@@ -8,8 +8,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.3",
+    "@react-page/editor": "^1.4.1",
+    "@react-page/plugins-divider": "^1.4.1",
+    "@react-page/plugins-image": "^1.4.1",
+    "@react-page/plugins-slate": "^1.4.1",
+    "@react-page/plugins-spacer": "^1.4.1",
+    "@react-page/plugins-video": "^1.4.1",
     "next": "10.0.9",
     "react": "17.0.2",
     "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.35",
+    "typescript": "^4.2.3"
   }
 }
