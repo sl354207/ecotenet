@@ -61,7 +61,18 @@ const getMovies = async () => {
   return movies;
 }
 
+const createMovie = async (firstName) => {
+  const { db } = await connectToDatabase();
+
+  const data = {firstName}
+  const response = await db.collection("bookings").insertOne(data)
+
+  return data;
+
+} 
+
 module.exports = {
   connectToDatabase,
-  getMovies
+  getMovies,
+  createMovie
 }
