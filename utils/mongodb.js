@@ -25,7 +25,7 @@ if (!cached) {
   cached = global.mongo = { conn: null, promise: null }
 }
 
-export async function connectToDatabase() {
+const connectToDatabase = async () => {
   if (cached.conn) {
     return cached.conn
   }
@@ -45,4 +45,23 @@ export async function connectToDatabase() {
   }
   cached.conn = await cached.promise
   return cached.conn
+}
+
+const getMovies = async () => {
+  
+  const { db } = await connectToDatabase();
+
+  const movies = await db
+    .collection("movies")
+    .find({})
+    .sort({ metacritic: -1 })
+    .limit(20)
+    .toArray();
+
+  return movies;
+}
+
+module.exports = {
+  connectToDatabase,
+  getMovies
 }
