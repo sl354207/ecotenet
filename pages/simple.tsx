@@ -32,6 +32,7 @@ import '@react-page/plugins-spacer/lib/index.css';
 import divider from '@react-page/plugins-divider';
 
 import PageLayout from '../components/PageLayout';
+import { Button } from '@material-ui/core';
 
 
 
@@ -47,10 +48,23 @@ const cellPlugins = [slate(),
 
 export default function SimpleExample() {
   const [value, setValue] = useState<Value>(null);
+  const create = async (value) => {
+    const res = await fetch('/api/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    });
+    // const response = await res.json();
+    // console.log(typeof(value));
+    // console.log(response);
+  }
 
   return (
     <PageLayout>
       <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} />
+      <Button onClick={()=>create(value)}>test</Button>
     </PageLayout>
   );
 }

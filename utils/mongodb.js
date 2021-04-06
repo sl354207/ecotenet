@@ -61,15 +61,25 @@ const getMovies = async () => {
   return movies;
 }
 
-const createMovie = async (firstName) => {
+const createMovie = async (id, version, rows) => {
   const { db } = await connectToDatabase();
 
-  const data = {firstName}
+  const data = {id, version, rows}
   const response = await db.collection("bookings").insertOne(data)
 
   return data;
 
 } 
+
+// const createMovie = async (value) => {
+//   const { db } = await connectToDatabase();
+
+//   const data = {value}
+//   const response = await db.collection("bookings").insertOne(data)
+
+//   return data;
+
+// } 
 
 module.exports = {
   connectToDatabase,
