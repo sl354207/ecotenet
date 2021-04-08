@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 
 // The editor core
-import Editor, { Value } from '@react-page/editor';
+import Editor, { Value }    from '@react-page/editor';
+
 
 // import the main css, uncomment this: (this is commented in the example because of https://github.com/vercel/next.js/issues/19717)
 import '@react-page/editor/lib/index.css';
@@ -33,7 +34,7 @@ import divider from '@react-page/plugins-divider';
 
 import PageLayout from '../components/PageLayout';
 import { Button } from '@material-ui/core';
-
+import  { getMovie }  from '../utils/mongodb';
 
 
 
@@ -46,8 +47,10 @@ const cellPlugins = [slate(),
   divider
 ];
 
-export default function SimpleExample() {
-  const [value, setValue] = useState<Value>(null);
+export default function SimpleExample({ test_data }) {
+  
+  const [value, setValue] = useState<Value>(test_data);
+
   const create = async (value) => {
     const res = await fetch('/api/create', {
       method: 'POST',
@@ -67,4 +70,35 @@ export default function SimpleExample() {
       <Button onClick={()=>create(value)}>test</Button>
     </PageLayout>
   );
+}
+
+export const getStaticProps = async () => {
+  // const res = await fetch(`${server}/api/articles`)
+  // const articles = await res.json()
+
+  // // return articles from data.js
+  // return {
+  //   props: {
+  //     articles
+  //   }
+  // }
+
+  // const customers = await getCustomers();
+  // console.log(customers)
+
+  // return {
+  //   props: {
+  //     customers
+  //   }
+  // }
+
+  const movie = await getMovie();
+  console.log(movie);
+
+  return {
+    props: {
+      test_data: JSON.parse(JSON.stringify(movie))
+    }
+  }
+
 }

@@ -71,6 +71,33 @@ const createMovie = async (id, version, rows) => {
 
 } 
 
+
+const getMovie = async () => {
+  
+  const { db } = await connectToDatabase();
+
+  const movie = await db
+    .collection("bookings")
+    .findOne({
+      id: "mnsvyx"
+    });
+
+  return movie;
+}
+
+// export default async function getMovie() {
+  
+//   const { db } = await connectToDatabase();
+
+//   const movie = await db
+//     .collection("bookings")
+//     .findOne({
+//       id: "mnsvyx"
+//     });
+
+//   return movie;
+// }
+
 // const createMovie = async (value) => {
 //   const { db } = await connectToDatabase();
 
@@ -84,5 +111,7 @@ const createMovie = async (id, version, rows) => {
 module.exports = {
   connectToDatabase,
   getMovies,
-  createMovie
+  createMovie,
+  getMovie
 }
+

@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { getMovies } from '../../utils/mongodb'
+import { getMovies, getMovie } from '../../utils/mongodb'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -7,7 +7,12 @@ export default async function handler(req, res) {
   }
   try {
     const movies = await getMovies();
-  return res.status(200).json(movies);
+    const movie = await getMovie();
+    // return res.status(200).json(movies);
+
+    console.log(movie);
+    return res.status(200).json(movie);
+
   }
   catch (err) {
     console.log(err);
