@@ -34,7 +34,10 @@ import divider from '@react-page/plugins-divider';
 
 import PageLayout from '../components/PageLayout';
 import { Button } from '@material-ui/core';
-import  { getMovie }  from '../utils/mongodb';
+
+const { getMovie } = require('../utils/mongodb');   
+
+
 
 
 
