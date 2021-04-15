@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const PageLayout: React.FC = ({ children }) => {
+const EditorLayout: React.FC = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -138,4 +138,4 @@ const PageLayout: React.FC = ({ children }) => {
     </>
   );
 };
-export default PageLayout;
+export default EditorLayout;

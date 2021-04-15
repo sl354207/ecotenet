@@ -32,10 +32,12 @@ import '@react-page/plugins-spacer/lib/index.css';
 // The divider plugin
 import divider from '@react-page/plugins-divider';
 
-import PageLayout from '../components/PageLayout';
+import EditorLayout from '../components/EditorLayout';
 import { Button } from '@material-ui/core';
 
-const { getMovie } = require('../utils/mongodb');   
+const { getMovie } = require('../utils/mongodb');  
+
+import testPlugin from '../plugins/testPlugin'
 
 
 
@@ -47,7 +49,8 @@ const cellPlugins = [slate(),
   image,
   video,
   spacer,
-  divider
+  divider,
+  testPlugin
 ];
 
 export default function SimpleExample({ test_data }) {
@@ -68,10 +71,10 @@ export default function SimpleExample({ test_data }) {
   }
 
   return (
-    <PageLayout>
+    <EditorLayout>
       <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} />
       <Button onClick={()=>create(value)}>test</Button>
-    </PageLayout>
+    </EditorLayout>
   );
 }
 
