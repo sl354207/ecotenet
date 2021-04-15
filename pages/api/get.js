@@ -7,15 +7,17 @@ export default async function handler(req, res) {
   }
   try {
     const movies = await getMovies();
+
     const movie = await getMovie();
     // return res.status(200).json(movies);
 
-    console.log(movie);
+    // console.log(movie);
     return res.status(200).json(movie);
 
   }
   catch (err) {
     console.log(err);
+    
     res.status(500).json({ msg: 'something went wrong'});
   }
   

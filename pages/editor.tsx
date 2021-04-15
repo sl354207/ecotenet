@@ -65,9 +65,6 @@ export default function SimpleExample({ test_data }) {
       },
       body: JSON.stringify(value),
     });
-    // const response = await res.json();
-    // console.log(typeof(value));
-    // console.log(response);
   }
 
   return (
@@ -79,27 +76,8 @@ export default function SimpleExample({ test_data }) {
 }
 
 export const getStaticProps = async () => {
-  // const res = await fetch(`${server}/api/articles`)
-  // const articles = await res.json()
-
-  // // return articles from data.js
-  // return {
-  //   props: {
-  //     articles
-  //   }
-  // }
-
-  // const customers = await getCustomers();
-  // console.log(customers)
-
-  // return {
-  //   props: {
-  //     customers
-  //   }
-  // }
-
   const movie = await getMovie();
-  console.log(movie);
+  // console.log(movie);
 
   return {
     props: {

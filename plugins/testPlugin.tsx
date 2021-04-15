@@ -1,4 +1,5 @@
 import { CellPlugin } from '@react-page/editor';
+
 import React from 'react';
 
 import TestComponent from '../components/TestComponent';
@@ -10,16 +11,10 @@ type Data = {
   title: string,
   imageUrl: string,
   description: string
-
 }
 
 const testPlugin: CellPlugin<Data> = {
   Renderer: ({ data }) => (
-    // <div>
-    //   <h1>{data.title}</h1>
-    //   <img style={{ width: 300 }} src={data.imageUrl} />
-    //   <p>{data.description}</p>
-    // </div>
     <TestComponent data={data} />
   ),
   id: 'testPlugin',
@@ -50,4 +45,5 @@ const testPlugin: CellPlugin<Data> = {
     },
   },
 };
+
 export default testPlugin;

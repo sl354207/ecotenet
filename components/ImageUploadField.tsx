@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { HTMLFieldProps, connectField } from 'uniforms';
 
 import BackupIcon from '@material-ui/icons/Backup';
@@ -6,17 +7,15 @@ import BackupIcon from '@material-ui/icons/Backup';
 type ImageProps = HTMLFieldProps<string, HTMLDivElement>;
 
 function ImageUploadField({ onChange, value }: ImageProps) {
-
-  // const uploadFile = async (photo) => {
-  //   const url = await URL.createObjectURL(photo);
-  //   return url;
-  // }
-
   const uploadFile = async (photo, callback) => {
     const url = "https://api.cloudinary.com/v1_1/demo/upload";
+
     const xhr = new XMLHttpRequest();
+
     const fd = new FormData();
+
     xhr.open('POST', url, true);
+
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   
     // Reset the upload progress bar
@@ -49,12 +48,13 @@ function ImageUploadField({ onChange, value }: ImageProps) {
         // img.alt = response.public_id;
         // document.getElementById('gallery').appendChild(img);
       }
-      // console.log(xhr.onreadystatechange);
     };
   
     fd.append('upload_preset', 'doc_codepen_example');
+
     fd.append('tags', 'browser_upload'); // Optional - add tag for image admin in Cloudinary
     fd.append('file', photo);
+
     xhr.send(fd);
   }
 
@@ -78,15 +78,9 @@ function ImageUploadField({ onChange, value }: ImageProps) {
         id="file-input"
         onChange={async ({ target: { files } }) => {
           if (files && files[0]) {
-            // const url = await uploadFile(files[0], async function(url){
-            //   return url;
-            // });
-            // console.log(url);
-            // onChange(url);
             await uploadFile(files[0], async function(url){
               onChange(url);
             });
-            // console.log(files[0].name);
           }
         }}
         style={{ display: 'none' }}

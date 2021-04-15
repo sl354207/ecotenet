@@ -138,4 +138,5 @@ const EditorLayout: React.FC = ({ children }) => {
     </>
   );
 };
+
 export default EditorLayout;
