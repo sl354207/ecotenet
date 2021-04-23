@@ -47,6 +47,7 @@ const connectToDatabase = async () => {
   return cached.conn
 }
 
+// query database to get all movies
 const getMovies = async () => {
   
   const { db } = await connectToDatabase();
@@ -61,6 +62,7 @@ const getMovies = async () => {
   return movies;
 }
 
+// add a movie to database with specific format from editor with id, version, and rows as input data.
 const createMovie = async (id, version, rows) => {
   const { db } = await connectToDatabase();
 
@@ -71,7 +73,7 @@ const createMovie = async (id, version, rows) => {
 
 } 
 
-
+// retrieve single movie from database
 const getMovie = async () => {
   
   const { db } = await connectToDatabase();

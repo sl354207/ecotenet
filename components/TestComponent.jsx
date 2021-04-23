@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+// TestComponent takes in data as prop passed down from testPlugin
 const TestComponent = ({data}) => {
     return (
         <div>

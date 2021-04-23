@@ -53,10 +53,13 @@ const cellPlugins = [slate(),
   testPlugin
 ];
 
+// pass in test_data from getStaticProps as prop to set value of editor
 export default function SimpleExample({ test_data }) {
   
+  // set test_data as value of editor
   const [value, setValue] = useState<Value>(test_data);
 
+  // add value of editor to database from create api endpoint using fetch api(see docs).
   const create = async (value) => {
     const res = await fetch('/api/create', {
       method: 'POST',
@@ -75,6 +78,7 @@ export default function SimpleExample({ test_data }) {
   );
 }
 
+// retrieve data at build time
 export const getStaticProps = async () => {
   const movie = await getMovie();
   // console.log(movie);
