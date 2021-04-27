@@ -81,7 +81,7 @@ const getMovie = async () => {
   const movie = await db
     .collection("bookings")
     .findOne({
-      id: "mnsvyx"
+      id: "l1rb8i"
     });
 
   return movie;
