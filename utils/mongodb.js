@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectID } from 'mongodb'
 
 const { MONGODB_URI, MONGODB_DB } = process.env
 
@@ -48,17 +48,17 @@ const connectToDatabase = async () => {
 }
 
 // query database to get all published posts
-const getPublishedPosts = async () => {
+const getPosts = async () => {
   
   const { db } = await connectToDatabase();
 
-  const publishedPosts = await db
+  const posts = await db
     .collection("published_posts")
     .find({})
     .limit(20)
     .toArray();
 
-  return publishedPosts;
+  return posts;
 }
 
 // add a draft to database with specific format from editor with id, version, and rows as input data.
@@ -80,7 +80,7 @@ const getDraft = async () => {
   const draft = await db
     .collection("drafts")
     .findOne({
-      id: "l1rb8i"
+      _id: ObjectID("608abf484014019848172fdf")
     });
 
   return draft;
@@ -111,7 +111,7 @@ const getDraft = async () => {
 
 module.exports = {
   connectToDatabase,
-  getPublishedPosts,
+  getPosts,
   createDraft,
   getDraft
 }
