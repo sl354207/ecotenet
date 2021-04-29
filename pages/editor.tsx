@@ -35,7 +35,7 @@ import divider from '@react-page/plugins-divider';
 import EditorLayout from '../components/EditorLayout';
 import { Button } from '@material-ui/core';
 
-const { getMovie } = require('../utils/mongodb');  
+const { getDraft } = require('../utils/mongodb');  
 
 import testPlugin from '../plugins/testPlugin'
 
@@ -80,12 +80,12 @@ export default function SimpleExample({ test_data }) {
 
 // retrieve data at build time
 export const getStaticProps = async () => {
-  const movie = await getMovie();
-  // console.log(movie);
+  const draft = await getDraft();
+  // console.log(draft);
 
   return {
     props: {
-      test_data: JSON.parse(JSON.stringify(movie))
+      test_data: JSON.parse(JSON.stringify(draft))
     }
   }
 

@@ -47,44 +47,43 @@ const connectToDatabase = async () => {
   return cached.conn
 }
 
-// query database to get all movies
-const getMovies = async () => {
+// query database to get all published posts
+const getPublishedPosts = async () => {
   
   const { db } = await connectToDatabase();
 
-  const movies = await db
-    .collection("movies")
+  const publishedPosts = await db
+    .collection("published_posts")
     .find({})
-    .sort({ metacritic: -1 })
     .limit(20)
     .toArray();
 
-  return movies;
+  return publishedPosts;
 }
 
-// add a movie to database with specific format from editor with id, version, and rows as input data.
-const createMovie = async (id, version, rows) => {
+// add a draft to database with specific format from editor with id, version, and rows as input data.
+const createDraft = async (id, version, rows) => {
   const { db } = await connectToDatabase();
 
   const data = {id, version, rows}
-  const response = await db.collection("bookings").insertOne(data)
+  const response = await db.collection("drafts").insertOne(data)
 
   return data;
 
 } 
 
-// retrieve single movie from database
-const getMovie = async () => {
+// retrieve single draft from database
+const getDraft = async () => {
   
   const { db } = await connectToDatabase();
 
-  const movie = await db
-    .collection("bookings")
+  const draft = await db
+    .collection("drafts")
     .findOne({
       id: "l1rb8i"
     });
 
-  return movie;
+  return draft;
 }
 
 // export default async function getMovie() {
@@ -112,9 +111,9 @@ const getMovie = async () => {
 
 module.exports = {
   connectToDatabase,
-  getMovies,
-  createMovie,
-  getMovie
+  getPublishedPosts,
+  createDraft,
+  getDraft
 }
 
  

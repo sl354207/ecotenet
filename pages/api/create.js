@@ -1,6 +1,6 @@
-import { createMovie } from '../../utils/mongodb';
+import { createDraft } from '../../utils/mongodb';
 
-// api endpoint to post a movie to the database
+// api endpoint to post a draft to the database
 export default async function handler(req, res) {
      // body must be in same format as database query
     const { id, version, rows } = req.body;
@@ -11,13 +11,13 @@ export default async function handler(req, res) {
     }
     // try post request, if successful return response, otherwise return error message.
     try {
-        const createdMovie = await createMovie(
+        const createdDraft = await createDraft(
             id,
             version,
             rows
         );
 
-        return res.status(200).json(createdMovie);
+        return res.status(200).json(createdDraft);
     } catch (err) {
         console.error(err);
         

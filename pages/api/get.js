@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { getMovies, getMovie } from '../../utils/mongodb'
+import { getPublishedPosts, getDraft } from '../../utils/mongodb'
 
-// api endpoint to get all movies or a single movie from database
+// api endpoint to get all published posts or a single draft from database
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== 'GET') {
@@ -9,13 +9,13 @@ export default async function handler(req, res) {
   }
   // try get request, if successful return response, otherwise return error message
   try {
-    const movies = await getMovies();
+    const publishedPosts = await getPublishedPosts();
 
-    const movie = await getMovie();
-    // return res.status(200).json(movies);
+    const draft = await getDraft();
+    // return res.status(200).json(publishedPosts);
 
-    // console.log(movie);
-    return res.status(200).json(movie);
+    // console.log(draft);
+    return res.status(200).json(draft);
 
   }
   catch (err) {
