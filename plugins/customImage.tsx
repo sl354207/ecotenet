@@ -2,7 +2,7 @@ import { CellPlugin } from '@react-page/editor';
 
 import React from 'react';
 
-import TestComponent from '../components/TestComponent';
+import ImageRender from '../components/ImageRender';
 
 import ImageUploadField from '../components/ImageUploadField'
 
@@ -14,14 +14,14 @@ type Data = {
 }
 
 // plugin takes in Data/data input into plugin fields.
-const testPlugin: CellPlugin<Data> = {
+const customImage: CellPlugin<Data> = {
    // the Renderer displays the output of the plugin.
   Renderer: ({ data }) => (
-    // pass data down from plugin to TestComponent prop
-    <TestComponent data={data} />
+    // pass data down from plugin to ImageRender prop
+    <ImageRender data={data} />
   ),
   // set fields for plugin UI
-  id: 'testPlugin',
+  id: 'customImage',
   title: 'Image',
   description: 'Upload image from local file or external url',
   version: 1,
@@ -52,4 +52,4 @@ const testPlugin: CellPlugin<Data> = {
   },
 };
 
-export default testPlugin;
+export default customImage;

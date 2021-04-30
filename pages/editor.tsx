@@ -37,7 +37,7 @@ import { Button } from '@material-ui/core';
 
 const { getDraft } = require('../utils/mongodb');  
 
-import testPlugin from '../plugins/testPlugin'
+import customImage from '../plugins/customImage'
 
 
 
@@ -50,7 +50,7 @@ const cellPlugins = [slate(),
   video,
   spacer,
   divider,
-  testPlugin
+  customImage
 ];
 
 // pass in test_data from getStaticProps as prop to set value of editor

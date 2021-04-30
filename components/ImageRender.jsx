@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-// TestComponent takes in data as prop passed down from testPlugin
-const TestComponent = ({data}) => {
+// ImageRender takes in data as prop passed down from testPlugin
+const ImageRender = ({data}) => {
     return (
         <div>
             <h1>{data.title}</h1>
@@ -19,4 +19,4 @@ const TestComponent = ({data}) => {
     )
 }
 
-export default TestComponent
+export default ImageRender
