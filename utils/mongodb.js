@@ -47,6 +47,17 @@ const connectToDatabase = async () => {
   return cached.conn
 }
 
+// add a post to database with specific format from editor with id, version, and rows as input data.
+const createPost = async (id, version, rows) => {
+  const { db } = await connectToDatabase();
+
+  const data = {id, version, rows}
+  const response = await db.collection("published_posts").insertOne(data)
+
+  return data;
+
+} 
+
 // query database to get all published posts
 const getPosts = async () => {
   
@@ -75,6 +86,21 @@ const getPostById = async (id) => {
   return post;
 }
 
+// update a post
+const updatePost = async (_id, id, version, rows) => {
+  const { db } = await connectToDatabase();
+
+  const data = {id, version, rows}
+  const response = await db.collection("published_posts").updateOne({
+    _id: ObjectID(_id)
+  }, { $set: data })
+
+  return data;
+
+} 
+
+//delete a post
+
 // add a draft to database with specific format from editor with id, version, and rows as input data.
 const createDraft = async (id, version, rows) => {
   const { db } = await connectToDatabase();
@@ -86,49 +112,52 @@ const createDraft = async (id, version, rows) => {
 
 } 
 
-// retrieve single draft from database
-const getDraft = async () => {
+// query database to get all drafts by user 
+
+// retrieve single draft by id from database
+const getDraftById = async (id) => {
   
   const { db } = await connectToDatabase();
 
   const draft = await db
     .collection("drafts")
     .findOne({
-      _id: ObjectID("608abf484014019848172fdf")
+      _id: ObjectID(id)
     });
 
   return draft;
 }
 
-// export default async function getMovie() {
-  
-//   const { db } = await connectToDatabase();
+//update a draft
+const updateDraft = async (_id, id, version, rows) => {
+  const { db } = await connectToDatabase();
 
-//   const movie = await db
-//     .collection("bookings")
-//     .findOne({
-//       id: "mnsvyx"
-//     });
+  const data = {id, version, rows}
+  const response = await db.collection("drafts").updateOne({
+    _id: ObjectID(_id)
+  }, { $set: data })
 
-//   return movie;
-// }
+  return data;
 
-// const createMovie = async (value) => {
-//   const { db } = await connectToDatabase();
+}
 
-//   const data = {value}
-//   const response = await db.collection("bookings").insertOne(data)
+//delete a draft
 
-//   return data;
 
-// } 
 
 module.exports = {
   connectToDatabase,
+  createPost,
   getPosts,
+  // getPostsByUser,
   getPostById,
+  updatePost,
+  // deletePost,
   createDraft,
-  getDraft
+  // getDraftsByUser,
+  getDraftById,
+  updateDraft,
+  // deleteDraft
 }
 
  

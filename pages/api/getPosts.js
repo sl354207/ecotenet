@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { getPosts, getDraft } from '../../utils/mongodb'
+import { getPosts, getDraftById } from '../../utils/mongodb'
 
 // api endpoint to get all published posts or a single draft from database
 export default async function handler(req, res) {
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   try {
     const posts = await getPosts();
 
-    const draft = await getDraft();
+    // const draft = await getDraftById();
     // return res.status(200).json(posts);
 
     // console.log(draft);

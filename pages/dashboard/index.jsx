@@ -7,7 +7,7 @@ import  PostList  from '../../components/PostList'
 export default function Dashboard() {
     // retrieve posts from posts api. convert swr data to name posts.
     const { data: posts} = useSWR('/api/getPosts')
-    console.log(posts);
+    
 
     if (!posts) return "Loading...";
 

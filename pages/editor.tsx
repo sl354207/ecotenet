@@ -35,7 +35,7 @@ import divider from '@react-page/plugins-divider';
 import EditorLayout from '../components/EditorLayout';
 import { Button } from '@material-ui/core';
 
-const { getDraft } = require('../utils/mongodb');  
+const { getDraftById } = require('../utils/mongodb');  
 
 import customImage from '../plugins/customImage'
 
@@ -55,7 +55,7 @@ const cellPlugins = [slate(),
 
 // pass in test_data from getStaticProps as prop to set value of editor
 export default function SimpleExample({ test_data }) {
-  
+
   // set test_data as value of editor
   const [value, setValue] = useState<Value>(test_data);
 
@@ -80,7 +80,7 @@ export default function SimpleExample({ test_data }) {
 
 // retrieve data at build time
 export const getStaticProps = async () => {
-  const draft = await getDraft();
+  const draft = await getDraftById("608abf484014019848172fdf");
   // console.log(draft);
 
   return {
