@@ -61,6 +61,20 @@ const getPosts = async () => {
   return posts;
 }
 
+// retrieve single post by id from database
+const getPostById = async (id) => {
+  
+  const { db } = await connectToDatabase();
+
+  const post = await db
+    .collection("published_posts")
+    .findOne({
+      _id: ObjectID(id)
+    });
+
+  return post;
+}
+
 // add a draft to database with specific format from editor with id, version, and rows as input data.
 const createDraft = async (id, version, rows) => {
   const { db } = await connectToDatabase();
@@ -112,6 +126,7 @@ const getDraft = async () => {
 module.exports = {
   connectToDatabase,
   getPosts,
+  getPostById,
   createDraft,
   getDraft
 }

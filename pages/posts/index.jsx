@@ -1,7 +1,7 @@
 
 // import getPosts from '../utils/mongodb'
-const { getPosts } = require('../utils/mongodb');
-import PostList from '../components/PostList'
+const { getPosts } = require('../../utils/mongodb');
+import PostList from '../../components/PostList'
 
 // pass in posts from database as a prop
 export default function Posts({posts}) {
@@ -16,7 +16,7 @@ export default function Posts({posts}) {
 // retrieve data at build time
 export const getStaticProps = async () => {
     const posts = await getPosts();
-    // console.log(posts);
+    // console.log(`these are posts: ${posts}`);
   
     return {
       props: {
