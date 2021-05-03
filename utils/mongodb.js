@@ -73,14 +73,14 @@ const getPosts = async () => {
 }
 
 // retrieve single post by id from database
-const getPostById = async (id) => {
+const getPostById = async (_id) => {
   
   const { db } = await connectToDatabase();
 
   const post = await db
     .collection("published_posts")
     .findOne({
-      _id: ObjectID(id)
+      _id: ObjectID(_id)
     });
 
   return post;
@@ -100,6 +100,18 @@ const updatePost = async (_id, id, version, rows) => {
 } 
 
 //delete a post
+const deletePost = async (_id) => {
+  
+  const { db } = await connectToDatabase();
+
+  const deleted = await db
+    .collection("published_posts")
+    .deleteOne({
+      _id: ObjectID(_id)
+    });
+
+  return deleted;
+}
 
 // add a draft to database with specific format from editor with id, version, and rows as input data.
 const createDraft = async (id, version, rows) => {
@@ -152,7 +164,7 @@ module.exports = {
   // getPostsByUser,
   getPostById,
   updatePost,
-  // deletePost,
+  deletePost,
   createDraft,
   // getDraftsByUser,
   getDraftById,

@@ -27,9 +27,9 @@ const post = ({ post }) => {
 // fetch post data at build time
 export const getStaticProps = async (context) => {
     // context allows us to fetch specific data points from data such as id
-    const id = context.params.id;
+    const _id = context.params.id;
 
-    const post = await getPostById(id);
+    const post = await getPostById(_id);
     
     return {
         props: {

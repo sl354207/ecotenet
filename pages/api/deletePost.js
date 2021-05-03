@@ -1,21 +1,18 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { getPosts, getDraftById } from '../../utils/mongodb'
+import { deletePost } from '../../utils/mongodb'
 
 // api endpoint to get all published posts or a single draft from database
 export default async function handler(req, res) {
   // only allow get request
-  if (req.method !== 'GET') {
+  if (req.method !== 'DELETE') {
     return res.status(405).json({ msg: 'Method not allowed' });
   }
+
+  const { _id } = req.body;
   // try get request, if successful return response, otherwise return error message
   try {
-    const posts = await getPosts();
+    const deleted = await deletePost(_id);
 
-    // const draft = await getDraftById();
-    // return res.status(200).json(posts);
-
-    // console.log(draft);
-    return res.status(200).json(posts);
+    return res.status(200).json(deleted);
 
   }
   catch (err) {
