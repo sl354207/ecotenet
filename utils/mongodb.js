@@ -86,6 +86,8 @@ const getPostById = async (_id) => {
   return post;
 }
 
+// query database to get all drafts by user
+
 // update a post
 const updatePost = async (_id, id, version, rows) => {
   const { db } = await connectToDatabase();
@@ -154,7 +156,18 @@ const updateDraft = async (_id, id, version, rows) => {
 }
 
 //delete a draft
+const deleteDraft = async (_id) => {
+  
+  const { db } = await connectToDatabase();
 
+  const deleted = await db
+    .collection("drafts")
+    .deleteOne({
+      _id: ObjectID(_id)
+    });
+
+  return deleted;
+}
 
 
 module.exports = {
@@ -169,7 +182,7 @@ module.exports = {
   // getDraftsByUser,
   getDraftById,
   updateDraft,
-  // deleteDraft
+  deleteDraft
 }
 
  
