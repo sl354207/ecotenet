@@ -2,6 +2,8 @@
 import { useRouter } from 'next/router'
 
 import { Button } from '@material-ui/core'; 
+
+import Link from 'next/link'
 // pass in post as prop from DashboardPosts which was created from posts data
 const DashboardPost = ({post}) => {
     const router = useRouter();
@@ -25,10 +27,15 @@ const DashboardPost = ({post}) => {
     return (
         <div>
             <h3>{post._id}</h3>
-            
-            {/* push to post url based on id */}
-            <Button onClick={()=>router.push(`/dashboard/posts/${post._id}`)}>Edit</Button>
-            <Button onClick={()=>deletePost(_id)}>Delete</Button>
+            {/* push to draft url based on id */}
+            {/* <Button onClick={()=>router.push(`/dashboard/drafts/${post._id}`)}>Edit</Button> */}
+            <Link href='/dashboard/posts/[_id]' as={`/dashboard/posts/${post._id}`}>
+                {/* add content and styling to PostItem */}
+                <a>
+                    <h3>Update &rarr;</h3>
+                </a>
+            </Link>
+            <Button onClick={()=>deleteDraft(_id)}>Delete</Button>
         </div>
         
 
