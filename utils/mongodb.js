@@ -88,8 +88,22 @@ const getPostById = async (_id) => {
 
 // query database to get all drafts by user
 
+// UPDATE TO GETPOSTSBYUSER
+const getPostsByUser = async () => {
+  
+  const { db } = await connectToDatabase();
+
+  const posts = await db
+    .collection("published_posts")
+    .find({})
+    .limit(20)
+    .toArray();
+
+  return posts;
+}
+
 // update a post
-const updatePost = async (_id, id, version, rows) => {
+const updatePost = async (id, version, rows, _id) => {
   const { db } = await connectToDatabase();
 
   const data = {id, version, rows}
@@ -126,7 +140,21 @@ const createDraft = async (id, version, rows) => {
 
 } 
 
-// query database to get all drafts by user 
+// query database to get all drafts by user
+
+// UPDATE TO GETPOSTSBYUSER
+const getDraftsByUser = async () => {
+  
+  const { db } = await connectToDatabase();
+
+  const drafts = await db
+    .collection("drafts")
+    .find({})
+    .limit(20)
+    .toArray();
+
+  return drafts;
+}
 
 // retrieve single draft by id from database
 const getDraftById = async (id) => {
@@ -143,7 +171,7 @@ const getDraftById = async (id) => {
 }
 
 //update a draft
-const updateDraft = async (_id, id, version, rows) => {
+const updateDraft = async ( id, version, rows, _id) => {
   const { db } = await connectToDatabase();
 
   const data = {id, version, rows}
@@ -174,12 +202,12 @@ module.exports = {
   connectToDatabase,
   createPost,
   getPosts,
-  // getPostsByUser,
+  getPostsByUser,
   getPostById,
   updatePost,
   deletePost,
   createDraft,
-  // getDraftsByUser,
+  getDraftsByUser,
   getDraftById,
   updateDraft,
   deleteDraft

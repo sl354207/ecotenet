@@ -53,15 +53,19 @@ const cellPlugins = [slate(),
   customImage
 ];
 
-// pass in test_data from getStaticProps as prop to set value of editor
-export default function SimpleExample({ test_data }) {
+// pass in draft from getStaticProps as prop to set value of editor
+export default function SimpleExample({ draft }) {
 
-  // set test_data as value of editor
-  const [value, setValue] = useState<Value>(test_data);
+  // set draft as value of editor
+  const [value, setValue] = useState<Value>(draft);
 
+  // console.log(draft);
+  // console.log(draft._id);
+  console.log(value);
   // add value of editor to database from create api endpoint using fetch api(see docs).
+  const _id = draft._id;
   const create = async (value) => {
-    const res = await fetch('/api/create', {
+    const res = await fetch('/api/createDraft', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,10 +74,27 @@ export default function SimpleExample({ test_data }) {
     });
   }
 
+  const update = async (value, _id) => {
+    
+    console.log(_id);
+    console.log(value);
+    value = Object.assign(value, {_id: _id});
+    console.log(value);
+    const res = await fetch('/api/updateDraft', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    });
+    console.log(res);
+  }
+  
   return (
     <EditorLayout>
       <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} />
-      <Button onClick={()=>create(value)}>test</Button>
+      <Button onClick={()=>create(value)}>Create Draft</Button>
+      <Button onClick={()=>update(value, _id)}>Save Draft</Button>
     </EditorLayout>
   );
 }
@@ -85,7 +106,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      test_data: JSON.parse(JSON.stringify(draft))
+      draft: JSON.parse(JSON.stringify(draft))
     }
   }
 

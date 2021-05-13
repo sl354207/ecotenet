@@ -1,20 +1,15 @@
-import  useSWR  from 'swr'
+import { useRouter } from 'next/router'
 
+import { Button } from '@material-ui/core';
 
-import  PostList  from '../../components/PostList'
-
-// pass in posts from database as a prop
 export default function Dashboard() {
-    // retrieve posts from posts api. convert swr data to name posts.
-    const { data: posts} = useSWR('/api/getPosts')
     
-
-    if (!posts) return "Loading...";
+    const router = useRouter();
 
     return (
         <div>
-        {/* pass in posts data as a prop */}
-        <PostList posts={posts}/>
+            <Button onClick={()=>router.push('/dashboard/posts')}>Posts</Button>
+            <Button onClick={()=>router.push('/dashboard/drafts')}>Drafts</Button>
         </div>
     )
 }

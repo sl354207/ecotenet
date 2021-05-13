@@ -9,8 +9,6 @@ import { getPostById } from '../../utils/mongodb'
 
 // pass in post from data.js as prop and create page for each post
 const post = ({ post }) => {
-    // const router = useRouter()
-    // const { id } = router.query
     
     return (
         <>
