@@ -1,5 +1,3 @@
-
-// import getPosts from '../utils/mongodb'
 const { getPosts } = require('../../utils/mongodb');
 
 import PostList from '../../components/PostList'
