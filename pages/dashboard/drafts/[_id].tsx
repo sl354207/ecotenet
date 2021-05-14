@@ -67,6 +67,46 @@ export default function DraftByUser() {
   // console.log(setValue);
   
   // (draft && draft.currentInfo && draft.currentInfo._id) || undefined
+
+  const update = async (value, _id) => {
+    
+    console.log(_id);
+    console.log(value);
+    value = Object.assign(value, {_id: _id});
+    console.log(value);
+    const res = await fetch('/api/updateDraft', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    });
+    // console.log(res);
+  }
+
+  const publish = async (value, _id) => {
+    
+    // console.log(_id);
+    // console.log(value);
+    // value = Object.assign(value, {_id: _id});
+    // console.log(value);
+    const res1 = await fetch('/api/createPost', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    });
+
+    const res2 = await fetch('/api/deleteDraft', {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(_id),
+      });
+    // console.log(res);
+  }
   
   // loading state until draft is retrieved
   if (!draft || draft == undefined) return "Loading...";
@@ -76,6 +116,8 @@ export default function DraftByUser() {
         <EditorLayout>
           <Editor cellPlugins={cellPlugins} value={draft} onChange={setValue} />
         </EditorLayout>
+        <Button onClick={()=>update(value, _id)}>Save Draft</Button>
+        <Button onClick={()=>publish(value, _id)}>Publish Post</Button>
         <Link href='/dashboard/drafts'>Go Back</Link>
       </div>
   )

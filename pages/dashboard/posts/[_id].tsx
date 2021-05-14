@@ -65,6 +65,22 @@ export default function PostByUser() {
   const [value, setValue] = useState<Value>(post);
   // console.log(value);
   // console.log(setValue);
+
+  const update = async (value, _id) => {
+    
+    console.log(_id);
+    console.log(value);
+    value = Object.assign(value, {_id: _id});
+    console.log(value);
+    const res = await fetch('/api/updatePost', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    });
+    // console.log(res);
+  }
   
   // set loading state until post data is retrieved
   if (!post) return "Loading...";
@@ -74,6 +90,7 @@ export default function PostByUser() {
     <EditorLayout>
       <Editor cellPlugins={cellPlugins} value={post} onChange={setValue} />
     </EditorLayout>
+    <Button onClick={()=>update(value, _id)}>Update Post</Button>
     <Link href='/dashboard/posts'>Go Back</Link>
   </div>
   )

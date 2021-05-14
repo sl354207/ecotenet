@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
     // body must be in same format as database query
     const { id, version, rows, _id } = req.body;
-    console.log(req.body)
+    // console.log(req.body)
 
     try {
         const updated = await updateDraft(
