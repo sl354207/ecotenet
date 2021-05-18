@@ -1,6 +1,6 @@
 import  useSWR  from 'swr'
 
-import  DashboardPosts  from '../../../components/DashboardPosts'
+import  DashboardPosts  from '../../../components/Dashboard/DashboardPosts'
 
 import { Button } from '@material-ui/core';
 

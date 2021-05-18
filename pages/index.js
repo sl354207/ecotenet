@@ -4,6 +4,8 @@ import { connectToDatabase } from '../utils/mongodb'
 
 import styles from '../styles/Home.module.css'
 
+import StepForm from '../components/PostForm/StepForm'
+
 export default function Home({ isConnected }) {
   return (
     <div className={styles.container}>
@@ -60,6 +62,7 @@ export default function Home({ isConnected }) {
             </p>
           </a>
         </div>
+        <StepForm />
       </main>
 
       <footer className={styles.footer}>
