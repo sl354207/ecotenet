@@ -29,7 +29,7 @@ const DashboardDraft = ({post}) => {
             <h3>{post._id}</h3>
             {/* push to draft url based on id */}
             {/* <Button onClick={()=>router.push(`/dashboard/drafts/${post._id}`)}>Edit</Button> */}
-            <Link href='/dashboard/drafts/[_id]' as={`/dashboard/drafts/${post._id}`}>
+            <Link href='/dashboard/testing/[_id]' as={`/dashboard/testing/${post._id}`}>
                 {/* add content and styling to PostItem */}
                 <a>
                     <h3>Edit &rarr;</h3>

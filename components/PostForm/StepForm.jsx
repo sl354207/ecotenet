@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 
 import PostDetails from './PostDetails'
+import PostRegion from './PostRegion';
+import PostEditor from './PostEditor'
 
 const initialValues = {
+    post: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -13,6 +16,8 @@ const initialValues = {
 }
 
 const StepForm = () => {
+
+  
     // set step state
     const [activeStep, setActiveStep] = useState(0);
 
@@ -49,12 +54,14 @@ const StepForm = () => {
         switch (step) {
           case 0:
             return (
-              <PostDetails handleNext={handleNext} handleChange={handleChange} values={formValues}  />
+              <PostEditor
+              handleNext={handleNext} handleChange={handleChange} values={formValues}
+               />
               // add back in when ready  formErrors={formErrors}
             )
           case 1:
             return (
-              <SecondStep
+              <PostDetails
                 handleNext={handleNext}
                 handleBack={handleBack}
                 handleChange={handleChange}
@@ -64,16 +71,23 @@ const StepForm = () => {
             // add back in when ready  formErrors={formErrors}
             )
           case 2:
-            return <Confirm handleNext={handleNext} handleBack={handleBack} values={formValues} />
+            return <PostRegion
+            handleNext={handleNext}
+            handleBack={handleBack}
+            handleChange={handleChange}
+            values={formValues}
+            
+            />
+            // add back in when ready  formErrors={formErrors}
           default:
             break
         }
       }
 
     return (
-        <div>
+        <>
             {handleSteps(activeStep)}
-        </div>
+        </>
     )
 }
 

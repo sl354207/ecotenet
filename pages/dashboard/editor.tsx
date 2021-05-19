@@ -36,50 +36,57 @@ import EditorLayout from '../../components/EditorLayout';
 import { Button } from '@material-ui/core';
 import customImage from '../../plugins/customImage'
 
+import StepForm from '../../components/PostForm/StepForm'
+
+
+
 
 
 
 
 
 // Define which plugins we want to use.
-const cellPlugins = [slate(),
-  image,
-  video,
-  spacer,
-  divider,
-  customImage
-];
+// const cellPlugins = [slate(),
+//   image,
+//   video,
+//   spacer,
+//   divider,
+//   customImage
+// ];
 
 export default function DashboardEditor (){
     // set draft as value of editor
-  const [value, setValue] = useState<Value>(null);
+  // const [value, setValue] = useState<Value>(null);
 
-  // add value of editor to database from create api endpoint using fetch api(see docs).
-  const createPost = async (value) => {
-    const res = await fetch('/api/createPost', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(value),
-    });
-  }
+  // // add value of editor to database from create api endpoint using fetch api(see docs).
+  // const createPost = async (value) => {
+  //   const res = await fetch('/api/createPost', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(value),
+  //   });
+  // }
 
-  const createDraft = async (value) => {
-    const res = await fetch('/api/createDraft', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(value),
-    });
-  }
+  // const createDraft = async (value) => {
+  //   const res = await fetch('/api/createDraft', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(value),
+  //   });
+  // }
 
   return (
-    <EditorLayout>
-      <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} />
-      <Button onClick={()=>createPost(value)}>Publish Post</Button>
-      <Button onClick={()=>createDraft(value)}>Save to Drafts</Button>
-    </EditorLayout>
+    // <EditorLayout>
+    <>
+      <StepForm />
+      {/* <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} /> */}
+      {/* <Button onClick={()=>createPost(value)}>Publish Post</Button>
+      <Button onClick={()=>createDraft(value)}>Save to Drafts</Button> */}
+    {/* </EditorLayout> */}
+  </>
   );
 }

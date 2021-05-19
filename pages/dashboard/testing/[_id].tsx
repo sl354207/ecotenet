@@ -3,53 +3,54 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 //do I need to import react
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 
-// The editor core
-import Editor, { Value }    from '@react-page/editor';
+// // The editor core
+// import Editor, { Value }    from '@react-page/editor';
 
+import StepForm from '../../../components/PostForm/StepForm';
 
 // import the main css, uncomment this: (this is commented in the example because of https://github.com/vercel/next.js/issues/19717)
-import '@react-page/editor/lib/index.css';
+// import '@react-page/editor/lib/index.css';
 
-// The rich text area plugin
-import slate from '@react-page/plugins-slate';
+// // The rich text area plugin
+// import slate from '@react-page/plugins-slate';
 
-// Stylesheets for the rich text area plugin
-// uncomment this
-import '@react-page/plugins-slate/lib/index.css';
+// // Stylesheets for the rich text area plugin
+// // uncomment this
+// import '@react-page/plugins-slate/lib/index.css';
 
-// image
-import image from '@react-page/plugins-image';
+// // image
+// import image from '@react-page/plugins-image';
 
-// Stylesheets for the image plugin
-import '@react-page/plugins-image/lib/index.css';
+// // Stylesheets for the image plugin
+// import '@react-page/plugins-image/lib/index.css';
 
-// The video plugin
-import video from '@react-page/plugins-video';
-import '@react-page/plugins-video/lib/index.css';
+// // The video plugin
+// import video from '@react-page/plugins-video';
+// import '@react-page/plugins-video/lib/index.css';
 
-// The spacer plugin
-import spacer from '@react-page/plugins-spacer';
-import '@react-page/plugins-spacer/lib/index.css';
+// // The spacer plugin
+// import spacer from '@react-page/plugins-spacer';
+// import '@react-page/plugins-spacer/lib/index.css';
 
-// The divider plugin
-import divider from '@react-page/plugins-divider';
+// // The divider plugin
+// import divider from '@react-page/plugins-divider';
 
-import EditorLayout from '../../../components/EditorLayout';
+// import EditorLayout from '../../../components/EditorLayout';
 import { Button } from '@material-ui/core';
-import customImage from '../../../plugins/customImage'
+// import customImage from '../../../plugins/customImage'
 
 
 
-// Define which plugins we want to use.
-const cellPlugins = [slate(),
-    image,
-    video,
-    spacer,
-    divider,
-    customImage
-  ];
+// // Define which plugins we want to use.
+// const cellPlugins = [slate(),
+//     image,
+//     video,
+//     spacer,
+//     divider,
+//     customImage
+//   ];
 
 
 export default function DraftByUser() {
@@ -60,11 +61,11 @@ export default function DraftByUser() {
   // retrieve drafts from drafts api. convert swr data to name posts.
   const { data: draft} = useSWR(`/api/getdrafts/${_id}`)
 
-  console.log(draft);
+  // console.log(draft);
 
   
   // set draft as value of editor
-  const [value, setValue] = useState<Value>(draft);
+  // const [value, setValue] = useState<Value>(draft);
   // console.log(value);
   // console.log(setValue);
   
@@ -115,11 +116,12 @@ export default function DraftByUser() {
 
   return (
       <div>
-        <EditorLayout>
+        <StepForm _id={_id} draft={draft}/>
+        {/* <EditorLayout>
           <Editor cellPlugins={cellPlugins} value={draft} onChange={setValue} />
-        </EditorLayout>
-        <Button onClick={()=>update(value, _id)}>Save Draft</Button>
-        <Button onClick={()=>publish(value, _id)}>Publish Post</Button>
+        </EditorLayout> */}
+        {/* <Button onClick={()=>update(value, _id)}>Save Draft</Button>
+        <Button onClick={()=>publish(value, _id)}>Publish Post</Button> */}
         <Link href='/dashboard/drafts'>Go Back</Link>
       </div>
   )
