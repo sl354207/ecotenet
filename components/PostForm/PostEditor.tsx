@@ -30,7 +30,7 @@ import '@react-page/plugins-spacer/lib/index.css';
 // The divider plugin
 import divider from '@react-page/plugins-divider';
 
-import EditorLayout from '../../components/EditorLayout';
+import EditorLayout from '../EditorLayout';
 import { Button } from '@material-ui/core';
 import customImage from '../../plugins/customImage'
 
@@ -48,12 +48,12 @@ const cellPlugins = [slate(),
   customImage
 ];
 
-const PostEditor = ({handleNext, handleChange, values: { post }}) => {
+const PostEditor = ({handleNext, handleChange, handleEditor, values: { post }, value, setPostValue}) => {
     // console.log(_id);
     // console.log(typeof draft._id);
     // set draft as value of editor
-  const [value, setValue] = useState<Value>(post);
-  console.log(value);
+  // const [value, setValue] = useState<Value>(post);
+  // console.log(value);
 
   // add value of editor to database from create api endpoint using fetch api(see docs).
   const createPost = async (value) => {
@@ -79,7 +79,7 @@ const PostEditor = ({handleNext, handleChange, values: { post }}) => {
   return (
     <Fragment>
         <EditorLayout>
-            <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} />
+            <Editor cellPlugins={cellPlugins} value={value} onChange={setPostValue} />
             {/* <Button onClick={()=>createPost(value)}>Publish Post</Button>
             <Button onClick={()=>createDraft(value)}>Save to Drafts</Button> */}
             <div style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}>

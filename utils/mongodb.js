@@ -48,10 +48,29 @@ const connectToDatabase = async () => {
 }
 
 // add a post to database with specific format from editor with id, version, and rows as input data.
-const createPost = async (id, version, rows) => {
+const createPost = async (firstName,
+  lastName,
+  email,
+  gender,
+  date,
+  city, 
+  phone, 
+  
+  id, 
+  version, 
+  rows) => {
   const { db } = await connectToDatabase();
 
-  const data = {id, version, rows}
+  const data = {firstName,
+    lastName,
+    email,
+    gender,
+    date,
+    city, 
+    phone,
+    id, 
+    version, 
+    rows}
   const response = await db.collection("published_posts").insertOne(data)
 
   return data;
@@ -171,10 +190,30 @@ const getDraftById = async (id) => {
 }
 
 //update a draft
-const updateDraft = async ( id, version, rows, _id) => {
+const updateDraft = async ( firstName,
+lastName,
+email,
+gender,
+date,
+city, 
+phone, 
+_id,
+id, 
+version, 
+rows) => {
   const { db } = await connectToDatabase();
 
-  const data = {id, version, rows}
+  const data = { 
+    firstName,
+    lastName,
+    email,
+    gender,
+    date,
+    city, 
+    phone,
+    id, 
+    version, 
+    rows}
   const response = await db.collection("drafts").updateOne({
     _id: ObjectID(_id)
   }, { $set: data })

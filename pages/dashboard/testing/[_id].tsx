@@ -71,21 +71,21 @@ export default function DraftByUser() {
   
   // (draft && draft.currentInfo && draft.currentInfo._id) || undefined
 
-  const update = async (value, _id) => {
+  // const update = async (value, _id) => {
     
-    console.log(_id);
-    console.log(value);
-    value = Object.assign(value, {_id: _id});
-    console.log(value);
-    const res = await fetch('/api/updateDraft', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(value),
-    });
-    // console.log(res);
-  }
+  //   console.log(_id);
+  //   console.log(value);
+  //   value = Object.assign(value, {_id: _id});
+  //   console.log(value);
+  //   const res = await fetch('/api/updateDraft', {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(value),
+  //   });
+  //   // console.log(res);
+  // }
 
   const publish = async (value, _id) => {
     
