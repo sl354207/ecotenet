@@ -32,7 +32,7 @@ export default async function handler(req, res) {
             _id,
             id,
             version,
-            rows,
+            rows
         );
         return res.status(200).json(updated);
     } catch (err) {

@@ -35,7 +35,7 @@ const DashboardPost = ({post}) => {
                     <h3>Update &rarr;</h3>
                 </a>
             </Link>
-            <Button onClick={()=>deleteDraft(_id)}>Delete</Button>
+            <Button onClick={()=>deletePost(_id)}>Delete</Button>
         </div>
         
 

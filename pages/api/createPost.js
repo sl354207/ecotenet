@@ -23,16 +23,16 @@ export default async function handler(req, res) {
     try {
         const createdPost = await createPost(
             firstName,
-  lastName,
-  email,
-  gender,
-  date,
-  city, 
-  phone, 
-  
-  id, 
-  version, 
-  rows
+            lastName,
+            email,
+            gender,
+            date,
+            city, 
+            phone, 
+            
+            id, 
+            version, 
+            rows
         );
 
         return res.status(200).json(createdPost);

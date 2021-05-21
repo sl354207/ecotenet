@@ -3,7 +3,17 @@ import { createDraft } from '../../utils/mongodb';
 // api endpoint to post a draft to the database
 export default async function handler(req, res) {
      // body must be in same format as database query
-    const { id, version, rows } = req.body;
+    const { firstName,
+        lastName,
+        email,
+        gender,
+        date,
+        city, 
+        phone, 
+        
+        id, 
+        version, 
+        rows } = req.body;
 
     // only allow post method
     if (req.method !== 'POST') {
@@ -12,8 +22,16 @@ export default async function handler(req, res) {
     // try post request, if successful return response, otherwise return error message.
     try {
         const createdDraft = await createDraft(
-            id,
-            version,
+            firstName,
+            lastName,
+            email,
+            gender,
+            date,
+            city, 
+            phone, 
+            
+            id, 
+            version, 
             rows
         );
 
