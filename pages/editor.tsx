@@ -101,7 +101,7 @@ export default function SimpleExample({ draft }) {
 
 // retrieve data at build time
 export const getStaticProps = async () => {
-  const draft = await getDraftById("608abf484014019848172fdf");
+  const draft = await getDraftById("609d3d138cd35121f8b5154f");
   // console.log(draft);
 
   return {
