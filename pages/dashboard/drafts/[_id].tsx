@@ -57,66 +57,21 @@ export default function DraftByUser() {
   // set id to id in url query
   const router = useRouter();
   const  _id  = router.query._id;
+  const pathName = router.pathname;
+  console.log(router.pathname);
+  console.log(router.locale);
+  console.log(router.asPath);
+  console.log(router.basePath);
   
   // retrieve drafts from drafts api. convert swr data to name posts.
-  const { data: draft} = useSWR(`/api/getdrafts/${_id}`)
-
-  // console.log(draft);
-
-  
-  // set draft as value of editor
-  // const [value, setValue] = useState<Value>(draft);
-  // console.log(value);
-  // console.log(setValue);
-  
-  // (draft && draft.currentInfo && draft.currentInfo._id) || undefined
-
-  // const update = async (value, _id) => {
-    
-  //   console.log(_id);
-  //   console.log(value);
-  //   value = Object.assign(value, {_id: _id});
-  //   console.log(value);
-  //   const res = await fetch('/api/updateDraft', {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(value),
-  //   });
-  //   // console.log(res);
-  // }
-
-  // const publish = async (value, _id) => {
-    
-  //   // console.log(_id);
-  //   // console.log(value);
-  //   // value = Object.assign(value, {_id: _id});
-  //   // console.log(value);
-  //   const res1 = await fetch('/api/createPost', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(value),
-  //   });
-
-  //   const res2 = await fetch('/api/deleteDraft', {
-  //     method: 'DELETE',
-  //     headers: {
-  //         'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(_id),
-  //     });
-  //   // console.log(res);
-  // }
+  const { data: post} = useSWR(`/api/getdrafts/${_id}`)
   
   // loading state until draft is retrieved
-  if (!draft || draft == undefined) return "Loading...";
+  if (!post || post == undefined) return "Loading...";
 
   return (
       <div>
-        <StepForm _id={_id} draft={draft}/>
+        <StepForm _id={_id} post={post} pathname={pathName}/>
         {/* <EditorLayout>
           <Editor cellPlugins={cellPlugins} value={draft} onChange={setValue} />
         </EditorLayout> */}

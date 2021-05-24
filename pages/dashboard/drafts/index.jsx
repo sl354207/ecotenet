@@ -1,6 +1,6 @@
 import  useSWR  from 'swr'
 
-import  DashboardDrafts  from '../../../components/Dashboard/DashboardDrafts'
+import  DashboardPosts  from '../../../components/Dashboard/DashboardPosts'
 
 import { Button } from '@material-ui/core';
 
@@ -14,15 +14,15 @@ export default function DraftsByUser() {
     // retrieve posts from posts api. convert swr data to name posts.
 
     // UPDATE TO GETDRAFTSBYUSER
-    const { data: drafts} = useSWR('/api/getdrafts')
+    const { data: posts} = useSWR('/api/getdrafts')
     
     // show loading state until drafts are retrieved
-    if (!drafts) return "Loading...";
+    if (!posts) return "Loading...";
 
     return (
         <div>
         {/* pass in posts data as a prop */}
-        <DashboardDrafts posts={drafts}/>
+        <DashboardPosts posts={posts}/>
         <Button onClick={()=>router.push('/dashboard/editor')}>Create New Draft</Button>
         </div>
     )
