@@ -21,5 +21,4 @@ export const getStaticProps = async () => {
         posts: JSON.parse(JSON.stringify(posts))
       }
     }
-  
   }

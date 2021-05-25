@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 
 import PostDetails from './PostDetails'
-import PostRegion from './PostRegion';
+import PostTags from './PostTags';
 import PostEditor from './PostEditor'
 import { Button } from '@material-ui/core';
 
-
-const StepForm = ({_id, post, pathname}) => {
-
+// pass in post and url path as props
+const StepForm = ({post, pathname}) => {
+  // if the post is undefined(no post was retrieved) then display a blank editor
   if (post === undefined) {
+    // set initial values of form
     const initialValues = {
       firstName: "",
       lastName: "",
@@ -19,13 +20,22 @@ const StepForm = ({_id, post, pathname}) => {
       phone: ""
     }
 
-    // set step state
+    // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
     //set form values state;
     const [formValues, setFormValues] = useState(initialValues)
 
+    // set editor value state
     const [postValue, setPostValue] = useState(null);
+
+    // will change, look into select and autocomplete mui.
+    const [alignment, setAlignment] = useState();
+
+    // will change, look into select and autocomplete mui.
+    const handleAlignment = (event, newAlignment) => {
+      setAlignment(newAlignment);
+    };
     
     //setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
     // Proceed to next step.
@@ -37,8 +47,8 @@ const StepForm = ({_id, post, pathname}) => {
     const handleChange = e => {
         //set name and value from targeted form props
         const { name, value } = e.target
-        // console.log(e.target)
-        // Set new values on from change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
+        
+        // Set new values on form change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
         setFormValues(values => ({
           ...values,
           [name]: value
@@ -58,7 +68,7 @@ const StepForm = ({_id, post, pathname}) => {
           case 0:
             return (
               <PostEditor
-              handleNext={handleNext} handleChange={handleChange} values={formValues}
+              handleNext={handleNext} 
               value={postValue}
               setPostValue={setPostValue}
               
@@ -77,10 +87,12 @@ const StepForm = ({_id, post, pathname}) => {
             // add back in when ready  formErrors={formErrors}
             )
           case 2:
-            return <PostRegion
+            return <PostTags
             handleNext={handleNext}
             handleBack={handleBack}
             handleChange={handleChange}
+            handleAlignment={handleAlignment}
+            value={alignment}
             values={formValues}
             
             />
@@ -90,13 +102,11 @@ const StepForm = ({_id, post, pathname}) => {
         }
       }
 
+      // function to create a new draft. Takes in form values and editor value.
       const create = async (formValues, postValue) => {
-    
-        // console.log(_id);
-        // console.log(value);
-
+        // combine form value and editor value into one object to pass to api.
         const value = Object.assign(formValues, postValue);
-        console.log(value);
+        
         const res = await fetch('/api/createDraft', {
           method: 'POST',
           headers: {
@@ -104,16 +114,14 @@ const StepForm = ({_id, post, pathname}) => {
           },
           body: JSON.stringify(value),
         });
-        // console.log(res);
       }
 
+      // function to create a published post. Takes in form values and editor value
       const publish = async (formValues, postValue) => {
-    
-        // console.log(_id);
-        // console.log(value);
+        // combine form value and editor value into one object to pass to api. 
         const value = Object.assign(formValues, postValue);
-        // console.log(value);
-        const res1 = await fetch('/api/createPost', {
+        
+        const res = await fetch('/api/createPost', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -121,8 +129,7 @@ const StepForm = ({_id, post, pathname}) => {
           body: JSON.stringify(value),
         });
       }
-      // console.log(formValues);
-      // console.log(postValue);
+      
     return (
         <>
             {handleSteps(activeStep)}
@@ -130,9 +137,10 @@ const StepForm = ({_id, post, pathname}) => {
             <Button onClick={()=>publish(formValues, postValue)}>Publish</Button>
         </>
     )
+    // if url path leads to a draft than populate form with draft data
   } else if(pathname === "/dashboard/drafts/[_id]")
   {
-    
+    // destructure values from post data
     const {firstName,
       lastName,
       email,
@@ -141,7 +149,7 @@ const StepForm = ({_id, post, pathname}) => {
       city,
       phone} = post;
   
-    // set step state
+    // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
     //set form values state;
@@ -153,6 +161,7 @@ const StepForm = ({_id, post, pathname}) => {
       city,
       phone})
 
+    // set editor state
     const [postValue, setPostValue] = useState(post);
     
     //setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
@@ -165,7 +174,7 @@ const StepForm = ({_id, post, pathname}) => {
     const handleChange = e => {
         //set name and value from targeted form props
         const { name, value } = e.target
-        // console.log(e.target)
+        
         // Set new values on from change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
         setFormValues(values => ({
           ...values,
@@ -186,7 +195,7 @@ const StepForm = ({_id, post, pathname}) => {
           case 0:
             return (
               <PostEditor
-              handleNext={handleNext} handleChange={handleChange} values={formValues}
+              handleNext={handleNext}  
               value={postValue}
               setPostValue={setPostValue}
               
@@ -218,13 +227,11 @@ const StepForm = ({_id, post, pathname}) => {
         }
       }
 
+      // function to update the draft. Takes in the form values and editor value.
       const update = async (formValues, postValue) => {
-    
-        // console.log(_id);
-        // console.log(value);
-
+        // combine form values as post values. Add form values second otherwise they will be overridden by initial draft values.
         const value = Object.assign(postValue, formValues);
-        console.log(value);
+        
         const res = await fetch('/api/updateDraft', {
           method: 'PUT',
           headers: {
@@ -232,15 +239,14 @@ const StepForm = ({_id, post, pathname}) => {
           },
           body: JSON.stringify(value),
         });
-        // console.log(res);
       }
 
+      // function to publish the draft
       const publish = async (formValues, postValue) => {
     
-        // console.log(_id);
-        // console.log(value);
         const value = Object.assign(postValue, formValues);
-        // console.log(value);
+        
+        // create post
         const res1 = await fetch('/api/createPost', {
           method: 'POST',
           headers: {
@@ -249,6 +255,7 @@ const StepForm = ({_id, post, pathname}) => {
           body: JSON.stringify(value),
         });
     
+        // delete draft once published
         const res2 = await fetch('/api/deleteDraft', {
           method: 'DELETE',
           headers: {
@@ -256,10 +263,8 @@ const StepForm = ({_id, post, pathname}) => {
           },
           body: JSON.stringify(value._id),
           });
-        // console.log(res);
       }
-      // console.log(formValues);
-      // console.log(postValue);
+    
     return (
         <>
             {handleSteps(activeStep)}
@@ -267,7 +272,9 @@ const StepForm = ({_id, post, pathname}) => {
             <Button onClick={()=>publish(formValues, postValue)}>Publish</Button>
         </>
     )
+    // if url path leads to a post than populate form with post data.
   } else {
+
     const {firstName,
       lastName,
       email,
@@ -321,7 +328,7 @@ const StepForm = ({_id, post, pathname}) => {
           case 0:
             return (
               <PostEditor
-              handleNext={handleNext} handleChange={handleChange} values={formValues}
+              handleNext={handleNext} 
               value={postValue}
               setPostValue={setPostValue}
               
@@ -353,13 +360,10 @@ const StepForm = ({_id, post, pathname}) => {
         }
       }
 
+      // function to update post
       const update = async (formValues, postValue) => {
-    
-        // console.log(_id);
-        // console.log(value);
-
         const value = Object.assign(postValue, formValues);
-        console.log(value);
+        
         const res = await fetch('/api/updatePost', {
           method: 'PUT',
           headers: {
@@ -367,34 +371,9 @@ const StepForm = ({_id, post, pathname}) => {
           },
           body: JSON.stringify(value),
         });
-        // console.log(res);
+        
       }
-
-      // const publish = async (formValues, postValue) => {
-    
-      //   // console.log(_id);
-      //   // console.log(value);
-      //   const value = Object.assign(postValue, formValues);
-      //   // console.log(value);
-      //   const res1 = await fetch('/api/createPost', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(value),
-      //   });
-    
-      //   const res2 = await fetch('/api/deleteDraft', {
-      //     method: 'DELETE',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(value._id),
-      //     });
-      //   // console.log(res);
-      // }
-      // console.log(formValues);
-      // console.log(postValue);
+      
     return (
         <>
             {handleSteps(activeStep)}

@@ -10,7 +10,6 @@ export default async function handler(req, res) {
         date,
         city, 
         phone, 
-        
         id, 
         version, 
         rows } = req.body;
@@ -29,7 +28,6 @@ export default async function handler(req, res) {
             date,
             city, 
             phone, 
-            
             id, 
             version, 
             rows

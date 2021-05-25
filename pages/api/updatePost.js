@@ -17,7 +17,6 @@ export default async function handler(req, res) {
         id, 
         version, 
         rows } = req.body;
-    // console.log(req.body)
 
     try {
         const updated = await updatePost(

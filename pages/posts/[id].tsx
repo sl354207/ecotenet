@@ -10,41 +10,28 @@ import Link from 'next/link'
 import React, { useState } from 'react';
 
 // The editor core
-import Editor, { Value }    from '@react-page/editor';
-
-
-// import the main css, uncomment this: (this is commented in the example because of https://github.com/vercel/next.js/issues/19717)
+import Editor, { Value } from '@react-page/editor';
 import '@react-page/editor/lib/index.css';
 
-// The rich text area plugin
 import slate from '@react-page/plugins-slate';
-
-// Stylesheets for the rich text area plugin
-// uncomment this
 import '@react-page/plugins-slate/lib/index.css';
 
-// image
 import image from '@react-page/plugins-image';
-
-// Stylesheets for the image plugin
 import '@react-page/plugins-image/lib/index.css';
 
-// The video plugin
 import video from '@react-page/plugins-video';
 import '@react-page/plugins-video/lib/index.css';
 
-// The spacer plugin
 import spacer from '@react-page/plugins-spacer';
 import '@react-page/plugins-spacer/lib/index.css';
 
-// The divider plugin
 import divider from '@react-page/plugins-divider';
 
-import EditorLayout from '../../components/EditorLayout';
-import { Button } from '@material-ui/core';
 import customImage from '../../plugins/customImage'
 
+import EditorLayout from '../../components/EditorLayout';
 
+import { Button } from '@material-ui/core';
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(),
@@ -55,11 +42,10 @@ const cellPlugins = [slate(),
     customImage
   ];
 
-
 // pass in post from data.js as prop and create page for each post
 const post = ({ post }) => {
     // set post as value of editor
-  const [value, setValue] = useState<Value>(post);
+    const [value, setValue] = useState<Value>(post);
     
     return (
         <>
@@ -90,14 +76,11 @@ export const getStaticPaths = async () => {
     
     const posts = await getPosts();
     
-
     // create array of ids of each post in posts
     const ids = posts.map(post => post._id)
 
     // create paths array with objects that follow structure given
     const paths = ids.map(id => ({params: {id: id.toString()}}))
-
-    
 
     // return a path for each post id. If no id return 404
     return {
@@ -105,7 +88,5 @@ export const getStaticPaths = async () => {
         fallback: false
     }
 }
-
-
 
 export default post

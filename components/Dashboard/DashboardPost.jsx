@@ -7,11 +7,12 @@ import Link from 'next/link'
 // pass in post as prop from DashboardPosts which was created from posts data
 const DashboardPost = ({post}) => {
     const router = useRouter();
+    // capture url path
     const pathName = router.pathname;
-    // console.log(pathName);
 
     const _id = post._id;
     
+    // if url path leads to posts populate with posts data
     if (pathName === "/dashboard/posts") {
 
          
@@ -54,6 +55,7 @@ const DashboardPost = ({post}) => {
             //     </a>
             // </Link>
         )
+        // if url path leads to drafts then populate with draft data.
     } else {
         // function to delete post by id
         const deletePost = async (_id) => {
