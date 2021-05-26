@@ -10,32 +10,26 @@ const StepForm = ({post, pathname}) => {
   // if the post is undefined(no post was retrieved) then display a blank editor
   if (post === undefined) {
     // set initial values of form
-    const initialValues = {
-      firstName: "",
-      lastName: "",
-      email: "",
-      gender: "",
-      date: "",
-      city: "",
-      phone: ""
+    const initialDetailValues = {
+      title: "",
+      author: "",
+      description: ""
     }
 
     // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
-    //set form values state;
-    const [formValues, setFormValues] = useState(initialValues)
+    //set detail values state;
+    const [detailValues, setDetailValues] = useState(initialDetailValues)
 
     // set editor value state
     const [postValue, setPostValue] = useState(null);
 
-    // will change, look into select and autocomplete mui.
-    const [alignment, setAlignment] = useState();
+    // set category state
+    const [categoryValue, setCategoryValue] = useState("");
 
-    // will change, look into select and autocomplete mui.
-    const handleAlignment = (event, newAlignment) => {
-      setAlignment(newAlignment);
-    };
+    // set category input state
+    const [categoryInputValue, setCategoryInputValue] = useState("");
     
     //setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
     // Proceed to next step.
@@ -49,8 +43,8 @@ const StepForm = ({post, pathname}) => {
         const { name, value } = e.target
         
         // Set new values on form change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
-        setFormValues(values => ({
-          ...values,
+        setDetailValues(detailValues => ({
+          ...detailValues,
           [name]: value
         }))
 
@@ -81,8 +75,11 @@ const StepForm = ({post, pathname}) => {
                 handleNext={handleNext}
                 handleBack={handleBack}
                 handleChange={handleChange}
-                values={formValues}
-                
+                detailValues={detailValues}
+                categoryValue={categoryValue}
+                setCategoryValue={setCategoryValue}
+                categoryInputValue={categoryInputValue}
+                setCategoryInputValue={setCategoryInputValue}
               />
             // add back in when ready  formErrors={formErrors}
             )
@@ -93,7 +90,7 @@ const StepForm = ({post, pathname}) => {
             handleChange={handleChange}
             handleAlignment={handleAlignment}
             value={alignment}
-            values={formValues}
+            detailValues={detailValues}
             
             />
             // add back in when ready  formErrors={formErrors}
@@ -103,9 +100,9 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to create a new draft. Takes in form values and editor value.
-      const create = async (formValues, postValue) => {
+      const create = async (detailValues, postValue) => {
         // combine form value and editor value into one object to pass to api.
-        const value = Object.assign(formValues, postValue);
+        const value = Object.assign(detailValues, postValue);
         
         const res = await fetch('/api/createDraft', {
           method: 'POST',
@@ -117,9 +114,9 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to create a published post. Takes in form values and editor value
-      const publish = async (formValues, postValue) => {
+      const publish = async (detailValues, postValue) => {
         // combine form value and editor value into one object to pass to api. 
-        const value = Object.assign(formValues, postValue);
+        const value = Object.assign(detailValues, postValue);
         
         const res = await fetch('/api/createPost', {
           method: 'POST',
@@ -133,33 +130,28 @@ const StepForm = ({post, pathname}) => {
     return (
         <>
             {handleSteps(activeStep)}
-            <Button onClick={()=>create(formValues, postValue)}>Save</Button>
-            <Button onClick={()=>publish(formValues, postValue)}>Publish</Button>
+            <Button onClick={()=>create(detailValues, postValue)}>Save</Button>
+            <Button onClick={()=>publish(detailValues, postValue)}>Publish</Button>
         </>
     )
     // if url path leads to a draft than populate form with draft data
   } else if(pathname === "/dashboard/drafts/[_id]")
   {
     // destructure values from post data
-    const {firstName,
-      lastName,
-      email,
-      gender,
-      date,
-      city,
-      phone} = post;
+    const {title,
+      author,
+      description,
+      category
+      } = post;
   
     // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
     //set form values state;
-    const [formValues, setFormValues] = useState({firstName,
-      lastName,
-      email,
-      gender,
-      date,
-      city,
-      phone})
+    const [detailValues, setDetailValues] = useState({title,
+      author,
+      description
+      })
 
     // set editor state
     const [postValue, setPostValue] = useState(post);
@@ -176,7 +168,7 @@ const StepForm = ({post, pathname}) => {
         const { name, value } = e.target
         
         // Set new values on from change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
-        setFormValues(values => ({
+        setDetailValues(values => ({
           ...values,
           [name]: value
         }))
@@ -208,7 +200,7 @@ const StepForm = ({post, pathname}) => {
                 handleNext={handleNext}
                 handleBack={handleBack}
                 handleChange={handleChange}
-                values={formValues}
+                values={detailValues}
                 
               />
             // add back in when ready  formErrors={formErrors}
@@ -218,7 +210,7 @@ const StepForm = ({post, pathname}) => {
             handleNext={handleNext}
             handleBack={handleBack}
             handleChange={handleChange}
-            values={formValues}
+            values={detailValues}
             
             />
             // add back in when ready  formErrors={formErrors}
@@ -228,9 +220,9 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to update the draft. Takes in the form values and editor value.
-      const update = async (formValues, postValue) => {
+      const update = async (detailValues, postValue) => {
         // combine form values as post values. Add form values second otherwise they will be overridden by initial draft values.
-        const value = Object.assign(postValue, formValues);
+        const value = Object.assign(postValue, detailValues);
         
         const res = await fetch('/api/updateDraft', {
           method: 'PUT',
@@ -242,9 +234,9 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to publish the draft
-      const publish = async (formValues, postValue) => {
+      const publish = async (detailValues, postValue) => {
     
-        const value = Object.assign(postValue, formValues);
+        const value = Object.assign(postValue, detailValues);
         
         // create post
         const res1 = await fetch('/api/createPost', {
@@ -268,32 +260,26 @@ const StepForm = ({post, pathname}) => {
     return (
         <>
             {handleSteps(activeStep)}
-            <Button onClick={()=>update(formValues, postValue)}>Save</Button>
-            <Button onClick={()=>publish(formValues, postValue)}>Publish</Button>
+            <Button onClick={()=>update(detailValues, postValue)}>Save</Button>
+            <Button onClick={()=>publish(detailValues, postValue)}>Publish</Button>
         </>
     )
     // if url path leads to a post than populate form with post data.
   } else {
 
-    const {firstName,
-      lastName,
-      email,
-      gender,
-      date,
-      city,
-      phone} = post;
+    const {title,
+      author,
+      description,
+      category} = post;
   
     // set step state
     const [activeStep, setActiveStep] = useState(0);
 
     //set form values state;
-    const [formValues, setFormValues] = useState({firstName,
-      lastName,
-      email,
-      gender,
-      date,
-      city,
-      phone})
+    const [detailValues, setDetailValues] = useState({title,
+      author,
+      description
+      })
 
     const [postValue, setPostValue] = useState(post);
     
@@ -309,7 +295,7 @@ const StepForm = ({post, pathname}) => {
         const { name, value } = e.target
         // console.log(e.target)
         // Set new values on from change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
-        setFormValues(values => ({
+        setDetailValues(values => ({
           ...values,
           [name]: value
         }))
@@ -341,7 +327,7 @@ const StepForm = ({post, pathname}) => {
                 handleNext={handleNext}
                 handleBack={handleBack}
                 handleChange={handleChange}
-                values={formValues}
+                values={detailValues}
                 
               />
             // add back in when ready  formErrors={formErrors}
@@ -351,7 +337,7 @@ const StepForm = ({post, pathname}) => {
             handleNext={handleNext}
             handleBack={handleBack}
             handleChange={handleChange}
-            values={formValues}
+            values={detailValues}
             
             />
             // add back in when ready  formErrors={formErrors}
@@ -361,8 +347,8 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to update post
-      const update = async (formValues, postValue) => {
-        const value = Object.assign(postValue, formValues);
+      const update = async (detailValues, postValue) => {
+        const value = Object.assign(postValue, detailValues);
         
         const res = await fetch('/api/updatePost', {
           method: 'PUT',
@@ -377,7 +363,7 @@ const StepForm = ({post, pathname}) => {
     return (
         <>
             {handleSteps(activeStep)}
-            <Button onClick={()=>update(formValues, postValue)}>Save</Button>
+            <Button onClick={()=>update(detailValues, postValue)}>Save</Button>
             
         </>
     )

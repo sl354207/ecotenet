@@ -5,23 +5,26 @@ import { FormControl } from "@material-ui/core"
 import { Select } from "@material-ui/core"
 import { InputLabel } from "@material-ui/core"
 import { MenuItem } from "@material-ui/core"
+import { Autocomplete } from '@material-ui/lab'
 import { Button } from "@material-ui/core"
 
 //pass in and destructure props.
-const PostDetails = ({ handleNext, handleBack,handleChange, values: { firstName, lastName, email, gender } }) => {
+const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { title, author, description }, categoryValue, setCategoryValue, categoryInputValue, setCategoryInputValue }) => {
+
+    const options = ["Hunt", "Gather"]
     return (
         <Fragment>
             <Grid container spacing={2} noValidate>
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label="First Name"
-                        name="firstName"
-                        placeholder="Your first name"
+                        label="Title"
+                        name="title"
+                        placeholder=" title of post(max length 60 characters)"
                         margin="normal"
-                        value={firstName || ""}
+                        value={title || ""}
                         onChange={handleChange}
-                        
+                        inputProps={{ maxLength: 60 }}
                         
                         required
                     />
@@ -29,13 +32,13 @@ const PostDetails = ({ handleNext, handleBack,handleChange, values: { firstName,
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label="Last Name"
-                        name="lastName"
-                        placeholder="Your last name"
+                        label="Author"
+                        name="author"
+                        placeholder="author name"
                         margin="normal"
-                        value={lastName || ""}
+                        value={author || ""}
                         onChange={handleChange}
-                        
+                        inputProps={{ maxLength: 60 }}
                         required
                     />
                 </Grid>
@@ -43,25 +46,33 @@ const PostDetails = ({ handleNext, handleBack,handleChange, values: { firstName,
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label="Email"
-                        name="email"
-                        placeholder="Your email address"
-                        type="email"
-                        value={email || ""}
+                        label="Description"
+                        name="description"
+                        placeholder=" short summary of post(max length 160 characters) "
+                        value={description || ""}
                         onChange={handleChange}
                         margin="normal"
-                        
-                        required
+                        inputProps={{ maxLength: 160 }}
+                        multiline
+                        rows={2}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth required margin="normal">
-                        <InputLabel>Gender</InputLabel>
-                        <Select value={gender} onChange={handleChange} name="gender">
-                            <MenuItem value={"Male"}>Male</MenuItem>
-                            <MenuItem value={"Female"}>Female</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <Autocomplete
+                    id="combo-box-demo"
+                    name="category"
+                    autoHighlight
+                    onChange={(event, categoryValue) => {
+                        setCategoryValue(categoryValue)}} 
+                    value={categoryValue}
+                    onInputChange={(event, categoryInputValue) => {
+                        setCategoryInputValue(categoryInputValue)}} 
+                    inputValue={categoryInputValue}
+                    options={options}
+                    getOptionLabel={(option) => option}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Category" variant="outlined" />}
+                    />
                 </Grid>
             </Grid>
             <div style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}>
