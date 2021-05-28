@@ -7,13 +7,11 @@ export default async function handler(req, res) {
 
     // body must be in same format as database query
     const {  
-        firstName,
-        lastName,
-        email,
-        gender,
-        date,
-        city, 
-        phone, 
+        title,
+        author,
+        description,
+        category, 
+        tags,
         _id,
         id, 
         version, 
@@ -21,16 +19,14 @@ export default async function handler(req, res) {
 
     try {
         const updated = await updateDraft(
-            firstName,
-            lastName,
-            email,
-            gender,
-            date,
-            city, 
-            phone,
+            title,
+            author,
+            description,
+            category, 
+            tags,
             _id,
-            id,
-            version,
+            id, 
+            version, 
             rows
         );
         return res.status(200).json(updated);

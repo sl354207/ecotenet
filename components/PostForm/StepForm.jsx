@@ -19,17 +19,31 @@ const StepForm = ({post, pathname}) => {
     // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
-    //set detail values state;
-    const [detailValues, setDetailValues] = useState(initialDetailValues)
-
     // set editor value state
     const [postValue, setPostValue] = useState(null);
 
+    //set detail values state;
+    const [detailValues, setDetailValues] = useState(initialDetailValues)
+
+    // set category options
+    const categoryOptions = ["Hunt", "Gather"]
+
     // set category state
-    const [categoryValue, setCategoryValue] = useState("");
+    const [categoryValue, setCategoryValue] = useState();
 
     // set category input state
     const [categoryInputValue, setCategoryInputValue] = useState("");
+
+    // set tags
+    const tags = [];
+
+    // set tag state
+    const [tagValue, setTagValue] = useState([]);
+
+    // remove tag chip on delete
+    const handleRemoveChip = chip => {
+      setTagValue(tagValue.filter(tag => tag !== chip))
+    }
     
     //setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
     // Proceed to next step.
@@ -38,7 +52,7 @@ const StepForm = ({post, pathname}) => {
     const handleBack = () => setActiveStep(step => step - 1)
 
     // Handle form change
-    const handleChange = e => {
+    const handleDetailChange = e => {
         //set name and value from targeted form props
         const { name, value } = e.target
         
@@ -74,12 +88,17 @@ const StepForm = ({post, pathname}) => {
               <PostDetails
                 handleNext={handleNext}
                 handleBack={handleBack}
-                handleChange={handleChange}
+                handleDetailChange={handleDetailChange}
                 detailValues={detailValues}
+                categoryOptions={categoryOptions}
                 categoryValue={categoryValue}
                 setCategoryValue={setCategoryValue}
                 categoryInputValue={categoryInputValue}
                 setCategoryInputValue={setCategoryInputValue}
+                tags={tags}
+                tagValue={tagValue}
+                setTagValue={setTagValue}
+                handleRemoveChip={handleRemoveChip}
               />
             // add back in when ready  formErrors={formErrors}
             )
@@ -87,7 +106,7 @@ const StepForm = ({post, pathname}) => {
             return <PostTags
             handleNext={handleNext}
             handleBack={handleBack}
-            handleChange={handleChange}
+            handleDetailChange={handleDetailChange}
             handleAlignment={handleAlignment}
             value={alignment}
             detailValues={detailValues}
@@ -100,9 +119,16 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to create a new draft. Takes in form values and editor value.
-      const create = async (detailValues, postValue) => {
+      const create = async (postValue, detailValues, categoryValue, tagValue) => {
+
+        const categoryObject = {
+          category: categoryValue
+        }
+        const tagObject = {
+          tags: tagValue
+        }
         // combine form value and editor value into one object to pass to api.
-        const value = Object.assign(detailValues, postValue);
+        const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
         const res = await fetch('/api/createDraft', {
           method: 'POST',
@@ -114,9 +140,16 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to create a published post. Takes in form values and editor value
-      const publish = async (detailValues, postValue) => {
+      const publish = async (postValue, detailValues, categoryValue, tagValue) => {
+
+        const categoryObject = {
+          category: categoryValue
+        }
+        const tagObject = {
+          tags: tagValue
+        }
         // combine form value and editor value into one object to pass to api. 
-        const value = Object.assign(detailValues, postValue);
+        const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
         const res = await fetch('/api/createPost', {
           method: 'POST',
@@ -130,8 +163,8 @@ const StepForm = ({post, pathname}) => {
     return (
         <>
             {handleSteps(activeStep)}
-            <Button onClick={()=>create(detailValues, postValue)}>Save</Button>
-            <Button onClick={()=>publish(detailValues, postValue)}>Publish</Button>
+            <Button onClick={()=>create(postValue, detailValues, categoryValue, tagValue)}>Save</Button>
+            <Button onClick={()=>publish(postValue, detailValues, categoryValue, tagValue)}>Publish</Button>
         </>
     )
     // if url path leads to a draft than populate form with draft data
@@ -141,20 +174,39 @@ const StepForm = ({post, pathname}) => {
     const {title,
       author,
       description,
-      category
+      category,
+      tags
       } = post;
   
     // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
-    //set form values state;
+    // set editor state
+    const [postValue, setPostValue] = useState(post);
+
+    //set form detail values state;
     const [detailValues, setDetailValues] = useState({title,
       author,
       description
       })
 
-    // set editor state
-    const [postValue, setPostValue] = useState(post);
+    // set category options
+    const categoryOptions = ["Hunt", "Gather"]
+
+    // set category state
+    const [categoryValue, setCategoryValue] = useState(category);
+
+    // set category input state
+    const [categoryInputValue, setCategoryInputValue] = useState("");
+
+  
+    // set tag state
+    const [tagValue, setTagValue] = useState(tags);
+
+    // remove tag chip on delete
+    const handleRemoveChip = chip => {
+      setTagValue(tagValue.filter(tag => tag !== chip))
+    }
     
     //setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
     // Proceed to next step.
@@ -163,7 +215,7 @@ const StepForm = ({post, pathname}) => {
     const handleBack = () => setActiveStep(step => step - 1)
 
     // Handle form change
-    const handleChange = e => {
+    const handleDetailChange = e => {
         //set name and value from targeted form props
         const { name, value } = e.target
         
@@ -199,9 +251,17 @@ const StepForm = ({post, pathname}) => {
               <PostDetails
                 handleNext={handleNext}
                 handleBack={handleBack}
-                handleChange={handleChange}
-                values={detailValues}
-                
+                handleDetailChange={handleDetailChange}
+                detailValues={detailValues}
+                categoryOptions={categoryOptions}
+                categoryValue={categoryValue}
+                setCategoryValue={setCategoryValue}
+                categoryInputValue={categoryInputValue}
+                setCategoryInputValue={setCategoryInputValue}
+                tags={tags}
+                tagValue={tagValue}
+                setTagValue={setTagValue}
+                handleRemoveChip={handleRemoveChip}
               />
             // add back in when ready  formErrors={formErrors}
             )
@@ -209,7 +269,7 @@ const StepForm = ({post, pathname}) => {
             return <PostRegion
             handleNext={handleNext}
             handleBack={handleBack}
-            handleChange={handleChange}
+            handleDetailChange={handleDetailChange}
             values={detailValues}
             
             />
@@ -220,9 +280,15 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to update the draft. Takes in the form values and editor value.
-      const update = async (detailValues, postValue) => {
-        // combine form values as post values. Add form values second otherwise they will be overridden by initial draft values.
-        const value = Object.assign(postValue, detailValues);
+      const update = async (postValue, detailValues, categoryValue, tagValue) => {
+        const categoryObject = {
+          category: categoryValue
+        }
+        const tagObject = {
+          tags: tagValue
+        }
+        // combine form value and editor value into one object to pass to api.
+        const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
         const res = await fetch('/api/updateDraft', {
           method: 'PUT',
@@ -234,9 +300,16 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to publish the draft
-      const publish = async (detailValues, postValue) => {
+      const publish = async (postValue, detailValues, categoryValue, tagValue) => {
     
-        const value = Object.assign(postValue, detailValues);
+        const categoryObject = {
+          category: categoryValue
+        }
+        const tagObject = {
+          tags: tagValue
+        }
+        // combine form value and editor value into one object to pass to api.
+        const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
         // create post
         const res1 = await fetch('/api/createPost', {
@@ -260,28 +333,50 @@ const StepForm = ({post, pathname}) => {
     return (
         <>
             {handleSteps(activeStep)}
-            <Button onClick={()=>update(detailValues, postValue)}>Save</Button>
-            <Button onClick={()=>publish(detailValues, postValue)}>Publish</Button>
+            <Button onClick={()=>update(postValue, detailValues, categoryValue, tagValue)}>Save</Button>
+            <Button onClick={()=>publish(postValue, detailValues, categoryValue, tagValue)}>Publish</Button>
         </>
     )
     // if url path leads to a post than populate form with post data.
   } else {
 
+    // destructure values from post data
     const {title,
       author,
       description,
-      category} = post;
+      category,
+      tags
+      } = post;
   
-    // set step state
+    // set form step state
     const [activeStep, setActiveStep] = useState(0);
 
-    //set form values state;
+    // set editor state
+    const [postValue, setPostValue] = useState(post);
+
+    //set form detail values state;
     const [detailValues, setDetailValues] = useState({title,
       author,
       description
       })
 
-    const [postValue, setPostValue] = useState(post);
+    // set category options
+    const categoryOptions = ["Hunt", "Gather"]
+
+    // set category state
+    const [categoryValue, setCategoryValue] = useState(category);
+
+    // set category input state
+    const [categoryInputValue, setCategoryInputValue] = useState("");
+
+  
+    // set tag state
+    const [tagValue, setTagValue] = useState(tags);
+
+    // remove tag chip on delete
+    const handleRemoveChip = chip => {
+      setTagValue(tagValue.filter(tag => tag !== chip))
+    }
     
     //setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
     // Proceed to next step.
@@ -290,10 +385,10 @@ const StepForm = ({post, pathname}) => {
     const handleBack = () => setActiveStep(step => step - 1)
 
     // Handle form change
-    const handleChange = e => {
+    const handleDetailChange = e => {
         //set name and value from targeted form props
         const { name, value } = e.target
-        // console.log(e.target)
+        
         // Set new values on from change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
         setDetailValues(values => ({
           ...values,
@@ -324,11 +419,19 @@ const StepForm = ({post, pathname}) => {
           case 1:
             return (
               <PostDetails
-                handleNext={handleNext}
-                handleBack={handleBack}
-                handleChange={handleChange}
-                values={detailValues}
-                
+              handleNext={handleNext}
+              handleBack={handleBack}
+              handleDetailChange={handleDetailChange}
+              detailValues={detailValues}
+              categoryOptions={categoryOptions}
+              categoryValue={categoryValue}
+              setCategoryValue={setCategoryValue}
+              categoryInputValue={categoryInputValue}
+              setCategoryInputValue={setCategoryInputValue}
+              tags={tags}
+              tagValue={tagValue}
+              setTagValue={setTagValue}
+              handleRemoveChip={handleRemoveChip}
               />
             // add back in when ready  formErrors={formErrors}
             )
@@ -336,7 +439,7 @@ const StepForm = ({post, pathname}) => {
             return <PostRegion
             handleNext={handleNext}
             handleBack={handleBack}
-            handleChange={handleChange}
+            handleDetailChange={handleDetailChange}
             values={detailValues}
             
             />
@@ -347,8 +450,15 @@ const StepForm = ({post, pathname}) => {
       }
 
       // function to update post
-      const update = async (detailValues, postValue) => {
-        const value = Object.assign(postValue, detailValues);
+      const update = async (postValue, detailValues, categoryValue, tagValue) => {
+        const categoryObject = {
+          category: categoryValue
+        }
+        const tagObject = {
+          tags: tagValue
+        }
+        // combine form value and editor value into one object to pass to api.
+        const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
         const res = await fetch('/api/updatePost', {
           method: 'PUT',
@@ -363,7 +473,7 @@ const StepForm = ({post, pathname}) => {
     return (
         <>
             {handleSteps(activeStep)}
-            <Button onClick={()=>update(detailValues, postValue)}>Save</Button>
+            <Button onClick={()=>update(postValue, detailValues, categoryValue, tagValue)}>Save</Button>
             
         </>
     )

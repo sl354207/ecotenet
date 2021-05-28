@@ -48,26 +48,21 @@ const connectToDatabase = async () => {
 }
 
 // add a post to database with specific format from editor with id, version, and rows as input data.
-const createPost = async (firstName,
-  lastName,
-  email,
-  gender,
-  date,
-  city, 
-  phone, 
-  
+const createPost = async (title,
+  author,
+  description,
+  category, 
+  tags,
   id, 
   version, 
   rows) => {
   const { db } = await connectToDatabase();
 
-  const data = {firstName,
-    lastName,
-    email,
-    gender,
-    date,
-    city, 
-    phone,
+  const data = {title,
+    author,
+    description,
+    category, 
+    tags,
     id, 
     version, 
     rows}
@@ -122,26 +117,22 @@ const getPostsByUser = async () => {
 }
 
 // update a post
-const updatePost = async (firstName,
-  lastName,
-  email,
-  gender,
-  date,
-  city, 
-  phone, 
+const updatePost = async (title,
+  author,
+  description,
+  category, 
+  tags,
   _id,
   id, 
   version, 
   rows) => {
   const { db } = await connectToDatabase();
 
-  const data = {firstName,
-    lastName,
-    email,
-    gender,
-    date,
-    city, 
-    phone,
+  const data = {title,
+    author,
+    description,
+    category, 
+    tags,
     id, 
     version, 
     rows}
@@ -168,26 +159,21 @@ const deletePost = async (_id) => {
 }
 
 // add a draft to database with specific format from editor with id, version, and rows as input data.
-const createDraft = async (firstName,
-  lastName,
-  email,
-  gender,
-  date,
-  city, 
-  phone, 
-  
+const createDraft = async (title,
+  author,
+  description,
+  category, 
+  tags,
   id, 
   version, 
   rows) => {
   const { db } = await connectToDatabase();
 
-  const data = {firstName,
-    lastName,
-    email,
-    gender,
-    date,
-    city, 
-    phone,
+  const data = {title,
+    author,
+    description,
+    category, 
+    tags,
     id, 
     version, 
     rows}
@@ -228,30 +214,26 @@ const getDraftById = async (id) => {
 }
 
 //update a draft
-const updateDraft = async ( firstName,
-lastName,
-email,
-gender,
-date,
-city, 
-phone, 
-_id,
-id, 
-version, 
-rows) => {
+const updateDraft = async ( title,
+  author,
+  description,
+  category, 
+  tags,
+  _id,
+  id, 
+  version, 
+  rows) => {
   const { db } = await connectToDatabase();
 
   const data = { 
-    firstName,
-    lastName,
-    email,
-    gender,
-    date,
-    city, 
-    phone,
-    id, 
-    version, 
-    rows}
+    title,
+  author,
+  description,
+  category, 
+  tags,
+  id, 
+  version, 
+  rows}
   const response = await db.collection("drafts").updateOne({
     _id: ObjectID(_id)
   }, { $set: data })

@@ -1,24 +1,17 @@
 import React, { Fragment, useState } from "react"
 import  { Grid } from "@material-ui/core"
 import { TextField } from "@material-ui/core"
-import { FormControl } from "@material-ui/core"
-import { Select } from "@material-ui/core"
-import { InputLabel } from "@material-ui/core"
-import { MenuItem } from "@material-ui/core"
 import { Autocomplete, createFilterOptions } from '@material-ui/lab'
 import { Button } from "@material-ui/core"
+import { Chip } from '@material-ui/core'
 
 //pass in and destructure props.
-const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { title, author, description }, categoryValue, setCategoryValue, categoryInputValue, setCategoryInputValue }) => {
+const PostDetails = ({ handleNext, handleBack,handleDetailChange, detailValues: { title, author, description }, categoryOptions, categoryValue, setCategoryValue, categoryInputValue, setCategoryInputValue, tags, tagValue, setTagValue, handleRemoveChip }) => {
 
-    const options = ["Hunt", "Gather"]
+    
 
     //testing stuff
     const filter = createFilterOptions();
-
-    let top100Films = [];
-
-    const [testValue, setTestValue] = useState([]);
 
     
 
@@ -33,7 +26,7 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
                         placeholder=" title of post(max length 60 characters)"
                         margin="normal"
                         value={title || ""}
-                        onChange={handleChange}
+                        onChange={handleDetailChange}
                         inputProps={{ maxLength: 60 }}
                         
                         required
@@ -47,7 +40,7 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
                         placeholder="author name"
                         margin="normal"
                         value={author || ""}
-                        onChange={handleChange}
+                        onChange={handleDetailChange}
                         inputProps={{ maxLength: 60 }}
                         required
                     />
@@ -60,7 +53,7 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
                         name="description"
                         placeholder=" short summary of post(max length 160 characters) "
                         value={description || ""}
-                        onChange={handleChange}
+                        onChange={handleDetailChange}
                         margin="normal"
                         inputProps={{ maxLength: 160 }}
                         multiline
@@ -78,7 +71,7 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
                     onInputChange={(event, categoryInputValue) => {
                         setCategoryInputValue(categoryInputValue)}} 
                     inputValue={categoryInputValue}
-                    options={options}
+                    options={categoryOptions}
                     getOptionLabel={(option) => option}
                     style={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Category" variant="outlined" />}
@@ -88,23 +81,21 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
                     <Autocomplete
       autoHighlight
       disableClearable={true}
-      value={testValue}
+      value={tagValue}
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           () => {
-              setTestValue(newValue)
+              setTagValue(newValue)
           }
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
-          setTestValue(
+          setTagValue(
               
-            testValue => [...testValue, newValue.inputValue]
+            tagValue => [...tagValue, newValue.inputValue]
           );
-          console.log(testValue);
-        //   top100Films.push(newValue.inputValue);
-        //   console.log(top100Films);
+
         } else {
-          setTestValue(newValue);
+          setTagValue(newValue);
         }
       }}
       filterOptions={(options, params) => {
@@ -124,7 +115,7 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
       clearOnBlur
       handleHomeEndKeys
       id="free-solo-with-text-demo"
-      options={top100Films}
+      options={tags}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -144,11 +135,13 @@ const PostDetails = ({ handleNext, handleBack,handleChange, detailValues: { titl
         <TextField {...params} label="Free solo with text demo" variant="outlined" />
       )}
     />
-    {testValue.map((label) => (
+    {tagValue.map((tag) => (
           <div
             
           >
-            {label}
+           <Chip 
+           label={tag}
+           onDelete={ ()=> handleRemoveChip(tag)}></Chip> 
           </div>
         ))}
                 </Grid>
