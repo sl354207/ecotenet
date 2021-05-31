@@ -7,7 +7,7 @@ import { Button } from '@material-ui/core';
 
 // pass in post and url path as props
 const StepForm = ({post, pathname}) => {
-  // if the post is undefined(no post was retrieved) then display a blank editor
+  // if the post is undefined(no post was retrieved) then display a blank editor for creating new post or draft. Remove any repetitive code out of if statements?
   if (post === undefined) {
     // set initial values of form
     const initialDetailValues = {
@@ -25,13 +25,13 @@ const StepForm = ({post, pathname}) => {
     //set detail values state;
     const [detailValues, setDetailValues] = useState(initialDetailValues)
 
-    // set category options
+    // set category options. Move above if statements since doesn't change?
     const categoryOptions = ["Hunt", "Gather"]
 
     // set category state
     const [categoryValue, setCategoryValue] = useState();
 
-    // set category input state
+    // set category input state. Recommended to keep separate than category state by MUI docs.
     const [categoryInputValue, setCategoryInputValue] = useState("");
 
     // set tags
@@ -40,7 +40,7 @@ const StepForm = ({post, pathname}) => {
     // set tag state
     const [tagValue, setTagValue] = useState([]);
 
-    // remove tag chip on delete
+    // remove tag chip on delete. Take in label of chip as chip. If the tag value does not equal the tag label than return filtered array without that chip and set it to state.
     const handleRemoveChip = chip => {
       setTagValue(tagValue.filter(tag => tag !== chip))
     }
@@ -51,7 +51,7 @@ const StepForm = ({post, pathname}) => {
     // Go back to prev step
     const handleBack = () => setActiveStep(step => step - 1)
 
-    // Handle form change
+    // Handle form details change
     const handleDetailChange = e => {
         //set name and value from targeted form props
         const { name, value } = e.target
@@ -120,16 +120,18 @@ const StepForm = ({post, pathname}) => {
 
       // function to create a new draft. Takes in form values and editor value.
       const create = async (postValue, detailValues, categoryValue, tagValue) => {
-
+        // turn category string into object with key value pair
         const categoryObject = {
           category: categoryValue
         }
+        // turn tag string into object with key value pair.
         const tagObject = {
           tags: tagValue
         }
         // combine form value and editor value into one object to pass to api.
         const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
+        // send value to createDraft api
         const res = await fetch('/api/createDraft', {
           method: 'POST',
           headers: {
@@ -141,16 +143,18 @@ const StepForm = ({post, pathname}) => {
 
       // function to create a published post. Takes in form values and editor value
       const publish = async (postValue, detailValues, categoryValue, tagValue) => {
-
+        // turn category string into object with key value pair
         const categoryObject = {
           category: categoryValue
         }
+        // turn tag string into object with key value pair.
         const tagObject = {
           tags: tagValue
         }
         // combine form value and editor value into one object to pass to api. 
         const value = Object.assign(postValue, detailValues, categoryObject, tagObject);
         
+        // send value to createPost api
         const res = await fetch('/api/createPost', {
           method: 'POST',
           headers: {

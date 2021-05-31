@@ -7,14 +7,10 @@ import { Chip } from '@material-ui/core'
 
 //pass in and destructure props.
 const PostDetails = ({ handleNext, handleBack,handleDetailChange, detailValues: { title, author, description }, categoryOptions, categoryValue, setCategoryValue, categoryInputValue, setCategoryInputValue, tags, tagValue, setTagValue, handleRemoveChip }) => {
-
-    
-
-    //testing stuff
+    // set filter for autocomplete options
     const filter = createFilterOptions();
 
-    
-
+    // check MUI docs and examples for component prop explanations. Need to change some ids and props.
     return (
         <Fragment>
             <Grid container spacing={2} noValidate>
@@ -79,73 +75,74 @@ const PostDetails = ({ handleNext, handleBack,handleDetailChange, detailValues: 
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <Autocomplete
-      autoHighlight
-      disableClearable={true}
-      value={tagValue}
-      onChange={(event, newValue) => {
-        if (typeof newValue === 'string') {
-          () => {
-              setTagValue(newValue)
-          }
-        } else if (newValue && newValue.inputValue) {
-          // Create a new value from the user input
-          setTagValue(
-              
-            tagValue => [...tagValue, newValue.inputValue]
-          );
+                      autoHighlight
+                      disableClearable={true}
+                      value={tagValue}
+                      onChange={(event, newValue) => {
+                        if (typeof newValue === 'string') {
+                          () => {
+                              setTagValue(newValue)
+                          }
+                        } else if (newValue && newValue.inputValue) {
+                          // Create a new value from the user input
+                          setTagValue(
+                              
+                            tagValue => [...tagValue, newValue.inputValue]
+                          );
 
-        } else {
-          setTagValue(newValue);
-        }
-      }}
-      filterOptions={(options, params) => {
-        const filtered = filter(options, params);
+                        } else {
+                          setTagValue(newValue);
+                        }
+                      }}
+                      filterOptions={(options, params) => {
+                        const filtered = filter(options, params);
 
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            title: `Add "${params.inputValue}"`,
-          });
-        }
+                        // Suggest the creation of a new value
+                        if (params.inputValue !== '') {
+                          filtered.push({
+                            inputValue: params.inputValue,
+                            title: `Add "${params.inputValue}"`,
+                          });
+                        }
 
-        return filtered;
-      }}
-      selectOnFocus
-      clearOnBlur
-      handleHomeEndKeys
-      id="free-solo-with-text-demo"
-      options={tags}
-      getOptionLabel={(option) => {
-        // Value selected with enter, right from the input
-        if (typeof option === 'string') {
-          return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return option.inputValue;
-        }
-        // Regular option
-        return option.title;
-      }}
-      renderOption={(option) => option.title}
-      style={{ width: 300 }}
-      freeSolo
-      renderInput={(params) => (
-        <TextField {...params} label="Free solo with text demo" variant="outlined" />
-      )}
-    />
-    {tagValue.map((tag) => (
-          <div
-            
-          >
-           <Chip 
-           label={tag}
-           onDelete={ ()=> handleRemoveChip(tag)}></Chip> 
-          </div>
-        ))}
-                </Grid>
-                
+                        return filtered;
+                      }}
+                      selectOnFocus
+                      clearOnBlur
+                      handleHomeEndKeys
+                      id="free-solo-with-text-demo"
+                      options={tags}
+                      getOptionLabel={(option) => {
+                        // Value selected with enter, right from the input
+                        if (typeof option === 'string') {
+                          return option;
+                        }
+                        // Add "xxx" option created dynamically
+                        if (option.inputValue) {
+                          return option.inputValue;
+                        }
+                        // Regular option
+                        return option.title;
+                      }}
+                      renderOption={(option) => option.title}
+                      style={{ width: 300 }}
+                      freeSolo
+                      renderInput={(params) => (
+                        <TextField {...params} label="Free solo with text demo" variant="outlined" />
+                      )}
+                    />
+                    {tagValue.map((tag) => (
+                          <div
+                            
+                          >
+                          <Chip 
+                          label={tag}
+                          onDelete={ ()=> handleRemoveChip(tag)}></Chip> 
+                          </div>
+                        )
+                      )
+                    }
+                </Grid> 
             </Grid>
             <div style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}>
                 <Button variant="contained" color="default" onClick={handleBack} style={{ marginRight: 10 }}>
