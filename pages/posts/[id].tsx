@@ -33,6 +33,8 @@ import EditorLayout from '../../components/EditorLayout';
 
 import { Button } from '@material-ui/core';
 
+import CommentForm from '../../components/CommentForm'
+
 // Define which plugins we want to use.
 const cellPlugins = [slate(),
     image,
@@ -52,6 +54,7 @@ const post = ({ post }) => {
             <EditorLayout>
                 <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} readOnly/>
             </EditorLayout>
+            <CommentForm _id={post._id}/>
             <Link href='/posts'>Go Back</Link>
         </>
     )

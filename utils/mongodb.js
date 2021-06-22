@@ -256,6 +256,16 @@ const deleteDraft = async (_id) => {
   return deleted;
 }
 
+//create a comment
+const createComment = async (post_id, text) => {
+  const { db } = await connectToDatabase();
+
+  const data = {post_id, text}
+  const response = await db.collection("comments").insertOne(data)
+
+  return data;
+
+} 
 
 module.exports = {
   connectToDatabase,
@@ -269,7 +279,8 @@ module.exports = {
   getDraftsByUser,
   getDraftById,
   updateDraft,
-  deleteDraft
+  deleteDraft,
+  createComment
 }
 
  
