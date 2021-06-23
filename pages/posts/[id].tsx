@@ -3,6 +3,7 @@ import Meta from '../../components/Meta'
 const { getPosts } = require('../../utils/mongodb');
 
 const { getPostById } = require('../../utils/mongodb');
+const { getPostComments } = require('../../utils/mongodb');
 
 import Link from 'next/link'
 
@@ -34,6 +35,7 @@ import EditorLayout from '../../components/EditorLayout';
 import { Button } from '@material-ui/core';
 
 import CommentForm from '../../components/CommentForm'
+import Comments from '../../components/Comments'
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(),
@@ -45,7 +47,7 @@ const cellPlugins = [slate(),
   ];
 
 // pass in post from data.js as prop and create page for each post
-const post = ({ post }) => {
+const post = ({ post, comments }) => {
     // set post as value of editor
     const [value, setValue] = useState<Value>(post);
     
@@ -54,6 +56,7 @@ const post = ({ post }) => {
             <EditorLayout>
                 <Editor cellPlugins={cellPlugins} value={value} onChange={setValue} readOnly/>
             </EditorLayout>
+            <Comments comments={comments}/>
             <CommentForm _id={post._id}/>
             <Link href='/posts'>Go Back</Link>
         </>
@@ -66,10 +69,16 @@ export const getStaticProps = async (context) => {
     const _id = context.params.id;
 
     const post = await getPostById(_id);
+    const postId = post._id.toString();
+    // console.log(typeof postId);
+
+    const comments = await getPostComments(postId)
+    // console.log(comments);
     
     return {
         props: {
-            post: JSON.parse(JSON.stringify(post))
+            post: JSON.parse(JSON.stringify(post)),
+            comments: JSON.parse(JSON.stringify(comments))
         }
     }
 }

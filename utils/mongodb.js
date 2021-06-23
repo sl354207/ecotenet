@@ -267,6 +267,21 @@ const createComment = async (post_id, text) => {
 
 } 
 
+//get post comments
+const getPostComments = async (id) => {
+  
+  const { db } = await connectToDatabase();
+
+  const comments = await db
+    .collection("comments")
+    .find({
+      post_id: id
+    })
+    .toArray();
+
+  return comments;
+}
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -280,7 +295,8 @@ module.exports = {
   getDraftById,
   updateDraft,
   deleteDraft,
-  createComment
+  createComment,
+  getPostComments
 }
 
  

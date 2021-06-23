@@ -15,7 +15,7 @@ const CommentForm = (_id) => {
     };
 
     const idObject = {
-      post_id: _id,
+      post_id: _id._id,
     };
 
     const comment = Object.assign(idObject, textObject);
