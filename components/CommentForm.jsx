@@ -2,20 +2,20 @@ import { useState } from "react";
 import { TextField } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
-const CommentForm = (_id) => {
+const CommentForm = ({ post_id, comment_ref }) => {
   const [value, setValue] = useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  const handleSubmit = async (value, _id) => {
+  const handleSubmit = async (value, post_id) => {
     const textObject = {
       text: value,
     };
 
     const idObject = {
-      post_id: _id._id,
+      post_id: post_id._id,
     };
 
     const comment = Object.assign(idObject, textObject);
@@ -40,7 +40,7 @@ const CommentForm = (_id) => {
         onChange={handleChange}
         onSubmit={handleSubmit}
       />
-      <Button onClick={() => handleSubmit(value, _id)}>Save</Button>
+      <Button onClick={() => handleSubmit(value, post_id)}>Save</Button>
     </div>
   );
 };
