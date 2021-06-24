@@ -58,8 +58,7 @@ const post = ({ post, comments }) => {
           readOnly
         />
       </EditorLayout>
-      <Comments comments={comments} />
-      <CommentForm post_id={post._id} />
+      <Comments comments={comments} post_id={post._id} />
       <Link href="/posts">Go Back</Link>
     </>
   );

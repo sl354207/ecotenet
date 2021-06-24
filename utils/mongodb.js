@@ -257,10 +257,10 @@ const deleteDraft = async (_id) => {
 }
 
 //create a comment
-const createComment = async (post_id, text) => {
+const createComment = async (post_id, comment_ref, date, text) => {
   const { db } = await connectToDatabase();
 
-  const data = {post_id, text}
+  const data = {post_id, comment_ref, date, text}
   const response = await db.collection("comments").insertOne(data)
 
   return data;

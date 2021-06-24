@@ -9,16 +9,24 @@ const CommentForm = ({ post_id, comment_ref }) => {
     setValue(event.target.value);
   };
 
-  const handleSubmit = async (value, post_id) => {
+  const handleSubmit = async (value, post_id, comment_ref) => {
     const textObject = {
       text: value,
     };
 
     const idObject = {
-      post_id: post_id._id,
+      post_id: post_id,
     };
 
-    const comment = Object.assign(idObject, textObject);
+    const refObject = {
+      comment_ref: comment_ref,
+    };
+
+    const dateObject = {
+      date: new Date().toUTCString(),
+    };
+
+    const comment = Object.assign(idObject, refObject, dateObject, textObject);
 
     const res = await fetch("/api/createComment", {
       method: "POST",
@@ -40,7 +48,9 @@ const CommentForm = ({ post_id, comment_ref }) => {
         onChange={handleChange}
         onSubmit={handleSubmit}
       />
-      <Button onClick={() => handleSubmit(value, post_id)}>Save</Button>
+      <Button onClick={() => handleSubmit(value, post_id, comment_ref)}>
+        Save
+      </Button>
     </div>
   );
 };
