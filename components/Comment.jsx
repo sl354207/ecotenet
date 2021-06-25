@@ -24,27 +24,35 @@ const Comment = ({ comment, post_id }) => {
   const open = Boolean(anchorEl);
   const id = open ? "reply-form" : undefined;
 
-  return (
-    <div>
-      <h3>{comment.text}</h3>
-      {comment.comment_ref === null && (
-        <div>
-          <Button aria-describedby={id} onClick={handleClick}>
-            reply
-          </Button>
-          <Popper id={id} open={open} anchorEl={anchorEl} transition>
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}>
-                <div className={classes.paper}>
-                  <CommentForm post_id={post_id} comment_ref={comment._id} />
-                </div>
-              </Fade>
-            )}
-          </Popper>
-        </div>
-      )}
-    </div>
-  );
+  if (comment.comment_ref === comment._id) {
+    return (
+      <div>
+        <h3>{comment.text}</h3>
+        {comment.comment_ref === comment._id && (
+          <div>
+            <Button aria-describedby={id} onClick={handleClick}>
+              reply
+            </Button>
+            <Popper id={id} open={open} anchorEl={anchorEl} transition>
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <div className={classes.paper}>
+                    <CommentForm post_id={post_id} comment_ref={comment._id} />
+                  </div>
+                </Fade>
+              )}
+            </Popper>
+          </div>
+        )}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <h3>REPLY COMMENT{comment.text}</h3>
+      </div>
+    );
+  }
 };
 
 export default Comment;

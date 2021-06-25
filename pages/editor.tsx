@@ -61,7 +61,7 @@ export default function SimpleExample({ draft }) {
 
   // console.log(draft);
   // console.log(draft._id);
-  console.log(value);
+  // console.log(value);
   // add value of editor to database from create api endpoint using fetch api(see docs).
   const _id = draft._id;
   const create = async (value) => {
@@ -76,10 +76,10 @@ export default function SimpleExample({ draft }) {
 
   const update = async (value, _id) => {
     
-    console.log(_id);
-    console.log(value);
+    // console.log(_id);
+    // console.log(value);
     value = Object.assign(value, {_id: _id});
-    console.log(value);
+    // console.log(value);
     const res = await fetch('/api/updateDraft', {
       method: 'PUT',
       headers: {
@@ -87,7 +87,7 @@ export default function SimpleExample({ draft }) {
       },
       body: JSON.stringify(value),
     });
-    console.log(res);
+    // console.log(res);
   }
   
   return (
