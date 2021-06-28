@@ -1,6 +1,6 @@
 import { createComment } from '../../utils/mongodb';
 
-// api endpoint to post a draft to the database
+// api endpoint to post a comment to the database
 export default async function handler(req, res) {
      // body must be in same format as database query
     const { post_id, comment_ref, date, text } = req.body;

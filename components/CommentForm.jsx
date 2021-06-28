@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TextField } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
+//pass in post id and comment ref from comment
 const CommentForm = ({ post_id, comment_ref }) => {
   const [value, setValue] = useState("");
 
@@ -10,6 +11,7 @@ const CommentForm = ({ post_id, comment_ref }) => {
   };
 
   const handleSubmit = async (value, post_id, comment_ref) => {
+    //convert comment values to key value pairs
     const textObject = {
       text: value,
     };
@@ -25,7 +27,7 @@ const CommentForm = ({ post_id, comment_ref }) => {
     const dateObject = {
       date: new Date().toUTCString(),
     };
-
+    //combine all objects and send to api
     const comment = Object.assign(idObject, refObject, dateObject, textObject);
 
     const res = await fetch("/api/createComment", {

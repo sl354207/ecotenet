@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//pass in comment and post id from comments
 const Comment = ({ comment, post_id }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -23,11 +24,12 @@ const Comment = ({ comment, post_id }) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "reply-form" : undefined;
-
+  //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
     return (
       <div>
         <h3>{comment.text}</h3>
+        {/* display reply button and comment form with comment ref to original comment*/}
         {comment.comment_ref === comment._id && (
           <div>
             <Button aria-describedby={id} onClick={handleClick}>
