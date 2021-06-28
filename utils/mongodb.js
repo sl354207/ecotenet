@@ -56,6 +56,9 @@ const createPost = async (title,
   id, 
   version, 
   rows) => {
+
+  const count = 0;
+
   const { db } = await connectToDatabase();
 
   const data = {title,
@@ -65,7 +68,9 @@ const createPost = async (title,
     tags,
     id, 
     version, 
-    rows}
+    rows,
+    count}
+    
   const response = await db.collection("published_posts").insertOne(data)
 
   return data;

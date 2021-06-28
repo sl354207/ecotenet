@@ -10,7 +10,8 @@ export default async function handler(req, res) {
         tags,
         id, 
         version, 
-        rows } = req.body;
+        rows,
+        count } = req.body;
 
     // only allow post method
     if (req.method !== 'POST') {
@@ -26,7 +27,8 @@ export default async function handler(req, res) {
             tags,
             id, 
             version, 
-            rows
+            rows,
+            count
         );
 
         return res.status(200).json(createdPost);

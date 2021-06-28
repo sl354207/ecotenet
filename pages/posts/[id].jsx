@@ -31,9 +31,10 @@ import customImage from "../../plugins/customImage";
 
 import EditorLayout from "../../components/EditorLayout";
 
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
 
 import Comments from "../../components/Comments";
+import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
@@ -42,6 +43,34 @@ const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 const post = ({ post, comments }) => {
   // set post as value of editor
   const [value, setValue] = useState(post);
+
+  //set count value for post
+  const [count, setCount] = useState(post.count);
+  //set limit for count
+  const [limit, setLimit] = useState(0);
+
+  const handleCountUp = () => {
+    if (limit == 1) {
+      setLimit(1);
+      setCount(count);
+    } else {
+      setLimit(limit + 1);
+      setCount(count + 1);
+    }
+  };
+
+  const handleCountDown = () => {
+    if (count == 0) {
+      setLimit(0);
+      setCount(count);
+    } else if (limit == -1) {
+      setLimit(limit);
+      setCount(count);
+    } else {
+      setLimit(limit - 1);
+      setCount(count - 1);
+    }
+  };
 
   return (
     <>
@@ -53,6 +82,14 @@ const post = ({ post, comments }) => {
           readOnly
         />
       </EditorLayout>
+      <IconButton onClick={handleCountUp}>
+        <ArrowDropUp />
+      </IconButton>
+      <div>{count}</div>
+      <IconButton onClick={handleCountDown}>
+        <ArrowDropDown />
+      </IconButton>
+      {count !== post.count && <Button>Submit</Button>}
       <Comments comments={comments} post_id={post._id} />
       <Link href="/posts">Go Back</Link>
     </>
