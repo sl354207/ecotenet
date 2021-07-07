@@ -14,47 +14,62 @@ function ImageUploadField({ onChange, value }: ImageProps) {
   // uploadFile takes in the local file as photo, uploads the file to storage and returns the url through xhr. A callback is needed to retrieve the url as it is asynchronous data.  
   const uploadFile = async (photo, callback) => {
     // post request url
-    const url = "https://api.cloudinary.com/v1_1/demo/upload";
+    // const url = "https://api.cloudinary.com/v1_1/demo/upload";
 
-    // create xhr object. Check docs for more details.
-    const xhr = new XMLHttpRequest();
+    // // create xhr object. Check docs for more details.
+    // const xhr = new XMLHttpRequest();
 
-    // create form data object. FormData api is used to submit xhr data to a form more easily. Check docs.
-    const fd = new FormData();
+    // // create form data object. FormData api is used to submit xhr data to a form more easily. Check docs.
+    // const fd = new FormData();
 
-    // open xhr request to the specified url, set it as an asynchronous POST request.
-    xhr.open('POST', url, true);
+    // // open xhr request to the specified url, set it as an asynchronous POST request.
+    // xhr.open('POST', url, true);
 
-    // set name of the header and the value.
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    // // set name of the header and the value.
+    // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
   
-    // Reset the upload progress bar
-    //  document.getElementById('progress').style.width = 0;
+    // // Reset the upload progress bar
+    // //  document.getElementById('progress').style.width = 0;
     
-    // Update progress (can be used to show progress indicator)
+    // // Update progress (can be used to show progress indicator)
 
-    // track the progress of the uploaded file
-    xhr.upload.addEventListener("progress", function(e) {
-      // const progress = Math.round((e.loaded * 100.0) / e.total);
-      // document.getElementById('progress').style.width = progress + "%";
+    // // track the progress of the uploaded file
+    // xhr.upload.addEventListener("progress", function(e) {
+    //   // const progress = Math.round((e.loaded * 100.0) / e.total);
+    //   // document.getElementById('progress').style.width = progress + "%";
   
-      console.log(`fileuploadprogress data.loaded: ${e.loaded},
-    data.total: ${e.total}`);
-    });
+    //   console.log(`fileuploadprogress data.loaded: ${e.loaded},
+    // data.total: ${e.total}`);
+    // });
   
-    // handle any functionality returned by request.
-    xhr.onreadystatechange = function(e) {
-      // if fetch is successful return url.
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        // File uploaded successfully
-        const response = JSON.parse(xhr.responseText);
-        // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
+    // // handle any functionality returned by request.
+    // xhr.onreadystatechange = function(e) {
+    //   // if fetch is successful return url.
+    //   if (xhr.readyState == 4 && xhr.status == 200) {
+    //     // File uploaded successfully
+    //     const response = JSON.parse(xhr.responseText);
+    //     // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
 
+        // get secure url from our server
+        const url  = await fetch("/api/media").then(res => res.json())
+        // console.log(url)
+      
+        // post the image direclty to the s3 bucket
+        await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+          body: photo
+        })
+      
+        const imageUrl = url.split('?')[0]
+        console.log(typeof imageUrl)
 
-        const url = response.secure_url;
+        // // const url = response.secure_url;
 
-        // add callback so url is available outside function.
-        callback(url);
+        // // add callback so url is available outside function.
+        callback(imageUrl);
         
         //  console.log(url);
         // Create a thumbnail of the uploaded image, with 150px width
@@ -64,22 +79,22 @@ function ImageUploadField({ onChange, value }: ImageProps) {
         // img.src = tokens.join('/');
         // img.alt = response.public_id;
         // document.getElementById('gallery').appendChild(img);
-      }
+      
       // console.log(xhr.onreadystatechange);
-    };
+  };
     
     // add upload preset key:value for cloudinary submission
-    fd.append('upload_preset', 'doc_codepen_example');
+    // fd.append('upload_preset', 'doc_codepen_example');
 
-    // Optional - add tag for image admin in Cloudinary
-    fd.append('tags', 'browser_upload');
+    // // Optional - add tag for image admin in Cloudinary
+    // fd.append('tags', 'browser_upload');
     
-    // add file as photo
-    fd.append('file', photo);
+    // // add file as photo
+    // fd.append('file', photo);
 
-    // send form data to server.
-    xhr.send(fd);
-  }
+    // // send form data to server.
+    // xhr.send(fd);
+  
 
   return (
     <div className="ImageField">
