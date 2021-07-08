@@ -2,6 +2,7 @@ import Image from "next/image";
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data }) => {
+  // console.log(data.imageUrl);
   return (
     <div>
       <h1>{data.title}</h1>

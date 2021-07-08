@@ -49,6 +49,7 @@ function ImageUploadField({ onChange, value }: ImageProps) {
     //     // File uploaded successfully
     //     const response = JSON.parse(xhr.responseText);
     //     // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
+        console.log(photo.name.split('.')[1])
 
         // get secure url from our server
         const url  = await fetch("/api/media").then(res => res.json())
@@ -64,7 +65,7 @@ function ImageUploadField({ onChange, value }: ImageProps) {
         })
       
         const imageUrl = url.split('?')[0]
-        console.log(typeof imageUrl)
+        // console.log(typeof imageUrl)
 
         // // const url = response.secure_url;
 
