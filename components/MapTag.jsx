@@ -4,10 +4,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Geocoder from "react-map-gl-geocoder";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
+import { Button } from "@material-ui/core";
 
-const Map1 = () => {
+const Map = () => {
   const router = useRouter();
-  const mapBox =
+
+  const fake =
     "pk.eyJ1Ijoic2wzNTQyMDciLCJhIjoiY2twaDJ1OTU1MDhtZDJ1b2x0N3c3ZnYwdiJ9.P7qlEddqung5yTH_u8VF7Q";
 
   const ecoFill = {
@@ -56,7 +58,7 @@ const Map1 = () => {
   };
   const [viewport, setViewport] = useState({
     latitude: 37.8,
-    longitude: -122.4,
+    longitude: -98,
     zoom: 4,
     bearing: 0,
     pitch: 0,
@@ -71,12 +73,14 @@ const Map1 = () => {
       longitude: event.lngLat[0],
       latitude: event.lngLat[1],
       regionName: region && region.properties.ECO_NAME,
+      regionNum: region && region.properties.ECO_SYM,
     });
     // console.log(region);
   }, []);
 
   const selectedRegion = (hoverInfo && hoverInfo.regionName) || "";
   // console.log(selectedRegion);
+  const ecoID = (hoverInfo && hoverInfo.regionNum) || "";
 
   const filter = useMemo(
     () => ["in", "ECO_NAME", selectedRegion],
@@ -133,13 +137,18 @@ const Map1 = () => {
     <div style={{ height: "100vh" }}>
       <div
         ref={geocoderContainerRef}
-        style={{ position: "absolute", top: 20, left: 20, zIndex: 1 }}
+        style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
       />
+      <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+        <Button variant="contained">test</Button>
+      </div>
       <ReactMapGL
         ref={mapRef}
         {...viewport}
         width="100vw"
         height="100vh"
+        minZoom="4"
+        maxZoom="9"
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
         onViewportChange={handleViewportChange}
         mapboxApiAccessToken={mapBox}
@@ -166,7 +175,8 @@ const Map1 = () => {
             latitude={hoverInfo.latitude}
             closeButton={false}
           >
-            {selectedRegion}
+            <div>{selectedRegion}</div>
+            <div>{ecoID}</div>
           </Popup>
         )}
       </ReactMapGL>
@@ -174,4 +184,4 @@ const Map1 = () => {
   );
 };
 
-export default Map1;
+export default Map;
