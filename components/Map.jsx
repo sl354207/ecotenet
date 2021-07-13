@@ -6,9 +6,11 @@ import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
 import { Button } from "@material-ui/core";
 
+// const { MAPBOX } = process.env;
+
 const Map = () => {
   const router = useRouter();
-
+  const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
   const fake =
     "pk.eyJ1Ijoic2wzNTQyMDciLCJhIjoiY2twaDJ1OTU1MDhtZDJ1b2x0N3c3ZnYwdiJ9.P7qlEddqung5yTH_u8VF7Q";
 
@@ -163,6 +165,7 @@ const Map = () => {
         height="100vh"
         minZoom="4"
         maxZoom="9"
+        touchZoom={false}
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
         onViewportChange={handleViewportChange}
         mapboxApiAccessToken={mapBox}
