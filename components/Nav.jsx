@@ -67,7 +67,7 @@ const Nav = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   // const open = Boolean(anchorEl);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

@@ -4,15 +4,17 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Geocoder from "react-map-gl-geocoder";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
-import { Button } from "@material-ui/core";
+import { Button, useMediaQuery } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // const { MAPBOX } = process.env;
 
 const Map = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  const fake =
-    "pk.eyJ1Ijoic2wzNTQyMDciLCJhIjoiY2twaDJ1OTU1MDhtZDJ1b2x0N3c3ZnYwdiJ9.P7qlEddqung5yTH_u8VF7Q";
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const ecoFill = {
     id: "eco-fill",
@@ -105,9 +107,9 @@ const Map = () => {
 
   const handleClick = (event) => {
     const region = event.features && event.features[0];
-    const slug = slugify(region.properties.ECO_NAME);
-    console.log(slug);
+    // console.log(selectedRegion);
     if (selectedRegion !== "") {
+      const slug = slugify(selectedRegion);
       router.push(`/${slug}`);
     }
   };
@@ -150,54 +152,123 @@ const Map = () => {
   );
 
   return (
-    <div style={{ height: "100vh" }}>
-      <div
-        ref={geocoderContainerRef}
-        style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
-      />
-      <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
-        <Button variant="contained">test</Button>
-      </div>
-      <ReactMapGL
-        ref={mapRef}
-        {...viewport}
-        width="100vw"
-        height="100vh"
-        minZoom="4"
-        maxZoom="9"
-        touchZoom={false}
-        mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-        onViewportChange={handleViewportChange}
-        mapboxApiAccessToken={mapBox}
-        interactiveLayerIds={["eco-fill"]}
-        onHover={onHover}
-        onClick={handleClick}
-      >
-        <Geocoder
-          mapRef={mapRef}
-          containerRef={geocoderContainerRef}
-          onViewportChange={handleViewportChange}
-          mapboxApiAccessToken={mapBox}
-          position="top-left"
-        />
-        <Source id="eco-data" type="vector" url="mapbox://sl354207.0w3ac669">
-          <Layer beforeId="waterway-label" {...ecoLine} />
-          <Layer beforeId="waterway-label" {...ecoFill} />
-          <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
-          <Layer beforeId="waterway-label" {...ecoFill2} filter={clickFilter} />
-        </Source>
-        {selectedRegion && (
-          <Popup
-            longitude={hoverInfo.longitude}
-            latitude={hoverInfo.latitude}
-            closeButton={false}
+    <>
+      {isMobile ? (
+        <div style={{ height: "100vh" }}>
+          <div
+            ref={geocoderContainerRef}
+            style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+          />
+          <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+            <Button variant="contained">test</Button>
+          </div>
+          <ReactMapGL
+            ref={mapRef}
+            {...viewport}
+            width="100vw"
+            height="100vh"
+            minZoom={4}
+            maxZoom={9}
+            doubleClickZoom={false}
+            mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
+            onViewportChange={handleViewportChange}
+            mapboxApiAccessToken={mapBox}
+            interactiveLayerIds={["eco-fill"]}
+            onHover={onHover}
+            onDblClick={handleClick}
           >
-            <div>{selectedRegion}</div>
-            <div>{ecoID}</div>
-          </Popup>
-        )}
-      </ReactMapGL>
-    </div>
+            <Geocoder
+              mapRef={mapRef}
+              containerRef={geocoderContainerRef}
+              onViewportChange={handleViewportChange}
+              mapboxApiAccessToken={mapBox}
+              position="top-left"
+            />
+            <Source
+              id="eco-data"
+              type="vector"
+              url="mapbox://sl354207.0w3ac669"
+            >
+              <Layer beforeId="waterway-label" {...ecoLine} />
+              <Layer beforeId="waterway-label" {...ecoFill} />
+              <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill2}
+                filter={clickFilter}
+              />
+            </Source>
+            {selectedRegion && (
+              <Popup
+                longitude={hoverInfo.longitude}
+                latitude={hoverInfo.latitude}
+                closeButton={false}
+              >
+                <div>{selectedRegion}</div>
+                <div>{ecoID}</div>
+              </Popup>
+            )}
+          </ReactMapGL>
+        </div>
+      ) : (
+        <div style={{ height: "100vh" }}>
+          <div
+            ref={geocoderContainerRef}
+            style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+          />
+          <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+            <Button variant="contained">test</Button>
+          </div>
+          <ReactMapGL
+            ref={mapRef}
+            {...viewport}
+            width="100vw"
+            height="100vh"
+            minZoom={4}
+            maxZoom={9}
+            doubleClickZoom={false}
+            mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
+            onViewportChange={handleViewportChange}
+            mapboxApiAccessToken={mapBox}
+            interactiveLayerIds={["eco-fill"]}
+            onHover={onHover}
+            onClick={handleClick}
+          >
+            <Geocoder
+              mapRef={mapRef}
+              containerRef={geocoderContainerRef}
+              onViewportChange={handleViewportChange}
+              mapboxApiAccessToken={mapBox}
+              position="top-left"
+            />
+            <Source
+              id="eco-data"
+              type="vector"
+              url="mapbox://sl354207.0w3ac669"
+            >
+              <Layer beforeId="waterway-label" {...ecoLine} />
+              <Layer beforeId="waterway-label" {...ecoFill} />
+              <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill2}
+                filter={clickFilter}
+              />
+            </Source>
+            {selectedRegion && (
+              <Popup
+                longitude={hoverInfo.longitude}
+                latitude={hoverInfo.latitude}
+                closeButton={false}
+              >
+                <div>{selectedRegion}</div>
+                <div>{ecoID}</div>
+              </Popup>
+            )}
+          </ReactMapGL>
+        </div>
+      )}
+    </>
   );
 };
 
