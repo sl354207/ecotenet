@@ -11,6 +11,13 @@ export default function Home({ isConnected }) {
     <>
       <Nav />
       <div className={styles.container}>
+        <iframe
+          id="inlineFrameExample"
+          title="Inline Frame Example"
+          width="100%"
+          height="100%"
+          src="https://en.m.wikipedia.org/wiki/Appalachian_mixed_mesophytic_forests"
+        ></iframe>
         <main className={styles.main}>
           {/* <h1 className={styles.title}>
             Welcome to <a href="https://nextjs.org">Next.js!</a>
@@ -58,13 +65,6 @@ export default function Home({ isConnected }) {
                 Instantly deploy your Next.js site to a public URL with Vercel.
               </p>
             </a> */}
-            <iframe
-              id="inlineFrameExample"
-              title="Inline Frame Example"
-              width="600"
-              height="500"
-              src="https://en.m.wikipedia.org/wiki/Appalachian_mixed_mesophytic_forests"
-            ></iframe>
           </div>
         </main>
 
