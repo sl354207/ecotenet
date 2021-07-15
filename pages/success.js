@@ -12,7 +12,7 @@ export default function Home({ isConnected }) {
       <Nav />
       <div className={styles.container}>
         <main className={styles.main}>
-          <h1 className={styles.title}>
+          {/* <h1 className={styles.title}>
             Welcome to <a href="https://nextjs.org">Next.js!</a>
           </h1>
 
@@ -28,10 +28,10 @@ export default function Home({ isConnected }) {
           <p className={styles.description}>
             Get started by editing{" "}
             <code className={styles.code}>pages/index.js</code>
-          </p>
+          </p> */}
 
           <div className={styles.grid}>
-            <a href="https://nextjs.org/docs" className={styles.card}>
+            {/* <a href="https://nextjs.org/docs" className={styles.card}>
               <h3>Documentation &rarr;</h3>
               <p>Find in-depth information about Next.js features and API.</p>
             </a>
@@ -57,7 +57,7 @@ export default function Home({ isConnected }) {
               <p>
                 Instantly deploy your Next.js site to a public URL with Vercel.
               </p>
-            </a>
+            </a> */}
             <iframe
               id="inlineFrameExample"
               title="Inline Frame Example"
@@ -68,7 +68,7 @@ export default function Home({ isConnected }) {
           </div>
         </main>
 
-        <footer className={styles.footer}>
+        {/* <footer className={styles.footer}>
           <a
             href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             target="_blank"
@@ -77,7 +77,7 @@ export default function Home({ isConnected }) {
             Powered by{" "}
             <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
           </a>
-        </footer>
+        </footer> */}
       </div>
     </>
   );
