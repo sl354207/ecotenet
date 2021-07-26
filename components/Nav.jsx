@@ -8,7 +8,7 @@ import { MenuItem } from "@material-ui/core";
 import { Menu } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import { useMediaQuery } from "@material-ui/core";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -21,6 +21,20 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import {
+  Popper,
+  Grow,
+  Paper,
+  ClickAwayListener,
+  MenuList,
+  Collapse,
+} from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -58,29 +72,65 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
+  accordion: {
+    border: "1px solid rgba(0, 0, 0, .125)",
+    boxShadow: "none",
+    "&:not(:last-child)": {
+      borderBottom: 0,
+    },
+    "&:before": {
+      display: "none",
+    },
+    "&$expanded": {
+      margin: "auto",
+    },
+  },
 }));
 
 const Nav = () => {
   const router = useRouter();
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
+
   const [drawerOpen, setDrawerOpen] = useState(false);
-  // const open = Boolean(anchorEl);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [openL, setOpenL] = useState(false);
+
+  const anchor = Boolean(openL);
+  const id = anchor ? "simple-popper" : undefined;
+  // const anchorRef = useRef(null);
+
+  // const handleToggle = () => {
+  //   setOpen((prevOpen) => !prevOpen);
+  // };
+
+  const handleClose = (event, menuSub) => {
+    // if (anchorRef.current && anchorRef.current.contains(event.target)) {
+    //   return;
+    // }
+
+    // setOpen(false);
+    setOpenL(!openL);
   };
 
-  // const handleMenuClick = pageURL => {
-  //   history.push(pageURL);
-  //   setAnchorEl(null);
-  // };
+  // function handleListKeyDown(event) {
+  //   if (event.key === "Tab") {
+  //     event.preventDefault();
+  //     setOpen(false);
+  //   }
+  // }
 
-  // const handleButtonClick = pageURL => {
-  //   history.push(pageURL);
-  // };
+  // return focus to the button when we transitioned from !open -> open
+  // const prevOpen = useRef(open);
+  // useEffect(() => {
+  //   if (prevOpen.current === true && open === false) {
+  //     anchorRef.current.focus();
+  //   }
+
+  //   prevOpen.current = open;
+  // }, [open]);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -98,58 +148,110 @@ const Nav = () => {
 
   const menuItems = [
     {
-      menuTitle: "Home",
+      menuTitle: "Animals",
+      menuSubs: [
+        "Mammals",
+        "Reptiles",
+        "Amphibians",
+        "Birds",
+        "Fish/Mollusk",
+        "Guides",
+      ],
       pageURL: "/",
     },
     {
-      menuTitle: "Schedule",
+      menuTitle: "Plants",
+      menuSubs: ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
       pageURL: "/schedule",
     },
     {
-      menuTitle: "History",
+      menuTitle: "Fungi",
+      menuSubs: ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
       pageURL: "/history",
     },
     {
-      menuTitle: "Gallery",
+      menuTitle: "Arthropods",
+      menuSubs: [
+        "Crustaceans",
+        "Myriapods",
+        "Chelicerates",
+        "Insects",
+        "Guides",
+      ],
       pageURL: "/gallery",
     },
     {
-      menuTitle: "Pageant",
+      menuTitle: "Hunt",
+      menuSubs: [
+        "Tracking/Stalking",
+        "Trapping",
+        "Fishing",
+        "Strategies/Techniques",
+        "Processing",
+        "Tools",
+      ],
       pageURL: "/pageant",
     },
     {
-      menuTitle: "Volunteer",
+      menuTitle: "Gather",
+      menuSubs: ["Edible", "Medicinal"],
       pageURL: "/volunteer",
     },
     {
-      menuTitle: "Sponsors",
+      menuTitle: "Travel",
+      menuSubs: ["Land", "Water"],
       pageURL: "/sponsors",
     },
     {
-      menuTitle: "Contact",
+      menuTitle: "Survival",
+      menuSubs: ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
       pageURL: "/contact",
     },
     {
-      menuTitle: "Pageant",
+      menuTitle: "Agriculture",
+      menuSubs: [
+        "Planting/Harvesting",
+        "Maintenance/Management",
+        "Processing/Storage",
+        "Livestock",
+        "Soil Health",
+        "Propogation/Cultivation",
+        "Irrigation",
+        "Techniques/Systems",
+        "Start-To-Finish/Lifecycles",
+      ],
       pageURL: "/pageant",
     },
     {
-      menuTitle: "Volunteer",
+      menuTitle: "Building",
+      menuSubs: [
+        "Foundations/Floors",
+        "Walls",
+        "Roofs",
+        "Complete Structures",
+        "Water Systems",
+        "Heating/Cooling",
+        "Furniture/Utensils/Tools",
+      ],
       pageURL: "/volunteer",
     },
     {
-      menuTitle: "Sponsors",
+      menuTitle: "Culture",
+      menuSubs: [
+        "Cooking/Recipes",
+        "Clothing",
+        "Art",
+        "Music",
+        "Rituals",
+        "Stories",
+      ],
       pageURL: "/sponsors",
-    },
-    {
-      menuTitle: "Contact",
-      pageURL: "/contact",
     },
   ];
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           {/* <div>
             <img src="/mound.jpg" />
@@ -165,35 +267,7 @@ const Nav = () => {
               >
                 <MenuIcon />
               </IconButton>
-              {/* <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={open}
-                onClose={() => setAnchorEl(null)}
-              >
-                {menuItems.map((menuItem) => {
-                  const { menuTitle, pageURL } = menuItem;
-                  return (
-                    <MenuItem
-                      onClick={() => {
-                        setAnchorEl(null);
-                        router.push(pageURL);
-                      }}
-                    >
-                      {menuTitle}
-                    </MenuItem>
-                  );
-                })}
-              </Menu> */}
+
               <Typography variant="h6" className={classes.title}>
                 Mound
               </Typography>
@@ -215,31 +289,39 @@ const Nav = () => {
                   </IconButton>
                 </div>
                 <Divider />
-                <List>
-                  {menuItems.map((menuItem) => (
-                    <ListItem
-                      button
-                      key={menuItem.menuTitle}
-                      onClick={() => {
-                        handleDrawerClose(Event);
-                        router.push(menuItem.pageURL);
-                      }}
-                    >
-                      <ListItemText primary={menuItem.menuTitle} />
-                    </ListItem>
-                  ))}
-                </List>
-                {/* <Divider />
-                <List>
-                  {["All mail", "Trash", "Spam"].map((text, index) => (
-                    <ListItem button key={text}>
-                      <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  ))}
-                </List> */}
+                {menuItems.map((menuItem) => {
+                  const { menuTitle, menuSubs, pageURL } = menuItem;
+
+                  return (
+                    <Accordion className={classes.accordion}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Typography className={classes.heading}>
+                          {menuTitle}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <List>
+                          {menuSubs.map((menuSub) => (
+                            <ListItem
+                              button
+                              key={menuSub}
+                              onClick={() => {
+                                handleDrawerClose(Event);
+                                router.push(menuItem.pageURL);
+                              }}
+                            >
+                              <ListItemText primary={menuSub} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </AccordionDetails>
+                    </Accordion>
+                  );
+                })}
               </Drawer>
             </>
           ) : (
@@ -249,28 +331,47 @@ const Nav = () => {
               </Typography>
               <div className={classes.headerOptions}>
                 {menuItems.map((menuItem) => {
-                  const { menuTitle, pageURL } = menuItem;
+                  const { menuTitle, menuSubs, pageURL } = menuItem;
+
+                  // console.log(menuSubs);
                   return (
-                    <Button
-                      variant="contained"
-                      onClick={() => router.push(pageURL)}
-                    >
-                      {menuTitle}
-                    </Button>
+                    // <Button
+                    //   variant="contained"
+                    //   onClick={() => router.push(pageURL)}
+                    // >
+                    //   {menuTitle}
+                    // </Button>
+                    <>
+                      <Button onClick={handleClose}>{menuTitle}</Button>
+                    </>
                   );
                 })}
-
-                {/* <Button variant="contained">Schedule</Button>
-                <Button variant="contained"></Button>
-                <Button variant="contained">HOME</Button>
-                <Button variant="contained">CONTACT</Button>
-                <Button variant="contained">ABOUT</Button>
-                <Button variant="contained">ABOUT</Button> */}
+                <Popper open={openL} anchorEl={openL}>
+                  <List>
+                    {menuItems.map((menuItem) => {
+                      // console.log(menuSub);
+                      const { menuTitle, menuSubs, pageURL } = menuItem;
+                      return (
+                        <ListItem
+                          button
+                          key={menuTitle}
+                          onClick={() => {
+                            console.log(menuSub);
+                          }}
+                        >
+                          <ListItemText primary={menuTitle} />
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </Popper>
               </div>
             </>
           )}
         </Toolbar>
       </AppBar>
+      <Toolbar></Toolbar>
+      <Toolbar></Toolbar>
     </div>
   );
 };
