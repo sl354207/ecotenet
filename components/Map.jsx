@@ -18,7 +18,7 @@ const Map = () => {
     id: "eco-fill",
     type: "fill",
     // source: "eco-data",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
@@ -29,7 +29,7 @@ const Map = () => {
     id: "eco-fill1",
     type: "fill",
     source: "eco-fill",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
@@ -41,7 +41,7 @@ const Map = () => {
     id: "eco-line",
     type: "line",
     source: "eco-fill",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     layout: {},
     paint: {
       "line-color": "rgba(0,0,0,1)",
@@ -65,7 +65,7 @@ const Map = () => {
       longitude: event.lngLat[0],
       latitude: event.lngLat[1],
       regionName: region && region.properties.ECO_NAME,
-      regionNum: region && region.properties.ECO_SYM,
+      regionNum: region && region.properties.unique_id,
     });
     // console.log(region);
   }, []);
@@ -145,7 +145,7 @@ const Map = () => {
             <Source
               id="eco-data"
               type="vector"
-              url="mapbox://sl354207.ecozom-tiles"
+              url="mapbox://sl354207.ecozoom-tiles"
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
@@ -197,7 +197,7 @@ const Map = () => {
             <Source
               id="eco-data"
               type="vector"
-              url="mapbox://sl354207.ecozom-tiles"
+              url="mapbox://sl354207.ecozoom-tiles"
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
@@ -210,7 +210,7 @@ const Map = () => {
                 closeButton={false}
               >
                 <div>{selectedRegion}</div>
-                <div>{ecoID}</div>
+                <div>Eco-{ecoID}</div>
               </Popup>
             )}
           </ReactMapGL>

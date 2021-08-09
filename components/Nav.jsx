@@ -256,76 +256,76 @@ const Nav = () => {
           {/* <div>
             <img src="/mound.jpg" />
           </div> */}
-          {isMobile ? (
-            <>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-                onClick={handleDrawerOpen}
-              >
-                <MenuIcon />
-              </IconButton>
+          {/* {isMobile ? ( */}
+          <>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              onClick={handleDrawerOpen}
+            >
+              <MenuIcon />
+            </IconButton>
 
-              <Typography variant="h6" className={classes.title}>
-                Mound
-              </Typography>
-              <Drawer
-                className={classes.drawer}
-                anchor="left"
-                open={drawerOpen}
-                onClose={handleDrawerClose}
-                classes={{
-                  paper: classes.drawerPaper,
-                }}
-              >
-                <div className={classes.drawerHeader}>
-                  <Typography variant="h6" className={classes.title}>
-                    Mound
-                  </Typography>
-                  <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                  </IconButton>
-                </div>
-                <Divider />
-                {menuItems.map((menuItem) => {
-                  const { menuTitle, menuSubs, pageURL } = menuItem;
+            <Typography variant="h6" className={classes.title}>
+              Mound
+            </Typography>
+            <Drawer
+              className={classes.drawer}
+              anchor="left"
+              open={drawerOpen}
+              onClose={handleDrawerClose}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              <div className={classes.drawerHeader}>
+                <Typography variant="h6" className={classes.title}>
+                  Mound
+                </Typography>
+                <IconButton onClick={handleDrawerClose}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              </div>
+              <Divider />
+              {menuItems.map((menuItem) => {
+                const { menuTitle, menuSubs, pageURL } = menuItem;
 
-                  return (
-                    <Accordion className={classes.accordion}>
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                      >
-                        <Typography className={classes.heading}>
-                          {menuTitle}
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <List>
-                          {menuSubs.map((menuSub) => (
-                            <ListItem
-                              button
-                              key={menuSub}
-                              onClick={() => {
-                                handleDrawerClose(Event);
-                                router.push(menuItem.pageURL);
-                              }}
-                            >
-                              <ListItemText primary={menuSub} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                  );
-                })}
-              </Drawer>
-            </>
-          ) : (
-            <>
+                return (
+                  <Accordion className={classes.accordion}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography className={classes.heading}>
+                        {menuTitle}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <List>
+                        {menuSubs.map((menuSub) => (
+                          <ListItem
+                            button
+                            key={menuSub}
+                            onClick={() => {
+                              handleDrawerClose(Event);
+                              router.push(menuItem.pageURL);
+                            }}
+                          >
+                            <ListItemText primary={menuSub} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </AccordionDetails>
+                  </Accordion>
+                );
+              })}
+            </Drawer>
+          </>
+          {/* ) : ( */}
+          {/* <>
               <Typography variant="h6" className={classes.title}>
                 Mound
               </Typography>
@@ -366,8 +366,8 @@ const Nav = () => {
                   </List>
                 </Popper>
               </div>
-            </>
-          )}
+            </> */}
+          {/* )} */}
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>
