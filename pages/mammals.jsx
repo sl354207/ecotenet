@@ -5,16 +5,30 @@ import Link from "next/link";
 import { Button, IconButton } from "@material-ui/core";
 
 const mammals = ({ mammals }) => {
+  const uniqueFirst = [
+    ...new Set(mammals.map((mammal) => mammal.Scientific_Name[0])),
+  ];
+  console.log(uniqueFirst);
+
   return (
     <>
       <ul>
-        {mammals.map((mammal) => {
+        {uniqueFirst.map((entry) => {
           return (
-            <li>
-              <a href="/mammal">
-                {mammal.Scientific_Name}: {mammal.COMMON_NAME}
-              </a>
-            </li>
+            <>
+              <li>
+                <a href="/mammal">{entry}</a>
+              </li>
+              {mammals.map((mammal) => {
+                if (mammal.Scientific_Name[0] === entry) {
+                  return (
+                    <li>
+                      <a href="/mammal">{mammal.Scientific_Name}</a>
+                    </li>
+                  );
+                }
+              })}
+            </>
           );
         })}
       </ul>
