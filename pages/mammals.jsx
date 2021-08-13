@@ -1,17 +1,16 @@
 import { getMammals } from "../utils/mongodb";
 
 import Link from "next/link";
-
+import { useRouter } from "next/router";
 import {
   List,
   ListItem,
-  ListSubheader,
   ListItemText,
   AppBar,
   Toolbar,
 } from "@material-ui/core";
 
-import { useRef, createRef } from "react";
+import { useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -32,25 +31,26 @@ const useStyles = makeStyles((theme) => ({
 
 const mammals = ({ mammals }) => {
   const classes = useStyles();
+  const router = useRouter();
 
   const uniqueFirst = [
     ...new Set(mammals.map((mammal) => mammal.Scientific_Name[0])),
   ];
-  // console.log(uniqueFirst);
+
   const refs = uniqueFirst.reduce((acc, value) => {
     acc[value] = useRef();
     return acc;
   }, {});
-  // console.log(refs);
 
-  const handleClick = (id) =>
-    refs[id].current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+  const handleClick = (id, yOffset = -60) => {
+    const el = refs[id].current;
+    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
   return (
     <>
-      <AppBar position="sticky">
+      <AppBar elevation={0}>
         <Toolbar>
           <List component="div" className={classes.subheader}>
             {uniqueFirst.map((item) => (
@@ -66,18 +66,25 @@ const mammals = ({ mammals }) => {
           </List>
         </Toolbar>
       </AppBar>
-
+      <Toolbar />
+      {/* <Toolbar />
+      <Toolbar /> */}
       <List>
         {uniqueFirst.map((entry) => {
           return (
             <>
               <ListItem ref={refs[entry]}>
-                <a href="/mammal">{entry}</a>
+                <ListItemText>{entry}</ListItemText>
               </ListItem>
               {mammals.map((mammal) => {
                 if (mammal.Scientific_Name[0] === entry) {
                   return (
-                    <ListItem>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        router.push("/mammal");
+                      }}
+                    >
                       <a href="/mammal">{mammal.Scientific_Name}</a>
                     </ListItem>
                   );
