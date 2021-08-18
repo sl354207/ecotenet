@@ -297,6 +297,17 @@ const getMammals = async (unique_id) => {
   return mammals;
 };
 
+// retrieve single draft by id from database
+const getMammalById = async (id) => {
+  const { db } = await connectToDatabase();
+
+  const mammal = await db.collection("mammals").findOne({
+    _id: ObjectID(id),
+  });
+
+  return mammal;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -313,4 +324,5 @@ module.exports = {
   createComment,
   getPostComments,
   getMammals,
+  getMammalById,
 };

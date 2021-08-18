@@ -8,6 +8,9 @@ import {
   ListItemText,
   AppBar,
   Toolbar,
+  Container,
+  Box,
+  Button,
 } from "@material-ui/core";
 
 import { useRef } from "react";
@@ -17,15 +20,28 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   subheader: {
     display: "flex",
+    flexGrow: 1,
+    flexDirection: "row",
+    // flexShrink: 1,
+    flexWrap: "wrap",
+    // marginBottom: 300,
     // position: "sticky",
     // width: "100%",
     // maxWidth: 36,
     // backgroundColor: theme.palette.secondary.main,
   },
-  list: {
-    // display: "flex",
+  sublist: {
+    display: "flex",
+
+    justifyContent: "center",
+    // flexShrink: 1,
+    // flexWrap: "wrap",
+
     // width: "100%",
     // maxWidth: 36,
+  },
+  list: {
+    marginTop: 50,
   },
 }));
 
@@ -37,39 +53,43 @@ const mammals = ({ mammals }) => {
     ...new Set(mammals.map((mammal) => mammal.Scientific_Name[0])),
   ];
 
+  // const uniqueFirst = [
+  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+  //   22, 23, 24, 25, 26, 27, 28,
+  // ];
+
   const refs = uniqueFirst.reduce((acc, value) => {
     acc[value] = useRef();
     return acc;
   }, {});
 
-  const handleClick = (id, yOffset = -60) => {
+  const handleClick = (id, yOffset = -100) => {
     const el = refs[id].current;
     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
     window.scrollTo({ top: y, behavior: "smooth" });
   };
   return (
-    <>
-      <AppBar elevation={0}>
-        <Toolbar>
-          <List component="div" className={classes.subheader}>
-            {uniqueFirst.map((item) => (
-              <ListItem
-                className={classes.list}
-                key={item}
-                button
-                onClick={() => handleClick(item)}
-              >
-                <ListItemText>{item}</ListItemText>
-              </ListItem>
-            ))}
-          </List>
-        </Toolbar>
+    <Container>
+      {/* <AppBar elevation={1}> */}
+      {/* <Toolbar> */}
+      <AppBar component="div" className={classes.subheader}>
+        {uniqueFirst.map((item) => (
+          <Button
+            key={item}
+            onClick={() => handleClick(item)}
+            className={classes.sublist}
+          >
+            {item}
+          </Button>
+        ))}
       </AppBar>
+      {/* </Toolbar> */}
+      {/* </AppBar> */}
       <Toolbar />
       {/* <Toolbar />
       <Toolbar /> */}
-      <List>
+      <List className={classes.list}>
         {uniqueFirst.map((entry) => {
           return (
             <>
@@ -97,7 +117,7 @@ const mammals = ({ mammals }) => {
       <Link href="/posts" id="back-to-top-anchor">
         Go Back
       </Link>
-    </>
+    </Container>
   );
 };
 
