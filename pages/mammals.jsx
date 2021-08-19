@@ -1,5 +1,5 @@
 import { getMammals } from "../utils/mongodb";
-
+import Nav from "../components/Nav";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -11,6 +11,7 @@ import {
   Container,
   Box,
   Button,
+  Typography,
 } from "@material-ui/core";
 
 import { useRef } from "react";
@@ -24,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     // flexShrink: 1,
     flexWrap: "wrap",
-    // marginBottom: 300,
+    justifyContent: "center",
+    top: 60,
+    marginTop: 20,
     // position: "sticky",
     // width: "100%",
     // maxWidth: 36,
@@ -63,17 +66,19 @@ const mammals = ({ mammals }) => {
     return acc;
   }, {});
 
-  const handleClick = (id, yOffset = -100) => {
+  const handleClick = (id, yOffset = -160) => {
     const el = refs[id].current;
     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
     window.scrollTo({ top: y, behavior: "smooth" });
   };
   return (
-    <Container>
-      {/* <AppBar elevation={1}> */}
-      {/* <Toolbar> */}
-      <AppBar component="div" className={classes.subheader}>
+    <>
+      <Nav />
+      <Typography variant="h3" align="center">
+        Mammals
+      </Typography>
+      <AppBar component="div" position="sticky" className={classes.subheader}>
         {uniqueFirst.map((item) => (
           <Button
             key={item}
@@ -84,40 +89,39 @@ const mammals = ({ mammals }) => {
           </Button>
         ))}
       </AppBar>
-      {/* </Toolbar> */}
-      {/* </AppBar> */}
       <Toolbar />
-      {/* <Toolbar />
-      <Toolbar /> */}
-      <List className={classes.list}>
-        {uniqueFirst.map((entry) => {
-          return (
-            <>
-              <ListItem ref={refs[entry]}>
-                <ListItemText>{entry}</ListItemText>
-              </ListItem>
-              {mammals.map((mammal) => {
-                if (mammal.Scientific_Name[0] === entry) {
-                  return (
-                    <ListItem
-                      button
-                      onClick={() => {
-                        router.push("/mammal");
-                      }}
-                    >
-                      <a href="/mammal">{mammal.Scientific_Name}</a>
-                    </ListItem>
-                  );
-                }
-              })}
-            </>
-          );
-        })}
-      </List>
-      <Link href="/posts" id="back-to-top-anchor">
-        Go Back
-      </Link>
-    </Container>
+      <Container>
+        <List className={classes.list}>
+          {uniqueFirst.map((entry) => {
+            return (
+              <>
+                <ListItem key={entry} ref={refs[entry]}>
+                  <ListItemText>{entry}</ListItemText>
+                </ListItem>
+                {mammals.map((mammal) => {
+                  if (mammal.Scientific_Name[0] === entry) {
+                    return (
+                      <ListItem
+                        key={mammal._id}
+                        button
+                        onClick={() => {
+                          router.push("/mammal");
+                        }}
+                      >
+                        <a href="/mammal">{mammal.Scientific_Name}</a>
+                      </ListItem>
+                    );
+                  }
+                })}
+              </>
+            );
+          })}
+        </List>
+        <Link href="/posts" id="back-to-top-anchor">
+          Go Back
+        </Link>
+      </Container>
+    </>
   );
 };
 
