@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
+    flexGrow: 1,
     [theme.breakpoints.down("xs")]: {
       flexGrow: 1,
     },
@@ -81,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     "&:before": {
       display: "none",
     },
-    "&$expanded": {
+    "&:expanded": {
       margin: "auto",
     },
   },
@@ -157,7 +158,7 @@ const Nav = () => {
         "Fish/Mollusk",
         "Guides",
       ],
-      pageURL: "/",
+      pageURL: "/mammals",
     },
     {
       menuTitle: "Plants",
@@ -281,9 +282,15 @@ const Nav = () => {
               }}
             >
               <div className={classes.drawerHeader}>
-                <Typography variant="h6" className={classes.title}>
+                {/* <Typography variant="h6" className={classes.title}>
                   Mound
-                </Typography>
+                </Typography> */}
+                <Button
+                  className={classes.title}
+                  onClick={() => router.push("/category")}
+                >
+                  Categories
+                </Button>
                 <IconButton onClick={handleDrawerClose}>
                   <ChevronLeftIcon />
                 </IconButton>

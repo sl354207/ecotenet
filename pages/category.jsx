@@ -1,6 +1,6 @@
 import Nav from "../components/Nav";
 import { Container, Typography } from "@material-ui/core";
-
+// TEMPORARY
 const category = () => {
   const menuItems = [
     {

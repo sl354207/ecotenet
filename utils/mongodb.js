@@ -297,7 +297,7 @@ const getMammals = async (unique_id) => {
   return mammals;
 };
 
-// retrieve single draft by id from database
+// retrieve single mammal by id from database
 const getMammalById = async (id) => {
   const { db } = await connectToDatabase();
 

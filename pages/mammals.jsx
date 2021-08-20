@@ -1,3 +1,6 @@
+// PUT IN UNIQUE_ID FOLDER EVENTUALLY
+// UPDATE
+
 import { getMammals } from "../utils/mongodb";
 import Nav from "../components/Nav";
 import Link from "next/link";
@@ -52,6 +55,7 @@ const mammals = ({ mammals }) => {
   const classes = useStyles();
   const router = useRouter();
 
+  // create new array containing only unique first letters of scientific name of mammals
   const uniqueFirst = [
     ...new Set(mammals.map((mammal) => mammal.Scientific_Name[0])),
   ];
@@ -61,15 +65,19 @@ const mammals = ({ mammals }) => {
   //   22, 23, 24, 25, 26, 27, 28,
   // ];
 
+  // create object where keys equal uniqueFirst value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
   const refs = uniqueFirst.reduce((acc, value) => {
     acc[value] = useRef();
     return acc;
   }, {});
 
+  // scroll to clicked subheader section of page
   const handleClick = (id, yOffset = -160) => {
+    // set el to clicked elements ref
     const el = refs[id].current;
+    // get the position of el within browser window plus an offset
     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
+    // scroll to postion within window
     window.scrollTo({ top: y, behavior: "smooth" });
   };
   return (

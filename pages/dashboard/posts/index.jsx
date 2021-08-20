@@ -6,7 +6,6 @@ import { Button } from "@material-ui/core";
 
 import { useRouter } from "next/router";
 
-// pass in posts from database as a prop
 export default function PostsByUser() {
   const router = useRouter();
 

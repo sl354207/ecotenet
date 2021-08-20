@@ -6,10 +6,12 @@ import { Button } from "@material-ui/core";
 const CommentForm = ({ post_id, comment_ref }) => {
   const [value, setValue] = useState("");
 
+  // update text input field
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
+  // handle comment submission to database through api
   const handleSubmit = async (value, post_id, comment_ref) => {
     //convert comment values to key value pairs
     const textObject = {

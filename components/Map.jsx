@@ -13,7 +13,7 @@ const Map = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+  //  base layer
   const ecoFill = {
     id: "eco-fill",
     type: "fill",
@@ -25,6 +25,8 @@ const Map = () => {
       "fill-opacity": 0,
     },
   };
+
+  // hover layer
   const ecoFill1 = {
     id: "eco-fill1",
     type: "fill",
@@ -37,6 +39,7 @@ const Map = () => {
     },
   };
 
+  // outline layer
   const ecoLine = {
     id: "eco-line",
     type: "line",
@@ -48,6 +51,7 @@ const Map = () => {
       "line-width": 2,
     },
   };
+
   const [viewport, setViewport] = useState({
     latitude: 37.8,
     longitude: -98,
@@ -58,6 +62,7 @@ const Map = () => {
 
   const [hoverInfo, setHoverInfo] = useState(null);
 
+  // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback((event) => {
     const region = event.features && event.features[0];
 
@@ -74,6 +79,7 @@ const Map = () => {
 
   const ecoID = (hoverInfo && hoverInfo.regionNum) || "";
 
+  // check layer and style expressions in mapbox docs for array setup. useMemo memoizes the return value of a function(useCallback memoizes the function not the return value) so the return value can be reused between re-renders. Function is re-ran when value of selectedRegion changes.
   const filter = useMemo(
     () => ["in", "ECO_NAME", selectedRegion],
     [selectedRegion]
@@ -81,6 +87,7 @@ const Map = () => {
 
   const [clickInfo, setClickInfo] = useState([]);
 
+  // turn ecoregion name into proper slug
   const slugify = (text) =>
     text
       .toString()
@@ -102,6 +109,7 @@ const Map = () => {
     }
   };
 
+  // set ref and functionality for geocoder
   const geocoderContainerRef = useRef();
   const mapRef = useRef();
   const handleViewportChange = useCallback(

@@ -1,7 +1,9 @@
+// UPDATE, CHECK _DOCUMENT.JS
 import Head from "next/head";
 
 // add meta data props into Meta tag
 const Meta = ({ title, keywords, description }) => {
+  // UPDATE
   return (
     // Head tag is default head in next
     <Head>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-// pass in post as prop from PostList which was created from posts data
+// pass in post as prop from PostList
 const PostItem = ({ post }) => {
   return (
     // {/* // link to each post by id from data */}

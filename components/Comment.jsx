@@ -16,14 +16,18 @@ const useStyles = makeStyles((theme) => ({
 //pass in comment and post id from comments
 const Comment = ({ comment, post_id }) => {
   const classes = useStyles();
+  // set anchor element state for popper
   const [anchorEl, setAnchorEl] = useState(null);
 
+  // set popper anchor to clicked comment
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  // if popper is open set id
   const open = Boolean(anchorEl);
   const id = open ? "reply-form" : undefined;
+
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
     return (

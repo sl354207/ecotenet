@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Button } from "@material-ui/core";
 
 import Link from "next/link";
-// pass in post as prop from DashboardPosts which was created from posts data
+// pass in post as prop from DashboardPosts
 const DashboardPost = ({ post }) => {
   const router = useRouter();
   // capture url path
@@ -51,6 +51,7 @@ const DashboardPost = ({ post }) => {
       //     </a>
       // </Link>
     );
+
     // if url path leads to drafts then populate with draft data.
   } else {
     // function to delete post by id

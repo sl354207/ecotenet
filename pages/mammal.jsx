@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+// taken directly from material ui tabs example
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
