@@ -45,15 +45,14 @@ const CommentForm = ({ post_id, comment_ref }) => {
     <div>
       <TextField
         id="outlined-textarea"
-        label="Multiline Placeholder"
-        placeholder="Placeholder"
+        label="Comment"
         multiline
         variant="outlined"
         onChange={handleChange}
         onSubmit={handleSubmit}
       />
       <Button onClick={() => handleSubmit(value, post_id, comment_ref)}>
-        Save
+        Add Comment
       </Button>
     </div>
   );

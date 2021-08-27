@@ -163,7 +163,7 @@ const Nav = () => {
     {
       menuTitle: "Plants",
       menuSubs: ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
-      pageURL: "/schedule",
+      pageURL: "/posts/60da0c1ffde53f333e6498dd",
     },
     {
       menuTitle: "Fungi",
@@ -252,7 +252,7 @@ const Nav = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" elevation={1}>
         <Toolbar>
           {/* <div>
             <img src="/mound.jpg" />

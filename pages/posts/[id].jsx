@@ -4,10 +4,10 @@ import { getPosts } from "../../utils/mongodb";
 import { getPostById } from "../../utils/mongodb";
 import { getPostComments } from "../../utils/mongodb";
 
-import Link from "next/link";
+// import Link from "next/link";
 
 //do I need to import react
-import React, { useState } from "react";
+import { useState } from "react";
 
 // The editor core
 import Editor, { Value } from "@react-page/editor";
@@ -31,49 +31,88 @@ import customImage from "../../plugins/customImage";
 
 import EditorLayout from "../../components/EditorLayout";
 
-import { Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, Typography, Link } from "@material-ui/core";
 
 import Comments from "../../components/Comments";
-import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
+import Vote from "../../components/Vote";
+import Nav from "../../components/Nav";
+
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  content: {
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: 800,
+    flexGrow: 1,
+    marginLeft: 20,
+  },
+  items: {
+    display: "flex",
+    flexGrow: 1,
+  },
+  author: {},
+  publish: {
+    marginLeft: 20,
+    color: theme.palette.secondary.light,
+    fontStyle: "italic",
+  },
+}));
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post, comments }) => {
+  const classes = useStyles();
   // set post as value of editor
   const [value, setValue] = useState(post);
 
-  //set count value for post
-  const [count, setCount] = useState(post.count);
-  //set limit for count
-  const [limit, setLimit] = useState(0);
-
-  const handleCountUp = () => {
-    if (limit == 1) {
-      setLimit(1);
-      setCount(count);
-    } else {
-      setLimit(limit + 1);
-      setCount(count + 1);
-    }
-  };
-
-  const handleCountDown = () => {
-    if (count == 0) {
-      setLimit(0);
-      setCount(count);
-    } else if (limit == -1) {
-      setLimit(limit);
-      setCount(count);
-    } else {
-      setLimit(limit - 1);
-      setCount(count - 1);
-    }
-  };
-
   return (
     <>
+      <Nav />
+      <Typography align="center" variant="h4">
+        How To Do Something
+      </Typography>
+      <div className={classes.root}>
+        <div className={classes.content}>
+          <div className={classes.items}>
+            <Typography className={classes.author} align="center" variant="h6">
+              <Link href="#" color="secondary">
+                Muskrat
+              </Link>
+            </Typography>
+            <Typography className={classes.publish} align="center" variant="h6">
+              August 22, 2021
+            </Typography>
+          </div>
+          <Typography variant="h6">
+            Ecoregions:{" "}
+            <Link href="#" color="secondary">
+              Eco-313
+            </Link>
+            ,{" "}
+            <Link href="#" color="secondary">
+              Eco-314
+            </Link>
+            ,{" "}
+            <Link href="#" color="secondary">
+              Eco-315
+            </Link>
+            ,{" "}
+            <Link href="#" color="secondary">
+              Eco-316
+            </Link>
+          </Typography>
+        </div>
+
+        <Vote counter={post.count} />
+      </div>
       <EditorLayout>
         <Editor
           cellPlugins={cellPlugins}
@@ -82,14 +121,7 @@ const post = ({ post, comments }) => {
           readOnly
         />
       </EditorLayout>
-      <IconButton onClick={handleCountUp}>
-        <ArrowDropUp />
-      </IconButton>
-      <div>{count}</div>
-      <IconButton onClick={handleCountDown}>
-        <ArrowDropDown />
-      </IconButton>
-      {count !== post.count && <Button>Submit</Button>}
+
       <Comments comments={comments} post_id={post._id} />
       <Link href="/posts">Go Back</Link>
     </>
