@@ -1,4 +1,4 @@
-import { MongoClient, ObjectID } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
@@ -97,7 +97,7 @@ const getPostById = async (_id) => {
   const { db } = await connectToDatabase();
 
   const post = await db.collection("published_posts").findOne({
-    _id: ObjectID(_id),
+    _id: ObjectId(_id),
   });
 
   return post;
@@ -144,7 +144,7 @@ const updatePost = async (
   };
   const response = await db.collection("published_posts").updateOne(
     {
-      _id: ObjectID(_id),
+      _id: ObjectId(_id),
     },
     { $set: data }
   );
@@ -157,7 +157,7 @@ const deletePost = async (_id) => {
   const { db } = await connectToDatabase();
 
   const deleted = await db.collection("published_posts").deleteOne({
-    _id: ObjectID(_id),
+    _id: ObjectId(_id),
   });
 
   return deleted;
@@ -207,7 +207,7 @@ const getDraftById = async (id) => {
   const { db } = await connectToDatabase();
 
   const draft = await db.collection("drafts").findOne({
-    _id: ObjectID(id),
+    _id: ObjectId(id),
   });
 
   return draft;
@@ -239,7 +239,7 @@ const updateDraft = async (
   };
   const response = await db.collection("drafts").updateOne(
     {
-      _id: ObjectID(_id),
+      _id: ObjectId(_id),
     },
     { $set: data }
   );
@@ -252,7 +252,7 @@ const deleteDraft = async (_id) => {
   const { db } = await connectToDatabase();
 
   const deleted = await db.collection("drafts").deleteOne({
-    _id: ObjectID(_id),
+    _id: ObjectId(_id),
   });
 
   return deleted;
@@ -302,7 +302,7 @@ const getMammalById = async (id) => {
   const { db } = await connectToDatabase();
 
   const mammal = await db.collection("mammals").findOne({
-    _id: ObjectID(id),
+    _id: ObjectId(id),
   });
 
   return mammal;

@@ -6,13 +6,15 @@ import { Button } from "@material-ui/core";
 
 import { useRouter } from "next/router";
 
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
 export default function PostsByUser() {
   const router = useRouter();
 
   // retrieve posts from posts api. convert swr data to name posts.
 
   // UPDATE TO GETPOSTSBYUSER
-  const { data: posts } = useSWR("/api/getposts");
+  const { data: posts } = useSWR("/api/getposts", fetcher);
 
   // set loading state until posts data is retrieved
   if (!posts) return "Loading...";

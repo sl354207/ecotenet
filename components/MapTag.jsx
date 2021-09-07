@@ -9,51 +9,54 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // const { MAPBOX } = process.env;
 
-const Map = () => {
+const MapTag = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+  // base layer
   const ecoFill = {
     id: "eco-fill",
     type: "fill",
     // source: "eco-data",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
       "fill-opacity": 0,
     },
   };
+  // hover layer
   const ecoFill1 = {
     id: "eco-fill1",
     type: "fill",
     source: "eco-fill",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
       "fill-opacity": 0.5,
     },
   };
+  // selected layer
   const ecoFill2 = {
     id: "eco-fill2",
     type: "fill",
     source: "eco-fill",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
       "fill-opacity": 0.6,
     },
   };
+  // outline layer
   const ecoLine = {
     id: "eco-line",
     type: "line",
     source: "eco-fill",
-    "source-layer": "0w3ac669",
+    "source-layer": "zoom",
     layout: {},
     paint: {
       "line-color": "rgba(0,0,0,1)",
@@ -70,6 +73,7 @@ const Map = () => {
 
   const [hoverInfo, setHoverInfo] = useState(null);
 
+  // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback((event) => {
     const region = event.features && event.features[0];
 
@@ -77,23 +81,24 @@ const Map = () => {
       longitude: event.lngLat[0],
       latitude: event.lngLat[1],
       regionName: region && region.properties.ECO_NAME,
-      regionNum: region && region.properties.ECO_SYM,
+      regionNum: region && region.properties.unique_id,
     });
     // console.log(region);
   }, []);
 
   const selectedRegion = (hoverInfo && hoverInfo.regionName) || "";
-  // console.log(selectedRegion);
+
   const ecoID = (hoverInfo && hoverInfo.regionNum) || "";
 
+  // check layer and style expressions in mapbox docs for array setup. useMemo memoizes the return value of a function(useCallback memoizes the function not the return value) so the return value can be reused between re-renders. Function is re-ran when value of selectedRegion changes.
   const filter = useMemo(
     () => ["in", "ECO_NAME", selectedRegion],
     [selectedRegion]
   );
-  // console.log(filter);
 
   const [clickInfo, setClickInfo] = useState([]);
 
+  // turn ecoregion name into proper slug
   const slugify = (text) =>
     text
       .toString()
@@ -105,14 +110,14 @@ const Map = () => {
       .replace(/[^\w-]+/g, "")
       .replace(/--+/g, "-");
 
-  const handleClick = (event) => {
-    const region = event.features && event.features[0];
-    // console.log(selectedRegion);
-    if (selectedRegion !== "") {
-      const slug = slugify(selectedRegion);
-      router.push(`/${slug}`);
-    }
-  };
+  // const handleClick = (event) => {
+  //   const region = event.features && event.features[0];
+  //   // console.log(selectedRegion);
+  //   if (selectedRegion !== "") {
+  //     const slug = slugify(selectedRegion);
+  //     router.push(`/${slug}`);
+  //   }
+  // };
 
   const onClick = useCallback((event) => {
     const region = event.features && event.features[0];
@@ -159,9 +164,9 @@ const Map = () => {
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
           />
-          <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+          {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
-          </div>
+          </div> */}
           <ReactMapGL
             ref={mapRef}
             {...viewport}
@@ -175,7 +180,7 @@ const Map = () => {
             mapboxApiAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
             onHover={onHover}
-            onDblClick={handleClick}
+            onDblClick={onClick}
           >
             <Geocoder
               mapRef={mapRef}
@@ -187,7 +192,7 @@ const Map = () => {
             <Source
               id="eco-data"
               type="vector"
-              url="mapbox://sl354207.ecozom-tiles"
+              url="mapbox://sl354207.ecozoom-tiles"
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
@@ -216,14 +221,14 @@ const Map = () => {
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
           />
-          <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+          {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
-          </div>
+          </div> */}
           <ReactMapGL
             ref={mapRef}
             {...viewport}
-            width="100vw"
-            height="100vh"
+            width="60vw"
+            height="60vh"
             minZoom={2}
             maxZoom={9}
             doubleClickZoom={false}
@@ -232,7 +237,7 @@ const Map = () => {
             mapboxApiAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
             onHover={onHover}
-            onClick={handleClick}
+            onClick={onClick}
           >
             <Geocoder
               mapRef={mapRef}
@@ -244,7 +249,7 @@ const Map = () => {
             <Source
               id="eco-data"
               type="vector"
-              url="mapbox://sl354207.ecozom-tiles"
+              url="mapbox://sl354207.ecozoom-tiles"
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
@@ -272,4 +277,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export default MapTag;

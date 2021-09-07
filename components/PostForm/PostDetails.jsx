@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from "react";
-import { Grid } from "@material-ui/core";
+import dynamic from "next/dynamic";
+import { Container, Grid } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { Button } from "@material-ui/core";
 import { Chip } from "@material-ui/core";
+import MapTag from "../MapTag";
 
 //pass in and destructure props.
 const PostDetails = ({
@@ -21,12 +23,18 @@ const PostDetails = ({
   setTagValue,
   handleRemoveChip,
 }) => {
+  // need to dynamically import to work with mapbox
+  const Map = dynamic(() => import("../MapTag"), {
+    loading: () => "Loading...",
+    ssr: false,
+  });
+
   // set filter for autocomplete options
   const filter = createFilterOptions();
 
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
-    <Fragment>
+    <Container>
       <Grid container spacing={2} noValidate>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -155,6 +163,7 @@ const PostDetails = ({
           ))}
         </Grid>
       </Grid>
+      <MapTag />
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
       >
@@ -170,7 +179,7 @@ const PostDetails = ({
           Next
         </Button>
       </div>
-    </Fragment>
+    </Container>
   );
 };
 

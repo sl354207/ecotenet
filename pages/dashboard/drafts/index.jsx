@@ -6,13 +6,15 @@ import { Button } from "@material-ui/core";
 
 import { useRouter } from "next/router";
 
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
 export default function DraftsByUser() {
   const router = useRouter();
 
   // retrieve posts from posts api. convert swr data to name posts.
 
   // UPDATE TO GETDRAFTSBYUSER
-  const { data: posts } = useSWR("/api/getdrafts");
+  const { data: posts } = useSWR("/api/getdrafts", fetcher);
 
   // show loading state until drafts are retrieved
   if (!posts) return "Loading...";

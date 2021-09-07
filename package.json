@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12.1",
+    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@material-ui/styles": "^4.11.4",
@@ -18,18 +18,18 @@
     "@react-page/plugins-slate": "^3.2.1",
     "@react-page/plugins-spacer": "^3.2.1",
     "@react-page/plugins-video": "^3.2.1",
-    "aws-sdk": "^2.941.0",
-    "mongodb": "^3.6.10",
-    "next": "^11.0.1",
+    "aws-sdk": "^2.983.0",
+    "mongodb": "^4.1.1",
+    "next": "^11.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-map-gl": "^6.1.16",
-    "react-map-gl-geocoder": "^2.1.7",
-    "swr": "^0.5.6",
+    "react-map-gl-geocoder": "^2.2.0",
+    "swr": "^1.0.0",
     "uniforms": "^3.5.1"
   },
   "devDependencies": {
-    "@types/node": "^16.0.1",
-    "typescript": "^4.3.5"
+    "@types/node": "^16.7.13",
+    "typescript": "^4.4.2"
   }
 }
