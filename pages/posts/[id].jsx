@@ -87,7 +87,7 @@ const post = ({ post, comments }) => {
                 Muskrat
               </Link>
             </Typography>
-            <Typography className={classes.publish} align="center" variant="h6">
+            <Typography className={classes.publish} align="left" variant="h6">
               August 22, 2021
             </Typography>
           </div>

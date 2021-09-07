@@ -54,8 +54,13 @@ const useStyles = makeStyles((theme) => ({
   tabs: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    fontSize: 40,
+    // fontSize: 20,
+
+    // [theme.breakpoints.down("xs")]: {
+    //   fontSize: 10,
+    // },
   },
+
   title: {
     marginBottom: 20,
   },
@@ -63,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
   tab: {
-    fontSize: 18,
-    minWidth: 65,
+    // fontSize: 18,
+    // minWidth: 65,
     flexGrow: 1,
   },
 }));
@@ -109,15 +114,11 @@ const mammal = ({ mammal }) => {
               >
                 <Tab
                   className={classes.tab}
-                  label="General Info"
+                  label="General"
                   {...a11yProps(0)}
                 />
                 <Tab className={classes.tab} label="Photos" {...a11yProps(1)} />
-                <Tab
-                  className={classes.tab}
-                  label="More Resources"
-                  {...a11yProps(2)}
-                />
+                <Tab className={classes.tab} label="More" {...a11yProps(2)} />
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
