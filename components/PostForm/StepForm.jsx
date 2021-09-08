@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import PostDetails from "./PostDetails";
 import PostTags from "./PostTags";
@@ -39,6 +39,31 @@ const StepForm = ({ post, pathname }) => {
 
     // set tag state
     const [tagValue, setTagValue] = useState([]);
+
+    const [clickInfo, setClickInfo] = useState([]);
+    // console.log(clickInfo);
+
+    // const handleMapClick = useCallback((event) => {
+    //   const region = event.features && event.features[0];
+    //   // console.log(region);
+
+    //   setClickInfo((clickInfo) => {
+    //     // console.log(clickInfo);
+    //     if (!clickInfo.includes(region && region.properties.ECO_NAME)) {
+    //       return [...clickInfo, region && region.properties.ECO_NAME];
+    //     } else {
+    //       const removed = clickInfo.splice(
+    //         clickInfo.indexOf(region.properties.ECO_NAME),
+    //         1
+    //       );
+    //       // console.log(removed);
+    //       // console.log(clickInfo);
+    //       return clickInfo;
+    //     }
+    //   });
+    //   console.log(clickInfo);
+    // }, []);
+    // console.log(handleMapClick);
 
     // remove tag chip on delete. Take in label of chip as chip. If the tag value does not equal the tag label than return filtered array without that chip and set it to state.
     const handleRemoveChip = (chip) => {
@@ -98,7 +123,10 @@ const StepForm = ({ post, pathname }) => {
               tagValue={tagValue}
               setTagValue={setTagValue}
               handleRemoveChip={handleRemoveChip}
+              clickInfo={clickInfo}
+              setClickInfo={setClickInfo}
             />
+
             // add back in when ready  formErrors={formErrors}
           );
         case 2:

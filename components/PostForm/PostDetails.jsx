@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useCallback, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Container, Grid } from "@material-ui/core";
 import { TextField } from "@material-ui/core";
@@ -22,6 +22,8 @@ const PostDetails = ({
   tagValue,
   setTagValue,
   handleRemoveChip,
+  clickInfo,
+  setClickInfo,
 }) => {
   // need to dynamically import to work with mapbox
   const Map = dynamic(() => import("../MapTag"), {
@@ -31,6 +33,39 @@ const PostDetails = ({
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
+
+  // const [clickInfo, setClickInfo] = useState([]);
+  // const handleMapClick = useCallback((event) => {
+  //   const region = event.features && event.features[0];
+  // console.log(clickInfo);
+
+  //   setClickInfo((clickInfo) => {
+  //     if (!clickInfo.includes(region && region.properties.ECO_NAME)) {
+  //       return [...clickInfo, region && region.properties.ECO_NAME];
+  //     } else {
+  //       const removed = clickInfo.splice(
+  //         clickInfo.indexOf(region.properties.ECO_NAME),
+  //         1
+  //       );
+  //       // console.log(removed);
+  //       // console.log(clickInfo);
+  //       return clickInfo;
+  //     }
+  //   });
+  //   // console.log(clickInfo);
+  // }, []);
+  // console.log(handleMapClick);
+
+  // const clickedRegions = clickInfo;
+  // console.log(clickedRegions);
+
+  // const clickFilter = useMemo(
+  //   () => ["in", "ECO_NAME", ...clickedRegions],
+
+  //   [clickedRegions]
+  // );
+  // const clickFilter = ["in", "ECO_NAME", ...clickedRegions];
+  // console.log(clickInfo);
 
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
@@ -163,7 +198,8 @@ const PostDetails = ({
           ))}
         </Grid>
       </Grid>
-      <MapTag />
+      <MapTag clickInfo={clickInfo} setClickInfo={setClickInfo} />
+
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
       >

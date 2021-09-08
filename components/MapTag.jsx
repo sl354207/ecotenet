@@ -9,7 +9,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // const { MAPBOX } = process.env;
 
-const MapTag = () => {
+const MapTag = (clickInfo, setClickInfo) => {
+  // console.log(clickInfo);
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -31,7 +32,7 @@ const MapTag = () => {
   const ecoFill1 = {
     id: "eco-fill1",
     type: "fill",
-    source: "eco-fill",
+    // source: "eco-fill",
     "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
@@ -43,7 +44,7 @@ const MapTag = () => {
   const ecoFill2 = {
     id: "eco-fill2",
     type: "fill",
-    source: "eco-fill",
+    // source: "eco-fill",
     "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
@@ -55,7 +56,7 @@ const MapTag = () => {
   const ecoLine = {
     id: "eco-line",
     type: "line",
-    source: "eco-fill",
+    // source: "eco-fill",
     "source-layer": "zoom",
     layout: {},
     paint: {
@@ -96,19 +97,19 @@ const MapTag = () => {
     [selectedRegion]
   );
 
-  const [clickInfo, setClickInfo] = useState([]);
+  // const [clickInfo, setClickInfo] = useState([]);
 
   // turn ecoregion name into proper slug
-  const slugify = (text) =>
-    text
-      .toString()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]+/g, "")
-      .replace(/--+/g, "-");
+  // const slugify = (text) =>
+  //   text
+  //     .toString()
+  //     .normalize("NFD")
+  //     .replace(/[\u0300-\u036f]/g, "")
+  //     .toLowerCase()
+  //     .trim()
+  //     .replace(/\s+/g, "-")
+  //     .replace(/[^\w-]+/g, "")
+  //     .replace(/--+/g, "-");
 
   // const handleClick = (event) => {
   //   const region = event.features && event.features[0];
@@ -119,11 +120,12 @@ const MapTag = () => {
   //   }
   // };
 
-  const onClick = useCallback((event) => {
+  const handleMapClick = useCallback((event) => {
     const region = event.features && event.features[0];
-    console.log(region);
+    // console.log(region);
 
-    setClickInfo((clickInfo) => {
+    clickInfo.setClickInfo((clickInfo) => {
+      // console.log(clickInfo);
       if (!clickInfo.includes(region && region.properties.ECO_NAME)) {
         return [...clickInfo, region && region.properties.ECO_NAME];
       } else {
@@ -133,24 +135,27 @@ const MapTag = () => {
         );
         // console.log(removed);
         // console.log(clickInfo);
-        return clickInfo;
+        return [...clickInfo];
       }
     });
     // console.log(clickInfo);
   }, []);
 
-  const clickedRegions = clickInfo;
+  // console.log(handleMapClick);
+
+  const clickedRegions = clickInfo.clickInfo;
   // console.log(clickedRegions);
 
-  // const clickFilter = useMemo(
-  //   () => ["in", "ECO_NAME", ...clickedRegions],
+  // // const clickFilter = useMemo(
+  // //   () => ["in", "ECO_NAME", ...clickedRegions],
 
-  //   [clickedRegions]
-  // );
+  // //   [clickedRegions]
+  // // );
   const clickFilter = ["in", "ECO_NAME", ...clickedRegions];
+  // console.log(clickFilter);
 
-  const geocoderContainerRef = useRef();
-  const mapRef = useRef();
+  // const geocoderContainerRef = useRef();
+  // const mapRef = useRef();
   const handleViewportChange = useCallback(
     (newViewport) => setViewport(newViewport),
     []
@@ -160,15 +165,15 @@ const MapTag = () => {
     <>
       {isMobile ? (
         <div style={{ height: "100vh" }}>
-          <div
+          {/* <div
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
-          />
+          /> */}
           {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
           </div> */}
+          {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
           <ReactMapGL
-            ref={mapRef}
             {...viewport}
             width="100vw"
             height="100vh"
@@ -180,15 +185,15 @@ const MapTag = () => {
             mapboxApiAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
             onHover={onHover}
-            onDblClick={onClick}
+            onDblClick={handleMapClick}
           >
-            <Geocoder
+            {/* <Geocoder
               mapRef={mapRef}
               containerRef={geocoderContainerRef}
               onViewportChange={handleViewportChange}
               mapboxApiAccessToken={mapBox}
               position="top-left"
-            />
+            /> */}
             <Source
               id="eco-data"
               type="vector"
@@ -216,16 +221,16 @@ const MapTag = () => {
           </ReactMapGL>
         </div>
       ) : (
-        <div style={{ height: "100vh" }}>
-          <div
+        <div>
+          {/* <div
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
-          />
+          /> */}
           {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
           </div> */}
+          {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
           <ReactMapGL
-            ref={mapRef}
             {...viewport}
             width="60vw"
             height="60vh"
@@ -237,15 +242,15 @@ const MapTag = () => {
             mapboxApiAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
             onHover={onHover}
-            onClick={onClick}
+            onClick={handleMapClick}
           >
-            <Geocoder
+            {/* <Geocoder
               mapRef={mapRef}
               containerRef={geocoderContainerRef}
               onViewportChange={handleViewportChange}
               mapboxApiAccessToken={mapBox}
               position="top-left"
-            />
+            /> */}
             <Source
               id="eco-data"
               type="vector"

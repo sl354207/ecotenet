@@ -30,7 +30,7 @@ const Map = () => {
   const ecoFill1 = {
     id: "eco-fill1",
     type: "fill",
-    source: "eco-fill",
+    // source: "eco-fill",
     "source-layer": "zoom",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
@@ -43,7 +43,7 @@ const Map = () => {
   const ecoLine = {
     id: "eco-line",
     type: "line",
-    source: "eco-fill",
+    // source: "eco-fill",
     "source-layer": "zoom",
     layout: {},
     paint: {
