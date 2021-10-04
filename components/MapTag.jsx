@@ -10,7 +10,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 // const { MAPBOX } = process.env;
 
 const MapTag = (clickInfo, setClickInfo) => {
-  // console.log(clickInfo);
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 

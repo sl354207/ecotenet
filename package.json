@@ -18,18 +18,18 @@
     "@react-page/plugins-slate": "^3.2.1",
     "@react-page/plugins-spacer": "^3.2.1",
     "@react-page/plugins-video": "^3.2.1",
-    "aws-sdk": "^2.983.0",
-    "mongodb": "^4.1.1",
+    "aws-sdk": "^2.999.0",
+    "mongodb": "^4.1.2",
     "next": "^11.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-map-gl": "^6.1.16",
+    "react-map-gl": "^6.1.17",
     "react-map-gl-geocoder": "^2.2.0",
-    "swr": "^1.0.0",
-    "uniforms": "^3.5.1"
+    "swr": "^1.0.1",
+    "uniforms": "^3.6.1"
   },
   "devDependencies": {
-    "@types/node": "^16.7.13",
-    "typescript": "^4.4.2"
+    "@types/node": "^16.10.2",
+    "typescript": "^4.4.3"
   }
 }

@@ -34,36 +34,14 @@ const StepForm = ({ post, pathname }) => {
     // set category input state. Recommended to keep separate than category state by MUI docs.
     const [categoryInputValue, setCategoryInputValue] = useState("");
 
-    // set tags
+    // set tag options for autocomplete
     const tags = [];
 
     // set tag state
     const [tagValue, setTagValue] = useState([]);
 
+    // set map state
     const [clickInfo, setClickInfo] = useState([]);
-    // console.log(clickInfo);
-
-    // const handleMapClick = useCallback((event) => {
-    //   const region = event.features && event.features[0];
-    //   // console.log(region);
-
-    //   setClickInfo((clickInfo) => {
-    //     // console.log(clickInfo);
-    //     if (!clickInfo.includes(region && region.properties.ECO_NAME)) {
-    //       return [...clickInfo, region && region.properties.ECO_NAME];
-    //     } else {
-    //       const removed = clickInfo.splice(
-    //         clickInfo.indexOf(region.properties.ECO_NAME),
-    //         1
-    //       );
-    //       // console.log(removed);
-    //       // console.log(clickInfo);
-    //       return clickInfo;
-    //     }
-    //   });
-    //   console.log(clickInfo);
-    // }, []);
-    // console.log(handleMapClick);
 
     // remove tag chip on delete. Take in label of chip as chip. If the tag value does not equal the tag label than return filtered array without that chip and set it to state.
     const handleRemoveChip = (chip) => {
@@ -147,7 +125,13 @@ const StepForm = ({ post, pathname }) => {
     };
 
     // function to create a new draft. Takes in form values and editor value.
-    const create = async (postValue, detailValues, categoryValue, tagValue) => {
+    const create = async (
+      postValue,
+      detailValues,
+      categoryValue,
+      tagValue,
+      clickInfo
+    ) => {
       // turn category string into object with key value pair
       const categoryObject = {
         category: categoryValue,
@@ -156,12 +140,17 @@ const StepForm = ({ post, pathname }) => {
       const tagObject = {
         tags: tagValue,
       };
+
+      const ecoObject = {
+        ecoregions: clickInfo,
+      };
       // combine form value and editor value into one object to pass to api.
       const value = Object.assign(
         postValue,
         detailValues,
         categoryObject,
-        tagObject
+        tagObject,
+        ecoObject
       );
 
       // send value to createDraft api
@@ -179,7 +168,8 @@ const StepForm = ({ post, pathname }) => {
       postValue,
       detailValues,
       categoryValue,
-      tagValue
+      tagValue,
+      clickInfo
     ) => {
       // turn category string into object with key value pair
       const categoryObject = {
@@ -189,12 +179,17 @@ const StepForm = ({ post, pathname }) => {
       const tagObject = {
         tags: tagValue,
       };
+
+      const ecoObject = {
+        ecoregions: clickInfo,
+      };
       // combine form value and editor value into one object to pass to api.
       const value = Object.assign(
         postValue,
         detailValues,
         categoryObject,
-        tagObject
+        tagObject,
+        ecoObject
       );
 
       // send value to createPost api
@@ -212,14 +207,14 @@ const StepForm = ({ post, pathname }) => {
         {handleSteps(activeStep)}
         <Button
           onClick={() =>
-            create(postValue, detailValues, categoryValue, tagValue)
+            create(postValue, detailValues, categoryValue, tagValue, clickInfo)
           }
         >
           Save
         </Button>
         <Button
           onClick={() =>
-            publish(postValue, detailValues, categoryValue, tagValue)
+            publish(postValue, detailValues, categoryValue, tagValue, clickInfo)
           }
         >
           Publish
@@ -229,7 +224,7 @@ const StepForm = ({ post, pathname }) => {
     // if url path leads to a draft than populate form with draft data
   } else if (pathname === "/dashboard/drafts/[_id]") {
     // destructure values from post data
-    const { title, author, description, category, tags } = post;
+    const { title, author, description, category, tags, ecoregions } = post;
 
     // set form step state
     const [activeStep, setActiveStep] = useState(0);
@@ -255,6 +250,9 @@ const StepForm = ({ post, pathname }) => {
 
     // set tag state
     const [tagValue, setTagValue] = useState(tags);
+
+    // set map state
+    const [clickInfo, setClickInfo] = useState(ecoregions);
 
     // remove tag chip on delete
     const handleRemoveChip = (chip) => {
@@ -314,6 +312,8 @@ const StepForm = ({ post, pathname }) => {
               tagValue={tagValue}
               setTagValue={setTagValue}
               handleRemoveChip={handleRemoveChip}
+              clickInfo={clickInfo}
+              setClickInfo={setClickInfo}
             />
             // add back in when ready  formErrors={formErrors}
           );
@@ -333,19 +333,29 @@ const StepForm = ({ post, pathname }) => {
     };
 
     // function to update the draft. Takes in the form values and editor value.
-    const update = async (postValue, detailValues, categoryValue, tagValue) => {
+    const update = async (
+      postValue,
+      detailValues,
+      categoryValue,
+      tagValue,
+      clickInfo
+    ) => {
       const categoryObject = {
         category: categoryValue,
       };
       const tagObject = {
         tags: tagValue,
       };
+      const ecoObject = {
+        ecoregions: clickInfo,
+      };
       // combine form value and editor value into one object to pass to api.
       const value = Object.assign(
         postValue,
         detailValues,
         categoryObject,
-        tagObject
+        tagObject,
+        ecoObject
       );
 
       const res = await fetch("/api/updateDraft", {
@@ -362,7 +372,8 @@ const StepForm = ({ post, pathname }) => {
       postValue,
       detailValues,
       categoryValue,
-      tagValue
+      tagValue,
+      clickInfo
     ) => {
       const categoryObject = {
         category: categoryValue,
@@ -370,12 +381,16 @@ const StepForm = ({ post, pathname }) => {
       const tagObject = {
         tags: tagValue,
       };
+      const ecoObject = {
+        ecoregions: clickInfo,
+      };
       // combine form value and editor value into one object to pass to api.
       const value = Object.assign(
         postValue,
         detailValues,
         categoryObject,
-        tagObject
+        tagObject,
+        ecoObject
       );
 
       // create post
@@ -402,14 +417,14 @@ const StepForm = ({ post, pathname }) => {
         {handleSteps(activeStep)}
         <Button
           onClick={() =>
-            update(postValue, detailValues, categoryValue, tagValue)
+            update(postValue, detailValues, categoryValue, tagValue, clickInfo)
           }
         >
           Save
         </Button>
         <Button
           onClick={() =>
-            publish(postValue, detailValues, categoryValue, tagValue)
+            publish(postValue, detailValues, categoryValue, tagValue, clickInfo)
           }
         >
           Publish
@@ -419,7 +434,7 @@ const StepForm = ({ post, pathname }) => {
     // if url path leads to a post than populate form with post data.
   } else {
     // destructure values from post data
-    const { title, author, description, category, tags } = post;
+    const { title, author, description, category, tags, ecoregions } = post;
 
     // set form step state
     const [activeStep, setActiveStep] = useState(0);
@@ -445,6 +460,9 @@ const StepForm = ({ post, pathname }) => {
 
     // set tag state
     const [tagValue, setTagValue] = useState(tags);
+
+    // set map state
+    const [clickInfo, setClickInfo] = useState(ecoregions);
 
     // remove tag chip on delete
     const handleRemoveChip = (chip) => {
@@ -504,6 +522,8 @@ const StepForm = ({ post, pathname }) => {
               tagValue={tagValue}
               setTagValue={setTagValue}
               handleRemoveChip={handleRemoveChip}
+              clickInfo={clickInfo}
+              setClickInfo={setClickInfo}
             />
             // add back in when ready  formErrors={formErrors}
           );
@@ -523,19 +543,29 @@ const StepForm = ({ post, pathname }) => {
     };
 
     // function to update post
-    const update = async (postValue, detailValues, categoryValue, tagValue) => {
+    const update = async (
+      postValue,
+      detailValues,
+      categoryValue,
+      tagValue,
+      clickInfo
+    ) => {
       const categoryObject = {
         category: categoryValue,
       };
       const tagObject = {
         tags: tagValue,
       };
+      const ecoObject = {
+        ecoregions: clickInfo,
+      };
       // combine form value and editor value into one object to pass to api.
       const value = Object.assign(
         postValue,
         detailValues,
         categoryObject,
-        tagObject
+        tagObject,
+        ecoObject
       );
 
       const res = await fetch("/api/updatePost", {
@@ -552,7 +582,7 @@ const StepForm = ({ post, pathname }) => {
         {handleSteps(activeStep)}
         <Button
           onClick={() =>
-            update(postValue, detailValues, categoryValue, tagValue)
+            update(postValue, detailValues, categoryValue, tagValue, clickInfo)
           }
         >
           Save
