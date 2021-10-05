@@ -28,7 +28,7 @@ export default function Home({ isConnected }) {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       {/* TODO fix iframe resizing */}
       {isMobile ? (
         <div>

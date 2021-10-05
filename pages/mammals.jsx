@@ -82,7 +82,7 @@ const mammals = ({ mammals }) => {
   };
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <Typography variant="h3" align="center">
         Mammals
       </Typography>
