@@ -250,34 +250,26 @@ const Nav = () => {
     },
   ];
 
-  const [categoryFilter, setCategoryFilter] = useState(false);
-
-  // let storage = "";
-  // if (router.pathname.includes("suc", 1)) {
-  //   // () => setCategoryFilter(true);
-  //   // console.log(categoryFilter);
-  //   // sessionStorage.setItem("ecoregion", router.pathname.substring(1));
-  //   let car = sessionStorage.clear();
-  //   return car;
-  // }
-  // // else {
-  // //   // () => setCategoryFilter(false);
-  // //   // console.log(categoryFilter);
-  // //   // let storage = sessionStorage.setItem("trash", "a");
-  // // }
-
-  const [value, setValue] = useState(router.pathname);
+  // category filter logic. Revisit
+  const [value, setValue] = useState("");
 
   useEffect(() => {
-    sessionStorage.setItem("test", value);
-  }, [value]);
+    let filter = sessionStorage.getItem("test");
+    if (router.pathname == "/mammals") {
+      sessionStorage.setItem("test", router.pathname);
+      setValue(router.pathname);
+    } else {
+      setValue(filter);
+    }
+  }, []);
 
-  const onChange = () => setValue("/success");
+  // router.pathname.includes("suc", 1)
+  // router.pathname.substring(1)
 
   if (value === "/mammals") {
     return <div>testing</div>;
   } else {
-    onChange;
+    // onChange();
 
     return (
       <div className={classes.root}>
