@@ -251,117 +251,114 @@ const Nav = () => {
   ];
 
   // category filter logic. Revisit
-  const [value, setValue] = useState("");
+  const [ecoFilter, setEcoFilter] = useState("");
 
+  // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
   useEffect(() => {
-    let filter = sessionStorage.getItem("test");
+    let ecoregion = sessionStorage.getItem("ecoregion");
+
     if (router.pathname == "/mammals") {
-      sessionStorage.setItem("test", router.pathname);
-      setValue(router.pathname);
+      sessionStorage.setItem("ecoregion", router.pathname);
+      setEcoFilter(router.pathname);
     } else {
-      setValue(filter);
+      setEcoFilter(ecoregion);
     }
-  }, []);
+  }, [router.pathname]);
 
   // router.pathname.includes("suc", 1)
   // router.pathname.substring(1)
 
-  if (value === "/mammals") {
-    return <div>testing</div>;
-  } else {
-    // onChange();
-
-    return (
-      <div className={classes.root}>
-        <AppBar position="fixed" elevation={1}>
-          <Toolbar>
-            {/* <div>
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" elevation={1}>
+        <Toolbar>
+          {/* <div>
             <img src="/mound.jpg" />
           </div> */}
-            {/* {isMobile ? ( */}
-            {/* {router.pathname.includes("suc", 1)
+          {/* {isMobile ? ( */}
+          {/* {router.pathname.includes("suc", 1)
             ? () => setCategoryFilter(true)
             : () => setCategoryFilter(false)} */}
-            {/* <h1>Hello React with Local Storage!</h1>
+          {/* <h1>Hello React with Local Storage!</h1>
 
           <input value={value} type="text" onChange={onChange} />
 
           <p>{value}</p> */}
-            <>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-                onClick={handleDrawerOpen}
-              >
-                <MenuIcon />
-              </IconButton>
+          <>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              onClick={handleDrawerOpen}
+            >
+              <MenuIcon />
+            </IconButton>
 
-              <Typography variant="h6" className={classes.title}>
-                Mound
-              </Typography>
-              <Drawer
-                className={classes.drawer}
-                anchor="left"
-                open={drawerOpen}
-                onClose={handleDrawerClose}
-                classes={{
-                  paper: classes.drawerPaper,
-                }}
-              >
-                <div className={classes.drawerHeader}>
-                  {/* <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6" className={classes.title}>
+              Mound
+            </Typography>
+            <Drawer
+              className={classes.drawer}
+              anchor="left"
+              open={drawerOpen}
+              onClose={handleDrawerClose}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+            >
+              <div className={classes.drawerHeader}>
+                {/* <Typography variant="h6" className={classes.title}>
                   Mound
                 </Typography> */}
-                  <Button
-                    className={classes.title}
-                    onClick={() => router.push("/category")}
-                  >
-                    Categories
-                  </Button>
-                  <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                  </IconButton>
-                </div>
-                <Divider />
-                {menuItems.map((menuItem) => {
-                  const { menuTitle, menuSubs, pageURL } = menuItem;
+                <Button
+                  className={classes.title}
+                  onClick={() => router.push("/category")}
+                >
+                  Categories
+                </Button>
+                <IconButton onClick={handleDrawerClose}>
+                  <ChevronLeftIcon />
+                </IconButton>
+              </div>
+              <Divider />
+              {menuItems.map((menuItem) => {
+                const { menuTitle, menuSubs, pageURL } = menuItem;
 
-                  return (
-                    <Accordion className={classes.accordion}>
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                      >
-                        <Typography className={classes.heading}>
-                          {menuTitle}
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <List>
-                          {menuSubs.map((menuSub) => (
-                            <ListItem
-                              button
-                              key={menuSub}
-                              onClick={() => {
-                                handleDrawerClose(Event);
-                                router.push(menuItem.pageURL);
-                              }}
-                            >
-                              <ListItemText primary={menuSub} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </AccordionDetails>
-                    </Accordion>
-                  );
-                })}
-              </Drawer>
-            </>
-            {/* ) : ( */}
-            {/* <>
+                return (
+                  <Accordion className={classes.accordion}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography className={classes.heading}>
+                        {menuTitle}
+                      </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <List>
+                        {menuSubs.map((menuSub) => (
+                          <ListItem
+                            button
+                            key={menuSub}
+                            onClick={() => {
+                              handleDrawerClose(Event);
+                              router.push(menuItem.pageURL);
+                            }}
+                          >
+                            <ListItemText primary={menuSub} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </AccordionDetails>
+                  </Accordion>
+                );
+              })}
+            </Drawer>
+          </>
+          {/* ) : ( */}
+          {/* <>
               <Typography variant="h6" className={classes.title}>
                 Mound
               </Typography>
@@ -403,14 +400,13 @@ const Nav = () => {
                 </Popper>
               </div>
             </> */}
-            {/* )} */}
-          </Toolbar>
-        </AppBar>
-        <Toolbar></Toolbar>
-        <Toolbar></Toolbar>
-      </div>
-    );
-  }
+          {/* )} */}
+        </Toolbar>
+      </AppBar>
+      <Toolbar></Toolbar>
+      <Toolbar></Toolbar>
+    </div>
+  );
 };
 
 export default Nav;
