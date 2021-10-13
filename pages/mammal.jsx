@@ -222,7 +222,7 @@ const mammal = ({ mammal }) => {
 
 // fetch mammal data at build time
 export const getStaticProps = async () => {
-  const mammal = await getMammalById("610adbe4af7074ad89e2fd76");
+  const mammal = await getMammalById("61671d51dedb7802d2d7216d");
 
   return {
     props: {

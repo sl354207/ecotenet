@@ -290,13 +290,15 @@ const getPostComments = async (id) => {
   return comments;
 };
 
+// CHANGE TO LIFE INSTEAD OF MAMMALS
 //get mammals by unique eco id
-const getMammals = async (unique_id) => {
+const getMammals = async (CLASS, unique_id) => {
   const { db } = await connectToDatabase();
 
   const mammals = await db
-    .collection("mammals")
+    .collection("life")
     .find({
+      CLASS: CLASS,
       unique_id: unique_id,
     })
     .sort({ Scientific_Name: 1 })
@@ -305,11 +307,12 @@ const getMammals = async (unique_id) => {
   return mammals;
 };
 
+// CHANGE TO LIFE INSTEAD OF MAMMALS
 // retrieve single mammal by id from database
 const getMammalById = async (id) => {
   const { db } = await connectToDatabase();
 
-  const mammal = await db.collection("mammals").findOne({
+  const mammal = await db.collection("life").findOne({
     _id: ObjectId(id),
   });
 
