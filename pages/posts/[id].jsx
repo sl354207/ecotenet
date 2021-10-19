@@ -77,14 +77,14 @@ const post = ({ post, comments }) => {
     <>
       <Nav />
       <Typography align="center" variant="h4">
-        How To Do Something
+        {post.title}
       </Typography>
       <div className={classes.root}>
         <div className={classes.content}>
           <div className={classes.items}>
             <Typography className={classes.author} align="center" variant="h6">
               <Link href="#" color="secondary">
-                Muskrat
+                {post.author}
               </Link>
             </Typography>
             <Typography className={classes.publish} align="left" variant="h6">
@@ -93,21 +93,11 @@ const post = ({ post, comments }) => {
           </div>
           <Typography variant="h6">
             Ecoregions:{" "}
-            <Link href="#" color="secondary">
-              Eco-313
-            </Link>
-            ,{" "}
-            <Link href="#" color="secondary">
-              Eco-314
-            </Link>
-            ,{" "}
-            <Link href="#" color="secondary">
-              Eco-315
-            </Link>
-            ,{" "}
-            <Link href="#" color="secondary">
-              Eco-316
-            </Link>
+            {post.ecoregions.map((ecoregion) => (
+              <Link href="#" color="secondary">
+                Eco-{ecoregion},{" "}
+              </Link>
+            ))}
           </Typography>
         </div>
 

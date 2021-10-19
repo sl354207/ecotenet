@@ -1,9 +1,10 @@
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { AppBar } from "@material-ui/core";
 import { Toolbar } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { IconButton } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
 import { MenuItem } from "@material-ui/core";
 import { Menu } from "@material-ui/core";
 import { Button } from "@material-ui/core";
@@ -30,7 +31,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
   Popper,
   Grow,
-  Paper,
+  InputBase,
   ClickAwayListener,
   MenuList,
   Collapse,
@@ -85,6 +86,54 @@ const useStyles = makeStyles((theme) => ({
     "&:expanded": {
       margin: "auto",
     },
+  },
+  search: {
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    "&:hover": {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: theme.spacing(1),
+      width: "auto",
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputRoot: {
+    color: "inherit",
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+  searchPaper: {
+    border: "1px solid",
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+    // zIndex: "2000",
+  },
+  searchPopper: {
+    zIndex: "2000",
   },
 }));
 
@@ -146,6 +195,29 @@ const Nav = () => {
     }
     setDrawerOpen(false);
   };
+
+  const [searchAnchor, setSearchAnchor] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const handleSearchClick = (event) => {
+    setSearchValue(event.target.value);
+    console.log(event.target.value);
+    if (event.target.value === "") {
+      setSearchOpen(false);
+      setSearchAnchor(null);
+    } else {
+      setSearchOpen(true);
+      setSearchAnchor(event.currentTarget);
+    }
+  };
+
+  const handleSearchClickAway = () => {
+    setSearchOpen(false);
+  };
+
+  // const open = Boolean(searchAnchor);
+  const searchID = searchOpen ? "simple-popper" : undefined;
 
   const menuItems = [
     {
@@ -298,6 +370,43 @@ const Nav = () => {
             <Typography variant="h6" className={classes.title}>
               Mound
             </Typography>
+            <ClickAwayListener onClickAway={handleSearchClickAway}>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ "aria-label": "search" }}
+                  onFocus={() => setSearchValue("")}
+                  onChange={handleSearchClick}
+                  value={searchValue}
+                />
+                <Popper
+                  id={id}
+                  className={classes.searchPopper}
+                  open={searchOpen}
+                  anchorEl={searchAnchor}
+                >
+                  {ecoFilter && (
+                    <div className={classes.searchPaper}>
+                      Search for '{searchValue}' in Ecoregion
+                    </div>
+                  )}
+
+                  <div className={classes.searchPaper}>
+                    Search for '{searchValue}' in all Posts
+                  </div>
+                  <div className={classes.searchPaper}>
+                    Search for '{searchValue}' in all Species
+                  </div>
+                </Popper>
+              </div>
+            </ClickAwayListener>
             <Drawer
               className={classes.drawer}
               anchor="left"
@@ -439,76 +548,12 @@ export default Nav;
 //       display: "block"
 //     }
 //   },
-//   search: {
-//     position: "relative",
-//     borderRadius: theme.shape.borderRadius,
-//     backgroundColor: alpha(theme.palette.common.white, 0.15),
-//     "&:hover": {
-//       backgroundColor: alpha(theme.palette.common.white, 0.25)
-//     },
-//     marginLeft: 0,
-//     width: "100%",
-//     [theme.breakpoints.up("sm")]: {
-//       marginLeft: theme.spacing(1),
-//       width: "auto"
-//     }
-//   },
-//   searchIcon: {
-//     padding: theme.spacing(0, 2),
-//     height: "100%",
-//     position: "absolute",
-//     pointerEvents: "none",
-//     display: "flex",
-//     alignItems: "center",
-//     justifyContent: "center"
-//   },
-//   inputRoot: {
-//     color: "inherit"
-//   },
-//   inputInput: {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-//     transition: theme.transitions.create("width"),
-//     width: "100%",
-//     [theme.breakpoints.up("sm")]: {
-//       width: "12ch",
-//       "&:focus": {
-//         width: "20ch"
-//       }
-//     }
-//   },
-//   paper: {
-//     border: "1px solid",
-//     padding: theme.spacing(1),
-//     backgroundColor: theme.palette.background.paper
-//   }
+
 // }));
 
 // export default function SearchAppBar() {
 //   const classes = useStyles();
-//   const [anchorEl, setAnchorEl] = React.useState(null);
-//   const [value, setValue] = React.useState("");
-//   const [open, setOpen] = React.useState(false);
 
-//   const handleClick = (event) => {
-//     setValue(event.target.value);
-//     console.log(event.target.value);
-//     if (event.target.value === "") {
-//       setOpen(false);
-//       setAnchorEl(null);
-//     } else {
-//       setOpen(true);
-//       setAnchorEl(event.currentTarget);
-//     }
-//   };
-
-//   const handleClickAway = () => {
-//     setOpen(false);
-//   };
-
-//   // const open = Boolean(anchorEl);
-//   const id = open ? "simple-popper" : undefined;
 //   return (
 //     <div className={classes.root}>
 //       <AppBar position="static">
@@ -524,27 +569,7 @@ export default Nav;
 //           <Typography className={classes.title} variant="h6" noWrap>
 //             Material-UI
 //           </Typography>
-//           <ClickAwayListener onClickAway={handleClickAway}>
-//             <div className={classes.search}>
-//               <div className={classes.searchIcon}>
-//                 <SearchIcon />
-//               </div>
-//               <InputBase
-//                 placeholder="Search…"
-//                 classes={{
-//                   root: classes.inputRoot,
-//                   input: classes.inputInput
-//                 }}
-//                 inputProps={{ "aria-label": "search" }}
-//                 onFocus={() => setValue("")}
-//                 onChange={handleClick}
-//                 value={value}
-//               />
-//               <Popper id={id} open={open} anchorEl={anchorEl}>
-//                 <div className={classes.paper}>Search for '{value}'</div>
-//               </Popper>
-//             </div>
-//           </ClickAwayListener>
+
 //         </Toolbar>
 //       </AppBar>
 //     </div>

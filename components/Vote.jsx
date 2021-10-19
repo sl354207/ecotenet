@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 const Vote = ({ counter }) => {
   const classes = useStyles();
   //set count value for post
-  const [count, setCount] = useState(30);
+  const [count, setCount] = useState(counter);
   //set limit for count
   const [limit, setLimit] = useState(0);
 

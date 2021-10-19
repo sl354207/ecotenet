@@ -125,11 +125,11 @@ const MapTag = (clickInfo, setClickInfo) => {
 
     clickInfo.setClickInfo((clickInfo) => {
       // console.log(clickInfo);
-      if (!clickInfo.includes(region && region.properties.ECO_NAME)) {
-        return [...clickInfo, region && region.properties.ECO_NAME];
+      if (!clickInfo.includes(region && region.properties.unique_id)) {
+        return [...clickInfo, region && region.properties.unique_id];
       } else {
         const removed = clickInfo.splice(
-          clickInfo.indexOf(region.properties.ECO_NAME),
+          clickInfo.indexOf(region.properties.unique_id),
           1
         );
         // console.log(removed);
@@ -150,7 +150,7 @@ const MapTag = (clickInfo, setClickInfo) => {
 
   // //   [clickedRegions]
   // // );
-  const clickFilter = ["in", "ECO_NAME", ...clickedRegions];
+  const clickFilter = ["in", "unique_id", ...clickedRegions];
   // console.log(clickFilter);
 
   // const geocoderContainerRef = useRef();
