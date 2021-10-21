@@ -135,7 +135,7 @@ const mammals = ({ mammals }) => {
 
 // retrieve data at build time
 export const getStaticProps = async () => {
-  const mammals = await getMammals("Mammalia", 313);
+  const mammals = await getMammals("Mammalia", "313");
 
   return {
     props: {
