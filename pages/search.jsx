@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { useRouter } from "next/router";
+// import Nav from '../components/Nav'
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
@@ -16,29 +17,56 @@ export default function Search() {
     switch (search) {
       case "all-posts":
         //   must use different names for swr data in each case
-        // const { data: results } = useSWR(`/api/allpost`, fetcher);
-        const dog = ["cat"];
-        return {
-          // test
-          filter: "allposts",
-          data: dog,
-        };
+        const { data: allPosts } = useSWR(
+          `/api/search/allPosts?q=${query}`,
+          fetcher
+        );
+
+        // return {
+        //   filter: "posts",
+        //   data: allPosts,
+        // };
+        return allPosts;
 
         break;
       case "eco-posts":
-        // const { data: results } = useSWR(`/api/allpost`, fetcher);
+        const { data: ecoPosts } = useSWR(
+          `/api/search/ecoPosts?q=${query}`,
+          fetcher
+        );
 
-        return "ecoposts";
+        // return {
+        //   filter: "posts",
+        //   data: ecoPosts,
+        // };
+        console.log(ecoPosts);
+        return ecoPosts;
 
         break;
       case "all-species":
-        // const { data: results } = useSWR(`/api/allpost`, fetcher);
-        return "allspecies";
+        const { data: allSpecies } = useSWR(
+          `/api/search/allSpecies?q=${query}`,
+          fetcher
+        );
+
+        // return {
+        //   filter: "species",
+        //   data: allSpecies,
+        // };
+        return allSpecies;
 
         break;
       case "eco-species":
-        // const { data: results } = useSWR(`/api/allpost`, fetcher);
-        return "ecospecies";
+        const { data: ecoSpecies } = useSWR(
+          `/api/search/ecoSpecies?q=${query}`,
+          fetcher
+        );
+
+        // return {
+        //   filter: "species",
+        //   data: ecoSpecies,
+        // };
+        return ecoSpecies;
 
         break;
       // default:
@@ -53,8 +81,35 @@ export default function Search() {
   //   // retrieve drafts from drafts api. convert swr data to name posts.
   //   const { data: post } = useSWR(`/api/getdrafts/${_id}`, fetcher);
 
-  //   // loading state until draft is retrieved
-  //   if (!post || post == undefined) return "Loading...";
-
-  return <div> {results.data}</div>;
+  // loading state until draft is retrieved
+  if (!results || results == undefined) return "Loading...";
+  // console.log(results);
+  // if (results[0].title) {
+  return (
+    <div>
+      <ul>
+        {results.map((result) => {
+          return (
+            <li>
+              {result.title}
+              {result.count}
+            </li>
+          );
+        })}
+      </ul>
+      {query}
+    </div>
+  );
+  // } else {
+  //   return (
+  //     <div>
+  //       <ul>
+  //         {results.map((result) => {
+  //           return <li>{result.Scientific_Name}</li>;
+  //         })}
+  //       </ul>
+  //       {query}
+  //     </div>
+  //   );
+  // }
 }

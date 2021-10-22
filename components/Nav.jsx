@@ -13,13 +13,11 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import List from "@material-ui/core/List";
+
 import Divider from "@material-ui/core/Divider";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import {
@@ -35,6 +33,9 @@ import {
   ClickAwayListener,
   MenuList,
   Collapse,
+  List,
+  ListItem,
+  ListItemText,
 } from "@material-ui/core";
 
 const drawerWidth = 240;
@@ -392,18 +393,55 @@ const Nav = () => {
                   open={searchOpen}
                   anchorEl={searchAnchor}
                 >
-                  {ecoFilter && (
-                    <div className={classes.searchPaper}>
-                      Search for '{searchValue}' in Ecoregion
-                    </div>
-                  )}
+                  <List className={classes.searchPaper}>
+                    {ecoFilter && (
+                      <>
+                        <ListItem
+                          button
+                          onClick={() => {
+                            router.push(`/search?q=${searchValue}&s=eco-posts`);
+                          }}
+                        >
+                          <ListItemText
+                            primary={`Search for '${searchValue}' in ecoregion posts`}
+                          ></ListItemText>
+                        </ListItem>
+                        <ListItem
+                          button
+                          onClick={() => {
+                            router.push(
+                              `/search?q=${searchValue}&s=eco-species`
+                            );
+                          }}
+                        >
+                          <ListItemText
+                            primary={`Search for '${searchValue}' in ecoregion species`}
+                          ></ListItemText>
+                        </ListItem>
+                      </>
+                    )}
 
-                  <div className={classes.searchPaper}>
-                    Search for '{searchValue}' in all Posts
-                  </div>
-                  <div className={classes.searchPaper}>
-                    Search for '{searchValue}' in all Species
-                  </div>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        router.push(`/search?q=${searchValue}&s=all-posts`);
+                      }}
+                    >
+                      <ListItemText
+                        primary={`Search for '${searchValue}' in all posts`}
+                      ></ListItemText>
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        router.push(`/search?q=${searchValue}&s=all-species`);
+                      }}
+                    >
+                      <ListItemText
+                        primary={`Search for '${searchValue}' in all species`}
+                      ></ListItemText>
+                    </ListItem>
+                  </List>
                 </Popper>
               </div>
             </ClickAwayListener>

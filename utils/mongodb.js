@@ -319,6 +319,145 @@ const getMammalById = async (id) => {
   return mammal;
 };
 
+const searchAllPosts = async (query) => {
+  const { db } = await connectToDatabase();
+
+  const results = await db
+    .collection("published_posts")
+    .aggregate([
+      {
+        $search: {
+          index: "searchPosts",
+          text: {
+            query: `${query}`,
+            path: {
+              wildcard: "*",
+            },
+            fuzzy: {
+              maxExpansions: 20,
+            },
+            score: {
+              function: {
+                path: {
+                  value: "count",
+                },
+              },
+            },
+          },
+        },
+      },
+    ])
+    .toArray();
+
+  return results;
+};
+const searchAllSpecies = async (query) => {
+  const { db } = await connectToDatabase();
+
+  const results = await db
+    .collection("species")
+    .aggregate([
+      {
+        $search: {
+          index: "searchSpecies",
+          text: {
+            query: `${query}`,
+            path: ["COMMON_NAME", "Scientific_Name"],
+            fuzzy: {
+              maxExpansions: 20,
+            },
+          },
+        },
+      },
+    ])
+    .toArray();
+
+  return results;
+};
+const searchEcoPosts = async (query) => {
+  const { db } = await connectToDatabase();
+
+  const results = await db
+    .collection("published_posts")
+    .aggregate([
+      {
+        $search: {
+          index: "searchPosts",
+          compound: {
+            must: [
+              {
+                text: {
+                  query: `${query}`,
+                  path: {
+                    wildcard: "*",
+                  },
+                  fuzzy: {
+                    maxExpansions: 20,
+                  },
+                  score: {
+                    function: {
+                      path: {
+                        value: "count",
+                      },
+                    },
+                  },
+                },
+              },
+            ],
+            filter: [
+              {
+                text: {
+                  query: "313",
+                  path: "ecoregions",
+                },
+              },
+            ],
+          },
+        },
+      },
+    ])
+    .toArray();
+
+  return results;
+};
+const searchEcoSpecies = async (query) => {
+  const { db } = await connectToDatabase();
+
+  const results = await db
+    .collection("species")
+    .aggregate([
+      {
+        $search: {
+          index: "searchSpecies",
+          compound: {
+            must: [
+              {
+                text: {
+                  query: `${query}`,
+                  path: ["COMMON_NAME", "Scientific_Name"],
+                  fuzzy: {
+                    maxExpansions: 20,
+                  },
+                },
+              },
+            ],
+            filter: [
+              {
+                text: {
+                  query: "313",
+                  path: "unique_id",
+                },
+              },
+            ],
+          },
+        },
+      },
+    ])
+    .toArray();
+
+  return results;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -336,4 +475,8 @@ module.exports = {
   getPostComments,
   getMammals,
   getMammalById,
+  searchAllPosts,
+  searchAllSpecies,
+  searchEcoPosts,
+  searchEcoSpecies,
 };
