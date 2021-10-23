@@ -17,16 +17,12 @@ export default function Search() {
     switch (search) {
       case "all-posts":
         //   must use different names for swr data in each case
-        const { data: allPosts } = useSWR(
-          `/api/search/allPosts?q=${query}`,
-          fetcher
-        );
+        const { data } = useSWR(`/api/search/allPosts?q=${query}`, fetcher);
+        const filter = "post";
 
-        // return {
-        //   filter: "posts",
-        //   data: allPosts,
-        // };
-        return allPosts;
+        return data;
+
+        // return allPosts;
 
         break;
       case "eco-posts":
@@ -39,7 +35,7 @@ export default function Search() {
         //   filter: "posts",
         //   data: ecoPosts,
         // };
-        console.log(ecoPosts);
+        // console.log(ecoPosts);
         return ecoPosts;
 
         break;
@@ -83,33 +79,34 @@ export default function Search() {
 
   // loading state until draft is retrieved
   if (!results || results == undefined) return "Loading...";
-  // console.log(results);
-  // if (results[0].title) {
-  return (
-    <div>
-      <ul>
-        {results.map((result) => {
-          return (
-            <li>
-              {result.title}
-              {result.count}
-            </li>
-          );
-        })}
-      </ul>
-      {query}
-    </div>
-  );
-  // } else {
-  //   return (
-  //     <div>
-  //       <ul>
-  //         {results.map((result) => {
-  //           return <li>{result.Scientific_Name}</li>;
-  //         })}
-  //       </ul>
-  //       {query}
-  //     </div>
-  //   );
-  // }
+  console.log(results[0].title);
+  if (results && results[0].title !== undefined) {
+    return (
+      <div>
+        <ul>
+          {results.map((result) => {
+            return (
+              <li>
+                {result.title}
+                {result.count}
+              </li>
+            );
+          })}
+        </ul>
+        {query}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        {results[0].COMMON_NAME}
+        <ul>
+          {results.map((result) => {
+            return <li>{result.COMMON_NAME}</li>;
+          })}
+        </ul>
+        {query}
+      </div>
+    );
+  }
 }
