@@ -47,7 +47,45 @@ const Map = () => {
     "source-layer": "zoom",
     layout: {},
     paint: {
-      "line-color": "rgba(0,0,0,1)",
+      "line-color": "rgba(64,255,0,1)",
+      "line-width": 2,
+    },
+  };
+  //  base layer
+  const marineFill = {
+    id: "marine-fill",
+    type: "fill",
+    // source: "eco-data",
+    "source-layer": "marinezoom-tiles",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,1)",
+      "fill-color": "#627BC1",
+      "fill-opacity": 0,
+    },
+  };
+
+  // hover layer
+  const marineFill1 = {
+    id: "marine-fill1",
+    type: "fill",
+    // source: "eco-fill",
+    "source-layer": "marinezoom-tiles",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,1)",
+      "fill-color": "#627BC1",
+      "fill-opacity": 0.5,
+    },
+  };
+
+  // outline layer
+  const marineLine = {
+    id: "marine-line",
+    type: "line",
+    // source: "eco-fill",
+    "source-layer": "marinezoom-tiles",
+    layout: {},
+    paint: {
+      "line-color": "rgba(64,255,0,1)",
       "line-width": 2,
     },
   };
@@ -203,7 +241,7 @@ const Map = () => {
               position="top-left"
             />
             <Source
-              id="eco-data"
+              id="eco-terr"
               type="vector"
               url="mapbox://sl354207.ecozoom-tiles"
             >
@@ -211,6 +249,19 @@ const Map = () => {
               <Layer beforeId="waterway-label" {...ecoFill} />
               <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
             </Source>
+            {/* <Source
+              id="eco-mar"
+              type="vector"
+              url="mapbox://sl354207.marinezoom-tiles"
+            >
+              <Layer beforeId="waterway-label" {...marineLine} />
+              <Layer beforeId="waterway-label" {...marineFill} />
+              <Layer
+                beforeId="waterway-label"
+                {...marineFill1}
+                // filter={filter}
+              />
+            </Source> */}
             {selectedRegion && (
               <Popup
                 longitude={hoverInfo.longitude}
