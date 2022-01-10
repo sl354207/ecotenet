@@ -4,15 +4,22 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Geocoder from "react-map-gl-geocoder";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
-import { Button, useMediaQuery } from "@material-ui/core";
+import { Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+
+// const useStyles = makeStyles((theme) => ({
+//   popup: {
+//     alignItems: "center",
+//   },
+// }));
 
 const Map = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-
+  // const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   //  base layer
   const ecoFill = {
     id: "eco-fill",
@@ -125,10 +132,10 @@ const Map = () => {
   return (
     <>
       {isMobile ? (
-        <div style={{ height: "100vh" }}>
+        <div style={{ height: "94vh" }}>
           <div
             ref={geocoderContainerRef}
-            style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
+            style={{ position: "absolute", top: 100, right: 20, zIndex: 1 }}
           />
           {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
@@ -137,7 +144,7 @@ const Map = () => {
             ref={mapRef}
             {...viewport}
             width="100vw"
-            height="100vh"
+            height="94vh"
             minZoom={2}
             maxZoom={9}
             doubleClickZoom={false}
@@ -170,8 +177,12 @@ const Map = () => {
                 latitude={hoverInfo.latitude}
                 closeButton={false}
               >
-                <div>{ecoName}</div>
-                <div>Eco-{selectedRegion}</div>
+                <Typography color="textSecondary" align="center">
+                  {ecoName}
+                </Typography>
+                <Typography color="textSecondary" align="center">
+                  Eco-{selectedRegion}
+                </Typography>
               </Popup>
             )}
           </ReactMapGL>
@@ -229,9 +240,14 @@ const Map = () => {
                 longitude={hoverInfo.longitude}
                 latitude={hoverInfo.latitude}
                 closeButton={false}
+                // className={classes.pointer}
               >
-                <div>{ecoName}</div>
-                <div>Eco-{selectedRegion}</div>
+                <Typography color="textSecondary" align="center">
+                  {ecoName}
+                </Typography>
+                <Typography color="textSecondary" align="center">
+                  Eco-{selectedRegion}
+                </Typography>
               </Popup>
             )}
           </ReactMapGL>
