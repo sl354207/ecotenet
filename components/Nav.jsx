@@ -26,6 +26,7 @@ import {
   AccordionDetails,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import {
   Popper,
   Grow,
@@ -96,11 +97,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
+    // width: "100%",
+    // [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+    // },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -119,13 +120,13 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
+    // width: "100%",
+    // [theme.breakpoints.up("xs")]: {
+    width: "0ch",
+    "&:focus": {
+      width: "20ch",
     },
+    // },
   },
   searchPaper: {
     border: "1px solid",
@@ -219,6 +220,12 @@ const Nav = () => {
 
   // const open = Boolean(searchAnchor);
   const searchID = searchOpen ? "simple-popper" : undefined;
+
+  const [openList, setOpenList] = useState(false);
+
+  const handleListClick = () => {
+    setOpenList(!openList);
+  };
 
   const menuItems = [
     {
@@ -473,8 +480,8 @@ const Nav = () => {
                 const { menuTitle, menuSubs, pageURL } = menuItem;
 
                 return (
-                  <Accordion className={classes.accordion}>
-                    <AccordionSummary
+                  <List component="nav" aria-labelledby="nested-list-subheader">
+                    {/* <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
@@ -482,9 +489,13 @@ const Nav = () => {
                       <Typography className={classes.heading}>
                         {menuTitle}
                       </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <List>
+                    </AccordionSummary> */}
+                    <ListItem button onClick={handleListClick}>
+                      <ListItemText primary={menuTitle} />
+                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </ListItem>
+                    <Collapse in={openList} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
                         {menuSubs.map((menuSub) => (
                           <ListItem
                             button
@@ -498,8 +509,8 @@ const Nav = () => {
                           </ListItem>
                         ))}
                       </List>
-                    </AccordionDetails>
-                  </Accordion>
+                    </Collapse>
+                  </List>
                 );
               })}
             </Drawer>

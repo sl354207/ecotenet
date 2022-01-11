@@ -135,7 +135,7 @@ const Map = () => {
         <div style={{ height: "94vh" }}>
           <div
             ref={geocoderContainerRef}
-            style={{ position: "absolute", top: 100, right: 20, zIndex: 1 }}
+            style={{ position: "absolute", top: 100, left: 20, zIndex: 1 }}
           />
           {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
@@ -161,6 +161,9 @@ const Map = () => {
               onViewportChange={handleViewportChange}
               mapboxApiAccessToken={mapBox}
               position="top-left"
+              placeholder="Search Map"
+              clearAndBlurOnEsc="true"
+              clearOnBlur="true"
             />
             <Source
               id="ecomap"
@@ -194,7 +197,7 @@ const Map = () => {
             style={{
               position: "absolute",
               top: 100,
-              right: 20,
+              left: 20,
               zIndex: 1,
             }}
           />
