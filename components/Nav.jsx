@@ -9,7 +9,7 @@ import { MenuItem } from "@material-ui/core";
 import { Menu } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import { useMediaQuery } from "@material-ui/core";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useReducer } from "react";
 import { useRouter } from "next/router";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -139,6 +139,131 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const menuItems = [
+  {
+    menuTitle: "Animals",
+    menuSubs: [
+      "Mammals",
+      "Reptiles",
+      "Amphibians",
+      "Birds",
+      "Fish/Mollusk",
+      "Guides",
+    ],
+    pageURL: "/mammals",
+    openList: false,
+  },
+  {
+    menuTitle: "Plants",
+    menuSubs: ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
+    pageURL: "/posts/60da0c1ffde53f333e6498dd",
+    openList: false,
+  },
+  {
+    menuTitle: "Fungi",
+    menuSubs: ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
+    pageURL: "/history",
+    openList: false,
+  },
+  {
+    menuTitle: "Arthropods",
+    menuSubs: ["Crustaceans", "Myriapods", "Chelicerates", "Insects", "Guides"],
+    pageURL: "/gallery",
+    openList: false,
+  },
+  {
+    menuTitle: "Hunt",
+    menuSubs: [
+      "Tracking/Stalking",
+      "Trapping",
+      "Fishing",
+      "Strategies/Techniques",
+      "Processing",
+      "Tools",
+    ],
+    pageURL: "/pageant",
+    openList: false,
+  },
+  {
+    menuTitle: "Gather",
+    menuSubs: ["Edible", "Medicinal"],
+    pageURL: "/volunteer",
+    openList: false,
+  },
+  {
+    menuTitle: "Travel",
+    menuSubs: ["Land", "Water"],
+    pageURL: "/sponsors",
+    openList: false,
+  },
+  {
+    menuTitle: "Survival",
+    menuSubs: ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
+    pageURL: "/contact",
+    openList: false,
+  },
+  {
+    menuTitle: "Agriculture",
+    menuSubs: [
+      "Planting/Harvesting",
+      "Maintenance/Management",
+      "Processing/Storage",
+      "Livestock",
+      "Soil Health",
+      "Propogation/Cultivation",
+      "Irrigation",
+      "Techniques/Systems",
+      "Start-To-Finish/Lifecycles",
+    ],
+    pageURL: "/pageant",
+    openList: false,
+  },
+  {
+    menuTitle: "Building",
+    menuSubs: [
+      "Foundations/Floors",
+      "Walls",
+      "Roofs",
+      "Complete Structures",
+      "Water Systems",
+      "Heating/Cooling",
+      "Furniture/Utensils/Tools",
+    ],
+    pageURL: "/volunteer",
+    openList: false,
+  },
+  {
+    menuTitle: "Culture",
+    menuSubs: [
+      "Cooking/Recipes",
+      "Clothing",
+      "Art",
+      "Music",
+      "Rituals",
+      "Stories",
+    ],
+    pageURL: "/sponsors",
+    openList: false,
+  },
+];
+
+const reducer = (menuItems, action) => {
+  if (action.type == "toggle") {
+    return menuItems.map((menuItem) => {
+      if (menuItem.menuTitle == action.payload) {
+        menuItem.openList = !menuItem.openList;
+        console.log(menuItem);
+        // return menuItem;
+      }
+      // console.log(menuItem);
+      return menuItem;
+    });
+  }
+  // else {
+  //   return menuItems;
+  // }
+};
+
 const Nav = () => {
   const router = useRouter();
   const classes = useStyles();
@@ -221,114 +346,14 @@ const Nav = () => {
   // const open = Boolean(searchAnchor);
   const searchID = searchOpen ? "simple-popper" : undefined;
 
-  const [openList, setOpenList] = useState(false);
+  // const [openList, setOpenList] = useState(false);
 
-  const handleListClick = () => {
-    setOpenList(!openList);
-  };
+  function handleListClick(menuTitle) {
+    // setOpenList(!openList);
+    dispatch({ type: "toggle", payload: menuTitle });
+  }
 
-  const menuItems = [
-    {
-      menuTitle: "Animals",
-      menuSubs: [
-        "Mammals",
-        "Reptiles",
-        "Amphibians",
-        "Birds",
-        "Fish/Mollusk",
-        "Guides",
-      ],
-      pageURL: "/mammals",
-    },
-    {
-      menuTitle: "Plants",
-      menuSubs: ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
-      pageURL: "/posts/60da0c1ffde53f333e6498dd",
-    },
-    {
-      menuTitle: "Fungi",
-      menuSubs: ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
-      pageURL: "/history",
-    },
-    {
-      menuTitle: "Arthropods",
-      menuSubs: [
-        "Crustaceans",
-        "Myriapods",
-        "Chelicerates",
-        "Insects",
-        "Guides",
-      ],
-      pageURL: "/gallery",
-    },
-    {
-      menuTitle: "Hunt",
-      menuSubs: [
-        "Tracking/Stalking",
-        "Trapping",
-        "Fishing",
-        "Strategies/Techniques",
-        "Processing",
-        "Tools",
-      ],
-      pageURL: "/pageant",
-    },
-    {
-      menuTitle: "Gather",
-      menuSubs: ["Edible", "Medicinal"],
-      pageURL: "/volunteer",
-    },
-    {
-      menuTitle: "Travel",
-      menuSubs: ["Land", "Water"],
-      pageURL: "/sponsors",
-    },
-    {
-      menuTitle: "Survival",
-      menuSubs: ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
-      pageURL: "/contact",
-    },
-    {
-      menuTitle: "Agriculture",
-      menuSubs: [
-        "Planting/Harvesting",
-        "Maintenance/Management",
-        "Processing/Storage",
-        "Livestock",
-        "Soil Health",
-        "Propogation/Cultivation",
-        "Irrigation",
-        "Techniques/Systems",
-        "Start-To-Finish/Lifecycles",
-      ],
-      pageURL: "/pageant",
-    },
-    {
-      menuTitle: "Building",
-      menuSubs: [
-        "Foundations/Floors",
-        "Walls",
-        "Roofs",
-        "Complete Structures",
-        "Water Systems",
-        "Heating/Cooling",
-        "Furniture/Utensils/Tools",
-      ],
-      pageURL: "/volunteer",
-    },
-    {
-      menuTitle: "Culture",
-      menuSubs: [
-        "Cooking/Recipes",
-        "Clothing",
-        "Art",
-        "Music",
-        "Rituals",
-        "Stories",
-      ],
-      pageURL: "/sponsors",
-    },
-  ];
+  const [state, dispatch] = useReducer(reducer, menuItems);
 
   // category filter logic. Revisit
   const [ecoFilter, setEcoFilter] = useState("");
@@ -476,8 +501,8 @@ const Nav = () => {
                 </IconButton>
               </div>
               <Divider />
-              {menuItems.map((menuItem) => {
-                const { menuTitle, menuSubs, pageURL } = menuItem;
+              {state.map((menuItem) => {
+                // const { menuTitle, menuSubs, pageURL, openList } = menuItem;
 
                 return (
                   <List component="nav" aria-labelledby="nested-list-subheader">
@@ -490,13 +515,24 @@ const Nav = () => {
                         {menuTitle}
                       </Typography>
                     </AccordionSummary> */}
-                    <ListItem button onClick={handleListClick}>
-                      <ListItemText primary={menuTitle} />
-                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    <ListItem
+                      button
+                      onClick={() => handleListClick(menuItem.menuTitle)}
+                    >
+                      <ListItemText primary={menuItem.menuTitle} />
+                      {menuItem.openList ? (
+                        <ExpandLessIcon />
+                      ) : (
+                        <ExpandMoreIcon />
+                      )}
                     </ListItem>
-                    <Collapse in={openList} timeout="auto" unmountOnExit>
+                    <Collapse
+                      in={menuItem.openList}
+                      timeout="auto"
+                      unmountOnExit
+                    >
                       <List component="div" disablePadding>
-                        {menuSubs.map((menuSub) => (
+                        {menuItem.menuSubs.map((menuSub) => (
                           <ListItem
                             button
                             key={menuSub}
