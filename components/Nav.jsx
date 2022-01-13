@@ -68,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    backgroundColor: theme.palette.primary.light,
   },
   drawerHeader: {
     display: "flex",
@@ -129,16 +130,22 @@ const useStyles = makeStyles((theme) => ({
     // },
   },
   searchPaper: {
-    border: "1px solid",
+    border: "1px solid #94c9ff",
+    borderRadius: "10px",
     padding: theme.spacing(1),
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.primary.light,
     // zIndex: "2000",
   },
   searchPopper: {
     zIndex: "2000",
+    paddingTop: theme.spacing(1),
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
   },
 }));
 
+// initialize drawer categories
 const menuItems = [
   {
     menuTitle: "Animals",
@@ -247,19 +254,18 @@ const menuItems = [
   },
 ];
 
+// reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {
   if (action.type == "toggle") {
     return menuItems.map((menuItem) => {
       if (menuItem.menuTitle == action.payload) {
         menuItem.openList = !menuItem.openList;
-        console.log(menuItem);
-        // return menuItem;
       }
-      // console.log(menuItem);
       return menuItem;
     });
   }
   // else {
+  // POTENTIALLY ADD ERROR MESSAGE
   //   return menuItems;
   // }
 };
@@ -348,11 +354,13 @@ const Nav = () => {
 
   // const [openList, setOpenList] = useState(false);
 
-  function handleListClick(menuTitle) {
+  // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
+  const handleListClick = (menuTitle) => {
     // setOpenList(!openList);
     dispatch({ type: "toggle", payload: menuTitle });
-  }
+  };
 
+  // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
   const [state, dispatch] = useReducer(reducer, menuItems);
 
   // category filter logic. Revisit
@@ -438,6 +446,7 @@ const Nav = () => {
                             primary={`Search for '${searchValue}' in ecoregion posts`}
                           ></ListItemText>
                         </ListItem>
+                        <Divider />
                         <ListItem
                           button
                           onClick={() => {
@@ -450,6 +459,7 @@ const Nav = () => {
                             primary={`Search for '${searchValue}' in ecoregion species`}
                           ></ListItemText>
                         </ListItem>
+                        <Divider />
                       </>
                     )}
 
@@ -463,6 +473,7 @@ const Nav = () => {
                         primary={`Search for '${searchValue}' in all posts`}
                       ></ListItemText>
                     </ListItem>
+                    <Divider />
                     <ListItem
                       button
                       onClick={() => {
@@ -502,43 +513,24 @@ const Nav = () => {
               </div>
               <Divider />
               {state.map((menuItem) => {
-                // const { menuTitle, menuSubs, pageURL, openList } = menuItem;
+                const { menuTitle, menuSubs, pageURL, openList } = menuItem;
 
                 return (
-                  <List component="nav" aria-labelledby="nested-list-subheader">
-                    {/* <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography className={classes.heading}>
-                        {menuTitle}
-                      </Typography>
-                    </AccordionSummary> */}
-                    <ListItem
-                      button
-                      onClick={() => handleListClick(menuItem.menuTitle)}
-                    >
-                      <ListItemText primary={menuItem.menuTitle} />
-                      {menuItem.openList ? (
-                        <ExpandLessIcon />
-                      ) : (
-                        <ExpandMoreIcon />
-                      )}
+                  <List component="nav" aria-labelledby="nested-list">
+                    <ListItem button onClick={() => handleListClick(menuTitle)}>
+                      <ListItemText primary={menuTitle} />
+                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </ListItem>
-                    <Collapse
-                      in={menuItem.openList}
-                      timeout="auto"
-                      unmountOnExit
-                    >
+                    <Collapse in={openList} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
-                        {menuItem.menuSubs.map((menuSub) => (
+                        {menuSubs.map((menuSub) => (
                           <ListItem
                             button
                             key={menuSub}
+                            className={classes.nested}
                             onClick={() => {
                               handleDrawerClose(Event);
-                              router.push(menuItem.pageURL);
+                              router.push(pageURL);
                             }}
                           >
                             <ListItemText primary={menuSub} />
@@ -546,6 +538,7 @@ const Nav = () => {
                         ))}
                       </List>
                     </Collapse>
+                    <Divider />
                   </List>
                 );
               })}

@@ -15,8 +15,8 @@ const theme = createTheme({
       light: "#c8fcff",
       dark: "#0071e4",
     },
-
-    divider: "#1e4976",
+    // "#1e4976"
+    divider: "#94c9ff",
     background: {
       default: "#0a1929",
       paper: "#001e3c",
