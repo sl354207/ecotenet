@@ -15,6 +15,7 @@ import {
   Box,
   Button,
   Typography,
+  Divider,
 } from "@material-ui/core";
 
 import { useRef } from "react";
@@ -31,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     top: 60,
     marginTop: 20,
+    border: "1px solid #94c9ff",
+    borderRadius: "10px",
     // position: "sticky",
     // width: "100%",
     // maxWidth: 36,
@@ -83,22 +86,29 @@ const mammals = ({ mammals }) => {
   return (
     <>
       {/* <Nav /> */}
-      <Typography variant="h3" align="center">
-        Mammals
-      </Typography>
-      <AppBar component="div" position="sticky" className={classes.subheader}>
-        {uniqueFirst.map((item) => (
-          <Button
-            key={item}
-            onClick={() => handleClick(item)}
-            className={classes.sublist}
-          >
-            {item}
-          </Button>
-        ))}
-      </AppBar>
-      <Toolbar />
+
       <Container>
+        <Typography variant="h3" align="center">
+          Mammals
+        </Typography>
+        <AppBar component="div" position="sticky" className={classes.subheader}>
+          {uniqueFirst.map((item) => (
+            <>
+              <Button
+                key={item}
+                onClick={() => handleClick(item)}
+                className={classes.sublist}
+                variant="outlined"
+                color="secondary"
+              >
+                <Typography variant="h4" align="center">
+                  {item}
+                </Typography>
+              </Button>
+            </>
+          ))}
+        </AppBar>
+        <Toolbar />
         <List className={classes.list}>
           {uniqueFirst.map((entry) => {
             return (
@@ -121,6 +131,7 @@ const mammals = ({ mammals }) => {
                     );
                   }
                 })}
+                <Divider />
               </>
             );
           })}
