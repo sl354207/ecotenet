@@ -17,10 +17,11 @@ import {
   Typography,
   Divider,
 } from "@material-ui/core";
+import { useMediaQuery } from "@material-ui/core";
 
 import { useRef } from "react";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -49,14 +50,20 @@ const useStyles = makeStyles((theme) => ({
     // width: "100%",
     // maxWidth: 36,
   },
-  list: {
-    marginTop: 50,
+  header: {
+    marginTop: 20,
+  },
+  buttonlist: {
+    display: "block",
+    justifyContent: "start",
   },
 }));
 
 const mammals = ({ mammals }) => {
   const classes = useStyles();
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   // create new array containing only unique first letters of scientific name of mammals
   const uniqueFirst = [
@@ -75,7 +82,7 @@ const mammals = ({ mammals }) => {
   }, {});
 
   // scroll to clicked subheader section of page
-  const handleClick = (id, yOffset = -160) => {
+  const handleClick = (id, yOffset) => {
     // set el to clicked elements ref
     const el = refs[id].current;
     // get the position of el within browser window plus an offset
@@ -88,45 +95,92 @@ const mammals = ({ mammals }) => {
       {/* <Nav /> */}
 
       <Container>
-        <Typography variant="h3" align="center">
+        <Typography variant="h3" align="center" className={classes.header}>
           Mammals
         </Typography>
         <AppBar component="div" position="sticky" className={classes.subheader}>
           {uniqueFirst.map((item) => (
             <>
-              <Button
-                key={item}
-                onClick={() => handleClick(item)}
-                className={classes.sublist}
-                variant="outlined"
-                color="secondary"
-              >
-                <Typography variant="h4" align="center">
-                  {item}
-                </Typography>
-              </Button>
+              {isMobile ? (
+                <Button
+                  key={item}
+                  onClick={() => handleClick(item, -260)}
+                  className={classes.sublist}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  <Typography variant="h4" align="center">
+                    {item}
+                  </Typography>
+                </Button>
+              ) : (
+                <Button
+                  key={item}
+                  onClick={() => handleClick(item, -140)}
+                  className={classes.sublist}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  <Typography variant="h4" align="center">
+                    {item}
+                  </Typography>
+                </Button>
+              )}
             </>
           ))}
         </AppBar>
         <Toolbar />
-        <List className={classes.list}>
+        <List>
           {uniqueFirst.map((entry) => {
             return (
               <>
                 <ListItem key={entry} ref={refs[entry]}>
-                  <ListItemText>{entry}</ListItemText>
+                  <ListItemText>
+                    <Typography variant="h5" color="secondary">
+                      {entry}
+                    </Typography>
+                  </ListItemText>
                 </ListItem>
                 {mammals.map((mammal) => {
                   if (mammal.Scientific_Name[0] === entry) {
                     return (
-                      <ListItem
-                        key={mammal._id}
-                        button
-                        onClick={() => {
-                          router.push("/mammal");
-                        }}
-                      >
-                        <a href="/mammal">{mammal.Scientific_Name}</a>
+                      <ListItem key={mammal._id}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          fullWidth
+                          className={classes.buttonlist}
+                          onClick={() => {
+                            router.push("/mammal");
+                          }}
+                        >
+                          {isMobile ? (
+                            <>
+                              <Typography
+                                variant="h6"
+                                color="textPrimary"
+                                align="left"
+                              >
+                                {mammal.Scientific_Name} -
+                              </Typography>
+                              <Typography
+                                variant="h6"
+                                color="textPrimary"
+                                align="left"
+                              >
+                                {mammal.COMMON_NAME}
+                              </Typography>
+                            </>
+                          ) : (
+                            <Typography
+                              variant="h6"
+                              color="textPrimary"
+                              align="left"
+                            >
+                              {mammal.Scientific_Name} - {mammal.COMMON_NAME}
+                            </Typography>
+                          )}
+                        </Button>
                       </ListItem>
                     );
                   }
