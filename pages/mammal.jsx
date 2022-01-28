@@ -2,6 +2,8 @@ import { getMammalById } from "../utils/mongodb";
 import Nav from "../components/Nav";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import useSWR from "swr";
+import parse from "html-react-parser";
 import {
   Button,
   useMediaQuery,
@@ -74,6 +76,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const wiki = async () => {
+  const url =
+    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/Earth?redirect=false";
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      // Authorization:
+      //   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJmMWJmYjJlYmRjMjdjNDMxYjdiZDIzNjI0MWZhMGZkOSIsImp0aSI6IjdkMmI3NmZkNDFjNWU4NTcwZDgwYzY2MTgwOGMyZDI2Y2NjNzE0YjMwODJkODI1N2M5N2Q0NjVhZWQwMGMwNmZiOTljYTY5OGFkZWY4ZWY2IiwiaWF0IjoxNjQzMzA5NDAyLCJuYmYiOjE2NDMzMDk0MDIsImV4cCI6MzMyMDAyMTgyMDIsInN1YiI6IjY4Nzc3MDgxIiwiaXNzIjoiaHR0cHM6XC9cL21ldGEud2lraW1lZGlhLm9yZyIsInJhdGVsaW1pdCI6eyJyZXF1ZXN0c19wZXJfdW5pdCI6NTAwMCwidW5pdCI6IkhPVVIifSwic2NvcGVzIjpbImJhc2ljIl19.bIwXFgnWnc3_DNAkcBucrzwVnMAmQHKt_eoZuAwmYMZ7dvobReLNxP28D8C_VfAP7EOSSP7PmrkHAeQUDlY_qOXpLLe8Ls1FdTVmjFeXAQFm3dBtVDJe9FDc_Lnkqfb0zqV_OYZRdm_oDIqu16sItrhqQEkxAGQxdpaObWPQO4A8XcRhe0YrE82uFxTydTOO2RG910x9AkctxeyslzItr-qB5Gdz7pgua3YLaNSB0zcK0_D98_oSw61r7OQDT0L2xI_3DbIBbPlI1Lz0hbQVpzlEDxXp9v6GHFWu4VXaO27Mrr3XRegyo0tstid-wLtvjSdxphd8mdnrYhxT3PX9UZV5gotqC3BCnJlDdev_4q9QZjY-5n7aJbPSHC43aauZfUHrKDCp5y_ocxxS5eisG7ptqMRE1kflWIzLpzdDi1_UkBz-xqMuTnBVKNCf7aY45boDYI-aNfJt0nF2ujKSB76gsSI0-AyKJUBYj7PDvGcc5tyx4jK0EZzihCK3itTwhJE7JBfgCCyvgXtpQ8hGHSJyMnYBZci_ejwOK4-HwSIGhZV2QF0sJZat80LPq6vzt5omYnNZ9qUO02n7t_zegCZM-kwf0roOXhBgMSVkhbzConYTvh4sQPi1_LP77rbnPM96rWMF9hpCICB6Z2-e2KvSIJZwgA8rRx-nhJBAvq8",
+      "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+    },
+  });
+  // res.json().then(console.log).catch(console.error);
+  const resp = res.json().then(console.log).catch(console.error);
+  // const resp = JSON.parse(JSON.stringify(res));
+  // console.log(resp);
+  return resp;
+};
+
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
 const mammal = ({ mammal }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
@@ -86,9 +108,26 @@ const mammal = ({ mammal }) => {
 
   const ecoIds = mammal.unique_id.map((id) => <Link href="#">Eco-{id}</Link>);
 
+  // wiki();
+  // retrieve drafts from drafts api. convert swr data to name posts.
+  const { data: post } = useSWR(
+    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/Earth?redirect=false",
+    fetcher
+  );
+
+  // loading state until draft is retrieved
+  if (!post || post == undefined) return "Loading...";
+  console.log(post);
+  // const parser = new DOMParser();
+  // const htmlDoc = parser.parseFromString(
+  //   post.lead.sections[0].text,
+  //   "text/html"
+  // );
+  // console.log(htmlDoc);
   return (
     <>
       <Nav />
+      {parse(post.lead.sections[0].text)}
       {/* TODO fix iframe resizing */}
       {isMobile ? (
         <Container>
