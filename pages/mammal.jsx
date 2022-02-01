@@ -3,7 +3,8 @@ import Nav from "../components/Nav";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import useSWR from "swr";
-import parse from "html-react-parser";
+import parse, { domToReact, attributesToProps } from "html-react-parser";
+import DOMPurify from "dompurify";
 import {
   Button,
   useMediaQuery,
@@ -74,6 +75,16 @@ const useStyles = makeStyles((theme) => ({
     // minWidth: 65,
     flexGrow: 1,
   },
+  tablerow: {
+    backgroundColor: "#001e3c!important",
+  },
+  table: {
+    [theme.breakpoints.down("xs")]: {
+      margin: "auto",
+      float: "none",
+    },
+    float: "right",
+  },
 }));
 
 const wiki = async () => {
@@ -109,9 +120,53 @@ const mammal = ({ mammal }) => {
   const ecoIds = mammal.unique_id.map((id) => <Link href="#">Eco-{id}</Link>);
 
   // wiki();
+  const options = {
+    replace: (domNode) => {
+      // console.log(domNode);
+      if (domNode.attribs && domNode.children && domNode.name === "a") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <Link
+            {...props}
+            href={"https://en.wikipedia.org/" + domNode.attribs.href}
+            color="secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {domToReact(domNode.children, options)}
+          </Link>
+        );
+      }
+      if (domNode.attribs && domNode.children && domNode.name === "table") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <table {...props} className={classes.table}>
+            {domToReact(domNode.children, options)}
+          </table>
+        );
+      }
+      if (domNode.attribs && domNode.children && domNode.name === "th") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <th {...props} className={classes.tablerow}>
+            {domToReact(domNode.children, options)}
+          </th>
+        );
+      }
+      if (domNode.attribs && domNode.children && domNode.name === "tr") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <tr {...props} className={classes.tablerow}>
+            {domToReact(domNode.children, options)}
+          </tr>
+        );
+      }
+    },
+  };
+
   // retrieve drafts from drafts api. convert swr data to name posts.
   const { data: post } = useSWR(
-    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/Earth?redirect=false",
+    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/blarina_brevicauda?redirect=false",
     fetcher
   );
 
@@ -127,7 +182,7 @@ const mammal = ({ mammal }) => {
   return (
     <>
       <Nav />
-      {parse(post.lead.sections[0].text)}
+
       {/* TODO fix iframe resizing */}
       {isMobile ? (
         <Container>
@@ -161,13 +216,17 @@ const mammal = ({ mammal }) => {
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-              <iframe
+              {/* <iframe
                 id="questionnaire"
                 title="Inline Frame Example"
                 width="100%"
                 height="7300px"
                 src="https://en.m.wikipedia.org/wiki/Northern_short-tailed_shrew"
-              ></iframe>
+              ></iframe> */}
+              {parse(DOMPurify.sanitize(post.lead.sections[0].text), options)}
+              {post.remaining.sections.map((section) => {
+                return parse(DOMPurify.sanitize(section.text), options);
+              })}
             </TabPanel>
             <TabPanel value={value} index={1}>
               <iframe
@@ -226,13 +285,31 @@ const mammal = ({ mammal }) => {
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
-              <iframe
+              {/* <iframe
                 id="questionnaire"
                 title="Inline Frame Example"
                 width="100%"
                 height="7300px"
                 src="https://en.m.wikipedia.org/wiki/Northern_short-tailed_shrew"
-              ></iframe>
+              ></iframe> */}
+              {parse(DOMPurify.sanitize(post.lead.sections[0].text), options)}
+              {post.remaining.sections.map((section) => {
+                if (section.toclevel == 2) {
+                  return (
+                    <>
+                      <h2>{section.line}</h2>
+                      {parse(DOMPurify.sanitize(section.text), options)}
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <h1>{section.line}</h1>
+                      {parse(DOMPurify.sanitize(section.text), options)}
+                    </>
+                  );
+                }
+              })}
             </TabPanel>
             <TabPanel value={value} index={1}>
               <iframe
