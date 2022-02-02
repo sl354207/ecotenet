@@ -58,12 +58,17 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     // fontSize: 20,
+    // maxWidth: 40,
 
     // [theme.breakpoints.down("xs")]: {
     //   fontSize: 10,
     // },
+    borderRadius: "10px",
   },
-
+  tabbar: {
+    backgroundColor: theme.palette.primary.light,
+    borderRadius: "10px",
+  },
   title: {
     marginBottom: 20,
   },
@@ -74,6 +79,13 @@ const useStyles = makeStyles((theme) => ({
     // fontSize: 18,
     // minWidth: 65,
     flexGrow: 1,
+    backgroundColor: theme.palette.primary.light,
+    minHeight: 80,
+    borderRadius: "10px",
+    "&:hover": {
+      color: theme.text,
+      opacity: 1,
+    },
   },
   tablerow: {
     backgroundColor: "#001e3c!important",
@@ -122,7 +134,7 @@ const mammal = ({ mammal }) => {
   // wiki();
   const options = {
     replace: (domNode) => {
-      // console.log(domNode);
+      console.log(domNode);
       if (domNode.attribs && domNode.children && domNode.name === "a") {
         const props = attributesToProps(domNode.attribs);
         return (
@@ -136,6 +148,14 @@ const mammal = ({ mammal }) => {
             {domToReact(domNode.children, options)}
           </Link>
         );
+      }
+      if (domNode.attribs && domNode.attribs.role === "note") {
+        // const props = attributesToProps(domNode.attribs);
+        return <></>;
+      }
+      if (domNode.attribs && domNode.attribs.role === "presentation") {
+        // const props = attributesToProps(domNode.attribs);
+        return <></>;
       }
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
@@ -161,12 +181,16 @@ const mammal = ({ mammal }) => {
           </tr>
         );
       }
+      if (domNode.attribs && domNode.children && domNode.name === "figure") {
+        // const props = attributesToProps(domNode.attribs);
+        return <></>;
+      }
     },
   };
 
   // retrieve drafts from drafts api. convert swr data to name posts.
   const { data: post } = useSWR(
-    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/blarina_brevicauda?redirect=false",
+    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/carya_laciniosa?redirect=false",
     fetcher
   );
 
@@ -199,7 +223,7 @@ const mammal = ({ mammal }) => {
             ))}
           </Typography>
           <div className={classes.tabs}>
-            <AppBar position="static">
+            <AppBar position="static" elevation="0" className={classes.tabbar}>
               <Tabs
                 value={value}
                 onChange={handleChange}
@@ -225,7 +249,21 @@ const mammal = ({ mammal }) => {
               ></iframe> */}
               {parse(DOMPurify.sanitize(post.lead.sections[0].text), options)}
               {post.remaining.sections.map((section) => {
-                return parse(DOMPurify.sanitize(section.text), options);
+                if (section.toclevel == 2) {
+                  return (
+                    <>
+                      <h2>{section.line}</h2>
+                      {parse(DOMPurify.sanitize(section.text), options)}
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <h1>{section.line}</h1>
+                      {parse(DOMPurify.sanitize(section.text), options)}
+                    </>
+                  );
+                }
               })}
             </TabPanel>
             <TabPanel value={value} index={1}>
@@ -264,7 +302,7 @@ const mammal = ({ mammal }) => {
           </Typography>
 
           <div className={classes.tabs}>
-            <AppBar position="static">
+            <AppBar position="static" elevation="0" className={classes.tabbar}>
               <Tabs
                 value={value}
                 onChange={handleChange}
