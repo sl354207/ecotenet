@@ -31,11 +31,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
@@ -96,6 +92,7 @@ const useStyles = makeStyles((theme) => ({
       float: "none",
     },
     float: "right",
+    border: "thin solid",
   },
 }));
 
@@ -157,6 +154,14 @@ const mammal = ({ mammal }) => {
         // const props = attributesToProps(domNode.attribs);
         return <></>;
       }
+      if (domNode.attribs && domNode.attribs.role === "navigation") {
+        // const props = attributesToProps(domNode.attribs);
+        return <></>;
+      }
+      if (domNode.attribs && domNode.attribs.class === "noviewer") {
+        // const props = attributesToProps(domNode.attribs);
+        return <></>;
+      }
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
         return (
@@ -181,7 +186,36 @@ const mammal = ({ mammal }) => {
           </tr>
         );
       }
+      if (domNode.attribs && domNode.children && domNode.name === "td") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <td {...props} className={classes.tablerow}>
+            {domToReact(domNode.children, options)}
+          </td>
+        );
+      }
+      if (
+        domNode.attribs &&
+        domNode.children &&
+        domNode.attribs.class === "plainlist"
+      ) {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <div {...props} className={classes.tablerow}>
+            {domToReact(domNode.children, options)}
+          </div>
+        );
+      }
+      // if (domNode.attribs && domNode.children && domNode.name === "p") {
+      //   const props = attributesToProps(domNode.attribs);
+      //   return <div {...props}>{domToReact(domNode.children, options)}</div>;
+      // }
+
       if (domNode.attribs && domNode.children && domNode.name === "figure") {
+        // const props = attributesToProps(domNode.attribs);
+        return <></>;
+      }
+      if (domNode.attribs && domNode.attribs.class === "thumbinner") {
         // const props = attributesToProps(domNode.attribs);
         return <></>;
       }
@@ -190,7 +224,7 @@ const mammal = ({ mammal }) => {
 
   // retrieve drafts from drafts api. convert swr data to name posts.
   const { data: post } = useSWR(
-    "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/carya_laciniosa?redirect=false",
+    "https://api.wikimedia.org/core/v1/commons.wikimedia/en/search/page?q=earth&limit=10",
     fetcher
   );
 
@@ -223,7 +257,7 @@ const mammal = ({ mammal }) => {
             ))}
           </Typography>
           <div className={classes.tabs}>
-            <AppBar position="static" elevation="0" className={classes.tabbar}>
+            <AppBar position="static" elevation={0} className={classes.tabbar}>
               <Tabs
                 value={value}
                 onChange={handleChange}
@@ -249,7 +283,9 @@ const mammal = ({ mammal }) => {
               ></iframe> */}
               {parse(DOMPurify.sanitize(post.lead.sections[0].text), options)}
               {post.remaining.sections.map((section) => {
-                if (section.toclevel == 2) {
+                if (section.anchor == "Gallery") {
+                  return <></>;
+                } else if (section.toclevel == 2) {
                   return (
                     <>
                       <h2>{section.line}</h2>
@@ -272,7 +308,7 @@ const mammal = ({ mammal }) => {
                 title="Inline Frame Example"
                 width="100%"
                 height="7300px"
-                src="https://commons.m.wikimedia.org/wiki/Category:Blarina_brevicauda"
+                src="https://commons.m.wikimedia.org/wiki/Category:Quality_images_of_Sciurus_carolinensis"
               ></iframe>
             </TabPanel>
             <TabPanel value={value} index={2}>
@@ -302,7 +338,7 @@ const mammal = ({ mammal }) => {
           </Typography>
 
           <div className={classes.tabs}>
-            <AppBar position="static" elevation="0" className={classes.tabbar}>
+            <AppBar position="static" elevation={0} className={classes.tabbar}>
               <Tabs
                 value={value}
                 onChange={handleChange}
@@ -332,7 +368,9 @@ const mammal = ({ mammal }) => {
               ></iframe> */}
               {parse(DOMPurify.sanitize(post.lead.sections[0].text), options)}
               {post.remaining.sections.map((section) => {
-                if (section.toclevel == 2) {
+                if (section.anchor == "Gallery") {
+                  return <></>;
+                } else if (section.toclevel == 2) {
                   return (
                     <>
                       <h2>{section.line}</h2>
@@ -355,7 +393,7 @@ const mammal = ({ mammal }) => {
                 title="Inline Frame Example"
                 width="100%"
                 height="7300px"
-                src="https://commons.m.wikimedia.org/wiki/Category:Blarina_brevicauda"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/The_Blue_Marble.jpg/599px-The_Blue_Marble.jpg"
               ></iframe>
             </TabPanel>
             <TabPanel value={value} index={2}>
