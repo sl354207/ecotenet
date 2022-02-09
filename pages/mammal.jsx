@@ -1,5 +1,4 @@
 import { getMammalById } from "../utils/mongodb";
-import Nav from "../components/Nav";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import parse, { domToReact, attributesToProps } from "html-react-parser";
@@ -69,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginBottom: 20,
+    marginTop: 20,
   },
   ecoregions: {
     marginBottom: 20,
@@ -87,6 +87,8 @@ const useStyles = makeStyles((theme) => ({
   },
   tablerow: {
     backgroundColor: "#001e3c!important",
+    textAlign: "center",
+    color: "#ffffff!important",
   },
   table: {
     [theme.breakpoints.down("xs")]: {
@@ -95,12 +97,13 @@ const useStyles = makeStyles((theme) => ({
     },
     float: "right",
     border: "thin solid",
+    marginLeft: 10,
   },
 }));
 
 const mammal = ({ mammal, wiki }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -135,6 +138,18 @@ const mammal = ({ mammal, wiki }) => {
         return <></>;
       }
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
+        return <></>;
+      }
+      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+        return <></>;
+      }
+      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+        return <></>;
+      }
+      if (
+        domNode.attribs &&
+        domNode.attribs.class === "wikitable mw-collapsible"
+      ) {
         return <></>;
       }
       if (domNode.attribs && domNode.children && domNode.name === "table") {
@@ -185,6 +200,9 @@ const mammal = ({ mammal, wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "figure") {
         return <></>;
       }
+      if (domNode.attribs && domNode.children && domNode.name === "style") {
+        return <></>;
+      }
       if (domNode.attribs && domNode.attribs.class === "thumbinner") {
         return <></>;
       }
@@ -192,115 +210,111 @@ const mammal = ({ mammal, wiki }) => {
   };
 
   return (
-    <>
-      <Nav />
+    <Container>
+      <Typography variant="h3" align="center" className={classes.title}>
+        {mammal.Scientific_Name}: {mammal.COMMON_NAME}
+      </Typography>
+      <Typography variant="h5" className={classes.ecoregions}>
+        Ecoregions:{" "}
+        {mammal.unique_id.map((id) => (
+          <Link href="#" color="secondary">
+            Eco-{id}
+            {", "}
+          </Link>
+        ))}
+      </Typography>
 
-      <Container>
-        <Typography variant="h3" align="center" className={classes.title}>
-          {mammal.Scientific_Name}: {mammal.COMMON_NAME}
-        </Typography>
-        <Typography variant="h5" className={classes.ecoregions}>
-          Ecoregions:{" "}
-          {mammal.unique_id.map((id) => (
-            <Link href="#" color="secondary">
-              Eco-{id}
-              {", "}
-            </Link>
-          ))}
-        </Typography>
-
-        <div className={classes.tabs}>
-          <AppBar position="static" elevation={0} className={classes.tabbar}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="simple tabs example"
-              centered
-            >
-              <Tab
-                className={classes.tab}
-                label="General Info"
-                {...a11yProps(0)}
-              />
-              <Tab
-                className={classes.tab}
-                label="Additional Resources"
-                {...a11yProps(1)}
-              />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-            {wiki.remaining.sections.map((section) => {
-              if (section.anchor == "Gallery") {
-                return <></>;
-              } else if (section.toclevel == 2) {
-                return (
-                  <>
-                    <h2>{section.line}</h2>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <h1>{section.line}</h1>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              }
-            })}
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <List>
-              <ListItem>
-                <Link
-                  variant="h6"
-                  href={`https://www.inaturalist.org/search?q=${
-                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                  }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  iNaturalist
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link
-                  variant="h6"
-                  href={`https://commons.wikimedia.org/w/index.php?search=${
-                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                  }+${
-                    mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                  }&title=Special:MediaSearch&go=Go&type=image`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Wikimedia Commons
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link
-                  variant="h6"
-                  href={`https://www.iucnredlist.org/search?query=${
-                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                  }%20${
-                    mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                  }&searchType=species`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  IUCN Red List
-                </Link>
-              </ListItem>
-            </List>
-          </TabPanel>
-        </div>
-      </Container>
-    </>
+      <div className={classes.tabs}>
+        <AppBar position="static" elevation={0} className={classes.tabbar}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs example"
+            centered
+          >
+            <Tab
+              className={classes.tab}
+              label="General Info"
+              {...a11yProps(0)}
+            />
+            <Tab
+              className={classes.tab}
+              label="Additional Resources"
+              {...a11yProps(1)}
+            />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+          {wiki.remaining.sections.map((section) => {
+            if (section.anchor == "Gallery") {
+              return <></>;
+            } else if (section.toclevel == 2) {
+              return (
+                <>
+                  <h2>{section.line}</h2>
+                  {parse(DOMPurify.sanitize(section.text), options)}
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <h1>{section.line}</h1>
+                  {parse(DOMPurify.sanitize(section.text), options)}
+                </>
+              );
+            }
+          })}
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <List>
+            <ListItem>
+              <Link
+                variant="h6"
+                href={`https://www.inaturalist.org/search?q=${
+                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                iNaturalist
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link
+                variant="h6"
+                href={`https://commons.wikimedia.org/w/index.php?search=${
+                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                }+${
+                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
+                }&title=Special:MediaSearch&go=Go&type=image`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wikimedia Commons
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link
+                variant="h6"
+                href={`https://www.iucnredlist.org/search?query=${
+                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                }%20${
+                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
+                }&searchType=species`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                IUCN Red List
+              </Link>
+            </ListItem>
+          </List>
+        </TabPanel>
+      </div>
+    </Container>
   );
 };
 
