@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
   buttonlist: {
     display: "block",
     justifyContent: "start",
+    textTransform: "none",
   },
 }));
 
@@ -161,7 +162,7 @@ const mammals = ({ mammals }) => {
                                 color="textPrimary"
                                 align="left"
                               >
-                                {mammal.Scientific_Name} -
+                                <i>{mammal.Scientific_Name} -</i>
                               </Typography>
                               <Typography
                                 variant="h6"
@@ -177,7 +178,8 @@ const mammals = ({ mammals }) => {
                               color="textPrimary"
                               align="left"
                             >
-                              {mammal.Scientific_Name} - {mammal.COMMON_NAME}
+                              <i>{mammal.Scientific_Name} -</i>{" "}
+                              {mammal.COMMON_NAME}
                             </Typography>
                           )}
                         </Button>
