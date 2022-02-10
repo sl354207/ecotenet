@@ -49,6 +49,7 @@ const PostDetails = ({
             onChange={handleDetailChange}
             inputProps={{ maxLength: 60 }}
             required
+            color="secondary"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -62,6 +63,7 @@ const PostDetails = ({
             onChange={handleDetailChange}
             inputProps={{ maxLength: 60 }}
             required
+            color="secondary"
           />
         </Grid>
 
@@ -77,6 +79,7 @@ const PostDetails = ({
             inputProps={{ maxLength: 160 }}
             multiline
             rows={2}
+            color="secondary"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -96,7 +99,12 @@ const PostDetails = ({
             getOptionLabel={(option) => option}
             style={{ width: 300 }}
             renderInput={(params) => (
-              <TextField {...params} label="Category" variant="outlined" />
+              <TextField
+                {...params}
+                label="Category"
+                variant="outlined"
+                color="secondary"
+              />
             )}
           />
         </Grid>
@@ -155,6 +163,7 @@ const PostDetails = ({
                 {...params}
                 label="Free solo with text demo"
                 variant="outlined"
+                color="secondary"
               />
             )}
           />

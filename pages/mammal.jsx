@@ -4,11 +4,8 @@ import { useState } from "react";
 import parse, { domToReact, attributesToProps } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import {
-  Button,
-  useMediaQuery,
   Typography,
   AppBar,
-  Toolbar,
   Tabs,
   Tab,
   Box,
@@ -16,7 +13,6 @@ import {
   Container,
   List,
   ListItem,
-  ListItemText,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 

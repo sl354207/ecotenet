@@ -2,7 +2,6 @@
 // UPDATE
 
 import { getMammals } from "../utils/mongodb";
-import Nav from "../components/Nav";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -12,12 +11,11 @@ import {
   AppBar,
   Toolbar,
   Container,
-  Box,
   Button,
   Typography,
   Divider,
+  useMediaQuery,
 } from "@material-ui/core";
-import { useMediaQuery } from "@material-ui/core";
 
 import { useRef } from "react";
 
@@ -92,111 +90,107 @@ const mammals = ({ mammals }) => {
     window.scrollTo({ top: y, behavior: "smooth" });
   };
   return (
-    <>
-      {/* <Nav /> */}
-
-      <Container>
-        <Typography variant="h3" align="center" className={classes.header}>
-          Mammals
-        </Typography>
-        <AppBar component="div" position="sticky" className={classes.subheader}>
-          {uniqueFirst.map((item) => (
+    <Container>
+      <Typography variant="h3" align="center" className={classes.header}>
+        Mammals
+      </Typography>
+      <AppBar component="div" position="sticky" className={classes.subheader}>
+        {uniqueFirst.map((item) => (
+          <>
+            {isMobile ? (
+              <Button
+                key={item}
+                onClick={() => handleClick(item, -260)}
+                className={classes.sublist}
+                variant="outlined"
+                color="secondary"
+              >
+                <Typography variant="h4" align="center">
+                  {item}
+                </Typography>
+              </Button>
+            ) : (
+              <Button
+                key={item}
+                onClick={() => handleClick(item, -140)}
+                className={classes.sublist}
+                variant="outlined"
+                color="secondary"
+              >
+                <Typography variant="h4" align="center">
+                  {item}
+                </Typography>
+              </Button>
+            )}
+          </>
+        ))}
+      </AppBar>
+      <Toolbar />
+      <List>
+        {uniqueFirst.map((entry) => {
+          return (
             <>
-              {isMobile ? (
-                <Button
-                  key={item}
-                  onClick={() => handleClick(item, -260)}
-                  className={classes.sublist}
-                  variant="outlined"
-                  color="secondary"
-                >
-                  <Typography variant="h4" align="center">
-                    {item}
+              <ListItem key={entry} ref={refs[entry]}>
+                <ListItemText>
+                  <Typography variant="h5" color="secondary">
+                    {entry}
                   </Typography>
-                </Button>
-              ) : (
-                <Button
-                  key={item}
-                  onClick={() => handleClick(item, -140)}
-                  className={classes.sublist}
-                  variant="outlined"
-                  color="secondary"
-                >
-                  <Typography variant="h4" align="center">
-                    {item}
-                  </Typography>
-                </Button>
-              )}
-            </>
-          ))}
-        </AppBar>
-        <Toolbar />
-        <List>
-          {uniqueFirst.map((entry) => {
-            return (
-              <>
-                <ListItem key={entry} ref={refs[entry]}>
-                  <ListItemText>
-                    <Typography variant="h5" color="secondary">
-                      {entry}
-                    </Typography>
-                  </ListItemText>
-                </ListItem>
-                {mammals.map((mammal) => {
-                  if (mammal.Scientific_Name[0] === entry) {
-                    return (
-                      <ListItem key={mammal._id}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          fullWidth
-                          className={classes.buttonlist}
-                          onClick={() => {
-                            router.push("/mammal");
-                          }}
-                        >
-                          {isMobile ? (
-                            <>
-                              <Typography
-                                variant="h6"
-                                color="textPrimary"
-                                align="left"
-                              >
-                                <i>{mammal.Scientific_Name} -</i>
-                              </Typography>
-                              <Typography
-                                variant="h6"
-                                color="textPrimary"
-                                align="left"
-                              >
-                                {mammal.COMMON_NAME}
-                              </Typography>
-                            </>
-                          ) : (
+                </ListItemText>
+              </ListItem>
+              {mammals.map((mammal) => {
+                if (mammal.Scientific_Name[0] === entry) {
+                  return (
+                    <ListItem key={mammal._id}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        fullWidth
+                        className={classes.buttonlist}
+                        onClick={() => {
+                          router.push("/mammal");
+                        }}
+                      >
+                        {isMobile ? (
+                          <>
                             <Typography
                               variant="h6"
                               color="textPrimary"
                               align="left"
                             >
-                              <i>{mammal.Scientific_Name} -</i>{" "}
+                              <i>{mammal.Scientific_Name} -</i>
+                            </Typography>
+                            <Typography
+                              variant="h6"
+                              color="textPrimary"
+                              align="left"
+                            >
                               {mammal.COMMON_NAME}
                             </Typography>
-                          )}
-                        </Button>
-                      </ListItem>
-                    );
-                  }
-                })}
-                <Divider />
-              </>
-            );
-          })}
-        </List>
-        <Link href="/posts" id="back-to-top-anchor">
-          Go Back
-        </Link>
-      </Container>
-    </>
+                          </>
+                        ) : (
+                          <Typography
+                            variant="h6"
+                            color="textPrimary"
+                            align="left"
+                          >
+                            <i>{mammal.Scientific_Name} -</i>{" "}
+                            {mammal.COMMON_NAME}
+                          </Typography>
+                        )}
+                      </Button>
+                    </ListItem>
+                  );
+                }
+              })}
+              <Divider />
+            </>
+          );
+        })}
+      </List>
+      <Link href="/posts" id="back-to-top-anchor">
+        Go Back
+      </Link>
+    </Container>
   );
 };
 
