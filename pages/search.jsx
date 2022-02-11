@@ -57,39 +57,42 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     position: "relative",
+    border: "2px solid #94c9ff",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-      // border: "1px solid #94c9ff!important",
-    },
-    marginLeft: 0,
+    backgroundColor: theme.palette.primary.light,
+
+    // "&:hover": {
+    //   backgroundColor: alpha(theme.palette.primary.light, 0.25),
+    //   // border: "1px solid #94c9ff!important",
+    // },
+    // marginLeft: 0,
     // width: "100%",
     // [theme.breakpoints.up("sm")]: {
+    marginTop: 20,
+    marginBottom: 20,
     marginLeft: theme.spacing(1),
     width: "auto",
     // },
   },
-  searchText: {
-    "&:hover": {
-      // border: "1px solid #94c9ff",
-    },
-  },
   inputRoot: {
-    color: "inherit",
+    color: theme.palette.text.primary,
   },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
+    padding: theme.spacing(2, 2, 2, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
+    paddingLeft: `calc(1em + ${theme.spacing(2)}px)`,
+    // transition: theme.transitions.create("width"),
     // width: "100%",
     // [theme.breakpoints.up("xs")]: {
-    width: "0ch",
-    "&:focus": {
-      width: "20ch",
-    },
+    //   width: "0ch",
+    //   "&:focus": {
+    //     width: "20ch",
+    //   },
     // },
+  },
+
+  popper: {
+    backgroundColor: theme.palette.primary.light,
   },
 }));
 
@@ -202,11 +205,9 @@ const search = () => {
   } else {
     return (
       <Container>
-        <Typography variant="h3" align="center" className={classes.header}>
-          Search Results
-        </Typography>
         <Autocomplete
           className={classes.search}
+          classes={{ paper: classes.popper }}
           autoHighlight
           disableClearable={true}
           // value={tagValue}
@@ -222,8 +223,13 @@ const search = () => {
           //     setTagValue(newValue);
           //   }
           // }}
+          onChange={(event) => {
+            console.log(event.target);
+          }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);
+            // console.log(params);
+            // console.log(filtered);
 
             // Suggest the creation of a new value
             if (params.inputValue !== "") {
@@ -282,10 +288,15 @@ const search = () => {
               // value={searchValue}
               ref={params.InputProps.ref}
               inputProps={params.inputProps}
+
               // autoFocus
             />
           )}
         />
+        <Typography variant="h3" align="center" className={classes.header}>
+          Search Results
+        </Typography>
+
         <List>
           {results.map((result) => {
             return (
