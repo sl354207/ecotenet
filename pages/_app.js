@@ -1,4 +1,5 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -9,7 +10,7 @@ import Layout from "../components/Layout";
 export default function MyApp(props) {
   const { Component, pageProps } = props;
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
@@ -17,8 +18,24 @@ export default function MyApp(props) {
     }
   }, []);
 
+  const router = useRouter();
+  // category filter logic. Revisit
+  const [ecoFilter, setEcoFilter] = useState("");
+
+  // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
+  useEffect(() => {
+    let ecoregion = sessionStorage.getItem("ecoregion");
+
+    if (router.pathname == "/mammals") {
+      sessionStorage.setItem("ecoregion", router.pathname);
+      setEcoFilter(router.pathname);
+    } else {
+      setEcoFilter(ecoregion);
+    }
+  }, [router.pathname]);
+
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>My page</title>
         <meta
@@ -29,11 +46,11 @@ export default function MyApp(props) {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Layout>
-          <Component {...pageProps} />
+        <Layout ecoFilter={ecoFilter}>
+          <Component ecoFilter={ecoFilter} {...pageProps} />
         </Layout>
       </ThemeProvider>
-    </React.Fragment>
+    </>
   );
 }
 

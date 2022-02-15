@@ -270,7 +270,7 @@ const reducer = (menuItems, action) => {
   // }
 };
 
-const Nav = () => {
+const Nav = ({ ecoFilter }) => {
   const router = useRouter();
   const classes = useStyles();
 
@@ -329,6 +329,20 @@ const Nav = () => {
     setDrawerOpen(false);
   };
 
+  // const open = Boolean(searchAnchor);
+  // const searchID = searchOpen ? "simple-popper" : undefined;
+
+  // const [openList, setOpenList] = useState(false);
+
+  // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
+  const handleListClick = (menuTitle) => {
+    // setOpenList(!openList);
+    dispatch({ type: "toggle", payload: menuTitle });
+  };
+
+  // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
+  const [state, dispatch] = useReducer(reducer, menuItems);
+
   const [searchAnchor, setSearchAnchor] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -348,38 +362,6 @@ const Nav = () => {
   const handleSearchClickAway = () => {
     setSearchOpen(false);
   };
-
-  // const open = Boolean(searchAnchor);
-  const searchID = searchOpen ? "simple-popper" : undefined;
-
-  // const [openList, setOpenList] = useState(false);
-
-  // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
-  const handleListClick = (menuTitle) => {
-    // setOpenList(!openList);
-    dispatch({ type: "toggle", payload: menuTitle });
-  };
-
-  // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
-  const [state, dispatch] = useReducer(reducer, menuItems);
-
-  // category filter logic. Revisit
-  const [ecoFilter, setEcoFilter] = useState("");
-
-  // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
-  useEffect(() => {
-    let ecoregion = sessionStorage.getItem("ecoregion");
-
-    if (router.pathname == "/mammals") {
-      sessionStorage.setItem("ecoregion", router.pathname);
-      setEcoFilter(router.pathname);
-    } else {
-      setEcoFilter(ecoregion);
-    }
-  }, [router.pathname]);
-
-  // router.pathname.includes("suc", 1)
-  // router.pathname.substring(1)
 
   return (
     <div className={classes.root}>
@@ -411,6 +393,24 @@ const Nav = () => {
             <Typography variant="h6" className={classes.title}>
               Mound
             </Typography>
+            <div>
+              <p>
+                <small>
+                  Use up down keys and hit enter to select, or use the mouse
+                </small>
+              </p>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+                onFocus={() => setSearchValue("")}
+                onChange={handleSearchClick}
+                value={searchValue}
+              />
+            </div>
             <ClickAwayListener onClickAway={handleSearchClickAway}>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
@@ -476,6 +476,7 @@ const Nav = () => {
                     <Divider />
                     <ListItem
                       button
+                      selected
                       onClick={() => {
                         router.push(`/search?q=${searchValue}&s=all-species`);
                       }}
@@ -597,59 +598,3 @@ const Nav = () => {
 };
 
 export default Nav;
-
-// import React from "react";
-// import AppBar from "@material-ui/core/AppBar";
-// import Toolbar from "@material-ui/core/Toolbar";
-// import IconButton from "@material-ui/core/IconButton";
-// import Typography from "@material-ui/core/Typography";
-// import InputBase from "@material-ui/core/InputBase";
-// import Popper from "@material-ui/core/Popper";
-// import { alpha, makeStyles } from "@material-ui/core/styles";
-// import MenuIcon from "@material-ui/icons/Menu";
-// import SearchIcon from "@material-ui/icons/Search";
-// import ClickAwayListener from "@material-ui/core/ClickAwayListener";
-
-// // CLICK AWAY LISTENER
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1
-//   },
-//   menuButton: {
-//     marginRight: theme.spacing(2)
-//   },
-//   title: {
-//     flexGrow: 1,
-//     display: "none",
-//     [theme.breakpoints.up("sm")]: {
-//       display: "block"
-//     }
-//   },
-
-// }));
-
-// export default function SearchAppBar() {
-//   const classes = useStyles();
-
-//   return (
-//     <div className={classes.root}>
-//       <AppBar position="static">
-//         <Toolbar>
-//           <IconButton
-//             edge="start"
-//             className={classes.menuButton}
-//             color="inherit"
-//             aria-label="open drawer"
-//           >
-//             <MenuIcon />
-//           </IconButton>
-//           <Typography className={classes.title} variant="h6" noWrap>
-//             Material-UI
-//           </Typography>
-
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-// }

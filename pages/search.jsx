@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   List,
@@ -98,7 +98,8 @@ const useStyles = makeStyles((theme) => ({
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const search = () => {
+const search = ({ ecoFilter }) => {
+  // console.log(dog);
   const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -109,10 +110,25 @@ const search = () => {
   const tags = [];
 
   // set tag state
-  const [tagValue, setTagValue] = useState([]);
+  // const [tagValue, setTagValue] = useState([]);
 
   // set id to id in url query
   const router = useRouter();
+
+  // category filter logic. Revisit
+  // const [ecoFilter, setEcoFilter] = useState("");
+
+  // // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
+  // useEffect(() => {
+  //   let ecoregion = sessionStorage.getItem("ecoregion");
+
+  //   if (router.pathname == "/mammals") {
+  //     sessionStorage.setItem("ecoregion", router.pathname);
+  //     setEcoFilter(router.pathname);
+  //   } else {
+  //     setEcoFilter(ecoregion);
+  //   }
+  // }, [router.pathname]);
   //   capture search query and filter parameters
   const query = router.query.q;
   const queryFilter = router.query.s;
@@ -211,38 +227,64 @@ const search = () => {
           autoHighlight
           disableClearable={true}
           // value={tagValue}
-          // onChange={(event, newValue) => {
-          //   if (typeof newValue === "string") {
-          //     () => {
-          //       setTagValue(newValue);
-          //     };
-          //   } else if (newValue && newValue.inputValue) {
-          //     // Create a new value from the user input
-          //     setTagValue((tagValue) => [...tagValue, newValue.inputValue]);
-          //   } else {
-          //     setTagValue(newValue);
-          //   }
-          // }}
-          onChange={(event) => {
-            console.log(event.target);
+
+          onChange={(event, newValue) => {
+            // if (typeof newValue === "string") {
+            //   setTagValue(newValue);
+            // }
+            // if (newValue && newValue.inputValue) {
+            //   // Create a new value from the user input
+            //   setTagValue((tagValue) => [...tagValue, newValue.inputValue]);
+            // }
+            // else {
+            // setTagValue(newValue);
+            // console.log(newValue);
+            router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);
             // console.log(params);
-            // console.log(filtered);
-
-            // Suggest the creation of a new value
-            if (params.inputValue !== "") {
-              filtered.push(
-                {
-                  inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in all posts`,
-                },
-                {
-                  inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in all species`,
-                }
-              );
+            // console.log(ecoFilter);
+            if (!ecoFilter) {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all posts`,
+                    path: "all-posts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all species`,
+                    path: "all-species",
+                  }
+                );
+              }
+            } else {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in ecoregion posts`,
+                    path: "eco-posts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in ecoregion species`,
+                    path: "eco-species",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all posts`,
+                    path: "all-posts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all species`,
+                    path: "all-species",
+                  }
+                );
+              }
             }
 
             return filtered;
@@ -255,14 +297,14 @@ const search = () => {
           getOptionLabel={(option) => {
             // Value selected with enter, right from the input
             if (typeof option === "string") {
-              return option;
+              return option.inputValue;
             }
             // Add "xxx" option created dynamically
             if (option.inputValue) {
               return option.inputValue;
             }
             // Regular option
-            return option.title;
+            return option.inputValue;
           }}
           renderOption={(option) => option.title}
           // style={{ width: 300 }}
@@ -293,6 +335,7 @@ const search = () => {
             />
           )}
         />
+
         <Typography variant="h3" align="center" className={classes.header}>
           Search Results
         </Typography>
@@ -329,106 +372,7 @@ const search = () => {
             );
           })}
         </List>
-        {/* {query} */}
       </Container>
-      // <Container>
-      // <Typography variant="h3" align="center" className={classes.header}>
-      //   Mammals
-      // </Typography>
-      //   {/* <AppBar component="div" position="sticky" className={classes.subheader}>
-      //   {uniqueFirst.map((item) => (
-      //     <>
-      //       {isMobile ? (
-      //         <Button
-      //           key={item}
-      //           onClick={() => handleClick(item, -260)}
-      //           className={classes.sublist}
-      //           variant="outlined"
-      //           color="secondary"
-      //         >
-      //           <Typography variant="h4" align="center">
-      //             {item}
-      //           </Typography>
-      //         </Button>
-      //       ) : (
-      //         <Button
-      //           key={item}
-      //           onClick={() => handleClick(item, -140)}
-      //           className={classes.sublist}
-      //           variant="outlined"
-      //           color="secondary"
-      //         >
-      //           <Typography variant="h4" align="center">
-      //             {item}
-      //           </Typography>
-      //         </Button>
-      //       )}
-      //     </>
-      //   ))}
-      // </AppBar>
-      // <Toolbar /> */}
-      //   <List>
-      //     {uniqueFirst.map((entry) => {
-      //       return (
-      //         <>
-      //           <ListItem key={entry} ref={refs[entry]}>
-      //             <ListItemText>
-      //               <Typography variant="h5" color="secondary">
-      //                 {entry}
-      //               </Typography>
-      //             </ListItemText>
-      //           </ListItem>
-      //           {mammals.map((mammal) => {
-      //             if (mammal.Scientific_Name[0] === entry) {
-      //               return (
-      // <ListItem key={mammal._id}>
-      //   <Button
-      //     variant="outlined"
-      //     color="secondary"
-      //     fullWidth
-      //     className={classes.buttonlist}
-      //     onClick={() => {
-      //       router.push("/mammal");
-      //     }}
-      //   >
-      //     {isMobile ? (
-      //       <>
-      //         <Typography
-      //           variant="h6"
-      //           color="textPrimary"
-      //           align="left"
-      //         >
-      //           <i>{mammal.Scientific_Name} -</i>
-      //         </Typography>
-      //         <Typography
-      //           variant="h6"
-      //           color="textPrimary"
-      //           align="left"
-      //         >
-      //           {mammal.COMMON_NAME}
-      //         </Typography>
-      //       </>
-      //     ) : (
-      //       <Typography
-      //         variant="h6"
-      //         color="textPrimary"
-      //         align="left"
-      //       >
-      //         <i>{mammal.Scientific_Name} -</i>{" "}
-      //         {mammal.COMMON_NAME}
-      //       </Typography>
-      //     )}
-      //   </Button>
-      // </ListItem>
-      //               );
-      //             }
-      //           })}
-      //           <Divider />
-      //         </>
-      //       );
-      //     })}
-      //   </List>
-      // </Container>
     );
   }
 };
