@@ -12,19 +12,10 @@ import { useMediaQuery } from "@material-ui/core";
 import { useState, useEffect, useRef, useReducer } from "react";
 import { useRouter } from "next/router";
 import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
 
 import Divider from "@material-ui/core/Divider";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import {
@@ -38,6 +29,7 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
 const drawerWidth = 240;
 
@@ -136,9 +128,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.light,
     // zIndex: "2000",
   },
-  searchPopper: {
-    zIndex: "2000",
-    paddingTop: theme.spacing(1),
+  popper: {
+    backgroundColor: theme.palette.primary.light,
   },
   nested: {
     paddingLeft: theme.spacing(4),
@@ -343,25 +334,10 @@ const Nav = ({ ecoFilter }) => {
   // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
   const [state, dispatch] = useReducer(reducer, menuItems);
 
-  const [searchAnchor, setSearchAnchor] = useState(null);
-  const [searchValue, setSearchValue] = useState("");
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  const handleSearchClick = (event) => {
-    setSearchValue(event.target.value);
-    console.log(event.target.value);
-    if (event.target.value === "") {
-      setSearchOpen(false);
-      setSearchAnchor(null);
-    } else {
-      setSearchOpen(true);
-      setSearchAnchor(event.currentTarget);
-    }
-  };
-
-  const handleSearchClickAway = () => {
-    setSearchOpen(false);
-  };
+  // set filter for autocomplete options
+  const filter = createFilterOptions();
+  // set tag options for autocomplete
+  const tags = [];
 
   return (
     <div className={classes.root}>
@@ -391,104 +367,124 @@ const Nav = ({ ecoFilter }) => {
             </IconButton>
 
             <Typography variant="h6" className={classes.title}>
-              Mound
+              ecotenet
             </Typography>
-            <div>
-              <p>
-                <small>
-                  Use up down keys and hit enter to select, or use the mouse
-                </small>
-              </p>
-              <InputBase
-                placeholder="Search…"
+
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+
+              <Autocomplete
                 classes={{
+                  paper: classes.popper,
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-                inputProps={{ "aria-label": "search" }}
-                onFocus={() => setSearchValue("")}
-                onChange={handleSearchClick}
-                value={searchValue}
+                autoHighlight
+                disableClearable={true}
+                onChange={(event, newValue) => {
+                  // if (typeof newValue === "string") {
+                  //   setTagValue(newValue);
+                  // }
+                  // if (newValue && newValue.inputValue) {
+                  //   // Create a new value from the user input
+                  //   setTagValue((tagValue) => [...tagValue, newValue.inputValue]);
+                  // }
+                  // else {
+                  // setTagValue(newValue);
+                  // console.log(newValue);
+                  router.push(
+                    `/search?q=${newValue.inputValue}&s=${newValue.path}`
+                  );
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+                  // console.log(params);
+                  // console.log(ecoFilter);
+                  if (!ecoFilter) {
+                    if (params.inputValue !== "") {
+                      filtered.push(
+                        {
+                          inputValue: params.inputValue,
+                          title: `Search for "${params.inputValue}" in all posts`,
+                          path: "allPosts",
+                        },
+                        {
+                          inputValue: params.inputValue,
+                          title: `Search for "${params.inputValue}" in all species`,
+                          path: "allSpecies",
+                        }
+                      );
+                    }
+                  } else {
+                    if (params.inputValue !== "") {
+                      filtered.push(
+                        {
+                          inputValue: params.inputValue,
+                          title: `Search for "${params.inputValue}" in ecoregion posts`,
+                          path: "ecoPosts",
+                        },
+                        {
+                          inputValue: params.inputValue,
+                          title: `Search for "${params.inputValue}" in ecoregion species`,
+                          path: "ecoSpecies",
+                        },
+                        {
+                          inputValue: params.inputValue,
+                          title: `Search for "${params.inputValue}" in all posts`,
+                          path: "allPosts",
+                        },
+                        {
+                          inputValue: params.inputValue,
+                          title: `Search for "${params.inputValue}" in all species`,
+                          path: "allSpecies",
+                        }
+                      );
+                    }
+                  }
+
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                id="free-solo-with-text-demo"
+                options={tags}
+                getOptionLabel={(option) => {
+                  // Value selected with enter, right from the input
+                  if (typeof option === "string") {
+                    return option.inputValue;
+                  }
+                  // Add "xxx" option created dynamically
+                  if (option.inputValue) {
+                    return option.inputValue;
+                  }
+                  // Regular option
+                  return option.inputValue;
+                }}
+                renderOption={(option) => option.title}
+                // style={{ width: 300 }}
+                freeSolo
+                renderInput={(params) => (
+                  <InputBase
+                    {...params}
+                    placeholder="Search…"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    // inputProps={{ "aria-label": "search" }}
+                    // onFocus={() => setSearchValue("")}
+                    // onChange={handleSearchClick}
+                    // value={searchValue}
+                    ref={params.InputProps.ref}
+                    inputProps={params.inputProps}
+                  />
+                )}
               />
             </div>
-            <ClickAwayListener onClickAway={handleSearchClickAway}>
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                  placeholder="Search…"
-                  classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  inputProps={{ "aria-label": "search" }}
-                  onFocus={() => setSearchValue("")}
-                  onChange={handleSearchClick}
-                  value={searchValue}
-                />
-                <Popper
-                  id={id}
-                  className={classes.searchPopper}
-                  open={searchOpen}
-                  anchorEl={searchAnchor}
-                >
-                  <List className={classes.searchPaper}>
-                    {ecoFilter && (
-                      <>
-                        <ListItem
-                          button
-                          onClick={() => {
-                            router.push(`/search?q=${searchValue}&s=eco-posts`);
-                          }}
-                        >
-                          <ListItemText
-                            primary={`Search for '${searchValue}' in ecoregion posts`}
-                          ></ListItemText>
-                        </ListItem>
-                        <Divider />
-                        <ListItem
-                          button
-                          onClick={() => {
-                            router.push(
-                              `/search?q=${searchValue}&s=eco-species`
-                            );
-                          }}
-                        >
-                          <ListItemText
-                            primary={`Search for '${searchValue}' in ecoregion species`}
-                          ></ListItemText>
-                        </ListItem>
-                        <Divider />
-                      </>
-                    )}
 
-                    <ListItem
-                      button
-                      onClick={() => {
-                        router.push(`/search?q=${searchValue}&s=all-posts`);
-                      }}
-                    >
-                      <ListItemText
-                        primary={`Search for '${searchValue}' in all posts`}
-                      ></ListItemText>
-                    </ListItem>
-                    <Divider />
-                    <ListItem
-                      button
-                      selected
-                      onClick={() => {
-                        router.push(`/search?q=${searchValue}&s=all-species`);
-                      }}
-                    >
-                      <ListItemText
-                        primary={`Search for '${searchValue}' in all species`}
-                      ></ListItemText>
-                    </ListItem>
-                  </List>
-                </Popper>
-              </div>
-            </ClickAwayListener>
             <Drawer
               className={classes.drawer}
               anchor="left"
