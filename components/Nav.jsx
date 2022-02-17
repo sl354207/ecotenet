@@ -451,18 +451,18 @@ const Nav = ({ ecoFilter }) => {
                 handleHomeEndKeys
                 id="free-solo-with-text-demo"
                 options={tags}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === "string") {
-                    return option.inputValue;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.inputValue;
-                }}
+                // getOptionLabel={(option) => {
+                //   // Value selected with enter, right from the input
+                //   if (typeof option === "string") {
+                //     return option.inputValue;
+                //   }
+                //   // Add "xxx" option created dynamically
+                //   if (option.inputValue) {
+                //     return option.inputValue;
+                //   }
+                //   // Regular option
+                //   return option.inputValue;
+                // }}
                 renderOption={(option) => option.title}
                 // style={{ width: 300 }}
                 freeSolo

@@ -15,6 +15,12 @@ import {
   useMediaQuery,
   TextField,
   InputBase,
+  CircularProgress,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Link,
 } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
@@ -50,7 +56,12 @@ const useStyles = makeStyles((theme) => ({
   header: {
     marginTop: 20,
   },
-  buttonlist: {
+  buttonpost: {
+    display: "flex",
+    justifyContent: "start",
+    textTransform: "none",
+  },
+  buttonspecies: {
     display: "block",
     justifyContent: "start",
     textTransform: "none",
@@ -94,6 +105,18 @@ const useStyles = makeStyles((theme) => ({
   popper: {
     backgroundColor: theme.palette.primary.light,
   },
+  progress: {
+    margin: "100px auto",
+    display: "flex",
+    justifySelf: "center",
+  },
+  card: {
+    // display: "flex",
+    flex: "auto",
+    marginRight: 20,
+    // display: "block",
+    // border: "1px solid #94c9ff",
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -124,25 +147,7 @@ const search = ({ ecoFilter }) => {
   );
 
   // loading state until draft is retrieved
-  if (!results || results == undefined) return "Loading...";
-  // console.log(results[0].title);
-  if (results && results[0].title !== undefined) {
-    return (
-      <div>
-        <ul>
-          {results.map((result) => {
-            return (
-              <li>
-                {result.title}
-                {result.count}
-              </li>
-            );
-          })}
-        </ul>
-        {query}
-      </div>
-    );
-  } else {
+  if (!results || results == undefined) {
     return (
       <Container>
         <Autocomplete
@@ -150,25 +155,12 @@ const search = ({ ecoFilter }) => {
           classes={{ paper: classes.popper }}
           autoHighlight
           disableClearable={true}
-          // value={tagValue}
-
           onChange={(event, newValue) => {
-            // if (typeof newValue === "string") {
-            //   setTagValue(newValue);
-            // }
-            // if (newValue && newValue.inputValue) {
-            //   // Create a new value from the user input
-            //   setTagValue((tagValue) => [...tagValue, newValue.inputValue]);
-            // }
-            // else {
-            // setTagValue(newValue);
-            // console.log(newValue);
             router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);
-            // console.log(params);
-            // console.log(ecoFilter);
+
             if (!ecoFilter) {
               if (params.inputValue !== "") {
                 filtered.push(
@@ -218,29 +210,9 @@ const search = ({ ecoFilter }) => {
           handleHomeEndKeys
           id="free-solo-with-text-demo"
           options={tags}
-          getOptionLabel={(option) => {
-            // Value selected with enter, right from the input
-            if (typeof option === "string") {
-              return option.inputValue;
-            }
-            // Add "xxx" option created dynamically
-            if (option.inputValue) {
-              return option.inputValue;
-            }
-            // Regular option
-            return option.inputValue;
-          }}
           renderOption={(option) => option.title}
-          // style={{ width: 300 }}
           freeSolo
           renderInput={(params) => (
-            // <TextField
-            //   {...params}
-            //   className={classes.searchText}
-            //   // label="Free solo with text demo"
-            //   variant="standard"
-            //   color="secondary"
-            // />
             <InputBase
               {...params}
               placeholder="Search…"
@@ -248,14 +220,96 @@ const search = ({ ecoFilter }) => {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              // inputProps={{ "aria-label": "search" }}
-              // onFocus={() => setSearchValue("")}
-              // onChange={handleSearchClick}
-              // value={searchValue}
               ref={params.InputProps.ref}
               inputProps={params.inputProps}
+            />
+          )}
+        />
+        <CircularProgress
+          color="secondary"
+          size={100}
+          disableShrink={true}
+          className={classes.progress}
+        />
+      </Container>
+    );
+  }
+  // console.log(results[0].title);
+  if (results && results[0].title !== undefined) {
+    return (
+      <Container>
+        <Autocomplete
+          className={classes.search}
+          classes={{ paper: classes.popper }}
+          autoHighlight
+          disableClearable={true}
+          onChange={(event, newValue) => {
+            router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
 
-              // autoFocus
+            if (!ecoFilter) {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all posts`,
+                    path: "allPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  }
+                );
+              }
+            } else {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in ecoregion posts`,
+                    path: "ecoPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in ecoregion species`,
+                    path: "ecoSpecies",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all posts`,
+                    path: "allPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  }
+                );
+              }
+            }
+
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          id="free-solo-with-text-demo"
+          options={tags}
+          renderOption={(option) => option.title}
+          freeSolo
+          renderInput={(params) => (
+            <InputBase
+              {...params}
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              ref={params.InputProps.ref}
+              inputProps={params.inputProps}
             />
           )}
         />
@@ -272,7 +326,131 @@ const search = ({ ecoFilter }) => {
                   variant="outlined"
                   color="secondary"
                   fullWidth
-                  className={classes.buttonlist}
+                  className={classes.buttonpost}
+                  onClick={() => {
+                    router.push("/mammal");
+                  }}
+                >
+                  <div className={classes.card}>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      color="textPrimary"
+                      align="left"
+                    >
+                      {result.title}
+                    </Typography>
+                    <Typography gutterBottom color="textPrimary" align="left">
+                      {result.description}
+                    </Typography>
+                    <Typography gutterBottom color="secondary" align="left">
+                      {result.author}
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography variant="h6" color="secondary" align="right">
+                      {result.count}
+                    </Typography>
+                  </div>
+                </Button>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Container>
+    );
+  } else {
+    return (
+      <Container>
+        <Autocomplete
+          className={classes.search}
+          classes={{ paper: classes.popper }}
+          autoHighlight
+          disableClearable={true}
+          onChange={(event, newValue) => {
+            router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+
+            if (!ecoFilter) {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all posts`,
+                    path: "allPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  }
+                );
+              }
+            } else {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in ecoregion posts`,
+                    path: "ecoPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in ecoregion species`,
+                    path: "ecoSpecies",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all posts`,
+                    path: "allPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `Search for "${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  }
+                );
+              }
+            }
+
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          id="free-solo-with-text-demo"
+          options={tags}
+          renderOption={(option) => option.title}
+          freeSolo
+          renderInput={(params) => (
+            <InputBase
+              {...params}
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              ref={params.InputProps.ref}
+              inputProps={params.inputProps}
+            />
+          )}
+        />
+
+        <Typography variant="h3" align="center" className={classes.header}>
+          Search Results
+        </Typography>
+
+        <List>
+          {results.map((result) => {
+            return (
+              <ListItem key={result._id}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  className={classes.buttonspecies}
                   onClick={() => {
                     router.push("/mammal");
                   }}
