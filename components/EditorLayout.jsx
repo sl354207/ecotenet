@@ -7,13 +7,13 @@ const useStyles = makeStyles(
       display: "flex",
       flexGrow: 1,
       padding: theme.spacing(4),
-      backgroundColor: "#eee",
+      backgroundColor: theme.palette.primary.dark,
     },
 
     content: {
       flexGrow: 1,
       padding: theme.spacing(4),
-      backgroundColor: "white",
+      backgroundColor: theme.palette.primary.light,
       maxWidth: 1280,
       margin: "auto",
     },
