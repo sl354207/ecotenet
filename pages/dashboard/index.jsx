@@ -14,7 +14,15 @@ import {
   ListItem,
   Button,
   CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  TextField,
+  InputBase,
 } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import PropTypes from "prop-types";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -116,6 +124,23 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 20,
     // display: "block",
   },
+  buttongroup: {
+    // flexDirection: "column",
+    display: "grid",
+    margin: "auto 0px auto 20px",
+  },
+  buttonedit: {
+    margin: "4px 0px",
+    minWidth: "fit-content",
+    justifyContent: "start",
+  },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
+  profile: {
+    // border: "thin solid",
+    // borderRadius: "10px",
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -127,8 +152,19 @@ export default function Dashboard() {
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
-  // update to getuser initial value
+
   const [fetch, setFetch] = useState("getposts");
+  const [deleteFetch, setDeleteFetch] = useState();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const { data: results } = useSWR(`/api/${fetch}`, fetcher);
 
@@ -143,9 +179,11 @@ export default function Dashboard() {
         break;
       case 1:
         setFetch("getposts");
+        setDeleteFetch("deletePost");
         break;
       case 2:
         setFetch("getdrafts");
+        setDeleteFetch("deleteDraft");
         // expected output: "Mangoes and papayas are $2.79 a pound."
         break;
       case 3:
@@ -155,6 +193,20 @@ export default function Dashboard() {
       default:
         console.log(`Sorry, we are out of `);
     }
+  };
+
+  // function to delete post by id
+  const deletePost = async (_id, deleteFetch) => {
+    const res = await fetch(`/api/${deleteFetch}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_id),
+    });
+    setOpen(false);
+    // reload page after deletion
+    router.reload();
   };
 
   // if (!results || results == undefined) {
@@ -189,7 +241,38 @@ export default function Dashboard() {
             <Tab className={classes.tab} label="Comments" {...a11yProps(1)} />
           </Tabs>
         </AppBar>
+
         <TabPanel value={value} index={0}>
+          {!results ? (
+            <CircularProgress
+              color="secondary"
+              size={100}
+              disableShrink={true}
+              className={classes.progress}
+            />
+          ) : (
+            <TextField
+              id="outlined-multiline-static"
+              label="Multiline"
+              multiline
+              rows={4}
+              defaultValue="Default Value"
+              color="secondary"
+              variant="outlined"
+              fullWidth
+              className={classes.profile}
+            />
+          )}
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Button
+            href="/dashboard/editor"
+            variant="contained"
+            color="secondary"
+            size="large"
+          >
+            Create New Post
+          </Button>
           {!results ? (
             <CircularProgress
               color="secondary"
@@ -202,15 +285,6 @@ export default function Dashboard() {
               {results.map((result) => {
                 return (
                   <ListItem key={result._id} className={classes.buttonpost}>
-                    {/* <Button
-                      variant="outlined"
-                      color="secondary"
-                      fullWidth
-                      className={classes.buttonpost}
-                      onClick={() => {
-                        router.push("/mammal");
-                      }}
-                    > */}
                     <div className={classes.card}>
                       <Typography
                         gutterBottom
@@ -232,61 +306,29 @@ export default function Dashboard() {
                         {result.count}
                       </Typography>
                     </div>
-                    <Button variant="outlined" color="secondary">
-                      test
-                    </Button>
-                    {/* </Button> */}
-                  </ListItem>
-                );
-              })}
-            </List>
-          )}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          {results && (
-            <List>
-              {results.map((result) => {
-                return (
-                  <ListItem key={result._id}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      fullWidth
-                      className={classes.buttonpost}
-                      onClick={() => {
-                        router.push("/mammal");
-                      }}
-                    >
-                      <div className={classes.card}>
-                        <Typography
-                          gutterBottom
-                          variant="h5"
-                          color="textPrimary"
-                          align="left"
-                        >
-                          {result.title}
-                        </Typography>
-                        <Typography
-                          gutterBottom
-                          color="textPrimary"
-                          align="left"
-                        >
-                          {result.description}
-                        </Typography>
-                        <Typography gutterBottom color="secondary" align="left">
-                          {result.author}
-                        </Typography>
-                      </div>
-                      <div>
-                        <Typography
-                          variant="h6"
-                          color="secondary"
-                          align="right"
-                        >
-                          {result.count}
-                        </Typography>
-                      </div>
-                    </Button>
+                    <div className={classes.buttongroup}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.buttonedit}
+                        startIcon={<EditIcon />}
+                        size="small"
+                        href={`/dashboard/posts/${result._id}`}
+                        // as={`/dashboard/posts/${result._id}`}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.buttonedit}
+                        startIcon={<DeleteIcon />}
+                        size="small"
+                        onClick={handleClickOpen}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </ListItem>
                 );
               })}
@@ -294,19 +336,26 @@ export default function Dashboard() {
           )}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <List>
-            {/* {results.map((result) => {
-              return (
-                <ListItem key={result._id}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    fullWidth
-                    className={classes.buttonpost}
-                    onClick={() => {
-                      router.push("/mammal");
-                    }}
-                  >
+          <Button
+            href="/dashboard/editor"
+            variant="contained"
+            color="secondary"
+            size="large"
+          >
+            Create New Post
+          </Button>
+          {!results ? (
+            <CircularProgress
+              color="secondary"
+              size={100}
+              disableShrink={true}
+              className={classes.progress}
+            />
+          ) : (
+            <List>
+              {results.map((result) => {
+                return (
+                  <ListItem key={result._id} className={classes.buttonpost}>
                     <div className={classes.card}>
                       <Typography
                         gutterBottom
@@ -328,11 +377,34 @@ export default function Dashboard() {
                         {result.count}
                       </Typography>
                     </div>
-                  </Button>
-                </ListItem>
-              );
-            })} */}
-          </List>
+                    <div className={classes.buttongroup}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.buttonedit}
+                        startIcon={<EditIcon />}
+                        size="small"
+                        href={`/dashboard/drafts/${result._id}`}
+                        // as={`/dashboard/posts/${result._id}`}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.buttonedit}
+                        startIcon={<DeleteIcon />}
+                        size="small"
+                        onClick={handleClickOpen}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </ListItem>
+                );
+              })}
+            </List>
+          )}
         </TabPanel>
         <TabPanel value={value} index={3}>
           <List>
@@ -382,8 +454,28 @@ export default function Dashboard() {
           </List>
         </TabPanel>
       </div>
-      <Button onClick={() => router.push("/dashboard/posts")}>Posts</Button>
-      <Button onClick={() => router.push("/dashboard/drafts")}>Drafts</Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent className={classes.dialog}>
+          <DialogContentText id="alert-dialog-description" color="textPrimary">
+            Are you sure you want to permanently delete item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className={classes.dialog}>
+          <Button onClick={handleClose} color="secondary" variant="outlined">
+            Cancel
+          </Button>
+          <Button onClick={deletePost} color="secondary" variant="outlined">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* <Button onClick={() => router.push("/dashboard/posts")}>Posts</Button>
+      <Button onClick={() => router.push("/dashboard/drafts")}>Drafts</Button> */}
     </Container>
   );
 }
