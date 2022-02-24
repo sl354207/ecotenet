@@ -31,7 +31,14 @@ import customImage from "../../plugins/customImage";
 
 import EditorLayout from "../../components/EditorLayout";
 
-import { Button, IconButton, Typography, Link } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Typography,
+  Link,
+  Container,
+  Divider,
+} from "@material-ui/core";
 
 import Comments from "../../components/Comments";
 import Vote from "../../components/Vote";
@@ -40,7 +47,7 @@ import Nav from "../../components/Nav";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  description: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -62,6 +69,16 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.secondary.light,
     fontStyle: "italic",
   },
+  container: {
+    backgroundColor: theme.palette.primary.main,
+    // marginTop: "20px",
+  },
+  title: {
+    paddingTop: "40px",
+  },
+  commentsection: {
+    marginTop: 20,
+  },
 }));
 
 // Define which plugins we want to use.
@@ -74,12 +91,12 @@ const post = ({ post, comments }) => {
   const [value, setValue] = useState(post);
 
   return (
-    <>
-      <Nav />
-      <Typography align="center" variant="h4">
+    <Container className={classes.container}>
+      {/* <Nav /> */}
+      <Typography align="center" variant="h4" className={classes.title}>
         {post.title}
       </Typography>
-      <div className={classes.root}>
+      <div className={classes.description}>
         <div className={classes.content}>
           <div className={classes.items}>
             <Typography className={classes.author} align="center" variant="h6">
@@ -111,10 +128,13 @@ const post = ({ post, comments }) => {
           readOnly
         />
       </EditorLayout>
-
+      <Divider />
+      <Typography variant="h6" className={classes.commentsection}>
+        Comments:
+      </Typography>
       <Comments comments={comments} post_id={post._id} />
       <Link href="/posts">Go Back</Link>
-    </>
+    </Container>
   );
 };
 

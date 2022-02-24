@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField } from "@material-ui/core";
+import { ListItem, TextField } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 
 //pass in post id and comment ref from comment
@@ -42,7 +42,7 @@ const CommentForm = ({ post_id, comment_ref }) => {
   };
 
   return (
-    <div>
+    <ListItem>
       <TextField
         id="outlined-textarea"
         label="Comment"
@@ -51,10 +51,14 @@ const CommentForm = ({ post_id, comment_ref }) => {
         onChange={handleChange}
         onSubmit={handleSubmit}
       />
-      <Button onClick={() => handleSubmit(value, post_id, comment_ref)}>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => handleSubmit(value, post_id, comment_ref)}
+      >
         Add Comment
       </Button>
-    </div>
+    </ListItem>
   );
 };
 

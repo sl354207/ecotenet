@@ -3,7 +3,7 @@
 
 import { getMammals } from "../utils/mongodb";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
 import {
   List,
   ListItem,
@@ -20,6 +20,7 @@ import {
 import { useRef } from "react";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import SpeciesItem from "../components/SpeciesItem";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -51,16 +52,11 @@ const useStyles = makeStyles((theme) => ({
   header: {
     marginTop: 20,
   },
-  buttonlist: {
-    display: "block",
-    justifyContent: "start",
-    textTransform: "none",
-  },
 }));
 
 const mammals = ({ mammals }) => {
   const classes = useStyles();
-  const router = useRouter();
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -139,47 +135,7 @@ const mammals = ({ mammals }) => {
               </ListItem>
               {mammals.map((mammal) => {
                 if (mammal.Scientific_Name[0] === entry) {
-                  return (
-                    <ListItem key={mammal._id}>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        fullWidth
-                        className={classes.buttonlist}
-                        onClick={() => {
-                          router.push("/mammal");
-                        }}
-                      >
-                        {isMobile ? (
-                          <>
-                            <Typography
-                              variant="h6"
-                              color="textPrimary"
-                              align="left"
-                            >
-                              <i>{mammal.Scientific_Name} -</i>
-                            </Typography>
-                            <Typography
-                              variant="h6"
-                              color="textPrimary"
-                              align="left"
-                            >
-                              {mammal.COMMON_NAME}
-                            </Typography>
-                          </>
-                        ) : (
-                          <Typography
-                            variant="h6"
-                            color="textPrimary"
-                            align="left"
-                          >
-                            <i>{mammal.Scientific_Name} -</i>{" "}
-                            {mammal.COMMON_NAME}
-                          </Typography>
-                        )}
-                      </Button>
-                    </ListItem>
-                  );
+                  return <SpeciesItem result={mammal} />;
                 }
               })}
               <Divider />

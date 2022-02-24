@@ -24,7 +24,7 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PropTypes from "prop-types";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -109,7 +109,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    border: "1px solid #94c9ff",
+    // border: "1px solid #94c9ff",
+    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     margin: "20px auto",
     borderRadius: "10px",
   },
@@ -168,7 +169,7 @@ export default function Dashboard() {
 
   const { data: results } = useSWR(`/api/${fetch}`, fetcher);
 
-  const isLoading = results;
+  // const isLoading = results;
 
   const handleChange = (event, newValue) => {
     // console.log(typeof newValue);
@@ -208,19 +209,6 @@ export default function Dashboard() {
     // reload page after deletion
     router.reload();
   };
-
-  // if (!results || results == undefined) {
-  //   return (
-  //     <Container>
-  // <CircularProgress
-  //   color="secondary"
-  //   size={100}
-  //   disableShrink={true}
-  //   // className={classes.progress}
-  // />
-  //     </Container>
-  //   );
-  // }
 
   return (
     <Container>
@@ -314,7 +302,6 @@ export default function Dashboard() {
                         startIcon={<EditIcon />}
                         size="small"
                         href={`/dashboard/posts/${result._id}`}
-                        // as={`/dashboard/posts/${result._id}`}
                       >
                         Edit
                       </Button>
@@ -385,7 +372,6 @@ export default function Dashboard() {
                         startIcon={<EditIcon />}
                         size="small"
                         href={`/dashboard/drafts/${result._id}`}
-                        // as={`/dashboard/posts/${result._id}`}
                       >
                         Edit
                       </Button>
@@ -406,53 +392,7 @@ export default function Dashboard() {
             </List>
           )}
         </TabPanel>
-        <TabPanel value={value} index={3}>
-          <List>
-            <ListItem>
-              {/* <Link
-                variant="h6"
-                href={`https://www.inaturalist.org/search?q=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                iNaturalist
-              </Link> */}
-            </ListItem>
-            <ListItem>
-              {/* <Link
-                variant="h6"
-                href={`https://commons.wikimedia.org/w/index.php?search=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }+${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                }&title=Special:MediaSearch&go=Go&type=image`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wikimedia Commons
-              </Link> */}
-            </ListItem>
-            <ListItem>
-              {/* <Link
-                variant="h6"
-                href={`https://www.iucnredlist.org/search?query=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }%20${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                }&searchType=species`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                IUCN Red List
-              </Link> */}
-            </ListItem>
-          </List>
-        </TabPanel>
+        <TabPanel value={value} index={3}></TabPanel>
       </div>
       <Dialog
         open={open}
@@ -474,8 +414,6 @@ export default function Dashboard() {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* <Button onClick={() => router.push("/dashboard/posts")}>Posts</Button>
-      <Button onClick={() => router.push("/dashboard/drafts")}>Drafts</Button> */}
     </Container>
   );
 }

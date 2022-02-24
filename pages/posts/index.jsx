@@ -2,14 +2,15 @@
 import { getPosts } from "../../utils/mongodb";
 
 import PostList from "../../components/PostList";
+import { Container } from "@material-ui/core";
 
 // pass in posts from database as a prop
 export default function Posts({ posts }) {
   return (
-    <div>
+    <Container>
       {/* pass in posts data as a prop */}
       <PostList posts={posts} />
-    </div>
+    </Container>
   );
 }
 
