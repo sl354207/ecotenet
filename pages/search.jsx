@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -47,14 +47,16 @@ const useStyles = makeStyles((theme) => ({
 
   search: {
     position: "relative",
-    border: "2px solid #94c9ff",
+    // border: "2px solid #94c9ff",
+    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.light,
 
-    // "&:hover": {
-    //   backgroundColor: alpha(theme.palette.primary.light, 0.25),
-    //   // border: "1px solid #94c9ff!important",
-    // },
+    "&:focus-within": {
+      backgroundColor: theme.palette.primary.light,
+      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+      borderRadius: theme.shape.borderRadius,
+    },
     // marginLeft: 0,
     // width: "100%",
     // [theme.breakpoints.up("sm")]: {

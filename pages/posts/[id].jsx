@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   content: {
-    display: "flex",
+    // display: "flex",
     flexDirection: "column",
     maxWidth: 800,
     flexGrow: 1,
@@ -61,9 +61,9 @@ const useStyles = makeStyles((theme) => ({
   },
   items: {
     display: "flex",
-    flexGrow: 1,
+    // flexGrow: 1,
   },
-  author: {},
+
   publish: {
     marginLeft: 20,
     color: theme.palette.secondary.light,
@@ -99,7 +99,7 @@ const post = ({ post, comments }) => {
       <div className={classes.description}>
         <div className={classes.content}>
           <div className={classes.items}>
-            <Typography className={classes.author} align="center" variant="h6">
+            <Typography align="center" variant="h6">
               <Link href="#" color="secondary">
                 {post.author}
               </Link>

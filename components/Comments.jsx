@@ -1,7 +1,10 @@
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
-import { List } from "@material-ui/core";
+import { useState } from "react";
+import { List, Button } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 const useStyles = makeStyles((theme) => ({
   comments: {
@@ -14,6 +17,13 @@ const useStyles = makeStyles((theme) => ({
 const Comments = ({ comments, post_id }) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const [show, setShow] = useState(false);
+
+  const handleClick = () => {
+    setShow(!show);
+  };
+
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
     if (comment.comment_ref === "") {
@@ -34,10 +44,18 @@ const Comments = ({ comments, post_id }) => {
 
   return (
     <List className={classes.comments}>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={handleClick}
+        endIcon={show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      >
+        Add Comment
+      </Button>
+      <CommentForm post_id={post_id} comment_ref="" show={show} />
       {sortedComments.map((comment) => (
         <Comment comment={comment} post_id={post_id} />
       ))}
-      <CommentForm post_id={post_id} comment_ref="" />
     </List>
   );
 };
