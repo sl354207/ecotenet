@@ -290,6 +290,25 @@ const getPostComments = async (id) => {
   return comments;
 };
 
+const getCommentsByUser = async () => {
+  const { db } = await connectToDatabase();
+
+  const comments = await db.collection("comments").find({}).toArray();
+
+  return comments;
+};
+
+//delete a comment
+const deleteComment = async (_id) => {
+  const { db } = await connectToDatabase();
+
+  const deleted = await db.collection("comments").deleteOne({
+    _id: ObjectId(_id),
+  });
+
+  return deleted;
+};
+
 // CHANGE TO SPECIES INSTEAD OF MAMMALS
 //get mammals by unique eco id
 const getMammals = async (CLASS, unique_id) => {
@@ -473,6 +492,8 @@ module.exports = {
   deleteDraft,
   createComment,
   getPostComments,
+  getCommentsByUser,
+  deleteComment,
   getMammals,
   getMammalById,
   searchAllPosts,

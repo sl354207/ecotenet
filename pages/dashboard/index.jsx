@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
+import DashboardComments from "../../components/DashboardComments";
+
 import {
   Typography,
   AppBar,
@@ -20,11 +22,18 @@ import {
   DialogActions,
   TextField,
   InputBase,
+  InputLabel,
+  FormControl,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PropTypes from "prop-types";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import {
+  alpha,
+  makeStyles,
+  withStyles,
+  useTheme,
+} from "@material-ui/core/styles";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -142,6 +151,10 @@ const useStyles = makeStyles((theme) => ({
     // border: "thin solid",
     // borderRadius: "10px",
   },
+  items: {
+    // display: "flex",
+    flexGrow: 1,
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -188,7 +201,8 @@ export default function Dashboard() {
         // expected output: "Mangoes and papayas are $2.79 a pound."
         break;
       case 3:
-        setFetch("getcomments");
+        setFetch("getCommentsByUser");
+        setDeleteFetch("deleteComment");
         // expected output: "Mangoes and papayas are $2.79 a pound."
         break;
       default:
@@ -392,7 +406,29 @@ export default function Dashboard() {
             </List>
           )}
         </TabPanel>
-        <TabPanel value={value} index={3}></TabPanel>
+        <TabPanel value={value} index={3}>
+          {!results ? (
+            <CircularProgress
+              color="secondary"
+              size={100}
+              disableShrink={true}
+              className={classes.progress}
+            />
+          ) : (
+            <List>
+              {results.map((result) => {
+                return (
+                  <ListItem key={result._id} className={classes.buttonpost}>
+                    <DashboardComments
+                      result={result}
+                      handleClickOpen={handleClickOpen}
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          )}
+        </TabPanel>
       </div>
       <Dialog
         open={open}

@@ -11,6 +11,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.main,
     // border: "1px solid",
   },
+  add: {
+    marginBottom: 5,
+  },
+  noadd: {
+    marginBottom: 10,
+  },
 }));
 
 //pass in comments and post id from parent post
@@ -49,6 +55,7 @@ const Comments = ({ comments, post_id }) => {
         color="secondary"
         onClick={handleClick}
         endIcon={show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        className={show ? classes.add : classes.noadd}
       >
         Add Comment
       </Button>

@@ -1,17 +1,6 @@
 import { useState, useRef } from "react";
 import CommentForm from "./CommentForm";
-import {
-  Button,
-  Popper,
-  Fade,
-  Typography,
-  ListItem,
-  Link,
-  Portal,
-  InputBase,
-  InputLabel,
-  FormControl,
-} from "@material-ui/core";
+import { Button, Typography, ListItem, Link } from "@material-ui/core";
 import {
   alpha,
   makeStyles,
@@ -31,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   item: {
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: 4,
-    margin: "10px auto",
+    marginBottom: 10,
     // display: "flex",
     // justifyContent: "center",
     // alignItems: "center",
@@ -72,61 +61,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    // 'label + &': {
-    //   marginTop: theme.spacing(3),
-    // },
-    marginLeft: 60,
-  },
-  input: {
-    position: "relative",
-    backgroundColor: theme.palette.primary.main,
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-    // fontSize: 16,
-    width: "auto",
-    padding: "20px 10px",
-    flexGrow: 1,
-    // transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    // fontFamily: [
-    //   '-apple-system',
-    //   'BlinkMacSystemFont',
-    //   '"Segoe UI"',
-    //   'Roboto',
-    //   '"Helvetica Neue"',
-    //   'Arial',
-    //   'sans-serif',
-    //   '"Apple Color Emoji"',
-    //   '"Segoe UI Emoji"',
-    //   '"Segoe UI Symbol"',
-    // ].join(','),
-    "&:focus": {
-      // boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      flexGrow: 1,
-    },
-  },
-}))(InputBase);
-
 //pass in comment and post id from comments
 const Comment = ({ comment, post_id }) => {
   // console.log(comment);
   const classes = useStyles();
-  // // set anchor element state for popper
-  // const [anchorEl, setAnchorEl] = useState(null);
 
-  // // set popper anchor to clicked comment
-  // const handleClick = (event) => {
-  //   setAnchorEl(anchorEl ? null : event.currentTarget);
-  // };
-
-  // // if popper is open set id
-  // const open = Boolean(anchorEl);
-  // const id = open ? "reply-form" : undefined;
-
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
 
   const [show, setShow] = useState(false);
   const container = useRef(null);
@@ -180,32 +120,6 @@ const Comment = ({ comment, post_id }) => {
           </div>
         </ListItem>
         <CommentForm post_id={post_id} comment_ref={comment._id} show={show} />
-
-        {/* {show ? (
-          // <Portal container={container.current}>
-          //   <FormControl className={classes.items}>
-          //     <InputLabel shrink htmlFor="bootstrap-input"></InputLabel>
-          //     <BootstrapInput
-          //       defaultValue="react-bootstrap"
-          //       id="bootstrap-input"
-          //       autoFocus
-          //       multiline
-          //     />
-          //   </FormControl>
-          // </Portal>
-          <CommentForm post_id={post_id} comment_ref={comment._id} show={show}/>
-        ) : null} */}
-
-        {/* <div ref={container} /> */}
-        {/* <Popper id={id} open={open} anchorEl={anchorEl} transition>
-          {({ TransitionProps }) => (
-            <Fade {...TransitionProps} timeout={350}>
-              <div className={classes.paper}>
-                <CommentForm post_id={post_id} comment_ref={comment._id} />
-              </div>
-            </Fade>
-          )}
-        </Popper> */}
       </>
     );
   } else {

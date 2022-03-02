@@ -2,11 +2,6 @@ import { useState, useRef } from "react";
 
 import {
   Button,
-  Popper,
-  Fade,
-  Typography,
-  ListItem,
-  Link,
   Portal,
   InputBase,
   InputLabel,
@@ -18,8 +13,6 @@ import {
   useTheme,
   withStyles,
 } from "@material-ui/core/styles";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,10 +24,6 @@ const useStyles = makeStyles((theme) => ({
   item: {
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: 4,
-    // margin: "10px auto",
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "center",
   },
   reply: {
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
@@ -79,16 +68,16 @@ const useStyles = makeStyles((theme) => ({
   },
   cref: {
     marginLeft: 60,
+    padding: "0px 0px 10px 0px",
+  },
+  noref: {
+    // marginLeft: 60,
+    padding: "5px 0px 10px 0px",
   },
 }));
 
 const BootstrapInput = withStyles((theme) => ({
-  root: {
-    // 'label + &': {
-    //   marginTop: theme.spacing(3),
-    // },
-    // marginLeft: 60,
-  },
+  root: {},
   input: {
     position: "relative",
     backgroundColor: theme.palette.primary.main,
@@ -98,22 +87,8 @@ const BootstrapInput = withStyles((theme) => ({
     width: "auto",
     padding: "20px 10px",
     flexGrow: 1,
-    // transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    // fontFamily: [
-    //   '-apple-system',
-    //   'BlinkMacSystemFont',
-    //   '"Segoe UI"',
-    //   'Roboto',
-    //   '"Helvetica Neue"',
-    //   'Arial',
-    //   'sans-serif',
-    //   '"Apple Color Emoji"',
-    //   '"Segoe UI Emoji"',
-    //   '"Segoe UI Symbol"',
-    // ].join(','),
+
     "&:focus": {
-      // boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       flexGrow: 1,
     },
@@ -169,36 +144,19 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
   };
 
   return (
-    <ListItem className={classes.addition} disableGutters>
-      {/* <TextField
-        id="outlined-textarea"
-        label="Comment"
-        multiline
-        variant="outlined"
-        onChange={handleChange}
-        onSubmit={handleSubmit}
-      /> */}
-
-      {/* <Button
-        variant="outlined"
-        color="secondary"
-        onClick={handleClick}
-        endIcon={show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      >
-        Add Comment
-      </Button> */}
+    <div className={classes.addition} disableGutters>
       {show ? (
         <Portal container={container.current}>
           <FormControl className={classes.items}>
             <InputLabel shrink htmlFor="bootstrap"></InputLabel>
             <BootstrapInput
-              defaultValue="react-bootstrap"
+              // defaultValue="react-bootstrap"
               id="bootstrap"
               autoFocus
               onChange={handleChange}
               onSubmit={handleSubmit}
               multiline
-              className={comment_ref != "" ? classes.cref : null}
+              className={comment_ref != "" ? classes.cref : classes.noref}
             />
           </FormControl>
           <Button
@@ -213,7 +171,7 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
       ) : null}
 
       <div ref={container} className={classes.comment} />
-    </ListItem>
+    </div>
   );
 };
 
