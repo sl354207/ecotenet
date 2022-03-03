@@ -97,7 +97,13 @@ const Comment = ({ comment, post_id }) => {
                   align="left"
                   variant="h6"
                 >
-                  {comment.date.toDateString()}
+                  {comment.updated ? (
+                    //
+                    <>Updated on {comment.date.toDateString()}</>
+                  ) : (
+                    //
+                    <>{comment.date.toDateString()}</>
+                  )}
                 </Typography>
               </div>
               <Typography variant="h6">{comment.text}</Typography>

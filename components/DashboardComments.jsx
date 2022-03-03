@@ -8,6 +8,8 @@ import {
   useTheme,
 } from "@material-ui/core/styles";
 import { useState } from "react";
+import TextBox from "./TextBox";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
@@ -101,47 +103,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    // 'label + &': {
-    //   marginTop: theme.spacing(3),
-    // },
-    // marginLeft: 60,
-  },
-  input: {
-    position: "relative",
-    backgroundColor: theme.palette.primary.main,
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-    // fontSize: 16,
-    width: "auto",
-    padding: "20px 10px",
-    flexGrow: 1,
-    // transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    // fontFamily: [
-    //   '-apple-system',
-    //   'BlinkMacSystemFont',
-    //   '"Segoe UI"',
-    //   'Roboto',
-    //   '"Helvetica Neue"',
-    //   'Arial',
-    //   'sans-serif',
-    //   '"Apple Color Emoji"',
-    //   '"Segoe UI Emoji"',
-    //   '"Segoe UI Symbol"',
-    // ].join(','),
-    "&:focus": {
-      // boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      flexGrow: 1,
-    },
-  },
-}))(InputBase);
-
 const DashboardComments = ({ result, handleClickOpen }) => {
   const theme = useTheme();
   const classes = useStyles();
+
+  const router = useRouter();
 
   const [commentValue, setCommentValue] = useState("");
 
@@ -158,45 +124,53 @@ const DashboardComments = ({ result, handleClickOpen }) => {
   };
 
   // handle comment submission to database through api
-  const handleCommentSubmit = async (commentValue, post_id, comment_ref) => {
+  const handleCommentSubmit = async (commentValue, id) => {
     //convert comment values to key value pairs
     const textObject = {
       text: commentValue,
     };
 
-    const idObject = {
-      post_id: post_id,
-    };
-
-    const refObject = {
-      comment_ref: comment_ref,
+    const updateObject = {
+      updated: true,
     };
 
     const dateObject = {
       date: new Date().toUTCString(),
     };
+    const IDObject = {
+      _id: id,
+    };
     //combine all objects and send to api
-    const comment = Object.assign(idObject, refObject, dateObject, textObject);
+    const comment = Object.assign(
+      updateObject,
+      dateObject,
+      textObject,
+      IDObject
+    );
 
-    const res = await fetch("/api/createComment", {
-      method: "POST",
+    const res = await fetch("/api/updateComment", {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(comment),
     });
+
+    router.reload();
   };
 
   return (
     <>
       <FormControl className={classes.items}>
-        <InputLabel shrink htmlFor="bootstrap"></InputLabel>
-        <BootstrapInput
+        <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
+        <TextBox
           defaultValue={result.text}
-          id="bootstrap"
-          onChange={handleCommentChange}
-          onSubmit={handleCommentSubmit}
-          multiline
+          placeHolder={null}
+          id="dashboardcomment"
+          handleChange={handleCommentChange}
+          // handleSubmit={handleCommentSubmit}
+          autoFocus={false}
+          // rows={1}
         />
       </FormControl>
       <div className={classes.buttongroup}>
@@ -207,7 +181,7 @@ const DashboardComments = ({ result, handleClickOpen }) => {
             className={classes.buttonedit}
             // startIcon={<EditIcon />}
             size="small"
-            onClick={handleCommentSubmit}
+            onClick={() => handleCommentSubmit(commentValue, result._id)}
           >
             Save Change
           </Button>
@@ -219,7 +193,7 @@ const DashboardComments = ({ result, handleClickOpen }) => {
             // startIcon={<EditIcon />}
             size="small"
             disabled
-            onClick={handleCommentSubmit}
+            // onClick={handleCommentSubmit}
           >
             Save Change
           </Button>

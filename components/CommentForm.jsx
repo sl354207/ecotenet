@@ -1,18 +1,11 @@
 import { useState, useRef } from "react";
 
-import {
-  Button,
-  Portal,
-  InputBase,
-  InputLabel,
-  FormControl,
-} from "@material-ui/core";
-import {
-  alpha,
-  makeStyles,
-  useTheme,
-  withStyles,
-} from "@material-ui/core/styles";
+import TextBox from "./TextBox";
+import Sure from "./Sure";
+
+import { Button, Portal, InputLabel, FormControl } from "@material-ui/core";
+import { alpha, makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -74,32 +67,28 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: 60,
     padding: "5px 0px 10px 0px",
   },
-}));
-
-const BootstrapInput = withStyles((theme) => ({
-  root: {},
-  input: {
-    position: "relative",
-    backgroundColor: theme.palette.primary.main,
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-    // fontSize: 16,
-    width: "auto",
-    padding: "20px 10px",
-    flexGrow: 1,
-
-    "&:focus": {
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      flexGrow: 1,
-    },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
   },
-}))(InputBase);
+}));
 
 //pass in post id and comment ref from comment
 const CommentForm = ({ show, post_id, comment_ref }) => {
   const classes = useStyles();
 
+  const router = useRouter();
+
   const [value, setValue] = useState("");
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
   // const [show, setShow] = useState(false);
   const container = useRef(null);
@@ -143,26 +132,29 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
     });
   };
 
+  // () => handleSubmit(value, post_id, comment_ref)
+
   return (
     <div className={classes.addition} disableGutters>
       {show ? (
         <Portal container={container.current}>
           <FormControl className={classes.items}>
-            <InputLabel shrink htmlFor="bootstrap"></InputLabel>
-            <BootstrapInput
-              // defaultValue="react-bootstrap"
-              id="bootstrap"
-              autoFocus
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              multiline
+            <InputLabel shrink htmlFor="commentform"></InputLabel>
+            <TextBox
+              defaultValue={null}
+              placeHolder={null}
+              id="commentform"
+              autoFocus={true}
+              handleChange={handleChange}
+              handleSubmit={handleSubmit}
+              // rows={1}
               className={comment_ref != "" ? classes.cref : classes.noref}
             />
           </FormControl>
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleSubmit(value, post_id, comment_ref)}
+            onClick={handleClickOpen}
             className={classes.submit}
           >
             Submit
@@ -171,6 +163,19 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
       ) : null}
 
       <div ref={container} className={classes.comment} />
+      <Sure
+        open={open}
+        handleClose={handleClose}
+        ariaLabeledBy="alert-dialog-title"
+        ariaDescribedBy="alert-dialog-description"
+        id="alert-dialog-description"
+        className={classes.dialog}
+        sure="Are you sure you want to submit comment?"
+        action="submit"
+        postID={post_id}
+        value={value}
+        resultID={comment_ref}
+      />
     </div>
   );
 };

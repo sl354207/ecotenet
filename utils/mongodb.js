@@ -267,10 +267,10 @@ const deleteDraft = async (_id) => {
 };
 
 //create a comment
-const createComment = async (post_id, comment_ref, date, text) => {
+const createComment = async (post_id, comment_ref, date, text, updated) => {
   const { db } = await connectToDatabase();
 
-  const data = { post_id, comment_ref, date, text };
+  const data = { post_id, comment_ref, date, text, updated };
   const response = await db.collection("comments").insertOne(data);
 
   return data;
@@ -296,6 +296,25 @@ const getCommentsByUser = async () => {
   const comments = await db.collection("comments").find({}).toArray();
 
   return comments;
+};
+
+// update comment
+const updateComment = async (_id, date, text, updated) => {
+  const { db } = await connectToDatabase();
+
+  const data = {
+    date,
+    text,
+    updated,
+  };
+  const response = await db.collection("comments").updateOne(
+    {
+      _id: ObjectId(_id),
+    },
+    { $set: data }
+  );
+
+  return data;
 };
 
 //delete a comment
@@ -493,6 +512,7 @@ module.exports = {
   createComment,
   getPostComments,
   getCommentsByUser,
+  updateComment,
   deleteComment,
   getMammals,
   getMammalById,

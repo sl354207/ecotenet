@@ -3,6 +3,7 @@ import { useState } from "react";
 import useSWR from "swr";
 
 import DashboardComments from "../../components/DashboardComments";
+import Sure from "../../components/Sure";
 
 import {
   Typography,
@@ -10,30 +11,17 @@ import {
   Tabs,
   Tab,
   Box,
-  Link,
   Container,
   List,
   ListItem,
   Button,
   CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   TextField,
-  InputBase,
-  InputLabel,
-  FormControl,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PropTypes from "prop-types";
-import {
-  alpha,
-  makeStyles,
-  withStyles,
-  useTheme,
-} from "@material-ui/core/styles";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -172,8 +160,11 @@ export default function Dashboard() {
 
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const [resultID, setResultID] = useState();
+
+  const handleClickOpen = (ID) => {
     setOpen(true);
+    setResultID(ID);
   };
 
   const handleClose = () => {
@@ -211,13 +202,13 @@ export default function Dashboard() {
   };
 
   // function to delete post by id
-  const deletePost = async (_id, deleteFetch) => {
+  const deletePost = async (ID, deleteFetch) => {
     const res = await fetch(`/api/${deleteFetch}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(_id),
+      body: JSON.stringify(ID),
     });
     setOpen(false);
     // reload page after deletion
@@ -325,7 +316,7 @@ export default function Dashboard() {
                         className={classes.buttonedit}
                         startIcon={<DeleteIcon />}
                         size="small"
-                        onClick={handleClickOpen}
+                        onClick={() => handleClickOpen(result._id)}
                       >
                         Delete
                       </Button>
@@ -395,7 +386,7 @@ export default function Dashboard() {
                         className={classes.buttonedit}
                         startIcon={<DeleteIcon />}
                         size="small"
-                        onClick={handleClickOpen}
+                        onClick={() => handleClickOpen(result._id)}
                       >
                         Delete
                       </Button>
@@ -421,7 +412,7 @@ export default function Dashboard() {
                   <ListItem key={result._id} className={classes.buttonpost}>
                     <DashboardComments
                       result={result}
-                      handleClickOpen={handleClickOpen}
+                      handleClickOpen={() => handleClickOpen(result._id)}
                     />
                   </ListItem>
                 );
@@ -430,26 +421,21 @@ export default function Dashboard() {
           )}
         </TabPanel>
       </div>
-      <Dialog
+
+      <Sure
         open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent className={classes.dialog}>
-          <DialogContentText id="alert-dialog-description" color="textPrimary">
-            Are you sure you want to permanently delete item?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions className={classes.dialog}>
-          <Button onClick={handleClose} color="secondary" variant="outlined">
-            Cancel
-          </Button>
-          <Button onClick={deletePost} color="secondary" variant="outlined">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        handleClose={handleClose}
+        // handleSubmit={deletePost}
+        ariaLabeledBy="alert-dialog-title"
+        ariaDescribedBy="alert-dialog-description"
+        id="alert-dialog-description"
+        className={classes.dialog}
+        sure="Are you sure you want to permanently delete item?"
+        action="delete"
+        resultID={resultID}
+        deleteFetch={deleteFetch}
+        setOpen={setOpen}
+      />
     </Container>
   );
 }
