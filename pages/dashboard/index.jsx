@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 import DashboardComments from "../../components/DashboardComments";
 import Sure from "../../components/Sure";
+import TextBox from "../../components/TextBox";
 
 import {
   Typography,
@@ -16,7 +17,8 @@ import {
   ListItem,
   Button,
   CircularProgress,
-  TextField,
+  FormControl,
+  InputLabel,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -140,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
     // borderRadius: "10px",
   },
   items: {
-    // display: "flex",
+    display: "flex",
     flexGrow: 1,
   },
 }));
@@ -244,17 +246,20 @@ export default function Dashboard() {
               className={classes.progress}
             />
           ) : (
-            <TextField
-              id="outlined-multiline-static"
-              label="Multiline"
-              multiline
-              rows={4}
-              defaultValue="Default Value"
-              color="secondary"
-              variant="outlined"
-              fullWidth
-              className={classes.profile}
-            />
+            <FormControl className={classes.items}>
+              <InputLabel shrink htmlFor="bio" />
+
+              <TextBox
+                defaultValue={null}
+                placeHolder={null}
+                id="bio"
+                autoFocus={true}
+                // handleChange={handleChange}
+                // handleSubmit={handleSubmit}
+                rows={10}
+                // className={comment_ref != "" ? classes.cref : classes.noref}
+              />
+            </FormControl>
           )}
         </TabPanel>
         <TabPanel value={value} index={1}>

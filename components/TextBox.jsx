@@ -41,7 +41,7 @@ const TextBox = ({
       onChange={handleChange}
       // onSubmit={handleSubmit}
       multiline
-      rows={rows}
+      minRows={rows}
       className={className}
     />
   );

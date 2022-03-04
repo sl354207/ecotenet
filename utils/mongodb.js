@@ -78,7 +78,7 @@ const createPost = async (
 
   const response = await db.collection("published_posts").insertOne(data);
 
-  return data;
+  return response;
 };
 
 // query database to get all published posts
@@ -153,16 +153,23 @@ const updatePost = async (
     { $set: data }
   );
 
-  return data;
+  return response;
 };
 
 //delete a post
 const deletePost = async (_id) => {
   const { db } = await connectToDatabase();
 
-  const deleted = await db.collection("published_posts").deleteOne({
+  const post = await db.collection("published_posts").deleteOne({
     _id: ObjectId(_id),
   });
+
+  const comments = await db.collection("comments").deleteMany({
+    post_id: _id,
+  });
+
+  const deleted = Object.assign(post, comments);
+  console.log(deleted);
 
   return deleted;
 };
@@ -194,7 +201,7 @@ const createDraft = async (
   };
   const response = await db.collection("drafts").insertOne(data);
 
-  return data;
+  return response;
 };
 
 // query database to get all drafts by user
@@ -252,7 +259,7 @@ const updateDraft = async (
     { $set: data }
   );
 
-  return data;
+  return response;
 };
 
 //delete a draft
@@ -273,7 +280,7 @@ const createComment = async (post_id, comment_ref, date, text, updated) => {
   const data = { post_id, comment_ref, date, text, updated };
   const response = await db.collection("comments").insertOne(data);
 
-  return data;
+  return response;
 };
 
 //get post comments
@@ -314,16 +321,16 @@ const updateComment = async (_id, date, text, updated) => {
     { $set: data }
   );
 
-  return data;
+  return response;
 };
 
 //delete a comment
 const deleteComment = async (_id) => {
   const { db } = await connectToDatabase();
 
-  const deleted = await db.collection("comments").deleteOne({
-    _id: ObjectId(_id),
-  });
+  const deleted = await db
+    .collection("comments")
+    .deleteMany({ $or: [{ _id: ObjectId(_id) }, { comment_ref: _id }] });
 
   return deleted;
 };

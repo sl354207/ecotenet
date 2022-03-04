@@ -513,13 +513,21 @@ const Nav = ({ ecoFilter }) => {
                 const { menuTitle, menuSubs, pageURL, openList } = menuItem;
 
                 return (
-                  <List component="nav" aria-labelledby="nested-list">
-                    <ListItem button onClick={() => handleListClick(menuTitle)}>
+                  <List
+                    component="nav"
+                    aria-labelledby="nested-list"
+                    key="mainlist"
+                  >
+                    <ListItem
+                      button
+                      key={menuTitle}
+                      onClick={() => handleListClick(menuTitle)}
+                    >
                       <ListItemText primary={menuTitle} />
                       {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </ListItem>
                     <Collapse in={openList} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding>
+                      <List component="div" disablePadding key="sublist">
                         {menuSubs.map((menuSub) => (
                           <ListItem
                             button
