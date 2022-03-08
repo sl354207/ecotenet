@@ -503,6 +503,40 @@ const searchEcoSpecies = async (query) => {
   return results;
 };
 
+const autoSpecies = async (query) => {
+  const { db } = await connectToDatabase();
+
+  const results = await db
+    .collection("species")
+    .aggregate([
+      {
+        $search: {
+          index: "autoSpecies",
+          compound: {
+            should: [
+              {
+                autocomplete: {
+                  query: `${query}`,
+                  path: "Scientific_Name",
+                },
+              },
+              {
+                autocomplete: {
+                  query: `${query}`,
+                  path: "COMMON_NAME",
+                },
+              },
+            ],
+          },
+        },
+      },
+    ])
+    .limit(10)
+    .toArray();
+
+  return results;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -527,4 +561,5 @@ module.exports = {
   searchAllSpecies,
   searchEcoPosts,
   searchEcoSpecies,
+  autoSpecies,
 };

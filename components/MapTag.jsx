@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Geocoder from "react-map-gl-geocoder";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
-import { Button, useMediaQuery } from "@material-ui/core";
+import { Button, useMediaQuery, Typography } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // const { MAPBOX } = process.env;
@@ -20,7 +20,7 @@ const MapTag = (clickInfo, setClickInfo) => {
     id: "eco-fill",
     type: "fill",
     // source: "eco-data",
-    "source-layer": "zoom",
+    "source-layer": "ecomap-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
@@ -32,7 +32,7 @@ const MapTag = (clickInfo, setClickInfo) => {
     id: "eco-fill1",
     type: "fill",
     // source: "eco-fill",
-    "source-layer": "zoom",
+    "source-layer": "ecomap-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
@@ -44,7 +44,7 @@ const MapTag = (clickInfo, setClickInfo) => {
     id: "eco-fill2",
     type: "fill",
     // source: "eco-fill",
-    "source-layer": "zoom",
+    "source-layer": "ecomap-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
@@ -56,11 +56,16 @@ const MapTag = (clickInfo, setClickInfo) => {
     id: "eco-line",
     type: "line",
     // source: "eco-fill",
-    "source-layer": "zoom",
+    "source-layer": "ecomap-tiles",
     layout: {},
     paint: {
-      "line-color": "rgba(0,0,0,1)",
-      "line-width": 2,
+      "line-color": [
+        "case",
+        ["==", ["get", "TYPE"], "TEOW"],
+        "rgb(5, 11, 15)",
+        "rgb(62, 136, 185)",
+      ],
+      "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
     },
   };
   const [viewport, setViewport] = useState({
@@ -77,22 +82,24 @@ const MapTag = (clickInfo, setClickInfo) => {
   const onHover = useCallback((event) => {
     const region = event.features && event.features[0];
 
-    setHoverInfo({
-      longitude: event.lngLat[0],
-      latitude: event.lngLat[1],
-      regionName: region && region.properties.ECO_NAME,
-      regionNum: region && region.properties.unique_id,
-    });
+    if (region && region.properties.unique_id != "<NA>") {
+      setHoverInfo({
+        longitude: event.lngLat[0],
+        latitude: event.lngLat[1],
+        regionName: region && region.properties.name,
+        regionNum: region && region.properties.unique_id,
+      });
+    }
     // console.log(region);
   }, []);
 
-  const selectedRegion = (hoverInfo && hoverInfo.regionName) || "";
+  const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
 
-  const ecoID = (hoverInfo && hoverInfo.regionNum) || "";
+  const ecoName = (hoverInfo && hoverInfo.regionName) || "";
 
   // check layer and style expressions in mapbox docs for array setup. useMemo memoizes the return value of a function(useCallback memoizes the function not the return value) so the return value can be reused between re-renders. Function is re-ran when value of selectedRegion changes.
   const filter = useMemo(
-    () => ["in", "ECO_NAME", selectedRegion],
+    () => ["in", "unique_id", selectedRegion],
     [selectedRegion]
   );
 
@@ -122,22 +129,24 @@ const MapTag = (clickInfo, setClickInfo) => {
   const handleMapClick = useCallback((event) => {
     const region = event.features && event.features[0];
     // console.log(region);
-
-    clickInfo.setClickInfo((clickInfo) => {
-      // console.log(clickInfo);
-      if (!clickInfo.includes(region && region.properties.unique_id)) {
-        return [...clickInfo, region && region.properties.unique_id];
-      } else {
-        const removed = clickInfo.splice(
-          clickInfo.indexOf(region.properties.unique_id),
-          1
-        );
-        // console.log(removed);
+    if (region && region.properties.unique_id != "<NA>") {
+      clickInfo.setClickInfo((clickInfo) => {
         // console.log(clickInfo);
-        return [...clickInfo];
-      }
-    });
-    // console.log(clickInfo);
+        if (!clickInfo.includes(region && region.properties.unique_id)) {
+          return [...clickInfo, region && region.properties.unique_id];
+        } else {
+          const removed = clickInfo.splice(
+            clickInfo.indexOf(region.properties.unique_id),
+            1
+          );
+          // console.log(removed);
+          // console.log(clickInfo);
+          return [...clickInfo];
+        }
+      });
+    }
+
+    console.log(clickInfo.clickInfo);
   }, []);
 
   // console.log(handleMapClick);
@@ -194,9 +203,9 @@ const MapTag = (clickInfo, setClickInfo) => {
               position="top-left"
             /> */}
             <Source
-              id="eco-data"
+              id="eco-map"
               type="vector"
-              url="mapbox://sl354207.ecozoom-tiles"
+              url="mapbox://sl354207.ecomap-tiles"
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
@@ -213,8 +222,12 @@ const MapTag = (clickInfo, setClickInfo) => {
                 latitude={hoverInfo.latitude}
                 closeButton={false}
               >
-                <div>{selectedRegion}</div>
-                <div>{ecoID}</div>
+                <Typography color="textSecondary" align="center">
+                  {ecoName}
+                </Typography>
+                <Typography color="textSecondary" align="center">
+                  Eco-{selectedRegion}
+                </Typography>
               </Popup>
             )}
           </ReactMapGL>
@@ -251,9 +264,9 @@ const MapTag = (clickInfo, setClickInfo) => {
               position="top-left"
             /> */}
             <Source
-              id="eco-data"
+              id="eco-map"
               type="vector"
-              url="mapbox://sl354207.ecozoom-tiles"
+              url="mapbox://sl354207.ecomap-tiles"
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
@@ -270,8 +283,12 @@ const MapTag = (clickInfo, setClickInfo) => {
                 latitude={hoverInfo.latitude}
                 closeButton={false}
               >
-                <div>{selectedRegion}</div>
-                <div>{ecoID}</div>
+                <Typography color="textSecondary" align="center">
+                  {ecoName}
+                </Typography>
+                <Typography color="textSecondary" align="center">
+                  Eco-{selectedRegion}
+                </Typography>
               </Popup>
             )}
           </ReactMapGL>
