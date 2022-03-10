@@ -9,7 +9,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 // const { MAPBOX } = process.env;
 
-const MapTag = ({ clickInfo, setClickInfo, speciesInfo1 }) => {
+const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
   // console.log(speciesInfo1);
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
@@ -48,8 +48,8 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1 }) => {
     "source-layer": "ecomap-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#627BC1",
-      "fill-opacity": 0.8,
+      "fill-color": "#dddddd",
+      "fill-opacity": 1,
     },
   };
   // selected layer
@@ -60,10 +60,35 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1 }) => {
     "source-layer": "ecomap-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#ea6b6e",
+      "fill-color": "#ff00ff",
       "fill-opacity": 0.4,
     },
   };
+  // selected layer
+  const ecoFill4 = {
+    id: "eco-fill4",
+    type: "fill",
+    // source: "eco-fill",
+    "source-layer": "ecomap-tiles",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,1)",
+      "fill-color": "#ffff00",
+      "fill-opacity": 0.6,
+    },
+  };
+  // selected layer
+  const ecoFill5 = {
+    id: "eco-fill5",
+    type: "fill",
+    // source: "eco-fill",
+    "source-layer": "ecomap-tiles",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,1)",
+      "fill-color": "#00ffff",
+      "fill-opacity": 0.8,
+    },
+  };
+
   // outline layer
   const ecoLine = {
     id: "eco-line",
@@ -174,12 +199,24 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1 }) => {
   // // );
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  const speciesRegions = speciesInfo1;
-  console.log(speciesRegions);
+  const speciesRegions1 = state[1].regions;
+  // console.log(speciesRegions1);
 
-  const speciesFilter = ["in", "unique_id", ...speciesRegions];
+  const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  // console.log(speciesFilter1);
 
-  console.log(speciesFilter);
+  const speciesRegions2 = state[2].regions;
+  // console.log(speciesRegions2);
+
+  const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
+  // console.log(speciesFilter2);
+
+  const speciesRegions3 = state[3].regions;
+  // console.log(speciesRegions3);
+
+  const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
+  // console.log(speciesFilter3);
+
   // console.log(clickFilter);
 
   // const geocoderContainerRef = useRef();
@@ -290,17 +327,28 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1 }) => {
             >
               <Layer beforeId="waterway-label" {...ecoLine} />
               <Layer beforeId="waterway-label" {...ecoFill} />
-              <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
+
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill5}
+                filter={speciesFilter3}
+              />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill4}
+                filter={speciesFilter2}
+              />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill3}
+                filter={speciesFilter1}
+              />
               <Layer
                 beforeId="waterway-label"
                 {...ecoFill2}
                 filter={clickFilter}
               />
-              <Layer
-                beforeId="waterway-label"
-                {...ecoFill3}
-                filter={speciesFilter}
-              />
+              <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
             </Source>
             {selectedRegion && (
               <Popup

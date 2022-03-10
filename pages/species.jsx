@@ -95,6 +95,32 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifySelf: "center",
   },
+  chipDelete: {
+    WebkitTapHighlightColor: "transparent",
+    color: theme.palette.secondary.main,
+    height: 22,
+    width: 22,
+    cursor: "pointer",
+    margin: "0 5px 0 -6px",
+    "&:hover": {
+      color: alpha(theme.palette.secondary.main, 0.7),
+    },
+  },
+  chip: {
+    borderWidth: 2,
+    color: theme.palette.text.primary,
+    fontSize: 16,
+    height: 40,
+  },
+  chipOutline1: {
+    borderColor: "#ff00ff",
+  },
+  chipOutline2: {
+    borderColor: "#ffff00",
+  },
+  chipOutline3: {
+    borderColor: "#00ffff",
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -122,61 +148,57 @@ const speciesChips = [
     scientific_name: "",
     open: false,
   },
-  {
-    id: 4,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-  {
-    id: 5,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
 ];
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (speciesChips, action) => {
   if (action.type == "remove") {
+    console.log(speciesChips);
     switch (action.payload) {
       case 1:
-        speciesChips[1].open = false;
-        speciesChips[1].regions = [];
+        speciesChips[1].open = speciesChips[2].open;
+        speciesChips[1].regions = speciesChips[2].regions;
+        speciesChips[1].scientific_name = speciesChips[2].scientific_name;
+        speciesChips[1].common_name = speciesChips[2].common_name;
+
+        speciesChips[2].open = speciesChips[3].open;
+        speciesChips[2].regions = speciesChips[3].regions;
+        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
+        speciesChips[2].common_name = speciesChips[3].common_name;
+
+        speciesChips[3].open = false;
+        speciesChips[3].regions = action.value;
+        speciesChips[3].scientific_name = action.s_name;
+        speciesChips[3].common_name = action.c_name;
+
         speciesChips[0].count -= 1;
-        break;
+        return { ...speciesChips };
+
       case 2:
-        speciesChips[2].open = false;
-        speciesChips[2].regions = [];
+        speciesChips[2].open = speciesChips[3].open;
+        speciesChips[2].regions = speciesChips[3].regions;
+        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
+        speciesChips[2].common_name = speciesChips[3].common_name;
+
+        speciesChips[3].open = false;
+        speciesChips[3].regions = action.value;
+        speciesChips[3].scientific_name = action.s_name;
+        speciesChips[3].common_name = action.c_name;
+
         speciesChips[0].count -= 1;
-        break;
+        return { ...speciesChips };
+
       case 3:
         speciesChips[3].open = false;
-        speciesChips[3].regions = [];
+        speciesChips[3].regions = action.value;
+        speciesChips[3].scientific_name = action.s_name;
+        speciesChips[3].common_name = action.c_name;
         speciesChips[0].count -= 1;
-        break;
-      case 4:
-        speciesChips[4].open = false;
-        speciesChips[4].regions = [];
-        speciesChips[0].count -= 1;
-        break;
-      case 5:
-        speciesChips[5].open = false;
-        speciesChips[5].regions = [];
-        // speciesChips[0].count += 1
-        break;
+        return { ...speciesChips };
+
       default:
         throw new Error();
     }
-    // return speciesChips.map((chip) => {
-    //   if (chip.id == action.payload) {
-    //     chip.open = false;
-    //     chip.regions = [];
-    //   }
-    //   return chip;
-    // });
   }
   if (action.type == "add") {
     console.log(speciesChips);
@@ -205,37 +227,10 @@ const reducer = (speciesChips, action) => {
         speciesChips[0].count += 1;
         return { ...speciesChips };
 
-      case 4:
-        speciesChips[4].open = true;
-        speciesChips[4].regions = action.value;
-        speciesChips[4].scientific_name = action.s_name;
-        speciesChips[4].common_name = action.c_name;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 5:
-        speciesChips[5].open = true;
-        speciesChips[5].regions = action.value;
-        speciesChips[5].scientific_name = action.s_name;
-        speciesChips[5].common_name = action.c_name;
-        return { ...speciesChips };
-      // speciesChips[0].count += 1
-
       default:
         throw new Error();
     }
-    // return speciesChips.map((chip) => {
-    //   if (chip.id == action.payload) {
-    //     chip.open = true;
-    //     chip.region = action.value
-    //   }
-    //   return chip;
-    // });
   }
-  // else {
-  // POTENTIALLY ADD ERROR MESSAGE
-  //   return menuItems;
-  // }
 };
 
 const species = () => {
@@ -292,7 +287,7 @@ const species = () => {
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
 
-  const handleSubmit = async (event, newValue) => {
+  const handleSubmit = (event, newValue) => {
     const dash = newValue.indexOf("-");
     const name = newValue.slice(0, dash - 1);
     // console.log(name);
@@ -327,24 +322,7 @@ const species = () => {
               c_name: result.COMMON_NAME,
             });
             break;
-          case 3:
-            dispatch({
-              type: "add",
-              payload: 4,
-              value: result.unique_id,
-              s_name: result.Scientific_Name,
-              c_name: result.COMMON_NAME,
-            });
-            break;
-          case 4:
-            dispatch({
-              type: "add",
-              payload: 5,
-              value: result.unique_id,
-              s_name: result.Scientific_Name,
-              c_name: result.COMMON_NAME,
-            });
-            break;
+
           default:
             throw new Error();
         }
@@ -353,6 +331,17 @@ const species = () => {
     }
     // console.log(speciesInfo1);
     setResults([]);
+  };
+
+  const handleRemoveChip = (id) => {
+    dispatch({
+      type: "remove",
+      payload: id,
+      value: [],
+      s_name: "",
+      c_name: "",
+    });
+    // return dispatch();
   };
 
   return (
@@ -395,68 +384,52 @@ const species = () => {
         Search Results
       </Typography>
 
-      {query && <>{query.COMMON_NAME}</>}
       {Array.isArray(state[1].regions) && state[1].regions.length ? (
         <Chip
-          label={state[1].scientific_name}
-          // onDelete={() => handleRemoveChip(tag)}
+          label={`${state[1].scientific_name} - ${state[1].common_name}`}
+          onDelete={() => handleRemoveChip(1)}
+          variant="outlined"
+          // color="secondary"
+          className={`${classes.chipOutline1} ${classes.chip}`}
+          classes={{
+            deleteIcon: classes.chipDelete,
+          }}
         ></Chip>
       ) : (
         <></>
       )}
       {Array.isArray(state[2].regions) && state[2].regions.length ? (
         <Chip
-          label={state[2].scientific_name}
-          // onDelete={() => handleRemoveChip(tag)}
+          label={`${state[2].scientific_name} - ${state[2].common_name}`}
+          onDelete={() => handleRemoveChip(2)}
+          variant="outlined"
+          className={`${classes.chipOutline2} ${classes.chip}`}
+          classes={{
+            deleteIcon: classes.chipDelete,
+          }}
         ></Chip>
       ) : (
         <></>
       )}
       {Array.isArray(state[3].regions) && state[3].regions.length ? (
         <Chip
-          label={state[3].scientific_name}
-          // onDelete={() => handleRemoveChip(tag)}
+          label={`${state[3].scientific_name} - ${state[3].common_name}`}
+          onDelete={() => handleRemoveChip(3)}
+          variant="outlined"
+          className={`${classes.chipOutline3} ${classes.chip}`}
+          classes={{
+            deleteIcon: classes.chipDelete,
+          }}
         ></Chip>
       ) : (
         <></>
       )}
-      {Array.isArray(state[4].regions) && state[4].regions.length ? (
-        <Chip
-          label={state[4].scientific_name}
-          // onDelete={() => handleRemoveChip(tag)}
-        ></Chip>
-      ) : (
-        <></>
-      )}
-      {Array.isArray(state[5].regions) && state[5].regions.length ? (
-        <Chip
-          label={state[5].scientific_name}
-          // onDelete={() => handleRemoveChip(tag)}
-        ></Chip>
-      ) : (
-        <></>
-      )}
-      {/* {state.map((chip) => {
-        const { open, id, regions } = chip;
 
-        return (
-          <List component="nav" aria-labelledby="nested-list" key="mainlist">
-            <ListItem
-              button
-              key={id}
-              // onClick={() => handleListClick(menuTitle)}
-            >
-              <ListItemText>
-                {open ? regions.map((region) => region) : <></>}
-              </ListItemText>
-            </ListItem>
-          </List>
-        );
-      })} */}
       <MapTag
         clickInfo={clickInfo}
         setClickInfo={setClickInfo}
         speciesInfo1={speciesInfo1}
+        state={state}
       />
     </Container>
   );
