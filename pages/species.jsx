@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useCallback, useReducer } from "react";
 import dynamic from "next/dynamic";
 import MapTag from "../components/MapTag";
 
@@ -8,10 +8,7 @@ import {
   Container,
   Typography,
   InputBase,
-  CircularProgress,
-  List,
-  ListItem,
-  ListItemText,
+  useMediaQuery,
   Chip,
 } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
@@ -109,8 +106,15 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     borderWidth: 2,
     color: theme.palette.text.primary,
-    fontSize: 16,
+    // fontSize: 16,
     height: 40,
+    margin: "0px 5px 10px 5px",
+  },
+  chipHidden: {
+    visibility: "hidden",
+  },
+  chipMobile: {
+    display: "inline-grid",
   },
   chipOutline1: {
     borderColor: "#ff00ff",
@@ -120,6 +124,13 @@ const useStyles = makeStyles((theme) => ({
   },
   chipOutline3: {
     borderColor: "#00ffff",
+  },
+  description: {
+    marginTop: 20,
+    marginLeft: 10,
+  },
+  note: {
+    marginTop: 10,
   },
 }));
 
@@ -153,7 +164,7 @@ const speciesChips = [
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (speciesChips, action) => {
   if (action.type == "remove") {
-    console.log(speciesChips);
+    // console.log(speciesChips);
     switch (action.payload) {
       case 1:
         speciesChips[1].open = speciesChips[2].open;
@@ -201,7 +212,7 @@ const reducer = (speciesChips, action) => {
     }
   }
   if (action.type == "add") {
-    console.log(speciesChips);
+    // console.log(speciesChips);
     switch (action.payload) {
       case 1:
         speciesChips[1].open = true;
@@ -243,10 +254,12 @@ const species = () => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   // set filter for autocomplete options
   //   const filter = createFilterOptions();
   // set tag options for autocomplete
-  const tags = [];
+  // const tags = [];
 
   // set tag state
   // const [tagValue, setTagValue] = useState([]);
@@ -254,11 +267,11 @@ const species = () => {
   // set id to id in url query
   const router = useRouter();
 
-  const [query, setQuery] = useState();
+  // const [query, setQuery] = useState();
   const [results, setResults] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
   const [speciesInfo1, setSpeciesInfo1] = useState([]);
-  const [speciesInfo2, setSpeciesInfo2] = useState([]);
+  // const [speciesInfo2, setSpeciesInfo2] = useState([]);
 
   //   const queryFilter = router.query.s;
 
@@ -293,7 +306,7 @@ const species = () => {
     // console.log(name);
     for (const result of results) {
       if (result.Scientific_Name == name) {
-        setQuery(result);
+        // setQuery(result);
         switch (state[0].count) {
           case 0:
             dispatch({
@@ -346,6 +359,14 @@ const species = () => {
 
   return (
     <Container>
+      <Typography variant="h3" align="center" className={classes.header}>
+        Search Species
+      </Typography>
+      <Typography variant="body1" align="left" className={classes.description}>
+        Search for a species by common or scientific name to display their
+        distribution on the map. A maximum of three species can be mapped at the
+        same time
+      </Typography>
       <Autocomplete
         className={classes.search}
         classes={{ paper: classes.popper }}
@@ -379,50 +400,92 @@ const species = () => {
           />
         )}
       />
-
-      <Typography variant="h3" align="center" className={classes.header}>
-        Search Results
-      </Typography>
-
-      {Array.isArray(state[1].regions) && state[1].regions.length ? (
-        <Chip
-          label={`${state[1].scientific_name} - ${state[1].common_name}`}
-          onDelete={() => handleRemoveChip(1)}
-          variant="outlined"
-          // color="secondary"
-          className={`${classes.chipOutline1} ${classes.chip}`}
-          classes={{
-            deleteIcon: classes.chipDelete,
-          }}
-        ></Chip>
+      {isMobile ? (
+        <div className={classes.chipMobile}>
+          {Array.isArray(state[1].regions) && state[1].regions.length ? (
+            <Chip
+              label={`${state[1].scientific_name} - ${state[1].common_name}`}
+              onDelete={() => handleRemoveChip(1)}
+              variant="outlined"
+              // color="secondary"
+              className={`${classes.chipOutline1} ${classes.chip}`}
+              classes={{
+                deleteIcon: classes.chipDelete,
+              }}
+            ></Chip>
+          ) : (
+            <Chip className={classes.chipHidden}></Chip>
+          )}
+          {Array.isArray(state[2].regions) && state[2].regions.length ? (
+            <Chip
+              label={`${state[2].scientific_name} - ${state[2].common_name}`}
+              onDelete={() => handleRemoveChip(2)}
+              variant="outlined"
+              className={`${classes.chipOutline2} ${classes.chip}`}
+              classes={{
+                deleteIcon: classes.chipDelete,
+              }}
+            ></Chip>
+          ) : (
+            <></>
+          )}
+          {Array.isArray(state[3].regions) && state[3].regions.length ? (
+            <Chip
+              label={`${state[3].scientific_name} - ${state[3].common_name}`}
+              onDelete={() => handleRemoveChip(3)}
+              variant="outlined"
+              className={`${classes.chipOutline3} ${classes.chip}`}
+              classes={{
+                deleteIcon: classes.chipDelete,
+              }}
+            ></Chip>
+          ) : (
+            <></>
+          )}
+        </div>
       ) : (
-        <></>
-      )}
-      {Array.isArray(state[2].regions) && state[2].regions.length ? (
-        <Chip
-          label={`${state[2].scientific_name} - ${state[2].common_name}`}
-          onDelete={() => handleRemoveChip(2)}
-          variant="outlined"
-          className={`${classes.chipOutline2} ${classes.chip}`}
-          classes={{
-            deleteIcon: classes.chipDelete,
-          }}
-        ></Chip>
-      ) : (
-        <></>
-      )}
-      {Array.isArray(state[3].regions) && state[3].regions.length ? (
-        <Chip
-          label={`${state[3].scientific_name} - ${state[3].common_name}`}
-          onDelete={() => handleRemoveChip(3)}
-          variant="outlined"
-          className={`${classes.chipOutline3} ${classes.chip}`}
-          classes={{
-            deleteIcon: classes.chipDelete,
-          }}
-        ></Chip>
-      ) : (
-        <></>
+        <>
+          {Array.isArray(state[1].regions) && state[1].regions.length ? (
+            <Chip
+              label={`${state[1].scientific_name} - ${state[1].common_name}`}
+              onDelete={() => handleRemoveChip(1)}
+              variant="outlined"
+              // color="secondary"
+              className={`${classes.chipOutline1} ${classes.chip}`}
+              classes={{
+                deleteIcon: classes.chipDelete,
+              }}
+            ></Chip>
+          ) : (
+            <Chip className={classes.chipHidden}></Chip>
+          )}
+          {Array.isArray(state[2].regions) && state[2].regions.length ? (
+            <Chip
+              label={`${state[2].scientific_name} - ${state[2].common_name}`}
+              onDelete={() => handleRemoveChip(2)}
+              variant="outlined"
+              className={`${classes.chipOutline2} ${classes.chip}`}
+              classes={{
+                deleteIcon: classes.chipDelete,
+              }}
+            ></Chip>
+          ) : (
+            <></>
+          )}
+          {Array.isArray(state[3].regions) && state[3].regions.length ? (
+            <Chip
+              label={`${state[3].scientific_name} - ${state[3].common_name}`}
+              onDelete={() => handleRemoveChip(3)}
+              variant="outlined"
+              className={`${classes.chipOutline3} ${classes.chip}`}
+              classes={{
+                deleteIcon: classes.chipDelete,
+              }}
+            ></Chip>
+          ) : (
+            <></>
+          )}
+        </>
       )}
 
       <MapTag
@@ -431,6 +494,12 @@ const species = () => {
         speciesInfo1={speciesInfo1}
         state={state}
       />
+      <Typography variant="subtitle2" align="left" className={classes.note}>
+        *A species distribution often does not align perfectly with ecoregion
+        boundaries, therefore a species may not be present throughout the entire
+        ecoregion but only in specific areas. A species may also be widespread
+        but in small numbers so rarely seen.
+      </Typography>
     </Container>
   );
 };

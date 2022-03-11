@@ -228,17 +228,17 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
 
   return (
     <>
-      {isMobile ? (
-        <div style={{ height: "100vh" }}>
-          {/* <div
+      {/* {isMobile ? ( */}
+      {/* <div style={{ height: "100vh" }}> */}
+      {/* <div
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
           /> */}
-          {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+      {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
           </div> */}
-          {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
-          <ReactMapGL
+      {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
+      {/* <ReactMapGL
             {...viewport}
             width="100vw"
             height="100vh"
@@ -251,15 +251,15 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
             interactiveLayerIds={["eco-fill"]}
             onHover={onHover}
             onDblClick={handleMapClick}
-          >
-            {/* <Geocoder
+          > */}
+      {/* <Geocoder
               mapRef={mapRef}
               containerRef={geocoderContainerRef}
               onViewportChange={handleViewportChange}
               mapboxApiAccessToken={mapBox}
               position="top-left"
             /> */}
-            <Source
+      {/* <Source
               id="eco-map"
               type="vector"
               url="mapbox://sl354207.ecomap-tiles"
@@ -287,86 +287,89 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
                 </Typography>
               </Popup>
             )}
-          </ReactMapGL>
-        </div>
-      ) : (
-        <div>
-          {/* <div
+          </ReactMapGL> */}
+      {/* </div> */}
+      {/* ) : ( */}
+      <div>
+        {/* <div
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
           /> */}
-          {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
+        {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
           </div> */}
-          {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
-          <ReactMapGL
-            {...viewport}
-            width="60vw"
-            height="60vh"
-            minZoom={2}
-            maxZoom={9}
-            doubleClickZoom={false}
-            mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-            onViewportChange={handleViewportChange}
-            mapboxApiAccessToken={mapBox}
-            interactiveLayerIds={["eco-fill"]}
-            onHover={onHover}
-            onClick={handleMapClick}
-          >
-            {/* <Geocoder
+        {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
+        <ReactMapGL
+          {...viewport}
+          width="auto"
+          height="70vh"
+          minZoom={2}
+          maxZoom={9}
+          doubleClickZoom={false}
+          mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
+          onViewportChange={handleViewportChange}
+          mapboxApiAccessToken={mapBox}
+          interactiveLayerIds={["eco-fill"]}
+          onHover={onHover}
+          onClick={handleMapClick}
+          onRender={(e) => {
+            console.log(e);
+          }}
+        >
+          {/* <Geocoder
               mapRef={mapRef}
               containerRef={geocoderContainerRef}
               onViewportChange={handleViewportChange}
               mapboxApiAccessToken={mapBox}
               position="top-left"
             /> */}
-            <Source
-              id="eco-map"
-              type="vector"
-              url="mapbox://sl354207.ecomap-tiles"
-            >
-              <Layer beforeId="waterway-label" {...ecoLine} />
-              <Layer beforeId="waterway-label" {...ecoFill} />
+          <Source
+            id="eco-map"
+            type="vector"
+            url="mapbox://sl354207.ecomap-tiles"
+          >
+            <Layer beforeId="waterway-label" {...ecoFill} />
 
-              <Layer
-                beforeId="waterway-label"
-                {...ecoFill5}
-                filter={speciesFilter3}
-              />
-              <Layer
-                beforeId="waterway-label"
-                {...ecoFill4}
-                filter={speciesFilter2}
-              />
-              <Layer
-                beforeId="waterway-label"
-                {...ecoFill3}
-                filter={speciesFilter1}
-              />
-              <Layer
-                beforeId="waterway-label"
-                {...ecoFill2}
-                filter={clickFilter}
-              />
-              <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
-            </Source>
-            {selectedRegion && (
-              <Popup
-                longitude={hoverInfo.longitude}
-                latitude={hoverInfo.latitude}
-                closeButton={false}
-              >
-                <Typography color="textSecondary" align="center">
-                  {ecoName}
-                </Typography>
-                <Typography color="textSecondary" align="center">
-                  Eco-{selectedRegion}
-                </Typography>
-              </Popup>
-            )}
-          </ReactMapGL>
-        </div>
-      )}
+            <Layer
+              beforeId="waterway-label"
+              {...ecoFill5}
+              filter={speciesFilter3}
+            />
+            <Layer
+              beforeId="waterway-label"
+              {...ecoFill4}
+              filter={speciesFilter2}
+            />
+            <Layer
+              beforeId="waterway-label"
+              {...ecoFill3}
+              filter={speciesFilter1}
+            />
+            <Layer
+              beforeId="waterway-label"
+              {...ecoFill2}
+              filter={clickFilter}
+            />
+            <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
+            <Layer beforeId="waterway-label" {...ecoLine} />
+          </Source>
+          {selectedRegion && (
+            <Popup
+              longitude={hoverInfo.longitude}
+              latitude={hoverInfo.latitude}
+              closeButton={false}
+            >
+              <Typography color="textSecondary" align="center">
+                {ecoName}
+              </Typography>
+              <Typography color="textSecondary" align="center">
+                Eco-{selectedRegion}
+              </Typography>
+            </Popup>
+          )}
+        </ReactMapGL>
+      </div>
+      {/* )} */}
     </>
   );
 };
