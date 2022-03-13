@@ -10,6 +10,7 @@ import {
   InputBase,
   useMediaQuery,
   Chip,
+  TextField,
 } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
@@ -58,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
+    // "&:hover": {
+    //   // backgroundColor: alpha(theme.palette.common.white, 0.25),
+    //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+    //   outline: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+    // },
     // marginLeft: 0,
     // width: "100%",
     // [theme.breakpoints.up("sm")]: {
@@ -69,6 +75,17 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: theme.palette.text.primary,
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+      },
+      "&:hover fieldset": {
+        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+      },
+      "&.Mui-focused fieldset": {
+        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+      },
+    },
   },
   inputInput: {
     padding: theme.spacing(2, 2, 2, 0),
@@ -301,49 +318,51 @@ const species = () => {
   const [state, dispatch] = useReducer(reducer, speciesChips);
 
   const handleSubmit = (event, newValue) => {
-    const dash = newValue.indexOf("-");
-    const name = newValue.slice(0, dash - 1);
-    // console.log(name);
-    for (const result of results) {
-      if (result.Scientific_Name == name) {
-        // setQuery(result);
-        switch (state[0].count) {
-          case 0:
-            dispatch({
-              type: "add",
-              payload: 1,
-              value: result.unique_id,
-              s_name: result.Scientific_Name,
-              c_name: result.COMMON_NAME,
-            });
-            break;
-          case 1:
-            dispatch({
-              type: "add",
-              payload: 2,
-              value: result.unique_id,
-              s_name: result.Scientific_Name,
-              c_name: result.COMMON_NAME,
-            });
-            break;
-          case 2:
-            dispatch({
-              type: "add",
-              payload: 3,
-              value: result.unique_id,
-              s_name: result.Scientific_Name,
-              c_name: result.COMMON_NAME,
-            });
-            break;
+    if (newValue != null) {
+      const dash = newValue.indexOf("-");
+      const name = newValue.slice(0, dash - 1);
+      // console.log(name);
+      for (const result of results) {
+        if (result.Scientific_Name == name) {
+          // setQuery(result);
+          switch (state[0].count) {
+            case 0:
+              dispatch({
+                type: "add",
+                payload: 1,
+                value: result.unique_id,
+                s_name: result.Scientific_Name,
+                c_name: result.COMMON_NAME,
+              });
+              break;
+            case 1:
+              dispatch({
+                type: "add",
+                payload: 2,
+                value: result.unique_id,
+                s_name: result.Scientific_Name,
+                c_name: result.COMMON_NAME,
+              });
+              break;
+            case 2:
+              dispatch({
+                type: "add",
+                payload: 3,
+                value: result.unique_id,
+                s_name: result.Scientific_Name,
+                c_name: result.COMMON_NAME,
+              });
+              break;
 
-          default:
-            throw new Error();
+            default:
+              throw new Error();
+          }
+          // setSpeciesInfo1([...result.unique_id]);
         }
-        // setSpeciesInfo1([...result.unique_id]);
       }
+      // console.log(speciesInfo1);
+      setResults([]);
     }
-    // console.log(speciesInfo1);
-    setResults([]);
   };
 
   const handleRemoveChip = (id) => {
@@ -371,10 +390,11 @@ const species = () => {
         className={classes.search}
         classes={{ paper: classes.popper }}
         autoHighlight
-        disableClearable={true}
+        // disableClearable={true}
         onChange={(event, newValue) => handleSubmit(event, newValue)}
         selectOnFocus
         clearOnBlur
+        // clearText="Clear"
         handleHomeEndKeys
         id="free-solo-with-text-demo"
         options={
@@ -386,13 +406,14 @@ const species = () => {
         }
         filterOptions={(x) => x}
         freeSolo
+        // closeIcon
         renderInput={(params) => (
-          <InputBase
+          <TextField
             {...params}
             placeholder="Search…"
+            variant="outlined"
             classes={{
               root: classes.inputRoot,
-              input: classes.inputInput,
             }}
             ref={params.InputProps.ref}
             inputProps={params.inputProps}

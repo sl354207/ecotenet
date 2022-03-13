@@ -2,8 +2,6 @@ import { useState, useMemo, useCallback, useRef } from "react";
 import Map, { Popup, Source, Layer, mapRef } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import Geocoder from "react-map-gl-geocoder";
-import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
 import { Button, useMediaQuery, Typography } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -63,6 +61,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#ff00ff",
+      // "fill-color": "#990399",
       "fill-opacity": 0.4,
     },
   };
@@ -75,6 +74,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#ffff00",
+      // "fill-color": "#fcfbcc",
       "fill-opacity": 0.6,
     },
   };
@@ -87,6 +87,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#00ffff",
+      // "fill-color": "#00ffff",
       "fill-opacity": 0.8,
     },
   };
