@@ -256,6 +256,10 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     //   sourceLayer: "ecomap-tiles",
     //   filter: speciesFilter1,
     // });
+    // const mapFilter = mapRef.current?.queryRenderedFeatures({
+    //   layers: ["eco-fill3"],
+    //   // filter: speciesFilter1,
+    // });
     const mapFilter = mapRef.current?.queryRenderedFeatures({
       layers: ["eco-fill3"],
       // filter: speciesFilter1,
@@ -344,6 +348,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
           </div> */}
         {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
         <Map
+          reuseMaps
           style={{ width: "auto", height: "94vh" }}
           // ref={mapRef}
           // {...viewport}

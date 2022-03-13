@@ -1,9 +1,11 @@
 import { useState, useMemo, useCallback, useRef } from "react";
+
 import Map, { Popup, Source, Layer } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import Geocoder from "react-map-gl-geocoder";
-import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import Geocoder from "../components/Geocoder";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+
 import { useRouter } from "next/router";
 import { Typography, useMediaQuery } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -137,20 +139,15 @@ const MapMain = () => {
   return (
     <>
       {isMobile ? (
-        <div style={{ height: "94vh" }}>
+        <div style={{ height: "91vh" }}>
           {/* <div
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 100, left: 20, zIndex: 1 }}
           /> */}
-          {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
-            <Button variant="contained">test</Button>
-          </div> */}
+
           <Map
-            style={{ width: "100vw", height: "94vh" }}
-            // ref={mapRef}
-            // {...viewport}
-            // width="100vw"
-            // height="94vh"
+            reuseMaps
+            style={{ width: "auto", height: "91vh" }}
             initialViewState={{
               latitude: 37.8,
               longitude: -98,
@@ -162,22 +159,12 @@ const MapMain = () => {
             maxZoom={9}
             doubleClickZoom={false}
             mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-            // onViewportChange={handleViewportChange}
             mapboxAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
             // onMouseMove={onHover}
             onDblClick={handleClick}
           >
-            {/* <Geocoder
-              mapRef={mapRef}
-              containerRef={geocoderContainerRef}
-              onViewportChange={handleViewportChange}
-              mapboxAccessToken={mapBox}
-              position="top-left"
-              placeholder="Search Map"
-              clearAndBlurOnEsc="true"
-              clearOnBlur="true"
-            /> */}
+            <Geocoder mapboxAccessToken={mapBox} position="top-left" />
             <Source
               id="ecomap"
               type="vector"
@@ -204,7 +191,7 @@ const MapMain = () => {
           </Map>
         </div>
       ) : (
-        <div style={{ height: "94vh" }}>
+        <div style={{ height: "91vh" }}>
           {/* <div
             ref={geocoderContainerRef}
             style={{
@@ -214,15 +201,9 @@ const MapMain = () => {
               zIndex: 1,
             }}
           /> */}
-          {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
-            <Button variant="contained">test</Button>
-          </div> */}
+
           <Map
-            style={{ width: "100vw", height: "94vh" }}
-            // ref={mapRef}
-            // {...viewport}
-            // width="100vw"
-            // height="94vh"
+            style={{ width: "auto", height: "91vh" }}
             initialViewState={{
               latitude: 37.8,
               longitude: -98,
@@ -234,22 +215,18 @@ const MapMain = () => {
             maxZoom={9}
             doubleClickZoom={false}
             mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-            // onViewportChange={handleViewportChange}
             mapboxAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
             onMouseMove={onHover}
             onClick={handleClick}
           >
-            {/* <Geocoder
-              mapRef={mapRef}
-              containerRef={geocoderContainerRef}
-              onViewportChange={handleViewportChange}
+            <Geocoder
               mapboxAccessToken={mapBox}
               position="top-left"
               placeholder="Search Map"
-              clearAndBlurOnEsc="true"
-              clearOnBlur="true"
-            /> */}
+              clearAndBlurOnEsc
+              clearOnBlur
+            />
             <Source
               id="ecomap"
               type="vector"

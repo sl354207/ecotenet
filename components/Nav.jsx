@@ -469,7 +469,7 @@ const Nav = ({ ecoFilter }) => {
                 renderInput={(params) => (
                   <InputBase
                     {...params}
-                    placeholder="Search…"
+                    placeholder="Search Site…"
                     classes={{
                       root: classes.inputRoot,
                       input: classes.inputInput,
