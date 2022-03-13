@@ -1,11 +1,13 @@
 import { useState, useMemo, useCallback, useRef } from "react";
-import ReactMapGL, { Popup, Source, Layer } from "react-map-gl";
+import Map, { Popup, Source, Layer, mapRef } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+
 import Geocoder from "react-map-gl-geocoder";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
 import { Button, useMediaQuery, Typography } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { ContactSupportOutlined } from "@material-ui/icons";
 
 // const { MAPBOX } = process.env;
 
@@ -117,21 +119,26 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
   const [hoverInfo, setHoverInfo] = useState(null);
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
-  const onHover = useCallback((event) => {
-    const region = event.features && event.features[0];
+  const onHover = useCallback(
+    (event) => {
+      const region = event.features && event.features[0];
+      // console.log(region.properties.unique_id);
+      if (region.properties.unique_id != "<NA>") {
+        setHoverInfo({
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          regionName: region && region.properties.name,
+          regionNum: region && region.properties.unique_id,
+        });
+      }
 
-    if (region && region.properties.unique_id != "<NA>") {
-      setHoverInfo({
-        longitude: event.lngLat[0],
-        latitude: event.lngLat[1],
-        regionName: region && region.properties.name,
-        regionNum: region && region.properties.unique_id,
-      });
-    }
-    // console.log(region);
-  }, []);
+      // console.log(hoverInfo);
+    },
+    [hoverInfo]
+  );
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
+  // console.log(selectedRegion);
 
   const ecoName = (hoverInfo && hoverInfo.regionName) || "";
 
@@ -182,9 +189,19 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
           return [...clickInfo];
         }
       });
+      // setHoverInfo({
+      //   longitude: event.lngLat.lng,
+      //   latitude: event.lngLat.lat,
+      //   regionName: region && region.properties.name,
+      //   regionNum: region && region.properties.unique_id,
+      // });
+      // let mapFilter = mapRef.current?.getFilter("click");
+      // let mapFilter = mapRef.current?.getMap("");
+      // console.log(mapRef.current?.getFilter("hover"));
+      // mapRef.current?.flyTo({ center: [-122.4, 37.8], duration: 2000 });
     }
 
-    // console.log(clickInfo.clickInfo);
+    // console.log(clickInfo);
   }, []);
 
   // console.log(handleMapClick);
@@ -192,17 +209,18 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
   const clickedRegions = clickInfo;
   // console.log(clickedRegions);
 
-  // // const clickFilter = useMemo(
-  // //   () => ["in", "ECO_NAME", ...clickedRegions],
+  // const clickFilter = useMemo(
+  //   () => ["in", "ECO_NAME", ...clickedRegions],
 
-  // //   [clickedRegions]
-  // // );
+  //   [clickedRegions]
+  // );
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
   const speciesRegions1 = state[1].regions;
   // console.log(speciesRegions1);
 
   const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  // const speciesFilter1 = ["in", "unique_id", "313"];
   // console.log(speciesFilter1);
 
   const speciesRegions2 = state[2].regions;
@@ -226,6 +244,32 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     []
   );
 
+  const mapRef = useRef();
+
+  const onMapLoad = useCallback(() => {
+    // console.log(event.features);
+    // mapRef.current.on("click", () => {
+    //   // do something
+    //   map.flyTo({ center: [-122.4, 37.8] });
+    // });
+    // const mapFilter = mapRef.current?.querySourceFeatures("eco-map", {
+    //   sourceLayer: "ecomap-tiles",
+    //   filter: speciesFilter1,
+    // });
+    const mapFilter = mapRef.current?.queryRenderedFeatures({
+      layers: ["eco-fill3"],
+      // filter: speciesFilter1,
+    });
+    // const mapFilter = mapRef.current?.getFeatureState({
+    //   source: "eco-map",
+    //   sourceLayer: "ecomap-tiles",
+    //   id: 1910158490491681,
+    // });
+    console.log(mapFilter);
+    // let mapFilter = mapRef.current?.getMap("");
+    // const coord = mapFilter[0].geometry.coordinates[0][0];
+    // mapRef.current?.flyTo({ center: coord, duration: 2000 });
+  }, []);
   return (
     <>
       {/* {isMobile ? ( */}
@@ -299,22 +343,31 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
             <Button variant="contained">test</Button>
           </div> */}
         {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
-        <ReactMapGL
-          {...viewport}
-          width="auto"
-          height="70vh"
+        <Map
+          style={{ width: "auto", height: "94vh" }}
+          // ref={mapRef}
+          // {...viewport}
+          // width="100vw"
+          // height="94vh"
+          initialViewState={{
+            latitude: 37.8,
+            longitude: -98,
+            zoom: 4,
+            bearing: 0,
+            pitch: 0,
+          }}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-          onViewportChange={handleViewportChange}
-          mapboxApiAccessToken={mapBox}
+          // onViewportChange={handleViewportChange}
+          mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
-          onHover={onHover}
+          onMouseMove={onHover}
           onClick={handleMapClick}
-          onRender={(e) => {
-            console.log(e);
-          }}
+          ref={mapRef}
+          // onClick={onMapLoad}
+          // onSourceData={onMapLoad}
         >
           {/* <Geocoder
               mapRef={mapRef}
@@ -328,7 +381,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
             type="vector"
             url="mapbox://sl354207.ecomap-tiles"
           >
-            <Layer beforeId="waterway-label" {...ecoFill} />
+            <Layer id="base" beforeId="waterway-label" {...ecoFill} />
 
             <Layer
               beforeId="waterway-label"
@@ -341,16 +394,23 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
               filter={speciesFilter2}
             />
             <Layer
+              id="species1"
               beforeId="waterway-label"
               {...ecoFill3}
               filter={speciesFilter1}
             />
             <Layer
+              id="click"
               beforeId="waterway-label"
               {...ecoFill2}
               filter={clickFilter}
             />
-            <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
+            <Layer
+              id="hover"
+              beforeId="waterway-label"
+              {...ecoFill1}
+              filter={filter}
+            />
             <Layer beforeId="waterway-label" {...ecoLine} />
           </Source>
           {selectedRegion && (
@@ -358,6 +418,8 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
               longitude={hoverInfo.longitude}
               latitude={hoverInfo.latitude}
               closeButton={false}
+              closeOnClick={false}
+              maxWidth="500px"
             >
               <Typography color="textSecondary" align="center">
                 {ecoName}
@@ -367,7 +429,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
               </Typography>
             </Popup>
           )}
-        </ReactMapGL>
+        </Map>
       </div>
       {/* )} */}
     </>

@@ -246,10 +246,10 @@ const reducer = (speciesChips, action) => {
 
 const species = () => {
   // need to dynamically import to work with mapbox
-  //   const MapTag = dynamic(() => import("../components/MapTag"), {
-  //     loading: () => "Loading...",
-  //     ssr: false,
-  //   });
+  // const MapTag = dynamic(() => import("../components/MapTag"), {
+  //   loading: () => "Loading...",
+  //   ssr: false,
+  // });
   // console.log(dog);
   const classes = useStyles();
   const theme = useTheme();

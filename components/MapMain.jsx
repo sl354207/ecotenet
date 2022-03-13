@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useRef } from "react";
-import ReactMapGL, { Popup, Source, Layer } from "react-map-gl";
+import Map, { Popup, Source, Layer } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+
 import Geocoder from "react-map-gl-geocoder";
 import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { useRouter } from "next/router";
@@ -13,7 +14,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 //   },
 // }));
 
-const Map = () => {
+const MapMain = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
   // const classes = useStyles();
@@ -75,19 +76,23 @@ const Map = () => {
   const [hoverInfo, setHoverInfo] = useState(null);
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
-  const onHover = useCallback((event) => {
-    const region = event.features && event.features[0];
-    if (region && region.properties.unique_id != "<NA>") {
-      setHoverInfo({
-        longitude: event.lngLat[0],
-        latitude: event.lngLat[1],
-        regionName: region && region.properties.name,
-        regionNum: region && region.properties.unique_id,
-      });
-    }
+  const onHover = useCallback(
+    (event) => {
+      const region = event.features && event.features[0];
+      // console.log(region.properties.unique_id);
+      if (region.properties.unique_id != "<NA>") {
+        setHoverInfo({
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          regionName: region && region.properties.name,
+          regionNum: region && region.properties.unique_id,
+        });
+      }
 
-    // console.log(hoverInfo);
-  }, []);
+      // console.log(hoverInfo);
+    },
+    [hoverInfo]
+  );
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
 
@@ -133,38 +138,46 @@ const Map = () => {
     <>
       {isMobile ? (
         <div style={{ height: "94vh" }}>
-          <div
+          {/* <div
             ref={geocoderContainerRef}
             style={{ position: "absolute", top: 100, left: 20, zIndex: 1 }}
-          />
+          /> */}
           {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
           </div> */}
-          <ReactMapGL
-            ref={mapRef}
-            {...viewport}
-            width="100vw"
-            height="94vh"
+          <Map
+            style={{ width: "100vw", height: "94vh" }}
+            // ref={mapRef}
+            // {...viewport}
+            // width="100vw"
+            // height="94vh"
+            initialViewState={{
+              latitude: 37.8,
+              longitude: -98,
+              zoom: 4,
+              bearing: 0,
+              pitch: 0,
+            }}
             minZoom={2}
             maxZoom={9}
             doubleClickZoom={false}
             mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-            onViewportChange={handleViewportChange}
-            mapboxApiAccessToken={mapBox}
+            // onViewportChange={handleViewportChange}
+            mapboxAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
-            onHover={onHover}
+            // onMouseMove={onHover}
             onDblClick={handleClick}
           >
-            <Geocoder
+            {/* <Geocoder
               mapRef={mapRef}
               containerRef={geocoderContainerRef}
               onViewportChange={handleViewportChange}
-              mapboxApiAccessToken={mapBox}
+              mapboxAccessToken={mapBox}
               position="top-left"
               placeholder="Search Map"
               clearAndBlurOnEsc="true"
               clearOnBlur="true"
-            />
+            /> */}
             <Source
               id="ecomap"
               type="vector"
@@ -188,11 +201,11 @@ const Map = () => {
                 </Typography>
               </Popup>
             )}
-          </ReactMapGL>
+          </Map>
         </div>
       ) : (
         <div style={{ height: "94vh" }}>
-          <div
+          {/* <div
             ref={geocoderContainerRef}
             style={{
               position: "absolute",
@@ -200,35 +213,43 @@ const Map = () => {
               left: 20,
               zIndex: 1,
             }}
-          />
+          /> */}
           {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
             <Button variant="contained">test</Button>
           </div> */}
-          <ReactMapGL
-            ref={mapRef}
-            {...viewport}
-            width="100vw"
-            height="94vh"
+          <Map
+            style={{ width: "100vw", height: "94vh" }}
+            // ref={mapRef}
+            // {...viewport}
+            // width="100vw"
+            // height="94vh"
+            initialViewState={{
+              latitude: 37.8,
+              longitude: -98,
+              zoom: 4,
+              bearing: 0,
+              pitch: 0,
+            }}
             minZoom={2}
             maxZoom={9}
             doubleClickZoom={false}
             mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-            onViewportChange={handleViewportChange}
-            mapboxApiAccessToken={mapBox}
+            // onViewportChange={handleViewportChange}
+            mapboxAccessToken={mapBox}
             interactiveLayerIds={["eco-fill"]}
-            onHover={onHover}
+            onMouseMove={onHover}
             onClick={handleClick}
           >
-            <Geocoder
+            {/* <Geocoder
               mapRef={mapRef}
               containerRef={geocoderContainerRef}
               onViewportChange={handleViewportChange}
-              mapboxApiAccessToken={mapBox}
+              mapboxAccessToken={mapBox}
               position="top-left"
               placeholder="Search Map"
               clearAndBlurOnEsc="true"
               clearOnBlur="true"
-            />
+            /> */}
             <Source
               id="ecomap"
               type="vector"
@@ -243,6 +264,7 @@ const Map = () => {
                 longitude={hoverInfo.longitude}
                 latitude={hoverInfo.latitude}
                 closeButton={false}
+                maxWidth="500px"
                 // className={classes.pointer}
               >
                 <Typography color="textSecondary" align="center">
@@ -252,12 +274,13 @@ const Map = () => {
                   Eco-{selectedRegion}
                 </Typography>
               </Popup>
+              // <></>
             )}
-          </ReactMapGL>
+          </Map>
         </div>
       )}
     </>
   );
 };
 
-export default Map;
+export default MapMain;
