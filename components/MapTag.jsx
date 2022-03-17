@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import Map, { Popup, Source, Layer, mapRef } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { Button, useMediaQuery, Typography } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { ContactSupportOutlined } from "@material-ui/icons";
+
+import Coords from "../data/eco_coord.json";
 
 // const { MAPBOX } = process.env;
 
@@ -109,7 +111,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
       "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
     },
   };
-  const [viewport, setViewport] = useState({
+  const [viewState, setViewState] = useState({
     latitude: 37.8,
     longitude: -98,
     zoom: 4,
@@ -240,41 +242,110 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
 
   // const geocoderContainerRef = useRef();
   // const mapRef = useRef();
-  const handleViewportChange = useCallback(
-    (newViewport) => setViewport(newViewport),
-    []
-  );
+  // const handleViewportChange = useCallback(
+  //   (newViewport) => setViewport(newViewport),
+  //   []
+  // );
 
   const mapRef = useRef();
 
-  const onMapLoad = useCallback(() => {
-    // console.log(event.features);
-    // mapRef.current.on("click", () => {
-    //   // do something
-    //   map.flyTo({ center: [-122.4, 37.8] });
-    // });
-    // const mapFilter = mapRef.current?.querySourceFeatures("eco-map", {
-    //   sourceLayer: "ecomap-tiles",
-    //   filter: speciesFilter1,
-    // });
-    // const mapFilter = mapRef.current?.queryRenderedFeatures({
-    //   layers: ["eco-fill3"],
-    //   // filter: speciesFilter1,
-    // });
-    const mapFilter = mapRef.current?.queryRenderedFeatures({
-      layers: ["eco-fill3"],
-      // filter: speciesFilter1,
-    });
-    // const mapFilter = mapRef.current?.getFeatureState({
-    //   source: "eco-map",
-    //   sourceLayer: "ecomap-tiles",
-    //   id: 1910158490491681,
-    // });
-    console.log(mapFilter);
-    // let mapFilter = mapRef.current?.getMap("");
-    // const coord = mapFilter[0].geometry.coordinates[0][0];
-    // mapRef.current?.flyTo({ center: coord, duration: 2000 });
-  }, []);
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }
+
+  const prevCount1 = usePrevious(speciesRegions1);
+  const prevCount2 = usePrevious(speciesRegions2);
+  const prevCount3 = usePrevious(speciesRegions3);
+
+  const onMove = useCallback(
+    (prevCount1, prevCount2, prevCount3) => {
+      // console.log(event);
+      // console.log(viewState);
+      // console.log(prevViewState);
+      if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
+        // setViewState(viewState);
+        const coord = Coords.filter(
+          (region) => region.unique_id == speciesRegions1[0]
+        );
+        // console.log(coord);
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3,
+        });
+      }
+      if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
+        const coord = Coords.filter(
+          (region) => region.unique_id == speciesRegions2[0]
+        );
+        // console.log(coord);
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3,
+        });
+      }
+      if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
+        const coord = Coords.filter(
+          (region) => region.unique_id == speciesRegions3[0]
+        );
+        // console.log(coord);
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3,
+        });
+      }
+
+      // console.log(newViewState);
+      // console.log(prevCount);
+      // console.log(speciesRegions1);
+    },
+    [speciesRegions1, speciesRegions2, speciesRegions3]
+  );
+
+  // const onMapLoad = useCallback(() => {
+  //   // console.log(event.features);
+  //   // mapRef.current.on("click", () => {
+  //   //   // do something
+  //   //   map.flyTo({ center: [-122.4, 37.8] });
+  //   // });
+  //   // const mapFilter = mapRef.current?.querySourceFeatures("eco-map", {
+  //   //   sourceLayer: "ecomap-tiles",
+  //   //   filter: speciesFilter1,
+  //   // });
+  //   // const mapFilter = mapRef.current?.queryRenderedFeatures({
+  //   //   layers: ["eco-fill3"],
+  //   //   // filter: speciesFilter1,
+  //   // });
+  //   // const mapFilter = mapRef.current?.queryRenderedFeatures({
+  //   //   layers: ["eco-fill3"],
+  //   //   // filter: speciesFilter1,
+  //   // });
+  //   // const mapFilter = mapRef.current?.getFeatureState({
+  //   //   source: "eco-map",
+  //   //   sourceLayer: "ecomap-tiles",
+  //   //   id: 1910158490491681,
+  //   // });
+  //   // console.log(mapFilter);
+  //   // let mapFilter = mapRef.current?.getMap("");
+  //   // console.log(speciesRegions1.length);
+  //   if (
+  //     speciesRegions1.length > 0
+  //     // ||
+  //     // speciesRegions1 != Array(0)
+  //     // ||
+  //     // speciesRegions1 != undefined
+  //   ) {
+  //     const coord = [-112.3499421143609, 29.324581359154894];
+  //     mapRef.current?.flyTo({ center: coord, duration: 2000 });
+  //     console.log(speciesRegions1);
+  //   }
+  // }, [speciesFilter1]);
   return (
     <>
       {/* {isMobile ? ( */}
@@ -340,14 +411,6 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
       {/* </div> */}
       {/* ) : ( */}
       <div>
-        {/* <div
-            ref={geocoderContainerRef}
-            style={{ position: "absolute", top: 20, right: 20, zIndex: 1 }}
-          /> */}
-        {/* <div style={{ position: "absolute", top: 20, left: 20, zIndex: 2 }}>
-            <Button variant="contained">test</Button>
-          </div> */}
-        {/* ref={mapRef}. ADD THIS IN REACTMAPGL COMPONENT IF YOU WANT SEARCH GEOCODER */}
         <Map
           reuseMaps
           style={{ width: "auto", height: "94vh" }}
@@ -362,6 +425,9 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
             bearing: 0,
             pitch: 0,
           }}
+          // {...viewState}
+          // onMove={onMove}
+          // onMove={(evt) => console.log(evt)}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}
@@ -373,15 +439,8 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
           onClick={handleMapClick}
           ref={mapRef}
           // onClick={onMapLoad}
-          // onSourceData={onMapLoad}
+          onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         >
-          {/* <Geocoder
-              mapRef={mapRef}
-              containerRef={geocoderContainerRef}
-              onViewportChange={handleViewportChange}
-              mapboxApiAccessToken={mapBox}
-              position="top-left"
-            /> */}
           <Source
             id="eco-map"
             type="vector"
