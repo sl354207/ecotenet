@@ -5,7 +5,7 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { Button } from "@material-ui/core";
 import { Chip } from "@material-ui/core";
-import MapEditor from "../Editor";
+import MapEditor from "../MapEditor";
 
 //pass in and destructure props.
 const PostDetails = ({
