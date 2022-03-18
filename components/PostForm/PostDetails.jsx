@@ -5,7 +5,7 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { Button } from "@material-ui/core";
 import { Chip } from "@material-ui/core";
-import MapTag from "../MapTag";
+import MapEditor from "../Editor";
 
 //pass in and destructure props.
 const PostDetails = ({
@@ -174,7 +174,7 @@ const PostDetails = ({
           ))}
         </Grid>
       </Grid>
-      <MapTag clickInfo={clickInfo} setClickInfo={setClickInfo} />
+      <MapEditor clickInfo={clickInfo} setClickInfo={setClickInfo} />
 
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
