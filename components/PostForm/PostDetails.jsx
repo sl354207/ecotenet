@@ -25,11 +25,11 @@ const PostDetails = ({
   clickInfo,
   setClickInfo,
 }) => {
-  // need to dynamically import to work with mapbox
-  const Map = dynamic(() => import("../MapTag"), {
-    loading: () => "Loading...",
-    ssr: false,
-  });
+  // // need to dynamically import to work with mapbox
+  // const Map = dynamic(() => import("../MapTag"), {
+  //   loading: () => "Loading...",
+  //   ssr: false,
+  // });
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
