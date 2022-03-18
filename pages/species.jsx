@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useState, useCallback, useReducer } from "react";
 import dynamic from "next/dynamic";
-import MapTag from "../components/MapTag";
+import MapSpecies from "../components/MapSpecies";
 
 import {
   Container,
@@ -365,6 +365,29 @@ const species = () => {
     }
   };
 
+  const handleMapClick = useCallback((event) => {
+    const region = event.features && event.features[0];
+    // console.log(region);
+    if (region && region.properties.unique_id != "<NA>") {
+      setClickInfo((clickInfo) => {
+        // console.log(clickInfo);
+        if (!clickInfo.includes(region && region.properties.unique_id)) {
+          return [...clickInfo, region && region.properties.unique_id];
+        } else {
+          const removed = clickInfo.splice(
+            clickInfo.indexOf(region.properties.unique_id),
+            1
+          );
+          // console.log(removed);
+          // console.log(clickInfo);
+          return [...clickInfo];
+        }
+      });
+    }
+
+    // console.log(clickInfo);
+  }, []);
+
   const handleRemoveChip = (id) => {
     dispatch({
       type: "remove",
@@ -509,10 +532,9 @@ const species = () => {
         </>
       )}
 
-      <MapTag
+      <MapSpecies
         clickInfo={clickInfo}
-        setClickInfo={setClickInfo}
-        speciesInfo1={speciesInfo1}
+        // handleDblClick={handleMapClick}
         state={state}
       />
       <Typography variant="subtitle2" align="left" className={classes.note}>

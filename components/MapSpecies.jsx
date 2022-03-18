@@ -3,7 +3,12 @@ import Map, { Popup, Source, Layer, mapRef } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useRouter } from "next/router";
-import { Button, useMediaQuery, Typography } from "@material-ui/core";
+import {
+  Button,
+  useMediaQuery,
+  Typography,
+  CircularProgress,
+} from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { ContactSupportOutlined } from "@material-ui/icons";
 
@@ -11,11 +16,17 @@ import Coords from "../data/eco_coord.json";
 
 // const { MAPBOX } = process.env;
 
-const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
+const useStyles = makeStyles((theme) => ({
+  popup: {
+    display: "grid",
+  },
+}));
+
+const MapSpecies = ({ clickInfo, state }) => {
   // console.log(speciesInfo1);
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-
+  const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   // base layer
@@ -38,7 +49,8 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     "source-layer": "ecomap-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#627BC1",
+      // "fill-color": "#627BC1",
+      "fill-color": "#94c9ff",
       "fill-opacity": 0.5,
     },
   };
@@ -111,19 +123,17 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
       "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
     },
   };
-  const [viewState, setViewState] = useState({
-    latitude: 37.8,
-    longitude: -98,
-    zoom: 4,
-    bearing: 0,
-    pitch: 0,
-  });
 
   const [hoverInfo, setHoverInfo] = useState(null);
+
+  const [showPopup, setShowPopup] = useState(true);
+
+  const [showLoad, setShowLoad] = useState(false);
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback(
     (event) => {
+      setShowPopup(true);
       const region = event.features && event.features[0];
       // console.log(region.properties.unique_id);
       if (region.properties.unique_id != "<NA>") {
@@ -165,49 +175,18 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
   //     .replace(/[^\w-]+/g, "")
   //     .replace(/--+/g, "-");
 
-  // const handleClick = (event) => {
-  //   const region = event.features && event.features[0];
-  //   // console.log(selectedRegion);
-  //   if (selectedRegion !== "") {
-  //     const slug = slugify(selectedRegion);
-  //     router.push(`/${slug}`);
-  //   }
-  // };
-
-  const handleMapClick = useCallback((event) => {
-    const region = event.features && event.features[0];
-    // console.log(region);
-    if (region && region.properties.unique_id != "<NA>") {
-      setClickInfo((clickInfo) => {
-        // console.log(clickInfo);
-        if (!clickInfo.includes(region && region.properties.unique_id)) {
-          return [...clickInfo, region && region.properties.unique_id];
-        } else {
-          const removed = clickInfo.splice(
-            clickInfo.indexOf(region.properties.unique_id),
-            1
-          );
-          // console.log(removed);
-          // console.log(clickInfo);
-          return [...clickInfo];
-        }
-      });
-      // setHoverInfo({
-      //   longitude: event.lngLat.lng,
-      //   latitude: event.lngLat.lat,
-      //   regionName: region && region.properties.name,
-      //   regionNum: region && region.properties.unique_id,
-      // });
-      // let mapFilter = mapRef.current?.getFilter("click");
-      // let mapFilter = mapRef.current?.getMap("");
-      // console.log(mapRef.current?.getFilter("hover"));
-      // mapRef.current?.flyTo({ center: [-122.4, 37.8], duration: 2000 });
-    }
-
-    // console.log(clickInfo);
-  }, []);
-
-  // console.log(handleMapClick);
+  const handleClick = (event) => {
+    // const handleClick = (event) => {
+    // const region = event.features && event.features[0];
+    // // console.log(selectedRegion);
+    // if (selectedRegion !== "") {
+    //   const slug = slugify(selectedRegion);
+    //   // router.push(`/${slug}`);
+    //   router.push("/success");
+    // }
+    setShowLoad(true);
+    router.push("/success");
+  };
 
   const clickedRegions = clickInfo;
   // console.log(clickedRegions);
@@ -240,13 +219,6 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
 
   // console.log(clickFilter);
 
-  // const geocoderContainerRef = useRef();
-  // const mapRef = useRef();
-  // const handleViewportChange = useCallback(
-  //   (newViewport) => setViewport(newViewport),
-  //   []
-  // );
-
   const mapRef = useRef();
 
   function usePrevious(value) {
@@ -275,7 +247,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
           duration: 2000,
-          zoom: 3,
+          zoom: 3.5,
         });
       }
       if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
@@ -286,7 +258,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
           duration: 2000,
-          zoom: 3,
+          zoom: 3.5,
         });
       }
       if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
@@ -297,7 +269,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
           duration: 2000,
-          zoom: 3,
+          zoom: 3.5,
         });
       }
 
@@ -308,44 +280,7 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
     [speciesRegions1, speciesRegions2, speciesRegions3]
   );
 
-  // const onMapLoad = useCallback(() => {
-  //   // console.log(event.features);
-  //   // mapRef.current.on("click", () => {
-  //   //   // do something
-  //   //   map.flyTo({ center: [-122.4, 37.8] });
-  //   // });
-  //   // const mapFilter = mapRef.current?.querySourceFeatures("eco-map", {
-  //   //   sourceLayer: "ecomap-tiles",
-  //   //   filter: speciesFilter1,
-  //   // });
-  //   // const mapFilter = mapRef.current?.queryRenderedFeatures({
-  //   //   layers: ["eco-fill3"],
-  //   //   // filter: speciesFilter1,
-  //   // });
-  //   // const mapFilter = mapRef.current?.queryRenderedFeatures({
-  //   //   layers: ["eco-fill3"],
-  //   //   // filter: speciesFilter1,
-  //   // });
-  //   // const mapFilter = mapRef.current?.getFeatureState({
-  //   //   source: "eco-map",
-  //   //   sourceLayer: "ecomap-tiles",
-  //   //   id: 1910158490491681,
-  //   // });
-  //   // console.log(mapFilter);
-  //   // let mapFilter = mapRef.current?.getMap("");
-  //   // console.log(speciesRegions1.length);
-  //   if (
-  //     speciesRegions1.length > 0
-  //     // ||
-  //     // speciesRegions1 != Array(0)
-  //     // ||
-  //     // speciesRegions1 != undefined
-  //   ) {
-  //     const coord = [-112.3499421143609, 29.324581359154894];
-  //     mapRef.current?.flyTo({ center: coord, duration: 2000 });
-  //     console.log(speciesRegions1);
-  //   }
-  // }, [speciesFilter1]);
+  //
   return (
     <>
       {/* {isMobile ? ( */}
@@ -414,10 +349,6 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
         <Map
           reuseMaps
           style={{ width: "auto", height: "94vh" }}
-          // ref={mapRef}
-          // {...viewport}
-          // width="100vw"
-          // height="94vh"
           initialViewState={{
             latitude: 37.8,
             longitude: -98,
@@ -425,20 +356,19 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
             bearing: 0,
             pitch: 0,
           }}
-          // {...viewState}
-          // onMove={onMove}
-          // onMove={(evt) => console.log(evt)}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}
+          boxZoom={false}
+          dragRotate={false}
+          touchPitch={false}
+          // touchZoomRotate={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-          // onViewportChange={handleViewportChange}
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
-          onMouseMove={onHover}
-          onClick={handleMapClick}
+          onClick={onHover}
+          //   onDblClick={handleDblClick}
           ref={mapRef}
-          // onClick={onMapLoad}
           onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         >
           <Source
@@ -478,20 +408,41 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
             />
             <Layer beforeId="waterway-label" {...ecoLine} />
           </Source>
-          {selectedRegion && (
+          {selectedRegion && showPopup && (
             <Popup
               longitude={hoverInfo.longitude}
               latitude={hoverInfo.latitude}
-              closeButton={false}
               closeOnClick={false}
+              onClose={() => setShowPopup(false)}
               maxWidth="500px"
             >
-              <Typography color="textSecondary" align="center">
-                {ecoName}
-              </Typography>
-              <Typography color="textSecondary" align="center">
-                Eco-{selectedRegion}
-              </Typography>
+              <div className={classes.popup}>
+                {!showLoad ? (
+                  <>
+                    <Typography color="textSecondary" align="center">
+                      {ecoName}
+                    </Typography>
+                    <Typography color="textSecondary" align="center">
+                      Eco-{selectedRegion}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      disableElevation={true}
+                      size="small"
+                      color="primary"
+                      onClick={handleClick}
+                    >
+                      Enter
+                    </Button>
+                  </>
+                ) : (
+                  <CircularProgress
+                    color="primary"
+                    size={100}
+                    disableShrink={true}
+                  />
+                )}
+              </div>
             </Popup>
           )}
         </Map>
@@ -501,4 +452,4 @@ const MapTag = ({ clickInfo, setClickInfo, speciesInfo1, state }) => {
   );
 };
 
-export default MapTag;
+export default MapSpecies;
