@@ -6,13 +6,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexGrow: 1,
     // padding: theme.spacing(4),
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.light,
   },
 
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.light,
     maxWidth: 1280,
     margin: "auto",
   },

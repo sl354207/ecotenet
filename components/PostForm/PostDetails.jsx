@@ -174,7 +174,7 @@ const PostDetails = ({
           ))}
         </Grid>
       </Grid>
-      <MapEditor clickInfo={clickInfo} setClickInfo={setClickInfo} />
+      {/* <MapEditor clickInfo={clickInfo} setClickInfo={setClickInfo} /> */}
 
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
