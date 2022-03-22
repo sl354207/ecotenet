@@ -198,23 +198,23 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   // );
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  const speciesRegions1 = state[1].regions;
-  // console.log(speciesRegions1);
+  // const speciesRegions1 = state[1].regions;
+  // // console.log(speciesRegions1);
 
-  const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
-  // const speciesFilter1 = ["in", "unique_id", "313"];
-  // console.log(speciesFilter1);
+  // const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  // // const speciesFilter1 = ["in", "unique_id", "313"];
+  // // console.log(speciesFilter1);
 
-  const speciesRegions2 = state[2].regions;
-  // console.log(speciesRegions2);
+  // const speciesRegions2 = state[2].regions;
+  // // console.log(speciesRegions2);
 
-  const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
-  // console.log(speciesFilter2);
+  // const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
+  // // console.log(speciesFilter2);
 
-  const speciesRegions3 = state[3].regions;
-  // console.log(speciesRegions3);
+  // const speciesRegions3 = state[3].regions;
+  // // console.log(speciesRegions3);
 
-  const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
+  // const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
   // console.log(speciesFilter3);
 
   // console.log(clickFilter);
@@ -229,56 +229,56 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     return ref.current;
   }
 
-  const prevCount1 = usePrevious(speciesRegions1);
-  const prevCount2 = usePrevious(speciesRegions2);
-  const prevCount3 = usePrevious(speciesRegions3);
+  // const prevCount1 = usePrevious(speciesRegions1);
+  // const prevCount2 = usePrevious(speciesRegions2);
+  // const prevCount3 = usePrevious(speciesRegions3);
 
-  const onMove = useCallback(
-    (prevCount1, prevCount2, prevCount3) => {
-      // console.log(event);
-      // console.log(viewState);
-      // console.log(prevViewState);
-      if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
-        // setViewState(viewState);
-        const coord = Coords.filter(
-          (region) => region.unique_id == speciesRegions1[0]
-        );
-        // console.log(coord);
-        mapRef.current?.flyTo({
-          center: coord[0].coordinates,
-          duration: 2000,
-          zoom: 3.5,
-        });
-      }
-      if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
-        const coord = Coords.filter(
-          (region) => region.unique_id == speciesRegions2[0]
-        );
-        // console.log(coord);
-        mapRef.current?.flyTo({
-          center: coord[0].coordinates,
-          duration: 2000,
-          zoom: 3.5,
-        });
-      }
-      if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
-        const coord = Coords.filter(
-          (region) => region.unique_id == speciesRegions3[0]
-        );
-        // console.log(coord);
-        mapRef.current?.flyTo({
-          center: coord[0].coordinates,
-          duration: 2000,
-          zoom: 3.5,
-        });
-      }
+  // const onMove = useCallback(
+  //   (prevCount1, prevCount2, prevCount3) => {
+  //     // console.log(event);
+  //     // console.log(viewState);
+  //     // console.log(prevViewState);
+  //     if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
+  //       // setViewState(viewState);
+  //       const coord = Coords.filter(
+  //         (region) => region.unique_id == speciesRegions1[0]
+  //       );
+  //       // console.log(coord);
+  //       mapRef.current?.flyTo({
+  //         center: coord[0].coordinates,
+  //         duration: 2000,
+  //         zoom: 3.5,
+  //       });
+  //     }
+  //     if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
+  //       const coord = Coords.filter(
+  //         (region) => region.unique_id == speciesRegions2[0]
+  //       );
+  //       // console.log(coord);
+  //       mapRef.current?.flyTo({
+  //         center: coord[0].coordinates,
+  //         duration: 2000,
+  //         zoom: 3.5,
+  //       });
+  //     }
+  //     if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
+  //       const coord = Coords.filter(
+  //         (region) => region.unique_id == speciesRegions3[0]
+  //       );
+  //       // console.log(coord);
+  //       mapRef.current?.flyTo({
+  //         center: coord[0].coordinates,
+  //         duration: 2000,
+  //         zoom: 3.5,
+  //       });
+  //     }
 
-      // console.log(newViewState);
-      // console.log(prevCount);
-      // console.log(speciesRegions1);
-    },
-    [speciesRegions1, speciesRegions2, speciesRegions3]
-  );
+  //     // console.log(newViewState);
+  //     // console.log(prevCount);
+  //     // console.log(speciesRegions1);
+  //   },
+  //   [speciesRegions1, speciesRegions2, speciesRegions3]
+  // );
 
   //
   return (
@@ -369,7 +369,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           onClick={onHover}
           onDblClick={handleDblClick}
           ref={mapRef}
-          onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
+          // onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         >
           <Source
             id="eco-map"
@@ -381,18 +381,18 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
             <Layer
               beforeId="waterway-label"
               {...ecoFill5}
-              filter={speciesFilter3}
+              // filter={speciesFilter3}
             />
             <Layer
               beforeId="waterway-label"
               {...ecoFill4}
-              filter={speciesFilter2}
+              // filter={speciesFilter2}
             />
             <Layer
               id="species1"
               beforeId="waterway-label"
               {...ecoFill3}
-              filter={speciesFilter1}
+              // filter={speciesFilter1}
             />
             <Layer
               id="click"

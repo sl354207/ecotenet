@@ -1,5 +1,16 @@
 import StepForm from "../../components/PostForm/StepForm";
 
-export default function DashboardEditor() {
-  return <StepForm />;
-}
+const DashboardEditor = () => {
+  const initialDetailValues = {
+    title: "",
+    author: "",
+    description: "",
+    category: "",
+    tags: [],
+    ecoregions: [],
+  };
+
+  return <StepForm post={initialDetailValues} />;
+};
+
+export default DashboardEditor;

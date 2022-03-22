@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 //pass in and destructure props.
 const PostRegion = ({ handleNext, handleBack, handleChange, values }) => {
   //testing. change this
-  const { firstName, lastName, email, gender, date, phone, city } = values;
+  // const { firstName, lastName, email, gender, date, phone, city } = values;
 
   //testing. change this
   const handleSubmit = () => {
@@ -22,46 +22,6 @@ const PostRegion = ({ handleNext, handleBack, handleChange, values }) => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="City"
-            name="city"
-            placeholder="Enter your city"
-            value={city || ""}
-            margin="normal"
-            onChange={handleChange}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            label="Date of birth"
-            name="date"
-            type="date"
-            defaultValue={date || "1999-12-31"}
-            onChange={handleChange}
-            margin="normal"
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Phone number"
-            name="phone"
-            placeholder="i.e: xxx-xxx-xxxx"
-            value={phone || ""}
-            onChange={handleChange}
-            margin="normal"
-          />
-        </Grid>
-      </Grid>
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
       >

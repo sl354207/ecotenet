@@ -145,6 +145,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexGrow: 1,
   },
+  label: {
+    color: `${theme.palette.text.primary}!important`,
+    position: "relative",
+    transform: "none",
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -246,20 +251,32 @@ export default function Dashboard() {
               className={classes.progress}
             />
           ) : (
-            <FormControl className={classes.items}>
-              <InputLabel shrink htmlFor="bio" />
+            <>
+              {/* <Typography variant="body1">Bio:</Typography> */}
+              <FormControl className={classes.items}>
+                <InputLabel
+                  htmlFor="bio"
+                  classes={{
+                    root: classes.label,
+                    formControl: classes.label,
+                    focused: classes.label,
+                  }}
+                >
+                  Bio:
+                </InputLabel>
 
-              <TextBox
-                defaultValue={null}
-                placeHolder={null}
-                id="bio"
-                autoFocus={true}
-                // handleChange={handleChange}
-                // handleSubmit={handleSubmit}
-                rows={10}
-                // className={comment_ref != "" ? classes.cref : classes.noref}
-              />
-            </FormControl>
+                <TextBox
+                  defaultValue={null}
+                  placeHolder="Tell us about yourself..."
+                  id="bio"
+                  autoFocus={true}
+                  // handleChange={handleChange}
+                  // handleSubmit={handleSubmit}
+                  rows={10}
+                  // className={comment_ref != "" ? classes.cref : classes.noref}
+                />
+              </FormControl>
+            </>
           )}
         </TabPanel>
         <TabPanel value={value} index={1}>

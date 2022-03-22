@@ -29,6 +29,7 @@ const TextBox = ({
   rows,
   className,
   autoFocus,
+  inputProps,
 }) => {
   // const classes = useStyles();
 
@@ -43,6 +44,7 @@ const TextBox = ({
       multiline
       minRows={rows}
       className={className}
+      inputProps={inputProps}
     />
   );
 };
