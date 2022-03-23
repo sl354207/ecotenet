@@ -23,7 +23,7 @@ export default function DraftByUser() {
 
   return (
     <div>
-      <StepForm post={post} pathname={pathName} />
+      <StepForm post={post} pathName={pathName} />
 
       <Link href="/dashboard/drafts">Go Back</Link>
     </div>

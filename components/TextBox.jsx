@@ -30,6 +30,7 @@ const TextBox = ({
   className,
   autoFocus,
   inputProps,
+  name,
 }) => {
   // const classes = useStyles();
 
@@ -38,6 +39,7 @@ const TextBox = ({
       defaultValue={defaultValue}
       placeholder={placeHolder}
       id={id}
+      name={name}
       autoFocus={autoFocus}
       onChange={handleChange}
       // onSubmit={handleSubmit}

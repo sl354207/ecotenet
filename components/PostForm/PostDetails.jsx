@@ -18,6 +18,8 @@ import TextBox from "../TextBox";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
+import CategoriesAutoComplete from "../../data/categories_autocomplete.json";
+
 const useStyles = makeStyles((theme) => ({
   subheader: {
     display: "flex",
@@ -140,6 +142,13 @@ const useStyles = makeStyles((theme) => ({
   form: {
     marginBottom: 12,
   },
+  groupLabel: {
+    backgroundColor: theme.palette.primary.light,
+    color: alpha(theme.palette.text.primary, 0.6),
+  },
+  noOptions: {
+    color: alpha(theme.palette.text.primary, 0.6),
+  },
 }));
 
 //pass in and destructure props.
@@ -147,8 +156,7 @@ const PostDetails = ({
   handleNext,
   handleBack,
   handleDetailChange,
-  detailValues: { title, author, description },
-  categoryOptions,
+  detailValues: { title, description },
   categoryValue,
   setCategoryValue,
   categoryInputValue,
@@ -157,8 +165,6 @@ const PostDetails = ({
   tagValue,
   setTagValue,
   handleRemoveChip,
-  clickInfo,
-  setClickInfo,
 }) => {
   // // need to dynamically import to work with mapbox
   // const Map = dynamic(() => import("../MapTag"), {
@@ -205,7 +211,8 @@ const PostDetails = ({
               defaultValue={title || ""}
               placeHolder=" title of post(max length 60 characters)"
               id="title"
-              // handleChange={handleChange}
+              name="title"
+              handleChange={handleDetailChange}
               // handleSubmit={handleSubmit}
               rows={1}
               inputProps={{ maxLength: 60 }}
@@ -229,7 +236,8 @@ const PostDetails = ({
               defaultValue={description || ""}
               placeHolder=" short summary of post(max length 160 characters) "
               id="description"
-              // handleChange={handleChange}
+              name="description"
+              handleChange={handleDetailChange}
               // handleSubmit={handleSubmit}
               rows={2}
               inputProps={{ maxLength: 160 }}
@@ -251,7 +259,11 @@ const PostDetails = ({
             </InputLabel>
             <Autocomplete
               className={classes.search}
-              classes={{ paper: classes.popper }}
+              classes={{
+                paper: classes.popper,
+                groupLabel: classes.groupLabel,
+                noOptions: classes.noOptions,
+              }}
               autoHighlight
               // disableClearable={true}
               id="category"
@@ -259,14 +271,15 @@ const PostDetails = ({
               onChange={(event, categoryValue) => {
                 setCategoryValue(categoryValue);
               }}
-              // defaultValue={categoryValue || ""}
+              defaultValue={categoryValue || ""}
               value={categoryValue}
               onInputChange={(event, categoryInputValue) => {
                 setCategoryInputValue(categoryInputValue);
               }}
               inputValue={categoryInputValue}
-              options={categoryOptions}
-              getOptionLabel={(option) => option}
+              options={CategoriesAutoComplete}
+              groupBy={(option) => option.title}
+              getOptionLabel={(option) => option.sub}
               // style={{ width: 300 }}
               renderInput={(params) => (
                 // <TextField

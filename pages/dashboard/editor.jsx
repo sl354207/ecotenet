@@ -10,7 +10,7 @@ const DashboardEditor = () => {
     ecoregions: [],
   };
 
-  return <StepForm post={initialDetailValues} />;
+  return <StepForm post={initialDetailValues} pathName="editor" />;
 };
 
 export default DashboardEditor;

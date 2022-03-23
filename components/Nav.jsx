@@ -31,6 +31,8 @@ import {
 } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
+import menuItems from "../data/categories.json";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -137,113 +139,113 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // initialize drawer categories
-const menuItems = [
-  {
-    menuTitle: "Animals",
-    menuSubs: [
-      "Mammals",
-      "Reptiles",
-      "Amphibians",
-      "Birds",
-      "Fish/Mollusk",
-      "Guides",
-    ],
-    pageURL: "/mammals",
-    openList: false,
-  },
-  {
-    menuTitle: "Plants",
-    menuSubs: ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
-    pageURL: "/posts/60da0c1ffde53f333e6498dd",
-    openList: false,
-  },
-  {
-    menuTitle: "Fungi",
-    menuSubs: ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
-    pageURL: "/history",
-    openList: false,
-  },
-  {
-    menuTitle: "Arthropods",
-    menuSubs: ["Crustaceans", "Myriapods", "Chelicerates", "Insects", "Guides"],
-    pageURL: "/gallery",
-    openList: false,
-  },
-  {
-    menuTitle: "Hunt",
-    menuSubs: [
-      "Tracking/Stalking",
-      "Trapping",
-      "Fishing",
-      "Strategies/Techniques",
-      "Processing",
-      "Tools",
-    ],
-    pageURL: "/pageant",
-    openList: false,
-  },
-  {
-    menuTitle: "Gather",
-    menuSubs: ["Edible", "Medicinal"],
-    pageURL: "/volunteer",
-    openList: false,
-  },
-  {
-    menuTitle: "Travel",
-    menuSubs: ["Land", "Water"],
-    pageURL: "/sponsors",
-    openList: false,
-  },
-  {
-    menuTitle: "Survival",
-    menuSubs: ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
-    pageURL: "/contact",
-    openList: false,
-  },
-  {
-    menuTitle: "Agriculture",
-    menuSubs: [
-      "Planting/Harvesting",
-      "Maintenance/Management",
-      "Processing/Storage",
-      "Livestock",
-      "Soil Health",
-      "Propogation/Cultivation",
-      "Irrigation",
-      "Techniques/Systems",
-      "Start-To-Finish/Lifecycles",
-    ],
-    pageURL: "/pageant",
-    openList: false,
-  },
-  {
-    menuTitle: "Building",
-    menuSubs: [
-      "Foundations/Floors",
-      "Walls",
-      "Roofs",
-      "Complete Structures",
-      "Water Systems",
-      "Heating/Cooling",
-      "Furniture/Utensils/Tools",
-    ],
-    pageURL: "/volunteer",
-    openList: false,
-  },
-  {
-    menuTitle: "Culture",
-    menuSubs: [
-      "Cooking/Recipes",
-      "Clothing",
-      "Art",
-      "Music",
-      "Rituals",
-      "Stories",
-    ],
-    pageURL: "/sponsors",
-    openList: false,
-  },
-];
+// const menuItems = [
+//   {
+//     menuTitle: "Animals",
+//     menuSubs: [
+//       "Mammals",
+//       "Reptiles",
+//       "Amphibians",
+//       "Birds",
+//       "Fish/Mollusk",
+//       "Guides",
+//     ],
+//     pageURL: "/mammals",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Plants",
+//     menuSubs: ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
+//     pageURL: "/posts/60da0c1ffde53f333e6498dd",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Fungi",
+//     menuSubs: ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
+//     pageURL: "/history",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Arthropods",
+//     menuSubs: ["Crustaceans", "Myriapods", "Chelicerates", "Insects", "Guides"],
+//     pageURL: "/gallery",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Hunt",
+//     menuSubs: [
+//       "Tracking/Stalking",
+//       "Trapping",
+//       "Fishing",
+//       "Strategies/Techniques",
+//       "Processing",
+//       "Tools",
+//     ],
+//     pageURL: "/pageant",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Gather",
+//     menuSubs: ["Edible", "Medicinal"],
+//     pageURL: "/volunteer",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Travel",
+//     menuSubs: ["Land", "Water"],
+//     pageURL: "/sponsors",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Survival",
+//     menuSubs: ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
+//     pageURL: "/contact",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Agriculture",
+//     menuSubs: [
+//       "Planting/Harvesting",
+//       "Maintenance/Management",
+//       "Processing/Storage",
+//       "Livestock",
+//       "Soil Health",
+//       "Propogation/Cultivation",
+//       "Irrigation",
+//       "Techniques/Systems",
+//       "Start-To-Finish/Lifecycles",
+//     ],
+//     pageURL: "/pageant",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Building",
+//     menuSubs: [
+//       "Foundations/Floors",
+//       "Walls",
+//       "Roofs",
+//       "Complete Structures",
+//       "Water Systems",
+//       "Heating/Cooling",
+//       "Furniture/Utensils/Tools",
+//     ],
+//     pageURL: "/volunteer",
+//     openList: false,
+//   },
+//   {
+//     menuTitle: "Culture",
+//     menuSubs: [
+//       "Cooking/Recipes",
+//       "Clothing",
+//       "Art",
+//       "Music",
+//       "Rituals",
+//       "Stories",
+//     ],
+//     pageURL: "/sponsors",
+//     openList: false,
+//   },
+// ];
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {

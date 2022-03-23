@@ -5,23 +5,22 @@ import PostRegion from "./PostRegion";
 import PostEditor from "./PostEditor";
 import { Button } from "@material-ui/core";
 
+// const formValues = {
+//   title: "",
+//     author: "",
+//     description: "",
+//     category: "",
+//     tags: [],
+//     ecoregions: [],
+// }
+
 // pass in post and url path as props
-const StepForm = ({ post, pathname }) => {
+const StepForm = ({ post, pathName }) => {
   // if the post is undefined(no post was retrieved) then display a blank editor for creating new post or draft. Remove any repetitive code out of if statements?
   // if (post === undefined) {
 
   // } else {
   const { title, author, description, category, tags, ecoregions } = post;
-
-  // const initialDetailValues = {
-  //   title: title,
-  //   author: author,
-  //   description: description,
-  //   category: category,
-  //   tags: tags,
-  //   ecoregions: ecoregions,
-  // };
-  // }
 
   // set initial values of form
 
@@ -34,12 +33,8 @@ const StepForm = ({ post, pathname }) => {
   //set detail values state;
   const [detailValues, setDetailValues] = useState({
     title,
-    author,
     description,
   });
-
-  // set category options. Move above if statements since doesn't change?
-  const categoryOptions = ["Hunt", "Gather"];
 
   // set category state
   const [categoryValue, setCategoryValue] = useState(category);
@@ -105,7 +100,6 @@ const StepForm = ({ post, pathname }) => {
             handleBack={handleBack}
             handleDetailChange={handleDetailChange}
             detailValues={detailValues}
-            categoryOptions={categoryOptions}
             categoryValue={categoryValue}
             setCategoryValue={setCategoryValue}
             categoryInputValue={categoryInputValue}
@@ -114,8 +108,6 @@ const StepForm = ({ post, pathname }) => {
             tagValue={tagValue}
             setTagValue={setTagValue}
             handleRemoveChip={handleRemoveChip}
-            clickInfo={clickInfo}
-            setClickInfo={setClickInfo}
           />
 
           // add back in when ready  formErrors={formErrors}
@@ -136,7 +128,7 @@ const StepForm = ({ post, pathname }) => {
   };
 
   // function to create a new draft. Takes in form values and editor value.
-  const create = async (
+  const save = async (
     postValue,
     detailValues,
     categoryValue,
@@ -164,14 +156,40 @@ const StepForm = ({ post, pathname }) => {
       ecoObject
     );
 
+    switch (pathName) {
+      case "/dashboard/drafts/[_id]":
+        const res1 = await fetch("/api/updateDraft", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value),
+        });
+        break;
+      case "/dashboard/posts/[_id]":
+        const res2 = await fetch("/api/updatePost", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value),
+        });
+        break;
+      case "editor":
+        const res3 = await fetch("/api/createDraft", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value),
+        });
+        break;
+
+      default:
+        break;
+    }
+
     // send value to createDraft api
-    const res = await fetch("/api/createDraft", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
   };
 
   // function to create a published post. Takes in form values and editor value
@@ -203,14 +221,42 @@ const StepForm = ({ post, pathname }) => {
       ecoObject
     );
 
-    // send value to createPost api
-    const res = await fetch("/api/createPost", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
+    switch (pathName) {
+      case "/dashboard/drafts/[_id]":
+        // create post
+        const res1 = await fetch("/api/createPost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value),
+        });
+
+        // delete draft once published
+        const res2 = await fetch("/api/deleteDraft", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value._id),
+        });
+        break;
+      case "/dashboard/posts/[_id]":
+        break;
+      case "editor":
+        // send value to createPost api
+        const res3 = await fetch("/api/createPost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value),
+        });
+        break;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -218,7 +264,7 @@ const StepForm = ({ post, pathname }) => {
       {handleSteps(activeStep)}
       <Button
         onClick={() =>
-          create(postValue, detailValues, categoryValue, tagValue, clickInfo)
+          save(postValue, detailValues, categoryValue, tagValue, clickInfo)
         }
       >
         Save
@@ -342,85 +388,7 @@ const StepForm = ({ post, pathname }) => {
   //       }
   //     };
 
-  //     // function to update the draft. Takes in the form values and editor value.
-  //     const update = async (
-  //       postValue,
-  //       detailValues,
-  //       categoryValue,
-  //       tagValue,
-  //       clickInfo
-  //     ) => {
-  //       const categoryObject = {
-  //         category: categoryValue,
-  //       };
-  //       const tagObject = {
-  //         tags: tagValue,
-  //       };
-  //       const ecoObject = {
-  //         ecoregions: clickInfo,
-  //       };
-  //       // combine form value and editor value into one object to pass to api.
-  //       const value = Object.assign(
-  //         postValue,
-  //         detailValues,
-  //         categoryObject,
-  //         tagObject,
-  //         ecoObject
-  //       );
-
-  //       const res = await fetch("/api/updateDraft", {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(value),
-  //       });
-  //     };
-
-  //     // function to publish the draft
-  //     const publish = async (
-  //       postValue,
-  //       detailValues,
-  //       categoryValue,
-  //       tagValue,
-  //       clickInfo
-  //     ) => {
-  //       const categoryObject = {
-  //         category: categoryValue,
-  //       };
-  //       const tagObject = {
-  //         tags: tagValue,
-  //       };
-  //       const ecoObject = {
-  //         ecoregions: clickInfo,
-  //       };
-  //       // combine form value and editor value into one object to pass to api.
-  //       const value = Object.assign(
-  //         postValue,
-  //         detailValues,
-  //         categoryObject,
-  //         tagObject,
-  //         ecoObject
-  //       );
-
-  //       // create post
-  //       const res1 = await fetch("/api/createPost", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(value),
-  //       });
-
-  //       // delete draft once published
-  //       const res2 = await fetch("/api/deleteDraft", {
-  //         method: "DELETE",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(value._id),
-  //       });
-  //     };
+  //
 
   //     return (
   //       <>
@@ -549,41 +517,6 @@ const StepForm = ({ post, pathname }) => {
   //         default:
   //           break;
   //       }
-  //     };
-
-  //     // function to update post
-  //     const update = async (
-  //       postValue,
-  //       detailValues,
-  //       categoryValue,
-  //       tagValue,
-  //       clickInfo
-  //     ) => {
-  //       const categoryObject = {
-  //         category: categoryValue,
-  //       };
-  //       const tagObject = {
-  //         tags: tagValue,
-  //       };
-  //       const ecoObject = {
-  //         ecoregions: clickInfo,
-  //       };
-  //       // combine form value and editor value into one object to pass to api.
-  //       const value = Object.assign(
-  //         postValue,
-  //         detailValues,
-  //         categoryObject,
-  //         tagObject,
-  //         ecoObject
-  //       );
-
-  //       const res = await fetch("/api/updatePost", {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(value),
-  //       });
   //     };
 
   //     return (
