@@ -128,7 +128,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const [showPopup, setShowPopup] = useState(true);
 
-  const [showLoad, setShowLoad] = useState(false);
+  // const [showLoad, setShowLoad] = useState(false);
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback(
@@ -175,18 +175,18 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   //     .replace(/[^\w-]+/g, "")
   //     .replace(/--+/g, "-");
 
-  const handleClick = (event) => {
-    // const handleClick = (event) => {
-    // const region = event.features && event.features[0];
-    // // console.log(selectedRegion);
-    // if (selectedRegion !== "") {
-    //   const slug = slugify(selectedRegion);
-    //   // router.push(`/${slug}`);
-    //   router.push("/success");
-    // }
-    setShowLoad(true);
-    router.push("/success");
-  };
+  // const handleClick = (event) => {
+  //   // const handleClick = (event) => {
+  //   // const region = event.features && event.features[0];
+  //   // // console.log(selectedRegion);
+  //   // if (selectedRegion !== "") {
+  //   //   const slug = slugify(selectedRegion);
+  //   //   // router.push(`/${slug}`);
+  //   //   router.push("/success");
+  //   // }
+  //   setShowLoad(true);
+  //   router.push("/success");
+  // };
 
   const clickedRegions = clickInfo;
   // console.log(clickedRegions);
@@ -198,23 +198,23 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   // );
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  // const speciesRegions1 = state[1].regions;
-  // // console.log(speciesRegions1);
+  const speciesRegions1 = state[1].regions;
+  // console.log(speciesRegions1);
 
-  // const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
-  // // const speciesFilter1 = ["in", "unique_id", "313"];
-  // // console.log(speciesFilter1);
+  const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  // const speciesFilter1 = ["in", "unique_id", "313"];
+  // console.log(speciesFilter1);
 
-  // const speciesRegions2 = state[2].regions;
-  // // console.log(speciesRegions2);
+  const speciesRegions2 = state[2].regions;
+  // console.log(speciesRegions2);
 
-  // const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
-  // // console.log(speciesFilter2);
+  const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
+  // console.log(speciesFilter2);
 
-  // const speciesRegions3 = state[3].regions;
-  // // console.log(speciesRegions3);
+  const speciesRegions3 = state[3].regions;
+  // console.log(speciesRegions3);
 
-  // const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
+  const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
   // console.log(speciesFilter3);
 
   // console.log(clickFilter);
@@ -229,56 +229,56 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     return ref.current;
   }
 
-  // const prevCount1 = usePrevious(speciesRegions1);
-  // const prevCount2 = usePrevious(speciesRegions2);
-  // const prevCount3 = usePrevious(speciesRegions3);
+  const prevCount1 = usePrevious(speciesRegions1);
+  const prevCount2 = usePrevious(speciesRegions2);
+  const prevCount3 = usePrevious(speciesRegions3);
 
-  // const onMove = useCallback(
-  //   (prevCount1, prevCount2, prevCount3) => {
-  //     // console.log(event);
-  //     // console.log(viewState);
-  //     // console.log(prevViewState);
-  //     if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
-  //       // setViewState(viewState);
-  //       const coord = Coords.filter(
-  //         (region) => region.unique_id == speciesRegions1[0]
-  //       );
-  //       // console.log(coord);
-  //       mapRef.current?.flyTo({
-  //         center: coord[0].coordinates,
-  //         duration: 2000,
-  //         zoom: 3.5,
-  //       });
-  //     }
-  //     if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
-  //       const coord = Coords.filter(
-  //         (region) => region.unique_id == speciesRegions2[0]
-  //       );
-  //       // console.log(coord);
-  //       mapRef.current?.flyTo({
-  //         center: coord[0].coordinates,
-  //         duration: 2000,
-  //         zoom: 3.5,
-  //       });
-  //     }
-  //     if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
-  //       const coord = Coords.filter(
-  //         (region) => region.unique_id == speciesRegions3[0]
-  //       );
-  //       // console.log(coord);
-  //       mapRef.current?.flyTo({
-  //         center: coord[0].coordinates,
-  //         duration: 2000,
-  //         zoom: 3.5,
-  //       });
-  //     }
+  const onMove = useCallback(
+    (prevCount1, prevCount2, prevCount3) => {
+      // console.log(event);
+      // console.log(viewState);
+      // console.log(prevViewState);
+      if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
+        // setViewState(viewState);
+        const coord = Coords.filter(
+          (region) => region.unique_id == speciesRegions1[0]
+        );
+        // console.log(coord);
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
+      if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
+        const coord = Coords.filter(
+          (region) => region.unique_id == speciesRegions2[0]
+        );
+        // console.log(coord);
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
+      if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
+        const coord = Coords.filter(
+          (region) => region.unique_id == speciesRegions3[0]
+        );
+        // console.log(coord);
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
 
-  //     // console.log(newViewState);
-  //     // console.log(prevCount);
-  //     // console.log(speciesRegions1);
-  //   },
-  //   [speciesRegions1, speciesRegions2, speciesRegions3]
-  // );
+      // console.log(newViewState);
+      // console.log(prevCount);
+      // console.log(speciesRegions1);
+    },
+    [speciesRegions1, speciesRegions2, speciesRegions3]
+  );
 
   //
   return (
@@ -369,7 +369,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           onClick={onHover}
           onDblClick={handleDblClick}
           ref={mapRef}
-          // onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
+          onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         >
           <Source
             id="eco-map"
@@ -381,18 +381,18 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
             <Layer
               beforeId="waterway-label"
               {...ecoFill5}
-              // filter={speciesFilter3}
+              filter={speciesFilter3}
             />
             <Layer
               beforeId="waterway-label"
               {...ecoFill4}
-              // filter={speciesFilter2}
+              filter={speciesFilter2}
             />
             <Layer
               id="species1"
               beforeId="waterway-label"
               {...ecoFill3}
-              // filter={speciesFilter1}
+              filter={speciesFilter1}
             />
             <Layer
               id="click"
@@ -417,31 +417,12 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
               maxWidth="500px"
             >
               <div className={classes.popup}>
-                {!showLoad ? (
-                  <>
-                    <Typography color="textSecondary" align="center">
-                      {ecoName}
-                    </Typography>
-                    <Typography color="textSecondary" align="center">
-                      Eco-{selectedRegion}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      disableElevation={true}
-                      size="small"
-                      color="primary"
-                      onClick={handleClick}
-                    >
-                      Enter
-                    </Button>
-                  </>
-                ) : (
-                  <CircularProgress
-                    color="primary"
-                    size={100}
-                    disableShrink={true}
-                  />
-                )}
+                <Typography color="textSecondary" align="center">
+                  {ecoName}
+                </Typography>
+                <Typography color="textSecondary" align="center">
+                  Eco-{selectedRegion}
+                </Typography>
               </div>
             </Popup>
           )}

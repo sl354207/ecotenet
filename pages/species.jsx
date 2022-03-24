@@ -151,8 +151,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
 const speciesChips = [
   { count: 0 },
   {
@@ -262,42 +260,16 @@ const reducer = (speciesChips, action) => {
 };
 
 const species = () => {
-  // need to dynamically import to work with mapbox
-  // const MapTag = dynamic(() => import("../components/MapTag"), {
-  //   loading: () => "Loading...",
-  //   ssr: false,
-  // });
-  // console.log(dog);
   const classes = useStyles();
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  // set filter for autocomplete options
-  //   const filter = createFilterOptions();
-  // set tag options for autocomplete
-  // const tags = [];
-
-  // set tag state
-  // const [tagValue, setTagValue] = useState([]);
-
   // set id to id in url query
-  const router = useRouter();
+  // const router = useRouter();
 
-  // const [query, setQuery] = useState();
   const [results, setResults] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
-  const [speciesInfo1, setSpeciesInfo1] = useState([]);
-  // const [speciesInfo2, setSpeciesInfo2] = useState([]);
-
-  //   const queryFilter = router.query.s;
-
-  //   const { data: results } = useSWR(
-  //     `/api/search/autoSpecies?q=${query}`,
-  //     fetcher
-  //   );
-
-  //   console.log(results);
 
   const handleChange = async (e) => {
     if (e.target.value) {
@@ -364,29 +336,6 @@ const species = () => {
       setResults([]);
     }
   };
-
-  const handleMapClick = useCallback((event) => {
-    const region = event.features && event.features[0];
-    // console.log(region);
-    if (region && region.properties.unique_id != "<NA>") {
-      setClickInfo((clickInfo) => {
-        // console.log(clickInfo);
-        if (!clickInfo.includes(region && region.properties.unique_id)) {
-          return [...clickInfo, region && region.properties.unique_id];
-        } else {
-          const removed = clickInfo.splice(
-            clickInfo.indexOf(region.properties.unique_id),
-            1
-          );
-          // console.log(removed);
-          // console.log(clickInfo);
-          return [...clickInfo];
-        }
-      });
-    }
-
-    // console.log(clickInfo);
-  }, []);
 
   const handleRemoveChip = (id) => {
     dispatch({

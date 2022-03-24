@@ -13,7 +13,7 @@ import { TextField } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { Button } from "@material-ui/core";
 import { Chip } from "@material-ui/core";
-import MapEditor from "../MapEditor";
+
 import TextBox from "../TextBox";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
@@ -156,22 +156,11 @@ const PostDetails = ({
   handleNext,
   handleBack,
   handleDetailChange,
-  detailValues: { title, description },
-  categoryValue,
-  setCategoryValue,
-  categoryInputValue,
-  setCategoryInputValue,
-  tags,
-  tagValue,
-  setTagValue,
+  details: { title, description, category, tags },
+  setDetails,
+
   handleRemoveChip,
 }) => {
-  // // need to dynamically import to work with mapbox
-  // const Map = dynamic(() => import("../MapTag"), {
-  //   loading: () => "Loading...",
-  //   ssr: false,
-  // });
-
   const classes = useStyles();
   const theme = useTheme();
 
@@ -181,21 +170,8 @@ const PostDetails = ({
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
     <Container>
-      {/* <div className={classes.form}> */}
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          {/* <TextBox
-            fullWidth
-            label="Title"
-            name="title"
-            placeholder=" title of post(max length 60 characters)"
-            margin="normal"
-            value={title || ""}
-            onChange={handleDetailChange}
-            inputProps={{ maxLength: 60 }}
-            required
-            color="secondary"
-          /> */}
           <FormControl className={classes.items}>
             <InputLabel
               htmlFor="title"
@@ -213,10 +189,8 @@ const PostDetails = ({
               id="title"
               name="title"
               handleChange={handleDetailChange}
-              // handleSubmit={handleSubmit}
               rows={1}
               inputProps={{ maxLength: 60 }}
-              // className={comment_ref != "" ? classes.cref : classes.noref}
             />
           </FormControl>
         </Grid>
@@ -238,10 +212,8 @@ const PostDetails = ({
               id="description"
               name="description"
               handleChange={handleDetailChange}
-              // handleSubmit={handleSubmit}
               rows={2}
               inputProps={{ maxLength: 160 }}
-              // className={comment_ref != "" ? classes.cref : classes.noref}
             />
           </FormControl>
         </Grid>
@@ -265,41 +237,29 @@ const PostDetails = ({
                 noOptions: classes.noOptions,
               }}
               autoHighlight
-              // disableClearable={true}
               id="category"
               name="category"
-              onChange={(event, categoryValue) => {
-                setCategoryValue(categoryValue);
+              onChange={(event, newValue) => {
+                setDetails((details) => ({
+                  ...details,
+                  category: newValue,
+                }));
               }}
-              defaultValue={categoryValue || ""}
-              value={categoryValue}
-              onInputChange={(event, categoryInputValue) => {
-                setCategoryInputValue(categoryInputValue);
-              }}
-              inputValue={categoryInputValue}
+              defaultValue={category || ""}
+              value={category}
               options={CategoriesAutoComplete}
               groupBy={(option) => option.title}
               getOptionLabel={(option) => option.sub}
-              // style={{ width: 300 }}
               renderInput={(params) => (
-                // <TextField
-                //   {...params}
-                //   label="Category"
-                //   variant="outlined"
-                //   color="secondary"
-                // />
                 <TextField
                   {...params}
                   placeholder="Select category"
                   variant="outlined"
-                  // select
                   classes={{
                     root: classes.select,
                   }}
                   ref={params.InputProps.ref}
                   inputProps={params.inputProps}
-                  // defaultValue={categoryValue || ""}
-                  // onChange={(e) => handleChange(e)}
                 />
               )}
             />
@@ -322,18 +282,12 @@ const PostDetails = ({
               classes={{ paper: classes.popper }}
               autoHighlight
               disableClearable={true}
-              value={tagValue}
+              value={tags}
               onChange={(event, newValue) => {
-                if (typeof newValue === "string") {
-                  () => {
-                    setTagValue(newValue);
-                  };
-                } else if (newValue && newValue.inputValue) {
-                  // Create a new value from the user input
-                  setTagValue((tagValue) => [...tagValue, newValue.inputValue]);
-                } else {
-                  setTagValue(newValue);
-                }
+                setDetails((details) => ({
+                  ...details,
+                  tags: [...tags, newValue.inputValue],
+                }));
               }}
               filterOptions={(options, params) => {
                 const filtered = filter(options, params);
@@ -351,23 +305,10 @@ const PostDetails = ({
               selectOnFocus
               clearOnBlur
               handleHomeEndKeys
-              id="keywords"
-              name="keywords"
+              id="tags"
+              name="tags"
               options={tags}
-              getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                if (typeof option === "string") {
-                  return option;
-                }
-                // Add "xxx" option created dynamically
-                if (option.inputValue) {
-                  return option.inputValue;
-                }
-                // Regular option
-                return option.title;
-              }}
               renderOption={(option) => option.title}
-              // style={{ width: 300 }}
               freeSolo
               renderInput={(params) => (
                 <InputBase
@@ -384,7 +325,7 @@ const PostDetails = ({
             />
           </FormControl>
           <div>
-            {tagValue.map((tag) => (
+            {tags.map((tag) => (
               <Chip
                 label={tag}
                 variant="outlined"
@@ -392,14 +333,12 @@ const PostDetails = ({
                 classes={{
                   deleteIcon: classes.chipDelete,
                 }}
-                onDelete={() => handleRemoveChip(tag)}
+                onDelete={() => handleRemoveChip(tags, tag)}
               ></Chip>
             ))}
           </div>
         </Grid>
       </Grid>
-      {/* </div>
-      <MapEditor clickInfo={clickInfo} setClickInfo={setClickInfo} /> */}
 
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}

@@ -8,6 +8,7 @@ const DashboardEditor = () => {
     category: "",
     tags: [],
     ecoregions: [],
+    id: "",
   };
 
   return <StepForm post={initialDetailValues} pathName="editor" />;

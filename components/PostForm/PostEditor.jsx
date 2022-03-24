@@ -21,7 +21,7 @@ import customImage from "../../plugins/customImage";
 
 import EditorLayout from "../EditorLayout";
 
-import { Button } from "@material-ui/core";
+import { Button, Container } from "@material-ui/core";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
@@ -29,7 +29,7 @@ const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 // take in handleNext to change form step, and editor state values.
 const PostEditor = ({ handleNext, value, setPostValue }) => {
   return (
-    <Fragment>
+    <Container>
       <EditorLayout>
         <Editor
           cellPlugins={cellPlugins}
@@ -44,7 +44,7 @@ const PostEditor = ({ handleNext, value, setPostValue }) => {
           </Button>
         </div>
       </EditorLayout>
-    </Fragment>
+    </Container>
   );
 };
 
