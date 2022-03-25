@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from "react";
 
+import { useRouter } from "next/router";
+
 import PostDetails from "./PostDetails";
 import PostRegion from "./PostRegion";
 import PostEditor from "./PostEditor";
@@ -84,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
 const StepForm = ({ post, pathName }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const router = useRouter();
 
   const { title, author, description, category, tags, ecoregions } = post;
 
@@ -136,9 +139,15 @@ const StepForm = ({ post, pathName }) => {
     const ecoObject = {
       ecoregions: clickInfo,
     };
+
+    const postObject = {
+      id: postValue != null ? postValue.id : "",
+      version: postValue != null ? postValue.version : 1,
+      rows: postValue != null ? postValue.rows : [],
+    };
     // combine form value and editor value into one object to pass to api.
-    const value = Object.assign(postValue, details, ecoObject);
-    console.log(value);
+    const value = Object.assign(postObject, details, ecoObject);
+    // console.log(value);
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
@@ -151,13 +160,13 @@ const StepForm = ({ post, pathName }) => {
         });
         break;
       case "/dashboard/posts/[_id]":
-        const res2 = await fetch("/api/updatePost", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(value),
-        });
+        // const res2 = await fetch("/api/updatePost", {
+        //   method: "PUT",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(value),
+        // });
         break;
       case "editor":
         const res3 = await fetch("/api/createDraft", {
@@ -168,6 +177,8 @@ const StepForm = ({ post, pathName }) => {
           body: JSON.stringify(value),
         });
         // console.log(res3);
+        const ID = await res3.json();
+        router.push(`/dashboard/drafts/${ID.insertedId}`);
         break;
 
       default:
@@ -207,6 +218,13 @@ const StepForm = ({ post, pathName }) => {
 
         break;
       case "/dashboard/posts/[_id]":
+        const res2 = await fetch("/api/updatePost", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(value),
+        });
         break;
       case "editor":
         // send value to createPost api
@@ -227,12 +245,10 @@ const StepForm = ({ post, pathName }) => {
   // setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
   // Proceed to next step.
   const handleNext = () => {
-    console.log(clickInfo);
     setActiveStep((step) => step + 1);
   };
   // Go back to prev step
   const handleBack = () => {
-    console.log(clickInfo);
     setActiveStep((step) => step - 1);
   };
 
@@ -256,34 +272,69 @@ const StepForm = ({ post, pathName }) => {
                 Back
               </Button>
               {/* <div> */}
-              <Button
-                onClick={() => save(postValue, details, clickInfo)}
-                variant="contained"
-                color="secondary"
-              >
-                Save
-              </Button>
-              {details.title != "" &&
-              details.category != "" &&
-              Array.isArray(clickInfo) &&
-              clickInfo.length > 0 &&
-              postValue != null ? (
-                <Button
-                  onClick={() => publish(postValue, details, clickInfo)}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Publish
-                </Button>
+              {pathName == "/dashboard/posts/[_id]" ? (
+                <>
+                  <Button
+                    onClick={() => save(postValue, details, clickInfo)}
+                    variant="contained"
+                    color="secondary"
+                    disabled
+                  >
+                    Save
+                  </Button>
+                  {details.title != "" &&
+                  details.category != "" &&
+                  clickInfo.length > 0 &&
+                  postValue.rows.length > 0 ? (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Publish
+                    </Button>
+                  )}
+                </>
               ) : (
-                <Button
-                  onClick={() => publish(postValue, details, clickInfo)}
-                  variant="contained"
-                  color="secondary"
-                  disabled
-                >
-                  Publish
-                </Button>
+                <>
+                  <Button
+                    onClick={() => save(postValue, details, clickInfo)}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Save
+                  </Button>
+                  {details.title != "" &&
+                  details.category != "" &&
+                  clickInfo.length > 0 &&
+                  postValue.rows.length > 0 ? (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Publish
+                    </Button>
+                  )}
+                </>
               )}
 
               {/* </div> */}
@@ -310,34 +361,69 @@ const StepForm = ({ post, pathName }) => {
                 Back
               </Button>
               {/* <div> */}
-              <Button
-                onClick={() => save(postValue, details, clickInfo)}
-                variant="contained"
-                color="secondary"
-              >
-                Save
-              </Button>
-              {details.title != "" &&
-              details.category != "" &&
-              Array.isArray(clickInfo) &&
-              clickInfo.length > 0 &&
-              postValue != null ? (
-                <Button
-                  onClick={() => publish(postValue, details, clickInfo)}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Publish
-                </Button>
+              {pathName == "/dashboard/posts/[_id]" ? (
+                <>
+                  <Button
+                    onClick={() => save(postValue, details, clickInfo)}
+                    variant="contained"
+                    color="secondary"
+                    disabled
+                  >
+                    Save
+                  </Button>
+                  {details.title != "" &&
+                  details.category != "" &&
+                  clickInfo.length > 0 &&
+                  postValue.rows.length > 0 ? (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Publish
+                    </Button>
+                  )}
+                </>
               ) : (
-                <Button
-                  onClick={() => publish(postValue, details, clickInfo)}
-                  variant="contained"
-                  color="secondary"
-                  disabled
-                >
-                  Publish
-                </Button>
+                <>
+                  <Button
+                    onClick={() => save(postValue, details, clickInfo)}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Save
+                  </Button>
+                  {details.title != "" &&
+                  details.category != "" &&
+                  clickInfo.length > 0 &&
+                  postValue.rows.length > 0 ? (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Publish
+                    </Button>
+                  )}
+                </>
               )}
               {/* </div> */}
               <Button variant="contained" color="default" onClick={handleNext}>
@@ -357,34 +443,69 @@ const StepForm = ({ post, pathName }) => {
                 Back
               </Button>
               {/* <div> */}
-              <Button
-                onClick={() => save(postValue, details, clickInfo)}
-                variant="contained"
-                color="secondary"
-              >
-                Save
-              </Button>
-              {details.title != "" &&
-              details.category != "" &&
-              Array.isArray(clickInfo) &&
-              clickInfo.length > 0 &&
-              postValue != null ? (
-                <Button
-                  onClick={() => publish(postValue, details, clickInfo)}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Publish
-                </Button>
+              {pathName == "/dashboard/posts/[_id]" ? (
+                <>
+                  <Button
+                    onClick={() => save(postValue, details, clickInfo)}
+                    variant="contained"
+                    color="secondary"
+                    disabled
+                  >
+                    Save
+                  </Button>
+                  {details.title != "" &&
+                  details.category != "" &&
+                  clickInfo.length > 0 &&
+                  postValue.rows.length > 0 ? (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Publish
+                    </Button>
+                  )}
+                </>
               ) : (
-                <Button
-                  onClick={() => publish(postValue, details, clickInfo)}
-                  variant="contained"
-                  color="secondary"
-                  disabled
-                >
-                  Publish
-                </Button>
+                <>
+                  <Button
+                    onClick={() => save(postValue, details, clickInfo)}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Save
+                  </Button>
+                  {details.title != "" &&
+                  details.category != "" &&
+                  clickInfo.length > 0 &&
+                  postValue.rows.length > 0 ? (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Publish
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => publish(postValue, details, clickInfo)}
+                      variant="contained"
+                      color="secondary"
+                      disabled
+                    >
+                      Publish
+                    </Button>
+                  )}
+                </>
               )}
               {/* </div> */}
 

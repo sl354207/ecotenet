@@ -200,6 +200,7 @@ const createDraft = async (
     rows,
   };
   const response = await db.collection("drafts").insertOne(data);
+  // console.log(response);
 
   return response;
 };
