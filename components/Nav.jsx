@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
     // [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
+    marginRight: 10,
     // },
   },
   searchIcon: {
@@ -262,9 +263,12 @@ const Nav = ({ ecoFilter }) => {
               <MenuIcon />
             </IconButton>
 
-            <Typography variant="h6" className={classes.title}>
+            {/* <Typography variant="h6" className={classes.title}>
               ecotenet
-            </Typography>
+            </Typography> */}
+            <div className={classes.title}>
+              <Button href="/">ecotenet</Button>
+            </div>
 
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -380,6 +384,9 @@ const Nav = ({ ecoFilter }) => {
                 )}
               />
             </div>
+            <Button href="/species" variant="contained" color="secondary">
+              Species Map
+            </Button>
 
             <Drawer
               className={classes.drawer}

@@ -166,7 +166,7 @@ const success = ({ wiki }) => {
 // CHANGE
 export const getServerSideProps = async () => {
   const wikiRes = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/Mojave_desert?redirect=true`,
+    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/Appalachian_mixed_mesophytic_forests?redirect=true`,
     {
       method: "GET",
       headers: {

@@ -50,18 +50,28 @@ const Vote = ({ counter }) => {
     }
   };
   return (
-    <div className={classes.root}>
-      <div className={classes.count}>
-        <IconButton onClick={handleCountUp}>
-          <ArrowDropUp fontSize="large" />
-        </IconButton>
-        <Typography align="center">{count}</Typography>
-        <IconButton onClick={handleCountDown}>
-          <ArrowDropDown fontSize="large" />
-        </IconButton>
+    <>
+      <div className={classes.root}>
+        <div className={classes.count}>
+          <IconButton onClick={handleCountUp} color="secondary">
+            <ArrowDropUp fontSize="large" />
+          </IconButton>
+          <Typography align="center">{count}</Typography>
+          <IconButton onClick={handleCountDown} color="secondary">
+            <ArrowDropDown fontSize="large" />
+          </IconButton>
+        </div>
       </div>
-      {count !== counter && <Button>Vote</Button>}
-    </div>
+      {count !== counter ? (
+        <Button variant="contained" color="secondary">
+          Vote
+        </Button>
+      ) : (
+        <Button variant="contained" color="secondary" disabled>
+          Vote
+        </Button>
+      )}
+    </>
   );
 };
 

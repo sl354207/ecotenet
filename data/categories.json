@@ -15,19 +15,19 @@
     {
       "menuTitle": "Plants",
       "menuSubs": ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
-      "pageURL": "/posts/60da0c1ffde53f333e6498dd",
+      "pageURL": "/mammals",
       "openList": false
     },
     {
       "menuTitle": "Fungi",
       "menuSubs": ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
-      "pageURL": "/history",
+      "pageURL": "/mammals",
       "openList": false
     },
     {
       "menuTitle": "Arthropods",
       "menuSubs": ["Crustaceans", "Myriapods", "Chelicerates", "Insects", "Guides"],
-      "pageURL": "/gallery",
+      "pageURL": "/mammals",
       "openList": false
     },
     {
@@ -40,25 +40,25 @@
         "Processing",
         "Tools"
       ],
-      "pageURL": "/pageant",
+      "pageURL": "/posts/60da0c1ffde53f333e6498dd",
       "openList": false
     },
     {
       "menuTitle": "Gather",
       "menuSubs": ["Edible", "Medicinal"],
-      "pageURL": "/volunteer",
+      "pageURL": "/posts/60da0c1ffde53f333e6498dd",
      " openList": false
     },
     {
       "menuTitle": "Travel",
       "menuSubs": ["Land", "Water"],
-      "pageURL": "/sponsors",
+      "pageURL": "/posts/60da0c1ffde53f333e6498dd",
       "openList": false
     },
     {
       "menuTitle": "Survival",
       "menuSubs": ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
-     " pageURL": "/contact",
+     " pageURL": "/posts/60da0c1ffde53f333e6498dd",
      " openList": false
     },
     {
@@ -74,7 +74,7 @@
         "Techniques/Systems",
         "Start-To-Finish/Lifecycles"
       ],
-      "pageURL": "/pageant",
+      "pageURL":"/posts/60da0c1ffde53f333e6498dd",
       "openList": false
     },
     {
@@ -88,7 +88,7 @@
         "Heating/Cooling",
         "Furniture/Utensils/Tools"
       ],
-      "pageURL": "/volunteer",
+      "pageURL": "/posts/60da0c1ffde53f333e6498dd",
       "openList": false
     },
     {
@@ -101,7 +101,7 @@
         "Rituals",
         "Stories"
       ],
-      "pageURL": "/sponsors",
+      "pageURL": "/posts/60da0c1ffde53f333e6498dd",
       "openList": false
     }
   ]
