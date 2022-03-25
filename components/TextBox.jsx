@@ -47,6 +47,7 @@ const TextBox = ({
       minRows={rows}
       className={className}
       inputProps={inputProps}
+      error
     />
   );
 };

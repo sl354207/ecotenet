@@ -36,13 +36,6 @@ const PostEditor = ({ handleNext, value, setPostValue }) => {
           value={value}
           onChange={setPostValue}
         />
-        <div
-          style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
-        >
-          <Button variant="contained" color="primary" onClick={handleNext}>
-            Next
-          </Button>
-        </div>
       </EditorLayout>
     </Container>
   );

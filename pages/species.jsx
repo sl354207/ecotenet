@@ -366,6 +366,7 @@ const species = () => {
         onChange={(event, newValue) => handleSubmit(event, newValue)}
         selectOnFocus
         clearOnBlur
+        blurOnSelect
         // clearText="Clear"
         handleHomeEndKeys
         id="free-solo-with-text-demo"

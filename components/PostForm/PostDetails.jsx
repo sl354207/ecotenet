@@ -172,7 +172,7 @@ const PostDetails = ({
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.items}>
+          <FormControl className={classes.items} required>
             <InputLabel
               htmlFor="title"
               classes={{
@@ -218,7 +218,7 @@ const PostDetails = ({
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.items}>
+          <FormControl className={classes.items} required>
             <InputLabel
               htmlFor="category"
               classes={{
@@ -339,22 +339,6 @@ const PostDetails = ({
           </div>
         </Grid>
       </Grid>
-
-      <div
-        style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
-      >
-        <Button
-          variant="contained"
-          color="default"
-          onClick={handleBack}
-          style={{ marginRight: 10 }}
-        >
-          Back
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleNext}>
-          Next
-        </Button>
-      </div>
     </Container>
   );
 };

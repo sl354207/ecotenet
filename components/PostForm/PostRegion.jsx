@@ -507,7 +507,7 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
         </>
       )}
       <Typography variant="h6" align="left">
-        Ecoregions: {clickInfo.map((region) => `Eco-${region}, `)}
+        Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
       </Typography>
 
       <MapEditor

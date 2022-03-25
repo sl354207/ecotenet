@@ -70,6 +70,14 @@ const useStyles = makeStyles((theme) => ({
       // fontWeight: 700,
     },
   },
+  stepper: {
+    backgroundColor: theme.palette.primary.dark,
+  },
+  stepNav: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginBottom: 20,
+  },
 }));
 
 // pass in post and url path as props
@@ -218,9 +226,15 @@ const StepForm = ({ post, pathName }) => {
 
   // setActiveStep takes in arrow function with input variable step. It increments step forward or backward.
   // Proceed to next step.
-  const handleNext = () => setActiveStep((step) => step + 1);
+  const handleNext = () => {
+    console.log(clickInfo);
+    setActiveStep((step) => step + 1);
+  };
   // Go back to prev step
-  const handleBack = () => setActiveStep((step) => step - 1);
+  const handleBack = () => {
+    console.log(clickInfo);
+    setActiveStep((step) => step - 1);
+  };
 
   const handleStep = (step) => () => {
     setActiveStep(step);
@@ -231,33 +245,160 @@ const StepForm = ({ post, pathName }) => {
     switch (step) {
       case 0:
         return (
-          <PostEditor
-            handleNext={handleNext}
-            value={postValue}
-            setPostValue={setPostValue}
-          />
+          <>
+            <div className={classes.stepNav}>
+              <Button
+                variant="contained"
+                color="default"
+                onClick={handleBack}
+                disabled
+              >
+                Back
+              </Button>
+              {/* <div> */}
+              <Button
+                onClick={() => save(postValue, details, clickInfo)}
+                variant="contained"
+                color="secondary"
+              >
+                Save
+              </Button>
+              {details.title != "" &&
+              details.category != "" &&
+              Array.isArray(clickInfo) &&
+              clickInfo.length > 0 &&
+              postValue != null ? (
+                <Button
+                  onClick={() => publish(postValue, details, clickInfo)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Publish
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => publish(postValue, details, clickInfo)}
+                  variant="contained"
+                  color="secondary"
+                  disabled
+                >
+                  Publish
+                </Button>
+              )}
+
+              {/* </div> */}
+              <Button variant="contained" color="default" onClick={handleNext}>
+                Next
+              </Button>
+            </div>
+
+            <PostDetails
+              handleDetailChange={handleDetailChange}
+              details={details}
+              setDetails={setDetails}
+              handleRemoveChip={handleRemoveChip}
+            />
+          </>
+
           // add back in when ready  formErrors={formErrors}
         );
       case 1:
         return (
-          <PostDetails
-            handleNext={handleNext}
-            handleBack={handleBack}
-            handleDetailChange={handleDetailChange}
-            details={details}
-            setDetails={setDetails}
-            handleRemoveChip={handleRemoveChip}
-          />
+          <>
+            <div className={classes.stepNav}>
+              <Button variant="contained" color="default" onClick={handleBack}>
+                Back
+              </Button>
+              {/* <div> */}
+              <Button
+                onClick={() => save(postValue, details, clickInfo)}
+                variant="contained"
+                color="secondary"
+              >
+                Save
+              </Button>
+              {details.title != "" &&
+              details.category != "" &&
+              Array.isArray(clickInfo) &&
+              clickInfo.length > 0 &&
+              postValue != null ? (
+                <Button
+                  onClick={() => publish(postValue, details, clickInfo)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Publish
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => publish(postValue, details, clickInfo)}
+                  variant="contained"
+                  color="secondary"
+                  disabled
+                >
+                  Publish
+                </Button>
+              )}
+              {/* </div> */}
+              <Button variant="contained" color="default" onClick={handleNext}>
+                Next
+              </Button>
+            </div>
+            <PostEditor value={postValue} setPostValue={setPostValue} />
+          </>
 
           // add back in when ready  formErrors={formErrors}
         );
       case 2:
         return (
-          <PostRegion
-            handleBack={handleBack}
-            clickInfo={clickInfo}
-            setClickInfo={setClickInfo}
-          />
+          <>
+            <div className={classes.stepNav}>
+              <Button variant="contained" color="default" onClick={handleBack}>
+                Back
+              </Button>
+              {/* <div> */}
+              <Button
+                onClick={() => save(postValue, details, clickInfo)}
+                variant="contained"
+                color="secondary"
+              >
+                Save
+              </Button>
+              {details.title != "" &&
+              details.category != "" &&
+              Array.isArray(clickInfo) &&
+              clickInfo.length > 0 &&
+              postValue != null ? (
+                <Button
+                  onClick={() => publish(postValue, details, clickInfo)}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Publish
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => publish(postValue, details, clickInfo)}
+                  variant="contained"
+                  color="secondary"
+                  disabled
+                >
+                  Publish
+                </Button>
+              )}
+              {/* </div> */}
+
+              <Button
+                variant="contained"
+                color="default"
+                onClick={handleNext}
+                disabled
+              >
+                Next
+              </Button>
+            </div>
+            <PostRegion clickInfo={clickInfo} setClickInfo={setClickInfo} />
+          </>
         );
       // add back in when ready  formErrors={formErrors}
       default:
@@ -267,7 +408,12 @@ const StepForm = ({ post, pathName }) => {
 
   return (
     <>
-      <Stepper alternativeLabel nonLinear activeStep={activeStep}>
+      <Stepper
+        alternativeLabel
+        nonLinear
+        activeStep={activeStep}
+        className={classes.stepper}
+      >
         <Step>
           <StepButton onClick={handleStep(0)} className={classes.stepLabel}>
             body
@@ -290,10 +436,6 @@ const StepForm = ({ post, pathName }) => {
       </Stepper>
 
       {handleSteps(activeStep)}
-      <Button onClick={() => save(postValue, details, clickInfo)}>Save</Button>
-      <Button onClick={() => publish(postValue, details, clickInfo)}>
-        Publish
-      </Button>
     </>
   );
 };
