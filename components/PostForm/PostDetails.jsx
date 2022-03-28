@@ -1,14 +1,21 @@
 import React, { Fragment, useState, useCallback, useMemo } from "react";
 import dynamic from "next/dynamic";
 import {
+  ClickAwayListener,
   Container,
   FormControl,
+  FormHelperText,
   Grid,
+  IconButton,
   InputBase,
   InputLabel,
+  Link,
   NativeSelect,
   Select,
+  Tooltip,
+  Typography,
 } from "@material-ui/core";
+import InfoIcon from "@material-ui/icons/Info";
 import { TextField } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { Button } from "@material-ui/core";
@@ -48,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     // maxWidth: 36,
   },
   header: {
-    marginTop: 20,
+    marginTop: 30,
   },
 
   search: {
@@ -149,6 +156,19 @@ const useStyles = makeStyles((theme) => ({
   noOptions: {
     color: alpha(theme.palette.text.primary, 0.6),
   },
+  // required: {
+  //   "& .MuiFormLabel-asterisk": {
+  //     color: `${theme.palette.secondary.main}!important`,
+  //   },
+  // },
+  helper: {
+    color: theme.palette.text.primary,
+  },
+  description: {
+    marginTop: 20,
+    marginLeft: 10,
+    marginBottom: 20,
+  },
 }));
 
 //pass in and destructure props.
@@ -164,12 +184,33 @@ const PostDetails = ({
   const classes = useStyles();
   const theme = useTheme();
 
+  const [open, setOpen] = useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
+
   // set filter for autocomplete options
   const filter = createFilterOptions();
 
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
     <Container>
+      <Typography variant="h4" align="center" className={classes.header}>
+        Post Details
+      </Typography>
+      <Typography variant="body1" align="left" className={classes.description}>
+        Choose a title and category for your post. To make it easier for people
+        to find your post you may add a short description and keywords for your
+        post
+      </Typography>
+      <Typography variant="body1" align="left" className={classes.description}>
+        *denotes required field
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <FormControl className={classes.items} required>
@@ -215,6 +256,9 @@ const PostDetails = ({
               rows={2}
               inputProps={{ maxLength: 160 }}
             />
+            <FormHelperText className={classes.helper}>
+              Helps with search functionality
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -229,6 +273,7 @@ const PostDetails = ({
             >
               Category:
             </InputLabel>
+
             <Autocomplete
               className={classes.search}
               classes={{
@@ -264,6 +309,35 @@ const PostDetails = ({
               )}
             />
           </FormControl>
+
+          <ClickAwayListener onClickAway={handleTooltipClose}>
+            <Tooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              onClose={handleTooltipClose}
+              open={open}
+              disableFocusListener
+              disableHoverListener
+              disableTouchListener
+              interactive
+              title={
+                <>
+                  <Typography color="inherit">
+                    If you need help deciding check out our explantion for each{" "}
+                    <Link href="/category" color="secondary">
+                      category
+                    </Link>
+                  </Typography>
+                </>
+              }
+              arrow
+            >
+              <IconButton edge="start" size="small" onClick={handleTooltipOpen}>
+                <InfoIcon fontSize="small"></InfoIcon>
+              </IconButton>
+            </Tooltip>
+          </ClickAwayListener>
         </Grid>
         <Grid item xs={12} sm={6}>
           <FormControl className={classes.items}>
@@ -281,6 +355,7 @@ const PostDetails = ({
               className={classes.search}
               classes={{ paper: classes.popper }}
               autoHighlight
+              disabled={tags.length > 2 ? true : false}
               disableClearable={true}
               value={tags}
               onChange={(event, newValue) => {
@@ -323,6 +398,9 @@ const PostDetails = ({
                 />
               )}
             />
+            <FormHelperText className={classes.helper}>
+              Helps with search functionality (3 max)
+            </FormHelperText>
           </FormControl>
           <div>
             {tags.map((tag) => (

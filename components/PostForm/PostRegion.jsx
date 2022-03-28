@@ -370,7 +370,7 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
 
   return (
     <Container>
-      <Typography variant="h3" align="center" className={classes.header}>
+      <Typography variant="h4" align="center" className={classes.header}>
         Select Ecoregions
       </Typography>
       <Typography variant="body1" align="left" className={classes.description}>
@@ -383,6 +383,9 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
         Search for a species by common or scientific name to display their
         distribution on the map. A maximum of three species can be mapped at the
         same time
+      </Typography>
+      <Typography variant="body1" align="left" className={classes.description}>
+        *denotes required field
       </Typography>
       <Autocomplete
         className={classes.search}

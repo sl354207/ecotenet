@@ -537,12 +537,12 @@ const StepForm = ({ post, pathName }) => {
       >
         <Step>
           <StepButton onClick={handleStep(0)} className={classes.stepLabel}>
-            body
+            details
           </StepButton>
         </Step>
         <Step>
           <StepButton onClick={handleStep(1)} className={classes.stepLabel}>
-            details
+            body
           </StepButton>
         </Step>
         <Step>

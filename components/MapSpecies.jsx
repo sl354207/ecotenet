@@ -348,7 +348,11 @@ const MapSpecies = ({ clickInfo, state }) => {
       <div>
         <Map
           reuseMaps
-          style={{ width: "auto", height: "94vh" }}
+          style={{
+            width: "auto",
+            height: "80vh",
+            margin: "0px 10px 0px 10px",
+          }}
           initialViewState={{
             latitude: 37.8,
             longitude: -98,
