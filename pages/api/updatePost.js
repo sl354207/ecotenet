@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   // body must be in same format as database query
   const {
     title,
-    author,
+    name,
     description,
     category,
     tags,
@@ -17,12 +17,16 @@ export default async function handler(req, res) {
     id,
     version,
     rows,
+    status,
+    approved,
+    updated,
+    featured,
   } = req.body;
 
   try {
     const updated = await updatePost(
       title,
-      author,
+      name,
       description,
       category,
       tags,
@@ -30,7 +34,11 @@ export default async function handler(req, res) {
       _id,
       id,
       version,
-      rows
+      rows,
+      status,
+      approved,
+      updated,
+      featured
     );
     return res.status(200).json(updated);
   } catch (err) {

@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 const Sure = ({
   open,
   handleClose,
-  setOpen,
+
   ariaLabeledBy,
   ariaDescribedBy,
   className,
@@ -21,7 +21,10 @@ const Sure = ({
   value,
   postID,
   resultID,
-
+  postValue,
+  details,
+  clickInfo,
+  pathName,
   deleteFetch,
 }) => {
   const router = useRouter();
@@ -40,45 +43,108 @@ const Sure = ({
     router.reload();
   };
 
-  const handleSubmit = async (value, post_id, comment_ref) => {
-    //convert comment values to key value pairs
-    const textObject = {
-      text: value,
-    };
+  const handleSubmit = async (
+    value,
+    post_id,
+    comment_ref,
+    postValue,
+    details,
+    clickInfo
+  ) => {
+    if (action == "comment") {
+      //convert comment values to key value pairs
+      const textObject = {
+        text: value,
+      };
 
-    const idObject = {
-      post_id: post_id,
-    };
+      const idObject = {
+        post_id: post_id,
+      };
 
-    const refObject = {
-      comment_ref: comment_ref,
-    };
+      const refObject = {
+        comment_ref: comment_ref,
+      };
 
-    const dateObject = {
-      date: new Date().toUTCString(),
-    };
+      const dateObject = {
+        date: new Date().toUTCString(),
+      };
 
-    const updateObject = {
-      updated: false,
-    };
-    //combine all objects and send to api
-    const comment = Object.assign(
-      idObject,
-      refObject,
-      dateObject,
-      textObject,
-      updateObject
-    );
+      const updateObject = {
+        updated: false,
+      };
+      //combine all objects and send to api
+      const comment = Object.assign(
+        idObject,
+        refObject,
+        dateObject,
+        textObject,
+        updateObject
+      );
 
-    const res = await fetch("/api/createComment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(comment),
-    });
+      const res = await fetch("/api/createComment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(comment),
+      });
 
-    router.reload();
+      router.reload();
+    } else {
+      const ecoObject = {
+        ecoregions: clickInfo,
+      };
+      // combine form value and editor value into one object to pass to api.
+      const post = Object.assign(postValue, details, ecoObject);
+      console.log(post);
+
+      switch (pathName) {
+        case "/dashboard/drafts/[_id]":
+          // create post
+          const res1 = await fetch("/api/createPost", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(post),
+          });
+
+          if (res1.ok) {
+            // delete draft once published
+            const res2 = await fetch("/api/deleteDraft", {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(post._id),
+            });
+          }
+
+          break;
+        case "/dashboard/posts/[_id]":
+          const res2 = await fetch("/api/updatePost", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(post),
+          });
+          break;
+        case "editor":
+          // send value to createPost api
+          const res3 = await fetch("/api/createPost", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(post),
+          });
+          break;
+
+        default:
+          break;
+      }
+    }
   };
 
   return (
@@ -99,14 +165,22 @@ const Sure = ({
         </Button>
         <Button
           onClick={
-            action == "submit"
-              ? () => handleSubmit(value, postID, resultID)
+            action == "comment" || action == "publish"
+              ? () =>
+                  handleSubmit(
+                    value,
+                    postID,
+                    resultID,
+                    postValue,
+                    details,
+                    clickInfo
+                  )
               : () => deletePost(resultID, deleteFetch)
           }
           color="secondary"
           variant="outlined"
         >
-          {action == "submit" ? "Submit" : "Delete"}
+          {action == "comment" || action == "publish" ? "Submit" : "Delete"}
         </Button>
       </DialogActions>
     </Dialog>

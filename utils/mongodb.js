@@ -50,14 +50,18 @@ const connectToDatabase = async () => {
 // add a post to database with specific format from editor with id, version, and rows as input data.
 const createPost = async (
   title,
-  author,
+  name,
   description,
   category,
   tags,
   ecoregions,
   id,
   version,
-  rows
+  rows,
+  status,
+  approved,
+  updated,
+  featured
 ) => {
   const count = 0;
 
@@ -65,7 +69,7 @@ const createPost = async (
 
   const data = {
     title,
-    author,
+    name,
     description,
     category,
     tags,
@@ -74,9 +78,13 @@ const createPost = async (
     version,
     rows,
     count,
+    status,
+    approved,
+    updated,
+    featured,
   };
 
-  const response = await db.collection("published_posts").insertOne(data);
+  const response = await db.collection("posts").insertOne(data);
 
   return response;
 };
@@ -85,11 +93,7 @@ const createPost = async (
 const getPosts = async () => {
   const { db } = await connectToDatabase();
 
-  const posts = await db
-    .collection("published_posts")
-    .find({})
-    .limit(20)
-    .toArray();
+  const posts = await db.collection("posts").find({}).limit(20).toArray();
 
   return posts;
 };
@@ -98,7 +102,7 @@ const getPosts = async () => {
 const getPostById = async (_id) => {
   const { db } = await connectToDatabase();
 
-  const post = await db.collection("published_posts").findOne({
+  const post = await db.collection("posts").findOne({
     _id: ObjectId(_id),
   });
 
@@ -108,13 +112,13 @@ const getPostById = async (_id) => {
 // query database to get all drafts by user
 
 // UPDATE TO GETPOSTSBYUSER
-const getPostsByUser = async () => {
+const getPostsByUser = async (name, status) => {
   const { db } = await connectToDatabase();
 
   const posts = await db
-    .collection("published_posts")
-    .find({})
-    .limit(20)
+    .collection("posts")
+    .find({ name: name, status: status })
+    .sort({ count: 1 })
     .toArray();
 
   return posts;
@@ -123,7 +127,7 @@ const getPostsByUser = async () => {
 // update a post
 const updatePost = async (
   title,
-  author,
+  name,
   description,
   category,
   tags,
@@ -131,13 +135,17 @@ const updatePost = async (
   _id,
   id,
   version,
-  rows
+  rows,
+  status,
+  approved,
+  updated,
+  featured
 ) => {
   const { db } = await connectToDatabase();
 
   const data = {
     title,
-    author,
+    name,
     description,
     category,
     tags,
@@ -145,8 +153,12 @@ const updatePost = async (
     id,
     version,
     rows,
+    status,
+    approved,
+    updated,
+    featured,
   };
-  const response = await db.collection("published_posts").updateOne(
+  const response = await db.collection("posts").updateOne(
     {
       _id: ObjectId(_id),
     },
@@ -160,7 +172,7 @@ const updatePost = async (
 const deletePost = async (_id) => {
   const { db } = await connectToDatabase();
 
-  const post = await db.collection("published_posts").deleteOne({
+  const post = await db.collection("posts").deleteOne({
     _id: ObjectId(_id),
   });
 
@@ -169,41 +181,45 @@ const deletePost = async (_id) => {
   });
 
   const deleted = Object.assign(post, comments);
-  console.log(deleted);
+  // console.log(deleted);
 
   return deleted;
 };
 
 // add a draft to database with specific format from editor with id, version, and rows as input data.
-const createDraft = async (
-  title,
-  author,
-  description,
-  category,
-  tags,
-  ecoregions,
-  id,
-  version,
-  rows
-) => {
-  const { db } = await connectToDatabase();
+// const createDraft = async (
+//   title,
+//   name,
+//   description,
+//   category,
+//   tags,
+//   ecoregions,
+//   id,
+//   version,
+//   rows,
+//   approved,
+//   updated
+// ) => {
+//   const { db } = await connectToDatabase();
 
-  const data = {
-    title,
-    author,
-    description,
-    category,
-    tags,
-    ecoregions,
-    id,
-    version,
-    rows,
-  };
-  const response = await db.collection("drafts").insertOne(data);
-  // console.log(response);
+//   const data = {
+//     title,
+//     name,
+//     description,
+//     category,
+//     tags,
+//     ecoregions,
+//     id,
+//     version,
+//     rows,
+//     approved,
+//     updated,
+//   };
+//   const response = await db.collection("posts").insertOne(data);
+//   // console.log(response);
 
-  return response;
-};
+//   return response;
+// };
 
 // query database to get all drafts by user
 
@@ -211,68 +227,72 @@ const createDraft = async (
 const getDraftsByUser = async () => {
   const { db } = await connectToDatabase();
 
-  const drafts = await db.collection("drafts").find({}).limit(20).toArray();
+  const drafts = await db.collection("posts").find({}).limit(20).toArray();
 
   return drafts;
 };
 
 // retrieve single draft by id from database
-const getDraftById = async (id) => {
-  const { db } = await connectToDatabase();
+// const getDraftById = async (id) => {
+//   const { db } = await connectToDatabase();
 
-  const draft = await db.collection("drafts").findOne({
-    _id: ObjectId(id),
-  });
+//   const draft = await db.collection("posts").findOne({
+//     _id: ObjectId(id),
+//   });
 
-  return draft;
-};
+//   return draft;
+// };
 
-//update a draft
-const updateDraft = async (
-  title,
-  author,
-  description,
-  category,
-  tags,
-  ecoregions,
-  _id,
-  id,
-  version,
-  rows
-) => {
-  const { db } = await connectToDatabase();
+// //update a draft
+// const updateDraft = async (
+//   title,
+//   name,
+//   description,
+//   category,
+//   tags,
+//   ecoregions,
+//   _id,
+//   id,
+//   version,
+//   rows,
+//   approved,
+//   updated
+// ) => {
+//   const { db } = await connectToDatabase();
 
-  const data = {
-    title,
-    author,
-    description,
-    category,
-    tags,
-    ecoregions,
-    id,
-    version,
-    rows,
-  };
-  const response = await db.collection("drafts").updateOne(
-    {
-      _id: ObjectId(_id),
-    },
-    { $set: data }
-  );
+//   const data = {
+//     title,
+//     name,
+//     description,
+//     category,
+//     tags,
+//     ecoregions,
+//     id,
+//     version,
+//     rows,
+//     approved,
+//     updated,
+//   };
+//   const response = await db.collection("posts").updateOne(
+//     {
+//       _id: ObjectId(_id),
+//     },
+//     { $set: data }
+//   );
 
-  return response;
-};
+//   return response;
+// };
 
-//delete a draft
-const deleteDraft = async (_id) => {
-  const { db } = await connectToDatabase();
+// //delete a draft
+// const deleteDraft = async (_id) => {
+//   const { db } = await connectToDatabase();
 
-  const deleted = await db.collection("drafts").deleteOne({
-    _id: ObjectId(_id),
-  });
+//   const deleted = await db.collection("posts").deleteOne({
+//     _id: ObjectId(_id),
+//   });
 
-  return deleted;
-};
+//   return deleted;
+// };
 
 //create a comment
 const createComment = async (post_id, comment_ref, date, text, updated) => {
@@ -298,7 +318,7 @@ const getPostComments = async (id) => {
   return comments;
 };
 
-const getCommentsByUser = async () => {
+const getCommentsByUser = async (name) => {
   const { db } = await connectToDatabase();
 
   const comments = await db.collection("comments").find({}).toArray();
@@ -369,7 +389,7 @@ const searchAllPosts = async (query) => {
   const { db } = await connectToDatabase();
 
   const results = await db
-    .collection("published_posts")
+    .collection("posts")
     .aggregate([
       {
         $search: {
@@ -424,7 +444,7 @@ const searchEcoPosts = async (query) => {
   const { db } = await connectToDatabase();
 
   const results = await db
-    .collection("published_posts")
+    .collection("posts")
     .aggregate([
       {
         $search: {
@@ -546,11 +566,11 @@ module.exports = {
   getPostById,
   updatePost,
   deletePost,
-  createDraft,
+  // createDraft,
   getDraftsByUser,
-  getDraftById,
-  updateDraft,
-  deleteDraft,
+  // getDraftById,
+  // updateDraft,
+  // deleteDraft,
   createComment,
   getPostComments,
   getCommentsByUser,

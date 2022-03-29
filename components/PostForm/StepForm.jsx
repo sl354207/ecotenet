@@ -11,9 +11,14 @@ import {
   StepButton,
   Stepper,
   Typography,
+  IconButton,
+  Snackbar,
 } from "@material-ui/core";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+
+import CloseIcon from "@material-ui/icons/Close";
+import Sure from "../Sure";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -80,6 +85,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-around",
     marginBottom: 20,
   },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
 // pass in post and url path as props
@@ -106,6 +114,22 @@ const StepForm = ({ post, pathName }) => {
 
   // set map state
   const [clickInfo, setClickInfo] = useState(ecoregions);
+
+  const [dialog, setDialog] = useState(false);
+
+  const [snackbar, setSnackbar] = useState(false);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar(false);
+    }
+
+    setSnackbar(false);
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
 
   // remove tag chip on delete. Take in label of chip as chip. If the tag value does not equal the tag label than return filtered array without that chip and set it to state.
   const handleRemoveChip = (tags, chip) => {
@@ -158,6 +182,9 @@ const StepForm = ({ post, pathName }) => {
           },
           body: JSON.stringify(value),
         });
+        if (res1.ok) {
+          setSnackbar(true);
+        }
         break;
       case "/dashboard/posts/[_id]":
         // const res2 = await fetch("/api/updatePost", {
@@ -177,8 +204,11 @@ const StepForm = ({ post, pathName }) => {
           body: JSON.stringify(value),
         });
         // console.log(res3);
-        const ID = await res3.json();
-        router.push(`/dashboard/drafts/${ID.insertedId}`);
+        if (res3.ok) {
+          const ID = await res3.json();
+          router.push(`/dashboard/drafts/${ID.insertedId}`);
+        }
+
         break;
 
       default:
@@ -287,7 +317,10 @@ const StepForm = ({ post, pathName }) => {
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      onClick={() =>
+                        // {() => publish(postValue, details, clickInfo)}
+                        setDialog(true)
+                      }
                       variant="contained"
                       color="secondary"
                     >
@@ -318,7 +351,10 @@ const StepForm = ({ post, pathName }) => {
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      onClick={() =>
+                        // {() => publish(postValue, details, clickInfo)}
+                        setDialog(true)
+                      }
                       variant="contained"
                       color="secondary"
                     >
@@ -376,7 +412,10 @@ const StepForm = ({ post, pathName }) => {
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      onClick={() =>
+                        // {() => publish(postValue, details, clickInfo)}
+                        setDialog(true)
+                      }
                       variant="contained"
                       color="secondary"
                     >
@@ -407,7 +446,10 @@ const StepForm = ({ post, pathName }) => {
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      onClick={() =>
+                        // {() => publish(postValue, details, clickInfo)}
+                        setDialog(true)
+                      }
                       variant="contained"
                       color="secondary"
                     >
@@ -458,7 +500,10 @@ const StepForm = ({ post, pathName }) => {
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      onClick={() =>
+                        // {() => publish(postValue, details, clickInfo)}
+                        setDialog(true)
+                      }
                       variant="contained"
                       color="secondary"
                     >
@@ -489,7 +534,10 @@ const StepForm = ({ post, pathName }) => {
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      onClick={() =>
+                        // {() => publish(postValue, details, clickInfo)}
+                        setDialog(true)
+                      }
                       variant="contained"
                       color="secondary"
                     >
@@ -555,6 +603,43 @@ const StepForm = ({ post, pathName }) => {
           </StepButton>
         </Step>
       </Stepper>
+      <Sure
+        open={dialog}
+        handleClose={handleCloseDialog}
+        // handleSubmit={deletePost}
+        ariaLabeledBy="alert-dialog-title"
+        ariaDescribedBy="alert-dialog-description"
+        id="alert-dialog-description"
+        className={classes.dialog}
+        sure="Are you sure you want to publish item?"
+        action="publish"
+        postValue={postValue}
+        details={details}
+        clickInfo={clickInfo}
+        pathName={pathName}
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={snackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message="Post Saved"
+        action={
+          <>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </>
+        }
+      />
 
       {handleSteps(activeStep)}
     </>
