@@ -89,7 +89,7 @@ const Comment = ({ comment, post_id }) => {
                   variant="h6"
                 >
                   <Link href="#" color="secondary">
-                    Author
+                    {comment.name}
                   </Link>
                 </Typography>
                 <Typography
@@ -140,11 +140,17 @@ const Comment = ({ comment, post_id }) => {
                 variant="h6"
               >
                 <Link href="#" color="secondary">
-                  Author
+                  {comment.name}
                 </Link>
               </Typography>
               <Typography className={classes.publish} align="left" variant="h6">
-                {comment.date.toDateString()}
+                {comment.updated ? (
+                  //
+                  <>Updated on {comment.date.toDateString()}</>
+                ) : (
+                  //
+                  <>{comment.date.toDateString()}</>
+                )}
               </Typography>
             </div>
             <Typography variant="h6">{comment.text}</Typography>

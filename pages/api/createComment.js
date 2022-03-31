@@ -3,7 +3,8 @@ import { createComment } from "../../utils/mongodb";
 // api endpoint to post a comment to the database
 export default async function handler(req, res) {
   // body must be in same format as database query
-  const { post_id, comment_ref, date, text, updated } = req.body;
+  const { name, post_id, comment_ref, date, text, approved, updated } =
+    req.body;
 
   // only allow post method
   if (req.method !== "POST") {
@@ -12,10 +13,12 @@ export default async function handler(req, res) {
   // try post request, if successful return response, otherwise return error message.
   try {
     const createdComment = await createComment(
+      name,
       post_id,
       comment_ref,
       date,
       text,
+      approved,
       updated
     );
 

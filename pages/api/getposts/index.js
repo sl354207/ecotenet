@@ -7,7 +7,9 @@ export default async function handler(req, res) {
     return res.status(405);
   }
 
-  const { name, status } = req.body;
+  const name = req.query.q1;
+  const status = req.query.q2;
+  // console.log(req.body);
   // try get request, if successful return response, otherwise return error message
   try {
     const drafts = await getPostsByUser(name, status);

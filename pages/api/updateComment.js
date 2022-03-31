@@ -6,10 +6,17 @@ export default async function handler(req, res) {
   }
 
   // body must be in same format as database query
-  const { _id, date, text, updated } = req.body;
+  const { _id, name, date, text, approved, updated } = req.body;
 
   try {
-    const updatedComment = await updateComment(_id, date, text, updated);
+    const updatedComment = await updateComment(
+      _id,
+      name,
+      date,
+      text,
+      approved,
+      updated
+    );
     return res.status(200).json(updatedComment);
   } catch (err) {
     console.error(err);

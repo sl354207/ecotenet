@@ -11,12 +11,14 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 export default function DraftByUser() {
   // set id to id in url query
   const router = useRouter();
+  // console.log(router.query);
   const _id = router.query._id;
   // capture url path to pass to form
   const pathName = router.pathname;
+  // console.log(_id);
 
   // retrieve drafts from drafts api. convert swr data to name posts.
-  const { data: post } = useSWR(`/api/getdrafts/${_id}`, fetcher);
+  const { data: post } = useSWR(_id ? `/api/getposts/${_id}` : null, fetcher);
 
   // loading state until draft is retrieved
   if (!post || post == undefined) return "Loading...";

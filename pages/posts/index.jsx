@@ -16,7 +16,7 @@ export default function Posts({ posts }) {
 
 // retrieve data at build time
 export const getStaticProps = async () => {
-  const posts = await getPosts();
+  const posts = await getPosts("published", "true");
 
   return {
     props: {

@@ -48,7 +48,7 @@ const PostList = ({ posts }) => {
                   {post.description}
                 </Typography>
                 <Typography gutterBottom color="secondary" align="left">
-                  {post.author}
+                  {post.name}
                 </Typography>
               </div>
               <div>

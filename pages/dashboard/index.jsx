@@ -153,6 +153,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
+// const fetcher = (url, name, status) => {
+//   const value = {
+//     name: name,
+//     status: status,
+//   };
+//   // console.log(url);
+//   // console.log(value);
+//   // const res = fetch(url, {
+//   //   method: "Get",
+//   //   headers: {
+//   //     "Content-Type": "application/json",
+//   //   },
+//   //   body: JSON.stringify(value),
+//   // }).then((res) => res.json());
+//   // const json = await res.json();
+//   // console.log(json);
+//   // return res.json();
+// };
 
 export default function Dashboard() {
   const router = useRouter();
@@ -161,8 +179,8 @@ export default function Dashboard() {
   const classes = useStyles();
 
   const [value, setValue] = useState(0);
-
-  const [fetch, setFetch] = useState("getposts");
+  // change to get user profile
+  const [fetch, setFetch] = useState(`/api/getposts?q1=Muskrat&q2=published`);
   const [deleteFetch, setDeleteFetch] = useState();
 
   const [open, setOpen] = useState(false);
@@ -178,7 +196,7 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  const { data: results } = useSWR(`/api/${fetch}`, fetcher);
+  const { data: results } = useSWR(fetch, fetcher);
 
   // const isLoading = results;
 
@@ -187,19 +205,20 @@ export default function Dashboard() {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        setFetch("getposts");
+        setFetch(`/api/getposts?q1=Muskrat&q2=published`);
         break;
       case 1:
-        setFetch("getposts");
+        setFetch(`/api/getposts?q1=Muskrat&q2=published`);
         setDeleteFetch("deletePost");
         break;
       case 2:
-        setFetch("getdrafts");
+        setFetch(`/api/getposts?q1=Muskrat&q2=draft`);
         setDeleteFetch("deleteDraft");
         // expected output: "Mangoes and papayas are $2.79 a pound."
         break;
       case 3:
-        setFetch("getCommentsByUser");
+        // update comments request
+        setFetch(`/api/getCommentsByUser?q=Muskrat`);
         setDeleteFetch("deleteComment");
         // expected output: "Mangoes and papayas are $2.79 a pound."
         break;

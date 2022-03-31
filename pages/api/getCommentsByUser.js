@@ -6,9 +6,12 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405);
   }
+
+  const { q } = req.query;
+  // console.log(name);
   // try get request, if successful return response, otherwise return error message
   try {
-    const comments = await getCommentsByUser();
+    const comments = await getCommentsByUser(q);
 
     return res.status(200).json(comments);
   } catch (err) {

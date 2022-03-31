@@ -101,7 +101,7 @@ const post = ({ post, comments }) => {
           <div className={classes.items}>
             <Typography align="center" variant="h6">
               <Link href="#" color="secondary">
-                {post.author}
+                {post.name}
               </Link>
             </Typography>
             <Typography className={classes.publish} align="left" variant="h6">
@@ -157,7 +157,7 @@ export const getStaticProps = async (context) => {
 
 // build routing paths for each post at build time
 export const getStaticPaths = async () => {
-  const posts = await getPosts();
+  const posts = await getPosts("published", "true");
 
   // create array of ids of each post in posts
   const ids = posts.map((post) => post._id);

@@ -16,7 +16,7 @@ export default function DraftByUser() {
   const pathName = router.pathname;
 
   // retrieve drafts from drafts api. convert swr data to name posts.
-  const { data: post } = useSWR(`/api/getposts/${_id}`, fetcher);
+  const { data: post } = useSWR(_id ? `/api/getposts/${_id}` : null, fetcher);
 
   // loading state until draft is retrieved
   if (!post || post == undefined) return "Loading...";

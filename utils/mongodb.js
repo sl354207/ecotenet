@@ -90,10 +90,14 @@ const createPost = async (
 };
 
 // query database to get all published posts
-const getPosts = async () => {
+const getPosts = async (status, approved) => {
   const { db } = await connectToDatabase();
 
-  const posts = await db.collection("posts").find({}).limit(20).toArray();
+  const posts = await db
+    .collection("posts")
+    .find({ status: status, approved: approved })
+    .sort({ count: -1 })
+    .toArray();
 
   return posts;
 };
@@ -224,13 +228,13 @@ const deletePost = async (_id) => {
 // query database to get all drafts by user
 
 // UPDATE TO GETPOSTSBYUSER
-const getDraftsByUser = async () => {
-  const { db } = await connectToDatabase();
+// const getDraftsByUser = async () => {
+//   const { db } = await connectToDatabase();
 
-  const drafts = await db.collection("posts").find({}).limit(20).toArray();
+//   const drafts = await db.collection("posts").find({}).limit(20).toArray();
 
-  return drafts;
-};
+//   return drafts;
+// };
 
 // retrieve single draft by id from database
 // const getDraftById = async (id) => {
@@ -295,10 +299,18 @@ const getDraftsByUser = async () => {
 // };
 
 //create a comment
-const createComment = async (post_id, comment_ref, date, text, updated) => {
+const createComment = async (
+  name,
+  post_id,
+  comment_ref,
+  date,
+  text,
+  approved,
+  updated
+) => {
   const { db } = await connectToDatabase();
 
-  const data = { post_id, comment_ref, date, text, updated };
+  const data = { name, post_id, comment_ref, date, text, approved, updated };
   const response = await db.collection("comments").insertOne(data);
 
   return response;
@@ -312,6 +324,7 @@ const getPostComments = async (id) => {
     .collection("comments")
     .find({
       post_id: id,
+      approved: "true",
     })
     .toArray();
 
@@ -321,18 +334,23 @@ const getPostComments = async (id) => {
 const getCommentsByUser = async (name) => {
   const { db } = await connectToDatabase();
 
-  const comments = await db.collection("comments").find({}).toArray();
+  const comments = await db
+    .collection("comments")
+    .find({ name: name })
+    .toArray();
 
   return comments;
 };
 
 // update comment
-const updateComment = async (_id, date, text, updated) => {
+const updateComment = async (_id, name, date, text, approved, updated) => {
   const { db } = await connectToDatabase();
 
   const data = {
+    name,
     date,
     text,
+    approved,
     updated,
   };
   const response = await db.collection("comments").updateOne(
@@ -394,21 +412,39 @@ const searchAllPosts = async (query) => {
       {
         $search: {
           index: "searchPosts",
-          text: {
-            query: `${query}`,
-            path: {
-              wildcard: "*",
-            },
-            fuzzy: {
-              maxExpansions: 20,
-            },
-            score: {
-              function: {
-                path: {
-                  value: "count",
+          compound: {
+            must: [
+              {
+                text: {
+                  query: `${query}`,
+                  path: {
+                    wildcard: "*",
+                  },
+                  fuzzy: {
+                    maxExpansions: 20,
+                  },
+                  score: {
+                    function: {
+                      path: {
+                        value: "count",
+                      },
+                    },
+                  },
                 },
               },
-            },
+            ],
+            filter: [
+              {
+                text: {
+                  query: "published",
+                  path: "status",
+                },
+                text: {
+                  query: "true",
+                  path: "approved",
+                },
+              },
+            ],
           },
         },
       },
@@ -473,8 +509,16 @@ const searchEcoPosts = async (query) => {
             filter: [
               {
                 text: {
-                  query: "313",
+                  query: ["313"],
                   path: "ecoregions",
+                },
+                text: {
+                  query: "published",
+                  path: "status",
+                },
+                text: {
+                  query: "true",
+                  path: "approved",
                 },
               },
             ],
@@ -567,7 +611,7 @@ module.exports = {
   updatePost,
   deletePost,
   // createDraft,
-  getDraftsByUser,
+  // getDraftsByUser,
   // getDraftById,
   // updateDraft,
   // deleteDraft,
