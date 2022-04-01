@@ -1,4 +1,4 @@
-import { getCommentsByUser } from "../../utils/mongodb";
+import { getDashboardComments } from "../../utils/mongodb";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   // console.log(name);
   // try get request, if successful return response, otherwise return error message
   try {
-    const comments = await getCommentsByUser(q);
+    const comments = await getDashboardComments(q);
 
     return res.status(200).json(comments);
   } catch (err) {

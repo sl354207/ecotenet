@@ -118,8 +118,39 @@ const search = ({ ecoFilter }) => {
     `/api/search/${queryFilter}?q=${query}`,
     fetcher
   );
+  console.log(results);
 
   let list;
+
+  // switch (results) {
+  //   case undefined:
+  //     list = (
+  //       <CircularProgress
+  //         color="secondary"
+  //         size={100}
+  //         disableShrink={true}
+  //         className={classes.progress}
+  //       />
+  //     );
+
+  //     break;
+  //   case [""]:
+  //     list = (
+  //       <Typography variant="h3" align="center" className={classes.header}>
+  //         no results
+  //       </Typography>
+  //     );
+
+  //     break;
+
+  //   default:
+  //     if (results[0].title !== undefined) {
+  //       list = <PostList posts={results} />;
+  //     } else {
+  //       list = <SpeciesList results={results} />;
+  //     }
+  //     break;
+  // }
   if (!results || results == undefined) {
     list = (
       <CircularProgress
@@ -129,7 +160,18 @@ const search = ({ ecoFilter }) => {
         className={classes.progress}
       />
     );
-  } else if (results && results[0].title !== undefined) {
+  } else if (Array.isArray(results) && results.length == 0) {
+    list = (
+      <Typography variant="h3" align="center" className={classes.header}>
+        no results
+      </Typography>
+    );
+    // } else if (
+    //   results &&
+    //   results.lenth > 0 &&
+    //   results[0].title !== undefined
+    // ) {
+  } else if (results && results.length > 0 && results[0].title !== undefined) {
     list = <PostList posts={results} />;
   } else {
     list = <SpeciesList results={results} />;

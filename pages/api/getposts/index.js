@@ -1,4 +1,4 @@
-import { getPostsByUser } from "../../../utils/mongodb";
+import { getDashboardPosts } from "../../../utils/mongodb";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   // console.log(req.body);
   // try get request, if successful return response, otherwise return error message
   try {
-    const drafts = await getPostsByUser(name, status);
+    const drafts = await getDashboardPosts(name, status);
 
     return res.status(200).json(drafts);
   } catch (err) {

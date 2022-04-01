@@ -36,7 +36,7 @@ import divider from '@react-page/plugins-divider';
 import EditorLayout from '../components/EditorLayout';
 import { Button } from '@material-ui/core';
 
-const { getDraftById } = require('../utils/mongodb');  
+const { getPostById } = require('../utils/mongodb');  
 
 import customImage from '../plugins/customImage'
 
@@ -102,7 +102,7 @@ export default function SimpleExample({ draft }) {
 
 // retrieve data at build time
 export const getStaticProps = async () => {
-  const draft = await getDraftById("60b10c03819ccf1757b20e76");
+  const draft = await getPostById("624340abf21e50781696754d");
   // console.log(draft);
 
   return {

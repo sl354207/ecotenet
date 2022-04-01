@@ -116,7 +116,7 @@ const getPostById = async (_id) => {
 // query database to get all drafts by user
 
 // UPDATE TO GETPOSTSBYUSER
-const getPostsByUser = async (name, status) => {
+const getDashboardPosts = async (name, status) => {
   const { db } = await connectToDatabase();
 
   const posts = await db
@@ -331,7 +331,7 @@ const getPostComments = async (id) => {
   return comments;
 };
 
-const getCommentsByUser = async (name) => {
+const getDashboardComments = async (name) => {
   const { db } = await connectToDatabase();
 
   const comments = await db
@@ -421,6 +421,7 @@ const searchAllPosts = async (query) => {
                     wildcard: "*",
                   },
                   fuzzy: {
+                    maxEdits: 2,
                     maxExpansions: 20,
                   },
                   score: {
@@ -466,6 +467,7 @@ const searchAllSpecies = async (query) => {
             query: `${query}`,
             path: ["COMMON_NAME", "Scientific_Name"],
             fuzzy: {
+              maxEdits: 1,
               maxExpansions: 20,
             },
           },
@@ -494,6 +496,7 @@ const searchEcoPosts = async (query) => {
                     wildcard: "*",
                   },
                   fuzzy: {
+                    maxEdits: 2,
                     maxExpansions: 20,
                   },
                   score: {
@@ -504,12 +507,16 @@ const searchEcoPosts = async (query) => {
                     },
                   },
                 },
+                // text: {
+                //   query: "313",
+                //   path: "ecoregions",
+                // },
               },
             ],
             filter: [
               {
                 text: {
-                  query: ["313"],
+                  query: "313",
                   path: "ecoregions",
                 },
                 text: {
@@ -546,6 +553,7 @@ const searchEcoSpecies = async (query) => {
                   query: `${query}`,
                   path: ["COMMON_NAME", "Scientific_Name"],
                   fuzzy: {
+                    maxEdits: 1,
                     maxExpansions: 20,
                   },
                 },
@@ -606,7 +614,7 @@ module.exports = {
   connectToDatabase,
   createPost,
   getPosts,
-  getPostsByUser,
+  getDashboardPosts,
   getPostById,
   updatePost,
   deletePost,
@@ -617,7 +625,7 @@ module.exports = {
   // deleteDraft,
   createComment,
   getPostComments,
-  getCommentsByUser,
+  getDashboardComments,
   updateComment,
   deleteComment,
   getMammals,

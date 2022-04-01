@@ -96,7 +96,7 @@ const StepForm = ({ post, pathName }) => {
   const theme = useTheme();
   const router = useRouter();
 
-  const { title, author, description, category, tags, ecoregions } = post;
+  const { title, description, category, tags, ecoregions } = post;
 
   // set form step state
   const [activeStep, setActiveStep] = useState(0);
@@ -158,6 +158,7 @@ const StepForm = ({ post, pathName }) => {
     // })
   };
 
+  // UPDATE ONCE AUTHENTICATION IS USED
   // function to create a new draft. Takes in form values and editor value.
   const save = async (postValue, details, clickInfo) => {
     const ecoObject = {
@@ -169,13 +170,21 @@ const StepForm = ({ post, pathName }) => {
       version: postValue != null ? postValue.version : 1,
       rows: postValue != null ? postValue.rows : [],
     };
+
+    const silentObject = {
+      name: "Muskrat",
+      status: "draft",
+      approved: "false",
+      updated: false,
+      featured: false,
+    };
     // combine form value and editor value into one object to pass to api.
-    const value = Object.assign(postObject, details, ecoObject);
+    const value = Object.assign(postObject, details, ecoObject, silentObject);
     // console.log(value);
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
-        const res1 = await fetch("/api/updateDraft", {
+        const res1 = await fetch("/api/updatePost", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -196,7 +205,7 @@ const StepForm = ({ post, pathName }) => {
         // });
         break;
       case "editor":
-        const res3 = await fetch("/api/createDraft", {
+        const res3 = await fetch("/api/createPost", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -216,18 +225,27 @@ const StepForm = ({ post, pathName }) => {
     }
   };
 
+  // UPDATE ONCE AUTHENTICATION IS USED
   // function to create a published post. Takes in form values and editor value
   const publish = async (postValue, details, clickInfo) => {
     const ecoObject = {
       ecoregions: clickInfo,
     };
+
+    const silentObject = {
+      name: "Muskrat",
+      status: "published",
+      approved: "pending",
+      updated: post.approved == "true" ? true : false,
+      featured: false,
+    };
     // combine form value and editor value into one object to pass to api.
-    const value = Object.assign(postValue, details, ecoObject);
+    const value = Object.assign(postValue, details, ecoObject, silentObject);
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
         // create post
-        const res1 = await fetch("/api/createPost", {
+        const res1 = await fetch("/api/updatePost", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -237,13 +255,14 @@ const StepForm = ({ post, pathName }) => {
 
         if (res1.ok) {
           // delete draft once published
-          const res2 = await fetch("/api/deleteDraft", {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(value._id),
-          });
+          // const res2 = await fetch("/api/deleteDraft", {
+          //   method: "DELETE",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(value._id),
+          // });
+          setSnackbar(true);
         }
 
         break;
@@ -255,6 +274,17 @@ const StepForm = ({ post, pathName }) => {
           },
           body: JSON.stringify(value),
         });
+        if (res1.ok) {
+          // delete draft once published
+          // const res2 = await fetch("/api/deleteDraft", {
+          //   method: "DELETE",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(value._id),
+          // });
+          setSnackbar(true);
+        }
         break;
       case "editor":
         // send value to createPost api
@@ -265,6 +295,17 @@ const StepForm = ({ post, pathName }) => {
           },
           body: JSON.stringify(value),
         });
+        if (res1.ok) {
+          // delete draft once published
+          // const res2 = await fetch("/api/deleteDraft", {
+          //   method: "DELETE",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(value._id),
+          // });
+          setSnackbar(true);
+        }
         break;
 
       default:

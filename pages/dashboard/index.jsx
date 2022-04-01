@@ -218,7 +218,7 @@ export default function Dashboard() {
         break;
       case 3:
         // update comments request
-        setFetch(`/api/getCommentsByUser?q=Muskrat`);
+        setFetch(`/api/getDashboardComments?q=Muskrat`);
         setDeleteFetch("deleteComment");
         // expected output: "Mangoes and papayas are $2.79 a pound."
         break;
@@ -228,18 +228,18 @@ export default function Dashboard() {
   };
 
   // function to delete post by id
-  const deletePost = async (ID, deleteFetch) => {
-    const res = await fetch(`/api/${deleteFetch}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(ID),
-    });
-    setOpen(false);
-    // reload page after deletion
-    router.reload();
-  };
+  // const deletePost = async (ID, deleteFetch) => {
+  //   const res = await fetch(`/api/${deleteFetch}`, {
+  //     method: "DELETE",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(ID),
+  //   });
+  //   setOpen(false);
+  //   // reload page after deletion
+  //   router.reload();
+  // };
 
   return (
     <Container>
