@@ -103,7 +103,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardComments = ({ result, handleClickOpen }) => {
+const DashboardComments = ({
+  result,
+  handleClickOpen,
+  mutate,
+  setSnackbar,
+}) => {
   const theme = useTheme();
   const classes = useStyles();
 
@@ -111,42 +116,21 @@ const DashboardComments = ({ result, handleClickOpen }) => {
 
   const [commentValue, setCommentValue] = useState("");
 
-  // const [show, setShow] = useState(false);
-  // const container = useRef(null);
-
-  // const handleClick = () => {
-  //   setShow(!show);
-  // };
-
   // update text input field
   const handleCommentChange = (event) => {
     setCommentValue(event.target.value);
   };
 
   // handle comment submission to database through api
-  const handleCommentSubmit = async (commentValue, id) => {
-    //convert comment values to key value pairs
-    const textObject = {
+  const handleCommentUpdate = async (commentValue) => {
+    //combine all objects and send to api
+    const comment = {
+      _id: result._id,
+      date: new Date().toUTCString(),
       text: commentValue,
-    };
-
-    const updateObject = {
+      approved: "pending",
       updated: true,
     };
-
-    const dateObject = {
-      date: new Date().toUTCString(),
-    };
-    const IDObject = {
-      _id: id,
-    };
-    //combine all objects and send to api
-    const comment = Object.assign(
-      updateObject,
-      dateObject,
-      textObject,
-      IDObject
-    );
 
     const res = await fetch("/api/updateComment", {
       method: "PUT",
@@ -155,8 +139,15 @@ const DashboardComments = ({ result, handleClickOpen }) => {
       },
       body: JSON.stringify(comment),
     });
-
-    router.reload();
+    if (res.ok) {
+      mutate();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Comment updated successfully",
+      });
+      setCommentValue("");
+    }
   };
 
   return (
@@ -168,7 +159,6 @@ const DashboardComments = ({ result, handleClickOpen }) => {
           placeHolder={null}
           id="dashboardcomment"
           handleChange={handleCommentChange}
-          // handleSubmit={handleCommentSubmit}
           autoFocus={false}
           // rows={1}
         />
@@ -179,9 +169,8 @@ const DashboardComments = ({ result, handleClickOpen }) => {
             variant="contained"
             color="secondary"
             className={classes.buttonedit}
-            // startIcon={<EditIcon />}
             size="small"
-            onClick={() => handleCommentSubmit(commentValue, result._id)}
+            onClick={() => handleCommentUpdate(commentValue)}
           >
             Save Change
           </Button>
@@ -190,10 +179,8 @@ const DashboardComments = ({ result, handleClickOpen }) => {
             variant="contained"
             color="secondary"
             className={classes.buttonedit}
-            // startIcon={<EditIcon />}
             size="small"
             disabled
-            // onClick={handleCommentSubmit}
           >
             Save Change
           </Button>

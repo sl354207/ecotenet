@@ -24,10 +24,10 @@ const Comments = ({ comments, post_id }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [show, setShow] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const handleClick = () => {
-    setShow(!show);
+    setShowForm(!showForm);
   };
 
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
@@ -54,12 +54,17 @@ const Comments = ({ comments, post_id }) => {
         variant="outlined"
         color="secondary"
         onClick={handleClick}
-        endIcon={show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        className={show ? classes.add : classes.noadd}
+        endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        className={showForm ? classes.add : classes.noadd}
       >
         Add Comment
       </Button>
-      <CommentForm post_id={post_id} comment_ref="" show={show} />
+      <CommentForm
+        post_id={post_id}
+        comment_ref=""
+        showForm={showForm}
+        closeForm={handleClick}
+      />
       {sortedComments.map((comment) => (
         <Comment comment={comment} post_id={post_id} />
       ))}

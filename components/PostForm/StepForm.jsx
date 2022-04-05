@@ -18,7 +18,8 @@ import {
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 import CloseIcon from "@material-ui/icons/Close";
-import Sure from "../Sure";
+import SurePost from "../SurePost";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -111,20 +112,25 @@ const StepForm = ({ post, pathName }) => {
     category,
     tags,
   });
+  // console.log(details);
 
   // set map state
   const [clickInfo, setClickInfo] = useState(ecoregions);
 
   const [dialog, setDialog] = useState(false);
 
-  const [snackbar, setSnackbar] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
-      setSnackbar(false);
+      setSnackbar({ ...snackbar, open: false });
     }
 
-    setSnackbar(false);
+    setSnackbar({ ...snackbar, open: false });
   };
 
   const handleCloseDialog = () => {
@@ -172,6 +178,7 @@ const StepForm = ({ post, pathName }) => {
     };
 
     const silentObject = {
+      _id: post._id,
       name: "Muskrat",
       status: "draft",
       approved: "false",
@@ -180,7 +187,7 @@ const StepForm = ({ post, pathName }) => {
     };
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postObject, details, ecoObject, silentObject);
-    // console.log(value);
+    console.log(value);
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
@@ -192,7 +199,18 @@ const StepForm = ({ post, pathName }) => {
           body: JSON.stringify(value),
         });
         if (res1.ok) {
-          setSnackbar(true);
+          setSnackbar({
+            open: true,
+            severity: "success",
+            message: "Draft saved successfully",
+          });
+        }
+        if (!res1.ok) {
+          setSnackbar({
+            open: true,
+            severity: "error",
+            message: "There was a problem saving draft. Please try again later",
+          });
         }
         break;
       case "/dashboard/posts/[_id]":
@@ -216,6 +234,18 @@ const StepForm = ({ post, pathName }) => {
         if (res3.ok) {
           const ID = await res3.json();
           router.push(`/dashboard/drafts/${ID.insertedId}`);
+          setSnackbar({
+            open: true,
+            severity: "success",
+            message: "Draft saved successfully",
+          });
+        }
+        if (!res3.ok) {
+          setSnackbar({
+            open: true,
+            severity: "error",
+            message: "There was a problem saving draft. Please try again later",
+          });
         }
 
         break;
@@ -233,6 +263,7 @@ const StepForm = ({ post, pathName }) => {
     };
 
     const silentObject = {
+      _id: post._id,
       name: "Muskrat",
       status: "published",
       approved: "pending",
@@ -254,15 +285,19 @@ const StepForm = ({ post, pathName }) => {
         });
 
         if (res1.ok) {
-          // delete draft once published
-          // const res2 = await fetch("/api/deleteDraft", {
-          //   method: "DELETE",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(value._id),
-          // });
-          setSnackbar(true);
+          setSnackbar({
+            open: true,
+            severity: "success",
+            message: "Draft published successfully",
+          });
+        }
+        if (!res1.ok) {
+          setSnackbar({
+            open: true,
+            severity: "error",
+            message:
+              "There was a problem publishing draft. Please try again later",
+          });
         }
 
         break;
@@ -274,42 +309,67 @@ const StepForm = ({ post, pathName }) => {
           },
           body: JSON.stringify(value),
         });
-        if (res1.ok) {
-          // delete draft once published
-          // const res2 = await fetch("/api/deleteDraft", {
-          //   method: "DELETE",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(value._id),
-          // });
-          setSnackbar(true);
+        if (res2.ok) {
+          setSnackbar({
+            open: true,
+            severity: "success",
+            message: "Post published successfully",
+          });
+        }
+        if (!res2.ok) {
+          setSnackbar({
+            open: true,
+            severity: "error",
+            message:
+              "There was a problem publishing post. Please try again later",
+          });
         }
         break;
       case "editor":
-        // send value to createPost api
-        const res3 = await fetch("/api/createPost", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(value),
-        });
-        if (res1.ok) {
-          // delete draft once published
-          // const res2 = await fetch("/api/deleteDraft", {
-          //   method: "DELETE",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(value._id),
-          // });
-          setSnackbar(true);
-        }
         break;
 
       default:
         break;
+    }
+  };
+
+  const create = async (postValue, details, clickInfo) => {
+    const ecoObject = {
+      ecoregions: clickInfo,
+    };
+    const silentObject = {
+      name: "Muskrat",
+      status: "published",
+      approved: "pending",
+      updated: false,
+      featured: false,
+    };
+    // combine form value and editor value into one object to pass to api.
+    const value = Object.assign(postValue, details, ecoObject, silentObject);
+
+    const res = await fetch("/api/createPost", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(value),
+    });
+    // console.log(res3);
+    if (res.ok) {
+      const ID = await res.json();
+      router.push(`/dashboard/posts/${ID.insertedId}`);
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Draft published successfully",
+      });
+    }
+    if (!res.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem publishing draft. Please try again later",
+      });
     }
   };
 
@@ -369,7 +429,7 @@ const StepForm = ({ post, pathName }) => {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      // onClick={() => publish(postValue, details, clickInfo)}
                       variant="contained"
                       color="secondary"
                       disabled
@@ -403,7 +463,7 @@ const StepForm = ({ post, pathName }) => {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      // onClick={() => publish(postValue, details, clickInfo)}
                       variant="contained"
                       color="secondary"
                       disabled
@@ -464,7 +524,7 @@ const StepForm = ({ post, pathName }) => {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      // onClick={() => publish(postValue, details, clickInfo)}
                       variant="contained"
                       color="secondary"
                       disabled
@@ -498,7 +558,7 @@ const StepForm = ({ post, pathName }) => {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      // onClick={() => publish(postValue, details, clickInfo)}
                       variant="contained"
                       color="secondary"
                       disabled
@@ -552,7 +612,7 @@ const StepForm = ({ post, pathName }) => {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      // onClick={() => publish(postValue, details, clickInfo)}
                       variant="contained"
                       color="secondary"
                       disabled
@@ -586,7 +646,7 @@ const StepForm = ({ post, pathName }) => {
                     </Button>
                   ) : (
                     <Button
-                      onClick={() => publish(postValue, details, clickInfo)}
+                      // onClick={() => publish(postValue, details, clickInfo)}
                       variant="contained"
                       color="secondary"
                       disabled
@@ -644,7 +704,7 @@ const StepForm = ({ post, pathName }) => {
           </StepButton>
         </Step>
       </Stepper>
-      <Sure
+      <SurePost
         open={dialog}
         handleClose={handleCloseDialog}
         // handleSubmit={deletePost}
@@ -664,23 +724,14 @@ const StepForm = ({ post, pathName }) => {
           vertical: "bottom",
           horizontal: "left",
         }}
-        open={snackbar}
-        autoHideDuration={3000}
+        open={snackbar.open}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
-        message="Post Saved"
-        action={
-          <>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleCloseSnackbar}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </>
-        }
-      />
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
 
       {handleSteps(activeStep)}
     </>

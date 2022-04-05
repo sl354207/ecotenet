@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   } = req.body;
 
   try {
-    const updated = await updatePost(
+    const update = await updatePost(
       title,
       name,
       description,
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       updated,
       featured
     );
-    return res.status(200).json(updated);
+    return res.status(200).json(update);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Something went wrong." });

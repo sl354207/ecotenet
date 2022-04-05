@@ -68,11 +68,11 @@ const Comment = ({ comment, post_id }) => {
 
   // const [value, setValue] = useState("");
 
-  const [show, setShow] = useState(false);
+  const [reply, setReply] = useState(false);
   const container = useRef(null);
 
   const handleClick = () => {
-    setShow(!show);
+    setReply(!reply);
   };
 
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
@@ -117,7 +117,7 @@ const Comment = ({ comment, post_id }) => {
                   variant="outlined"
                   color="secondary"
                   onClick={handleClick}
-                  endIcon={show ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  endIcon={reply ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 >
                   reply
                 </Button>
@@ -125,7 +125,12 @@ const Comment = ({ comment, post_id }) => {
             )}
           </div>
         </ListItem>
-        <CommentForm post_id={post_id} comment_ref={comment._id} show={show} />
+        <CommentForm
+          post_id={post_id}
+          comment_ref={comment._id}
+          showForm={reply}
+          closeForm={handleClick}
+        />
       </>
     );
   } else {

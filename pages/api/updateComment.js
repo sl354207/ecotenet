@@ -6,12 +6,11 @@ export default async function handler(req, res) {
   }
 
   // body must be in same format as database query
-  const { _id, name, date, text, approved, updated } = req.body;
+  const { _id, date, text, approved, updated } = req.body;
 
   try {
     const updatedComment = await updateComment(
       _id,
-      name,
       date,
       text,
       approved,

@@ -343,11 +343,10 @@ const getDashboardComments = async (name) => {
 };
 
 // update comment
-const updateComment = async (_id, name, date, text, approved, updated) => {
+const updateComment = async (_id, date, text, approved, updated) => {
   const { db } = await connectToDatabase();
 
   const data = {
-    name,
     date,
     text,
     approved,

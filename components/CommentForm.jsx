@@ -1,11 +1,20 @@
 import { useState, useRef } from "react";
 
 import TextBox from "./TextBox";
-import Sure from "./Sure";
+import SureComment from "./SureComment";
 
-import { Button, Portal, InputLabel, FormControl } from "@material-ui/core";
+import {
+  Button,
+  Portal,
+  InputLabel,
+  FormControl,
+  Snackbar,
+  IconButton,
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -73,70 +82,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //pass in post id and comment ref from comment
-const CommentForm = ({ show, post_id, comment_ref }) => {
+const CommentForm = ({ showForm, post_id, comment_ref, closeForm }) => {
   const classes = useStyles();
 
   const router = useRouter();
 
   const [value, setValue] = useState("");
 
-  const [open, setOpen] = useState(false);
+  const [dialog, setDialog] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
+  const [snackbar, setSnackbar] = useState(false);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar(false);
+    }
+
+    setSnackbar(false);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleCloseDialog = () => {
+    setDialog(false);
   };
 
-  // const [show, setShow] = useState(false);
+  const handleOpenDialog = () => {
+    setDialog(true);
+  };
+
   const container = useRef(null);
-
-  // const handleClick = () => {
-  //   setShow(!show);
-  // };
 
   // update text input field
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  // handle comment submission to database through api
-  const handleSubmit = async (value, post_id, comment_ref) => {
-    //convert comment values to key value pairs
-    const textObject = {
-      text: value,
-    };
-
-    const idObject = {
-      post_id: post_id,
-    };
-
-    const refObject = {
-      comment_ref: comment_ref,
-    };
-
-    const dateObject = {
-      date: new Date().toUTCString(),
-    };
-    //combine all objects and send to api
-    const comment = Object.assign(idObject, refObject, dateObject, textObject);
-
-    const res = await fetch("/api/createComment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(comment),
-    });
-  };
-
-  // () => handleSubmit(value, post_id, comment_ref)
-
   return (
     <div className={classes.addition} disableGutters>
-      {show ? (
+      {showForm ? (
         <Portal container={container.current}>
           <FormControl className={classes.items}>
             <InputLabel shrink htmlFor="commentform"></InputLabel>
@@ -146,7 +128,6 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
               id="commentform"
               autoFocus={true}
               handleChange={handleChange}
-              handleSubmit={handleSubmit}
               // rows={1}
               className={comment_ref != "" ? classes.cref : classes.noref}
             />
@@ -154,7 +135,7 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={handleClickOpen}
+            onClick={handleOpenDialog}
             className={classes.submit}
           >
             Submit
@@ -163,9 +144,9 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
       ) : null}
 
       <div ref={container} className={classes.comment} />
-      <Sure
-        open={open}
-        handleClose={handleClose}
+      <SureComment
+        open={dialog}
+        handleClose={handleCloseDialog}
         ariaLabeledBy="alert-dialog-title"
         ariaDescribedBy="alert-dialog-description"
         id="alert-dialog-description"
@@ -175,7 +156,22 @@ const CommentForm = ({ show, post_id, comment_ref }) => {
         postID={post_id}
         value={value}
         resultID={comment_ref}
+        setSnackbar={setSnackbar}
+        closeForm={closeForm}
       />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

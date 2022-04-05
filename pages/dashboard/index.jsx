@@ -3,7 +3,7 @@ import { useState } from "react";
 import useSWR from "swr";
 
 import DashboardComments from "../../components/DashboardComments";
-import Sure from "../../components/Sure";
+import SureComment from "../../components/SureComment";
 import TextBox from "../../components/TextBox";
 
 import {
@@ -19,11 +19,15 @@ import {
   CircularProgress,
   FormControl,
   InputLabel,
+  Snackbar,
+  IconButton,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -183,20 +187,35 @@ export default function Dashboard() {
   const [fetch, setFetch] = useState(`/api/getposts?q1=Muskrat&q2=published`);
   const [deleteFetch, setDeleteFetch] = useState();
 
-  const [open, setOpen] = useState(false);
+  const [dialog, setDialog] = useState(false);
 
   const [resultID, setResultID] = useState();
 
-  const handleClickOpen = (ID) => {
-    setOpen(true);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (ID) => {
+    setDialog(true);
     setResultID(ID);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseDialog = () => {
+    setDialog(false);
   };
 
-  const { data: results } = useSWR(fetch, fetcher);
+  const { data: results, mutate } = useSWR(fetch, fetcher);
+  // mutate();
 
   // const isLoading = results;
 
@@ -357,7 +376,7 @@ export default function Dashboard() {
                         className={classes.buttonedit}
                         startIcon={<DeleteIcon />}
                         size="small"
-                        onClick={() => handleClickOpen(result._id)}
+                        // onClick={() => handleOpenDialog(result._id)}
                       >
                         Delete
                       </Button>
@@ -427,7 +446,7 @@ export default function Dashboard() {
                         className={classes.buttonedit}
                         startIcon={<DeleteIcon />}
                         size="small"
-                        onClick={() => handleClickOpen(result._id)}
+                        // onClick={() => handleClickOpen(result._id)}
                       >
                         Delete
                       </Button>
@@ -453,7 +472,9 @@ export default function Dashboard() {
                   <ListItem key={result._id} className={classes.buttonpost}>
                     <DashboardComments
                       result={result}
-                      handleClickOpen={() => handleClickOpen(result._id)}
+                      handleClickOpen={() => handleOpenDialog(result._id)}
+                      setSnackbar={setSnackbar}
+                      mutate={mutate}
                     />
                   </ListItem>
                 );
@@ -463,10 +484,9 @@ export default function Dashboard() {
         </TabPanel>
       </div>
 
-      <Sure
-        open={open}
-        handleClose={handleClose}
-        // handleSubmit={deletePost}
+      <SureComment
+        open={dialog}
+        handleClose={handleCloseDialog}
         ariaLabeledBy="alert-dialog-title"
         ariaDescribedBy="alert-dialog-description"
         id="alert-dialog-description"
@@ -474,9 +494,23 @@ export default function Dashboard() {
         sure="Are you sure you want to permanently delete item?"
         action="delete"
         resultID={resultID}
-        deleteFetch={deleteFetch}
-        setOpen={setOpen}
+        setOpen={setDialog}
+        setSnackbar={setSnackbar}
+        mutate={mutate}
       />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
