@@ -177,17 +177,29 @@ const StepForm = ({ post, pathName }) => {
       rows: postValue != null ? postValue.rows : [],
     };
 
-    const silentObject = {
-      _id: post._id,
-      name: "Muskrat",
-      status: "draft",
-      approved: "false",
-      updated: false,
-      featured: false,
-    };
+    let silentObject = {};
+
+    if (pathName == "editor") {
+      silentObject = {
+        name: "Muskrat",
+        status: "draft",
+        approved: "false",
+        updated: false,
+        featured: false,
+      };
+    } else {
+      silentObject = {
+        _id: post._id,
+        name: "Muskrat",
+        status: "draft",
+        approved: "false",
+        updated: false,
+        featured: false,
+      };
+    }
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postObject, details, ecoObject, silentObject);
-    console.log(value);
+    // console.log(value);
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
@@ -214,13 +226,6 @@ const StepForm = ({ post, pathName }) => {
         }
         break;
       case "/dashboard/posts/[_id]":
-        // const res2 = await fetch("/api/updatePost", {
-        //   method: "PUT",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(value),
-        // });
         break;
       case "editor":
         const res3 = await fetch("/api/createPost", {
@@ -252,124 +257,6 @@ const StepForm = ({ post, pathName }) => {
 
       default:
         break;
-    }
-  };
-
-  // UPDATE ONCE AUTHENTICATION IS USED
-  // function to create a published post. Takes in form values and editor value
-  const publish = async (postValue, details, clickInfo) => {
-    const ecoObject = {
-      ecoregions: clickInfo,
-    };
-
-    const silentObject = {
-      _id: post._id,
-      name: "Muskrat",
-      status: "published",
-      approved: "pending",
-      updated: post.approved == "true" ? true : false,
-      featured: false,
-    };
-    // combine form value and editor value into one object to pass to api.
-    const value = Object.assign(postValue, details, ecoObject, silentObject);
-
-    switch (pathName) {
-      case "/dashboard/drafts/[_id]":
-        // create post
-        const res1 = await fetch("/api/updatePost", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(value),
-        });
-
-        if (res1.ok) {
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: "Draft published successfully",
-          });
-        }
-        if (!res1.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message:
-              "There was a problem publishing draft. Please try again later",
-          });
-        }
-
-        break;
-      case "/dashboard/posts/[_id]":
-        const res2 = await fetch("/api/updatePost", {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(value),
-        });
-        if (res2.ok) {
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: "Post published successfully",
-          });
-        }
-        if (!res2.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message:
-              "There was a problem publishing post. Please try again later",
-          });
-        }
-        break;
-      case "editor":
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const create = async (postValue, details, clickInfo) => {
-    const ecoObject = {
-      ecoregions: clickInfo,
-    };
-    const silentObject = {
-      name: "Muskrat",
-      status: "published",
-      approved: "pending",
-      updated: false,
-      featured: false,
-    };
-    // combine form value and editor value into one object to pass to api.
-    const value = Object.assign(postValue, details, ecoObject, silentObject);
-
-    const res = await fetch("/api/createPost", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
-    // console.log(res3);
-    if (res.ok) {
-      const ID = await res.json();
-      router.push(`/dashboard/posts/${ID.insertedId}`);
-      setSnackbar({
-        open: true,
-        severity: "success",
-        message: "Draft published successfully",
-      });
-    }
-    if (!res.ok) {
-      setSnackbar({
-        open: true,
-        severity: "error",
-        message: "There was a problem publishing draft. Please try again later",
-      });
     }
   };
 
@@ -406,7 +293,7 @@ const StepForm = ({ post, pathName }) => {
               {pathName == "/dashboard/posts/[_id]" ? (
                 <>
                   <Button
-                    onClick={() => save(postValue, details, clickInfo)}
+                    // onClick={() => save(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                     disabled
@@ -501,7 +388,7 @@ const StepForm = ({ post, pathName }) => {
               {pathName == "/dashboard/posts/[_id]" ? (
                 <>
                   <Button
-                    onClick={() => save(postValue, details, clickInfo)}
+                    // onClick={() => save(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                     disabled
@@ -542,6 +429,7 @@ const StepForm = ({ post, pathName }) => {
                   >
                     Save
                   </Button>
+
                   {details.title != "" &&
                   details.category != "" &&
                   clickInfo.length > 0 &&
@@ -589,7 +477,7 @@ const StepForm = ({ post, pathName }) => {
               {pathName == "/dashboard/posts/[_id]" ? (
                 <>
                   <Button
-                    onClick={() => save(postValue, details, clickInfo)}
+                    // onClick={() => save(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                     disabled
@@ -713,11 +601,14 @@ const StepForm = ({ post, pathName }) => {
         id="alert-dialog-description"
         className={classes.dialog}
         sure="Are you sure you want to publish item?"
-        action="publish"
+        action="submit"
         postValue={postValue}
         details={details}
         clickInfo={clickInfo}
+        approved={post.approved}
+        resultID={post._id}
         pathName={pathName}
+        setSnackbar={setSnackbar}
       />
       <Snackbar
         anchorOrigin={{

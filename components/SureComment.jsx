@@ -23,7 +23,6 @@ const SureComment = ({
   resultID,
   setSnackbar,
   mutate,
-  pathName,
 }) => {
   const router = useRouter();
 
@@ -36,7 +35,7 @@ const SureComment = ({
       },
       body: JSON.stringify(resultID),
     });
-    handleClose();
+    handleClose("comment");
     if (res.ok) {
       mutate();
       setSnackbar({

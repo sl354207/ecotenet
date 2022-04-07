@@ -22,6 +22,7 @@ export default async function handler(req, res) {
     updated,
     featured,
   } = req.body;
+  // console.log(req);
 
   try {
     const update = await updatePost(
@@ -40,6 +41,8 @@ export default async function handler(req, res) {
       updated,
       featured
     );
+
+    // console.log(update);
     return res.status(200).json(update);
   } catch (err) {
     console.error(err);

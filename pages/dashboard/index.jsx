@@ -28,6 +28,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
+import SurePost from "../../components/SurePost";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -157,24 +158,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
-// const fetcher = (url, name, status) => {
-//   const value = {
-//     name: name,
-//     status: status,
-//   };
-//   // console.log(url);
-//   // console.log(value);
-//   // const res = fetch(url, {
-//   //   method: "Get",
-//   //   headers: {
-//   //     "Content-Type": "application/json",
-//   //   },
-//   //   body: JSON.stringify(value),
-//   // }).then((res) => res.json());
-//   // const json = await res.json();
-//   // console.log(json);
-//   // return res.json();
-// };
 
 export default function Dashboard() {
   const router = useRouter();
@@ -187,7 +170,7 @@ export default function Dashboard() {
   const [fetch, setFetch] = useState(`/api/getposts?q1=Muskrat&q2=published`);
   const [deleteFetch, setDeleteFetch] = useState();
 
-  const [dialog, setDialog] = useState(false);
+  const [dialog, setDialog] = useState({ comment: false, post: false });
 
   const [resultID, setResultID] = useState();
 
@@ -205,13 +188,21 @@ export default function Dashboard() {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (ID) => {
-    setDialog(true);
+  const handleOpenDialog = (ID, dialog) => {
+    if (dialog == "comment") {
+      setDialog({ comment: true, post: false });
+    } else {
+      setDialog({ comment: false, post: true });
+    }
     setResultID(ID);
   };
 
-  const handleCloseDialog = () => {
-    setDialog(false);
+  const handleCloseDialog = (dialog) => {
+    if (dialog == "comment") {
+      setDialog({ comment: false, post: false });
+    } else {
+      setDialog({ comment: false, post: false });
+    }
   };
 
   const { data: results, mutate } = useSWR(fetch, fetcher);
@@ -245,20 +236,6 @@ export default function Dashboard() {
         console.log(`Sorry, we are out of `);
     }
   };
-
-  // function to delete post by id
-  // const deletePost = async (ID, deleteFetch) => {
-  //   const res = await fetch(`/api/${deleteFetch}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(ID),
-  //   });
-  //   setOpen(false);
-  //   // reload page after deletion
-  //   router.reload();
-  // };
 
   return (
     <Container>
@@ -376,7 +353,7 @@ export default function Dashboard() {
                         className={classes.buttonedit}
                         startIcon={<DeleteIcon />}
                         size="small"
-                        // onClick={() => handleOpenDialog(result._id)}
+                        onClick={() => handleOpenDialog(result._id, "post")}
                       >
                         Delete
                       </Button>
@@ -446,7 +423,7 @@ export default function Dashboard() {
                         className={classes.buttonedit}
                         startIcon={<DeleteIcon />}
                         size="small"
-                        // onClick={() => handleClickOpen(result._id)}
+                        onClick={() => handleOpenDialog(result._id, "post")}
                       >
                         Delete
                       </Button>
@@ -472,7 +449,9 @@ export default function Dashboard() {
                   <ListItem key={result._id} className={classes.buttonpost}>
                     <DashboardComments
                       result={result}
-                      handleClickOpen={() => handleOpenDialog(result._id)}
+                      handleClickOpen={() =>
+                        handleOpenDialog(result._id, "comment")
+                      }
                       setSnackbar={setSnackbar}
                       mutate={mutate}
                     />
@@ -485,7 +464,7 @@ export default function Dashboard() {
       </div>
 
       <SureComment
-        open={dialog}
+        open={dialog.comment}
         handleClose={handleCloseDialog}
         ariaLabeledBy="alert-dialog-title"
         ariaDescribedBy="alert-dialog-description"
@@ -494,7 +473,19 @@ export default function Dashboard() {
         sure="Are you sure you want to permanently delete item?"
         action="delete"
         resultID={resultID}
-        setOpen={setDialog}
+        setSnackbar={setSnackbar}
+        mutate={mutate}
+      />
+      <SurePost
+        open={dialog.post}
+        handleClose={handleCloseDialog}
+        ariaLabeledBy="alert-dialog-title"
+        ariaDescribedBy="alert-dialog-description"
+        id="alert-dialog-description"
+        className={classes.dialog}
+        sure="Are you sure you want to permanently delete item?"
+        action="delete"
+        resultID={resultID}
         setSnackbar={setSnackbar}
         mutate={mutate}
       />
