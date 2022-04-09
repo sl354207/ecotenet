@@ -147,6 +147,13 @@ const useStyles = makeStyles((theme) => ({
   home: {
     minWidth: "auto",
   },
+  donate: {
+    marginLeft: 10,
+  },
+  desktop: {
+    display: "inline-flex",
+    // marginLeft: 200,
+  },
 }));
 
 // initialize drawer categories
@@ -255,7 +262,6 @@ const Nav = ({ ecoFilter }) => {
     <div className={classes.root}>
       <AppBar position="fixed" elevation={1}>
         <Toolbar>
-          {/* {isMobile ? ( */}
           {/* {router.pathname.includes("suc", 1)
             //   ? () => setCategoryFilter(true)
             //   : () => setCategoryFilter(false)} */}
@@ -303,6 +309,19 @@ const Nav = ({ ecoFilter }) => {
             ) : (
               <div className={classes.title}>
                 <Button href="/">ecotenet</Button>
+
+                <div className={classes.desktop}>
+                  <Button href="/featured" variant="text" color="secondary">
+                    Featured Posts
+                  </Button>
+                  <Button href="/species" variant="text" color="secondary">
+                    Species Map
+                  </Button>
+
+                  <Button href="/dashboard" variant="text" color="secondary">
+                    Dashboard
+                  </Button>
+                </div>
               </div>
             )}
 
@@ -332,12 +351,12 @@ const Nav = ({ ecoFilter }) => {
                       filtered.push(
                         {
                           inputValue: params.inputValue,
-                          title: `Search for "${params.inputValue}" in all posts`,
+                          title: `"${params.inputValue}" in all posts`,
                           path: "allPosts",
                         },
                         {
                           inputValue: params.inputValue,
-                          title: `Search for "${params.inputValue}" in all species`,
+                          title: `"${params.inputValue}" in all species`,
                           path: "allSpecies",
                         }
                       );
@@ -347,22 +366,22 @@ const Nav = ({ ecoFilter }) => {
                       filtered.push(
                         {
                           inputValue: params.inputValue,
-                          title: `Search for "${params.inputValue}" in ecoregion posts`,
+                          title: `"${params.inputValue}" in ecoregion posts`,
                           path: "ecoPosts",
                         },
                         {
                           inputValue: params.inputValue,
-                          title: `Search for "${params.inputValue}" in ecoregion species`,
+                          title: `"${params.inputValue}" in ecoregion species`,
                           path: "ecoSpecies",
                         },
                         {
                           inputValue: params.inputValue,
-                          title: `Search for "${params.inputValue}" in all posts`,
+                          title: `"${params.inputValue}" in all posts`,
                           path: "allPosts",
                         },
                         {
                           inputValue: params.inputValue,
-                          title: `Search for "${params.inputValue}" in all species`,
+                          title: `"${params.inputValue}" in all species`,
                           path: "allSpecies",
                         }
                       );
@@ -392,102 +411,131 @@ const Nav = ({ ecoFilter }) => {
                 )}
               />
             </div>
-            {/* {isMobile && (
-              <div>
-                <Button href="/">ecotenet</Button>
-              </div>
-            )} */}
+
             {!isMobile && (
-              <Button variant="outlined" color="secondary">
-                Sign In
-              </Button>
+              <>
+                <Button href="/signin" variant="outlined" color="secondary">
+                  Sign In
+                </Button>
+                <Button
+                  href="/dashboard/editor"
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.donate}
+                >
+                  Create Post
+                </Button>
+                <Button
+                  href="/donate"
+                  variant="contained"
+                  color="secondary"
+                  className={classes.donate}
+                >
+                  Donate
+                </Button>
+              </>
             )}
 
-            <IconButton
-              edge="end"
-              // className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              ref={anchorRef}
-              aria-controls={popper ? "menu-list-grow" : undefined}
-              aria-haspopup="true"
-              onClick={togglePopper}
-              // onClick={handleDrawerOpen}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Popper
-              open={popper}
-              anchorEl={anchorRef.current}
-              role={undefined}
-              transition
-              disablePortal
-            >
-              {({ TransitionProps, placement }) => (
-                <Grow
-                  {...TransitionProps}
-                  style={{
-                    transformOrigin:
-                      placement === "bottom" ? "center top" : "center bottom",
-                  }}
+            {isMobile && (
+              <>
+                <IconButton
+                  edge="end"
+                  // className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  ref={anchorRef}
+                  aria-controls={popper ? "menu-list-grow" : undefined}
+                  aria-haspopup="true"
+                  onClick={togglePopper}
+                  // onClick={handleDrawerOpen}
                 >
-                  <Paper className={classes.popper}>
-                    <ClickAwayListener onClickAway={closePopper}>
-                      <MenuList
-                        autoFocusItem={popper}
-                        id="menu-list-grow"
-                        onKeyDown={handlePopperKeyDown}
-                      >
-                        <MenuItem
-                          onClick={() => {
-                            setPopper(false);
-                            router.push("/species");
-                          }}
-                        >
-                          Featured Posts
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => {
-                            setPopper(false);
-                            router.push("/species");
-                          }}
-                        >
-                          Species Map
-                        </MenuItem>
-
-                        <MenuItem
-                          onClick={() => {
-                            setPopper(false);
-                            router.push("/species");
-                          }}
-                          divider={true}
-                        >
-                          Dashboard
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => {
-                            setPopper(false);
-                            router.push("/species");
-                          }}
-                        >
-                          Donate
-                        </MenuItem>
-                        {isMobile && (
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/species");
-                            }}
+                  <MenuIcon />
+                </IconButton>
+                <Popper
+                  open={popper}
+                  anchorEl={anchorRef.current}
+                  role={undefined}
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin:
+                          placement === "bottom"
+                            ? "center top"
+                            : "center bottom",
+                        minWidth: 210,
+                      }}
+                    >
+                      <Paper className={classes.popper}>
+                        <ClickAwayListener onClickAway={closePopper}>
+                          <MenuList
+                            autoFocusItem={popper}
+                            id="menu-list-grow"
+                            onKeyDown={handlePopperKeyDown}
                           >
-                            Sign In
-                          </MenuItem>
-                        )}
-                      </MenuList>
-                    </ClickAwayListener>
-                  </Paper>
-                </Grow>
-              )}
-            </Popper>
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/species");
+                              }}
+                            >
+                              Featured
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/species");
+                              }}
+                            >
+                              Species Map
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/species");
+                              }}
+                              divider={true}
+                            >
+                              Create Post
+                            </MenuItem>
+
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/species");
+                              }}
+                            >
+                              Donate
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/species");
+                              }}
+                            >
+                              Dashboard
+                            </MenuItem>
+                            {isMobile && (
+                              <MenuItem
+                                onClick={() => {
+                                  setPopper(false);
+                                  router.push("/species");
+                                }}
+                              >
+                                Sign In
+                              </MenuItem>
+                            )}
+                          </MenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </>
+            )}
 
             <Drawer
               className={classes.drawer}
@@ -501,9 +549,12 @@ const Nav = ({ ecoFilter }) => {
               <div className={classes.drawerHeader}>
                 <Button
                   className={classes.title}
-                  onClick={() => router.push("/category")}
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    router.push("/");
+                  }}
                 >
-                  Categories
+                  ecotenet
                 </Button>
                 <IconButton onClick={handleDrawerClose}>
                   <ChevronLeftIcon />
@@ -550,250 +601,6 @@ const Nav = ({ ecoFilter }) => {
               })}
             </Drawer>
           </>
-          {/* ) : ( */}
-          {/* <>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="filter"
-                onClick={handleDrawerOpen}
-              >
-                <MenuIcon />
-              </IconButton>
-
-              <div className={classes.title}>
-                <Button href="/">ecotenet</Button>
-              </div>
-
-              <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-
-                <Autocomplete
-                  classes={{
-                    paper: classes.popper,
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  autoHighlight
-                  disableClearable={true}
-                  onChange={(event, newValue) => {
-                    router.push(
-                      `/search?q=${newValue.inputValue}&s=${newValue.path}`
-                    );
-                  }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-
-                    if (!ecoFilter) {
-                      if (params.inputValue !== "") {
-                        filtered.push(
-                          {
-                            inputValue: params.inputValue,
-                            title: `Search for "${params.inputValue}" in all posts`,
-                            path: "allPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `Search for "${params.inputValue}" in all species`,
-                            path: "allSpecies",
-                          }
-                        );
-                      }
-                    } else {
-                      if (params.inputValue !== "") {
-                        filtered.push(
-                          {
-                            inputValue: params.inputValue,
-                            title: `Search for "${params.inputValue}" in ecoregion posts`,
-                            path: "ecoPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `Search for "${params.inputValue}" in ecoregion species`,
-                            path: "ecoSpecies",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `Search for "${params.inputValue}" in all posts`,
-                            path: "allPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `Search for "${params.inputValue}" in all species`,
-                            path: "allSpecies",
-                          }
-                        );
-                      }
-                    }
-
-                    return filtered;
-                  }}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="free-solo-with-text-demo"
-                  options={tags}
-                  renderOption={(option) => option.title}
-                  freeSolo
-                  renderInput={(params) => (
-                    <InputBase
-                      {...params}
-                      placeholder="Search Site…"
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                      ref={params.InputProps.ref}
-                      inputProps={params.inputProps}
-                    />
-                  )}
-                />
-              </div>
-              <Button variant="outlined" color="secondary">
-                Sign In
-              </Button>
-              <IconButton
-                edge="end"
-                // className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-                ref={anchorRef}
-                aria-controls={popper ? "menu-list-grow" : undefined}
-                aria-haspopup="true"
-                onClick={togglePopper}
-                // onClick={handleDrawerOpen}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Popper
-                open={popper}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === "bottom" ? "center top" : "center bottom",
-                    }}
-                  >
-                    <Paper className={classes.popper}>
-                      <ClickAwayListener onClickAway={closePopper}>
-                        <MenuList
-                          autoFocusItem={popper}
-                          id="menu-list-grow"
-                          onKeyDown={handlePopperKeyDown}
-                        >
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/species");
-                            }}
-                          >
-                            Featured Posts
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/species");
-                            }}
-                          >
-                            Species Map
-                          </MenuItem>
-
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/species");
-                            }}
-                            divider={true}
-                          >
-                            Dashboard
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/species");
-                            }}
-                            className={classes.donate}
-                          >
-                            Donate
-                          </MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-
-              <Drawer
-                className={classes.drawer}
-                anchor="left"
-                open={drawerOpen}
-                onClose={handleDrawerClose}
-                classes={{
-                  paper: classes.drawerPaper,
-                }}
-              >
-                <div className={classes.drawerHeader}>
-                  <Button
-                    className={classes.title}
-                    onClick={() => router.push("/category")}
-                  >
-                    Categories
-                  </Button>
-                  <IconButton onClick={handleDrawerClose}>
-                    <ChevronLeftIcon />
-                  </IconButton>
-                </div>
-                <Divider />
-                {state.map((menuItem) => {
-                  const { menuTitle, menuSubs, pageURL, openList } = menuItem;
-
-                  return (
-                    <List
-                      component="nav"
-                      aria-labelledby="nested-list"
-                      key="mainlist"
-                    >
-                      <ListItem
-                        button
-                        key={menuTitle}
-                        onClick={() => handleListClick(menuTitle)}
-                      >
-                        <ListItemText primary={menuTitle} />
-                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </ListItem>
-                      <Collapse in={openList} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding key="sublist">
-                          {menuSubs.map((menuSub) => (
-                            <ListItem
-                              button
-                              key={menuSub}
-                              className={classes.nested}
-                              onClick={() => {
-                                handleDrawerClose(Event);
-                                router.push(pageURL);
-                              }}
-                            >
-                              <ListItemText primary={menuSub} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Collapse>
-                      <Divider />
-                    </List>
-                  );
-                })}
-              </Drawer>
-            </> */}
-          {/* )} */}
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>

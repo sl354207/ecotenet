@@ -101,6 +101,18 @@ const getPosts = async (status, approved) => {
 
   return posts;
 };
+// query database to get all published posts
+const getFeatured = async () => {
+  const { db } = await connectToDatabase();
+
+  const featured = await db
+    .collection("posts")
+    .find({ featured: true })
+
+    .toArray();
+
+  return featured;
+};
 
 // retrieve single post by id from database
 const getPostById = async (_id) => {
@@ -613,6 +625,7 @@ module.exports = {
   connectToDatabase,
   createPost,
   getPosts,
+  getFeatured,
   getDashboardPosts,
   getPostById,
   updatePost,

@@ -1,6 +1,6 @@
-// import Meta from "../../components/Meta";
+import Meta from "../../components/Meta";
 
-// import { getPosts } from "../../utils/mongodb";
+import { getFeatured } from "../../utils/mongodb";
 import { getPostById } from "../../utils/mongodb";
 import { getPostComments } from "../../utils/mongodb";
 
@@ -139,7 +139,7 @@ const post = ({ post, comments }) => {
 };
 
 // fetch post data at build time
-export const getServerSideProps = async (context) => {
+export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const _id = context.params.id;
 
@@ -156,20 +156,20 @@ export const getServerSideProps = async (context) => {
 };
 
 // build routing paths for each post at build time
-// export const getStaticPaths = async () => {
-//   const posts = await getFeatured();
+export const getStaticPaths = async () => {
+  const posts = await getFeatured();
 
-//   // create array of ids of each post in posts
-//   const ids = posts.map((post) => post._id);
+  // create array of ids of each post in posts
+  const ids = posts.map((post) => post._id);
 
-//   // create paths array with objects that follow structure given
-//   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
+  // create paths array with objects that follow structure given
+  const paths = ids.map((id) => ({ params: { id: id.toString() } }));
 
-//   // return a path for each post id. If no id return 404
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };
+  // return a path for each post id. If no id return 404
+  return {
+    paths,
+    fallback: false,
+  };
+};
 
 export default post;

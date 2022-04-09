@@ -105,9 +105,6 @@ const search = ({ ecoFilter }) => {
   // set tag options for autocomplete
   const tags = [];
 
-  // set tag state
-  // const [tagValue, setTagValue] = useState([]);
-
   // set id to id in url query
   const router = useRouter();
 
@@ -118,39 +115,10 @@ const search = ({ ecoFilter }) => {
     `/api/search/${queryFilter}?q=${query}`,
     fetcher
   );
-  console.log(results);
+  // console.log(results);
 
   let list;
 
-  // switch (results) {
-  //   case undefined:
-  //     list = (
-  //       <CircularProgress
-  //         color="secondary"
-  //         size={100}
-  //         disableShrink={true}
-  //         className={classes.progress}
-  //       />
-  //     );
-
-  //     break;
-  //   case [""]:
-  //     list = (
-  //       <Typography variant="h3" align="center" className={classes.header}>
-  //         no results
-  //       </Typography>
-  //     );
-
-  //     break;
-
-  //   default:
-  //     if (results[0].title !== undefined) {
-  //       list = <PostList posts={results} />;
-  //     } else {
-  //       list = <SpeciesList results={results} />;
-  //     }
-  //     break;
-  // }
   if (!results || results == undefined) {
     list = (
       <CircularProgress
@@ -166,11 +134,6 @@ const search = ({ ecoFilter }) => {
         no results
       </Typography>
     );
-    // } else if (
-    //   results &&
-    //   results.lenth > 0 &&
-    //   results[0].title !== undefined
-    // ) {
   } else if (results && results.length > 0 && results[0].title !== undefined) {
     list = <PostList posts={results} />;
   } else {
@@ -195,12 +158,12 @@ const search = ({ ecoFilter }) => {
               filtered.push(
                 {
                   inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in all posts`,
+                  title: `"${params.inputValue}" in all posts`,
                   path: "allPosts",
                 },
                 {
                   inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in all species`,
+                  title: `"${params.inputValue}" in all species`,
                   path: "allSpecies",
                 }
               );
@@ -210,22 +173,22 @@ const search = ({ ecoFilter }) => {
               filtered.push(
                 {
                   inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in ecoregion posts`,
+                  title: `"${params.inputValue}" in ecoregion posts`,
                   path: "ecoPosts",
                 },
                 {
                   inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in ecoregion species`,
+                  title: `"${params.inputValue}" in ecoregion species`,
                   path: "ecoSpecies",
                 },
                 {
                   inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in all posts`,
+                  title: `"${params.inputValue}" in all posts`,
                   path: "allPosts",
                 },
                 {
                   inputValue: params.inputValue,
-                  title: `Search for "${params.inputValue}" in all species`,
+                  title: `"${params.inputValue}" in all species`,
                   path: "allSpecies",
                 }
               );
@@ -255,7 +218,7 @@ const search = ({ ecoFilter }) => {
         )}
       />
 
-      <Typography variant="h3" align="center" className={classes.header}>
+      <Typography variant="h4" align="center" className={classes.header}>
         Search Results
       </Typography>
 

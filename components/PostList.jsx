@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // pass down posts from database to PostList as a prop
-const PostList = ({ posts }) => {
+const PostList = ({ posts, featured }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -33,7 +33,7 @@ const PostList = ({ posts }) => {
               color="secondary"
               fullWidth
               className={classes.buttonpost}
-              href={`posts/${post._id}`}
+              href={featured ? `featured/${post._id}` : `posts/${post._id}`}
             >
               <div className={classes.card}>
                 <Typography

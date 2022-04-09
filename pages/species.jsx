@@ -350,8 +350,8 @@ const species = () => {
 
   return (
     <Container>
-      <Typography variant="h3" align="center" className={classes.header}>
-        Search Species
+      <Typography variant="h4" align="center" className={classes.header}>
+        Species Map
       </Typography>
       <Typography variant="body1" align="left" className={classes.description}>
         Search for a species by common or scientific name to display their
