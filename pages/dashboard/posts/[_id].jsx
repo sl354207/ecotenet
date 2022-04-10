@@ -6,9 +6,22 @@ import Link from "next/link";
 
 import StepForm from "../../../components/PostForm/StepForm";
 
+import { CircularProgress } from "@material-ui/core";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  progress: {
+    margin: "100px auto",
+    display: "flex",
+    justifySelf: "center",
+  },
+}));
+
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function DraftByUser() {
+  const theme = useTheme();
+  const classes = useStyles();
   // set id to id in url query
   const router = useRouter();
   const _id = router.query._id;
@@ -19,13 +32,15 @@ export default function DraftByUser() {
   const { data: post } = useSWR(_id ? `/api/getposts/${_id}` : null, fetcher);
 
   // loading state until draft is retrieved
-  if (!post || post == undefined) return "Loading...";
+  if (!post || post == undefined)
+    return (
+      <CircularProgress
+        color="secondary"
+        size={100}
+        disableShrink={true}
+        className={classes.progress}
+      />
+    );
 
-  return (
-    <div>
-      <StepForm post={post} pathName={pathName} />
-
-      <Link href="/dashboard/posts">Go Back</Link>
-    </div>
-  );
+  return <StepForm post={post} pathName={pathName} />;
 }

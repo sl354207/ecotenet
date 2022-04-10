@@ -15,6 +15,8 @@ import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import MapEditor from "../MapEditor";
+import Header from "../Header";
+import Description from "../Description";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -143,7 +145,7 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#00ffff",
   },
   description: {
-    marginTop: 20,
+    // marginTop: 20,
     marginLeft: 10,
   },
   note: {
@@ -370,14 +372,22 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
 
   return (
     <Container>
-      <Typography variant="h4" align="center" className={classes.header}>
-        Select Ecoregions
-      </Typography>
-      <Typography variant="body1" align="left" className={classes.description}>
+      {/* <Typography variant="h4" align="center" className={classes.header}>
+        Post Details
+      </Typography> */}
+      <Header title="Select Ecoregions" />
+      {/* <Typography variant="body1" align="left" className={classes.description}>
         Choose which ecoregions apply to your post. You may add or delete
         ecoregions by double clicking on the map. A single click highlights the
         ecoregion and displays the Eco-ID and ecoregion name
-      </Typography>
+      </Typography> */}
+      <Description
+        description="Choose which ecoregions apply to your post. You may add or delete
+        ecoregions by double clicking on the map. A single click highlights the
+        ecoregion and displays the Eco-ID and ecoregion name"
+        align="left"
+        className={classes.description}
+      />
 
       <Typography variant="body1" align="left" className={classes.description}>
         Search for a species by common or scientific name to display their

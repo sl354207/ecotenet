@@ -26,6 +26,8 @@ import TextBox from "../TextBox";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 import CategoriesAutoComplete from "../../data/categories_autocomplete.json";
+import Header from "../Header";
+import Description from "../Description";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -200,14 +202,21 @@ const PostDetails = ({
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
     <Container>
-      <Typography variant="h4" align="center" className={classes.header}>
+      {/* <Typography variant="h4" align="center" className={classes.header}>
         Post Details
-      </Typography>
-      <Typography variant="body1" align="left" className={classes.description}>
+      </Typography> */}
+      <Header title="Post Details" />
+      {/* <Typography variant="body1" align="left" className={classes.description}>
         Choose a title and category for your post. To make it easier for people
         to find your post you may add a short description and keywords for your
         post
-      </Typography>
+      </Typography> */}
+      <Description
+        description="Choose a title and category for your post. To make it easier for people
+        to find your post you may add a short description and keywords for your
+        post"
+        align="left"
+      />
       <Typography variant="body1" align="left" className={classes.description}>
         *denotes required field
       </Typography>

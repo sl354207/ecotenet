@@ -13,6 +13,8 @@ import {
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -141,89 +143,93 @@ const search = ({ ecoFilter }) => {
   }
 
   return (
-    <Container>
-      <Autocomplete
-        className={classes.search}
-        classes={{ paper: classes.popper }}
-        autoHighlight
-        disableClearable={true}
-        onChange={(event, newValue) => {
-          router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
-        }}
-        filterOptions={(options, params) => {
-          const filtered = filter(options, params);
+    <>
+      <Container>
+        <Header title="Search Results" />
+        <Autocomplete
+          className={classes.search}
+          classes={{ paper: classes.popper }}
+          autoHighlight
+          disableClearable={true}
+          onChange={(event, newValue) => {
+            router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
 
-          if (!ecoFilter) {
-            if (params.inputValue !== "") {
-              filtered.push(
-                {
-                  inputValue: params.inputValue,
-                  title: `"${params.inputValue}" in all posts`,
-                  path: "allPosts",
-                },
-                {
-                  inputValue: params.inputValue,
-                  title: `"${params.inputValue}" in all species`,
-                  path: "allSpecies",
-                }
-              );
+            if (!ecoFilter) {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in all posts`,
+                    path: "allPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  }
+                );
+              }
+            } else {
+              if (params.inputValue !== "") {
+                filtered.push(
+                  {
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in ecoregion posts`,
+                    path: "ecoPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in ecoregion species`,
+                    path: "ecoSpecies",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in all posts`,
+                    path: "allPosts",
+                  },
+                  {
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  }
+                );
+              }
             }
-          } else {
-            if (params.inputValue !== "") {
-              filtered.push(
-                {
-                  inputValue: params.inputValue,
-                  title: `"${params.inputValue}" in ecoregion posts`,
-                  path: "ecoPosts",
-                },
-                {
-                  inputValue: params.inputValue,
-                  title: `"${params.inputValue}" in ecoregion species`,
-                  path: "ecoSpecies",
-                },
-                {
-                  inputValue: params.inputValue,
-                  title: `"${params.inputValue}" in all posts`,
-                  path: "allPosts",
-                },
-                {
-                  inputValue: params.inputValue,
-                  title: `"${params.inputValue}" in all species`,
-                  path: "allSpecies",
-                }
-              );
-            }
-          }
 
-          return filtered;
-        }}
-        selectOnFocus
-        clearOnBlur
-        handleHomeEndKeys
-        id="free-solo-with-text-demo"
-        options={tags}
-        renderOption={(option) => option.title}
-        freeSolo
-        renderInput={(params) => (
-          <InputBase
-            {...params}
-            placeholder="Search…"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            ref={params.InputProps.ref}
-            inputProps={params.inputProps}
-          />
-        )}
-      />
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          id="free-solo-with-text-demo"
+          options={tags}
+          renderOption={(option) => option.title}
+          freeSolo
+          renderInput={(params) => (
+            <InputBase
+              {...params}
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              ref={params.InputProps.ref}
+              inputProps={params.inputProps}
+            />
+          )}
+        />
 
-      <Typography variant="h4" align="center" className={classes.header}>
+        {/* <Typography variant="h4" align="center" className={classes.header}>
         Search Results
-      </Typography>
+      </Typography> */}
 
-      {list}
-    </Container>
+        {list}
+      </Container>
+      <Footer />
+    </>
   );
 };
 

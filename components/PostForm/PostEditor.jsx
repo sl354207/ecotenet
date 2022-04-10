@@ -24,6 +24,8 @@ import EditorLayout from "../EditorLayout";
 import { Button, Container, Typography } from "@material-ui/core";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import Header from "../Header";
+import Description from "../Description";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -163,9 +165,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
   },
   description: {
-    marginTop: 20,
+    // marginTop: 20,
     marginLeft: 10,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
 }));
 
@@ -178,10 +180,22 @@ const PostEditor = ({ handleNext, value, setPostValue }) => {
   const theme = useTheme();
   return (
     <Container>
-      <Typography variant="h4" align="center" className={classes.header}>
-        Post Body
-      </Typography>
-      <Typography variant="body1" align="left" className={classes.description}>
+      {/* <Typography variant="h4" align="center" className={classes.header}>
+        Post Details
+      </Typography> */}
+      <Header title="Post Body" />
+      <Description
+        description="This is where the body of your post is created. Using the editor you can
+        add blocks of text, images and video. The layout of your post can be
+        adjusted by using moving and resizing blocks as well as by adding
+        dividers and spacers wherever necessary. You can also preview what the
+        body of your post will look like once it is published. If working on
+        desktop you may want to adjust your browser window size to see how your
+        layout reacts on smaller screens"
+        align="left"
+        className={classes.description}
+      />
+      {/* <Typography variant="body1" align="left" className={classes.description}>
         This is where the body of your post is created. Using the editor you can
         add blocks of text, images and video. The layout of your post can be
         adjusted by using moving and resizing blocks as well as by adding
@@ -189,7 +203,7 @@ const PostEditor = ({ handleNext, value, setPostValue }) => {
         body of your post will look like once it is published. If working on
         desktop you may want to adjust your browser window size to see how your
         layout reacts on smaller screens
-      </Typography>
+      </Typography> */}
       <EditorLayout>
         <Editor
           cellPlugins={cellPlugins}

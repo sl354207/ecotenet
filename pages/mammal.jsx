@@ -15,6 +15,8 @@ import {
   ListItem,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -67,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
   },
   ecoregions: {
+    marginTop: 20,
     marginBottom: 20,
   },
   tab: {
@@ -206,111 +209,115 @@ const mammal = ({ mammal, wiki }) => {
   };
 
   return (
-    <Container>
-      <Typography variant="h3" align="center" className={classes.title}>
+    <>
+      <Container>
+        {/* <Typography variant="h3" align="center" className={classes.title}>
         {mammal.Scientific_Name}: {mammal.COMMON_NAME}
-      </Typography>
-      <Typography variant="h5" className={classes.ecoregions}>
-        Ecoregions:{" "}
-        {mammal.unique_id.map((id) => (
-          <Link href="#" color="secondary">
-            Eco-{id}
-            {", "}
-          </Link>
-        ))}
-      </Typography>
+      </Typography> */}
+        <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
+        <Typography variant="h6" className={classes.ecoregions}>
+          Ecoregions:{" "}
+          {mammal.unique_id.map((id) => (
+            <Link href="#" color="secondary">
+              Eco-{id}
+              {", "}
+            </Link>
+          ))}
+        </Typography>
 
-      <div className={classes.tabs}>
-        <AppBar position="static" elevation={0} className={classes.tabbar}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="simple tabs example"
-            centered
-          >
-            <Tab
-              className={classes.tab}
-              label="General Info"
-              {...a11yProps(0)}
-            />
-            <Tab
-              className={classes.tab}
-              label="Additional Resources"
-              {...a11yProps(1)}
-            />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-          {wiki.remaining.sections.map((section) => {
-            if (section.anchor == "Gallery") {
-              return <></>;
-            } else if (section.toclevel == 2) {
-              return (
-                <>
-                  <h2>{section.line}</h2>
-                  {parse(DOMPurify.sanitize(section.text), options)}
-                </>
-              );
-            } else {
-              return (
-                <>
-                  <h1>{section.line}</h1>
-                  {parse(DOMPurify.sanitize(section.text), options)}
-                </>
-              );
-            }
-          })}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <List>
-            <ListItem>
-              <Link
-                variant="h6"
-                href={`https://www.inaturalist.org/search?q=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                iNaturalist
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link
-                variant="h6"
-                href={`https://commons.wikimedia.org/w/index.php?search=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }+${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                }&title=Special:MediaSearch&go=Go&type=image`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wikimedia Commons
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link
-                variant="h6"
-                href={`https://www.iucnredlist.org/search?query=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }%20${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                }&searchType=species`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                IUCN Red List
-              </Link>
-            </ListItem>
-          </List>
-        </TabPanel>
-      </div>
-    </Container>
+        <div className={classes.tabs}>
+          <AppBar position="static" elevation={0} className={classes.tabbar}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="simple tabs example"
+              centered
+            >
+              <Tab
+                className={classes.tab}
+                label="General Info"
+                {...a11yProps(0)}
+              />
+              <Tab
+                className={classes.tab}
+                label="Additional Resources"
+                {...a11yProps(1)}
+              />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+            {wiki.remaining.sections.map((section) => {
+              if (section.anchor == "Gallery") {
+                return <></>;
+              } else if (section.toclevel == 2) {
+                return (
+                  <>
+                    <h2>{section.line}</h2>
+                    {parse(DOMPurify.sanitize(section.text), options)}
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <h1>{section.line}</h1>
+                    {parse(DOMPurify.sanitize(section.text), options)}
+                  </>
+                );
+              }
+            })}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <List>
+              <ListItem>
+                <Link
+                  variant="h6"
+                  href={`https://www.inaturalist.org/search?q=${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                  }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
+                  color="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  iNaturalist
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  variant="h6"
+                  href={`https://commons.wikimedia.org/w/index.php?search=${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                  }+${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[1]
+                  }&title=Special:MediaSearch&go=Go&type=image`}
+                  color="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wikimedia Commons
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  variant="h6"
+                  href={`https://www.iucnredlist.org/search?query=${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                  }%20${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[1]
+                  }&searchType=species`}
+                  color="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  IUCN Red List
+                </Link>
+              </ListItem>
+            </List>
+          </TabPanel>
+        </div>
+      </Container>
+      <Footer />
+    </>
   );
 };
 

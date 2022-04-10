@@ -147,12 +147,36 @@ const useStyles = makeStyles((theme) => ({
   home: {
     minWidth: "auto",
   },
-  donate: {
+  spacer: {
     marginLeft: 10,
   },
   desktop: {
     display: "inline-flex",
     // marginLeft: 200,
+  },
+  popperTop: {
+    color: theme.palette.secondary.main,
+  },
+  popperBottom: {
+    color: theme.palette.secondary.main,
+    border: `1px solid ${theme.palette.secondary.main}`,
+    // borderBottom: "none",
+    borderRadius: 4,
+    marginBottom: 4,
+  },
+  donateMobile: {
+    border: `1px solid ${theme.palette.secondary.main}`,
+    borderRadius: 4,
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.text.secondary,
+    "&:hover": {
+      backgroundColor: "#0071e4",
+      border: "1px solid #0071e4",
+      borderRadius: 4,
+    },
+  },
+  divider: {
+    marginBottom: 4,
   },
 }));
 
@@ -414,22 +438,27 @@ const Nav = ({ ecoFilter }) => {
 
             {!isMobile && (
               <>
-                <Button href="/signin" variant="outlined" color="secondary">
-                  Sign In
-                </Button>
                 <Button
                   href="/dashboard/editor"
                   variant="outlined"
                   color="secondary"
-                  className={classes.donate}
                 >
                   Create Post
                 </Button>
                 <Button
+                  href="/signin"
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.spacer}
+                >
+                  Sign In
+                </Button>
+
+                <Button
                   href="/donate"
                   variant="contained"
                   color="secondary"
-                  className={classes.donate}
+                  className={classes.spacer}
                 >
                   Donate
                 </Button>
@@ -479,55 +508,64 @@ const Nav = ({ ecoFilter }) => {
                             <MenuItem
                               onClick={() => {
                                 setPopper(false);
-                                router.push("/species");
+                                router.push("/featured");
                               }}
+                              className={classes.popperTop}
                             >
-                              Featured
+                              Featured Posts
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
                                 setPopper(false);
                                 router.push("/species");
                               }}
+                              className={classes.popperTop}
                             >
                               Species Map
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
                                 setPopper(false);
-                                router.push("/species");
+                                router.push("/dashboard");
                               }}
-                              divider={true}
-                            >
-                              Create Post
-                            </MenuItem>
-
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/species");
-                              }}
-                            >
-                              Donate
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/species");
-                              }}
+                              className={classes.popperTop}
+                              // divider={true}
                             >
                               Dashboard
                             </MenuItem>
-                            {isMobile && (
-                              <MenuItem
-                                onClick={() => {
-                                  setPopper(false);
-                                  router.push("/species");
-                                }}
-                              >
-                                Sign In
-                              </MenuItem>
-                            )}
+                            {/* <Divider
+                              // variant="inset"
+                              className={classes.divider}
+                            /> */}
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/dashboard/editor");
+                              }}
+                              className={classes.popperBottom}
+                              // divider
+                            >
+                              Create Post
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/signin");
+                              }}
+                              className={classes.popperBottom}
+                              // divider
+                            >
+                              Sign In
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => {
+                                setPopper(false);
+                                router.push("/donate");
+                              }}
+                              className={classes.donateMobile}
+                            >
+                              Donate
+                            </MenuItem>
                           </MenuList>
                         </ClickAwayListener>
                       </Paper>

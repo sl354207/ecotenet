@@ -13,6 +13,7 @@ import {
   Typography,
   IconButton,
   Snackbar,
+  Link,
 } from "@material-ui/core";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
@@ -88,6 +89,10 @@ const useStyles = makeStyles((theme) => ({
   },
   dialog: {
     backgroundColor: theme.palette.primary.light,
+  },
+  link: {
+    color: theme.palette.secondary.light,
+    marginLeft: 10,
   },
 }));
 
@@ -566,6 +571,9 @@ const StepForm = ({ post, pathName }) => {
 
   return (
     <>
+      <Link href="/dashboard" className={classes.link}>
+        &#10229;Dashboard
+      </Link>
       <Stepper
         alternativeLabel
         nonLinear

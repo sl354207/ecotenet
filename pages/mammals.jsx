@@ -21,6 +21,8 @@ import { useRef } from "react";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import SpeciesItem from "../components/SpeciesItem";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {
@@ -86,67 +88,71 @@ const mammals = ({ mammals }) => {
     window.scrollTo({ top: y, behavior: "smooth" });
   };
   return (
-    <Container>
-      <Typography variant="h3" align="center" className={classes.header}>
+    <>
+      <Container>
+        {/* <Typography variant="h3" align="center" className={classes.header}>
         Mammals
-      </Typography>
-      <AppBar component="div" position="sticky" className={classes.subheader}>
-        {uniqueFirst.map((item) => (
-          <>
-            {isMobile ? (
-              <Button
-                key={item}
-                onClick={() => handleClick(item, -260)}
-                className={classes.sublist}
-                variant="outlined"
-                color="secondary"
-              >
-                <Typography variant="h4" align="center">
-                  {item}
-                </Typography>
-              </Button>
-            ) : (
-              <Button
-                key={item}
-                onClick={() => handleClick(item, -140)}
-                className={classes.sublist}
-                variant="outlined"
-                color="secondary"
-              >
-                <Typography variant="h4" align="center">
-                  {item}
-                </Typography>
-              </Button>
-            )}
-          </>
-        ))}
-      </AppBar>
-      <Toolbar />
-      <List>
-        {uniqueFirst.map((entry) => {
-          return (
+      </Typography> */}
+        <Header title="Mammals" />
+        <AppBar component="div" position="sticky" className={classes.subheader}>
+          {uniqueFirst.map((item) => (
             <>
-              <ListItem key={entry} ref={refs[entry]}>
-                <ListItemText>
-                  <Typography variant="h5" color="secondary">
-                    {entry}
+              {isMobile ? (
+                <Button
+                  key={item}
+                  onClick={() => handleClick(item, -260)}
+                  className={classes.sublist}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  <Typography variant="h5" align="center">
+                    {item}
                   </Typography>
-                </ListItemText>
-              </ListItem>
-              {mammals.map((mammal) => {
-                if (mammal.Scientific_Name[0] === entry) {
-                  return <SpeciesItem result={mammal} />;
-                }
-              })}
-              <Divider />
+                </Button>
+              ) : (
+                <Button
+                  key={item}
+                  onClick={() => handleClick(item, -140)}
+                  className={classes.sublist}
+                  variant="outlined"
+                  color="secondary"
+                >
+                  <Typography variant="h5" align="center">
+                    {item}
+                  </Typography>
+                </Button>
+              )}
             </>
-          );
-        })}
-      </List>
-      <Link href="/posts" id="back-to-top-anchor">
-        Go Back
-      </Link>
-    </Container>
+          ))}
+        </AppBar>
+        <Toolbar />
+        <List>
+          {uniqueFirst.map((entry) => {
+            return (
+              <>
+                <ListItem key={entry} ref={refs[entry]}>
+                  <ListItemText>
+                    <Typography variant="h5" color="secondary">
+                      {entry}
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+                {mammals.map((mammal) => {
+                  if (mammal.Scientific_Name[0] === entry) {
+                    return <SpeciesItem result={mammal} />;
+                  }
+                })}
+                <Divider />
+              </>
+            );
+          })}
+        </List>
+        <Link href="/posts" id="back-to-top-anchor">
+          Go Back
+        </Link>
+      </Container>
+      <Footer />
+    </>
   );
 };
 

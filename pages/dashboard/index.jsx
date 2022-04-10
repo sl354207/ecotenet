@@ -29,6 +29,7 @@ import PropTypes from "prop-types";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import SurePost from "../../components/SurePost";
+import Header from "../../components/Header";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
   tabs: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    marginTop: 20,
     // fontSize: 20,
     // maxWidth: 40,
 
@@ -239,9 +241,10 @@ export default function Dashboard() {
 
   return (
     <Container>
-      <Typography variant="h3" align="center" className={classes.title}>
+      {/* <Typography variant="h3" align="center" className={classes.title}>
         Dashboard
-      </Typography>
+      </Typography> */}
+      <Header title="Dashboard" />
       <div className={classes.tabs}>
         <AppBar position="static" elevation={0} className={classes.tabbar}>
           <Tabs

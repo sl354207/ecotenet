@@ -11,6 +11,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: 20,
@@ -29,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     float: "right",
     border: "thin solid",
     marginLeft: 10,
+  },
+  description: {
+    marginBottom: 40,
   },
 }));
 
@@ -135,31 +141,38 @@ const success = ({ wiki }) => {
   };
 
   return (
-    <Container>
-      <Typography variant="h3" align="center" className={classes.title}>
+    <>
+      <Container>
+        {/* <Typography variant="h3" align="center" className={classes.title}>
         Eco-313: Appalachian mixed mesophytic forests
-      </Typography>
-      {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-      {wiki.remaining.sections.map((section) => {
-        if (section.anchor == "Gallery") {
-          return <></>;
-        } else if (section.toclevel == 2) {
-          return (
-            <>
-              <h2>{section.line}</h2>
-              {parse(DOMPurify.sanitize(section.text), options)}
-            </>
-          );
-        } else {
-          return (
-            <>
-              <h1>{section.line}</h1>
-              {parse(DOMPurify.sanitize(section.text), options)}
-            </>
-          );
-        }
-      })}
-    </Container>
+      </Typography> */}
+        <Header
+          title="Eco-313: Appalachian mixed mesophytic forests"
+          className={classes.description}
+        />
+        {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+        {wiki.remaining.sections.map((section) => {
+          if (section.anchor == "Gallery") {
+            return <></>;
+          } else if (section.toclevel == 2) {
+            return (
+              <>
+                <h2>{section.line}</h2>
+                {parse(DOMPurify.sanitize(section.text), options)}
+              </>
+            );
+          } else {
+            return (
+              <>
+                <h1>{section.line}</h1>
+                {parse(DOMPurify.sanitize(section.text), options)}
+              </>
+            );
+          }
+        })}
+      </Container>
+      <Footer />
+    </>
   );
 };
 

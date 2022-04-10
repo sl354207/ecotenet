@@ -45,6 +45,8 @@ import Vote from "../../components/Vote";
 import Nav from "../../components/Nav";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -91,50 +93,53 @@ const post = ({ post, comments }) => {
   const [value, setValue] = useState(post);
 
   return (
-    <Container className={classes.container}>
-      {/* <Nav /> */}
-      <Typography align="center" variant="h4" className={classes.title}>
+    <>
+      <Container className={classes.container}>
+        {/* <Nav /> */}
+        {/* <Typography align="center" variant="h4" className={classes.title}>
         {post.title}
-      </Typography>
-      <div className={classes.description}>
-        <div className={classes.content}>
-          <div className={classes.items}>
-            <Typography align="center" variant="h6">
-              <Link href="#" color="secondary">
-                {post.name}
-              </Link>
-            </Typography>
-            <Typography className={classes.publish} align="left" variant="h6">
-              August 22, 2021
+      </Typography> */}
+        <Header title={post.title} />
+        <div className={classes.description}>
+          <div className={classes.content}>
+            <div className={classes.items}>
+              <Typography align="center" variant="h6">
+                <Link href="#" color="secondary">
+                  {post.name}
+                </Link>
+              </Typography>
+              <Typography className={classes.publish} align="left" variant="h6">
+                August 22, 2021
+              </Typography>
+            </div>
+            <Typography variant="h6">
+              Ecoregions:{" "}
+              {post.ecoregions.map((ecoregion) => (
+                <Link href="#" color="secondary">
+                  Eco-{ecoregion},{" "}
+                </Link>
+              ))}
             </Typography>
           </div>
-          <Typography variant="h6">
-            Ecoregions:{" "}
-            {post.ecoregions.map((ecoregion) => (
-              <Link href="#" color="secondary">
-                Eco-{ecoregion},{" "}
-              </Link>
-            ))}
-          </Typography>
-        </div>
 
-        <Vote counter={post.count} />
-      </div>
-      <EditorLayout>
-        <Editor
-          cellPlugins={cellPlugins}
-          value={value}
-          onChange={setValue}
-          readOnly
-        />
-      </EditorLayout>
-      <Divider />
-      <Typography variant="h6" className={classes.commentsection}>
-        Comments:
-      </Typography>
-      <Comments comments={comments} post_id={post._id} />
-      <Link href="/posts">Go Back</Link>
-    </Container>
+          <Vote counter={post.count} />
+        </div>
+        <EditorLayout>
+          <Editor
+            cellPlugins={cellPlugins}
+            value={value}
+            onChange={setValue}
+            readOnly
+          />
+        </EditorLayout>
+        <Divider />
+        <Typography variant="h6" className={classes.commentsection}>
+          Comments:
+        </Typography>
+        <Comments comments={comments} post_id={post._id} />
+      </Container>
+      <Footer />
+    </>
   );
 };
 

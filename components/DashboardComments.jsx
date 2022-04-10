@@ -1,4 +1,10 @@
-import { FormControl, InputLabel, InputBase, Button } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  InputBase,
+  Button,
+  Link,
+} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
@@ -101,6 +107,16 @@ const useStyles = makeStyles((theme) => ({
     // display: "flex",
     flexGrow: 1,
   },
+  text: {
+    display: "flex",
+    flexGrow: 1,
+  },
+  comment: {
+    flexGrow: 1,
+  },
+  link: {
+    color: theme.palette.secondary.light,
+  },
 }));
 
 const DashboardComments = ({
@@ -151,53 +167,59 @@ const DashboardComments = ({
   };
 
   return (
-    <>
-      <FormControl className={classes.items}>
-        <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
-        <TextBox
-          defaultValue={result.text}
-          placeHolder={null}
-          id="dashboardcomment"
-          handleChange={handleCommentChange}
-          autoFocus={false}
-          // rows={1}
-        />
-      </FormControl>
-      <div className={classes.buttongroup}>
-        {commentValue != "" ? (
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.buttonedit}
-            size="small"
-            onClick={() => handleCommentUpdate(commentValue)}
-          >
-            Save Change
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.buttonedit}
-            size="small"
-            disabled
-          >
-            Save Change
-          </Button>
-        )}
+    <div className={classes.comment}>
+      <Link href={`/posts/${result.post_id}`} className={classes.link}>
+        View Post
+      </Link>{" "}
+      {result.date}
+      <div className={classes.text}>
+        <FormControl className={classes.items}>
+          <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
+          <TextBox
+            defaultValue={result.text}
+            placeHolder={null}
+            id="dashboardcomment"
+            handleChange={handleCommentChange}
+            autoFocus={false}
+            // rows={1}
+          />
+        </FormControl>
+        <div className={classes.buttongroup}>
+          {commentValue != "" ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.buttonedit}
+              size="small"
+              onClick={() => handleCommentUpdate(commentValue)}
+            >
+              Save Change
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.buttonedit}
+              size="small"
+              disabled
+            >
+              Save Change
+            </Button>
+          )}
 
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classes.buttonedit}
-          startIcon={<DeleteIcon />}
-          size="small"
-          onClick={handleClickOpen}
-        >
-          Delete
-        </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.buttonedit}
+            startIcon={<DeleteIcon />}
+            size="small"
+            onClick={handleClickOpen}
+          >
+            Delete
+          </Button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
