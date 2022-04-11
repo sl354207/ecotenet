@@ -39,6 +39,13 @@ const theme = createTheme({
       activatedOpacity: "0.24",
     },
   },
+  overrides: {
+    MuiContainer: {
+      root: {
+        minHeight: "60vh",
+      },
+    },
+  },
 });
 
 export default theme;

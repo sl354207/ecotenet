@@ -19,303 +19,292 @@ const category = () => {
       {/* <Nav /> */}
       <Container>
         <Header title="Category Breakdown" />
-        {/* <Typography variant="body1">
-          These are all the categories in the menu if you expand it. Categories
-          will be used so that if want to learn about a specific topic in an
-          ecoregion you can click on the category and all the related posts will
-          be displayed. When authors create a post they will pick 1 main
-          category but they can also add additional tags for which the article
-          can be searched by. None of these are set in stone, they are just the
-          initial ones I came up with. I know it's alot, tried to find the
-          balance between broad and specific. I would love y'alls input if you
-          have any ideas
-        </Typography> */}
         <Description
-          description="These are all the categories in the menu if you expand it. Categories
-          will be used so that if want to learn about a specific topic in an
-          ecoregion you can click on the category and all the related posts will
-          be displayed. When authors create a post they will pick 1 main
-          category but they can also add additional tags for which the article
-          can be searched by. None of these are set in stone, they are just the
-          initial ones I came up with. I know it's alot, tried to find the
-          balance between broad and specific. I would love y'alls input if you
-          have any ideas"
+          description="This is a general breakdown of the categories that may be selected when creating a post. Each category has a brief description of the types of possible posts that should be included in that category"
           align="left"
         />
         <Typography> </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          animals/ plants/ fungi/ arthropods
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          species subcategories
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Guides:
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          These will be like the mammal page where it shows general info,
-          photos, and links to other resources, they will not be user
-          submissions I don't think.
+          A guides category can be found under each of the main species
+          categories Animals, Plants, Fungi and Arthropods. This category is for
+          posts that may be more in depth and complete than the general info
+          given for that species(id guides, lifecycles, etc.) or for posts that
+          share information on several species within the main category e.g. a
+          comparison of species of hickory trees within an ecoregion
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          guides
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Hunt:
         </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          These will be posts that either do a general deep dive on a specific
-          species or compare/discuss several species. These and the rest of the
-          categories will be user submitted
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          hunt
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          tracking/stalking
+        <Typography className={classes.spacer} variant="h6">
+          Tracking/Stalking
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Anything related tracking/stalking
+          Anything related to tracking or stalking
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          trapping
+        <Typography className={classes.spacer} variant="h6">
+          Trapping
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to trapping
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          fishing
+        <Typography className={classes.spacer} variant="h6">
+          Fishing
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to fishing
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          strategies/ techniques
+        <Typography className={classes.spacer} variant="h6">
+          Strategies/Techniques
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Things like how to specifically hunt whitetail or turkeys
+          Posts about strategies or techniques for hunting specific species or
+          terrain e.g. how to hunt whitetail deer in specific situations
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          processing
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          Field dressing, skinning, etc.
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          tools
+        <Typography className={classes.spacer} variant="h6">
+          Processing
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Things like bow making, maybe also how to use specific tools
+          Posts about field dressing, skinning, processing, etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          gather
+        <Typography className={classes.spacer} variant="h6">
+          Tools
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          edible
+        <Typography className={classes.spacer} variant="body1">
+          Posts about processes like bow or arrow making, or how to use specific
+          tools for hunting
+        </Typography>
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Gather:
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Edible
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to wild edibles
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          medicinal
+        <Typography className={classes.spacer} variant="h6">
+          Medicinal
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to herbal medicine
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          survival
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Survival:
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          fire
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          Anything related to fires
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          water
+        <Typography className={classes.spacer} variant="h6">
+          Fire
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Anything related to water
+          Anything related to fires and fire making
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          basic shelter
+        <Typography className={classes.spacer} variant="h6">
+          Water
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Anything related to water collection, purification, etc. in a survival
+          setting
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Basic shelter
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to basic shelters
         </Typography>
-        <Typography variant="h5">navigation</Typography>
-        <Typography variant="body1">Anything related to navigation</Typography>
-        <Typography variant="h5">emergency</Typography>
-        <Typography variant="body1">
-          Emergency situation skills like injuries and rescue etc.
-        </Typography>
-        <Typography variant="h5">travel</Typography>
-        <Typography variant="h5">land</Typography>
-        <Typography variant="body1">
-          Could range from mountaineering type skills to a review about your
-          favorite hiking spot to what type of gear you should use for the
-          appalachian trail
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          water
+        <Typography className={classes.spacer} variant="h6">
+          Navigation
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Similar but water related so paddling, rafting skills etc. River trip
-          reviews etc.{" "}
+          Anything related to navigation in a survival setting
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          agriculture
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          planting/ harvesting
+        <Typography className={classes.spacer} variant="h6">
+          Emergency
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Anything related to planting/harvesting
+          Anything related to emergency situation skills like injuries and
+          rescue etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          maintenance/ management
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Travel:
         </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          Weeding techniques, pruning, anything that happens between plant and
-          harvest
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          processing/ storage
+        <Typography className={classes.spacer} variant="h6">
+          land
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Canning, smoking, root cellars, etc.{" "}
+          Posts ould range from mountaineering type skills to a review about
+          your favorite hiking spot to what type of gear you should use for the
+          appalachian trail etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          propogation/ cultivation
+        <Typography className={classes.spacer} variant="h6">
+          Water
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Seed propogation, collection, and storage, all tree nursery stuff,
-          etc.{" "}
+          Similar to land but water related so paddling, rafting skills, river
+          trip reviews etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          livestock
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Agriculture:
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Planting/Harvesting
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Anything related to planting or harvesting
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Maintenance/Management
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Posts about weeding techniques, pruning, or any other management that
+          happens between planting and harvesting
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Processing/Storage
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Posts about canning, smoking, root cellars, etc.
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Propogation/Cultivation
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Posta about seed propogation, collection, and storage. Any tree
+          nursery stuff, etc.
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Livestock
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything livestock related
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          soil health
+        <Typography className={classes.spacer} variant="h6">
+          Soil health
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Composting techniques, soil building and maintenance, etc.
+          Posts about composting techniques, soil building and maintenance, etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          irrigation
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          how to get water to your stuff. Not sure if it needs it's own category
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          techniques/ systems
+        <Typography className={classes.spacer} variant="h6">
+          Irrigation
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Permaculture type stuff, or specific farming
-          practices/systems/techniques that you employ
+          Posts about how to get water to your stuff.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          start-to-finish/ lifecycles
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          I was thinking if you want to do a deep dive on one specific crop or
-          species all the way through it's entire lifecycle. Not sure if this
-          should be it's own also.
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          building
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          foundations/ floors
+        <Typography className={classes.spacer} variant="h6">
+          Techniques/Systems
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Anything related to foundations/floors
+          Posts about specific farming practices/systems/techniques that you
+          employ e.g. permaculture etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          walls
+        <Typography className={classes.spacer} variant="h6">
+          Start-to-finish/Lifecycles
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Deep dives on one specific crop or species all the way through it's
+          entire lifecycle.
+        </Typography>
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Building:
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Foundations/ floors
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Anything related to foundations
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Floors
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Anything related to floors
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Walls
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to building walls
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          roofs
+        <Typography className={classes.spacer} variant="h6">
+          Roofs
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything related to roofing
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          complete structures
+        <Typography className={classes.spacer} variant="h6">
+          Complete structures
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          This could either be like start to finish on a building or like
-          fencing, outhouse, decks, pavilions, etc.
+          This could either be a post about the start to finish process on a
+          building or a post about fencing, outhouses, decks, pavilions, etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          water systems
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          Water systems for the house or like pond building or routing water
-          through the environment somehow etc.
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          heating/cooling
+        <Typography className={classes.spacer} variant="h6">
+          Water systems
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Anything related to heating/cooling
+          Posts about water systems for a house or perhaps pond building or
+          routing water through the environment for whatever situation etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          furniture/ utensils/ tools
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          How to make or use these things
+        <Typography className={classes.spacer} variant="h6">
+          Heating/Cooling
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          NOT SURE IF SANITION SYSTEMS NEED A CATEGORY OR WHERE THAT MIGHT GO
+          Anything related to heating and cooling
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          culture
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          Idea for culture section was anything that isn't utility based I guess
-          but could be interesting
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          cooking/recipes
+        <Typography className={classes.spacer} variant="h6">
+          Furniture/Tools
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Recipes but also like how to pit roast a pig or something
+          Posts about how to make or use furniture, utensils or any type of tool
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          clothing
-        </Typography>{" "}
-        variant='h5'
+
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          Culture:
+        </Typography>
+
+        <Typography className={classes.spacer} variant="h6">
+          Cooking/Recipes
+        </Typography>
         <Typography className={classes.spacer} variant="body1">
-          How to make clothing, thought tanning hides would also go here but not
-          positive that is the right place for it
+          Recipes but also posts about cooking processes and techniques like how
+          to pit roast a pig etc.
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          art
+        <Typography className={classes.spacer} variant="h6">
+          Clothing
+        </Typography>
+
+        <Typography className={classes.spacer} variant="body1">
+          Posts about how to make clothing, from tanning to sewing, as well as
+          styling
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Art
         </Typography>
         <Typography className={classes.spacer} variant="body1">
           Anything art related. Not sure if there is a better word that
           basically covers all art that isn't music (sculpting, painting, etc.)
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          music
+        <Typography className={classes.spacer} variant="h6">
+          Music
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Songs maybe but also how to make instruments
+          Songs perhaps but also posts about how to make and use instruments
         </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          rituals
-        </Typography>
-        <Typography className={classes.spacer} variant="body1">
-          Kind of like a religion section but basically any ritualistic type
-          stuff people might do
-        </Typography>
-        <Typography className={classes.spacer} variant="h5">
-          stories
+        <Typography className={classes.spacer} variant="h6">
+          Rituals
         </Typography>
         <Typography className={classes.spacer} variant="body1">
-          Stories maybe? Saw Foxfire books had this thought it was kind of
-          interesting
+          Anything related to rituals whether it be religious or otherwise
+        </Typography>
+        <Typography className={classes.spacer} variant="h6">
+          Stories
+        </Typography>
+        <Typography className={classes.spacer} variant="body1">
+          Storytelling
+        </Typography>
+        <Typography className={classes.spacer} variant="h5" color="secondary">
+          NOT SURE IF SANITION SYSTEMS NEED A CATEGORY OR WHERE THAT MIGHT GO
         </Typography>
       </Container>
       <Footer />

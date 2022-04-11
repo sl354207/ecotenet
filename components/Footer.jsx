@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     marginTop: 40,
   },
+  container: {
+    minHeight: "fit-content",
+  },
 }));
 
 const Footer = () => {
@@ -34,50 +37,50 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <Divider />
-      <Container className={classes.spacing}>
+      <Container className={`${classes.spacing} ${classes.container}`}>
         <Typography variant="body2" align="center" gutterBottom>
           Copyright &#169; Ecotenet 2022
         </Typography>
 
         <Grid container spacing={2} className={classes.spacing}>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/privacy" className={classes.link}>
               Privacy Policy
             </Link>
           </Grid>
 
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/contact" className={classes.link}>
               Contact Us
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/featured" className={classes.link}>
               Featured Posts
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/terms" className={classes.link}>
               Terms of Use
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/about" className={classes.link}>
               About Us
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/species" className={classes.link}>
               Species Map
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}>
             <Link href="/sitemap" className={classes.link}>
               Site Map
             </Link>
           </Grid>
-          <Grid item xs={12} sm={4} className={classes.text}></Grid>
-          <Grid item xs={12} sm={4} className={classes.text}>
+          <Grid item xs={4} className={classes.text}></Grid>
+          <Grid item xs={4} className={classes.text}>
             <Button href="/donate" variant="contained" color="secondary">
               Donate
             </Button>

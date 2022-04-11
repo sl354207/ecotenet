@@ -202,114 +202,6 @@ const deletePost = async (_id) => {
   return deleted;
 };
 
-// add a draft to database with specific format from editor with id, version, and rows as input data.
-// const createDraft = async (
-//   title,
-//   name,
-//   description,
-//   category,
-//   tags,
-//   ecoregions,
-//   id,
-//   version,
-//   rows,
-//   approved,
-//   updated
-// ) => {
-//   const { db } = await connectToDatabase();
-
-//   const data = {
-//     title,
-//     name,
-//     description,
-//     category,
-//     tags,
-//     ecoregions,
-//     id,
-//     version,
-//     rows,
-//     approved,
-//     updated,
-//   };
-//   const response = await db.collection("posts").insertOne(data);
-//   // console.log(response);
-
-//   return response;
-// };
-
-// query database to get all drafts by user
-
-// UPDATE TO GETPOSTSBYUSER
-// const getDraftsByUser = async () => {
-//   const { db } = await connectToDatabase();
-
-//   const drafts = await db.collection("posts").find({}).limit(20).toArray();
-
-//   return drafts;
-// };
-
-// retrieve single draft by id from database
-// const getDraftById = async (id) => {
-//   const { db } = await connectToDatabase();
-
-//   const draft = await db.collection("posts").findOne({
-//     _id: ObjectId(id),
-//   });
-
-//   return draft;
-// };
-
-// //update a draft
-// const updateDraft = async (
-//   title,
-//   name,
-//   description,
-//   category,
-//   tags,
-//   ecoregions,
-//   _id,
-//   id,
-//   version,
-//   rows,
-//   approved,
-//   updated
-// ) => {
-//   const { db } = await connectToDatabase();
-
-//   const data = {
-//     title,
-//     name,
-//     description,
-//     category,
-//     tags,
-//     ecoregions,
-//     id,
-//     version,
-//     rows,
-//     approved,
-//     updated,
-//   };
-//   const response = await db.collection("posts").updateOne(
-//     {
-//       _id: ObjectId(_id),
-//     },
-//     { $set: data }
-//   );
-
-//   return response;
-// };
-
-// //delete a draft
-// const deleteDraft = async (_id) => {
-//   const { db } = await connectToDatabase();
-
-//   const deleted = await db.collection("posts").deleteOne({
-//     _id: ObjectId(_id),
-//   });
-
-//   return deleted;
-// };
-
 //create a comment
 const createComment = async (
   name,
@@ -349,6 +241,17 @@ const getDashboardComments = async (name) => {
   const comments = await db
     .collection("comments")
     .find({ name: name })
+    .toArray();
+
+  return comments;
+};
+const getComments = async (approved) => {
+  const { db } = await connectToDatabase();
+
+  const comments = await db
+    .collection("comments")
+    .find({ approved: approved })
+    .sort({ _id: -1 })
     .toArray();
 
   return comments;
@@ -627,14 +530,10 @@ module.exports = {
   getPosts,
   getFeatured,
   getDashboardPosts,
+  getComments,
   getPostById,
   updatePost,
   deletePost,
-  // createDraft,
-  // getDraftsByUser,
-  // getDraftById,
-  // updateDraft,
-  // deleteDraft,
   createComment,
   getPostComments,
   getDashboardComments,
