@@ -45,6 +45,11 @@ const theme = createTheme({
         minHeight: "60vh",
       },
     },
+    MuiLink: {
+      root: {
+        color: "#c8fcff",
+      },
+    },
   },
 });
 

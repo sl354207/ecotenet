@@ -171,7 +171,7 @@ const DashboardComments = ({
       <Link href={`/posts/${result.post_id}`} className={classes.link}>
         View Post
       </Link>{" "}
-      {result.date}
+      {result.date} Approved: {result.approved}
       <div className={classes.text}>
         <FormControl className={classes.items}>
           <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>

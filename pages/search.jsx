@@ -132,7 +132,7 @@ const search = ({ ecoFilter }) => {
     );
   } else if (Array.isArray(results) && results.length == 0) {
     list = (
-      <Typography variant="h3" align="center" className={classes.header}>
+      <Typography variant="h6" align="center" className={classes.header}>
         no results
       </Typography>
     );

@@ -7,9 +7,12 @@ export default async function handler(req, res) {
     return res.status(405);
   }
 
+  const status = req.query.q1;
+  const approved = req.query.q2;
+
   // try get request, if successful return response, otherwise return error message
   try {
-    const posts = await getPosts();
+    const posts = await getPosts(status, approved);
 
     return res.status(200).json(posts);
   } catch (err) {

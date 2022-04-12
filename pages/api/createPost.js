@@ -18,6 +18,7 @@ export default async function handler(req, res) {
     approved,
     updated,
     featured,
+    date,
   } = req.body;
 
   // only allow post method
@@ -39,7 +40,8 @@ export default async function handler(req, res) {
       status,
       approved,
       updated,
-      featured
+      featured,
+      date
     );
 
     return res.status(200).json(createdPost);

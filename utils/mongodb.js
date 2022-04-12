@@ -61,7 +61,8 @@ const createPost = async (
   status,
   approved,
   updated,
-  featured
+  featured,
+  date
 ) => {
   const count = 0;
 
@@ -82,6 +83,7 @@ const createPost = async (
     approved,
     updated,
     featured,
+    date,
   };
 
   const response = await db.collection("posts").insertOne(data);
@@ -143,7 +145,6 @@ const getDashboardPosts = async (name, status) => {
 // update a post
 const updatePost = async (
   title,
-  name,
   description,
   category,
   tags,
@@ -155,13 +156,13 @@ const updatePost = async (
   status,
   approved,
   updated,
-  featured
+  featured,
+  date
 ) => {
   const { db } = await connectToDatabase();
 
   const data = {
     title,
-    name,
     description,
     category,
     tags,
@@ -173,6 +174,7 @@ const updatePost = async (
     approved,
     updated,
     featured,
+    date,
   };
   const response = await db.collection("posts").updateOne(
     {

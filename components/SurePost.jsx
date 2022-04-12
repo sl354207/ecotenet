@@ -69,6 +69,7 @@ const SurePost = ({
       approved: "pending",
       updated: approved == "true" ? true : false,
       featured: false,
+      date: new Date().toUTCString(),
     };
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postValue, details, ecoObject, silentObject);
@@ -147,10 +148,11 @@ const SurePost = ({
       approved: "pending",
       updated: false,
       featured: false,
+      date: "",
     };
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postValue, details, ecoObject, silentObject);
-    console.log(value);
+    // console.log(value);
 
     const res = await fetch("/api/createPost", {
       method: "POST",

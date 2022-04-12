@@ -321,6 +321,15 @@ export default function Dashboard() {
                     <div className={classes.card}>
                       <Typography
                         gutterBottom
+                        color="textPrimary"
+                        align="left"
+                        variant="body2"
+                      >
+                        Approved: {result.approved}
+                      </Typography>
+
+                      <Typography
+                        gutterBottom
                         variant="h5"
                         color="textPrimary"
                         align="left"
@@ -330,9 +339,9 @@ export default function Dashboard() {
                       <Typography gutterBottom color="textPrimary" align="left">
                         {result.description}
                       </Typography>
-                      <Typography gutterBottom color="secondary" align="left">
-                        {result.author}
-                      </Typography>
+                      {/* <Typography gutterBottom color="secondary" align="left">
+                        {result.name}
+                      </Typography> */}
                     </div>
                     <div>
                       <Typography variant="h6" color="secondary" align="right">

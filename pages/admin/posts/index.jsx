@@ -21,10 +21,9 @@ import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
 
-import Header from "../../components/Header";
-import SureCommentAdmin from "../../components/SureCommentAdmin";
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
+import Header from "../../../components/Header";
 
 const drawerWidth = 120;
 
@@ -83,18 +82,18 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     backgroundColor: theme.palette.primary.light,
   },
-  comment: {
+  post: {
     display: "flow-root",
     flexGrow: 1,
   },
   link: {
-    color: theme.palette.secondary.light,
+    // color: theme.palette.secondary.light,
   },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const AdminComments = () => {
+const AdminPosts = () => {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
@@ -106,7 +105,7 @@ const AdminComments = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",
-    message: "Comment submitted successfully",
+    message: "Post submitted successfully",
   });
 
   const handleCloseSnackbar = (event, reason) => {
@@ -127,7 +126,7 @@ const AdminComments = () => {
   };
 
   const { data: results, mutate } = useSWR(
-    "/api/getComments?q=pending",
+    "/api/getAllPosts?q1=published&q2=pending",
     fetcher
   );
 
@@ -154,80 +153,20 @@ const AdminComments = () => {
         {results.map((result) => {
           return (
             <>
-              <ListItem key={result._id} className={classes.buttonpost}>
-                <div className={classes.comment}>
-                  <Link className={classes.link}>{result.name}</Link>
+              <ListItem
+                key={result._id}
+                className={classes.buttonpost}
+                button
+                onClick={() => router.push(`/admin/posts/${result._id}`)}
+              >
+                <div className={classes.post}>
+                  <Link>{result.name}</Link>
 
-                  <ListItemText primary={result.text}></ListItemText>
+                  <ListItemText primary={result.title}></ListItemText>
                 </div>
 
-                {isMobile ? (
-                  <div className={classes.buttonmobile}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() => handleOpenDialog("Approve")}
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={classes.buttonup}
-                      onClick={() => handleOpenDialog("Deny")}
-                    >
-                      Deny
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={`${classes.buttonup} ${classes.delete}`}
-                      onClick={() => handleOpenDialog("Delete")}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() => handleOpenDialog("Approve")}
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={classes.button}
-                      onClick={() => handleOpenDialog("Deny")}
-                    >
-                      Deny
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={`${classes.button} ${classes.delete}`}
-                      onClick={() => handleOpenDialog("Delete")}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
+                <Link href={`/admin/posts/${result._id}`}>View Post</Link>
               </ListItem>
-              <SureCommentAdmin
-                comment={result}
-                action={action}
-                open={dialog}
-                handleClose={handleCloseDialog}
-                ariaLabeledBy="alert-dialog-title"
-                ariaDescribedBy="alert-dialog-description"
-                id="alert-dialog-description"
-                className={classes.dialog}
-                sure="Are you sure you want to"
-                setSnackbar={setSnackbar}
-                mutate={mutate}
-              />
             </>
           );
         })}
@@ -283,7 +222,7 @@ const AdminComments = () => {
         </div>
       </Drawer>
       <div className={classes.content}>
-        <Header title="Comments" />
+        <Header title="Posts" />
         {list}
         <Snackbar
           anchorOrigin={{
@@ -303,4 +242,4 @@ const AdminComments = () => {
   );
 };
 
-export default AdminComments;
+export default AdminPosts;
