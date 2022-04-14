@@ -7,7 +7,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import PostList from "../../components/PostList";
 
-import { getFeatured } from "../../utils/mongodb";
+import { getFeatures } from "../../utils/mongodb";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -49,7 +49,7 @@ const featured = ({ featured }) => {
 };
 
 export const getStaticProps = async () => {
-  const featured = await getFeatured();
+  const featured = await getFeatures();
 
   return {
     props: {

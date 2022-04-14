@@ -1,20 +1,30 @@
 import {
   AppBar,
+  Button,
+  CircularProgress,
   Divider,
   Drawer,
+  Grid,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Snackbar,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
 
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-import { makeStyles } from "@material-ui/core/styles";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
+import Header from "../../components/Header";
+import { Alert } from "@material-ui/lab";
+import { useState } from "react";
+import useSWR from "swr";
 
 const drawerWidth = 120;
 
@@ -40,11 +50,178 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  header: {
+    marginTop: 20,
+  },
+  buttonpost: {
+    display: "flex",
+    justifyContent: "start",
+    textTransform: "none",
+    // border: "1px solid #94c9ff",
+    border: `1px solid ${theme.palette.secondary.main}`,
+    margin: "20px auto",
+    borderRadius: "10px",
+  },
+  buttonmobile: {
+    display: "grid",
+  },
+  buttonup: {
+    marginTop: 4,
+  },
+  button: {
+    marginLeft: 4,
+  },
+  delete: {
+    color: "#fc7ebf",
+    borderColor: "#fc7ebf",
+  },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
+  post: {
+    display: "flow-root",
+    flexGrow: 1,
+  },
+  spacing: {
+    marginTop: 20,
+  },
+  text: {
+    textAlign: "center",
+  },
 }));
+
+const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const Admin = () => {
   const classes = useStyles();
+  const theme = useTheme();
   const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [dialog, setDialog] = useState(false);
+  const [action, setAction] = useState("");
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (action) => {
+    setDialog(true);
+    setAction(action);
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
+
+  const { data: results, mutate } = useSWR("/api/getFeatures", fetcher);
+  console.log(results);
+  let list;
+
+  if (!results || results == undefined) {
+    list = (
+      <CircularProgress
+        color="secondary"
+        size={100}
+        disableShrink={true}
+        className={classes.progress}
+      />
+    );
+  } else if (Array.isArray(results) && results.length == 0) {
+    list = (
+      <Typography variant="h6" align="center" className={classes.header}>
+        no results
+      </Typography>
+    );
+  } else {
+    list = (
+      <>
+        <Typography>Feature count: {results.length}</Typography>
+        <List>
+          {results.map((result) => {
+            return (
+              <>
+                <ListItem key={result._id} className={classes.buttonpost}>
+                  {/* <div className={classes.post}>
+                  <Link>{result.name}</Link>
+
+                  <ListItemText primary={result.title}></ListItemText>
+                  <Typography variant="body1" color="textPrimary" align="left">
+                    {result.date}
+                  </Typography>
+                </div>
+                <Typography variant="h6" color="secondary" align="left">
+                  {result.count}
+                </Typography>
+                <Link href={`/admin/posts/${result._id}`}>View Post</Link> */}
+                  <Grid container spacing={1} className={classes.spacing}>
+                    <Grid item xs={4} className={classes.text}>
+                      <Link href="/privacy">{result.name}</Link>
+                    </Grid>
+
+                    <Grid item xs={4} className={classes.text}>
+                      <Typography>Feature: {result.feature}</Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      <Link href={`/admin/posts/${result._id}`}>View Post</Link>
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      <Typography>{result.title}</Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      <Typography>
+                        Featured: {result.featured ? "True" : "False"}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      {result.feature == "true" ? (
+                        <Button variant="outlined" color="secondary">
+                          placeholder
+                        </Button>
+                      ) : (
+                        <Button variant="outlined" color="secondary">
+                          Add to Features
+                        </Button>
+                      )}
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      <Typography>{result.date}</Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      <Typography variant="h6" color="secondary">
+                        {result.count}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} className={classes.text}>
+                      {result.feature !== "true" ? (
+                        <Button variant="outlined" color="secondary">
+                          Remove from List
+                        </Button>
+                      ) : (
+                        <Button variant="outlined" color="secondary">
+                          Add to Features
+                        </Button>
+                      )}
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              </>
+            );
+          })}
+        </List>
+      </>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -109,20 +286,22 @@ const Admin = () => {
           lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
           faucibus et molestie ac.
         </Typography>
-        <Typography>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+
+        <Header title="Feature Candidates" />
+        {list}
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );

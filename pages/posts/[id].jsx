@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 
   publish: {
     marginLeft: 20,
-    color: theme.palette.secondary.light,
+    // color: theme.palette.secondary.light,
     fontStyle: "italic",
   },
   container: {
@@ -92,6 +92,8 @@ const post = ({ post, comments }) => {
   // set post as value of editor
   const [value, setValue] = useState(post);
 
+  const date = new Date(post.date);
+
   return (
     <>
       <Container className={classes.container}>
@@ -109,7 +111,7 @@ const post = ({ post, comments }) => {
                 </Link>
               </Typography>
               <Typography className={classes.publish} align="left" variant="h6">
-                August 22, 2021
+                {date.toDateString()}
               </Typography>
             </div>
             <Typography variant="h6">
