@@ -21,6 +21,7 @@ export default async function handler(req, res) {
     updated,
     featured,
     date,
+    feature,
   } = req.body;
   // console.log(req);
 
@@ -39,7 +40,8 @@ export default async function handler(req, res) {
       approved,
       updated,
       featured,
-      date
+      date,
+      feature
     );
 
     // console.log(update);

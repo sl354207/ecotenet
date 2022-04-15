@@ -62,7 +62,8 @@ const createPost = async (
   approved,
   updated,
   featured,
-  date
+  date,
+  feature
 ) => {
   const count = 0;
 
@@ -84,6 +85,7 @@ const createPost = async (
     updated,
     featured,
     date,
+    feature,
   };
 
   const response = await db.collection("posts").insertOne(data);
@@ -121,7 +123,7 @@ const getFeatureCandidates = async () => {
   const features = await db
     .collection("posts")
     .find({ feature: { $ne: "false" } })
-
+    .sort({ feature: -1 })
     .toArray();
 
   return features;
@@ -168,7 +170,8 @@ const updatePost = async (
   approved,
   updated,
   featured,
-  date
+  date,
+  feature
 ) => {
   const { db } = await connectToDatabase();
 
@@ -186,6 +189,7 @@ const updatePost = async (
     updated,
     featured,
     date,
+    feature,
   };
   const response = await db.collection("posts").updateOne(
     {
@@ -537,6 +541,103 @@ const autoSpecies = async (query) => {
   return results;
 };
 
+const getStats = async () => {
+  const { db } = await connectToDatabase();
+
+  const comments = await db.collection("comments").estimatedDocumentCount({});
+  const people = await db.collection("people").estimatedDocumentCount({});
+  const flags = await db.collection("flags").estimatedDocumentCount({});
+  const species = await db.collection("species").estimatedDocumentCount({});
+  const posts = await db
+    .collection("posts")
+    .count({ status: "published", approved: "true" });
+
+  const stats = {
+    comments: comments,
+    people: people,
+    flags: flags,
+    species: species,
+    posts: posts,
+  };
+
+  return stats;
+};
+const getPeople = async () => {
+  const { db } = await connectToDatabase();
+
+  const people = await db
+    .collection("people")
+    .find({
+      approved: "pending",
+    })
+    .toArray();
+
+  return people;
+};
+
+const getPersonById = async (name) => {
+  const { db } = await connectToDatabase();
+
+  const person = await db.collection("people").findOne({
+    name: name,
+  });
+
+  return person;
+};
+const updatePerson = async (
+  _id,
+  bio,
+  email,
+  website,
+  socials,
+  flags,
+  denials,
+  approved
+) => {
+  const { db } = await connectToDatabase();
+
+  const data = {
+    bio,
+    email,
+    website,
+    socials,
+    flags,
+    denials,
+    approved,
+  };
+  const response = await db.collection("people").updateOne(
+    {
+      _id: ObjectId(_id),
+    },
+    { $set: data }
+  );
+
+  return response;
+};
+
+const deletePerson = async (name) => {
+  const { db } = await connectToDatabase();
+
+  const person = await db.collection("people").deleteOne({
+    name: name,
+  });
+
+  const comments = await db.collection("comments").deleteMany({
+    name: name,
+  });
+  const posts = await db.collection("comments").deleteMany({
+    name: name,
+  });
+  const flags = await db.collection("flags").deleteMany({
+    flagee: name,
+  });
+
+  const deleted = Object.assign(person, comments, posts, flags);
+  // console.log(deleted);
+
+  return deleted;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -560,4 +661,9 @@ module.exports = {
   searchEcoPosts,
   searchEcoSpecies,
   autoSpecies,
+  getStats,
+  getPeople,
+  getPersonById,
+  updatePerson,
+  deletePerson,
 };

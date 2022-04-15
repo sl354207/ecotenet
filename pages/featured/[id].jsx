@@ -1,6 +1,6 @@
 import Meta from "../../components/Meta";
 
-import { getFeatured } from "../../utils/mongodb";
+import { getFeatures } from "../../utils/mongodb";
 import { getPostById } from "../../utils/mongodb";
 import { getPostComments } from "../../utils/mongodb";
 
@@ -164,7 +164,7 @@ export const getStaticProps = async (context) => {
 
 // build routing paths for each post at build time
 export const getStaticPaths = async () => {
-  const posts = await getFeatured();
+  const posts = await getFeatures();
 
   // create array of ids of each post in posts
   const ids = posts.map((post) => post._id);

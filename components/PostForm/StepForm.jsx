@@ -191,6 +191,7 @@ const StepForm = ({ post, pathName }) => {
         approved: "false",
         updated: false,
         featured: false,
+        feature: "false",
       };
     } else {
       silentObject = {
@@ -200,6 +201,7 @@ const StepForm = ({ post, pathName }) => {
         approved: "false",
         updated: false,
         featured: false,
+        feature: "false",
       };
     }
     // combine form value and editor value into one object to pass to api.

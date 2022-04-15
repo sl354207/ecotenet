@@ -70,6 +70,7 @@ const SurePost = ({
       updated: approved == "true" ? true : false,
       featured: false,
       date: new Date().toUTCString(),
+      feature: "false",
     };
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postValue, details, ecoObject, silentObject);
@@ -149,6 +150,7 @@ const SurePost = ({
       updated: false,
       featured: false,
       date: "",
+      feature: "false",
     };
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postValue, details, ecoObject, silentObject);

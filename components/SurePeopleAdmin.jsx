@@ -8,10 +8,10 @@ import {
 
 import { useRouter } from "next/router";
 
-const SurePostAdmin = ({
+const SurePeopleAdmin = ({
   open,
   handleClose,
-  post,
+  person,
   ariaLabeledBy,
   ariaDescribedBy,
   className,
@@ -24,13 +24,13 @@ const SurePostAdmin = ({
   const router = useRouter();
 
   // function to delete post by id
-  const deletePost = async (ID) => {
-    const res = await fetch("/api/deletePost", {
+  const deletePerson = async (name) => {
+    const res = await fetch("/api/deletePerson", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(ID),
+      body: JSON.stringify(name),
     });
     handleClose();
     if (res.ok) {
@@ -38,40 +38,34 @@ const SurePostAdmin = ({
       setSnackbar({
         open: true,
         severity: "success",
-        message: "Post deleted successfully",
+        message: "Account deleted successfully",
       });
     }
     if (!res.ok) {
       setSnackbar({
         open: true,
         severity: "error",
-        message: "There was a problem deleting post. Please try again later",
+        message: "There was a problem deleting account. Please try again later",
       });
     }
   };
 
   // ADD ERROR SNACKBAR
-  const handleSubmit = async (post, action) => {
+  const handleSubmit = async (person, action) => {
     //combine all objects and send to api
     const submission = {
-      title: post.title,
-      description: post.description,
-      category: post.category,
-      tags: post.tags,
-      ecoregions: post.ecoregions,
-      _id: post._id,
-      id: post.id,
-      version: post.version,
-      rows: post.rows,
-      status: post.status,
+      _id: person._id,
+      name: person.name,
+      bio: person.bio,
+      email: person.email,
+      website: person.website,
+      socials: person.socials,
+      flags: person.flags,
+      denials: person.denials,
       approved: action == "Approve" ? "true" : "false",
-      updated: post.updated,
-      featured: post.featured,
-      date: post.date,
-      feature: post.feature,
     };
 
-    const res = await fetch("/api/updatePost", {
+    const res = await fetch("/api/updatePerson", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -85,14 +79,14 @@ const SurePostAdmin = ({
       setSnackbar({
         open: true,
         severity: "success",
-        message: "Post submitted successfully",
+        message: "Account updated successfully",
       });
     }
     if (!res.ok) {
       setSnackbar({
         open: true,
         severity: "error",
-        message: "There was a problem submitting post. Please try again later",
+        message: "There was a problem updating account. Please try again later",
       });
     }
   };
@@ -116,8 +110,8 @@ const SurePostAdmin = ({
         <Button
           onClick={
             action == "Approve" || action == "Deny"
-              ? () => handleSubmit(post, action)
-              : () => deletePost(post._id)
+              ? () => handleSubmit(person, action)
+              : () => deletePerson(person.name)
           }
           color="secondary"
           variant="outlined"
@@ -129,4 +123,4 @@ const SurePostAdmin = ({
   );
 };
 
-export default SurePostAdmin;
+export default SurePeopleAdmin;
