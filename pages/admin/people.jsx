@@ -154,12 +154,27 @@ const AdminPeople = () => {
             <>
               <ListItem key={result._id} className={classes.buttonpost}>
                 <div className={classes.comment}>
-                  <Link className={classes.link}>{result.name}</Link>
+                  <Link>{result.name}</Link>
 
                   <Typography>bio: {result.bio}</Typography>
                   <Typography>email: {result.email}</Typography>
-                  <Typography>website: {result.website}</Typography>
-                  <Typography>socials: {result.socials}</Typography>
+                  <Typography>
+                    website:{" "}
+                    <Link target="_blank" rel="noopener noreferrer">
+                      {result.website}
+                    </Link>
+                  </Typography>
+                  <Typography>
+                    socials:{" "}
+                    {result.socials.map((social) => (
+                      <>
+                        <Link target="_blank" rel="noopener noreferrer">
+                          {social}
+                        </Link>
+                        ,{" "}
+                      </>
+                    ))}
+                  </Typography>
                   <Typography>flags: {result.flags}</Typography>
                   <Typography>denials: {result.denials}</Typography>
                 </div>

@@ -638,6 +638,18 @@ const deletePerson = async (name) => {
   return deleted;
 };
 
+const getFlags = async () => {
+  const { db } = await connectToDatabase();
+
+  const flags = await db
+    .collection("flags")
+    .find({ status: "pending" })
+    .sort({ _id: -1 })
+    .toArray();
+
+  return flags;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -666,4 +678,5 @@ module.exports = {
   getPersonById,
   updatePerson,
   deletePerson,
+  getFlags,
 };

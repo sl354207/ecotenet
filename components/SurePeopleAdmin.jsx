@@ -61,7 +61,7 @@ const SurePeopleAdmin = ({
       website: person.website,
       socials: person.socials,
       flags: person.flags,
-      denials: person.denials,
+      denials: action == "Deny" ? person.denials + 1 : person.denials,
       approved: action == "Approve" ? "true" : "false",
     };
 

@@ -25,6 +25,8 @@ import {
   Divider,
   CircularProgress,
   Snackbar,
+  List,
+  ListItem,
 } from "@material-ui/core";
 
 import useSWR from "swr";
@@ -41,6 +43,7 @@ import Vote from "../../../components/Vote";
 import EditorLayout from "../../../components/EditorLayout";
 import customImage from "../../../plugins/customImage";
 import SurePostAdmin from "../../../components/SurePostAdmin";
+import AdminComments from "../../../components/AdminComments";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -90,8 +93,42 @@ const useStyles = makeStyles((theme) => ({
     color: "#fc7ebf",
     borderColor: "#fc7ebf",
   },
-  link: {
-    color: theme.palette.secondary.light,
+  buttonpost: {
+    display: "flex",
+    justifyContent: "start",
+    textTransform: "none",
+    // border: "1px solid #94c9ff",
+    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+    margin: "20px auto",
+    borderRadius: "10px",
+  },
+  buttonreply: {
+    display: "flex",
+    justifyContent: "start",
+    textTransform: "none",
+    // border: "1px solid #94c9ff",
+    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+    marginLeft: 60,
+    width: "auto",
+    // margin: "10px auto",
+
+    borderRadius: "10px",
+  },
+  buttonmobile: {
+    display: "grid",
+  },
+  buttonup: {
+    marginTop: 4,
+  },
+
+  delete: {
+    color: "#fc7ebf",
+    borderColor: "#fc7ebf",
+  },
+
+  comment: {
+    display: "flow-root",
+    flexGrow: 1,
   },
 }));
 
@@ -106,6 +143,7 @@ const post = () => {
   const router = useRouter();
 
   const ID = router.query.id;
+  const comment_query = router.query.q;
   //   console.log(ID);
 
   const [dialog, setDialog] = useState(false);
@@ -136,6 +174,11 @@ const post = () => {
 
   const { data: post, mutate } = useSWR(
     ID ? `/api/getposts/${ID}` : null,
+    fetcher
+  );
+
+  const { data: comments } = useSWR(
+    comment_query ? `/api/getPostComments?q=${ID}` : null,
     fetcher
   );
 
@@ -217,9 +260,34 @@ const post = () => {
     );
   }
 
+  let commentList;
+
+  if (!comments || comments == undefined) {
+    commentList = (
+      <CircularProgress
+        color="secondary"
+        size={100}
+        disableShrink={true}
+        className={classes.progress}
+      />
+    );
+  } else if (Array.isArray(comments) && comments.length == 0) {
+    commentList = (
+      <Typography variant="h6" align="center" className={classes.header}>
+        no results
+      </Typography>
+    );
+  } else {
+    commentList = (
+      <AdminComments comments={comments} comment_query={comment_query} />
+    );
+  }
+
   return (
     <>
       {list}
+
+      {commentList}
       <SurePostAdmin
         post={post}
         action={action}

@@ -87,9 +87,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flow-root",
     flexGrow: 1,
   },
-  link: {
-    color: theme.palette.secondary.light,
-  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());

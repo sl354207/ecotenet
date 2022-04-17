@@ -1,20 +1,30 @@
 import {
   AppBar,
+  Button,
+  CircularProgress,
   Divider,
   Drawer,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Snackbar,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
 
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import { makeStyles } from "@material-ui/core/styles";
+import useSWR from "swr";
+
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
+
+import Header from "../../components/Header";
+// import SureCommentAdmin from "../../components/SureCommentAdmin";
+import { useState } from "react";
+import { Alert } from "@material-ui/lab";
 
 const drawerWidth = 120;
 
@@ -40,11 +50,180 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  progress: {
+    margin: "100px auto",
+    display: "flex",
+    justifySelf: "center",
+  },
+  header: {
+    marginTop: 20,
+  },
+  buttonpost: {
+    display: "flex",
+    justifyContent: "start",
+    textTransform: "none",
+    // border: "1px solid #94c9ff",
+    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+    margin: "20px auto",
+    borderRadius: "10px",
+  },
+  buttonmobile: {
+    display: "grid",
+  },
+  buttonup: {
+    marginTop: 4,
+  },
+  button: {
+    marginLeft: 4,
+  },
+  delete: {
+    color: "#fc7ebf",
+    borderColor: "#fc7ebf",
+  },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
+  comment: {
+    display: "flow-root",
+    flexGrow: 1,
+  },
+  link: {
+    color: theme.palette.secondary.light,
+  },
 }));
+
+const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const AdminFlags = () => {
   const classes = useStyles();
+  const theme = useTheme();
   const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [dialog, setDialog] = useState(false);
+  const [action, setAction] = useState("");
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Comment submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (action) => {
+    setDialog(true);
+    setAction(action);
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
+
+  const { data: results, mutate } = useSWR("/api/getFlags", fetcher);
+
+  let list;
+
+  if (!results || results == undefined) {
+    list = (
+      <CircularProgress
+        color="secondary"
+        size={100}
+        disableShrink={true}
+        className={classes.progress}
+      />
+    );
+  } else if (Array.isArray(results) && results.length == 0) {
+    list = (
+      <Typography variant="h6" align="center" className={classes.header}>
+        no results
+      </Typography>
+    );
+  } else {
+    list = (
+      <List>
+        {results.map((result) => {
+          return (
+            <>
+              <ListItem key={result._id} className={classes.buttonpost}>
+                <div className={classes.comment}>
+                  <Typography>
+                    Flagged by: <Link>{result.name}</Link>
+                  </Typography>
+                  <Typography>Flag type: {result.type}</Typography>
+                  <Typography>Flag text: {result.text}</Typography>
+                  <Typography>
+                    Name flagged: <Link>{result.flagged}</Link>
+                  </Typography>
+                </div>
+
+                <div className={classes.buttonmobile}>
+                  {result.type == "post" || result.type == "comment" ? (
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      href={
+                        result.type == "post"
+                          ? `/admin/posts/${result.content_id}`
+                          : `/admin/posts/${result.ref}?q=${result.content_id}`
+                      }
+                    >
+                      View Post
+                    </Button>
+                  ) : (
+                    <Button variant="outlined" color="secondary" disabled>
+                      View Post
+                    </Button>
+                  )}
+
+                  {result.type == "profile" ? (
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => handleOpenDialog("Approve")}
+                    >
+                      View Profile
+                    </Button>
+                  ) : (
+                    <Button variant="outlined" color="secondary" disabled>
+                      View Profile
+                    </Button>
+                  )}
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.buttonup}
+                    onClick={() => handleOpenDialog("Deny")}
+                  >
+                    Resolve
+                  </Button>
+                </div>
+              </ListItem>
+              {/* <SureCommentAdmin
+                comment={result}
+                action={action}
+                open={dialog}
+                handleClose={handleCloseDialog}
+                ariaLabeledBy="alert-dialog-title"
+                ariaDescribedBy="alert-dialog-description"
+                id="alert-dialog-description"
+                className={classes.dialog}
+                sure="Are you sure you want to"
+                setSnackbar={setSnackbar}
+                mutate={mutate}
+              /> */}
+            </>
+          );
+        })}
+      </List>
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -94,35 +273,21 @@ const AdminFlags = () => {
         </div>
       </Drawer>
       <div className={classes.content}>
-        <Typography>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Header title="Flags" />
+        {list}
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );
