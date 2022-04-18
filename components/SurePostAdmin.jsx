@@ -19,7 +19,6 @@ const SurePostAdmin = ({
   sure,
   action,
   setSnackbar,
-  mutate,
 }) => {
   const router = useRouter();
 
@@ -34,7 +33,6 @@ const SurePostAdmin = ({
     });
     handleClose();
     if (res.ok) {
-      mutate();
       setSnackbar({
         open: true,
         severity: "success",
@@ -81,7 +79,6 @@ const SurePostAdmin = ({
     handleClose();
 
     if (res.ok) {
-      mutate();
       setSnackbar({
         open: true,
         severity: "success",

@@ -44,6 +44,7 @@ import EditorLayout from "../../../components/EditorLayout";
 import customImage from "../../../plugins/customImage";
 import SurePostAdmin from "../../../components/SurePostAdmin";
 import AdminComments from "../../../components/AdminComments";
+import Notify from "../../../components/Notify";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -146,8 +147,9 @@ const post = () => {
   const comment_query = router.query.q;
   //   console.log(ID);
 
-  const [dialog, setDialog] = useState(false);
+  const [dialog, setDialog] = useState({ sure: false, notify: false });
   const [action, setAction] = useState("");
+  const [notify, setNotify] = useState("");
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -163,21 +165,24 @@ const post = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (action) => {
-    setDialog(true);
-    setAction(action);
+  const handleOpenDialog = (action, type) => {
+    if (type) {
+      setDialog({ ...dialog, notify: true });
+      setAction(action);
+      setNotify(type);
+    } else {
+      setDialog({ ...dialog, sure: true });
+      setAction(action);
+    }
   };
 
   const handleCloseDialog = () => {
-    setDialog(false);
+    setDialog({ sure: false, notify: false });
   };
 
-  const { data: post, mutate } = useSWR(
-    ID ? `/api/getposts/${ID}` : null,
-    fetcher
-  );
+  const { data: post } = useSWR(ID ? `/api/getposts/${ID}` : null, fetcher);
 
-  const { data: comments } = useSWR(
+  const { data: comments, mutate } = useSWR(
     comment_query ? `/api/getPostComments?q=${ID}` : null,
     fetcher
   );
@@ -227,19 +232,21 @@ const post = () => {
                 ))}
               </Typography>
             </div>
+            {!comment_query && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleOpenDialog("Approve")}
+              >
+                Approve
+              </Button>
+            )}
 
             <Button
               variant="outlined"
               color="secondary"
-              onClick={() => handleOpenDialog("Approve")}
-            >
-              Approve
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
               className={classes.button}
-              onClick={() => handleOpenDialog("Deny")}
+              onClick={() => handleOpenDialog("Deny", "post")}
             >
               Deny
             </Button>
@@ -247,7 +254,7 @@ const post = () => {
               variant="outlined"
               color="secondary"
               className={`${classes.button} ${classes.delete}`}
-              onClick={() => handleOpenDialog("Delete")}
+              onClick={() => handleOpenDialog("Delete", "post")}
             >
               Delete
             </Button>
@@ -279,7 +286,15 @@ const post = () => {
     );
   } else {
     commentList = (
-      <AdminComments comments={comments} comment_query={comment_query} />
+      <AdminComments
+        comments={comments}
+        comment_query={comment_query}
+        handleOpenDialog={handleOpenDialog}
+        handleCloseDialog={handleCloseDialog}
+        dialog={dialog}
+        action={action}
+        setSnackbar={setSnackbar}
+      />
     );
   }
 
@@ -291,7 +306,7 @@ const post = () => {
       <SurePostAdmin
         post={post}
         action={action}
-        open={dialog}
+        open={dialog.sure}
         handleClose={handleCloseDialog}
         ariaLabeledBy="alert-dialog-title"
         ariaDescribedBy="alert-dialog-description"
@@ -300,6 +315,18 @@ const post = () => {
         sure="Are you sure you want to"
         setSnackbar={setSnackbar}
         mutate={mutate}
+      />
+      <Notify
+        type={notify}
+        action={action}
+        open={dialog.notify}
+        handleClose={handleCloseDialog}
+        ariaLabeledBy="alert-dialog-title"
+        ariaDescribedBy="alert-dialog-description"
+        id="alert-dialog-description"
+        className={classes.dialog}
+        result={post}
+        setSnackbar={setSnackbar}
       />
       <Snackbar
         anchorOrigin={{

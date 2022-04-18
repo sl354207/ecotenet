@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
+import Notify from "./Notify";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -107,7 +108,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //pass in comments and post id from parent post
-const AdminComments = ({ comments, comment_query }) => {
+const AdminComments = ({
+  comments,
+  comment_query,
+  dialog,
+  action,
+  setSnackbar,
+  handleOpenDialog,
+  handleCloseDialog,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -157,7 +166,11 @@ const AdminComments = ({ comments, comment_query }) => {
                 </div>
 
                 <div className={classes.buttonmobile}>
-                  <Button variant="outlined" color="secondary">
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => handleOpenDialog("Deny", "comment")}
+                  >
                     Deny
                   </Button>
 
@@ -165,29 +178,27 @@ const AdminComments = ({ comments, comment_query }) => {
                     variant="outlined"
                     color="secondary"
                     className={classes.buttonup}
-                    onClick={() => handleOpenDialog("Deny")}
+                    onClick={() => handleOpenDialog("Delete", "comment")}
                   >
                     Delete
                   </Button>
                 </div>
+                <Notify
+                  type="comment"
+                  action={action}
+                  open={dialog.notify}
+                  handleClose={handleCloseDialog}
+                  ariaLabeledBy="alert-dialog-title"
+                  ariaDescribedBy="alert-dialog-description"
+                  id="alert-dialog-description"
+                  className={classes.dialog}
+                  result={comment}
+                  setSnackbar={setSnackbar}
+                />
               </ListItem>
-              {/* <SureCommentAdmin
-            comment={result}
-            action={action}
-            open={dialog}
-            handleClose={handleCloseDialog}
-            ariaLabeledBy="alert-dialog-title"
-            ariaDescribedBy="alert-dialog-description"
-            id="alert-dialog-description"
-            className={classes.dialog}
-            sure="Are you sure you want to"
-            setSnackbar={setSnackbar}
-            mutate={mutate}
-          /> */}
             </>
           );
         })}
-        {/* {comments.map((comment) => )} */}
       </List>
     </Container>
   );
