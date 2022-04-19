@@ -22,9 +22,10 @@ import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 
 import Header from "../../components/Header";
-import SureCommentAdmin from "../../components/SureCommentAdmin";
+
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
+import AdminDialog from "../../components/admin/AdminDialog";
 
 const drawerWidth = 120;
 
@@ -91,14 +92,15 @@ const useStyles = makeStyles((theme) => ({
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const AdminComments = () => {
+const adminComments = () => {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [dialog, setDialog] = useState(false);
-  const [action, setAction] = useState("");
+  const [action, setAction] = useState({ action: "", type: "" });
+  const [item, setItem] = useState("");
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -114,9 +116,11 @@ const AdminComments = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (action) => {
+  const handleOpenDialog = (action, type, result) => {
+    setItem(result);
+    setAction({ action: action, type: type });
+
     setDialog(true);
-    setAction(action);
   };
 
   const handleCloseDialog = () => {
@@ -163,7 +167,9 @@ const AdminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      onClick={() => handleOpenDialog("Approve")}
+                      onClick={() =>
+                        handleOpenDialog("Approve", "comment", result)
+                      }
                     >
                       Approve
                     </Button>
@@ -171,7 +177,9 @@ const AdminComments = () => {
                       variant="outlined"
                       color="secondary"
                       className={classes.buttonup}
-                      onClick={() => handleOpenDialog("Deny")}
+                      onClick={() =>
+                        handleOpenDialog("Deny", "comment", result)
+                      }
                     >
                       Deny
                     </Button>
@@ -179,7 +187,9 @@ const AdminComments = () => {
                       variant="outlined"
                       color="secondary"
                       className={`${classes.buttonup} ${classes.delete}`}
-                      onClick={() => handleOpenDialog("Delete")}
+                      onClick={() =>
+                        handleOpenDialog("Delete", "comment", result)
+                      }
                     >
                       Delete
                     </Button>
@@ -189,7 +199,9 @@ const AdminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      onClick={() => handleOpenDialog("Approve")}
+                      onClick={() =>
+                        handleOpenDialog("Approve", "comment", result)
+                      }
                     >
                       Approve
                     </Button>
@@ -197,7 +209,9 @@ const AdminComments = () => {
                       variant="outlined"
                       color="secondary"
                       className={classes.button}
-                      onClick={() => handleOpenDialog("Deny")}
+                      onClick={() =>
+                        handleOpenDialog("Deny", "comment", result)
+                      }
                     >
                       Deny
                     </Button>
@@ -205,26 +219,15 @@ const AdminComments = () => {
                       variant="outlined"
                       color="secondary"
                       className={`${classes.button} ${classes.delete}`}
-                      onClick={() => handleOpenDialog("Delete")}
+                      onClick={() =>
+                        handleOpenDialog("Delete", "comment", result)
+                      }
                     >
                       Delete
                     </Button>
                   </div>
                 )}
               </ListItem>
-              <SureCommentAdmin
-                comment={result}
-                action={action}
-                open={dialog}
-                handleClose={handleCloseDialog}
-                ariaLabeledBy="alert-dialog-title"
-                ariaDescribedBy="alert-dialog-description"
-                id="alert-dialog-description"
-                className={classes.dialog}
-                sure="Are you sure you want to"
-                setSnackbar={setSnackbar}
-                mutate={mutate}
-              />
             </>
           );
         })}
@@ -282,6 +285,16 @@ const AdminComments = () => {
       <div className={classes.content}>
         <Header title="Comments" />
         {list}
+        <AdminDialog
+          contentType={action.type}
+          action={action.action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          className={classes.dialog}
+          result={item}
+          setSnackbar={setSnackbar}
+          mutate={mutate}
+        />
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
@@ -300,4 +313,4 @@ const AdminComments = () => {
   );
 };
 
-export default AdminComments;
+export default adminComments;

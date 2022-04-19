@@ -25,7 +25,7 @@ import Header from "../../components/Header";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
-import SurePeopleAdmin from "../../components/SurePeopleAdmin";
+import AdminDialog from "../../components/admin/AdminDialog";
 
 const drawerWidth = 120;
 
@@ -95,14 +95,15 @@ const useStyles = makeStyles((theme) => ({
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const AdminPeople = () => {
+const adminPeople = () => {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [dialog, setDialog] = useState(false);
-  const [action, setAction] = useState("");
+  const [action, setAction] = useState({ action: "", type: "" });
+  const [item, setItem] = useState("");
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -118,9 +119,11 @@ const AdminPeople = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (action) => {
+  const handleOpenDialog = (action, type, result) => {
+    setItem(result);
+    setAction({ action: action, type: type });
+
     setDialog(true);
-    setAction(action);
   };
 
   const handleCloseDialog = () => {
@@ -183,7 +186,9 @@ const AdminPeople = () => {
                   <Button
                     variant="outlined"
                     color="secondary"
-                    onClick={() => handleOpenDialog("Approve")}
+                    onClick={() =>
+                      handleOpenDialog("Approve", "person", result)
+                    }
                   >
                     Approve
                   </Button>
@@ -191,7 +196,7 @@ const AdminPeople = () => {
                     variant="outlined"
                     color="secondary"
                     className={classes.buttonup}
-                    onClick={() => handleOpenDialog("Deny")}
+                    onClick={() => handleOpenDialog("Deny", "person", result)}
                   >
                     Deny
                   </Button>
@@ -199,25 +204,12 @@ const AdminPeople = () => {
                     variant="outlined"
                     color="secondary"
                     className={`${classes.buttonup} ${classes.delete}`}
-                    onClick={() => handleOpenDialog("Delete")}
+                    onClick={() => handleOpenDialog("Delete", "person", result)}
                   >
                     Delete
                   </Button>
                 </div>
               </ListItem>
-              <SurePeopleAdmin
-                person={result}
-                action={action}
-                open={dialog}
-                handleClose={handleCloseDialog}
-                ariaLabeledBy="alert-dialog-title"
-                ariaDescribedBy="alert-dialog-description"
-                id="alert-dialog-description"
-                className={classes.dialog}
-                sure="Are you sure you want to"
-                setSnackbar={setSnackbar}
-                mutate={mutate}
-              />
             </>
           );
         })}
@@ -275,6 +267,16 @@ const AdminPeople = () => {
       <div className={classes.content}>
         <Header title="People" />
         {list}
+        <AdminDialog
+          contentType={action.type}
+          action={action.action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          className={classes.dialog}
+          result={item}
+          setSnackbar={setSnackbar}
+          mutate={mutate}
+        />
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
@@ -293,4 +295,4 @@ const AdminPeople = () => {
   );
 };
 
-export default AdminPeople;
+export default adminPeople;

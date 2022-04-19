@@ -22,7 +22,7 @@ import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 
 import Header from "../../components/Header";
-// import SureCommentAdmin from "../../components/SureCommentAdmin";
+
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
 
@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const AdminFlags = () => {
+const adminFlags = () => {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
@@ -293,4 +293,4 @@ const AdminFlags = () => {
   );
 };
 
-export default AdminFlags;
+export default adminFlags;

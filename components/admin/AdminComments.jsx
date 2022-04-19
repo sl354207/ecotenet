@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
-import Notify from "./Notify";
+import Notify from "./AdminDialog";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -108,15 +108,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //pass in comments and post id from parent post
-const AdminComments = ({
-  comments,
-  comment_query,
-  dialog,
-  action,
-  setSnackbar,
-  handleOpenDialog,
-  handleCloseDialog,
-}) => {
+const AdminComments = ({ comments, comment_query, handleOpenDialog }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -160,6 +152,7 @@ const AdminComments = ({
                 }
               >
                 <div className={classes.comment}>
+                  <Typography>{comment.date.toDateString()}</Typography>
                   <Link>{comment.name}</Link>
 
                   <Typography>{comment.text}</Typography>
@@ -169,7 +162,7 @@ const AdminComments = ({
                   <Button
                     variant="outlined"
                     color="secondary"
-                    onClick={() => handleOpenDialog("Deny", "comment")}
+                    onClick={() => handleOpenDialog("Deny", "comment", comment)}
                   >
                     Deny
                   </Button>
@@ -178,23 +171,13 @@ const AdminComments = ({
                     variant="outlined"
                     color="secondary"
                     className={classes.buttonup}
-                    onClick={() => handleOpenDialog("Delete", "comment")}
+                    onClick={() =>
+                      handleOpenDialog("Delete", "comment", comment)
+                    }
                   >
                     Delete
                   </Button>
                 </div>
-                <Notify
-                  type="comment"
-                  action={action}
-                  open={dialog.notify}
-                  handleClose={handleCloseDialog}
-                  ariaLabeledBy="alert-dialog-title"
-                  ariaDescribedBy="alert-dialog-description"
-                  id="alert-dialog-description"
-                  className={classes.dialog}
-                  result={comment}
-                  setSnackbar={setSnackbar}
-                />
               </ListItem>
             </>
           );

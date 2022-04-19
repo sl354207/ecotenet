@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import Link from "next/link";
 
-import StepForm from "../../../components/PostForm/StepForm";
+import StepForm from "../../../components/postForm/StepForm";
 
 import { CircularProgress } from "@material-ui/core";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";

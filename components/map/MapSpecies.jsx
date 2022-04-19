@@ -12,7 +12,7 @@ import {
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { ContactSupportOutlined } from "@material-ui/icons";
 
-import Coords from "../data/eco_coord.json";
+import Coords from "../../data/eco_coord.json";
 
 // const { MAPBOX } = process.env;
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MapEditor = ({ clickInfo, state, handleDblClick }) => {
+const MapSpecies = ({ clickInfo, state }) => {
   // console.log(speciesInfo1);
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
@@ -128,7 +128,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const [showPopup, setShowPopup] = useState(true);
 
-  // const [showLoad, setShowLoad] = useState(false);
+  const [showLoad, setShowLoad] = useState(false);
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback(
@@ -175,18 +175,18 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   //     .replace(/[^\w-]+/g, "")
   //     .replace(/--+/g, "-");
 
-  // const handleClick = (event) => {
-  //   // const handleClick = (event) => {
-  //   // const region = event.features && event.features[0];
-  //   // // console.log(selectedRegion);
-  //   // if (selectedRegion !== "") {
-  //   //   const slug = slugify(selectedRegion);
-  //   //   // router.push(`/${slug}`);
-  //   //   router.push("/success");
-  //   // }
-  //   setShowLoad(true);
-  //   router.push("/success");
-  // };
+  const handleClick = (event) => {
+    // const handleClick = (event) => {
+    // const region = event.features && event.features[0];
+    // // console.log(selectedRegion);
+    // if (selectedRegion !== "") {
+    //   const slug = slugify(selectedRegion);
+    //   // router.push(`/${slug}`);
+    //   router.push("/success");
+    // }
+    setShowLoad(true);
+    router.push("/success");
+  };
 
   const clickedRegions = clickInfo;
   // console.log(clickedRegions);
@@ -371,7 +371,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
           onClick={onHover}
-          onDblClick={handleDblClick}
+          //   onDblClick={handleDblClick}
           ref={mapRef}
           onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         >
@@ -421,12 +421,31 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
               maxWidth="500px"
             >
               <div className={classes.popup}>
-                <Typography color="textSecondary" align="center">
-                  {ecoName}
-                </Typography>
-                <Typography color="textSecondary" align="center">
-                  Eco-{selectedRegion}
-                </Typography>
+                {!showLoad ? (
+                  <>
+                    <Typography color="textSecondary" align="center">
+                      {ecoName}
+                    </Typography>
+                    <Typography color="textSecondary" align="center">
+                      Eco-{selectedRegion}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      disableElevation={true}
+                      size="small"
+                      color="primary"
+                      onClick={handleClick}
+                    >
+                      Enter
+                    </Button>
+                  </>
+                ) : (
+                  <CircularProgress
+                    color="primary"
+                    size={100}
+                    disableShrink={true}
+                  />
+                )}
               </div>
             </Popup>
           )}
@@ -437,4 +456,4 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   );
 };
 
-export default MapEditor;
+export default MapSpecies;

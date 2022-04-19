@@ -40,7 +40,7 @@ import {
   Divider,
 } from "@material-ui/core";
 
-import Comments from "../../components/Comments";
+import Comments from "../../components/comments";
 import Vote from "../../components/Vote";
 import Nav from "../../components/Nav";
 

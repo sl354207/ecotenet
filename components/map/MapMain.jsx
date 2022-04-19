@@ -3,7 +3,7 @@ import { useState, useMemo, useCallback, useRef } from "react";
 import Map, { Popup, Source, Layer, AttributionControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import Geocoder from "../components/Geocoder";
+import Geocoder from "../Geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import { useRouter } from "next/router";

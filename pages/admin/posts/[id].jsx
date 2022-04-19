@@ -42,9 +42,10 @@ import Header from "../../../components/Header";
 import Vote from "../../../components/Vote";
 import EditorLayout from "../../../components/EditorLayout";
 import customImage from "../../../plugins/customImage";
-import SurePostAdmin from "../../../components/SurePostAdmin";
-import AdminComments from "../../../components/AdminComments";
-import Notify from "../../../components/Notify";
+
+import AdminComments from "../../../components/admin/AdminComments";
+
+import AdminDialog from "../../../components/admin/AdminDialog";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -147,9 +148,9 @@ const post = () => {
   const comment_query = router.query.q;
   //   console.log(ID);
 
-  const [dialog, setDialog] = useState({ sure: false, notify: false });
-  const [action, setAction] = useState("");
-  const [notify, setNotify] = useState("");
+  const [dialog, setDialog] = useState(false);
+  const [action, setAction] = useState({ action: "", type: "" });
+  const [item, setItem] = useState("");
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -165,24 +166,20 @@ const post = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (action, type) => {
-    if (type) {
-      setDialog({ ...dialog, notify: true });
-      setAction(action);
-      setNotify(type);
-    } else {
-      setDialog({ ...dialog, sure: true });
-      setAction(action);
-    }
+  const handleOpenDialog = (action, type, result) => {
+    setItem(result);
+    setAction({ action: action, type: type });
+
+    setDialog(true);
   };
 
   const handleCloseDialog = () => {
-    setDialog({ sure: false, notify: false });
+    setDialog(false);
   };
 
   const { data: post } = useSWR(ID ? `/api/getposts/${ID}` : null, fetcher);
 
-  const { data: comments, mutate } = useSWR(
+  const { data: comments } = useSWR(
     comment_query ? `/api/getPostComments?q=${ID}` : null,
     fetcher
   );
@@ -204,9 +201,16 @@ const post = () => {
     date = new Date(post.date);
     list = (
       <>
-        <Link href="/admin/posts" className={classes.link}>
-          &#10229;Posts
-        </Link>
+        {comment_query ? (
+          <Link href="/admin/flags" className={classes.link}>
+            &#10229;Flags
+          </Link>
+        ) : (
+          <Link href="/admin/posts" className={classes.link}>
+            &#10229;Posts
+          </Link>
+        )}
+
         <Container className={classes.container}>
           <Header title={post.title} />
           <div className={classes.description}>
@@ -236,7 +240,7 @@ const post = () => {
               <Button
                 variant="outlined"
                 color="secondary"
-                onClick={() => handleOpenDialog("Approve")}
+                onClick={() => handleOpenDialog("Approve", "post", post)}
               >
                 Approve
               </Button>
@@ -246,7 +250,7 @@ const post = () => {
               variant="outlined"
               color="secondary"
               className={classes.button}
-              onClick={() => handleOpenDialog("Deny", "post")}
+              onClick={() => handleOpenDialog("Deny", "post", post)}
             >
               Deny
             </Button>
@@ -254,7 +258,7 @@ const post = () => {
               variant="outlined"
               color="secondary"
               className={`${classes.button} ${classes.delete}`}
-              onClick={() => handleOpenDialog("Delete", "post")}
+              onClick={() => handleOpenDialog("Delete", "post", post)}
             >
               Delete
             </Button>
@@ -268,8 +272,9 @@ const post = () => {
   }
 
   let commentList;
-
-  if (!comments || comments == undefined) {
+  if (!comment_query) {
+    commentList = <></>;
+  } else if (!comments || comments == undefined) {
     commentList = (
       <CircularProgress
         color="secondary"
@@ -290,10 +295,7 @@ const post = () => {
         comments={comments}
         comment_query={comment_query}
         handleOpenDialog={handleOpenDialog}
-        handleCloseDialog={handleCloseDialog}
-        dialog={dialog}
-        action={action}
-        setSnackbar={setSnackbar}
+        setItem={setItem}
       />
     );
   }
@@ -303,29 +305,13 @@ const post = () => {
       {list}
 
       {commentList}
-      <SurePostAdmin
-        post={post}
-        action={action}
-        open={dialog.sure}
+      <AdminDialog
+        contentType={action.type}
+        action={action.action}
+        open={dialog}
         handleClose={handleCloseDialog}
-        ariaLabeledBy="alert-dialog-title"
-        ariaDescribedBy="alert-dialog-description"
-        id="alert-dialog-description"
         className={classes.dialog}
-        sure="Are you sure you want to"
-        setSnackbar={setSnackbar}
-        mutate={mutate}
-      />
-      <Notify
-        type={notify}
-        action={action}
-        open={dialog.notify}
-        handleClose={handleCloseDialog}
-        ariaLabeledBy="alert-dialog-title"
-        ariaDescribedBy="alert-dialog-description"
-        id="alert-dialog-description"
-        className={classes.dialog}
-        result={post}
+        result={item}
         setSnackbar={setSnackbar}
       />
       <Snackbar

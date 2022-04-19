@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import { useState, useCallback, useReducer } from "react";
 import dynamic from "next/dynamic";
-import MapSpecies from "../components/MapSpecies";
+import MapSpecies from "../components/map/MapSpecies";
 
 import {
   Container,

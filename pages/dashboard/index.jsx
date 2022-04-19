@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-import DashboardComments from "../../components/DashboardComments";
+import DashboardComments from "../../components/comments/DashboardComments";
 import SureComment from "../../components/SureComment";
 import TextBox from "../../components/TextBox";
 

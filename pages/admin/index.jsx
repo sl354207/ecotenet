@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const Admin = () => {
+const admin = () => {
   const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
@@ -478,4 +478,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default admin;

@@ -2,9 +2,9 @@ import { CellPlugin } from '@react-page/editor';
 
 import React from 'react';
 
-import ImageRender from '../components/ImagePlugin/ImageRender';
+import ImageRender from '../components/imagePlugin/ImageRender';
 
-import ImageUploadField from '../components/ImagePlugin/ImageUploadField'
+import ImageUploadField from '../components/imagePlugin/ImageUploadField'
 
 // use a type here, not an interface. Set types for data for typescript.
 type Data = {

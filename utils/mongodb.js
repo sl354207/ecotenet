@@ -650,6 +650,15 @@ const getFlags = async () => {
   return flags;
 };
 
+const createNotification = async (name, reason, text, ref, date) => {
+  const { db } = await connectToDatabase();
+
+  const data = { name, reason, text, ref, date };
+  const response = await db.collection("notifications").insertOne(data);
+
+  return response;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -679,4 +688,5 @@ module.exports = {
   updatePerson,
   deletePerson,
   getFlags,
+  createNotification,
 };
