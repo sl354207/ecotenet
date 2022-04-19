@@ -1,8 +1,5 @@
 import { useState, useRef } from "react";
 
-import TextBox from "./TextBox";
-import SureComment from "./SureComment";
-
 import {
   Button,
   Portal,
@@ -15,6 +12,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
+import TextBox from "../TextBox";
+import SureComment from "../SureComment";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
