@@ -40,13 +40,13 @@ import {
   Divider,
 } from "@material-ui/core";
 
-import Comments from "../../components/comments";
 import Vote from "../../components/Vote";
 import Nav from "../../components/Nav";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import CommentList from "../../components/comments/CommentList";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -138,7 +138,7 @@ const post = ({ post, comments }) => {
         <Typography variant="h6" className={classes.commentsection}>
           Comments:
         </Typography>
-        <Comments comments={comments} post_id={post._id} />
+        <CommentList comments={comments} post_id={post._id} />
       </Container>
       <Footer />
     </>

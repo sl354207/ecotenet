@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //pass in comments and post id from parent post
-const Comments = ({ comments, post_id }) => {
+const CommentList = ({ comments, post_id }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -72,4 +72,4 @@ const Comments = ({ comments, post_id }) => {
   );
 };
 
-export default Comments;
+export default CommentList;

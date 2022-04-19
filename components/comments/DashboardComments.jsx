@@ -14,8 +14,9 @@ import {
   useTheme,
 } from "@material-ui/core/styles";
 import { useState } from "react";
-import TextBox from "./TextBox";
+
 import { useRouter } from "next/router";
+import TextBox from "../TextBox";
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
