@@ -21,13 +21,16 @@ import {
   InputLabel,
   Snackbar,
   IconButton,
+  InputBase,
+  FormHelperText,
+  Chip,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
+import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
 import SurePost from "../../components/SurePost";
 import Header from "../../components/Header";
 
@@ -151,11 +154,71 @@ const useStyles = makeStyles((theme) => ({
   items: {
     display: "flex",
     flexGrow: 1,
+    margin: "10px 0 10px 0",
   },
   label: {
     color: `${theme.palette.text.primary}!important`,
     position: "relative",
     transform: "none",
+  },
+  search: {
+    position: "relative",
+    // border: "2px solid #94c9ff",
+    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.primary.main,
+
+    "&:focus-within": {
+      backgroundColor: theme.palette.primary.main,
+      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+      borderRadius: theme.shape.borderRadius,
+    },
+    // marginLeft: 0,
+    // width: "100%",
+    // [theme.breakpoints.up("sm")]: {
+    marginTop: 6,
+    marginBottom: 10,
+    // marginLeft: theme.spacing(1),
+    width: "auto",
+    // },
+  },
+  inputRoot: {
+    color: theme.palette.text.primary,
+  },
+  inputInput: {
+    padding: 18,
+    // vertical padding + font size from searchIcon
+    // paddingLeft: `calc(1em)`,
+    // transition: theme.transitions.create("width"),
+    // width: "100%",
+    // [theme.breakpoints.up("xs")]: {
+    //   width: "0ch",
+    //   "&:focus": {
+    //     width: "20ch",
+    //   },
+    // },
+  },
+  popper: {
+    backgroundColor: theme.palette.primary.light,
+  },
+  chipDelete: {
+    WebkitTapHighlightColor: "transparent",
+    color: theme.palette.secondary.main,
+    height: 22,
+    width: 22,
+    cursor: "pointer",
+    margin: "0 5px 0 -6px",
+    "&:hover": {
+      color: alpha(theme.palette.secondary.main, 0.7),
+    },
+  },
+  chip: {
+    borderColor: theme.palette.secondary.main,
+    borderWidth: 2,
+    color: theme.palette.text.primary,
+    // fontSize: 16,
+    height: 40,
+    margin: "0px 5px 10px 5px",
   },
 }));
 
@@ -167,9 +230,13 @@ export default function Dashboard() {
   const theme = useTheme();
   const classes = useStyles();
 
+  // set filter for autocomplete options
+  const filter = createFilterOptions();
+
   const [value, setValue] = useState(0);
   // change to get user profile
-  const [fetch, setFetch] = useState(`/api/getposts?q1=Muskrat&q2=published`);
+
+  const [fetchApi, setFetchApi] = useState("/api/getPerson?q=Muskrat");
   const [deleteFetch, setDeleteFetch] = useState();
 
   const [dialog, setDialog] = useState({ comment: false, post: false });
@@ -207,7 +274,7 @@ export default function Dashboard() {
     }
   };
 
-  const { data: results, mutate } = useSWR(fetch, fetcher);
+  const { data: results, mutate } = useSWR(fetchApi, fetcher);
   // mutate();
 
   // const isLoading = results;
@@ -217,33 +284,89 @@ export default function Dashboard() {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        setFetch(`/api/getposts?q1=Muskrat&q2=published`);
+        setFetchApi(`/api/getPerson?q=Muskrat`);
         break;
       case 1:
-        setFetch(`/api/getposts?q1=Muskrat&q2=published`);
+        setFetchApi(`/api/getposts?q1=Muskrat&q2=published`);
         setDeleteFetch("deletePost");
         break;
       case 2:
-        setFetch(`/api/getposts?q1=Muskrat&q2=draft`);
+        setFetchApi(`/api/getposts?q1=Muskrat&q2=draft`);
         setDeleteFetch("deleteDraft");
-        // expected output: "Mangoes and papayas are $2.79 a pound."
+
         break;
       case 3:
         // update comments request
-        setFetch(`/api/getDashboardComments?q=Muskrat`);
+        setFetchApi(`/api/getDashboardComments?q=Muskrat`);
         setDeleteFetch("deleteComment");
-        // expected output: "Mangoes and papayas are $2.79 a pound."
+
+        break;
+      case 4:
+        // update comments request
+        setFetchApi(`/api/getNotifications?q=Muskrat`);
+        setDeleteFetch("deleteNotification");
+
         break;
       default:
-        console.log(`Sorry, we are out of `);
+        break;
     }
+  };
+
+  const handleNotify = async (ID) => {
+    const notify = {
+      _id: ID,
+      viewed: true,
+    };
+    console.log(notify);
+
+    const res = await fetch("/api/updateNotification", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(notify),
+    });
+
+    if (res.ok) {
+      mutate();
+    }
+    if (!res.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message:
+          "There was a problem resolving notification. Please try again later",
+      });
+    }
+  };
+
+  const handleRemoveChip = (socials, chip) => {
+    setDetails((details) => ({
+      ...details,
+      tags: tags.filter((tag) => tag !== chip),
+    }));
+  };
+
+  const handleDetailChange = (e) => {
+    //set name and value from targeted form props
+    const { name, value } = e.target;
+
+    // Set new values on form change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
+    setDetails((details) => ({
+      ...details,
+      [name]: value,
+    }));
+
+    // set errors
+    // const error = formValidation(name, value, fieldsValidation) || ""
+
+    // setFormErrors({
+    //   [name]: error
+    // })
   };
 
   return (
     <Container>
-      {/* <Typography variant="h3" align="center" className={classes.title}>
-        Dashboard
-      </Typography> */}
       <Header title="Dashboard" />
       <div className={classes.tabs}>
         <AppBar position="static" elevation={0} className={classes.tabbar}>
@@ -255,8 +378,13 @@ export default function Dashboard() {
           >
             <Tab className={classes.tab} label="Profile" {...a11yProps(0)} />
             <Tab className={classes.tab} label="Posts" {...a11yProps(1)} />
-            <Tab className={classes.tab} label="Drafts" {...a11yProps(1)} />
-            <Tab className={classes.tab} label="Comments" {...a11yProps(1)} />
+            <Tab className={classes.tab} label="Drafts" {...a11yProps(2)} />
+            <Tab className={classes.tab} label="Comments" {...a11yProps(3)} />
+            <Tab
+              className={classes.tab}
+              label="Notifications"
+              {...a11yProps(4)}
+            />
           </Tabs>
         </AppBar>
 
@@ -270,7 +398,12 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              {/* <Typography variant="body1">Bio:</Typography> */}
+              <Typography variant="h5" gutterBottom>
+                Public Profile: optional
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Approved: {results.approved}
+              </Typography>
               <FormControl className={classes.items}>
                 <InputLabel
                   htmlFor="bio"
@@ -284,13 +417,138 @@ export default function Dashboard() {
                 </InputLabel>
 
                 <TextBox
-                  defaultValue={null}
+                  defaultValue={results.bio}
                   placeHolder="Tell us about yourself..."
                   id="bio"
-                  autoFocus={true}
+                  autoFocus={false}
                   // handleChange={handleChange}
                   // handleSubmit={handleSubmit}
                   rows={10}
+                  // className={comment_ref != "" ? classes.cref : classes.noref}
+                />
+              </FormControl>
+              <FormControl className={classes.items}>
+                <InputLabel
+                  htmlFor="website"
+                  classes={{
+                    root: classes.label,
+                    formControl: classes.label,
+                    focused: classes.label,
+                  }}
+                >
+                  Personal Website:
+                </InputLabel>
+
+                <TextBox
+                  defaultValue={results.website}
+                  placeHolder="Share your personal website"
+                  id="website"
+                  autoFocus={false}
+                  // handleChange={handleChange}
+                  // handleSubmit={handleSubmit}
+                  rows={1}
+                  // className={comment_ref != "" ? classes.cref : classes.noref}
+                />
+              </FormControl>
+              <FormControl className={classes.items}>
+                <InputLabel
+                  htmlFor="socials"
+                  classes={{
+                    root: classes.label,
+                    formControl: classes.label,
+                    focused: classes.label,
+                  }}
+                >
+                  Socials:
+                </InputLabel>
+                <Autocomplete
+                  className={classes.search}
+                  classes={{ paper: classes.popper }}
+                  autoHighlight
+                  disabled={results.socials.length > 2 ? true : false}
+                  disableClearable={true}
+                  value={results.socials}
+                  // onChange={(event, newValue) => {
+                  //   setDetails((details) => ({
+                  //     ...details,
+                  //     tags: [...tags, newValue.inputValue],
+                  //   }));
+                  // }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+
+                    // Suggest the creation of a new value
+                    if (params.inputValue !== "") {
+                      filtered.push({
+                        inputValue: params.inputValue,
+                        title: `Add "${params.inputValue}"`,
+                      });
+                    }
+
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="socials"
+                  name="socials"
+                  options={[]}
+                  renderOption={(option) => option.title}
+                  freeSolo
+                  filterSelectedOptions={false}
+                  renderInput={(params) => (
+                    <InputBase
+                      {...params}
+                      placeholder="Add social media links (3 max)"
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                      ref={params.InputProps.ref}
+                      inputProps={params.inputProps}
+                    />
+                  )}
+                />
+                {/* <FormHelperText className={classes.helper}>
+                  Helps with search functionality (3 max)
+                </FormHelperText> */}
+              </FormControl>
+              <div>
+                {results.socials.map((social) => (
+                  <Chip
+                    label={social}
+                    variant="outlined"
+                    className={classes.chip}
+                    classes={{
+                      deleteIcon: classes.chipDelete,
+                    }}
+                    onDelete={() => handleRemoveChip(results.socials, social)}
+                  ></Chip>
+                ))}
+              </div>
+              <Typography variant="h5" gutterBottom>
+                Private Settings:
+              </Typography>
+              <FormControl className={classes.items}>
+                <InputLabel
+                  htmlFor="email"
+                  classes={{
+                    root: classes.label,
+                    formControl: classes.label,
+                    focused: classes.label,
+                  }}
+                >
+                  Email:
+                </InputLabel>
+
+                <TextBox
+                  defaultValue={results.email}
+                  placeHolder="email@site.com"
+                  id="email"
+                  autoFocus={false}
+                  // handleChange={handleChange}
+                  // handleSubmit={handleSubmit}
+                  rows={1}
                   // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
@@ -314,66 +572,78 @@ export default function Dashboard() {
               className={classes.progress}
             />
           ) : (
-            <List>
-              {results.map((result) => {
-                return (
-                  <ListItem key={result._id} className={classes.buttonpost}>
-                    <div className={classes.card}>
-                      <Typography
-                        gutterBottom
-                        color="textPrimary"
-                        align="left"
-                        variant="body2"
-                      >
-                        Approved: {result.approved}
-                      </Typography>
+            <>
+              {results.length > 0 && (
+                <List>
+                  {results.map((result) => {
+                    return (
+                      <ListItem key={result._id} className={classes.buttonpost}>
+                        <div className={classes.card}>
+                          <Typography
+                            gutterBottom
+                            color="textPrimary"
+                            align="left"
+                            variant="body2"
+                          >
+                            Approved: {result.approved}
+                          </Typography>
 
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        color="textPrimary"
-                        align="left"
-                      >
-                        {result.title}
-                      </Typography>
-                      <Typography gutterBottom color="textPrimary" align="left">
-                        {result.description}
-                      </Typography>
-                      {/* <Typography gutterBottom color="secondary" align="left">
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            color="textPrimary"
+                            align="left"
+                          >
+                            {result.title}
+                          </Typography>
+                          <Typography
+                            gutterBottom
+                            color="textPrimary"
+                            align="left"
+                          >
+                            {result.description}
+                          </Typography>
+                          {/* <Typography gutterBottom color="secondary" align="left">
                         {result.name}
                       </Typography> */}
-                    </div>
-                    <div>
-                      <Typography variant="h6" color="secondary" align="right">
-                        {result.count}
-                      </Typography>
-                    </div>
-                    <div className={classes.buttongroup}>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.buttonedit}
-                        startIcon={<EditIcon />}
-                        size="small"
-                        href={`/dashboard/posts/${result._id}`}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.buttonedit}
-                        startIcon={<DeleteIcon />}
-                        size="small"
-                        onClick={() => handleOpenDialog(result._id, "post")}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </ListItem>
-                );
-              })}
-            </List>
+                        </div>
+                        <div>
+                          <Typography
+                            variant="h6"
+                            color="secondary"
+                            align="right"
+                          >
+                            {result.count}
+                          </Typography>
+                        </div>
+                        <div className={classes.buttongroup}>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.buttonedit}
+                            startIcon={<EditIcon />}
+                            size="small"
+                            href={`/dashboard/posts/${result._id}`}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.buttonedit}
+                            startIcon={<DeleteIcon />}
+                            size="small"
+                            onClick={() => handleOpenDialog(result._id, "post")}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              )}
+            </>
           )}
         </TabPanel>
         <TabPanel value={value} index={2}>
@@ -393,57 +663,73 @@ export default function Dashboard() {
               className={classes.progress}
             />
           ) : (
-            <List>
-              {results.map((result) => {
-                return (
-                  <ListItem key={result._id} className={classes.buttonpost}>
-                    <div className={classes.card}>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        color="textPrimary"
-                        align="left"
-                      >
-                        {result.title}
-                      </Typography>
-                      <Typography gutterBottom color="textPrimary" align="left">
-                        {result.description}
-                      </Typography>
-                      <Typography gutterBottom color="secondary" align="left">
-                        {result.author}
-                      </Typography>
-                    </div>
-                    <div>
-                      <Typography variant="h6" color="secondary" align="right">
-                        {result.count}
-                      </Typography>
-                    </div>
-                    <div className={classes.buttongroup}>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.buttonedit}
-                        startIcon={<EditIcon />}
-                        size="small"
-                        href={`/dashboard/drafts/${result._id}`}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.buttonedit}
-                        startIcon={<DeleteIcon />}
-                        size="small"
-                        onClick={() => handleOpenDialog(result._id, "post")}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </ListItem>
-                );
-              })}
-            </List>
+            <>
+              {results.length > 0 && (
+                <List>
+                  {results.map((result) => {
+                    return (
+                      <ListItem key={result._id} className={classes.buttonpost}>
+                        <div className={classes.card}>
+                          <Typography
+                            gutterBottom
+                            variant="h5"
+                            color="textPrimary"
+                            align="left"
+                          >
+                            {result.title}
+                          </Typography>
+                          <Typography
+                            gutterBottom
+                            color="textPrimary"
+                            align="left"
+                          >
+                            {result.description}
+                          </Typography>
+                          <Typography
+                            gutterBottom
+                            color="secondary"
+                            align="left"
+                          >
+                            {result.author}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography
+                            variant="h6"
+                            color="secondary"
+                            align="right"
+                          >
+                            {result.count}
+                          </Typography>
+                        </div>
+                        <div className={classes.buttongroup}>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.buttonedit}
+                            startIcon={<EditIcon />}
+                            size="small"
+                            href={`/dashboard/drafts/${result._id}`}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.buttonedit}
+                            startIcon={<DeleteIcon />}
+                            size="small"
+                            onClick={() => handleOpenDialog(result._id, "post")}
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              )}
+            </>
           )}
         </TabPanel>
         <TabPanel value={value} index={3}>
@@ -455,22 +741,72 @@ export default function Dashboard() {
               className={classes.progress}
             />
           ) : (
-            <List>
-              {results.map((result) => {
-                return (
-                  <ListItem key={result._id} className={classes.buttonpost}>
-                    <DashboardComments
-                      result={result}
-                      handleClickOpen={() =>
-                        handleOpenDialog(result._id, "comment")
-                      }
-                      setSnackbar={setSnackbar}
-                      mutate={mutate}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
+            <>
+              {results.length > 0 && (
+                <List>
+                  {results.map((result) => {
+                    return (
+                      <ListItem key={result._id} className={classes.buttonpost}>
+                        <DashboardComments
+                          result={result}
+                          handleClickOpen={() =>
+                            handleOpenDialog(result._id, "comment")
+                          }
+                          setSnackbar={setSnackbar}
+                          mutate={mutate}
+                        />
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              )}
+            </>
+          )}
+        </TabPanel>
+        <TabPanel value={value} index={4}>
+          {!results ? (
+            <CircularProgress
+              color="secondary"
+              size={100}
+              disableShrink={true}
+              className={classes.progress}
+            />
+          ) : (
+            <>
+              {results.length > 0 && (
+                <List>
+                  {results.map((result) => {
+                    return (
+                      <ListItem key={result._id} className={classes.buttonpost}>
+                        <div className={classes.card}>
+                          <Typography
+                            gutterBottom
+                            color="textPrimary"
+                            align="left"
+                            variant="body2"
+                          >
+                            {result.date}
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            align="left"
+                            color="textPrimary"
+                          >
+                            {result.text}
+                          </Typography>
+                        </div>
+
+                        <div className={classes.buttongroup}>
+                          <IconButton onClick={() => handleNotify(result._id)}>
+                            <CloseIcon />
+                          </IconButton>
+                        </div>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              )}
+            </>
           )}
         </TabPanel>
       </div>

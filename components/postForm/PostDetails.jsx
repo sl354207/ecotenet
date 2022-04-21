@@ -202,15 +202,8 @@ const PostDetails = ({
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
     <Container>
-      {/* <Typography variant="h4" align="center" className={classes.header}>
-        Post Details
-      </Typography> */}
       <Header title="Post Details" />
-      {/* <Typography variant="body1" align="left" className={classes.description}>
-        Choose a title and category for your post. To make it easier for people
-        to find your post you may add a short description and keywords for your
-        post
-      </Typography> */}
+
       <Description
         description="Choose a title and category for your post. To make it easier for people
         to find your post you may add a short description and keywords for your
@@ -391,9 +384,10 @@ const PostDetails = ({
               handleHomeEndKeys
               id="tags"
               name="tags"
-              options={tags}
+              options={[]}
               renderOption={(option) => option.title}
               freeSolo
+              filterSelectedOptions={false}
               renderInput={(params) => (
                 <InputBase
                   {...params}

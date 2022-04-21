@@ -3,7 +3,7 @@ import { createNotification } from "../../utils/mongodb";
 // api endpoint to post a comment to the database
 export default async function handler(req, res) {
   // body must be in same format as database query
-  const { name, reason, text, ref, date } = req.body;
+  const { name, reason, text, ref, date, viewed } = req.body;
 
   // only allow post method
   if (req.method !== "POST") {
@@ -16,7 +16,8 @@ export default async function handler(req, res) {
       reason,
       text,
       ref,
-      date
+      date,
+      viewed
     );
 
     return res.status(200).json(createdNotification);

@@ -122,8 +122,35 @@ const adminFlags = () => {
     setAction(action);
   };
 
-  const handleCloseDialog = () => {
-    setDialog(false);
+  const handleResolve = async (ID) => {
+    const flag = {
+      _id: ID,
+      status: "resolved",
+    };
+
+    const res = await fetch("/api/updateFlag", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(flag),
+    });
+
+    if (res.ok) {
+      mutate();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Flag resolved",
+      });
+    }
+    if (!res.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem resolving flag. Please try again later",
+      });
+    }
   };
 
   const { data: results, mutate } = useSWR("/api/getFlags", fetcher);
@@ -199,25 +226,12 @@ const adminFlags = () => {
                     variant="outlined"
                     color="secondary"
                     className={classes.buttonup}
-                    onClick={() => handleOpenDialog("Deny")}
+                    onClick={() => handleResolve(result._id)}
                   >
                     Resolve
                   </Button>
                 </div>
               </ListItem>
-              {/* <SureCommentAdmin
-                comment={result}
-                action={action}
-                open={dialog}
-                handleClose={handleCloseDialog}
-                ariaLabeledBy="alert-dialog-title"
-                ariaDescribedBy="alert-dialog-description"
-                id="alert-dialog-description"
-                className={classes.dialog}
-                sure="Are you sure you want to"
-                setSnackbar={setSnackbar}
-                mutate={mutate}
-              /> */}
             </>
           );
         })}

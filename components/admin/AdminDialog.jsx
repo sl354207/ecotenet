@@ -107,6 +107,7 @@ const AdminDialog = ({
           text: `a ${item} of yours was deleted for a ${reason} violation`,
           ref: result._id,
           date: new Date().toUTCString(),
+          viewed: false,
         };
 
         const res1 = await fetch("/api/createNotification", {
@@ -160,6 +161,7 @@ const AdminDialog = ({
             text: `a ${item} of yours was denied for a ${reason} violation`,
             ref: result._id,
             date: new Date().toUTCString(),
+            viewed: false,
           };
 
           const res1 = await fetch("/api/createNotification", {

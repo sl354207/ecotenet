@@ -147,19 +147,49 @@ const admin = () => {
         });
 
         if (res.ok) {
-          mutate();
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: "Feature added successfully",
+          const notify = {
+            name: post.name,
+            reason: "feature",
+            text: "A post of yours was selected as a featured post",
+            ref: post._id,
+            date: new Date().toUTCString(),
+            viewed: false,
+          };
+
+          const res1 = await fetch("/api/createNotification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(notify),
           });
+
+          if (res1.ok) {
+            if (mutate) {
+              mutate();
+            }
+
+            setSnackbar({
+              open: true,
+              severity: "success",
+              message: "Feature added successfully",
+            });
+          }
+          if (!res1.ok) {
+            setSnackbar({
+              open: true,
+              severity: "error",
+              message:
+                "There was a problem adding feature. Please try again later",
+            });
+          }
         }
         if (!res.ok) {
           setSnackbar({
             open: true,
             severity: "error",
             message:
-              "There was a problem submitting post. Please try again later",
+              "There was a problem adding feature. Please try again later",
           });
         }
         break;
@@ -204,7 +234,7 @@ const admin = () => {
             open: true,
             severity: "error",
             message:
-              "There was a problem submitting post. Please try again later",
+              "There was a problem submitting feature. Please try again later",
           });
         }
         break;
@@ -248,7 +278,7 @@ const admin = () => {
             open: true,
             severity: "error",
             message:
-              "There was a problem submitting post. Please try again later",
+              "There was a problem removing feature. Please try again later",
           });
         }
         break;

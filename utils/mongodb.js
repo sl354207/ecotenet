@@ -575,7 +575,7 @@ const getPeople = async () => {
   return people;
 };
 
-const getPersonById = async (name) => {
+const getPerson = async (name) => {
   const { db } = await connectToDatabase();
 
   const person = await db.collection("people").findOne({
@@ -625,14 +625,17 @@ const deletePerson = async (name) => {
   const comments = await db.collection("comments").deleteMany({
     name: name,
   });
-  const posts = await db.collection("comments").deleteMany({
+  const posts = await db.collection("posts").deleteMany({
     name: name,
   });
   const flags = await db.collection("flags").deleteMany({
-    flagee: name,
+    name: name,
+  });
+  const notifications = await db.collection("notifications").deleteMany({
+    name: name,
   });
 
-  const deleted = Object.assign(person, comments, posts, flags);
+  const deleted = Object.assign(person, comments, posts, flags, notifications);
   // console.log(deleted);
 
   return deleted;
@@ -650,11 +653,54 @@ const getFlags = async () => {
   return flags;
 };
 
-const createNotification = async (name, reason, text, ref, date) => {
+const updateFlag = async (_id, status) => {
   const { db } = await connectToDatabase();
 
-  const data = { name, reason, text, ref, date };
+  const data = {
+    status,
+  };
+  const response = await db.collection("flags").updateOne(
+    {
+      _id: ObjectId(_id),
+    },
+    { $set: data }
+  );
+
+  return response;
+};
+
+const createNotification = async (name, reason, text, ref, date, viewed) => {
+  const { db } = await connectToDatabase();
+
+  const data = { name, reason, text, ref, date, viewed };
   const response = await db.collection("notifications").insertOne(data);
+
+  return response;
+};
+
+const getNotifications = async (name) => {
+  const { db } = await connectToDatabase();
+
+  const notifications = await db
+    .collection("notifications")
+    .find({ name: name, viewed: false })
+    .toArray();
+
+  return notifications;
+};
+
+const updateNotification = async (_id, viewed) => {
+  const { db } = await connectToDatabase();
+
+  const data = {
+    viewed,
+  };
+  const response = await db.collection("notifications").updateOne(
+    {
+      _id: ObjectId(_id),
+    },
+    { $set: data }
+  );
 
   return response;
 };
@@ -684,9 +730,12 @@ module.exports = {
   autoSpecies,
   getStats,
   getPeople,
-  getPersonById,
+  getPerson,
   updatePerson,
   deletePerson,
   getFlags,
+  updateFlag,
   createNotification,
+  getNotifications,
+  updateNotification,
 };
