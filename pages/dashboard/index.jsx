@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import DashboardComments from "../../components/comments/DashboardComments";
@@ -220,6 +220,13 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     margin: "0px 5px 10px 5px",
   },
+  save: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  helper: {
+    color: theme.palette.text.primary,
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -249,35 +256,25 @@ export default function Dashboard() {
     message: "Post submitted successfully",
   });
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
-
-  const handleOpenDialog = (ID, dialog) => {
-    if (dialog == "comment") {
-      setDialog({ comment: true, post: false });
-    } else {
-      setDialog({ comment: false, post: true });
-    }
-    setResultID(ID);
-  };
-
-  const handleCloseDialog = (dialog) => {
-    if (dialog == "comment") {
-      setDialog({ comment: false, post: false });
-    } else {
-      setDialog({ comment: false, post: false });
-    }
-  };
-
   const { data: results, mutate } = useSWR(fetchApi, fetcher);
-  // mutate();
 
-  // const isLoading = results;
+  const [profile, setProfile] = useState({
+    bio: "",
+    website: "",
+    socials: "",
+    approved: "",
+  });
+
+  useEffect(() => {
+    if (results) {
+      setProfile({
+        bio: results.bio,
+        website: results.website,
+        socials: results.socials,
+        approved: results.approved,
+      });
+    }
+  }, [results]);
 
   const handleChange = (event, newValue) => {
     // console.log(typeof newValue);
@@ -341,20 +338,20 @@ export default function Dashboard() {
   };
 
   const handleRemoveChip = (socials, chip) => {
-    setDetails((details) => ({
-      ...details,
-      tags: tags.filter((tag) => tag !== chip),
+    setProfile((profile) => ({
+      ...profile,
+      socials: socials.filter((tag) => tag !== chip),
     }));
   };
 
-  const handleDetailChange = (e) => {
+  const handleProfileChange = (e) => {
     //set name and value from targeted form props
-    const { name, value } = e.target;
+    const { id, value } = e.target;
 
     // Set new values on form change. Take in the current values as input and add name and value key value pair to object. values uses destructuring and name is in brackets to allow for dynamically setting key in key value pair(see docs).
-    setDetails((details) => ({
-      ...details,
-      [name]: value,
+    setProfile((profile) => ({
+      ...profile,
+      [id]: value,
     }));
 
     // set errors
@@ -363,6 +360,72 @@ export default function Dashboard() {
     // setFormErrors({
     //   [name]: error
     // })
+  };
+
+  const handleProfileSubmit = async () => {
+    const silentObject = {
+      _id: results._id,
+      email: results.email,
+      flags: results.flags,
+      denials: results.denials,
+      approved: "pending",
+    };
+
+    const changes = {
+      bio: profile.bio,
+      website: profile.website,
+      socials: profile.socials,
+    };
+
+    const value = Object.assign(silentObject, changes);
+
+    const res = await fetch("/api/updatePerson", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(value),
+    });
+    if (res.ok) {
+      mutate();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Profile saved successfully",
+      });
+    }
+    if (!res.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem saving profile. Please try again later",
+      });
+    }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (ID, dialog) => {
+    if (dialog == "comment") {
+      setDialog({ comment: true, post: false });
+    } else {
+      setDialog({ comment: false, post: true });
+    }
+    setResultID(ID);
+  };
+
+  const handleCloseDialog = (dialog) => {
+    if (dialog == "comment") {
+      setDialog({ comment: false, post: false });
+    } else {
+      setDialog({ comment: false, post: false });
+    }
   };
 
   return (
@@ -398,9 +461,27 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              <Typography variant="h5" gutterBottom>
-                Public Profile: optional
-              </Typography>
+              <div className={classes.save}>
+                <Typography variant="h5" gutterBottom>
+                  Public Profile: optional
+                </Typography>
+                {results.bio == profile.bio &&
+                results.website == profile.website &&
+                results.socials == profile.socials ? (
+                  <Button variant="contained" color="secondary" disabled>
+                    Save Changes
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleProfileSubmit()}
+                  >
+                    Save Changes
+                  </Button>
+                )}
+              </div>
+
               <Typography variant="body1" gutterBottom>
                 Approved: {results.approved}
               </Typography>
@@ -421,9 +502,10 @@ export default function Dashboard() {
                   placeHolder="Tell us about yourself..."
                   id="bio"
                   autoFocus={false}
-                  // handleChange={handleChange}
+                  handleChange={handleProfileChange}
                   // handleSubmit={handleSubmit}
                   rows={10}
+                  // inputProps={{ "aria-label": "description" }}
                   // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
@@ -441,12 +523,13 @@ export default function Dashboard() {
 
                 <TextBox
                   defaultValue={results.website}
-                  placeHolder="Share your personal website"
+                  placeHolder="Share your personal website (example.com)"
                   id="website"
                   autoFocus={false}
-                  // handleChange={handleChange}
+                  handleChange={handleProfileChange}
                   // handleSubmit={handleSubmit}
                   rows={1}
+                  inputProps={{ type: "url" }}
                   // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
@@ -465,15 +548,17 @@ export default function Dashboard() {
                   className={classes.search}
                   classes={{ paper: classes.popper }}
                   autoHighlight
-                  disabled={results.socials.length > 2 ? true : false}
+                  disabled={
+                    profile.socials && profile.socials.length > 2 ? true : false
+                  }
                   disableClearable={true}
-                  value={results.socials}
-                  // onChange={(event, newValue) => {
-                  //   setDetails((details) => ({
-                  //     ...details,
-                  //     tags: [...tags, newValue.inputValue],
-                  //   }));
-                  // }}
+                  value={profile.socials}
+                  onChange={(event, newValue) => {
+                    setProfile((profile) => ({
+                      ...profile,
+                      socials: [...profile.socials, newValue.inputValue],
+                    }));
+                  }}
                   filterOptions={(options, params) => {
                     const filtered = filter(options, params);
 
@@ -499,7 +584,7 @@ export default function Dashboard() {
                   renderInput={(params) => (
                     <InputBase
                       {...params}
-                      placeholder="Add social media links (3 max)"
+                      placeholder="example.com"
                       classes={{
                         root: classes.inputRoot,
                         input: classes.inputInput,
@@ -509,22 +594,23 @@ export default function Dashboard() {
                     />
                   )}
                 />
-                {/* <FormHelperText className={classes.helper}>
-                  Helps with search functionality (3 max)
-                </FormHelperText> */}
+                <FormHelperText className={classes.helper}>
+                  Add social media links (3 max)
+                </FormHelperText>
               </FormControl>
               <div>
-                {results.socials.map((social) => (
-                  <Chip
-                    label={social}
-                    variant="outlined"
-                    className={classes.chip}
-                    classes={{
-                      deleteIcon: classes.chipDelete,
-                    }}
-                    onDelete={() => handleRemoveChip(results.socials, social)}
-                  ></Chip>
-                ))}
+                {profile.socials &&
+                  profile.socials.map((social) => (
+                    <Chip
+                      label={social}
+                      variant="outlined"
+                      className={classes.chip}
+                      classes={{
+                        deleteIcon: classes.chipDelete,
+                      }}
+                      onDelete={() => handleRemoveChip(profile.socials, social)}
+                    ></Chip>
+                  ))}
               </div>
               <Typography variant="h5" gutterBottom>
                 Private Settings:
@@ -549,6 +635,7 @@ export default function Dashboard() {
                   // handleChange={handleChange}
                   // handleSubmit={handleSubmit}
                   rows={1}
+                  inputProps={{ type: "email" }}
                   // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
