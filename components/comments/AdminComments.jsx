@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
-import Notify from "./AdminDialog";
+import Notify from "../dialogs/AdminDialog";
 
 const useStyles = makeStyles((theme) => ({
   description: {

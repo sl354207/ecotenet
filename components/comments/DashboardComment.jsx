@@ -120,9 +120,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DashboardComments = ({
+const DashboardComment = ({
   result,
-  handleClickOpen,
+  handleDeleteOpen,
   mutate,
   setSnackbar,
 }) => {
@@ -214,7 +214,7 @@ const DashboardComments = ({
             className={classes.buttonedit}
             startIcon={<DeleteIcon />}
             size="small"
-            onClick={handleClickOpen}
+            onClick={handleDeleteOpen}
           >
             Delete
           </Button>
@@ -224,4 +224,4 @@ const DashboardComments = ({
   );
 };
 
-export default DashboardComments;
+export default DashboardComment;

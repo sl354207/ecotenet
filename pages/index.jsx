@@ -1,7 +1,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 
-import MapMain from "../components/map/MapMain";
+import MapMain from "../components/maps/MapMain";
 
 export default function MapPage() {
   // need to dynamically import to work with mapbox

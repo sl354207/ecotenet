@@ -43,9 +43,9 @@ import Vote from "../../../components/Vote";
 import EditorLayout from "../../../components/EditorLayout";
 import customImage from "../../../plugins/customImage";
 
-import AdminComments from "../../../components/admin/AdminComments";
+import AdminComments from "../../../components/comments/AdminComments";
 
-import AdminDialog from "../../../components/admin/AdminDialog";
+import AdminDialog from "../../../components/dialogs/AdminDialog";
 
 const useStyles = makeStyles((theme) => ({
   description: {

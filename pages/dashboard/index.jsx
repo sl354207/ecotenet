@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-import DashboardComments from "../../components/comments/DashboardComments";
+import DashboardComments from "../../components/comments/DashboardComment";
 import SureComment from "../../components/SureComment";
 import TextBox from "../../components/TextBox";
 
@@ -33,6 +33,8 @@ import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
 import SurePost from "../../components/SurePost";
 import Header from "../../components/Header";
+import DashboardDialog from "../../components/dialogs/DashboardDialog";
+import DashboardComment from "../../components/comments/DashboardComment";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -246,7 +248,10 @@ export default function Dashboard() {
   const [fetchApi, setFetchApi] = useState("/api/getPerson?q=Muskrat");
   const [deleteFetch, setDeleteFetch] = useState();
 
-  const [dialog, setDialog] = useState({ comment: false, post: false });
+  // const [dialog, setDialog] = useState({ comment: false, post: false });
+  const [dialog, setDialog] = useState(false);
+  const [action, setAction] = useState({ action: "", type: "" });
+  const [item, setItem] = useState("");
 
   const [resultID, setResultID] = useState();
 
@@ -411,21 +416,15 @@ export default function Dashboard() {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (ID, dialog) => {
-    if (dialog == "comment") {
-      setDialog({ comment: true, post: false });
-    } else {
-      setDialog({ comment: false, post: true });
-    }
-    setResultID(ID);
+  const handleOpenDialog = (action, type, result) => {
+    setItem(result);
+    setAction({ action: action, type: type });
+
+    setDialog(true);
   };
 
-  const handleCloseDialog = (dialog) => {
-    if (dialog == "comment") {
-      setDialog({ comment: false, post: false });
-    } else {
-      setDialog({ comment: false, post: false });
-    }
+  const handleCloseDialog = () => {
+    setDialog(false);
   };
 
   return (
@@ -690,9 +689,6 @@ export default function Dashboard() {
                           >
                             {result.description}
                           </Typography>
-                          {/* <Typography gutterBottom color="secondary" align="left">
-                        {result.name}
-                      </Typography> */}
                         </div>
                         <div>
                           <Typography
@@ -720,7 +716,9 @@ export default function Dashboard() {
                             className={classes.buttonedit}
                             startIcon={<DeleteIcon />}
                             size="small"
-                            onClick={() => handleOpenDialog(result._id, "post")}
+                            onClick={() =>
+                              handleOpenDialog("Delete", "post", result)
+                            }
                           >
                             Delete
                           </Button>
@@ -806,7 +804,9 @@ export default function Dashboard() {
                             className={classes.buttonedit}
                             startIcon={<DeleteIcon />}
                             size="small"
-                            onClick={() => handleOpenDialog(result._id, "post")}
+                            onClick={() =>
+                              handleOpenDialog("Delete", "draft", result)
+                            }
                           >
                             Delete
                           </Button>
@@ -834,10 +834,10 @@ export default function Dashboard() {
                   {results.map((result) => {
                     return (
                       <ListItem key={result._id} className={classes.buttonpost}>
-                        <DashboardComments
+                        <DashboardComment
                           result={result}
-                          handleClickOpen={() =>
-                            handleOpenDialog(result._id, "comment")
+                          handleDeleteOpen={() =>
+                            handleOpenDialog("Delete", "comment", result)
                           }
                           setSnackbar={setSnackbar}
                           mutate={mutate}
@@ -898,7 +898,7 @@ export default function Dashboard() {
         </TabPanel>
       </div>
 
-      <SureComment
+      {/* <SureComment
         open={dialog.comment}
         handleClose={handleCloseDialog}
         ariaLabeledBy="alert-dialog-title"
@@ -921,6 +921,16 @@ export default function Dashboard() {
         sure="Are you sure you want to permanently delete item?"
         action="delete"
         resultID={resultID}
+        setSnackbar={setSnackbar}
+        mutate={mutate}
+      /> */}
+      <DashboardDialog
+        contentType={action.type}
+        action={action.action}
+        open={dialog}
+        handleClose={handleCloseDialog}
+        className={classes.dialog}
+        result={item}
         setSnackbar={setSnackbar}
         mutate={mutate}
       />

@@ -16,7 +16,7 @@ import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../Header";
 import Description from "../Description";
-import MapEditor from "../map/MapEditor";
+import MapEditor from "../maps/MapEditor";
 
 const useStyles = makeStyles((theme) => ({
   subheader: {

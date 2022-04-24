@@ -21,6 +21,7 @@ import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import SurePost from "../SurePost";
 import { Alert } from "@material-ui/lab";
+import DashboardDialog from "../dialogs/DashboardDialog";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -123,6 +124,8 @@ const StepForm = ({ post, pathName }) => {
   const [clickInfo, setClickInfo] = useState(ecoregions);
 
   const [dialog, setDialog] = useState(false);
+  const [action, setAction] = useState({ action: "", type: "" });
+  const [item, setItem] = useState("");
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -136,6 +139,30 @@ const StepForm = ({ post, pathName }) => {
     }
 
     setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (action, type, postValue, details, clickInfo) => {
+    const result = {
+      title: details.title,
+      description: details.description,
+      category: details.category,
+      tags: details.tags,
+      ecoregions: clickInfo,
+      _id: post._id,
+      id: postValue.id,
+      version: postValue.version,
+      rows: postValue.rows,
+      status: "published",
+      approved: "pending",
+      updated: true,
+      featured: post.featured,
+      date: new Date().toUTCString(),
+      feature: "false",
+    };
+    setItem(result);
+    setAction({ action: action, type: type });
+
+    setDialog(true);
   };
 
   const handleCloseDialog = () => {
@@ -192,16 +219,17 @@ const StepForm = ({ post, pathName }) => {
         updated: false,
         featured: false,
         feature: "false",
+        date: "",
       };
     } else {
       silentObject = {
         _id: post._id,
-        name: "Muskrat",
         status: "draft",
         approved: "false",
         updated: false,
         featured: false,
         feature: "false",
+        date: "",
       };
     }
     // combine form value and editor value into one object to pass to api.
@@ -314,7 +342,13 @@ const StepForm = ({ post, pathName }) => {
                     <Button
                       onClick={() =>
                         // {() => publish(postValue, details, clickInfo)}
-                        setDialog(true)
+                        handleOpenDialog(
+                          "Publish",
+                          "post",
+                          postValue,
+                          details,
+                          clickInfo
+                        )
                       }
                       variant="contained"
                       color="secondary"
@@ -348,7 +382,13 @@ const StepForm = ({ post, pathName }) => {
                     <Button
                       onClick={() =>
                         // {() => publish(postValue, details, clickInfo)}
-                        setDialog(true)
+                        handleOpenDialog(
+                          "Publish",
+                          pathName == "editor" ? "create" : "draft",
+                          postValue,
+                          details,
+                          clickInfo
+                        )
                       }
                       variant="contained"
                       color="secondary"
@@ -409,7 +449,13 @@ const StepForm = ({ post, pathName }) => {
                     <Button
                       onClick={() =>
                         // {() => publish(postValue, details, clickInfo)}
-                        setDialog(true)
+                        handleOpenDialog(
+                          "Publish",
+                          "post",
+                          postValue,
+                          details,
+                          clickInfo
+                        )
                       }
                       variant="contained"
                       color="secondary"
@@ -444,7 +490,13 @@ const StepForm = ({ post, pathName }) => {
                     <Button
                       onClick={() =>
                         // {() => publish(postValue, details, clickInfo)}
-                        setDialog(true)
+                        handleOpenDialog(
+                          "Publish",
+                          pathName == "editor" ? "create" : "draft",
+                          postValue,
+                          details,
+                          clickInfo
+                        )
                       }
                       variant="contained"
                       color="secondary"
@@ -498,7 +550,13 @@ const StepForm = ({ post, pathName }) => {
                     <Button
                       onClick={() =>
                         // {() => publish(postValue, details, clickInfo)}
-                        setDialog(true)
+                        handleOpenDialog(
+                          "Publish",
+                          "post",
+                          postValue,
+                          details,
+                          clickInfo
+                        )
                       }
                       variant="contained"
                       color="secondary"
@@ -532,7 +590,13 @@ const StepForm = ({ post, pathName }) => {
                     <Button
                       onClick={() =>
                         // {() => publish(postValue, details, clickInfo)}
-                        setDialog(true)
+                        handleOpenDialog(
+                          "Publish",
+                          pathName == "editor" ? "create" : "draft",
+                          postValue,
+                          details,
+                          clickInfo
+                        )
                       }
                       variant="contained"
                       color="secondary"
@@ -602,7 +666,7 @@ const StepForm = ({ post, pathName }) => {
           </StepButton>
         </Step>
       </Stepper>
-      <SurePost
+      {/* <SurePost
         open={dialog}
         handleClose={handleCloseDialog}
         // handleSubmit={deletePost}
@@ -618,6 +682,15 @@ const StepForm = ({ post, pathName }) => {
         approved={post.approved}
         resultID={post._id}
         pathName={pathName}
+        setSnackbar={setSnackbar}
+      /> */}
+      <DashboardDialog
+        contentType={action.type}
+        action={action.action}
+        open={dialog}
+        handleClose={handleCloseDialog}
+        className={classes.dialog}
+        result={item}
         setSnackbar={setSnackbar}
       />
       <Snackbar

@@ -25,7 +25,7 @@ import Header from "../../components/Header";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
-import AdminDialog from "../../components/admin/AdminDialog";
+import AdminDialog from "../../components/dialogs/AdminDialog";
 
 const drawerWidth = 120;
 
