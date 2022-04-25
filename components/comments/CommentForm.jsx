@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
 import TextBox from "../TextBox";
 import SureComment from "../SureComment";
+import ClientDialog from "../dialogs/ClientDialog";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -75,44 +76,21 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: 60,
     padding: "5px 0px 10px 0px",
   },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
 }));
 
 //pass in post id and comment ref from comment
-const CommentForm = ({ showForm, post_id, comment_ref, closeForm }) => {
+const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
   const classes = useStyles();
 
   const router = useRouter();
 
-  const [value, setValue] = useState("");
-
-  const [dialog, setDialog] = useState(false);
-
-  const [snackbar, setSnackbar] = useState(false);
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar(false);
-    }
-
-    setSnackbar(false);
-  };
-
-  const handleCloseDialog = () => {
-    setDialog(false);
-  };
-
-  const handleOpenDialog = () => {
-    setDialog(true);
-  };
+  const [value, setValue] = useState({ text: "", comment_ref: comment_ref });
 
   const container = useRef(null);
 
   // update text input field
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setValue({ text: event.target.value, comment_ref: comment_ref });
   };
 
   return (
@@ -134,7 +112,7 @@ const CommentForm = ({ showForm, post_id, comment_ref, closeForm }) => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={handleOpenDialog}
+            onClick={() => handleOpenDialog("Comment", value)}
             className={classes.submit}
           >
             Submit
@@ -143,34 +121,6 @@ const CommentForm = ({ showForm, post_id, comment_ref, closeForm }) => {
       ) : null}
 
       <div ref={container} className={classes.comment} />
-      <SureComment
-        open={dialog}
-        handleClose={handleCloseDialog}
-        ariaLabeledBy="alert-dialog-title"
-        ariaDescribedBy="alert-dialog-description"
-        id="alert-dialog-description"
-        className={classes.dialog}
-        sure="Are you sure you want to submit comment?"
-        action="submit"
-        postID={post_id}
-        value={value}
-        resultID={comment_ref}
-        setSnackbar={setSnackbar}
-        closeForm={closeForm}
-      />
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

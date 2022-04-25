@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //pass in comments and post id from parent post
-const AdminComments = ({ comments, comment_query, handleOpenDialog }) => {
+const AdminCommentList = ({ comments, comment_query, handleOpenDialog }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -187,4 +187,4 @@ const AdminComments = ({ comments, comment_query, handleOpenDialog }) => {
   );
 };
 
-export default AdminComments;
+export default AdminCommentList;

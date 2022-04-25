@@ -6,8 +6,9 @@ import {
   FullscreenExitTwoTone,
 } from "@material-ui/icons";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import ClientDialog from "./dialogs/ClientDialog";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     // display: "flex",
     marginLeft: 20,
@@ -18,12 +19,15 @@ const useStyles = makeStyles(() => ({
     // justifyContent: "center",
     maxWidth: 50,
   },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
-const Vote = ({ counter }) => {
+const Vote = ({ post_count, count, setCount, post_id, handleOpenDialog }) => {
   const classes = useStyles();
-  //set count value for post
-  const [count, setCount] = useState(counter);
+  const theme = useTheme();
+
   //set limit for count
   const [limit, setLimit] = useState(0);
 
@@ -62,8 +66,12 @@ const Vote = ({ counter }) => {
           </IconButton>
         </div>
       </div>
-      {count !== counter ? (
-        <Button variant="contained" color="secondary">
+      {count !== post_count ? (
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => handleOpenDialog("Vote", count)}
+        >
           Vote
         </Button>
       ) : (

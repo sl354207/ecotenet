@@ -43,9 +43,8 @@ import Vote from "../../../components/Vote";
 import EditorLayout from "../../../components/EditorLayout";
 import customImage from "../../../plugins/customImage";
 
-import AdminComments from "../../../components/comments/AdminComments";
-
 import AdminDialog from "../../../components/dialogs/AdminDialog";
+import AdminCommentList from "../../../components/comments/AdminCommentList";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -291,7 +290,7 @@ const post = () => {
     );
   } else {
     commentList = (
-      <AdminComments
+      <AdminCommentList
         comments={comments}
         comment_query={comment_query}
         handleOpenDialog={handleOpenDialog}

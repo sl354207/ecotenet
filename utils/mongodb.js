@@ -705,6 +705,22 @@ const updateNotification = async (_id, viewed) => {
   return response;
 };
 
+const updateCount = async (_id, count) => {
+  const { db } = await connectToDatabase();
+
+  const data = {
+    count,
+  };
+  const response = await db.collection("posts").updateOne(
+    {
+      _id: ObjectId(_id),
+    },
+    { $set: data }
+  );
+
+  return response;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -738,4 +754,5 @@ module.exports = {
   createNotification,
   getNotifications,
   updateNotification,
+  updateCount,
 };

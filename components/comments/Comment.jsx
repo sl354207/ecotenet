@@ -62,18 +62,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //pass in comment and post id from comments
-const Comment = ({ comment, post_id }) => {
+const Comment = ({ comment, post_id, handleOpenDialog, showForm }) => {
   // console.log(comment);
   const classes = useStyles();
 
   // const [value, setValue] = useState("");
 
   const [reply, setReply] = useState(false);
-  const container = useRef(null);
-
   const handleClick = () => {
     setReply(!reply);
   };
+
+  const container = useRef(null);
 
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
@@ -129,7 +129,7 @@ const Comment = ({ comment, post_id }) => {
           post_id={post_id}
           comment_ref={comment._id}
           showForm={reply}
-          closeForm={handleClick}
+          handleOpenDialog={handleOpenDialog}
         />
       </>
     );

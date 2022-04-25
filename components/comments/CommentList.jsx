@@ -20,15 +20,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //pass in comments and post id from parent post
-const CommentList = ({ comments, post_id }) => {
+const CommentList = ({
+  comments,
+  post_id,
+  showForm,
+  handleForm,
+  handleOpenDialog,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
-
-  const [showForm, setShowForm] = useState(false);
-
-  const handleClick = () => {
-    setShowForm(!showForm);
-  };
 
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -53,7 +53,7 @@ const CommentList = ({ comments, post_id }) => {
       <Button
         variant="outlined"
         color="secondary"
-        onClick={handleClick}
+        onClick={handleForm}
         endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         className={showForm ? classes.add : classes.noadd}
       >
@@ -63,10 +63,15 @@ const CommentList = ({ comments, post_id }) => {
         post_id={post_id}
         comment_ref=""
         showForm={showForm}
-        closeForm={handleClick}
+        handleOpenDialog={handleOpenDialog}
       />
       {sortedComments.map((comment) => (
-        <Comment comment={comment} post_id={post_id} />
+        <Comment
+          comment={comment}
+          post_id={post_id}
+          handleOpenDialog={handleOpenDialog}
+          showForm={showForm}
+        />
       ))}
     </List>
   );

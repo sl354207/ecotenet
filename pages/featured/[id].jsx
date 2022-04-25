@@ -38,6 +38,7 @@ import {
   Link,
   Container,
   Divider,
+  Snackbar,
 } from "@material-ui/core";
 
 import Vote from "../../components/Vote";
@@ -47,6 +48,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CommentList from "../../components/comments/CommentList";
+import ClientDialog from "../../components/dialogs/ClientDialog";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -81,6 +84,9 @@ const useStyles = makeStyles((theme) => ({
   commentsection: {
     marginTop: 20,
   },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
 }));
 
 // Define which plugins we want to use.
@@ -92,15 +98,58 @@ const post = ({ post, comments }) => {
   // set post as value of editor
   const [value, setValue] = useState(post);
 
+  //set count value for post
+  const [count, setCount] = useState(post.count);
+
+  const [dialog, setDialog] = useState(false);
+  const [action, setAction] = useState("");
+  const [item, setItem] = useState("");
+
+  const [showForm, setShowForm] = useState(false);
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (action, result) => {
+    setItem(result);
+    setAction(action);
+
+    setDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
+
+  const toggleForm = () => {
+    setShowForm(!showForm);
+  };
+  const closeForm = () => {
+    setShowForm(false);
+    setReply(false);
+  };
+
+  const [reply, setReply] = useState(false);
+  const handleReply = () => {
+    setReply(!reply);
+  };
+
   const date = new Date(post.date);
 
   return (
     <>
       <Container className={classes.container}>
-        {/* <Nav /> */}
-        {/* <Typography align="center" variant="h4" className={classes.title}>
-        {post.title}
-      </Typography> */}
         <Header title={post.title} />
         <div className={classes.description}>
           <div className={classes.content}>
@@ -124,7 +173,12 @@ const post = ({ post, comments }) => {
             </Typography>
           </div>
 
-          <Vote counter={post.count} />
+          <Vote
+            post_count={post.count}
+            count={count}
+            setCount={setCount}
+            handleOpenDialog={handleOpenDialog}
+          />
         </div>
         <EditorLayout>
           <Editor
@@ -138,8 +192,37 @@ const post = ({ post, comments }) => {
         <Typography variant="h6" className={classes.commentsection}>
           Comments:
         </Typography>
-        <CommentList comments={comments} post_id={post._id} />
+        <CommentList
+          comments={comments}
+          post_id={post._id}
+          handleOpenDialog={handleOpenDialog}
+          showForm={showForm}
+          handleForm={toggleForm}
+        />
       </Container>
+      <ClientDialog
+        contentType={action}
+        open={dialog}
+        handleClose={handleCloseDialog}
+        className={classes.dialog}
+        post_id={post._id}
+        result={item}
+        setSnackbar={setSnackbar}
+        closeForm={closeForm}
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
       <Footer />
     </>
   );

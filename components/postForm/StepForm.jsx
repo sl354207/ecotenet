@@ -2,9 +2,6 @@ import React, { useState, useCallback } from "react";
 
 import { useRouter } from "next/router";
 
-import PostDetails from "./PostDetails";
-import PostRegion from "./PostRegion";
-import PostEditor from "./PostEditor";
 import {
   Button,
   Step,
@@ -18,10 +15,11 @@ import {
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
-import CloseIcon from "@material-ui/icons/Close";
-import SurePost from "../SurePost";
 import { Alert } from "@material-ui/lab";
 import DashboardDialog from "../dialogs/DashboardDialog";
+import PostDetails from "./PostDetails";
+import PostRegion from "./PostRegion";
+import PostEditor from "./PostEditor";
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -666,24 +664,6 @@ const StepForm = ({ post, pathName }) => {
           </StepButton>
         </Step>
       </Stepper>
-      {/* <SurePost
-        open={dialog}
-        handleClose={handleCloseDialog}
-        // handleSubmit={deletePost}
-        ariaLabeledBy="alert-dialog-title"
-        ariaDescribedBy="alert-dialog-description"
-        id="alert-dialog-description"
-        className={classes.dialog}
-        sure="Are you sure you want to publish item?"
-        action="submit"
-        postValue={postValue}
-        details={details}
-        clickInfo={clickInfo}
-        approved={post.approved}
-        resultID={post._id}
-        pathName={pathName}
-        setSnackbar={setSnackbar}
-      /> */}
       <DashboardDialog
         contentType={action.type}
         action={action.action}

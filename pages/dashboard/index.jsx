@@ -2,10 +2,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-import DashboardComments from "../../components/comments/DashboardComment";
-import SureComment from "../../components/SureComment";
-import TextBox from "../../components/TextBox";
-
 import {
   Typography,
   AppBar,
@@ -31,10 +27,11 @@ import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
-import SurePost from "../../components/SurePost";
+
 import Header from "../../components/Header";
 import DashboardDialog from "../../components/dialogs/DashboardDialog";
 import DashboardComment from "../../components/comments/DashboardComment";
+import TextBox from "../../components/TextBox";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -898,32 +895,6 @@ export default function Dashboard() {
         </TabPanel>
       </div>
 
-      {/* <SureComment
-        open={dialog.comment}
-        handleClose={handleCloseDialog}
-        ariaLabeledBy="alert-dialog-title"
-        ariaDescribedBy="alert-dialog-description"
-        id="alert-dialog-description"
-        className={classes.dialog}
-        sure="Are you sure you want to permanently delete item?"
-        action="delete"
-        resultID={resultID}
-        setSnackbar={setSnackbar}
-        mutate={mutate}
-      />
-      <SurePost
-        open={dialog.post}
-        handleClose={handleCloseDialog}
-        ariaLabeledBy="alert-dialog-title"
-        ariaDescribedBy="alert-dialog-description"
-        id="alert-dialog-description"
-        className={classes.dialog}
-        sure="Are you sure you want to permanently delete item?"
-        action="delete"
-        resultID={resultID}
-        setSnackbar={setSnackbar}
-        mutate={mutate}
-      /> */}
       <DashboardDialog
         contentType={action.type}
         action={action.action}
