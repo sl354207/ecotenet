@@ -26,9 +26,11 @@ const CommentList = ({
   showForm,
   handleForm,
   handleOpenDialog,
+  handleReply,
 }) => {
   const classes = useStyles();
   const theme = useTheme();
+  // console.log(comments);
 
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -70,7 +72,7 @@ const CommentList = ({
           comment={comment}
           post_id={post_id}
           handleOpenDialog={handleOpenDialog}
-          showForm={showForm}
+          handleReply={handleReply}
         />
       ))}
     </List>

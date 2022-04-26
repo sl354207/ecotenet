@@ -68,7 +68,7 @@ const ClientDialog = ({
         },
         body: JSON.stringify(submission),
       });
-      handleClose();
+      handleClose("reply");
 
       if (res.ok) {
         if (closeForm) {
@@ -142,7 +142,11 @@ const ClientDialog = ({
       </DialogContent>
 
       <DialogActions className={className}>
-        <Button onClick={handleClose} color="secondary" variant="outlined">
+        <Button
+          onClick={() => handleClose(submission.comment_ref)}
+          color="secondary"
+          variant="outlined"
+        >
           Cancel
         </Button>
         <Button

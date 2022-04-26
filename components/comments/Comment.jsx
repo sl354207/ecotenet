@@ -62,16 +62,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //pass in comment and post id from comments
-const Comment = ({ comment, post_id, handleOpenDialog, showForm }) => {
+const Comment = ({ comment, post_id, handleOpenDialog, handleReply }) => {
   // console.log(comment);
   const classes = useStyles();
 
   // const [value, setValue] = useState("");
 
-  const [reply, setReply] = useState(false);
-  const handleClick = () => {
-    setReply(!reply);
-  };
+  // const [reply, setReply] = useState(false);
+  // const handleClick = () => {
+  //   setReply(!reply);
+  // };
 
   const container = useRef(null);
 
@@ -116,8 +116,14 @@ const Comment = ({ comment, post_id, handleOpenDialog, showForm }) => {
                   // aria-describedby={id}
                   variant="outlined"
                   color="secondary"
-                  onClick={handleClick}
-                  endIcon={reply ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  onClick={
+                    comment.open
+                      ? () => handleReply("close", comment._id)
+                      : () => handleReply("open", comment._id)
+                  }
+                  endIcon={
+                    comment.open ? <ExpandLessIcon /> : <ExpandMoreIcon />
+                  }
                 >
                   reply
                 </Button>
@@ -128,7 +134,7 @@ const Comment = ({ comment, post_id, handleOpenDialog, showForm }) => {
         <CommentForm
           post_id={post_id}
           comment_ref={comment._id}
-          showForm={reply}
+          showForm={comment.open}
           handleOpenDialog={handleOpenDialog}
         />
       </>

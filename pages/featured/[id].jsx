@@ -7,7 +7,7 @@ import { getPostComments } from "../../utils/mongodb";
 // import Link from "next/link";
 
 //do I need to import react
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 // The editor core
 import Editor, { Value } from "@react-page/editor";
@@ -113,6 +113,56 @@ const post = ({ post, comments }) => {
     message: "Post submitted successfully",
   });
 
+  comments.forEach((reply) => {
+    reply.open = false;
+  });
+
+  const reducer = (comments, toggle) => {
+    // console.log(toggle);
+    if (toggle.type == "open") {
+      return comments.map((comment) => {
+        if (comment._id == toggle.payload) {
+          comment.open = true;
+          // console.log(comment.open);
+          // return comment;
+        }
+        // console.log(comment.open);
+        // console.log(comments);
+        return comment;
+      });
+    }
+    if (toggle.type == "close") {
+      return comments.map((comment) => {
+        if (comment._id == toggle.payload) {
+          comment.open = false;
+          // console.log(comment.open);
+          // return comment;
+        }
+        // console.log(comment.open);
+        // console.log(comments);
+        return comment;
+      });
+    }
+    if (toggle.type == "all") {
+      return comments.map((comment) => {
+        comment.open = false;
+        // console.log(comment.open);
+        // return comment;
+
+        // console.log(comment.open);
+        // console.log(comments);
+        return comment;
+      });
+    }
+    // else {
+    // POTENTIALLY ADD ERROR MESSAGE
+    //   return menuItems;
+    // }
+  };
+
+  const [state, dispatch] = useReducer(reducer, comments);
+  // console.log(comments);
+
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
       setSnackbar({ ...snackbar, open: false });
@@ -126,10 +176,22 @@ const post = ({ post, comments }) => {
     setAction(action);
 
     setDialog(true);
+    console.log(action);
+    console.log(result);
+    if (action == "Comment") {
+      dispatch({ type: "open", payload: result.comment_ref });
+    }
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (reply) => {
     setDialog(false);
+    // console.log(comments);
+    if (reply == "reply") {
+      dispatch({ type: "all" });
+    }
+    if (reply && reply !== "reply" && reply !== "") {
+      dispatch({ type: "open", payload: reply });
+    }
   };
 
   const toggleForm = () => {
@@ -137,12 +199,14 @@ const post = ({ post, comments }) => {
   };
   const closeForm = () => {
     setShowForm(false);
-    setReply(false);
+    // setReply(false);
   };
 
-  const [reply, setReply] = useState(false);
-  const handleReply = () => {
-    setReply(!reply);
+  // const [reply, setReply] = useState(false);
+  const handleReply = (toggle, ID) => {
+    // console.log(state);
+    dispatch({ type: toggle, payload: ID });
+    // console.log(dispatch.toggle);
   };
 
   const date = new Date(post.date);
@@ -193,13 +257,17 @@ const post = ({ post, comments }) => {
           Comments:
         </Typography>
         <CommentList
-          comments={comments}
+          comments={state}
           post_id={post._id}
           handleOpenDialog={handleOpenDialog}
           showForm={showForm}
           handleForm={toggleForm}
+          handleReply={handleReply}
         />
       </Container>
+      {/* {state.map((comment) => (
+        <>{comment.name}</>
+      ))} */}
       <ClientDialog
         contentType={action}
         open={dialog}
@@ -242,6 +310,7 @@ export const getStaticProps = async (context) => {
       post: JSON.parse(JSON.stringify(post)),
       comments: JSON.parse(JSON.stringify(comments)),
     },
+    // revalidate: 10,
   };
 };
 
