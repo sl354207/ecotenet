@@ -155,6 +155,18 @@ const getDashboardPosts = async (name, status) => {
   return posts;
 };
 
+const getProfilePosts = async (name, status, approved) => {
+  const { db } = await connectToDatabase();
+
+  const posts = await db
+    .collection("posts")
+    .find({ name: name, status: status, approved: approved })
+    .sort({ count: -1 })
+    .toArray();
+
+  return posts;
+};
+
 // update a post
 const updatePost = async (
   title,
@@ -641,6 +653,24 @@ const deletePerson = async (name) => {
   return deleted;
 };
 
+const createFlag = async (
+  name,
+  flagged,
+  type,
+  text,
+  content_id,
+  ref,
+  status,
+  date
+) => {
+  const { db } = await connectToDatabase();
+
+  const data = { name, flagged, type, text, content_id, ref, status, date };
+  const response = await db.collection("flags").insertOne(data);
+
+  return response;
+};
+
 const getFlags = async () => {
   const { db } = await connectToDatabase();
 
@@ -728,6 +758,7 @@ module.exports = {
   getFeatures,
   getFeatureCandidates,
   getDashboardPosts,
+  getProfilePosts,
   getComments,
   getPostById,
   updatePost,
@@ -749,6 +780,7 @@ module.exports = {
   getPerson,
   updatePerson,
   deletePerson,
+  createFlag,
   getFlags,
   updateFlag,
   createNotification,

@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
   publish: {
     marginLeft: 20,
-    color: theme.palette.secondary.light,
+    // color: theme.palette.secondary.light,
     fontStyle: "italic",
   },
 }));
@@ -86,16 +86,16 @@ const Comment = ({ comment, post_id, handleOpenDialog, handleReply }) => {
                 <Typography
                   className={classes.author}
                   align="center"
-                  variant="h6"
+                  variant="body1"
                 >
-                  <Link href="#" color="secondary">
+                  <Link href={`/person/${comment.name}`} color="secondary">
                     {comment.name}
                   </Link>
                 </Typography>
                 <Typography
                   className={classes.publish}
                   align="left"
-                  variant="h6"
+                  variant="body1"
                 >
                   {comment.updated ? (
                     //
@@ -148,13 +148,17 @@ const Comment = ({ comment, post_id, handleOpenDialog, handleReply }) => {
               <Typography
                 className={classes.author}
                 align="center"
-                variant="h6"
+                variant="body1"
               >
-                <Link href="#" color="secondary">
+                <Link href={`/person/${comment.name}`} color="secondary">
                   {comment.name}
                 </Link>
               </Typography>
-              <Typography className={classes.publish} align="left" variant="h6">
+              <Typography
+                className={classes.publish}
+                align="left"
+                variant="body1"
+              >
                 {comment.updated ? (
                   //
                   <>Updated on {comment.date.toDateString()}</>

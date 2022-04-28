@@ -219,7 +219,7 @@ const post = ({ post, comments }) => {
           <div className={classes.content}>
             <div className={classes.items}>
               <Typography align="center" variant="h6">
-                <Link href="#" color="secondary">
+                <Link href={`/person/${post.name}`} color="secondary">
                   {post.name}
                 </Link>
               </Typography>
@@ -265,9 +265,7 @@ const post = ({ post, comments }) => {
           handleReply={handleReply}
         />
       </Container>
-      {/* {state.map((comment) => (
-        <>{comment.name}</>
-      ))} */}
+
       <ClientDialog
         contentType={action}
         open={dialog}
