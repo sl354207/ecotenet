@@ -1,4 +1,4 @@
-import { updatePerson } from "../../utils/mongodb";
+import { updateDenials } from "../../utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "PUT") {
@@ -6,19 +6,11 @@ export default async function handler(req, res) {
   }
 
   // body must be in same format as database query
-  const { name, bio, email, website, socials, denials, approved } = req.body;
+  const { name, denials } = req.body;
   // console.log(req);
 
   try {
-    const update = await updatePerson(
-      name,
-      bio,
-      email,
-      website,
-      socials,
-      denials,
-      approved
-    );
+    const update = await updateDenials(name, denials);
 
     // console.log(update);
     return res.status(200).json(update);

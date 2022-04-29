@@ -201,13 +201,9 @@ const post = () => {
     list = (
       <>
         {comment_query ? (
-          <Link href="/admin/flags" className={classes.link}>
-            &#10229;Flags
-          </Link>
+          <Link href="/admin/flags">&#10229;Flags</Link>
         ) : (
-          <Link href="/admin/posts" className={classes.link}>
-            &#10229;Posts
-          </Link>
+          <Link href="/admin/posts">&#10229;Posts</Link>
         )}
 
         <Container className={classes.container}>
@@ -236,31 +232,59 @@ const post = () => {
               </Typography>
             </div>
             {!comment_query && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => handleOpenDialog("Approve", "post", post)}
-              >
-                Approve
-              </Button>
+              <>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => handleOpenDialog("Approve", "post", post)}
+                >
+                  Approve
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={() => handleOpenDialog("Deny", "post", post)}
+                >
+                  Deny
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={`${classes.button} ${classes.delete}`}
+                  onClick={() => handleOpenDialog("Delete", "post", post)}
+                >
+                  Delete
+                </Button>
+              </>
             )}
-
-            <Button
-              variant="outlined"
-              color="secondary"
-              className={classes.button}
-              onClick={() => handleOpenDialog("Deny", "post", post)}
-            >
-              Deny
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              className={`${classes.button} ${classes.delete}`}
-              onClick={() => handleOpenDialog("Delete", "post", post)}
-            >
-              Delete
-            </Button>
+            {comment_query == "flag" && (
+              <>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => handleOpenDialog("Approve", "post", post)}
+                >
+                  Resolve
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={() => handleOpenDialog("Deny", "post", post)}
+                >
+                  Deny
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={`${classes.button} ${classes.delete}`}
+                  onClick={() => handleOpenDialog("Delete", "post", post)}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
           </div>
           <EditorLayout>
             <Editor cellPlugins={cellPlugins} value={post} readOnly />
@@ -329,39 +353,5 @@ const post = () => {
     </>
   );
 };
-
-// fetch post data at build time
-// export const getServerSideProps = async (context) => {
-//   // context allows us to fetch specific data points from data such as id
-//   const _id = context.params.id;
-
-//   const post = await getPostById(_id);
-
-//   const comments = await getPostComments(post._id.toString());
-
-//   return {
-//     props: {
-//       post: JSON.parse(JSON.stringify(post)),
-//       comments: JSON.parse(JSON.stringify(comments)),
-//     },
-//   };
-// };
-
-// build routing paths for each post at build time
-// export const getStaticPaths = async () => {
-//   const posts = await getFeatured();
-
-//   // create array of ids of each post in posts
-//   const ids = posts.map((post) => post._id);
-
-//   // create paths array with objects that follow structure given
-//   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
-
-//   // return a path for each post id. If no id return 404
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };
 
 export default post;

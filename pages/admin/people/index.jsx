@@ -21,11 +21,11 @@ import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
 
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
-import AdminDialog from "../../components/dialogs/AdminDialog";
+import AdminDialog from "../../../components/dialogs/AdminDialog";
 
 const drawerWidth = 120;
 
@@ -178,7 +178,7 @@ const adminPeople = () => {
                       </>
                     ))}
                   </Typography>
-                  <Typography>flags: {result.flags}</Typography>
+
                   <Typography>denials: {result.denials}</Typography>
                 </div>
 

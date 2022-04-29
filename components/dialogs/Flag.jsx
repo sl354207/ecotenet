@@ -48,7 +48,7 @@ const Flag = ({ open, handleClose, contentType, result, setSnackbar }) => {
       flagged: result.name ? result.name : "ecotenet",
       type: contentType,
       text: value,
-      content_id: result._id ? result._id : "ecoregion",
+      content_id: result._id,
       ref: result.post_id ? result.post_id : "",
       status: "pending",
       date: new Date().toUTCString(),

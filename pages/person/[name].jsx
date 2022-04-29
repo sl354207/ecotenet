@@ -16,6 +16,7 @@ import {
   Link,
   Container,
   Divider,
+  Snackbar,
 } from "@material-ui/core";
 
 import FlagIcon from "@material-ui/icons/Flag";
@@ -25,6 +26,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import PostList from "../../components/PostList";
 import Flag from "../../components/dialogs/Flag";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -163,10 +165,23 @@ const person = ({ person, posts }) => {
         <Flag
           open={dialog}
           handleClose={() => handleCloseDialog()}
-          contentType="person"
+          contentType="profile"
           result={person}
           setSnackbar={setSnackbar}
         />
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Container>
       <Footer />
     </>

@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
     marginLeft: 60,
     width: "auto",
-    // margin: "10px auto",
+    marginTop: "20px",
 
     borderRadius: "10px",
   },
@@ -159,24 +159,67 @@ const AdminCommentList = ({ comments, comment_query, handleOpenDialog }) => {
                 </div>
 
                 <div className={classes.buttonmobile}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleOpenDialog("Deny", "comment", comment)}
-                  >
-                    Deny
-                  </Button>
+                  {comment._id == comment_query ? (
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() =>
+                          handleOpenDialog("Deny", "comment", comment)
+                        }
+                      >
+                        Resolve
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        className={classes.buttonup}
+                        onClick={() =>
+                          handleOpenDialog("Deny", "comment", comment)
+                        }
+                      >
+                        Deny
+                      </Button>
 
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={classes.buttonup}
-                    onClick={() =>
-                      handleOpenDialog("Delete", "comment", comment)
-                    }
-                  >
-                    Delete
-                  </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        className={classes.buttonup}
+                        onClick={() =>
+                          handleOpenDialog("Delete", "comment", comment)
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      {comment_query !== "flag" && (
+                        <>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() =>
+                              handleOpenDialog("Deny", "comment", comment)
+                            }
+                          >
+                            Deny
+                          </Button>
+
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            className={classes.buttonup}
+                            onClick={() =>
+                              handleOpenDialog("Delete", "comment", comment)
+                            }
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
               </ListItem>
             </>

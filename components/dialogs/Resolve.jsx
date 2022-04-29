@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const AdminDialog = ({
+const Resolve = ({
   open,
   handleClose,
   contentType,
@@ -72,6 +72,7 @@ const AdminDialog = ({
         email: result.email,
         website: result.website,
         socials: result.socials,
+        flags: result.flags,
         denials: action == "Deny" ? result.denials + 1 : result.denials,
         approved: action == "Approve" ? "true" : "false",
       };
@@ -287,4 +288,4 @@ const AdminDialog = ({
   );
 };
 
-export default AdminDialog;
+export default Resolve;

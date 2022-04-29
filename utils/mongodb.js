@@ -597,12 +597,11 @@ const getPerson = async (name) => {
   return person;
 };
 const updatePerson = async (
-  _id,
+  name,
   bio,
   email,
   website,
   socials,
-  flags,
   denials,
   approved
 ) => {
@@ -613,13 +612,31 @@ const updatePerson = async (
     email,
     website,
     socials,
-    flags,
     denials,
     approved,
   };
   const response = await db.collection("people").updateOne(
     {
-      _id: ObjectId(_id),
+      name: name,
+    },
+    { $set: data }
+  );
+
+  return response;
+};
+const updateDenials = async (
+  name,
+
+  denials
+) => {
+  const { db } = await connectToDatabase();
+
+  const data = {
+    denials,
+  };
+  const response = await db.collection("people").updateOne(
+    {
+      name: name,
     },
     { $set: data }
   );
@@ -779,6 +796,7 @@ module.exports = {
   getPeople,
   getPerson,
   updatePerson,
+  updateDenials,
   deletePerson,
   createFlag,
   getFlags,

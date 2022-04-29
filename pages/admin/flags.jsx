@@ -191,45 +191,81 @@ const adminFlags = () => {
                 </div>
 
                 <div className={classes.buttonmobile}>
-                  {result.type == "post" || result.type == "comment" ? (
+                  {result.type == "comment" && (
                     <Button
                       variant="outlined"
                       color="secondary"
-                      href={
-                        result.type == "post"
-                          ? `/admin/posts/${result.content_id}`
-                          : `/admin/posts/${result.ref}?q=${result.content_id}`
-                      }
+                      href={`/admin/posts/${result.ref}?q=${result.content_id}`}
                     >
                       View Post
                     </Button>
-                  ) : (
-                    <Button variant="outlined" color="secondary" disabled>
+                  )}
+                  {result.type == "post" && (
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      href={`/admin/posts/${result.content_id}?q=flag`}
+                    >
                       View Post
                     </Button>
                   )}
 
-                  {result.type == "profile" ? (
+                  {result.type == "profile" && (
                     <Button
                       variant="outlined"
                       color="secondary"
-                      onClick={() => handleOpenDialog("Approve")}
+                      href={`/admin/people/${result.flagged}`}
+                      // onClick={() => handleOpenDialog("Approve")}
                     >
                       View Profile
                     </Button>
-                  ) : (
-                    <Button variant="outlined" color="secondary" disabled>
-                      View Profile
-                    </Button>
                   )}
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={classes.buttonup}
-                    onClick={() => handleResolve(result._id)}
-                  >
-                    Resolve
-                  </Button>
+                  {result.type == "ecoregion" && (
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        href={`/ecoregions/${result.content_id}`}
+                        // CHECK
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        // onClick={() => handleOpenDialog("Approve")}
+                      >
+                        View Page
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        className={classes.buttonup}
+                        onClick={() => handleResolve(result._id)}
+                      >
+                        Resolve
+                      </Button>
+                    </>
+                  )}
+                  {result.type == "species" && (
+                    <>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        href={`/species/${result.content_id}`}
+                        // CHECK
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        // onClick={() => handleOpenDialog("Approve")}
+                      >
+                        View Page
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        className={classes.buttonup}
+                        onClick={() => handleResolve(result._id)}
+                      >
+                        Resolve
+                      </Button>
+                    </>
+                  )}
                 </div>
               </ListItem>
             </>
