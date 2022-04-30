@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Flag = ({ open, handleClose, contentType, result, setSnackbar }) => {
   const classes = useStyles();
-  console.log(result);
+  // console.log(result);
 
   const [value, setValue] = useState();
 

@@ -13,10 +13,15 @@ import {
   Container,
   List,
   ListItem,
+  IconButton,
+  Snackbar,
 } from "@material-ui/core";
+import FlagIcon from "@material-ui/icons/Flag";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { Alert } from "@material-ui/lab";
+import Flag from "../components/dialogs/Flag";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -98,6 +103,21 @@ const useStyles = makeStyles((theme) => ({
     border: "thin solid",
     marginLeft: 10,
   },
+  flagBox: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  spacer: {
+    display: "flex",
+    marginRight: "auto",
+    visibility: "hidden",
+    minWidth: 30,
+  },
+  flag: {
+    display: "flex",
+    marginLeft: "auto",
+    marginTop: "auto",
+  },
 }));
 
 const mammal = ({ mammal, wiki }) => {
@@ -105,6 +125,31 @@ const mammal = ({ mammal, wiki }) => {
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
+
+  const [dialog, setDialog] = useState(false);
+  // console.log(dialog);
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = () => {
+    setDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -211,10 +256,20 @@ const mammal = ({ mammal, wiki }) => {
   return (
     <>
       <Container>
-        {/* <Typography variant="h3" align="center" className={classes.title}>
-        {mammal.Scientific_Name}: {mammal.COMMON_NAME}
-      </Typography> */}
-        <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
+        <div className={classes.flagBox}>
+          <div className={classes.spacer}></div>
+          <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
+          <IconButton
+            className={classes.flag}
+            color="inherit"
+            aria-label="flag"
+            size="small"
+            onClick={() => handleOpenDialog()}
+          >
+            <FlagIcon />
+          </IconButton>
+        </div>
+
         <Typography variant="h6" className={classes.ecoregions}>
           Ecoregions:{" "}
           {mammal.unique_id.map((id) => (
@@ -315,6 +370,26 @@ const mammal = ({ mammal, wiki }) => {
             </List>
           </TabPanel>
         </div>
+        <Flag
+          open={dialog}
+          handleClose={() => handleCloseDialog()}
+          contentType="species"
+          result={mammal}
+          setSnackbar={setSnackbar}
+        />
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Container>
       <Footer />
     </>

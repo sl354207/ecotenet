@@ -31,6 +31,7 @@ import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import AdminDialog from "../../../components/dialogs/AdminDialog";
+import Resolve from "../../../components/dialogs/Resolve";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -111,7 +112,12 @@ const person = () => {
 
   const name = router.query.name;
 
+  const flag = router.query.flag;
+
+  const flagee = router.query.flagee;
+
   const [dialog, setDialog] = useState(false);
+  const [resolve, setResolve] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
 
@@ -140,35 +146,12 @@ const person = () => {
     setDialog(false);
   };
 
-  const handleResolve = async (ID) => {
-    const flag = {
-      _id: ID,
-      status: "resolved",
-    };
+  const handleOpenResolve = () => {
+    setResolve(true);
+  };
 
-    const res = await fetch("/api/updateFlag", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(flag),
-    });
-
-    if (res.ok) {
-      mutate();
-      setSnackbar({
-        open: true,
-        severity: "success",
-        message: "Flag resolved",
-      });
-    }
-    if (!res.ok) {
-      setSnackbar({
-        open: true,
-        severity: "error",
-        message: "There was a problem resolving flag. Please try again later",
-      });
-    }
+  const handleCloseResolve = () => {
+    setResolve(false);
   };
 
   const { data: results } = useSWR(
@@ -194,7 +177,7 @@ const person = () => {
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => handleOpenDialog("Approve", "post", results)}
+          onClick={() => handleOpenResolve()}
         >
           Resolve
         </Button>
@@ -261,6 +244,13 @@ const person = () => {
           handleClose={handleCloseDialog}
           className={classes.dialog}
           result={item}
+          setSnackbar={setSnackbar}
+        />
+        <Resolve
+          open={resolve}
+          handleClose={handleCloseResolve}
+          name={flagee}
+          ID={flag}
           setSnackbar={setSnackbar}
         />
         <Snackbar

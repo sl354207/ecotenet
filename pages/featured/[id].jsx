@@ -41,8 +41,9 @@ import {
   Snackbar,
 } from "@material-ui/core";
 
+import FlagIcon from "@material-ui/icons/Flag";
+
 import Vote from "../../components/Vote";
-import Nav from "../../components/Nav";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../../components/Header";
@@ -50,6 +51,7 @@ import Footer from "../../components/Footer";
 import CommentList from "../../components/comments/CommentList";
 import ClientDialog from "../../components/dialogs/ClientDialog";
 import { Alert } from "@material-ui/lab";
+import Flag from "../../components/dialogs/Flag";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -87,6 +89,21 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     backgroundColor: theme.palette.primary.light,
   },
+  flagBox: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  spacer: {
+    display: "flex",
+    marginRight: "auto",
+    visibility: "hidden",
+    minWidth: 30,
+  },
+  flag: {
+    display: "flex",
+    marginLeft: "auto",
+    marginTop: "auto",
+  },
 }));
 
 // Define which plugins we want to use.
@@ -102,6 +119,7 @@ const post = ({ post, comments }) => {
   const [count, setCount] = useState(post.count);
 
   const [dialog, setDialog] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [action, setAction] = useState("");
   const [item, setItem] = useState("");
 
@@ -202,6 +220,16 @@ const post = ({ post, comments }) => {
     // setReply(false);
   };
 
+  const handleOpenFlag = (action, result) => {
+    setItem(result);
+    setAction(action);
+    setFlag(true);
+  };
+
+  const handleCloseFlag = () => {
+    setFlag(false);
+  };
+
   // const [reply, setReply] = useState(false);
   const handleReply = (toggle, ID) => {
     // console.log(state);
@@ -214,7 +242,19 @@ const post = ({ post, comments }) => {
   return (
     <>
       <Container className={classes.container}>
-        <Header title={post.title} />
+        <div className={classes.flagBox}>
+          <div className={classes.spacer}></div>
+          <Header title={post.title} />
+          <IconButton
+            className={classes.flag}
+            color="inherit"
+            aria-label="flag"
+            size="small"
+            onClick={() => handleOpenFlag("post", post)}
+          >
+            <FlagIcon />
+          </IconButton>
+        </div>
         <div className={classes.description}>
           <div className={classes.content}>
             <div className={classes.items}>
@@ -260,6 +300,7 @@ const post = ({ post, comments }) => {
           comments={state}
           post_id={post._id}
           handleOpenDialog={handleOpenDialog}
+          handleOpenFlag={handleOpenFlag}
           showForm={showForm}
           handleForm={toggleForm}
           handleReply={handleReply}
@@ -275,6 +316,13 @@ const post = ({ post, comments }) => {
         result={item}
         setSnackbar={setSnackbar}
         closeForm={closeForm}
+      />
+      <Flag
+        open={flag}
+        handleClose={handleCloseFlag}
+        contentType={action}
+        result={item}
+        setSnackbar={setSnackbar}
       />
       <Snackbar
         anchorOrigin={{

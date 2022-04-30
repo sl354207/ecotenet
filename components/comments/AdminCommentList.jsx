@@ -108,7 +108,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //pass in comments and post id from parent post
-const AdminCommentList = ({ comments, comment_query, handleOpenDialog }) => {
+const AdminCommentList = ({
+  comments,
+  comment_query,
+  handleOpenDialog,
+  handleOpenResolve,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -164,9 +169,7 @@ const AdminCommentList = ({ comments, comment_query, handleOpenDialog }) => {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={() =>
-                          handleOpenDialog("Deny", "comment", comment)
-                        }
+                        onClick={() => handleOpenResolve()}
                       >
                         Resolve
                       </Button>

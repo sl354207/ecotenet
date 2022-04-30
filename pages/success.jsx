@@ -8,11 +8,17 @@ import {
   Typography,
   Container,
   Link,
+  IconButton,
+  Snackbar,
 } from "@material-ui/core";
+import FlagIcon from "@material-ui/icons/Flag";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { Alert } from "@material-ui/lab";
+import Flag from "../components/dialogs/Flag";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -36,11 +42,52 @@ const useStyles = makeStyles((theme) => ({
   description: {
     marginBottom: 40,
   },
+  flagBox: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  spacer: {
+    display: "flex",
+    marginRight: "auto",
+    visibility: "hidden",
+    minWidth: 30,
+  },
+  flag: {
+    display: "flex",
+    marginLeft: "auto",
+    marginTop: "auto",
+    marginBottom: "auto",
+  },
 }));
 
 const success = ({ wiki }) => {
   const classes = useStyles();
   const theme = useTheme();
+
+  const [dialog, setDialog] = useState(false);
+  // console.log(dialog);
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = () => {
+    setDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
 
   const options = {
     replace: (domNode) => {
@@ -143,13 +190,23 @@ const success = ({ wiki }) => {
   return (
     <>
       <Container>
-        {/* <Typography variant="h3" align="center" className={classes.title}>
-        Eco-313: Appalachian mixed mesophytic forests
-      </Typography> */}
-        <Header
-          title="Eco-313: Appalachian mixed mesophytic forests"
-          className={classes.description}
-        />
+        <div className={classes.flagBox}>
+          <div className={classes.spacer}></div>
+          <Header
+            title="Eco-313: Appalachian mixed mesophytic forests"
+            className={classes.description}
+          />
+          <IconButton
+            className={classes.flag}
+            color="inherit"
+            aria-label="flag"
+            size="small"
+            onClick={() => handleOpenDialog()}
+          >
+            <FlagIcon />
+          </IconButton>
+        </div>
+
         {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
         {wiki.remaining.sections.map((section) => {
           if (section.anchor == "Gallery") {
@@ -170,6 +227,27 @@ const success = ({ wiki }) => {
             );
           }
         })}
+        {/* UPDATE */}
+        <Flag
+          open={dialog}
+          handleClose={() => handleCloseDialog()}
+          contentType="ecoregion"
+          result={{ _id: "test" }}
+          setSnackbar={setSnackbar}
+        />
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </Container>
       <Footer />
     </>

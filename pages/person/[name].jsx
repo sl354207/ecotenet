@@ -80,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
   flag: {
     display: "flex",
     marginLeft: "auto",
+    marginTop: "auto",
   },
 }));
 

@@ -25,6 +25,7 @@ import Header from "../../components/Header";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
+import Resolve from "../../components/dialogs/Resolve";
 
 const drawerWidth = 120;
 
@@ -101,7 +102,7 @@ const adminFlags = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [dialog, setDialog] = useState(false);
-  const [action, setAction] = useState("");
+  const [action, setAction] = useState({ name: "", ID: "" });
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -117,40 +118,13 @@ const adminFlags = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const handleOpenDialog = (action) => {
+  const handleOpenResolve = (name, ID) => {
     setDialog(true);
-    setAction(action);
+    setAction({ name: name, ID: ID });
   };
 
-  const handleResolve = async (ID) => {
-    const flag = {
-      _id: ID,
-      status: "resolved",
-    };
-
-    const res = await fetch("/api/updateFlag", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(flag),
-    });
-
-    if (res.ok) {
-      mutate();
-      setSnackbar({
-        open: true,
-        severity: "success",
-        message: "Flag resolved",
-      });
-    }
-    if (!res.ok) {
-      setSnackbar({
-        open: true,
-        severity: "error",
-        message: "There was a problem resolving flag. Please try again later",
-      });
-    }
+  const handleCloseResolve = () => {
+    setDialog(false);
   };
 
   const { data: results, mutate } = useSWR("/api/getFlags", fetcher);
@@ -195,7 +169,7 @@ const adminFlags = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      href={`/admin/posts/${result.ref}?q=${result.content_id}`}
+                      href={`/admin/posts/${result.ref}?q=${result.content_id}&flag=${result._id}&flagee=${result.name}`}
                     >
                       View Post
                     </Button>
@@ -204,7 +178,7 @@ const adminFlags = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      href={`/admin/posts/${result.content_id}?q=flag`}
+                      href={`/admin/posts/${result.content_id}?q=flag&flag=${result._id}&flagee=${result.name}`}
                     >
                       View Post
                     </Button>
@@ -214,7 +188,7 @@ const adminFlags = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      href={`/admin/people/${result.flagged}`}
+                      href={`/admin/people/${result.flagged}?flag=${result._id}&flagee=${result.name}`}
                       // onClick={() => handleOpenDialog("Approve")}
                     >
                       View Profile
@@ -237,7 +211,9 @@ const adminFlags = () => {
                         variant="outlined"
                         color="secondary"
                         className={classes.buttonup}
-                        onClick={() => handleResolve(result._id)}
+                        onClick={() =>
+                          handleOpenResolve(result.name, result._id)
+                        }
                       >
                         Resolve
                       </Button>
@@ -260,7 +236,9 @@ const adminFlags = () => {
                         variant="outlined"
                         color="secondary"
                         className={classes.buttonup}
-                        onClick={() => handleResolve(result._id)}
+                        onClick={() =>
+                          handleOpenResolve(result.name, result._id)
+                        }
                       >
                         Resolve
                       </Button>
@@ -325,6 +303,14 @@ const adminFlags = () => {
       <div className={classes.content}>
         <Header title="Flags" />
         {list}
+        <Resolve
+          open={dialog}
+          handleClose={handleCloseResolve}
+          name={action.name}
+          ID={action.ID}
+          setSnackbar={setSnackbar}
+          mutate={mutate}
+        />
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",

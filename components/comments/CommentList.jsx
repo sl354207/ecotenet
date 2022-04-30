@@ -26,6 +26,7 @@ const CommentList = ({
   showForm,
   handleForm,
   handleOpenDialog,
+  handleOpenFlag,
   handleReply,
 }) => {
   const classes = useStyles();
@@ -72,6 +73,7 @@ const CommentList = ({
           comment={comment}
           post_id={post_id}
           handleOpenDialog={handleOpenDialog}
+          handleOpenFlag={handleOpenFlag}
           handleReply={handleReply}
         />
       ))}

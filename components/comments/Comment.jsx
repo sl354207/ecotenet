@@ -1,6 +1,15 @@
 import { useState, useRef } from "react";
 import CommentForm from "./CommentForm";
-import { Button, Typography, ListItem, Link } from "@material-ui/core";
+import {
+  Button,
+  Typography,
+  ListItem,
+  Link,
+  IconButton,
+} from "@material-ui/core";
+
+import FlagIcon from "@material-ui/icons/Flag";
+
 import {
   alpha,
   makeStyles,
@@ -59,10 +68,19 @@ const useStyles = makeStyles((theme) => ({
     // color: theme.palette.secondary.light,
     fontStyle: "italic",
   },
+  flag: {
+    marginLeft: 10,
+  },
 }));
 
 //pass in comment and post id from comments
-const Comment = ({ comment, post_id, handleOpenDialog, handleReply }) => {
+const Comment = ({
+  comment,
+  post_id,
+  handleOpenDialog,
+  handleOpenFlag,
+  handleReply,
+}) => {
   // console.log(comment);
   const classes = useStyles();
 
@@ -129,6 +147,15 @@ const Comment = ({ comment, post_id, handleOpenDialog, handleReply }) => {
                 </Button>
               </>
             )}
+            <IconButton
+              className={classes.flag}
+              color="inherit"
+              aria-label="flag"
+              size="small"
+              onClick={() => handleOpenFlag("comment", comment)}
+            >
+              <FlagIcon />
+            </IconButton>
           </div>
         </ListItem>
         <CommentForm
@@ -170,6 +197,15 @@ const Comment = ({ comment, post_id, handleOpenDialog, handleReply }) => {
             </div>
             <Typography variant="h6">{comment.text}</Typography>
           </div>
+          <IconButton
+            className={classes.flag}
+            color="inherit"
+            aria-label="flag"
+            size="small"
+            onClick={() => handleOpenFlag("comment", comment)}
+          >
+            <FlagIcon />
+          </IconButton>
         </div>
       </ListItem>
     );

@@ -316,7 +316,7 @@ export default function Dashboard() {
       _id: ID,
       viewed: true,
     };
-    console.log(notify);
+    // console.log(notify);
 
     const res = await fetch("/api/updateNotification", {
       method: "PUT",
@@ -878,6 +878,15 @@ export default function Dashboard() {
                           >
                             {result.text}
                           </Typography>
+                          {result.add_info && (
+                            <Typography
+                              variant="body1"
+                              align="left"
+                              color="textPrimary"
+                            >
+                              additional info: {result.add_info}
+                            </Typography>
+                          )}
                         </div>
 
                         <div className={classes.buttongroup}>

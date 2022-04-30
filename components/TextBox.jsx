@@ -23,7 +23,6 @@ const TextInput = withStyles((theme) => ({
 const TextBox = ({
   id,
   handleChange,
-  handleSubmit,
   defaultValue,
   placeHolder,
   rows,

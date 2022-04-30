@@ -10,10 +10,79 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Portal,
+  InputLabel,
 } from "@material-ui/core";
 
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+
+import { alpha, makeStyles } from "@material-ui/core/styles";
+
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import TextBox from "../TextBox";
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+    borderRadius: 4,
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.primary.light,
+  },
+  item: {
+    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+    borderRadius: 4,
+  },
+  reply: {
+    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+    borderRadius: 4,
+    marginLeft: 60,
+    width: "auto",
+    // margin: "10px auto",
+  },
+  comment: {
+    display: "flex",
+    // marginTop: 10,
+    alignItems: "center",
+  },
+  description: {
+    display: "flex",
+    // justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
+  },
+  content: {
+    // display: "flex",
+    // flexDirection: "column",
+    // maxWidth: 800,
+    flexGrow: 1,
+    // marginLeft: 20,
+  },
+  items: {
+    // display: "flex",
+    flexGrow: 1,
+  },
+
+  publish: {
+    marginLeft: 20,
+    color: theme.palette.secondary.light,
+    fontStyle: "italic",
+  },
+  addition: {
+    display: "block",
+  },
+  submit: {
+    marginLeft: 10,
+  },
+  info: {
+    // marginLeft: 60,
+    padding: "5px 0px 10px 0px",
+  },
+  button: {
+    marginTop: 18,
+  },
+}));
 
 const AdminDialog = ({
   open,
@@ -25,6 +94,8 @@ const AdminDialog = ({
   setSnackbar,
   mutate,
 }) => {
+  const classes = useStyles();
+
   let endpoint;
   let item;
   let submission;
@@ -82,8 +153,18 @@ const AdminDialog = ({
 
   const [reason, setReason] = useState("language");
 
-  const handleChange = (event) => {
+  const [addInfo, setAddInfo] = useState("");
+
+  const [showForm, setShowForm] = useState(false);
+
+  const container = useRef(null);
+
+  const handleReasonChange = (event) => {
     setReason(event.target.value);
+  };
+
+  const handleInfoChange = (event) => {
+    setAddInfo(event.target.value);
   };
 
   const handleSubmit = async () => {
@@ -104,6 +185,7 @@ const AdminDialog = ({
           name: result.name,
           reason: reason,
           text: `a ${item} of yours was deleted for a ${reason} violation`,
+          add_info: addInfo,
           ref: result._id,
           date: new Date().toUTCString(),
           viewed: false,
@@ -158,6 +240,7 @@ const AdminDialog = ({
             name: result.name,
             reason: reason,
             text: `a ${item} of yours was denied for a ${reason} violation`,
+            add_info: addInfo,
             ref: result._id,
             date: new Date().toUTCString(),
             viewed: false,
@@ -252,7 +335,7 @@ const AdminDialog = ({
               aria-label="reason"
               name="reason"
               value={reason}
-              onChange={handleChange}
+              onChange={handleReasonChange}
               row
             >
               <FormControlLabel
@@ -268,6 +351,36 @@ const AdminDialog = ({
               />
             </RadioGroup>
           </FormControl>
+          <Button
+            variant="outlined"
+            color="secondary"
+            className={classes.button}
+            onClick={() => setShowForm(!showForm)}
+            endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          >
+            Add Info
+          </Button>
+          <div className={classes.addition} disableGutters>
+            {showForm ? (
+              <Portal container={container.current}>
+                <FormControl className={classes.items}>
+                  <InputLabel shrink htmlFor="commentform"></InputLabel>
+                  <TextBox
+                    id="info"
+                    handleChange={handleInfoChange}
+                    defaultValue=""
+                    placeHolder="additional comment on notification"
+                    rows={1}
+                    className={classes.info}
+                    autoFocus={false}
+                    name="info"
+                  />
+                </FormControl>
+              </Portal>
+            ) : null}
+
+            <div ref={container} className={classes.comment} />
+          </div>
         </DialogContent>
       )}
 

@@ -716,10 +716,18 @@ const updateFlag = async (_id, status) => {
   return response;
 };
 
-const createNotification = async (name, reason, text, ref, date, viewed) => {
+const createNotification = async (
+  name,
+  reason,
+  text,
+  add_info,
+  ref,
+  date,
+  viewed
+) => {
   const { db } = await connectToDatabase();
 
-  const data = { name, reason, text, ref, date, viewed };
+  const data = { name, reason, text, add_info, ref, date, viewed };
   const response = await db.collection("notifications").insertOne(data);
 
   return response;

@@ -45,6 +45,7 @@ import customImage from "../../../plugins/customImage";
 
 import AdminDialog from "../../../components/dialogs/AdminDialog";
 import AdminCommentList from "../../../components/comments/AdminCommentList";
+import Resolve from "../../../components/dialogs/Resolve";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -145,9 +146,13 @@ const post = () => {
 
   const ID = router.query.id;
   const comment_query = router.query.q;
+  const flag = router.query.flag;
+
+  const flagee = router.query.flagee;
   //   console.log(ID);
 
   const [dialog, setDialog] = useState(false);
+  const [resolve, setResolve] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
 
@@ -176,9 +181,17 @@ const post = () => {
     setDialog(false);
   };
 
+  const handleOpenResolve = () => {
+    setResolve(true);
+  };
+
+  const handleCloseResolve = () => {
+    setResolve(false);
+  };
+
   const { data: post } = useSWR(ID ? `/api/getposts/${ID}` : null, fetcher);
 
-  const { data: comments } = useSWR(
+  const { data: comments, mutate } = useSWR(
     comment_query ? `/api/getPostComments?q=${ID}` : null,
     fetcher
   );
@@ -263,7 +276,7 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  onClick={() => handleOpenDialog("Approve", "post", post)}
+                  onClick={() => handleOpenResolve()}
                 >
                   Resolve
                 </Button>
@@ -318,7 +331,7 @@ const post = () => {
         comments={comments}
         comment_query={comment_query}
         handleOpenDialog={handleOpenDialog}
-        setItem={setItem}
+        handleOpenResolve={handleOpenResolve}
       />
     );
   }
@@ -336,6 +349,15 @@ const post = () => {
         className={classes.dialog}
         result={item}
         setSnackbar={setSnackbar}
+        mutate={mutate}
+      />
+      <Resolve
+        open={resolve}
+        handleClose={handleCloseResolve}
+        name={flagee}
+        ID={flag}
+        setSnackbar={setSnackbar}
+        mutate={mutate}
       />
       <Snackbar
         anchorOrigin={{

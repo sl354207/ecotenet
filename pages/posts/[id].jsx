@@ -7,7 +7,7 @@ import { getPostComments } from "../../utils/mongodb";
 // import Link from "next/link";
 
 //do I need to import react
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 // The editor core
 import Editor, { Value } from "@react-page/editor";
@@ -38,15 +38,20 @@ import {
   Link,
   Container,
   Divider,
+  Snackbar,
 } from "@material-ui/core";
 
+import FlagIcon from "@material-ui/icons/Flag";
+
 import Vote from "../../components/Vote";
-import Nav from "../../components/Nav";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CommentList from "../../components/comments/CommentList";
+import ClientDialog from "../../components/dialogs/ClientDialog";
+import { Alert } from "@material-ui/lab";
+import Flag from "../../components/dialogs/Flag";
 
 const useStyles = makeStyles((theme) => ({
   description: {
@@ -81,6 +86,24 @@ const useStyles = makeStyles((theme) => ({
   commentsection: {
     marginTop: 20,
   },
+  dialog: {
+    backgroundColor: theme.palette.primary.light,
+  },
+  flagBox: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  spacer: {
+    display: "flex",
+    marginRight: "auto",
+    visibility: "hidden",
+    minWidth: 30,
+  },
+  flag: {
+    display: "flex",
+    marginLeft: "auto",
+    marginTop: "auto",
+  },
 }));
 
 // Define which plugins we want to use.
@@ -92,16 +115,146 @@ const post = ({ post, comments }) => {
   // set post as value of editor
   const [value, setValue] = useState(post);
 
+  //set count value for post
+  const [count, setCount] = useState(post.count);
+
+  const [dialog, setDialog] = useState(false);
+  const [flag, setFlag] = useState(false);
+  const [action, setAction] = useState("");
+  const [item, setItem] = useState("");
+
+  const [showForm, setShowForm] = useState(false);
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  comments.forEach((reply) => {
+    reply.open = false;
+  });
+
+  const reducer = (comments, toggle) => {
+    // console.log(toggle);
+    if (toggle.type == "open") {
+      return comments.map((comment) => {
+        if (comment._id == toggle.payload) {
+          comment.open = true;
+          // console.log(comment.open);
+          // return comment;
+        }
+        // console.log(comment.open);
+        // console.log(comments);
+        return comment;
+      });
+    }
+    if (toggle.type == "close") {
+      return comments.map((comment) => {
+        if (comment._id == toggle.payload) {
+          comment.open = false;
+          // console.log(comment.open);
+          // return comment;
+        }
+        // console.log(comment.open);
+        // console.log(comments);
+        return comment;
+      });
+    }
+    if (toggle.type == "all") {
+      return comments.map((comment) => {
+        comment.open = false;
+        // console.log(comment.open);
+        // return comment;
+
+        // console.log(comment.open);
+        // console.log(comments);
+        return comment;
+      });
+    }
+    // else {
+    // POTENTIALLY ADD ERROR MESSAGE
+    //   return menuItems;
+    // }
+  };
+
+  const [state, dispatch] = useReducer(reducer, comments);
+  // console.log(comments);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const handleOpenDialog = (action, result) => {
+    setItem(result);
+    setAction(action);
+
+    setDialog(true);
+    console.log(action);
+    console.log(result);
+    if (action == "Comment") {
+      dispatch({ type: "open", payload: result.comment_ref });
+    }
+  };
+
+  const handleCloseDialog = (reply) => {
+    setDialog(false);
+    // console.log(comments);
+    if (reply == "reply") {
+      dispatch({ type: "all" });
+    }
+    if (reply && reply !== "reply" && reply !== "") {
+      dispatch({ type: "open", payload: reply });
+    }
+  };
+
+  const toggleForm = () => {
+    setShowForm(!showForm);
+  };
+  const closeForm = () => {
+    setShowForm(false);
+    // setReply(false);
+  };
+
+  const handleOpenFlag = (action, result) => {
+    setItem(result);
+    setAction(action);
+    setFlag(true);
+  };
+
+  const handleCloseFlag = () => {
+    setFlag(false);
+  };
+
+  // const [reply, setReply] = useState(false);
+  const handleReply = (toggle, ID) => {
+    // console.log(state);
+    dispatch({ type: toggle, payload: ID });
+    // console.log(dispatch.toggle);
+  };
+
   const date = new Date(post.date);
 
   return (
     <>
       <Container className={classes.container}>
-        {/* <Nav /> */}
-        {/* <Typography align="center" variant="h4" className={classes.title}>
-        {post.title}
-      </Typography> */}
-        <Header title={post.title} />
+        <div className={classes.flagBox}>
+          <div className={classes.spacer}></div>
+          <Header title={post.title} />
+          <IconButton
+            className={classes.flag}
+            color="inherit"
+            aria-label="flag"
+            size="small"
+            onClick={() => handleOpenFlag("post", post)}
+          >
+            <FlagIcon />
+          </IconButton>
+        </div>
         <div className={classes.description}>
           <div className={classes.content}>
             <div className={classes.items}>
@@ -124,7 +277,12 @@ const post = ({ post, comments }) => {
             </Typography>
           </div>
 
-          <Vote counter={post.count} />
+          <Vote
+            post_count={post.count}
+            count={count}
+            setCount={setCount}
+            handleOpenDialog={handleOpenDialog}
+          />
         </div>
         <EditorLayout>
           <Editor
@@ -138,8 +296,47 @@ const post = ({ post, comments }) => {
         <Typography variant="h6" className={classes.commentsection}>
           Comments:
         </Typography>
-        <CommentList comments={comments} post_id={post._id} />
+        <CommentList
+          comments={state}
+          post_id={post._id}
+          handleOpenDialog={handleOpenDialog}
+          handleOpenFlag={handleOpenFlag}
+          showForm={showForm}
+          handleForm={toggleForm}
+          handleReply={handleReply}
+        />
       </Container>
+
+      <ClientDialog
+        contentType={action}
+        open={dialog}
+        handleClose={handleCloseDialog}
+        className={classes.dialog}
+        post_id={post._id}
+        result={item}
+        setSnackbar={setSnackbar}
+        closeForm={closeForm}
+      />
+      <Flag
+        open={flag}
+        handleClose={handleCloseFlag}
+        contentType={action}
+        result={item}
+        setSnackbar={setSnackbar}
+      />
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
       <Footer />
     </>
   );
