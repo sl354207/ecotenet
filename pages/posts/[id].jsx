@@ -1,16 +1,10 @@
-// import Meta from "../../components/Meta";
-
-// import { getPosts } from "../../utils/mongodb";
 import { getPostById } from "../../utils/mongodb";
 import { getPostComments } from "../../utils/mongodb";
 
-// import Link from "next/link";
-
-//do I need to import react
 import { useReducer, useState } from "react";
 
 // The editor core
-import Editor, { Value } from "@react-page/editor";
+import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 
 import slate from "@react-page/plugins-slate";
@@ -32,7 +26,6 @@ import customImage from "../../plugins/customImage";
 import EditorLayout from "../../components/EditorLayout";
 
 import {
-  Button,
   IconButton,
   Typography,
   Link,
@@ -45,7 +38,7 @@ import FlagIcon from "@material-ui/icons/Flag";
 
 import Vote from "../../components/Vote";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CommentList from "../../components/comments/CommentList";
@@ -54,13 +47,12 @@ import { Alert } from "@material-ui/lab";
 import Flag from "../../components/dialogs/Flag";
 
 const useStyles = makeStyles((theme) => ({
-  description: {
+  box: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   content: {
-    // display: "flex",
     flexDirection: "column",
     maxWidth: 800,
     flexGrow: 1,
@@ -68,28 +60,21 @@ const useStyles = makeStyles((theme) => ({
   },
   items: {
     display: "flex",
-    // flexGrow: 1,
   },
-
-  publish: {
+  date: {
     marginLeft: 20,
-    // color: theme.palette.secondary.light,
     fontStyle: "italic",
   },
   container: {
     backgroundColor: theme.palette.primary.main,
-    // marginTop: "20px",
   },
-  title: {
-    paddingTop: "40px",
-  },
-  commentsection: {
+  comments: {
     marginTop: 20,
   },
   dialog: {
     backgroundColor: theme.palette.primary.light,
   },
-  flagBox: {
+  flagbox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -242,7 +227,7 @@ const post = ({ post, comments }) => {
   return (
     <>
       <Container className={classes.container}>
-        <div className={classes.flagBox}>
+        <div className={classes.flagbox}>
           <div className={classes.spacer}></div>
           <Header title={post.title} />
           <IconButton
@@ -255,7 +240,7 @@ const post = ({ post, comments }) => {
             <FlagIcon />
           </IconButton>
         </div>
-        <div className={classes.description}>
+        <div className={classes.box}>
           <div className={classes.content}>
             <div className={classes.items}>
               <Typography align="center" variant="h6">
@@ -263,7 +248,7 @@ const post = ({ post, comments }) => {
                   {post.name}
                 </Link>
               </Typography>
-              <Typography className={classes.publish} align="left" variant="h6">
+              <Typography className={classes.date} align="left" variant="h6">
                 {date.toDateString()}
               </Typography>
             </div>
@@ -293,7 +278,7 @@ const post = ({ post, comments }) => {
           />
         </EditorLayout>
         <Divider />
-        <Typography variant="h6" className={classes.commentsection}>
+        <Typography variant="h6" className={classes.comments}>
           Comments:
         </Typography>
         <CommentList
@@ -358,22 +343,5 @@ export const getServerSideProps = async (context) => {
     },
   };
 };
-
-// build routing paths for each post at build time
-// export const getStaticPaths = async () => {
-//   const posts = await getFeatured();
-
-//   // create array of ids of each post in posts
-//   const ids = posts.map((post) => post._id);
-
-//   // create paths array with objects that follow structure given
-//   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
-
-//   // return a path for each post id. If no id return 404
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };
 
 export default post;

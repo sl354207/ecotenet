@@ -1,18 +1,14 @@
-import useSWR from "swr";
-import { useRouter } from "next/router";
-import { useState, useCallback, useReducer } from "react";
-import dynamic from "next/dynamic";
+import { useState, useReducer } from "react";
 import MapSpecies from "../components/maps/MapSpecies";
 
 import {
   Container,
   Typography,
-  InputBase,
   useMediaQuery,
   Chip,
   TextField,
 } from "@material-ui/core";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { Autocomplete } from "@material-ui/lab";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../components/Header";
@@ -20,39 +16,8 @@ import Description from "../components/Description";
 import Footer from "../components/Footer";
 
 const useStyles = makeStyles((theme) => ({
-  subheader: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    // flexShrink: 1,
-    flexWrap: "wrap",
-    justifyContent: "center",
-    top: 60,
-    marginTop: 20,
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-    // position: "sticky",
-    // width: "100%",
-    // maxWidth: 36,
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  sublist: {
-    display: "flex",
-
-    justifyContent: "center",
-    // flexShrink: 1,
-    // flexWrap: "wrap",
-
-    // width: "100%",
-    // maxWidth: 36,
-  },
-  header: {
-    marginTop: 20,
-  },
-
   search: {
     position: "relative",
-    // border: "2px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.light,
@@ -62,21 +27,13 @@ const useStyles = makeStyles((theme) => ({
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-    // "&:hover": {
-    //   // backgroundColor: alpha(theme.palette.common.white, 0.25),
-    //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    //   outline: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    // },
-    // marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
+
     marginTop: 20,
     marginBottom: 20,
     marginLeft: theme.spacing(1),
     width: "auto",
-    // },
   },
-  inputRoot: {
+  root: {
     color: theme.palette.text.primary,
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
@@ -90,29 +47,10 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  inputInput: {
-    padding: theme.spacing(2, 2, 2, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(2)}px)`,
-    // transition: theme.transitions.create("width"),
-    // width: "100%",
-    // [theme.breakpoints.up("xs")]: {
-    //   width: "0ch",
-    //   "&:focus": {
-    //     width: "20ch",
-    //   },
-    // },
-  },
-
   popper: {
     backgroundColor: theme.palette.primary.light,
   },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  chipDelete: {
+  delete: {
     WebkitTapHighlightColor: "transparent",
     color: theme.palette.secondary.main,
     height: 22,
@@ -126,27 +64,25 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     borderWidth: 2,
     color: theme.palette.text.primary,
-    // fontSize: 16,
     height: 40,
     margin: "0px 5px 10px 5px",
   },
-  chipHidden: {
+  hidden: {
     visibility: "hidden",
   },
-  chipMobile: {
+  mobile: {
     display: "inline-grid",
   },
-  chipOutline1: {
+  outline1: {
     borderColor: "#ff00ff",
   },
-  chipOutline2: {
+  outline2: {
     borderColor: "#ffff00",
   },
-  chipOutline3: {
+  outline3: {
     borderColor: "#00ffff",
   },
   descriptionMargin: {
-    // marginTop: 20,
     marginLeft: 10,
   },
   note: {
@@ -354,15 +290,8 @@ const species = () => {
   return (
     <>
       <Container>
-        {/* <Typography variant="h4" align="center" className={classes.header}>
-        Species Map
-      </Typography> */}
         <Header title="Species Map" />
-        {/* <Typography variant="body1" align="left" className={classes.description}>
-        Search for a species by common or scientific name to display their
-        distribution on the map. A maximum of three species can be mapped at the
-        same time
-      </Typography> */}
+
         <Description
           description=" Search for a species by common or scientific name to display their
         distribution on the map. A maximum of three species can be mapped at the
@@ -379,7 +308,6 @@ const species = () => {
           selectOnFocus
           clearOnBlur
           blurOnSelect
-          // clearText="Clear"
           handleHomeEndKeys
           id="free-solo-with-text-demo"
           options={
@@ -391,14 +319,13 @@ const species = () => {
           }
           filterOptions={(x) => x}
           freeSolo
-          // closeIcon
           renderInput={(params) => (
             <TextField
               {...params}
               placeholder="Search…"
               variant="outlined"
               classes={{
-                root: classes.inputRoot,
+                root: classes.root,
               }}
               ref={params.InputProps.ref}
               inputProps={params.inputProps}
@@ -407,29 +334,28 @@ const species = () => {
           )}
         />
         {isMobile ? (
-          <div className={classes.chipMobile}>
+          <div className={classes.mobile}>
             {Array.isArray(state[1].regions) && state[1].regions.length ? (
               <Chip
                 label={`${state[1].scientific_name} - ${state[1].common_name}`}
                 onDelete={() => handleRemoveChip(1)}
                 variant="outlined"
-                // color="secondary"
-                className={`${classes.chipOutline1} ${classes.chip}`}
+                className={`${classes.outline1} ${classes.chip}`}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
               ></Chip>
             ) : (
-              <Chip className={classes.chipHidden}></Chip>
+              <Chip className={classes.hidden}></Chip>
             )}
             {Array.isArray(state[2].regions) && state[2].regions.length ? (
               <Chip
                 label={`${state[2].scientific_name} - ${state[2].common_name}`}
                 onDelete={() => handleRemoveChip(2)}
                 variant="outlined"
-                className={`${classes.chipOutline2} ${classes.chip}`}
+                className={`${classes.outline2} ${classes.chip}`}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
               ></Chip>
             ) : (
@@ -440,9 +366,9 @@ const species = () => {
                 label={`${state[3].scientific_name} - ${state[3].common_name}`}
                 onDelete={() => handleRemoveChip(3)}
                 variant="outlined"
-                className={`${classes.chipOutline3} ${classes.chip}`}
+                className={`${classes.outline3} ${classes.chip}`}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
               ></Chip>
             ) : (
@@ -457,22 +383,22 @@ const species = () => {
                 onDelete={() => handleRemoveChip(1)}
                 variant="outlined"
                 // color="secondary"
-                className={`${classes.chipOutline1} ${classes.chip}`}
+                className={`${classes.outline1} ${classes.chip}`}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
               ></Chip>
             ) : (
-              <Chip className={classes.chipHidden}></Chip>
+              <Chip className={classes.hidden}></Chip>
             )}
             {Array.isArray(state[2].regions) && state[2].regions.length ? (
               <Chip
                 label={`${state[2].scientific_name} - ${state[2].common_name}`}
                 onDelete={() => handleRemoveChip(2)}
                 variant="outlined"
-                className={`${classes.chipOutline2} ${classes.chip}`}
+                className={`${classes.outline2} ${classes.chip}`}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
               ></Chip>
             ) : (
@@ -483,9 +409,9 @@ const species = () => {
                 label={`${state[3].scientific_name} - ${state[3].common_name}`}
                 onDelete={() => handleRemoveChip(3)}
                 variant="outlined"
-                className={`${classes.chipOutline3} ${classes.chip}`}
+                className={`${classes.outline3} ${classes.chip}`}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
               ></Chip>
             ) : (
@@ -494,11 +420,7 @@ const species = () => {
           </>
         )}
 
-        <MapSpecies
-          clickInfo={clickInfo}
-          // handleDblClick={handleMapClick}
-          state={state}
-        />
+        <MapSpecies clickInfo={clickInfo} state={state} />
         <Typography variant="subtitle2" align="left" className={classes.note}>
           *A species distribution often does not align perfectly with ecoregion
           boundaries, therefore a species may not be present throughout the

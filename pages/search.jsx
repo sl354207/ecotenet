@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+
 import PostList from "../components/PostList";
 import SpeciesList from "../components/SpeciesList";
 
@@ -17,39 +17,11 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const useStyles = makeStyles((theme) => ({
-  subheader: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    // flexShrink: 1,
-    flexWrap: "wrap",
-    justifyContent: "center",
-    top: 60,
-    marginTop: 20,
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-    // position: "sticky",
-    // width: "100%",
-    // maxWidth: 36,
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  sublist: {
-    display: "flex",
-
-    justifyContent: "center",
-    // flexShrink: 1,
-    // flexWrap: "wrap",
-
-    // width: "100%",
-    // maxWidth: 36,
-  },
   header: {
     marginTop: 20,
   },
-
   search: {
     position: "relative",
-    // border: "2px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.light,
@@ -59,32 +31,19 @@ const useStyles = makeStyles((theme) => ({
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-    // marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
+
     marginTop: 20,
     marginBottom: 20,
     marginLeft: theme.spacing(1),
     width: "auto",
-    // },
   },
-  inputRoot: {
+  root: {
     color: theme.palette.text.primary,
   },
-  inputInput: {
+  input: {
     padding: theme.spacing(2, 2, 2, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(2)}px)`,
-    // transition: theme.transitions.create("width"),
-    // width: "100%",
-    // [theme.breakpoints.up("xs")]: {
-    //   width: "0ch",
-    //   "&:focus": {
-    //     width: "20ch",
-    //   },
-    // },
   },
-
   popper: {
     backgroundColor: theme.palette.primary.light,
   },
@@ -213,18 +172,14 @@ const search = ({ ecoFilter }) => {
               {...params}
               placeholder="Search…"
               classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
+                root: classes.root,
+                input: classes.input,
               }}
               ref={params.InputProps.ref}
               inputProps={params.inputProps}
             />
           )}
         />
-
-        {/* <Typography variant="h4" align="center" className={classes.header}>
-        Search Results
-      </Typography> */}
 
         {list}
       </Container>

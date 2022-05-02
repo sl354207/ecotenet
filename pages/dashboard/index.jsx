@@ -68,28 +68,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     marginTop: 20,
-    // fontSize: 20,
-    // maxWidth: 40,
-
-    // [theme.breakpoints.down("xs")]: {
-    //   fontSize: 10,
-    // },
     borderRadius: "10px",
   },
   tabbar: {
     backgroundColor: theme.palette.primary.light,
     borderRadius: "10px",
   },
-  title: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  ecoregions: {
-    marginBottom: 20,
-  },
   tab: {
-    // fontSize: 18,
-    // minWidth: 65,
     flexGrow: 1,
     backgroundColor: theme.palette.primary.light,
     minHeight: 80,
@@ -99,25 +84,10 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
-  tablerow: {
-    backgroundColor: "#001e3c!important",
-    textAlign: "center",
-    color: "#ffffff!important",
-  },
-  table: {
-    [theme.breakpoints.down("xs")]: {
-      margin: "auto",
-      float: "none",
-    },
-    float: "right",
-    border: "thin solid",
-    marginLeft: 10,
-  },
   buttonpost: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    // border: "1px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     margin: "20px auto",
     borderRadius: "10px",
@@ -128,17 +98,14 @@ const useStyles = makeStyles((theme) => ({
     justifySelf: "center",
   },
   card: {
-    // display: "flex",
     flex: "auto",
     marginRight: 20,
-    // display: "block",
   },
   buttongroup: {
-    // flexDirection: "column",
     display: "grid",
     margin: "auto 0px auto 20px",
   },
-  buttonedit: {
+  edit: {
     margin: "4px 0px",
     minWidth: "fit-content",
     justifyContent: "start",
@@ -146,11 +113,7 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     backgroundColor: theme.palette.primary.light,
   },
-  profile: {
-    // border: "thin solid",
-    // borderRadius: "10px",
-  },
-  items: {
+  form: {
     display: "flex",
     flexGrow: 1,
     margin: "10px 0 10px 0",
@@ -162,7 +125,6 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     position: "relative",
-    // border: "2px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.main,
@@ -172,35 +134,21 @@ const useStyles = makeStyles((theme) => ({
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-    // marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
+
     marginTop: 6,
     marginBottom: 10,
-    // marginLeft: theme.spacing(1),
     width: "auto",
-    // },
   },
-  inputRoot: {
+  root: {
     color: theme.palette.text.primary,
   },
-  inputInput: {
+  input: {
     padding: 18,
-    // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em)`,
-    // transition: theme.transitions.create("width"),
-    // width: "100%",
-    // [theme.breakpoints.up("xs")]: {
-    //   width: "0ch",
-    //   "&:focus": {
-    //     width: "20ch",
-    //   },
-    // },
   },
   popper: {
     backgroundColor: theme.palette.primary.light,
   },
-  chipDelete: {
+  delete: {
     WebkitTapHighlightColor: "transparent",
     color: theme.palette.secondary.main,
     height: 22,
@@ -215,7 +163,6 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.palette.secondary.main,
     borderWidth: 2,
     color: theme.palette.text.primary,
-    // fontSize: 16,
     height: 40,
     margin: "0px 5px 10px 5px",
   },
@@ -481,7 +428,7 @@ export default function Dashboard() {
               <Typography variant="body1" gutterBottom>
                 Approved: {results.approved}
               </Typography>
-              <FormControl className={classes.items}>
+              <FormControl className={classes.form}>
                 <InputLabel
                   htmlFor="bio"
                   classes={{
@@ -499,13 +446,10 @@ export default function Dashboard() {
                   id="bio"
                   autoFocus={false}
                   handleChange={handleProfileChange}
-                  // handleSubmit={handleSubmit}
                   rows={10}
-                  // inputProps={{ "aria-label": "description" }}
-                  // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
-              <FormControl className={classes.items}>
+              <FormControl className={classes.form}>
                 <InputLabel
                   htmlFor="website"
                   classes={{
@@ -523,13 +467,11 @@ export default function Dashboard() {
                   id="website"
                   autoFocus={false}
                   handleChange={handleProfileChange}
-                  // handleSubmit={handleSubmit}
                   rows={1}
                   inputProps={{ type: "url" }}
-                  // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
-              <FormControl className={classes.items}>
+              <FormControl className={classes.form}>
                 <InputLabel
                   htmlFor="socials"
                   classes={{
@@ -582,8 +524,8 @@ export default function Dashboard() {
                       {...params}
                       placeholder="example.com"
                       classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
+                        root: classes.root,
+                        input: classes.input,
                       }}
                       ref={params.InputProps.ref}
                       inputProps={params.inputProps}
@@ -602,7 +544,7 @@ export default function Dashboard() {
                       variant="outlined"
                       className={classes.chip}
                       classes={{
-                        deleteIcon: classes.chipDelete,
+                        deleteIcon: classes.delete,
                       }}
                       onDelete={() => handleRemoveChip(profile.socials, social)}
                     ></Chip>
@@ -611,7 +553,7 @@ export default function Dashboard() {
               <Typography variant="h5" gutterBottom>
                 Private Settings:
               </Typography>
-              <FormControl className={classes.items}>
+              <FormControl className={classes.form}>
                 <InputLabel
                   htmlFor="email"
                   classes={{
@@ -629,10 +571,9 @@ export default function Dashboard() {
                   id="email"
                   autoFocus={false}
                   // handleChange={handleChange}
-                  // handleSubmit={handleSubmit}
+
                   rows={1}
                   inputProps={{ type: "email" }}
-                  // className={comment_ref != "" ? classes.cref : classes.noref}
                 />
               </FormControl>
             </>
@@ -700,7 +641,7 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.buttonedit}
+                            className={classes.edit}
                             startIcon={<EditIcon />}
                             size="small"
                             href={`/dashboard/posts/${result._id}`}
@@ -710,7 +651,7 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.buttonedit}
+                            className={classes.edit}
                             startIcon={<DeleteIcon />}
                             size="small"
                             onClick={() =>
@@ -788,7 +729,7 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.buttonedit}
+                            className={classes.edit}
                             startIcon={<EditIcon />}
                             size="small"
                             href={`/dashboard/drafts/${result._id}`}
@@ -798,7 +739,7 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.buttonedit}
+                            className={classes.edit}
                             startIcon={<DeleteIcon />}
                             size="small"
                             onClick={() =>

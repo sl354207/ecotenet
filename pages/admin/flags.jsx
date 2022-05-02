@@ -1,5 +1,4 @@
 import {
-  AppBar,
   Button,
   CircularProgress,
   Divider,
@@ -7,17 +6,15 @@ import {
   Link,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Snackbar,
   Toolbar,
   Typography,
-  useMediaQuery,
 } from "@material-ui/core";
 
 import useSWR from "swr";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
 
@@ -33,18 +30,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
-  drawerPaper: {
+  paper: {
     width: drawerWidth,
     zIndex: 0,
   },
-  drawerContainer: {
+  container: {
     overflow: "auto",
   },
   content: {
@@ -68,28 +62,15 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px auto",
     borderRadius: "10px",
   },
-  buttonmobile: {
+  mobile: {
     display: "grid",
   },
-  buttonup: {
+  desktop: {
     marginTop: 4,
-  },
-  button: {
-    marginLeft: 4,
-  },
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
   },
   comment: {
     display: "flow-root",
     flexGrow: 1,
-  },
-  link: {
-    color: theme.palette.secondary.light,
   },
 }));
 
@@ -97,9 +78,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminFlags = () => {
   const classes = useStyles();
-  const theme = useTheme();
   const router = useRouter();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ name: "", ID: "" });
@@ -164,7 +143,7 @@ const adminFlags = () => {
                   </Typography>
                 </div>
 
-                <div className={classes.buttonmobile}>
+                <div className={classes.mobile}>
                   {result.type == "comment" && (
                     <Button
                       variant="outlined"
@@ -210,7 +189,7 @@ const adminFlags = () => {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        className={classes.buttonup}
+                        className={classes.desktop}
                         onClick={() =>
                           handleOpenResolve(result.name, result._id)
                         }
@@ -235,7 +214,7 @@ const adminFlags = () => {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        className={classes.buttonup}
+                        className={classes.desktop}
                         onClick={() =>
                           handleOpenResolve(result.name, result._id)
                         }
@@ -259,11 +238,11 @@ const adminFlags = () => {
         className={classes.drawer}
         variant="permanent"
         classes={{
-          paper: classes.drawerPaper,
+          paper: classes.paper,
         }}
       >
         <Toolbar />
-        <div className={classes.drawerContainer}>
+        <div className={classes.container}>
           <List>
             <ListItem button key="home" onClick={() => router.push("/admin")}>
               <ListItemText primary="Home" />

@@ -2,13 +2,11 @@ import useSWR from "swr";
 
 import { useRouter } from "next/router";
 
-import Link from "next/link";
-
 import StepForm from "../../../components/postForm/StepForm";
 import { CircularProgress } from "@material-ui/core";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   progress: {
     margin: "100px auto",
     display: "flex",
@@ -19,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function DraftByUser() {
-  const theme = useTheme();
   const classes = useStyles();
   // set id to id in url query
   const router = useRouter();

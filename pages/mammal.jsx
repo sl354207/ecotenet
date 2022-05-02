@@ -57,29 +57,17 @@ const useStyles = makeStyles((theme) => ({
   tabs: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    // fontSize: 20,
-    // maxWidth: 40,
-
-    // [theme.breakpoints.down("xs")]: {
-    //   fontSize: 10,
-    // },
     borderRadius: "10px",
   },
   tabbar: {
     backgroundColor: theme.palette.primary.light,
     borderRadius: "10px",
   },
-  title: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
   ecoregions: {
     marginTop: 20,
     marginBottom: 20,
   },
   tab: {
-    // fontSize: 18,
-    // minWidth: 65,
     flexGrow: 1,
     backgroundColor: theme.palette.primary.light,
     minHeight: 80,
@@ -103,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     border: "thin solid",
     marginLeft: 10,
   },
-  flagBox: {
+  flagbox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -256,7 +244,7 @@ const mammal = ({ mammal, wiki }) => {
   return (
     <>
       <Container>
-        <div className={classes.flagBox}>
+        <div className={classes.flagbox}>
           <div className={classes.spacer}></div>
           <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
           <IconButton

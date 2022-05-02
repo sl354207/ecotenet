@@ -1,6 +1,5 @@
-import Nav from "../components/Nav";
 import { Container, Typography } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Header from "../components/Header";
 import Description from "../components/Description";
 import Footer from "../components/Footer";
@@ -16,7 +15,6 @@ const category = () => {
 
   return (
     <>
-      {/* <Nav /> */}
       <Container>
         <Header title="Category Breakdown" />
         <Description

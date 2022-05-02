@@ -13,7 +13,7 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 import { Alert } from "@material-ui/lab";
 import TextBox from "../TextBox";
-import SureComment from "../SureComment";
+
 import ClientDialog from "../dialogs/ClientDialog";
 
 const useStyles = makeStyles((theme) => ({

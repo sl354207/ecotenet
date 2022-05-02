@@ -1,16 +1,7 @@
 // UPDATE TO ECORGEGION INDEX OR SOMETHING
-// UPDATE
 import parse, { domToReact, attributesToProps } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
-import {
-  Button,
-  useMediaQuery,
-  Typography,
-  Container,
-  Link,
-  IconButton,
-  Snackbar,
-} from "@material-ui/core";
+import { Container, Link, IconButton, Snackbar } from "@material-ui/core";
 import FlagIcon from "@material-ui/icons/Flag";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -21,10 +12,6 @@ import Flag from "../components/dialogs/Flag";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
   tablerow: {
     backgroundColor: "#001e3c!important",
     textAlign: "center",
@@ -42,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   description: {
     marginBottom: 40,
   },
-  flagBox: {
+  flagbox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -190,7 +177,7 @@ const success = ({ wiki }) => {
   return (
     <>
       <Container>
-        <div className={classes.flagBox}>
+        <div className={classes.flagbox}>
           <div className={classes.spacer}></div>
           <Header
             title="Eco-313: Appalachian mixed mesophytic forests"

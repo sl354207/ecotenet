@@ -1,32 +1,17 @@
-// import Meta from "../../components/Meta";
-
-// import { getPosts } from "../../utils/mongodb";
-// import { getPerson } from "../../utils/mongodb";
-// import { getProfilePosts } from "../../utils/mongodb";
-
-// import Link from "next/link";
-
-//do I need to import react
 import { useState } from "react";
 
 import {
   Button,
-  IconButton,
   Typography,
   Link,
   Container,
-  Divider,
   Snackbar,
   CircularProgress,
 } from "@material-ui/core";
 
-import FlagIcon from "@material-ui/icons/Flag";
-
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Header from "../../../components/Header";
-// import Footer from "../../components/Footer";
-// import PostList from "../../components/PostList";
-// import Flag from "../../components/dialogs/Flag";
+
 import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -34,57 +19,11 @@ import AdminDialog from "../../../components/dialogs/AdminDialog";
 import Resolve from "../../../components/dialogs/Resolve";
 
 const useStyles = makeStyles((theme) => ({
-  description: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    // display: "flex",
-    flexDirection: "column",
-    maxWidth: 800,
-    flexGrow: 1,
-    marginLeft: 20,
-  },
-  items: {
-    display: "flex",
-    // flexGrow: 1,
-  },
-
-  publish: {
-    marginLeft: 20,
-    // color: theme.palette.secondary.light,
-    fontStyle: "italic",
-  },
-  container: {
-    backgroundColor: theme.palette.primary.main,
-    // marginTop: "20px",
-  },
-  title: {
-    paddingTop: "40px",
-  },
-  commentsection: {
-    marginTop: 20,
-  },
   profile: {
     margin: 16,
   },
   socials: {
     display: "grid",
-  },
-  flagBox: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  spacer: {
-    display: "flex",
-    marginRight: "auto",
-    visibility: "hidden",
-    minWidth: 30,
-  },
-  flag: {
-    display: "flex",
-    marginLeft: "auto",
   },
   progress: {
     margin: "100px auto",

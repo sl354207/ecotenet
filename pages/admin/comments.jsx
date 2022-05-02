@@ -1,5 +1,4 @@
 import {
-  AppBar,
   Button,
   CircularProgress,
   Divider,
@@ -7,7 +6,6 @@ import {
   Link,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Snackbar,
   Toolbar,
@@ -33,18 +31,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
-  drawerPaper: {
+  paper: {
     width: drawerWidth,
     zIndex: 0,
   },
-  drawerContainer: {
+  container: {
     overflow: "auto",
   },
   content: {
@@ -68,10 +63,10 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px auto",
     borderRadius: "10px",
   },
-  buttonmobile: {
+  mobile: {
     display: "grid",
   },
-  buttonup: {
+  desktop: {
     marginTop: 4,
   },
   button: {
@@ -163,7 +158,7 @@ const adminComments = () => {
                 </div>
 
                 {isMobile ? (
-                  <div className={classes.buttonmobile}>
+                  <div className={classes.mobile}>
                     <Button
                       variant="outlined"
                       color="secondary"
@@ -176,7 +171,7 @@ const adminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      className={classes.buttonup}
+                      className={classes.desktop}
                       onClick={() =>
                         handleOpenDialog("Deny", "comment", result)
                       }
@@ -186,7 +181,7 @@ const adminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      className={`${classes.buttonup} ${classes.delete}`}
+                      className={`${classes.desktop} ${classes.delete}`}
                       onClick={() =>
                         handleOpenDialog("Delete", "comment", result)
                       }
@@ -241,11 +236,11 @@ const adminComments = () => {
         className={classes.drawer}
         variant="permanent"
         classes={{
-          paper: classes.drawerPaper,
+          paper: classes.paper,
         }}
       >
         <Toolbar />
-        <div className={classes.drawerContainer}>
+        <div className={classes.container}>
           <List>
             <ListItem button key="home" onClick={() => router.push("/admin")}>
               <ListItemText primary="Home" />

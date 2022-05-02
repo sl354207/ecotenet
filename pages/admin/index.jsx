@@ -1,5 +1,4 @@
 import {
-  AppBar,
   Button,
   CircularProgress,
   Divider,
@@ -8,17 +7,13 @@ import {
   Link,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Snackbar,
   Toolbar,
   Typography,
-  useMediaQuery,
 } from "@material-ui/core";
 
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
 import Header from "../../components/Header";
@@ -32,18 +27,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
   },
-  drawerPaper: {
+  paper: {
     width: drawerWidth,
     zIndex: 0,
   },
-  drawerContainer: {
+  container: {
     overflow: "auto",
   },
   content: {
@@ -57,30 +49,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    // border: "1px solid #94c9ff",
     border: `1px solid ${theme.palette.secondary.main}`,
     margin: "20px auto",
     borderRadius: "10px",
-  },
-  buttonmobile: {
-    display: "grid",
-  },
-  buttonup: {
-    marginTop: 4,
-  },
-  button: {
-    marginLeft: 4,
-  },
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  post: {
-    display: "flow-root",
-    flexGrow: 1,
   },
   spacing: {
     marginTop: 20,
@@ -94,9 +65,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const admin = () => {
   const classes = useStyles();
-  const theme = useTheme();
   const router = useRouter();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [featureCount, setFeatureCount] = useState(0);
 
@@ -444,11 +413,11 @@ const admin = () => {
         className={classes.drawer}
         variant="permanent"
         classes={{
-          paper: classes.drawerPaper,
+          paper: classes.paper,
         }}
       >
         <Toolbar />
-        <div className={classes.drawerContainer}>
+        <div className={classes.container}>
           <List>
             <ListItem button key="home" onClick={() => router.push("/admin")}>
               <ListItemText primary="Home" />

@@ -1,5 +1,5 @@
 // The editor core
-import Editor, { Value } from "@react-page/editor";
+import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 
 import slate from "@react-page/plugins-slate";
@@ -18,15 +18,11 @@ import divider from "@react-page/plugins-divider";
 
 import {
   Button,
-  IconButton,
   Typography,
   Link,
   Container,
-  Divider,
   CircularProgress,
   Snackbar,
-  List,
-  ListItem,
 } from "@material-ui/core";
 
 import useSWR from "swr";
@@ -39,7 +35,6 @@ import { useState } from "react";
 import { Alert } from "@material-ui/lab";
 
 import Header from "../../../components/Header";
-import Vote from "../../../components/Vote";
 import EditorLayout from "../../../components/EditorLayout";
 import customImage from "../../../plugins/customImage";
 
@@ -48,13 +43,12 @@ import AdminCommentList from "../../../components/comments/AdminCommentList";
 import Resolve from "../../../components/dialogs/Resolve";
 
 const useStyles = makeStyles((theme) => ({
-  description: {
+  box: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
   content: {
-    // display: "flex",
     flexDirection: "column",
     maxWidth: 800,
     flexGrow: 1,
@@ -62,23 +56,13 @@ const useStyles = makeStyles((theme) => ({
   },
   items: {
     display: "flex",
-    // flexGrow: 1,
   },
-
-  publish: {
+  date: {
     marginLeft: 20,
-    // color: theme.palette.secondary.light,
     fontStyle: "italic",
   },
   container: {
     backgroundColor: theme.palette.primary.main,
-    // marginTop: "20px",
-  },
-  title: {
-    paddingTop: "40px",
-  },
-  commentsection: {
-    marginTop: 20,
   },
   progress: {
     margin: "100px auto",
@@ -127,11 +111,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#fc7ebf",
     borderColor: "#fc7ebf",
   },
-
-  comment: {
-    display: "flow-root",
-    flexGrow: 1,
-  },
 }));
 
 // Define which plugins we want to use.
@@ -141,7 +120,6 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = () => {
   const classes = useStyles();
-  const theme = useTheme();
   const router = useRouter();
 
   const ID = router.query.id;
@@ -221,17 +199,13 @@ const post = () => {
 
         <Container className={classes.container}>
           <Header title={post.title} />
-          <div className={classes.description}>
+          <div className={classes.box}>
             <div className={classes.content}>
               <div className={classes.items}>
                 <Typography align="center" variant="h6">
                   <Link href="#">{post.name}</Link>
                 </Typography>
-                <Typography
-                  className={classes.publish}
-                  align="left"
-                  variant="h6"
-                >
+                <Typography className={classes.date} align="left" variant="h6">
                   {date.toDateString()}
                 </Typography>
               </div>
