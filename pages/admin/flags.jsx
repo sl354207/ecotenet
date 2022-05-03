@@ -1,14 +1,10 @@
 import {
   Button,
   CircularProgress,
-  Divider,
-  Drawer,
   Link,
   List,
   ListItem,
-  ListItemText,
   Snackbar,
-  Toolbar,
   Typography,
 } from "@material-ui/core";
 
@@ -16,30 +12,16 @@ import useSWR from "swr";
 
 import { alpha, makeStyles } from "@material-ui/core/styles";
 
-import { useRouter } from "next/router";
-
 import Header from "../../components/Header";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
 import Resolve from "../../components/dialogs/Resolve";
-
-const drawerWidth = 120;
+import AdminDrawer from "../../components/AdminDrawer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  paper: {
-    width: drawerWidth,
-    zIndex: 0,
-  },
-  container: {
-    overflow: "auto",
   },
   content: {
     flexGrow: 1,
@@ -53,11 +35,10 @@ const useStyles = makeStyles((theme) => ({
   header: {
     marginTop: 20,
   },
-  buttonpost: {
+  buttonPost: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    // border: "1px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
     margin: "20px auto",
     borderRadius: "10px",
@@ -78,7 +59,6 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminFlags = () => {
   const classes = useStyles();
-  const router = useRouter();
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ name: "", ID: "" });
@@ -131,7 +111,7 @@ const adminFlags = () => {
         {results.map((result) => {
           return (
             <>
-              <ListItem key={result._id} className={classes.buttonpost}>
+              <ListItem key={result._id} className={classes.buttonPost}>
                 <div className={classes.comment}>
                   <Typography>
                     Flagged by: <Link>{result.name}</Link>
@@ -168,7 +148,6 @@ const adminFlags = () => {
                       variant="outlined"
                       color="secondary"
                       href={`/admin/people/${result.flagged}?flag=${result._id}&flagee=${result.name}`}
-                      // onClick={() => handleOpenDialog("Approve")}
                     >
                       View Profile
                     </Button>
@@ -179,10 +158,8 @@ const adminFlags = () => {
                         variant="outlined"
                         color="secondary"
                         href={`/ecoregions/${result.content_id}`}
-                        // CHECK
                         target="_blank"
                         rel="noopener noreferrer"
-                        // onClick={() => handleOpenDialog("Approve")}
                       >
                         View Page
                       </Button>
@@ -204,10 +181,8 @@ const adminFlags = () => {
                         variant="outlined"
                         color="secondary"
                         href={`/species/${result.content_id}`}
-                        // CHECK
                         target="_blank"
                         rel="noopener noreferrer"
-                        // onClick={() => handleOpenDialog("Approve")}
                       >
                         View Page
                       </Button>
@@ -234,51 +209,7 @@ const adminFlags = () => {
 
   return (
     <div className={classes.root}>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.paper,
-        }}
-      >
-        <Toolbar />
-        <div className={classes.container}>
-          <List>
-            <ListItem button key="home" onClick={() => router.push("/admin")}>
-              <ListItemText primary="Home" />
-            </ListItem>
-            <ListItem
-              button
-              key="people"
-              onClick={() => router.push("/admin/people")}
-            >
-              <ListItemText primary="People" />
-            </ListItem>
-            <ListItem
-              button
-              key="posts"
-              onClick={() => router.push("/admin/posts")}
-            >
-              <ListItemText primary="Posts" />
-            </ListItem>
-            <ListItem
-              button
-              key="comments"
-              onClick={() => router.push("/admin/comments")}
-            >
-              <ListItemText primary="Comments" />
-            </ListItem>
-            <ListItem
-              button
-              key="flags"
-              onClick={() => router.push("/admin/flags")}
-            >
-              <ListItemText primary="Flags" />
-            </ListItem>
-          </List>
-          <Divider />
-        </div>
-      </Drawer>
+      <AdminDrawer />
       <div className={classes.content}>
         <Header title="Flags" />
         {list}

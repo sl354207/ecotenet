@@ -1,17 +1,13 @@
-import useSWR from "swr";
-import { useRouter } from "next/router";
 import { useState, useCallback, useReducer } from "react";
 
 import {
   Container,
   Typography,
-  InputBase,
   useMediaQuery,
   Chip,
   TextField,
-  Button,
 } from "@material-ui/core";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { Autocomplete } from "@material-ui/lab";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import Header from "../Header";
@@ -19,63 +15,22 @@ import Description from "../Description";
 import MapEditor from "../maps/MapEditor";
 
 const useStyles = makeStyles((theme) => ({
-  subheader: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    // flexShrink: 1,
-    flexWrap: "wrap",
-    justifyContent: "center",
-    top: 60,
-    marginTop: 20,
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-    // position: "sticky",
-    // width: "100%",
-    // maxWidth: 36,
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  sublist: {
-    display: "flex",
-
-    justifyContent: "center",
-    // flexShrink: 1,
-    // flexWrap: "wrap",
-
-    // width: "100%",
-    // maxWidth: 36,
-  },
-  header: {
-    marginTop: 20,
-  },
-
   search: {
     position: "relative",
-    // border: "2px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.light,
-
     "&:focus-within": {
       backgroundColor: theme.palette.primary.light,
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-    // "&:hover": {
-    //   // backgroundColor: alpha(theme.palette.common.white, 0.25),
-    //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    //   outline: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    // },
-    // marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
     marginTop: 20,
     marginBottom: 20,
     marginLeft: theme.spacing(1),
     width: "auto",
-    // },
   },
-  inputRoot: {
+  root: {
     color: theme.palette.text.primary,
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
@@ -89,29 +44,10 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
-  inputInput: {
-    padding: theme.spacing(2, 2, 2, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(2)}px)`,
-    // transition: theme.transitions.create("width"),
-    // width: "100%",
-    // [theme.breakpoints.up("xs")]: {
-    //   width: "0ch",
-    //   "&:focus": {
-    //     width: "20ch",
-    //   },
-    // },
-  },
-
   popper: {
     backgroundColor: theme.palette.primary.light,
   },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  chipDelete: {
+  delete: {
     WebkitTapHighlightColor: "transparent",
     color: theme.palette.secondary.main,
     height: 22,
@@ -125,27 +61,25 @@ const useStyles = makeStyles((theme) => ({
   chip: {
     borderWidth: 2,
     color: theme.palette.text.primary,
-    // fontSize: 16,
     height: 40,
     margin: "0px 5px 10px 5px",
   },
-  chipHidden: {
+  hidden: {
     visibility: "hidden",
   },
-  chipMobile: {
+  mobile: {
     display: "inline-grid",
   },
-  chipOutline1: {
+  outline1: {
     borderColor: "#ff00ff",
   },
-  chipOutline2: {
+  outline2: {
     borderColor: "#ffff00",
   },
-  chipOutline3: {
+  outline3: {
     borderColor: "#00ffff",
   },
   description: {
-    // marginTop: 20,
     marginLeft: 10,
   },
   note: {
@@ -181,7 +115,6 @@ const speciesChips = [
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (speciesChips, action) => {
   if (action.type == "remove") {
-    // console.log(speciesChips);
     switch (action.payload) {
       case 1:
         speciesChips[1].open = speciesChips[2].open;
@@ -229,7 +162,6 @@ const reducer = (speciesChips, action) => {
     }
   }
   if (action.type == "add") {
-    // console.log(speciesChips);
     switch (action.payload) {
       case 1:
         speciesChips[1].open = true;
@@ -262,7 +194,7 @@ const reducer = (speciesChips, action) => {
 };
 
 //pass in and destructure props.
-const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
+const PostRegion = ({ clickInfo, setClickInfo }) => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -272,7 +204,6 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
 
   const handleChange = async (e) => {
     if (e.target.value) {
-      //   console.log(e.target.value);
       const res = await fetch(`/api/search/autoSpecies?q=${e.target.value}`, {
         method: "GET",
         headers: {
@@ -281,7 +212,7 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
       });
 
       const data = await res.json();
-      // console.log(data);
+
       setResults(data);
     }
   };
@@ -292,10 +223,9 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
     if (newValue != null) {
       const dash = newValue.indexOf("-");
       const name = newValue.slice(0, dash - 1);
-      // console.log(name);
+
       for (const result of results) {
         if (result.Scientific_Name == name) {
-          // setQuery(result);
           switch (state[0].count) {
             case 0:
               dispatch({
@@ -328,20 +258,18 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
             default:
               throw new Error();
           }
-          // setSpeciesInfo1([...result.unique_id]);
         }
       }
-      // console.log(speciesInfo1);
+
       setResults([]);
     }
   };
 
   const handleMapClick = useCallback((event) => {
     const region = event.features && event.features[0];
-    // console.log(region);
+
     if (region && region.properties.unique_id != "<NA>") {
       setClickInfo((clickInfo) => {
-        // console.log(clickInfo);
         if (!clickInfo.includes(region && region.properties.unique_id)) {
           return [...clickInfo, region && region.properties.unique_id];
         } else {
@@ -349,14 +277,11 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
             clickInfo.indexOf(region.properties.unique_id),
             1
           );
-          // console.log(removed);
-          // console.log(clickInfo);
+
           return [...clickInfo];
         }
       });
     }
-
-    // console.log(clickInfo);
   }, []);
 
   const handleRemoveChip = (id) => {
@@ -367,20 +292,12 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
       s_name: "",
       c_name: "",
     });
-    // return dispatch();
   };
 
   return (
     <Container>
-      {/* <Typography variant="h4" align="center" className={classes.header}>
-        Post Details
-      </Typography> */}
       <Header title="Select Ecoregions" />
-      {/* <Typography variant="body1" align="left" className={classes.description}>
-        Choose which ecoregions apply to your post. You may add or delete
-        ecoregions by double clicking on the map. A single click highlights the
-        ecoregion and displays the Eco-ID and ecoregion name
-      </Typography> */}
+
       <Description
         description="Choose which ecoregions apply to your post. You may add or delete
         ecoregions by double clicking on the map. A single click highlights the
@@ -401,11 +318,9 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
         className={classes.search}
         classes={{ paper: classes.popper }}
         autoHighlight
-        // disableClearable={true}
         onChange={(event, newValue) => handleSubmit(event, newValue)}
         selectOnFocus
         clearOnBlur
-        // clearText="Clear"
         handleHomeEndKeys
         id="free-solo-with-text-demo"
         options={
@@ -417,14 +332,13 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
         }
         filterOptions={(x) => x}
         freeSolo
-        // closeIcon
         renderInput={(params) => (
           <TextField
             {...params}
             placeholder="Search…"
             variant="outlined"
             classes={{
-              root: classes.inputRoot,
+              root: classes.root,
             }}
             ref={params.InputProps.ref}
             inputProps={params.inputProps}
@@ -433,29 +347,28 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
         )}
       />
       {isMobile ? (
-        <div className={classes.chipMobile}>
+        <div className={classes.mobile}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <Chip
               label={`${state[1].scientific_name} - ${state[1].common_name}`}
               onDelete={() => handleRemoveChip(1)}
               variant="outlined"
-              // color="secondary"
-              className={`${classes.chipOutline1} ${classes.chip}`}
+              className={`${classes.outline1} ${classes.chip}`}
               classes={{
-                deleteIcon: classes.chipDelete,
+                deleteIcon: classes.delete,
               }}
             ></Chip>
           ) : (
-            <Chip className={classes.chipHidden}></Chip>
+            <Chip className={classes.hidden}></Chip>
           )}
           {Array.isArray(state[2].regions) && state[2].regions.length ? (
             <Chip
               label={`${state[2].scientific_name} - ${state[2].common_name}`}
               onDelete={() => handleRemoveChip(2)}
               variant="outlined"
-              className={`${classes.chipOutline2} ${classes.chip}`}
+              className={`${classes.outline2} ${classes.chip}`}
               classes={{
-                deleteIcon: classes.chipDelete,
+                deleteIcon: classes.delete,
               }}
             ></Chip>
           ) : (
@@ -466,9 +379,9 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
               label={`${state[3].scientific_name} - ${state[3].common_name}`}
               onDelete={() => handleRemoveChip(3)}
               variant="outlined"
-              className={`${classes.chipOutline3} ${classes.chip}`}
+              className={`${classes.outline3} ${classes.chip}`}
               classes={{
-                deleteIcon: classes.chipDelete,
+                deleteIcon: classes.delete,
               }}
             ></Chip>
           ) : (
@@ -482,23 +395,22 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
               label={`${state[1].scientific_name} - ${state[1].common_name}`}
               onDelete={() => handleRemoveChip(1)}
               variant="outlined"
-              // color="secondary"
-              className={`${classes.chipOutline1} ${classes.chip}`}
+              className={`${classes.outline1} ${classes.chip}`}
               classes={{
-                deleteIcon: classes.chipDelete,
+                deleteIcon: classes.delete,
               }}
             ></Chip>
           ) : (
-            <Chip className={classes.chipHidden}></Chip>
+            <Chip className={classes.hidden}></Chip>
           )}
           {Array.isArray(state[2].regions) && state[2].regions.length ? (
             <Chip
               label={`${state[2].scientific_name} - ${state[2].common_name}`}
               onDelete={() => handleRemoveChip(2)}
               variant="outlined"
-              className={`${classes.chipOutline2} ${classes.chip}`}
+              className={`${classes.outline2} ${classes.chip}`}
               classes={{
-                deleteIcon: classes.chipDelete,
+                deleteIcon: classes.delete,
               }}
             ></Chip>
           ) : (
@@ -509,9 +421,9 @@ const PostRegion = ({ handleNext, handleBack, clickInfo, setClickInfo }) => {
               label={`${state[3].scientific_name} - ${state[3].common_name}`}
               onDelete={() => handleRemoveChip(3)}
               variant="outlined"
-              className={`${classes.chipOutline3} ${classes.chip}`}
+              className={`${classes.outline3} ${classes.chip}`}
               classes={{
-                deleteIcon: classes.chipDelete,
+                deleteIcon: classes.delete,
               }}
             ></Chip>
           ) : (

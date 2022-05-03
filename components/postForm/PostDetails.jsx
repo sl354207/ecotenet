@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useCallback, useMemo } from "react";
-import dynamic from "next/dynamic";
+import { useState } from "react";
+
 import {
   ClickAwayListener,
   Container,
@@ -10,99 +10,47 @@ import {
   InputBase,
   InputLabel,
   Link,
-  NativeSelect,
-  Select,
+  TextField,
   Tooltip,
   Typography,
+  Chip,
 } from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
-import { TextField } from "@material-ui/core";
+
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
-import { Button } from "@material-ui/core";
-import { Chip } from "@material-ui/core";
 
 import TextBox from "../TextBox";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 
 import CategoriesAutoComplete from "../../data/categories_autocomplete.json";
 import Header from "../Header";
 import Description from "../Description";
 
 const useStyles = makeStyles((theme) => ({
-  subheader: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    // flexShrink: 1,
-    flexWrap: "wrap",
-    justifyContent: "center",
-    top: 60,
-    marginTop: 20,
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-    // position: "sticky",
-    // width: "100%",
-    // maxWidth: 36,
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  sublist: {
-    display: "flex",
-
-    justifyContent: "center",
-    // flexShrink: 1,
-    // flexWrap: "wrap",
-
-    // width: "100%",
-    // maxWidth: 36,
-  },
-  header: {
-    marginTop: 30,
-  },
-
   search: {
     position: "relative",
-    // border: "2px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.main,
-
     "&:focus-within": {
       backgroundColor: theme.palette.primary.main,
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-    // marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
     marginTop: 6,
     marginBottom: 10,
-    // marginLeft: theme.spacing(1),
     width: "auto",
-    // },
   },
-  inputRoot: {
+  root: {
     color: theme.palette.text.primary,
   },
-  inputInput: {
+  input: {
     padding: 18,
-    // vertical padding + font size from searchIcon
-    // paddingLeft: `calc(1em)`,
-    // transition: theme.transitions.create("width"),
-    // width: "100%",
-    // [theme.breakpoints.up("xs")]: {
-    //   width: "0ch",
-    //   "&:focus": {
-    //     width: "20ch",
-    //   },
-    // },
   },
   select: {
     color: theme.palette.text.primary,
     "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        // border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-      },
       "&:hover fieldset": {
         border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
         border: "none",
@@ -115,21 +63,17 @@ const useStyles = makeStyles((theme) => ({
   popper: {
     backgroundColor: theme.palette.primary.light,
   },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  items: {
+  form: {
     display: "flex",
     flexGrow: 1,
+    marginBottom: 12,
   },
   label: {
     color: `${theme.palette.text.primary}!important`,
     position: "relative",
     transform: "none",
   },
-  chipDelete: {
+  delete: {
     WebkitTapHighlightColor: "transparent",
     color: theme.palette.secondary.main,
     height: 22,
@@ -144,12 +88,8 @@ const useStyles = makeStyles((theme) => ({
     borderColor: theme.palette.secondary.main,
     borderWidth: 2,
     color: theme.palette.text.primary,
-    // fontSize: 16,
     height: 40,
     margin: "0px 5px 10px 5px",
-  },
-  form: {
-    marginBottom: 12,
   },
   groupLabel: {
     backgroundColor: theme.palette.primary.light,
@@ -158,15 +98,10 @@ const useStyles = makeStyles((theme) => ({
   noOptions: {
     color: alpha(theme.palette.text.primary, 0.6),
   },
-  // required: {
-  //   "& .MuiFormLabel-asterisk": {
-  //     color: `${theme.palette.secondary.main}!important`,
-  //   },
-  // },
   helper: {
     color: theme.palette.text.primary,
   },
-  description: {
+  required: {
     marginTop: 20,
     marginLeft: 10,
     marginBottom: 20,
@@ -175,16 +110,12 @@ const useStyles = makeStyles((theme) => ({
 
 //pass in and destructure props.
 const PostDetails = ({
-  handleNext,
-  handleBack,
   handleDetailChange,
   details: { title, description, category, tags },
   setDetails,
-
   handleRemoveChip,
 }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [open, setOpen] = useState(false);
 
@@ -210,12 +141,12 @@ const PostDetails = ({
         post"
         align="left"
       />
-      <Typography variant="body1" align="left" className={classes.description}>
+      <Typography variant="body1" align="left" className={classes.required}>
         *denotes required field
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.items} required>
+          <FormControl className={classes.form} required>
             <InputLabel
               htmlFor="title"
               classes={{
@@ -238,7 +169,7 @@ const PostDetails = ({
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.items}>
+          <FormControl className={classes.form}>
             <InputLabel
               htmlFor="description"
               classes={{
@@ -264,7 +195,7 @@ const PostDetails = ({
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.items} required>
+          <FormControl className={classes.form} required>
             <InputLabel
               htmlFor="category"
               classes={{
@@ -342,7 +273,7 @@ const PostDetails = ({
           </ClickAwayListener>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.items}>
+          <FormControl className={classes.form}>
             <InputLabel
               htmlFor="keywords"
               classes={{
@@ -393,8 +324,8 @@ const PostDetails = ({
                   {...params}
                   placeholder="Add keywords"
                   classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
+                    root: classes.root,
+                    input: classes.input,
                   }}
                   ref={params.InputProps.ref}
                   inputProps={params.inputProps}
@@ -412,7 +343,7 @@ const PostDetails = ({
                 variant="outlined"
                 className={classes.chip}
                 classes={{
-                  deleteIcon: classes.chipDelete,
+                  deleteIcon: classes.delete,
                 }}
                 onDelete={() => handleRemoveChip(tags, tag)}
               ></Chip>

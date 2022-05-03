@@ -1,26 +1,14 @@
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
-import { AppBar, Paper } from "@material-ui/core";
-import { Toolbar } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
-import { IconButton } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import { MenuItem } from "@material-ui/core";
-import { Menu } from "@material-ui/core";
-import { Button } from "@material-ui/core";
-import { useMediaQuery } from "@material-ui/core";
-import { useState, useEffect, useRef, useReducer } from "react";
-import { useRouter } from "next/router";
-import Drawer from "@material-ui/core/Drawer";
-
-import Divider from "@material-ui/core/Divider";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import SortIcon from "@material-ui/icons/Sort";
 import {
+  AppBar,
+  Paper,
+  Toolbar,
+  IconButton,
+  MenuItem,
+  Button,
+  useMediaQuery,
+  Drawer,
+  Divider,
   Popper,
   Grow,
   InputBase,
@@ -31,6 +19,17 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
+
+import { useState, useEffect, useRef, useReducer } from "react";
+import { useRouter } from "next/router";
+
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import SortIcon from "@material-ui/icons/Sort";
+
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
 import menuItems from "../data/categories.json";
@@ -38,26 +37,14 @@ import menuItems from "../data/categories.json";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    // flexGrow: 1,
-  },
-  menuButton: {
+  button: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
-
     [theme.breakpoints.down("xs")]: {
       flexGrow: 1,
     },
-  },
-  headerOptions: {
-    display: "flex",
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  hide: {
-    display: "none",
   },
   drawer: {
     width: drawerWidth,
@@ -67,25 +54,12 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
     backgroundColor: theme.palette.primary.light,
   },
-  drawerHeader: {
+  header: {
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-  },
-  accordion: {
-    border: "1px solid rgba(0, 0, 0, .125)",
-    boxShadow: "none",
-    "&:not(:last-child)": {
-      borderBottom: 0,
-    },
-    "&:before": {
-      display: "none",
-    },
-    "&:expanded": {
-      margin: "auto",
-    },
   },
   search: {
     position: "relative",
@@ -95,44 +69,29 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
-    // marginLeft: theme.spacing(1),
     width: "auto",
     marginRight: 10,
-    // },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
     height: "100%",
     position: "absolute",
-    // pointerEvents: "none",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
-  inputRoot: {
+  root: {
     color: "inherit",
   },
-  inputInput: {
+  input: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
-    // width: "100%",
-    // [theme.breakpoints.up("xs")]: {
     width: "0ch",
     "&:focus": {
       width: "20ch",
     },
-    // },
-  },
-  searchPaper: {
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.primary.light,
-    // zIndex: "2000",
   },
   popper: {
     backgroundColor: theme.palette.primary.light,
@@ -142,7 +101,6 @@ const useStyles = makeStyles((theme) => ({
   },
   sort: {
     color: theme.palette.secondary.light,
-    // marginLeft: -8,
   },
   home: {
     minWidth: "auto",
@@ -152,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
   },
   desktop: {
     display: "inline-flex",
-    // marginLeft: 200,
   },
   popperTop: {
     color: theme.palette.secondary.main,
@@ -160,11 +117,10 @@ const useStyles = makeStyles((theme) => ({
   popperBottom: {
     color: theme.palette.secondary.main,
     border: `1px solid ${theme.palette.secondary.main}`,
-    // borderBottom: "none",
     borderRadius: 4,
     marginBottom: 4,
   },
-  donateMobile: {
+  donate: {
     border: `1px solid ${theme.palette.secondary.main}`,
     borderRadius: 4,
     backgroundColor: theme.palette.secondary.main,
@@ -175,13 +131,7 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: 4,
     },
   },
-  divider: {
-    marginBottom: 4,
-  },
 }));
-
-// initialize drawer categories
-//
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {
@@ -207,20 +157,6 @@ const Nav = ({ ecoFilter }) => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const [openL, setOpenL] = useState(false);
-
-  const anchor = Boolean(openL);
-  const id = anchor ? "simple-popper" : undefined;
-
-  const handleClose = (event, menuSub) => {
-    // if (anchorRef.current && anchorRef.current.contains(event.target)) {
-    //   return;
-    // }
-
-    // setOpen(false);
-    setOpenL(!openL);
-  };
 
   const [popper, setPopper] = useState(false);
   const anchorRef = useRef(null);
@@ -270,7 +206,6 @@ const Nav = ({ ecoFilter }) => {
 
   // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
   const handleListClick = (menuTitle) => {
-    // setOpenList(!openList);
     dispatch({ type: "toggle", payload: menuTitle });
   };
 
@@ -283,41 +218,30 @@ const Nav = ({ ecoFilter }) => {
   const tags = [];
 
   return (
-    <div className={classes.root}>
+    <>
       <AppBar position="fixed" elevation={1}>
         <Toolbar>
-          {/* {router.pathname.includes("suc", 1)
-            //   ? () => setCategoryFilter(true)
-            //   : () => setCategoryFilter(false)} */}
-          {/* <h1>Hello React with Local Storage!</h1>
-
-            // <input value={value} type="text" onChange={onChange} />
-
-            // <p>{value}</p> */}
           <>
             {ecoFilter && (
               <>
                 {isMobile ? (
                   <IconButton
                     edge="start"
-                    // className={classes.menuButton}
                     color="inherit"
                     aria-label="filter"
                     size="small"
                     onClick={handleDrawerOpen}
                   >
-                    {/* <FilterListIcon color="secondary" /> */}
                     <SortIcon className={classes.sort} />
                   </IconButton>
                 ) : (
                   <IconButton
                     edge="start"
-                    className={classes.menuButton}
+                    className={classes.button}
                     color="inherit"
                     aria-label="filter"
                     onClick={handleDrawerOpen}
                   >
-                    {/* <FilterListIcon color="secondary" /> */}
                     <SortIcon className={classes.sort} />
                   </IconButton>
                 )}
@@ -357,8 +281,8 @@ const Nav = ({ ecoFilter }) => {
               <Autocomplete
                 classes={{
                   paper: classes.popper,
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
+                  root: classes.root,
+                  input: classes.input,
                 }}
                 autoHighlight
                 disableClearable={true}
@@ -426,8 +350,8 @@ const Nav = ({ ecoFilter }) => {
                     {...params}
                     placeholder="Search Site…"
                     classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
+                      root: classes.root,
+                      input: classes.input,
                     }}
                     ref={params.InputProps.ref}
                     inputProps={params.inputProps}
@@ -469,14 +393,12 @@ const Nav = ({ ecoFilter }) => {
               <>
                 <IconButton
                   edge="end"
-                  // className={classes.menuButton}
                   color="inherit"
                   aria-label="menu"
                   ref={anchorRef}
                   aria-controls={popper ? "menu-list-grow" : undefined}
                   aria-haspopup="true"
                   onClick={togglePopper}
-                  // onClick={handleDrawerOpen}
                 >
                   <MenuIcon />
                 </IconButton>
@@ -529,21 +451,16 @@ const Nav = ({ ecoFilter }) => {
                                 router.push("/dashboard");
                               }}
                               className={classes.popperTop}
-                              // divider={true}
                             >
                               Dashboard
                             </MenuItem>
-                            {/* <Divider
-                              // variant="inset"
-                              className={classes.divider}
-                            /> */}
+
                             <MenuItem
                               onClick={() => {
                                 setPopper(false);
                                 router.push("/dashboard/editor");
                               }}
                               className={classes.popperBottom}
-                              // divider
                             >
                               Create Post
                             </MenuItem>
@@ -553,7 +470,6 @@ const Nav = ({ ecoFilter }) => {
                                 router.push("/signin");
                               }}
                               className={classes.popperBottom}
-                              // divider
                             >
                               Sign In
                             </MenuItem>
@@ -562,7 +478,7 @@ const Nav = ({ ecoFilter }) => {
                                 setPopper(false);
                                 router.push("/donate");
                               }}
-                              className={classes.donateMobile}
+                              className={classes.donate}
                             >
                               Donate
                             </MenuItem>
@@ -584,7 +500,7 @@ const Nav = ({ ecoFilter }) => {
                 paper: classes.drawerPaper,
               }}
             >
-              <div className={classes.drawerHeader}>
+              <div className={classes.header}>
                 <Button
                   className={classes.title}
                   onClick={() => {
@@ -642,8 +558,7 @@ const Nav = ({ ecoFilter }) => {
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>
-      {/* <Toolbar></Toolbar> */}
-    </div>
+    </>
   );
 };
 

@@ -17,7 +17,7 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import FlagIcon from "@material-ui/icons/Flag";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Alert } from "@material-ui/lab";
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     borderRadius: "10px",
   },
-  tabbar: {
+  tabBar: {
     backgroundColor: theme.palette.primary.light,
     borderRadius: "10px",
   },
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
-  tablerow: {
+  tableRow: {
     backgroundColor: "#001e3c!important",
     textAlign: "center",
     color: "#ffffff!important",
@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
     border: "thin solid",
     marginLeft: 10,
   },
-  flagbox: {
+  flagBox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -109,13 +109,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const mammal = ({ mammal, wiki }) => {
-  const theme = useTheme();
-
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
   const [dialog, setDialog] = useState(false);
-  // console.log(dialog);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -145,7 +142,6 @@ const mammal = ({ mammal, wiki }) => {
 
   const options = {
     replace: (domNode) => {
-      // console.log(domNode);
       if (domNode.attribs && domNode.children && domNode.name === "a") {
         const props = attributesToProps(domNode.attribs);
         return (
@@ -195,7 +191,7 @@ const mammal = ({ mammal, wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "th") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <th {...props} className={classes.tablerow}>
+          <th {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </th>
         );
@@ -203,7 +199,7 @@ const mammal = ({ mammal, wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "tr") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <tr {...props} className={classes.tablerow}>
+          <tr {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </tr>
         );
@@ -211,7 +207,7 @@ const mammal = ({ mammal, wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "td") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <td {...props} className={classes.tablerow}>
+          <td {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </td>
         );
@@ -223,7 +219,7 @@ const mammal = ({ mammal, wiki }) => {
       ) {
         const props = attributesToProps(domNode.attribs);
         return (
-          <div {...props} className={classes.tablerow}>
+          <div {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </div>
         );
@@ -244,7 +240,7 @@ const mammal = ({ mammal, wiki }) => {
   return (
     <>
       <Container>
-        <div className={classes.flagbox}>
+        <div className={classes.flagBox}>
           <div className={classes.spacer}></div>
           <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
           <IconButton
@@ -269,7 +265,7 @@ const mammal = ({ mammal, wiki }) => {
         </Typography>
 
         <div className={classes.tabs}>
-          <AppBar position="static" elevation={0} className={classes.tabbar}>
+          <AppBar position="static" elevation={0} className={classes.tabBar}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -387,7 +383,7 @@ const mammal = ({ mammal, wiki }) => {
 // fetch mammal data at build time
 export const getServerSideProps = async () => {
   const mammal = await getMammalById("61706ddadbe0fa4daeb7a6f7");
-  // console.log(mammal);
+
   const wikiRes = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
       mammal.Scientific_Name.toLowerCase().split(" ")[0]
@@ -403,7 +399,6 @@ export const getServerSideProps = async () => {
   );
 
   const wiki = await wikiRes.json();
-  // console.log(wiki);
 
   return {
     props: {

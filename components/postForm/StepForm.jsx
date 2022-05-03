@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState } from "react";
 
 import { useRouter } from "next/router";
 
@@ -7,13 +7,11 @@ import {
   Step,
   StepButton,
   Stepper,
-  Typography,
-  IconButton,
   Snackbar,
   Link,
 } from "@material-ui/core";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 
 import { Alert } from "@material-ui/lab";
 import DashboardDialog from "../dialogs/DashboardDialog";
@@ -22,60 +20,18 @@ import PostRegion from "./PostRegion";
 import PostEditor from "./PostEditor";
 
 const useStyles = makeStyles((theme) => ({
-  search: {
-    position: "relative",
-    // border: "2px solid #94c9ff",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.main,
-
-    "&:focus-within": {
-      backgroundColor: theme.palette.primary.main,
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      borderRadius: theme.shape.borderRadius,
-    },
-    // marginLeft: 0,
-    // width: "100%",
-    // [theme.breakpoints.up("sm")]: {
-    marginTop: 6,
-    marginBottom: 10,
-    // marginLeft: theme.spacing(1),
-    width: "auto",
-    // },
-  },
-
-  select: {
-    color: theme.palette.text.primary,
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        // border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-      },
-      "&:hover fieldset": {
-        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-        border: "none",
-      },
-      "&.Mui-focused fieldset": {
-        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-      },
-    },
-  },
   stepLabel: {
     "& .MuiStepLabel-label": {
       color: alpha(theme.palette.text.primary, 0.7),
     },
     "& .MuiStepLabel-active": {
       color: theme.palette.text.primary,
-      // fontWeight: 700,
     },
     "& .MuiStepIcon-active": {
       color: `${theme.palette.secondary.dark}!important`,
-
-      // fontWeight: 700,
     },
     "& .MuiStepIcon-root": {
       color: alpha(theme.palette.secondary.dark, 0.4),
-
-      // fontWeight: 700,
     },
   },
   stepper: {
@@ -90,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.light,
   },
   link: {
-    color: theme.palette.secondary.light,
     marginLeft: 10,
   },
 }));
@@ -98,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 // pass in post and url path as props
 const StepForm = ({ post, pathName }) => {
   const classes = useStyles();
-  const theme = useTheme();
   const router = useRouter();
 
   const { title, description, category, tags, ecoregions } = post;
@@ -116,7 +70,6 @@ const StepForm = ({ post, pathName }) => {
     category,
     tags,
   });
-  // console.log(details);
 
   // set map state
   const [clickInfo, setClickInfo] = useState(ecoregions);
@@ -232,7 +185,6 @@ const StepForm = ({ post, pathName }) => {
     }
     // combine form value and editor value into one object to pass to api.
     const value = Object.assign(postObject, details, ecoObject, silentObject);
-    // console.log(value);
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
@@ -268,7 +220,7 @@ const StepForm = ({ post, pathName }) => {
           },
           body: JSON.stringify(value),
         });
-        // console.log(res3);
+
         if (res3.ok) {
           const ID = await res3.json();
           router.push(`/dashboard/drafts/${ID.insertedId}`);
@@ -322,15 +274,10 @@ const StepForm = ({ post, pathName }) => {
               >
                 Back
               </Button>
-              {/* <div> */}
+
               {pathName == "/dashboard/posts/[_id]" ? (
                 <>
-                  <Button
-                    // onClick={() => save(postValue, details, clickInfo)}
-                    variant="contained"
-                    color="secondary"
-                    disabled
-                  >
+                  <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
                   {details.title != "" &&
@@ -339,7 +286,6 @@ const StepForm = ({ post, pathName }) => {
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
-                        // {() => publish(postValue, details, clickInfo)}
                         handleOpenDialog(
                           "Publish",
                           "post",
@@ -354,12 +300,7 @@ const StepForm = ({ post, pathName }) => {
                       Publish
                     </Button>
                   ) : (
-                    <Button
-                      // onClick={() => publish(postValue, details, clickInfo)}
-                      variant="contained"
-                      color="secondary"
-                      disabled
-                    >
+                    <Button variant="contained" color="secondary" disabled>
                       Publish
                     </Button>
                   )}
@@ -379,7 +320,6 @@ const StepForm = ({ post, pathName }) => {
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
-                        // {() => publish(postValue, details, clickInfo)}
                         handleOpenDialog(
                           "Publish",
                           pathName == "editor" ? "create" : "draft",
@@ -394,19 +334,13 @@ const StepForm = ({ post, pathName }) => {
                       Publish
                     </Button>
                   ) : (
-                    <Button
-                      // onClick={() => publish(postValue, details, clickInfo)}
-                      variant="contained"
-                      color="secondary"
-                      disabled
-                    >
+                    <Button variant="contained" color="secondary" disabled>
                       Publish
                     </Button>
                   )}
                 </>
               )}
 
-              {/* </div> */}
               <Button variant="contained" color="default" onClick={handleNext}>
                 Next
               </Button>
@@ -429,15 +363,10 @@ const StepForm = ({ post, pathName }) => {
               <Button variant="contained" color="default" onClick={handleBack}>
                 Back
               </Button>
-              {/* <div> */}
+
               {pathName == "/dashboard/posts/[_id]" ? (
                 <>
-                  <Button
-                    // onClick={() => save(postValue, details, clickInfo)}
-                    variant="contained"
-                    color="secondary"
-                    disabled
-                  >
+                  <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
                   {details.title != "" &&
@@ -446,7 +375,6 @@ const StepForm = ({ post, pathName }) => {
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
-                        // {() => publish(postValue, details, clickInfo)}
                         handleOpenDialog(
                           "Publish",
                           "post",
@@ -461,12 +389,7 @@ const StepForm = ({ post, pathName }) => {
                       Publish
                     </Button>
                   ) : (
-                    <Button
-                      // onClick={() => publish(postValue, details, clickInfo)}
-                      variant="contained"
-                      color="secondary"
-                      disabled
-                    >
+                    <Button variant="contained" color="secondary" disabled>
                       Publish
                     </Button>
                   )}
@@ -487,7 +410,6 @@ const StepForm = ({ post, pathName }) => {
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
-                        // {() => publish(postValue, details, clickInfo)}
                         handleOpenDialog(
                           "Publish",
                           pathName == "editor" ? "create" : "draft",
@@ -502,18 +424,13 @@ const StepForm = ({ post, pathName }) => {
                       Publish
                     </Button>
                   ) : (
-                    <Button
-                      // onClick={() => publish(postValue, details, clickInfo)}
-                      variant="contained"
-                      color="secondary"
-                      disabled
-                    >
+                    <Button variant="contained" color="secondary" disabled>
                       Publish
                     </Button>
                   )}
                 </>
               )}
-              {/* </div> */}
+
               <Button variant="contained" color="default" onClick={handleNext}>
                 Next
               </Button>
@@ -530,15 +447,10 @@ const StepForm = ({ post, pathName }) => {
               <Button variant="contained" color="default" onClick={handleBack}>
                 Back
               </Button>
-              {/* <div> */}
+
               {pathName == "/dashboard/posts/[_id]" ? (
                 <>
-                  <Button
-                    // onClick={() => save(postValue, details, clickInfo)}
-                    variant="contained"
-                    color="secondary"
-                    disabled
-                  >
+                  <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
                   {details.title != "" &&
@@ -547,7 +459,6 @@ const StepForm = ({ post, pathName }) => {
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
-                        // {() => publish(postValue, details, clickInfo)}
                         handleOpenDialog(
                           "Publish",
                           "post",
@@ -562,12 +473,7 @@ const StepForm = ({ post, pathName }) => {
                       Publish
                     </Button>
                   ) : (
-                    <Button
-                      // onClick={() => publish(postValue, details, clickInfo)}
-                      variant="contained"
-                      color="secondary"
-                      disabled
-                    >
+                    <Button variant="contained" color="secondary" disabled>
                       Publish
                     </Button>
                   )}
@@ -587,7 +493,6 @@ const StepForm = ({ post, pathName }) => {
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
-                        // {() => publish(postValue, details, clickInfo)}
                         handleOpenDialog(
                           "Publish",
                           pathName == "editor" ? "create" : "draft",
@@ -602,18 +507,12 @@ const StepForm = ({ post, pathName }) => {
                       Publish
                     </Button>
                   ) : (
-                    <Button
-                      // onClick={() => publish(postValue, details, clickInfo)}
-                      variant="contained"
-                      color="secondary"
-                      disabled
-                    >
+                    <Button variant="contained" color="secondary" disabled>
                       Publish
                     </Button>
                   )}
                 </>
               )}
-              {/* </div> */}
 
               <Button
                 variant="contained"
@@ -655,11 +554,7 @@ const StepForm = ({ post, pathName }) => {
           </StepButton>
         </Step>
         <Step>
-          <StepButton
-            onClick={handleStep(2)}
-            className={classes.stepLabel}
-            // classes={{ label: classes.stepLabel }}
-          >
+          <StepButton onClick={handleStep(2)} className={classes.stepLabel}>
             map
           </StepButton>
         </Step>

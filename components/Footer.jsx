@@ -7,12 +7,9 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-  link: {
-    color: theme.palette.secondary.light,
-  },
+const useStyles = makeStyles(() => ({
   spacing: {
     marginTop: 20,
   },
@@ -33,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Footer = () => {
   const classes = useStyles();
-  const theme = useTheme();
+
   return (
     <footer className={classes.footer}>
       <Divider />
@@ -44,40 +41,25 @@ const Footer = () => {
 
         <Grid container spacing={2} className={classes.spacing}>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/privacy" className={classes.link}>
-              Privacy Policy
-            </Link>
-          </Grid>
-
-          <Grid item xs={4} className={classes.text}>
-            <Link href="/contact" className={classes.link}>
-              Contact Us
-            </Link>
+            <Link href="/privacy">Privacy Policy</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/featured" className={classes.link}>
-              Featured Posts
-            </Link>
+            <Link href="/contact">Contact Us</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/terms" className={classes.link}>
-              Terms of Use
-            </Link>
+            <Link href="/featured">Featured Posts</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/about" className={classes.link}>
-              About Us
-            </Link>
+            <Link href="/terms">Terms of Use</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/species" className={classes.link}>
-              Species Map
-            </Link>
+            <Link href="/about">About Us</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/sitemap" className={classes.link}>
-              Site Map
-            </Link>
+            <Link href="/species">Species Map</Link>
+          </Grid>
+          <Grid item xs={4} className={classes.text}>
+            <Link href="/sitemap">Site Map</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}></Grid>
           <Grid item xs={4} className={classes.text}>

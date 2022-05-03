@@ -1,8 +1,8 @@
 import { Typography } from "@material-ui/core";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   header: {
     marginTop: 40,
   },
@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = ({ title, className }) => {
   const classes = useStyles();
-  const theme = useTheme();
   return (
     <Typography
       variant="h4"

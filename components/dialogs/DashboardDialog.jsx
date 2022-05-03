@@ -5,15 +5,9 @@ import {
   DialogContentText,
   DialogActions,
   DialogTitle,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@material-ui/core";
 
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 const DashboardDialog = ({
   open,
@@ -108,12 +102,6 @@ const DashboardDialog = ({
     default:
       break;
   }
-
-  // const [reason, setReason] = useState("language");
-
-  // const handleChange = (event) => {
-  //   setReason(event.target.value);
-  // };
 
   const handleSubmit = async () => {
     switch (action) {
@@ -230,138 +218,6 @@ const DashboardDialog = ({
       default:
         break;
     }
-    // if (action == "Delete") {
-    //   const res = await fetch(`/api/delete${endpoint}`, {
-    //     method: "DELETE",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body:
-    //       contentType == "person"
-    //         ? JSON.stringify(result.name)
-    //         : JSON.stringify(result._id),
-    //   });
-
-    //   if (res.ok && contentType !== "person") {
-    //     const notify = {
-    //       name: result.name,
-    //       reason: reason,
-    //       text: `a ${item} of yours was deleted for a ${reason} violation`,
-    //       ref: result._id,
-    //       date: new Date().toUTCString(),
-    //       viewed: false,
-    //     };
-
-    //     const res1 = await fetch("/api/createNotification", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(notify),
-    //     });
-
-    //     if (res1.ok) {
-    //       if (mutate) {
-    //         mutate();
-    //       }
-
-    //       handleClose();
-    //       setSnackbar({
-    //         open: true,
-    //         severity: "success",
-    //         message: `${endpoint} deleted successfully`,
-    //       });
-    //     }
-    //     if (!res1.ok) {
-    //       setSnackbar({
-    //         open: true,
-    //         severity: "error",
-    //         message: `There was a problem deleting ${endpoint}. Please try again later`,
-    //       });
-    //     }
-    //   }
-    //   if (!res.ok) {
-    //     setSnackbar({
-    //       open: true,
-    //       severity: "error",
-    //       message: `There was a problem deleting ${endpoint}. Please try again later`,
-    //     });
-    //   }
-    // } else {
-    //   const res = await fetch(`/api/update${endpoint}`, {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(submission),
-    //   });
-    //   if (action == "Deny") {
-    //     if (res.ok) {
-    //       const notify = {
-    //         name: result.name,
-    //         reason: reason,
-    //         text: `a ${item} of yours was denied for a ${reason} violation`,
-    //         ref: result._id,
-    //         date: new Date().toUTCString(),
-    //         viewed: false,
-    //       };
-
-    //       const res1 = await fetch("/api/createNotification", {
-    //         method: "POST",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(notify),
-    //       });
-
-    //       if (res1.ok) {
-    //         if (mutate) {
-    //           mutate();
-    //         }
-
-    //         handleClose();
-    //         setSnackbar({
-    //           open: true,
-    //           severity: "success",
-    //           message: `${endpoint} denied successfully`,
-    //         });
-    //       }
-    //       if (!res1.ok) {
-    //         setSnackbar({
-    //           open: true,
-    //           severity: "error",
-    //           message: `There was a problem denying ${endpoint}. Please try again later`,
-    //         });
-    //       }
-    //     }
-    //     if (!res.ok) {
-    //       setSnackbar({
-    //         open: true,
-    //         severity: "error",
-    //         message: `There was a problem denying ${endpoint}. Please try again later`,
-    //       });
-    //     }
-    //   } else {
-    //     if (res.ok) {
-    //       if (mutate) {
-    //         mutate();
-    //       }
-    //       handleClose();
-    //       setSnackbar({
-    //         open: true,
-    //         severity: "success",
-    //         message: `${endpoint} approved successfully`,
-    //       });
-    //     }
-    //     if (!res.ok) {
-    //       setSnackbar({
-    //         open: true,
-    //         severity: "error",
-    //         message: `There was a problem approving ${endpoint}. Please try again later`,
-    //       });
-    //     }
-    //   }
-    // }
   };
 
   return (

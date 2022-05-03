@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     backgroundColor: theme.palette.primary.light,
   },
-  flagbox: {
+  flagBox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -122,16 +122,12 @@ const post = ({ post, comments }) => {
   });
 
   const reducer = (comments, toggle) => {
-    // console.log(toggle);
     if (toggle.type == "open") {
       return comments.map((comment) => {
         if (comment._id == toggle.payload) {
           comment.open = true;
-          // console.log(comment.open);
-          // return comment;
         }
-        // console.log(comment.open);
-        // console.log(comments);
+
         return comment;
       });
     }
@@ -139,22 +135,15 @@ const post = ({ post, comments }) => {
       return comments.map((comment) => {
         if (comment._id == toggle.payload) {
           comment.open = false;
-          // console.log(comment.open);
-          // return comment;
         }
-        // console.log(comment.open);
-        // console.log(comments);
+
         return comment;
       });
     }
     if (toggle.type == "all") {
       return comments.map((comment) => {
         comment.open = false;
-        // console.log(comment.open);
-        // return comment;
 
-        // console.log(comment.open);
-        // console.log(comments);
         return comment;
       });
     }
@@ -165,7 +154,6 @@ const post = ({ post, comments }) => {
   };
 
   const [state, dispatch] = useReducer(reducer, comments);
-  // console.log(comments);
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -189,7 +177,7 @@ const post = ({ post, comments }) => {
 
   const handleCloseDialog = (reply) => {
     setDialog(false);
-    // console.log(comments);
+
     if (reply == "reply") {
       dispatch({ type: "all" });
     }
@@ -203,7 +191,6 @@ const post = ({ post, comments }) => {
   };
   const closeForm = () => {
     setShowForm(false);
-    // setReply(false);
   };
 
   const handleOpenFlag = (action, result) => {
@@ -216,11 +203,8 @@ const post = ({ post, comments }) => {
     setFlag(false);
   };
 
-  // const [reply, setReply] = useState(false);
   const handleReply = (toggle, ID) => {
-    // console.log(state);
     dispatch({ type: toggle, payload: ID });
-    // console.log(dispatch.toggle);
   };
 
   const date = new Date(post.date);
@@ -228,7 +212,7 @@ const post = ({ post, comments }) => {
   return (
     <>
       <Container className={classes.container}>
-        <div className={classes.flagbox}>
+        <div className={classes.flagBox}>
           <div className={classes.spacer}></div>
           <Header title={post.title} />
           <IconButton

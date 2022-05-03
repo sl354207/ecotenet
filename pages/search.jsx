@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -25,13 +25,11 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.light,
-
     "&:focus-within": {
       backgroundColor: theme.palette.primary.light,
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-
     marginTop: 20,
     marginBottom: 20,
     marginLeft: theme.spacing(1),
@@ -57,9 +55,7 @@ const useStyles = makeStyles((theme) => ({
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const search = ({ ecoFilter }) => {
-  // console.log(dog);
   const classes = useStyles();
-  const theme = useTheme();
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -76,7 +72,6 @@ const search = ({ ecoFilter }) => {
     `/api/search/${queryFilter}?q=${query}`,
     fetcher
   );
-  // console.log(results);
 
   let list;
 

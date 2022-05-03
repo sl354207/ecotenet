@@ -2,10 +2,8 @@ import { Button, ListItem, Typography, useMediaQuery } from "@material-ui/core";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import { useRouter } from "next/router";
-
-const useStyles = makeStyles((theme) => ({
-  buttonspecies: {
+const useStyles = makeStyles(() => ({
+  button: {
     display: "block",
     justifyContent: "start",
     textTransform: "none",
@@ -17,18 +15,14 @@ const SpeciesItem = ({ result }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const router = useRouter();
-
   return (
     <ListItem key={result._id}>
       <Button
         variant="outlined"
         color="secondary"
         fullWidth
-        className={classes.buttonspecies}
-        onClick={() => {
-          router.push("/mammal");
-        }}
+        className={classes.button}
+        href="/mammal"
       >
         {isMobile ? (
           <>

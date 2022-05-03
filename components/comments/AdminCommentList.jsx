@@ -1,107 +1,39 @@
 import {
   Button,
-  IconButton,
   Typography,
   Link,
   Container,
-  Divider,
-  CircularProgress,
-  Snackbar,
   List,
   ListItem,
 } from "@material-ui/core";
 
-import useSWR from "swr";
-
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
-
-import { useRouter } from "next/router";
-
-import { useState } from "react";
-import { Alert } from "@material-ui/lab";
-import Notify from "../dialogs/AdminDialog";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  description: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    // display: "flex",
-    flexDirection: "column",
-    maxWidth: 800,
-    flexGrow: 1,
-    marginLeft: 20,
-  },
-  items: {
-    display: "flex",
-    // flexGrow: 1,
-  },
-
-  publish: {
-    marginLeft: 20,
-    // color: theme.palette.secondary.light,
-    fontStyle: "italic",
-  },
-  container: {
-    backgroundColor: theme.palette.primary.main,
-    // marginTop: "20px",
-  },
-  title: {
-    paddingTop: "40px",
-  },
-  commentsection: {
-    marginTop: 20,
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  button: {
-    marginLeft: 4,
-  },
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
-  buttonpost: {
+  buttonPost: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    // border: "1px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
     margin: "20px auto",
     borderRadius: "10px",
   },
-  buttonreply: {
+  buttonReply: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    // border: "1px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
     marginLeft: 60,
     width: "auto",
     marginTop: "20px",
-
     borderRadius: "10px",
   },
-  buttonmobile: {
+  buttonMobile: {
     display: "grid",
   },
-  buttonup: {
+  buttonDesktop: {
     marginTop: 4,
   },
-
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
-
   comment: {
     display: "flow-root",
     flexGrow: 1,
@@ -115,7 +47,6 @@ const AdminCommentList = ({
   handleOpenResolve,
 }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -146,10 +77,9 @@ const AdminCommentList = ({
                 key={comment._id}
                 className={
                   comment.comment_ref !== comment._id
-                    ? classes.buttonreply
-                    : classes.buttonpost
+                    ? classes.buttonReply
+                    : classes.buttonPost
                 }
-                // className={classes.buttonpost}
                 style={
                   comment._id == comment_query
                     ? { borderColor: "#fc7ebf" }
@@ -163,7 +93,7 @@ const AdminCommentList = ({
                   <Typography>{comment.text}</Typography>
                 </div>
 
-                <div className={classes.buttonmobile}>
+                <div className={classes.buttonMobile}>
                   {comment._id == comment_query ? (
                     <>
                       <Button
@@ -176,7 +106,7 @@ const AdminCommentList = ({
                       <Button
                         variant="outlined"
                         color="secondary"
-                        className={classes.buttonup}
+                        className={classes.buttonDesktop}
                         onClick={() =>
                           handleOpenDialog("Deny", "comment", comment)
                         }
@@ -187,7 +117,7 @@ const AdminCommentList = ({
                       <Button
                         variant="outlined"
                         color="secondary"
-                        className={classes.buttonup}
+                        className={classes.buttonDesktop}
                         onClick={() =>
                           handleOpenDialog("Delete", "comment", comment)
                         }
@@ -212,7 +142,7 @@ const AdminCommentList = ({
                           <Button
                             variant="outlined"
                             color="secondary"
-                            className={classes.buttonup}
+                            className={classes.buttonDesktop}
                             onClick={() =>
                               handleOpenDialog("Delete", "comment", comment)
                             }

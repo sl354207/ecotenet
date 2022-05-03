@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Description from "../components/Description";
 import Footer from "../components/Footer";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   spacer: {
     marginBottom: 10,
   },
@@ -256,11 +256,9 @@ const category = () => {
         <Typography className={classes.spacer} variant="body1">
           Posts about how to make or use furniture, utensils or any type of tool
         </Typography>
-
         <Typography className={classes.spacer} variant="h5" color="secondary">
           Culture:
         </Typography>
-
         <Typography className={classes.spacer} variant="h6">
           Cooking/Recipes
         </Typography>
@@ -271,7 +269,6 @@ const category = () => {
         <Typography className={classes.spacer} variant="h6">
           Clothing
         </Typography>
-
         <Typography className={classes.spacer} variant="body1">
           Posts about how to make clothing, from tanning to sewing, as well as
           styling

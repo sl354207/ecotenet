@@ -1,11 +1,9 @@
 import { createTheme } from "@material-ui/core/styles";
-import { grey } from "@material-ui/core/colors";
 
 // Create a theme instance.
 const theme = createTheme({
   palette: {
     primary: {
-      // #fafafa
       main: "#001e3c",
       light: "#132f4c",
       dark: "#0a1929",
@@ -15,7 +13,6 @@ const theme = createTheme({
       light: "#c8fcff",
       dark: "#0071e4",
     },
-    // "#1e4976"
     divider: "#94c9ff",
     background: {
       default: "#0a1929",

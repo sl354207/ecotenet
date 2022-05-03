@@ -27,7 +27,7 @@ import {
 
 import useSWR from "swr";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { useRouter } from "next/router";
 
@@ -43,6 +43,9 @@ import AdminCommentList from "../../../components/comments/AdminCommentList";
 import Resolve from "../../../components/dialogs/Resolve";
 
 const useStyles = makeStyles((theme) => ({
+  header: {
+    marginTop: 20,
+  },
   box: {
     display: "flex",
     justifyContent: "center",
@@ -79,38 +82,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#fc7ebf",
     borderColor: "#fc7ebf",
   },
-  buttonpost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    // border: "1px solid #94c9ff",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  buttonreply: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    // border: "1px solid #94c9ff",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-    marginLeft: 60,
-    width: "auto",
-    // margin: "10px auto",
-
-    borderRadius: "10px",
-  },
-  buttonmobile: {
-    display: "grid",
-  },
-  buttonup: {
-    marginTop: 4,
-  },
-
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
 }));
 
 // Define which plugins we want to use.
@@ -127,7 +98,6 @@ const post = () => {
   const flag = router.query.flag;
 
   const flagee = router.query.flagee;
-  //   console.log(ID);
 
   const [dialog, setDialog] = useState(false);
   const [resolve, setResolve] = useState(false);

@@ -1,111 +1,22 @@
-import {
-  FormControl,
-  InputLabel,
-  InputBase,
-  Button,
-  Link,
-} from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
+import { FormControl, InputLabel, Button, Link } from "@material-ui/core";
+
 import DeleteIcon from "@material-ui/icons/Delete";
-import {
-  alpha,
-  makeStyles,
-  withStyles,
-  useTheme,
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 
-import { useRouter } from "next/router";
 import TextBox from "../TextBox";
 
-const useStyles = makeStyles((theme) => ({
-  tabs: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    // fontSize: 20,
-    // maxWidth: 40,
-
-    // [theme.breakpoints.down("xs")]: {
-    //   fontSize: 10,
-    // },
-    borderRadius: "10px",
-  },
-  tabbar: {
-    backgroundColor: theme.palette.primary.light,
-    borderRadius: "10px",
-  },
-  title: {
-    marginBottom: 20,
-    marginTop: 20,
-  },
-  ecoregions: {
-    marginBottom: 20,
-  },
-  tab: {
-    // fontSize: 18,
-    // minWidth: 65,
-    flexGrow: 1,
-    backgroundColor: theme.palette.primary.light,
-    minHeight: 80,
-    borderRadius: "10px",
-    "&:hover": {
-      color: theme.text,
-      opacity: 1,
-    },
-  },
-  tablerow: {
-    backgroundColor: "#001e3c!important",
-    textAlign: "center",
-    color: "#ffffff!important",
-  },
-  table: {
-    [theme.breakpoints.down("xs")]: {
-      margin: "auto",
-      float: "none",
-    },
-    float: "right",
-    border: "thin solid",
-    marginLeft: 10,
-  },
-  buttonpost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    // border: "1px solid #94c9ff",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  card: {
-    // display: "flex",
-    flex: "auto",
-    marginRight: 20,
-    // display: "block",
-  },
-  buttongroup: {
-    // flexDirection: "column",
+const useStyles = makeStyles(() => ({
+  buttonGroup: {
     display: "grid",
     margin: "auto 0px auto 20px",
   },
-  buttonedit: {
+  buttonEdit: {
     margin: "4px 0px",
     minWidth: "fit-content",
     justifyContent: "start",
   },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  profile: {
-    // border: "thin solid",
-    // borderRadius: "10px",
-  },
-  items: {
-    // display: "flex",
+  form: {
     flexGrow: 1,
   },
   text: {
@@ -115,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
   comment: {
     flexGrow: 1,
   },
-  link: {
-    color: theme.palette.secondary.light,
-  },
 }));
 
 const DashboardComment = ({
@@ -126,10 +34,7 @@ const DashboardComment = ({
   mutate,
   setSnackbar,
 }) => {
-  const theme = useTheme();
   const classes = useStyles();
-
-  const router = useRouter();
 
   const [commentValue, setCommentValue] = useState("");
 
@@ -169,12 +74,10 @@ const DashboardComment = ({
 
   return (
     <div className={classes.comment}>
-      <Link href={`/posts/${result.post_id}`} className={classes.link}>
-        View Post
-      </Link>{" "}
-      {result.date} Approved: {result.approved}
+      <Link href={`/posts/${result.post_id}`}>View Post</Link> {result.date}{" "}
+      Approved: {result.approved}
       <div className={classes.text}>
-        <FormControl className={classes.items}>
+        <FormControl className={classes.form}>
           <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
           <TextBox
             defaultValue={result.text}
@@ -182,15 +85,14 @@ const DashboardComment = ({
             id="dashboardcomment"
             handleChange={handleCommentChange}
             autoFocus={false}
-            // rows={1}
           />
         </FormControl>
-        <div className={classes.buttongroup}>
+        <div className={classes.buttonGroup}>
           {commentValue != "" ? (
             <Button
               variant="contained"
               color="secondary"
-              className={classes.buttonedit}
+              className={classes.buttonEdit}
               size="small"
               onClick={() => handleCommentUpdate(commentValue)}
             >
@@ -200,7 +102,7 @@ const DashboardComment = ({
             <Button
               variant="contained"
               color="secondary"
-              className={classes.buttonedit}
+              className={classes.buttonEdit}
               size="small"
               disabled
             >
@@ -211,7 +113,7 @@ const DashboardComment = ({
           <Button
             variant="contained"
             color="secondary"
-            className={classes.buttonedit}
+            className={classes.buttonEdit}
             startIcon={<DeleteIcon />}
             size="small"
             onClick={handleDeleteOpen}

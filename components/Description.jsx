@@ -1,8 +1,8 @@
 import { Typography } from "@material-ui/core";
 
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   description: {
     marginTop: 20,
     marginBottom: 20,
@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Description = ({ description, align, className }) => {
   const classes = useStyles();
-  const theme = useTheme();
+
   return (
     <Typography
       variant="body1"

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 import Map, { Popup, Source, Layer, AttributionControl } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -7,15 +7,10 @@ import Geocoder from "./Geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 import { useRouter } from "next/router";
-import {
-  Button,
-  CircularProgress,
-  Typography,
-  useMediaQuery,
-} from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Button, CircularProgress, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   popup: {
     display: "grid",
   },
@@ -25,8 +20,6 @@ const MapMain = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
   const classes = useStyles();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   //  base layer
   const ecoFill = {
@@ -73,14 +66,6 @@ const MapMain = () => {
     },
   };
 
-  // const [viewport, setViewport] = useState({
-  //   latitude: 37.8,
-  //   longitude: -98,
-  //   zoom: 4,
-  //   bearing: 0,
-  //   pitch: 0,
-  // });
-
   const [hoverInfo, setHoverInfo] = useState(null);
 
   const [showPopup, setShowPopup] = useState(true);
@@ -91,9 +76,9 @@ const MapMain = () => {
   const onHover = useCallback(
     (event) => {
       setShowPopup(true);
-      // console.log(showPopup);
+
       const region = event.features && event.features[0];
-      // console.log(region.properties.unique_id);
+
       if (region.properties.unique_id != "<NA>") {
         setHoverInfo({
           longitude: event.lngLat.lng,
@@ -102,14 +87,11 @@ const MapMain = () => {
           regionNum: region && region.properties.unique_id,
         });
       }
-
-      // console.log(hoverInfo);
     },
     [hoverInfo]
   );
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
-  // console.log(selectedRegion);
 
   const ecoName = (hoverInfo && hoverInfo.regionName) || "";
 
@@ -132,104 +114,12 @@ const MapMain = () => {
       .replace(/--+/g, "-");
 
   const handleClick = (event) => {
-    // const region = event.features && event.features[0];
-    // // console.log(selectedRegion);
-    // if (selectedRegion !== "") {
-    //   const slug = slugify(selectedRegion);
-    //   // router.push(`/${slug}`);
-    //   router.push("/success");
-    // }
     setShowLoad(true);
     router.push("/success");
   };
 
-  // set ref and functionality for geocoder
-  // const geocoderContainerRef = useRef();
-  // const mapRef = useRef();
-  // const handleViewportChange = useCallback(
-  //   (newViewport) => setViewport(newViewport),
-  //   []
-  // );
-
   return (
     <>
-      {/* {isMobile ? (
-        <div style={{ height: "91vh" }}>
-          <Map
-            style={{ width: "auto", height: "91vh" }}
-            initialViewState={{
-              latitude: 37.8,
-              longitude: -98,
-              zoom: 4,
-              bearing: 0,
-              pitch: 0,
-            }}
-            minZoom={2}
-            maxZoom={9}
-            doubleClickZoom={false}
-            mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-            mapboxAccessToken={mapBox}
-            interactiveLayerIds={["eco-fill"]}
-            onClick={onHover}
-            onDblClick={handleClick}
-          >
-            <Geocoder
-              mapboxAccessToken={mapBox}
-              position="top-left"
-              placeholder="Search Map"
-              clearAndBlurOnEsc
-              clearOnBlur
-            />
-            <Source
-              id="ecomap"
-              type="vector"
-              url="mapbox://sl354207.ecomap-tiles"
-            >
-              <Layer beforeId="waterway-label" {...ecoLine} />
-              <Layer beforeId="waterway-label" {...ecoFill} />
-              <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} />
-            </Source>
-            {selectedRegion && showPopup && (
-              <Popup
-                longitude={hoverInfo.longitude}
-                latitude={hoverInfo.latitude}
-                closeOnClick={false}
-                onClose={() => setShowPopup(false)}
-                maxWidth="500px"
-              >
-                <div className={classes.popup}>
-                  {!showLoad ? (
-                    <>
-                      <Typography color="textSecondary" align="center">
-                        {ecoName}
-                      </Typography>
-                      <Typography color="textSecondary" align="center">
-                        Eco-{selectedRegion}
-                      </Typography>
-                      <Button
-                        variant="contained"
-                        disableElevation={true}
-                        size="small"
-                        color="primary"
-                        onClick={handleClick}
-                      >
-                        Enter
-                      </Button>
-                    </>
-                  ) : (
-                    <CircularProgress
-                      color="primary"
-                      size={100}
-                      disableShrink={true}
-                      
-                    />
-                  )}
-                </div>
-              </Popup>
-            )}
-          </Map>
-        </div>
-      ) : ( */}
       <div style={{ height: "91vh" }}>
         <Map
           style={{ width: "auto", height: "91vh" }}
@@ -246,14 +136,11 @@ const MapMain = () => {
           boxZoom={false}
           dragRotate={false}
           touchPitch={false}
-          // touchZoomRotate={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
           onClick={onHover}
           attributionControl={false}
-
-          // onDblClick={handleClick}
         >
           <Geocoder
             mapboxAccessToken={mapBox}
@@ -320,7 +207,6 @@ const MapMain = () => {
           )}
         </Map>
       </div>
-      {/* )} */}
     </>
   );
 };

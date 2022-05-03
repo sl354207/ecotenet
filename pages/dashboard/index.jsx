@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -25,7 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
 
 import Header from "../../components/Header";
@@ -70,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     borderRadius: "10px",
   },
-  tabbar: {
+  tabBar: {
     backgroundColor: theme.palette.primary.light,
     borderRadius: "10px",
   },
@@ -84,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
-  buttonpost: {
+  buttonPost: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
@@ -101,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
     flex: "auto",
     marginRight: 20,
   },
-  buttongroup: {
+  buttonGroup: {
     display: "grid",
     margin: "auto 0px auto 20px",
   },
@@ -178,26 +177,18 @@ const useStyles = makeStyles((theme) => ({
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Dashboard() {
-  const router = useRouter();
-
-  const theme = useTheme();
   const classes = useStyles();
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
 
   const [value, setValue] = useState(0);
-  // change to get user profile
 
   const [fetchApi, setFetchApi] = useState("/api/getPerson?q=Muskrat");
-  const [deleteFetch, setDeleteFetch] = useState();
 
-  // const [dialog, setDialog] = useState({ comment: false, post: false });
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
-
-  const [resultID, setResultID] = useState();
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -226,7 +217,6 @@ export default function Dashboard() {
   }, [results]);
 
   const handleChange = (event, newValue) => {
-    // console.log(typeof newValue);
     setValue(newValue);
     switch (newValue) {
       case 0:
@@ -234,23 +224,19 @@ export default function Dashboard() {
         break;
       case 1:
         setFetchApi(`/api/getposts?q1=Muskrat&q2=published`);
-        setDeleteFetch("deletePost");
+
         break;
       case 2:
         setFetchApi(`/api/getposts?q1=Muskrat&q2=draft`);
-        setDeleteFetch("deleteDraft");
 
         break;
       case 3:
         // update comments request
         setFetchApi(`/api/getDashboardComments?q=Muskrat`);
-        setDeleteFetch("deleteComment");
 
         break;
       case 4:
-        // update comments request
         setFetchApi(`/api/getNotifications?q=Muskrat`);
-        setDeleteFetch("deleteNotification");
 
         break;
       default:
@@ -263,7 +249,6 @@ export default function Dashboard() {
       _id: ID,
       viewed: true,
     };
-    // console.log(notify);
 
     const res = await fetch("/api/updateNotification", {
       method: "PUT",
@@ -375,7 +360,7 @@ export default function Dashboard() {
     <Container>
       <Header title="Dashboard" />
       <div className={classes.tabs}>
-        <AppBar position="static" elevation={0} className={classes.tabbar}>
+        <AppBar position="static" elevation={0} className={classes.tabBar}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -601,7 +586,7 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonpost}>
+                      <ListItem key={result._id} className={classes.buttonPost}>
                         <div className={classes.card}>
                           <Typography
                             gutterBottom
@@ -637,7 +622,7 @@ export default function Dashboard() {
                             {result.count}
                           </Typography>
                         </div>
-                        <div className={classes.buttongroup}>
+                        <div className={classes.buttonGroup}>
                           <Button
                             variant="contained"
                             color="secondary"
@@ -691,7 +676,7 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonpost}>
+                      <ListItem key={result._id} className={classes.buttonPost}>
                         <div className={classes.card}>
                           <Typography
                             gutterBottom
@@ -725,7 +710,7 @@ export default function Dashboard() {
                             {result.count}
                           </Typography>
                         </div>
-                        <div className={classes.buttongroup}>
+                        <div className={classes.buttonGroup}>
                           <Button
                             variant="contained"
                             color="secondary"
@@ -771,7 +756,7 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonpost}>
+                      <ListItem key={result._id} className={classes.buttonPost}>
                         <DashboardComment
                           result={result}
                           handleDeleteOpen={() =>
@@ -802,7 +787,7 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonpost}>
+                      <ListItem key={result._id} className={classes.buttonPost}>
                         <div className={classes.card}>
                           <Typography
                             gutterBottom
@@ -830,7 +815,7 @@ export default function Dashboard() {
                           )}
                         </div>
 
-                        <div className={classes.buttongroup}>
+                        <div className={classes.buttonGroup}>
                           <IconButton onClick={() => handleNotify(result._id)}>
                             <CloseIcon />
                           </IconButton>

@@ -1,20 +1,19 @@
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
-import { useState } from "react";
+
 import { List, Button } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 const useStyles = makeStyles((theme) => ({
   comments: {
     backgroundColor: theme.palette.primary.main,
-    // border: "1px solid",
   },
   add: {
     marginBottom: 5,
   },
-  noadd: {
+  noAdd: {
     marginBottom: 10,
   },
 }));
@@ -30,8 +29,6 @@ const CommentList = ({
   handleReply,
 }) => {
   const classes = useStyles();
-  const theme = useTheme();
-  // console.log(comments);
 
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -58,7 +55,7 @@ const CommentList = ({
         color="secondary"
         onClick={handleForm}
         endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        className={showForm ? classes.add : classes.noadd}
+        className={showForm ? classes.add : classes.noAdd}
       >
         Add Comment
       </Button>

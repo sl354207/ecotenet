@@ -5,15 +5,7 @@ import {
   DialogContentText,
   DialogActions,
   DialogTitle,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@material-ui/core";
-
-import { useRouter } from "next/router";
-import { useState } from "react";
 
 const ClientDialog = ({
   open,
@@ -29,7 +21,6 @@ const ClientDialog = ({
   let endpoint;
   let item;
   let submission;
-  //   console.log(contentType);
 
   switch (contentType) {
     case "Vote":
@@ -57,7 +48,6 @@ const ClientDialog = ({
     default:
       break;
   }
-  //   console.log(item);
 
   const handleSubmit = async () => {
     if (contentType == "Comment") {

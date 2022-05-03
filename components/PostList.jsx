@@ -1,27 +1,22 @@
 import { Button, List, ListItem, Typography } from "@material-ui/core";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-  buttonpost: {
+const useStyles = makeStyles(() => ({
+  button: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
   },
-
   card: {
-    // display: "flex",
     flex: "auto",
     marginRight: 20,
-    // display: "block",
-    // border: "1px solid #94c9ff",
   },
 }));
 
 // pass down posts from database to PostList as a prop
 const PostList = ({ posts, featured }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <List>
@@ -32,7 +27,7 @@ const PostList = ({ posts, featured }) => {
               variant="outlined"
               color="secondary"
               fullWidth
-              className={classes.buttonpost}
+              className={classes.button}
               href={featured ? `featured/${post._id}` : `posts/${post._id}`}
             >
               <div className={classes.card}>

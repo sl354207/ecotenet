@@ -1,32 +1,21 @@
 import { useState } from "react";
 import { Button, IconButton, Typography } from "@material-ui/core";
-import {
-  ArrowDropDown,
-  ArrowDropUp,
-  FullscreenExitTwoTone,
-} from "@material-ui/icons";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import ClientDialog from "./dialogs/ClientDialog";
+import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    // display: "flex",
     marginLeft: 20,
   },
   count: {
     display: "flex",
     flexDirection: "column",
-    // justifyContent: "center",
     maxWidth: 50,
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
   },
 }));
 
-const Vote = ({ post_count, count, setCount, post_id, handleOpenDialog }) => {
+const Vote = ({ post_count, count, setCount, handleOpenDialog }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   //set limit for count
   const [limit, setLimit] = useState(0);

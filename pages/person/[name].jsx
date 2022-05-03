@@ -20,14 +20,14 @@ import PostList from "../../components/PostList";
 import Flag from "../../components/dialogs/Flag";
 import { Alert } from "@material-ui/lab";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   profile: {
     margin: 16,
   },
   socials: {
     display: "grid",
   },
-  flagbox: {
+  flagBox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -49,7 +49,6 @@ const person = ({ person, posts }) => {
   const classes = useStyles();
 
   const [dialog, setDialog] = useState(false);
-  // console.log(dialog);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -76,7 +75,7 @@ const person = ({ person, posts }) => {
   return (
     <>
       <Container>
-        <div className={classes.flagbox}>
+        <div className={classes.flagBox}>
           <div className={classes.spacer}></div>
           <Header title={person.name} />
           <IconButton

@@ -3,7 +3,7 @@ import parse, { domToReact, attributesToProps } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { Container, Link, IconButton, Snackbar } from "@material-ui/core";
 import FlagIcon from "@material-ui/icons/Flag";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -12,7 +12,7 @@ import Flag from "../components/dialogs/Flag";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  tablerow: {
+  tableRow: {
     backgroundColor: "#001e3c!important",
     textAlign: "center",
     color: "#ffffff!important",
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   description: {
     marginBottom: 40,
   },
-  flagbox: {
+  flagBox: {
     display: "flex",
     justifyContent: "center",
   },
@@ -49,10 +49,8 @@ const useStyles = makeStyles((theme) => ({
 
 const success = ({ wiki }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [dialog, setDialog] = useState(false);
-  // console.log(dialog);
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -128,7 +126,7 @@ const success = ({ wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "th") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <th {...props} className={classes.tablerow}>
+          <th {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </th>
         );
@@ -136,7 +134,7 @@ const success = ({ wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "tr") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <tr {...props} className={classes.tablerow}>
+          <tr {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </tr>
         );
@@ -144,7 +142,7 @@ const success = ({ wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "td") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <td {...props} className={classes.tablerow}>
+          <td {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </td>
         );
@@ -156,7 +154,7 @@ const success = ({ wiki }) => {
       ) {
         const props = attributesToProps(domNode.attribs);
         return (
-          <div {...props} className={classes.tablerow}>
+          <div {...props} className={classes.tableRow}>
             {domToReact(domNode.children, options)}
           </div>
         );
@@ -177,7 +175,7 @@ const success = ({ wiki }) => {
   return (
     <>
       <Container>
-        <div className={classes.flagbox}>
+        <div className={classes.flagBox}>
           <div className={classes.spacer}></div>
           <Header
             title="Eco-313: Appalachian mixed mesophytic forests"
@@ -256,7 +254,6 @@ export const getServerSideProps = async () => {
   );
 
   const wiki = await wikiRes.json();
-  // console.log(wiki);
 
   return {
     props: {

@@ -1,14 +1,11 @@
 import {
   Button,
   CircularProgress,
-  Divider,
-  Drawer,
   Link,
   List,
   ListItem,
   ListItemText,
   Snackbar,
-  Toolbar,
   Typography,
   useMediaQuery,
 } from "@material-ui/core";
@@ -17,30 +14,16 @@ import useSWR from "swr";
 
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 
-import { useRouter } from "next/router";
-
 import Header from "../../components/Header";
 
 import { useState } from "react";
 import { Alert } from "@material-ui/lab";
 import AdminDialog from "../../components/dialogs/AdminDialog";
-
-const drawerWidth = 120;
+import AdminDrawer from "../../components/AdminDrawer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  paper: {
-    width: drawerWidth,
-    zIndex: 0,
-  },
-  container: {
-    overflow: "auto",
   },
   content: {
     flexGrow: 1,
@@ -54,11 +37,10 @@ const useStyles = makeStyles((theme) => ({
   header: {
     marginTop: 20,
   },
-  buttonpost: {
+  buttonPost: {
     display: "flex",
     justifyContent: "start",
     textTransform: "none",
-    // border: "1px solid #94c9ff",
     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
     margin: "20px auto",
     borderRadius: "10px",
@@ -90,7 +72,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 const adminComments = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const router = useRouter();
+
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [dialog, setDialog] = useState(false);
@@ -150,7 +132,7 @@ const adminComments = () => {
         {results.map((result) => {
           return (
             <>
-              <ListItem key={result._id} className={classes.buttonpost}>
+              <ListItem key={result._id} className={classes.buttonPost}>
                 <div className={classes.comment}>
                   <Link className={classes.link}>{result.name}</Link>
 
@@ -232,51 +214,7 @@ const adminComments = () => {
 
   return (
     <div className={classes.root}>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.paper,
-        }}
-      >
-        <Toolbar />
-        <div className={classes.container}>
-          <List>
-            <ListItem button key="home" onClick={() => router.push("/admin")}>
-              <ListItemText primary="Home" />
-            </ListItem>
-            <ListItem
-              button
-              key="people"
-              onClick={() => router.push("/admin/people")}
-            >
-              <ListItemText primary="People" />
-            </ListItem>
-            <ListItem
-              button
-              key="posts"
-              onClick={() => router.push("/admin/posts")}
-            >
-              <ListItemText primary="Posts" />
-            </ListItem>
-            <ListItem
-              button
-              key="comments"
-              onClick={() => router.push("/admin/comments")}
-            >
-              <ListItemText primary="Comments" />
-            </ListItem>
-            <ListItem
-              button
-              key="flags"
-              onClick={() => router.push("/admin/flags")}
-            >
-              <ListItemText primary="Flags" />
-            </ListItem>
-          </List>
-          <Divider />
-        </div>
-      </Drawer>
+      <AdminDrawer />
       <div className={classes.content}>
         <Header title="Comments" />
         {list}

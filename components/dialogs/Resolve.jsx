@@ -6,10 +6,6 @@ import {
   DialogActions,
   DialogTitle,
   FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Portal,
   InputLabel,
 } from "@material-ui/core";
@@ -17,66 +13,23 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
-import { alpha, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import TextBox from "../TextBox";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.primary.light,
-  },
-  item: {
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-  },
-  reply: {
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-    marginLeft: 60,
-    width: "auto",
-    // margin: "10px auto",
-  },
+const useStyles = makeStyles(() => ({
   comment: {
     display: "flex",
-    // marginTop: 10,
     alignItems: "center",
   },
-  description: {
-    display: "flex",
-    // justifyContent: "center",
-    alignItems: "center",
+  form: {
     flexGrow: 1,
-  },
-  content: {
-    // display: "flex",
-    // flexDirection: "column",
-    // maxWidth: 800,
-    flexGrow: 1,
-    // marginLeft: 20,
-  },
-  items: {
-    // display: "flex",
-    flexGrow: 1,
-  },
-
-  publish: {
-    marginLeft: 20,
-    color: theme.palette.secondary.light,
-    fontStyle: "italic",
   },
   addition: {
     display: "block",
   },
-  submit: {
-    marginLeft: 10,
-  },
   info: {
-    // marginLeft: 60,
     padding: "5px 0px 10px 0px",
   },
   button: {
@@ -93,7 +46,6 @@ const Resolve = ({
   setSnackbar,
   mutate,
 }) => {
-  // console.log(ID);
   const classes = useStyles();
 
   const [addInfo, setAddInfo] = useState("");
@@ -146,7 +98,6 @@ const Resolve = ({
             mutate();
           }
 
-          // handleClose();
           setSnackbar({
             open: true,
             severity: "success",
@@ -213,7 +164,7 @@ const Resolve = ({
         <div className={classes.addition} disableGutters>
           {showForm ? (
             <Portal container={container.current}>
-              <FormControl className={classes.items}>
+              <FormControl className={classes.form}>
                 <InputLabel shrink htmlFor="commentform"></InputLabel>
                 <TextBox
                   id="info"

@@ -21,13 +21,11 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.light,
-
     "&:focus-within": {
       backgroundColor: theme.palette.primary.light,
       border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
       borderRadius: theme.shape.borderRadius,
     },
-
     marginTop: 20,
     marginBottom: 20,
     marginLeft: theme.spacing(1),
@@ -118,7 +116,6 @@ const speciesChips = [
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (speciesChips, action) => {
   if (action.type == "remove") {
-    // console.log(speciesChips);
     switch (action.payload) {
       case 1:
         speciesChips[1].open = speciesChips[2].open;
@@ -166,7 +163,6 @@ const reducer = (speciesChips, action) => {
     }
   }
   if (action.type == "add") {
-    // console.log(speciesChips);
     switch (action.payload) {
       case 1:
         speciesChips[1].open = true;
@@ -204,15 +200,11 @@ const species = () => {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  // set id to id in url query
-  // const router = useRouter();
-
   const [results, setResults] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
 
   const handleChange = async (e) => {
     if (e.target.value) {
-      //   console.log(e.target.value);
       const res = await fetch(`/api/search/autoSpecies?q=${e.target.value}`, {
         method: "GET",
         headers: {
@@ -221,7 +213,6 @@ const species = () => {
       });
 
       const data = await res.json();
-      // console.log(data);
       setResults(data);
     }
   };
@@ -232,10 +223,8 @@ const species = () => {
     if (newValue != null) {
       const dash = newValue.indexOf("-");
       const name = newValue.slice(0, dash - 1);
-      // console.log(name);
       for (const result of results) {
         if (result.Scientific_Name == name) {
-          // setQuery(result);
           switch (state[0].count) {
             case 0:
               dispatch({
@@ -268,10 +257,9 @@ const species = () => {
             default:
               throw new Error();
           }
-          // setSpeciesInfo1([...result.unique_id]);
         }
       }
-      // console.log(speciesInfo1);
+
       setResults([]);
     }
   };
@@ -284,7 +272,6 @@ const species = () => {
       s_name: "",
       c_name: "",
     });
-    // return dispatch();
   };
 
   return (
@@ -303,7 +290,6 @@ const species = () => {
           className={classes.search}
           classes={{ paper: classes.popper }}
           autoHighlight
-          // disableClearable={true}
           onChange={(event, newValue) => handleSubmit(event, newValue)}
           selectOnFocus
           clearOnBlur
@@ -382,7 +368,6 @@ const species = () => {
                 label={`${state[1].scientific_name} - ${state[1].common_name}`}
                 onDelete={() => handleRemoveChip(1)}
                 variant="outlined"
-                // color="secondary"
                 className={`${classes.outline1} ${classes.chip}`}
                 classes={{
                   deleteIcon: classes.delete,

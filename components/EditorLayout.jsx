@@ -1,14 +1,12 @@
 // UPDATE
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexGrow: 1,
-    // padding: theme.spacing(4),
     backgroundColor: theme.palette.primary.light,
   },
-
   content: {
     flexGrow: 1,
     padding: theme.spacing(4),
@@ -20,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
 
 const EditorLayout = ({ children }) => {
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <div className={classes.root}>

@@ -22,7 +22,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const useStyles = makeStyles(() => ({
-  subheader: {
+  subHeader: {
     display: "flex",
     flexGrow: 1,
     flexDirection: "row",
@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
     border: "1px solid #94c9ff",
     borderRadius: "10px",
   },
-  sublist: {
+  subList: {
     display: "flex",
     justifyContent: "center",
   },
@@ -69,14 +69,14 @@ const mammals = ({ mammals }) => {
     <>
       <Container>
         <Header title="Mammals" />
-        <AppBar component="div" position="sticky" className={classes.subheader}>
+        <AppBar component="div" position="sticky" className={classes.subHeader}>
           {uniqueFirst.map((item) => (
             <>
               {isMobile ? (
                 <Button
                   key={item}
                   onClick={() => handleClick(item, -260)}
-                  className={classes.sublist}
+                  className={classes.subList}
                   variant="outlined"
                   color="secondary"
                 >
@@ -88,7 +88,7 @@ const mammals = ({ mammals }) => {
                 <Button
                   key={item}
                   onClick={() => handleClick(item, -140)}
-                  className={classes.sublist}
+                  className={classes.subList}
                   variant="outlined"
                   color="secondary"
                 >

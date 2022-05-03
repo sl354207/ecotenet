@@ -5,23 +5,16 @@ import {
   DialogContentText,
   DialogActions,
   DialogTitle,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@material-ui/core";
 
-import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { alpha, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import TextBox from "../TextBox";
 
 const useStyles = makeStyles((theme) => ({
   text: {
-    // marginLeft: 60,
     padding: "5px 0px 10px 0px",
     display: "flex",
   },
@@ -32,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Flag = ({ open, handleClose, contentType, result, setSnackbar }) => {
   const classes = useStyles();
-  // console.log(result);
 
   const [value, setValue] = useState();
 
