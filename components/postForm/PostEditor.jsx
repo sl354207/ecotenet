@@ -1,29 +1,20 @@
+import { Container } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
-
-import slate from "@react-page/plugins-slate";
-import "@react-page/plugins-slate/lib/index.css";
-
+import divider from "@react-page/plugins-divider";
 import image from "@react-page/plugins-image";
 import "@react-page/plugins-image/lib/index.css";
-
-import video from "@react-page/plugins-video";
-import "@react-page/plugins-video/lib/index.css";
-
+import slate from "@react-page/plugins-slate";
+import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
-
-import divider from "@react-page/plugins-divider";
-
+import video from "@react-page/plugins-video";
+import "@react-page/plugins-video/lib/index.css";
 import customImage from "../../plugins/customImage";
-
-import EditorLayout from "../EditorLayout";
-
-import { Container } from "@material-ui/core";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Header from "../Header";
 import Description from "../Description";
+import EditorLayout from "../EditorLayout";
+import Header from "../Header";
 
 const useStyles = makeStyles(() => ({
   description: {

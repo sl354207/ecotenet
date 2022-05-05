@@ -1,9 +1,9 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
   DialogTitle,
 } from "@material-ui/core";
 
@@ -24,7 +24,7 @@ const ClientDialog = ({
 
   switch (contentType) {
     case "Vote":
-      endpoint = "Count";
+      endpoint = "Post";
       item = "vote";
       submission = {
         _id: post_id,

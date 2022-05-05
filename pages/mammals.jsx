@@ -1,25 +1,22 @@
 // PUT IN UNIQUE_ID FOLDER EVENTUALLY
-import { getMammals } from "../utils/mongodb";
-
 import {
+  AppBar,
+  Button,
+  Container,
+  Divider,
   List,
   ListItem,
   ListItemText,
-  AppBar,
   Toolbar,
-  Container,
-  Button,
   Typography,
-  Divider,
   useMediaQuery,
 } from "@material-ui/core";
-
-import { useRef } from "react";
-
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import SpeciesItem from "../components/SpeciesItem";
-import Header from "../components/Header";
+import { useRef } from "react";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+import SpeciesItem from "../components/SpeciesItem";
+import { getMammals } from "../utils/mongodb";
 
 const useStyles = makeStyles(() => ({
   subHeader: {

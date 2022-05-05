@@ -8,14 +8,12 @@ import {
   Snackbar,
   Typography,
 } from "@material-ui/core";
-
 import { makeStyles } from "@material-ui/core/styles";
-
-import Header from "../../components/Header";
 import { Alert } from "@material-ui/lab";
 import { useState } from "react";
 import useSWR from "swr";
 import AdminDrawer from "../../components/AdminDrawer";
+import Header from "../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,20 +68,8 @@ const admin = () => {
     switch (action) {
       case "addFeature":
         const submission = {
-          title: post.title,
-          description: post.description,
-          category: post.category,
-          tags: post.tags,
-          ecoregions: post.ecoregions,
           _id: post._id,
-          id: post.id,
-          version: post.version,
-          rows: post.rows,
-          status: post.status,
-          approved: post.approved,
-          updated: post.updated,
           featured: true,
-          date: post.date,
           feature: "true",
         };
 
@@ -144,20 +130,8 @@ const admin = () => {
         break;
       case "removeFeature":
         const submission1 = {
-          title: post.title,
-          description: post.description,
-          category: post.category,
-          tags: post.tags,
-          ecoregions: post.ecoregions,
           _id: post._id,
-          id: post.id,
-          version: post.version,
-          rows: post.rows,
-          status: post.status,
-          approved: post.approved,
-          updated: post.updated,
           featured: true,
-          date: post.date,
           feature: "pending",
         };
 
@@ -189,20 +163,8 @@ const admin = () => {
         break;
       case "removeList":
         const submission2 = {
-          title: post.title,
-          description: post.description,
-          category: post.category,
-          tags: post.tags,
-          ecoregions: post.ecoregions,
           _id: post._id,
-          id: post.id,
-          version: post.version,
-          rows: post.rows,
-          status: post.status,
-          approved: post.approved,
-          updated: post.updated,
           featured: true,
-          date: post.date,
           feature: "false",
         };
 

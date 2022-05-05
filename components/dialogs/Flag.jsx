@@ -1,16 +1,13 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
   DialogTitle,
 } from "@material-ui/core";
-
-import { useState } from "react";
-
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useState } from "react";
 import TextBox from "../TextBox";
 
 const useStyles = makeStyles((theme) => ({

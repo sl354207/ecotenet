@@ -1,20 +1,17 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
   DialogTitle,
   FormControl,
-  Portal,
   InputLabel,
+  Portal,
 } from "@material-ui/core";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-
 import { makeStyles } from "@material-ui/core/styles";
-
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useRef, useState } from "react";
 import TextBox from "../TextBox";
 

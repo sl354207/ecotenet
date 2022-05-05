@@ -1,17 +1,15 @@
-import { useState, useCallback, useReducer } from "react";
-
 import {
+  Chip,
   Container,
+  TextField,
   Typography,
   useMediaQuery,
-  Chip,
-  TextField,
 } from "@material-ui/core";
-import { Autocomplete } from "@material-ui/lab";
-
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
-import Header from "../Header";
+import { Autocomplete } from "@material-ui/lab";
+import { useCallback, useReducer, useState } from "react";
 import Description from "../Description";
+import Header from "../Header";
 import MapEditor from "../maps/MapEditor";
 
 const useStyles = makeStyles((theme) => ({

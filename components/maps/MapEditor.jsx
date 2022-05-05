@@ -1,10 +1,8 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from "react";
-import Map, { Popup, Source, Layer } from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
+import "mapbox-gl/dist/mapbox-gl.css";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Map, { Layer, Popup, Source } from "react-map-gl";
 import Coords from "../../data/eco_coord.json";
 
 const useStyles = makeStyles(() => ({

@@ -1,12 +1,11 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
   DialogTitle,
 } from "@material-ui/core";
-
 import { useRouter } from "next/router";
 
 const DashboardDialog = ({

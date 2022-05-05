@@ -168,41 +168,9 @@ const getProfilePosts = async (name, status, approved) => {
 };
 
 // update a post
-const updatePost = async (
-  title,
-  description,
-  category,
-  tags,
-  ecoregions,
-  _id,
-  id,
-  version,
-  rows,
-  status,
-  approved,
-  updated,
-  featured,
-  date,
-  feature
-) => {
+const updatePost = async (_id, data) => {
   const { db } = await connectToDatabase();
 
-  const data = {
-    title,
-    description,
-    category,
-    tags,
-    ecoregions,
-    id,
-    version,
-    rows,
-    status,
-    approved,
-    updated,
-    featured,
-    date,
-    feature,
-  };
   const response = await db.collection("posts").updateOne(
     {
       _id: ObjectId(_id),
@@ -286,16 +254,9 @@ const getComments = async (approved) => {
   return comments;
 };
 
-// update comment
-const updateComment = async (_id, date, text, approved, updated) => {
+const updateComment = async (_id, data) => {
   const { db } = await connectToDatabase();
 
-  const data = {
-    date,
-    text,
-    approved,
-    updated,
-  };
   const response = await db.collection("comments").updateOne(
     {
       _id: ObjectId(_id),
@@ -596,25 +557,9 @@ const getPerson = async (name) => {
 
   return person;
 };
-const updatePerson = async (
-  name,
-  bio,
-  email,
-  website,
-  socials,
-  denials,
-  approved
-) => {
+const updatePerson = async (name, data) => {
   const { db } = await connectToDatabase();
 
-  const data = {
-    bio,
-    email,
-    website,
-    socials,
-    denials,
-    approved,
-  };
   const response = await db.collection("people").updateOne(
     {
       name: name,
@@ -624,21 +569,14 @@ const updatePerson = async (
 
   return response;
 };
-const updateDenials = async (
-  name,
-
-  denials
-) => {
+const updateDenials = async (name, denials) => {
   const { db } = await connectToDatabase();
 
-  const data = {
-    denials,
-  };
   const response = await db.collection("people").updateOne(
     {
       name: name,
     },
-    { $set: data }
+    { $set: denials }
   );
 
   return response;
@@ -703,14 +641,11 @@ const getFlags = async () => {
 const updateFlag = async (_id, status) => {
   const { db } = await connectToDatabase();
 
-  const data = {
-    status,
-  };
   const response = await db.collection("flags").updateOne(
     {
       _id: ObjectId(_id),
     },
-    { $set: data }
+    { $set: status }
   );
 
   return response;
@@ -747,30 +682,11 @@ const getNotifications = async (name) => {
 const updateNotification = async (_id, viewed) => {
   const { db } = await connectToDatabase();
 
-  const data = {
-    viewed,
-  };
   const response = await db.collection("notifications").updateOne(
     {
       _id: ObjectId(_id),
     },
-    { $set: data }
-  );
-
-  return response;
-};
-
-const updateCount = async (_id, count) => {
-  const { db } = await connectToDatabase();
-
-  const data = {
-    count,
-  };
-  const response = await db.collection("posts").updateOne(
-    {
-      _id: ObjectId(_id),
-    },
-    { $set: data }
+    { $set: viewed }
   );
 
   return response;
@@ -812,5 +728,4 @@ module.exports = {
   createNotification,
   getNotifications,
   updateNotification,
-  updateCount,
 };

@@ -1,6 +1,4 @@
 import React from "react";
-import dynamic from "next/dynamic";
-
 import MapMain from "../components/maps/MapMain";
 
 export default function MapPage() {

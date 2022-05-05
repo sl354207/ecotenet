@@ -1,20 +1,17 @@
-import useSWR from "swr";
+import {
+  CircularProgress,
+  Container,
+  InputBase,
+  Typography,
+} from "@material-ui/core";
+import { alpha, makeStyles } from "@material-ui/core/styles";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { useRouter } from "next/router";
-
+import useSWR from "swr";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 import PostList from "../components/PostList";
 import SpeciesList from "../components/SpeciesList";
-
-import {
-  Container,
-  Typography,
-  InputBase,
-  CircularProgress,
-} from "@material-ui/core";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
-
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 const useStyles = makeStyles((theme) => ({
   header: {

@@ -1,37 +1,33 @@
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import {
   AppBar,
-  Paper,
-  Toolbar,
-  IconButton,
-  MenuItem,
   Button,
-  useMediaQuery,
-  Drawer,
-  Divider,
-  Popper,
-  Grow,
-  InputBase,
   ClickAwayListener,
-  MenuList,
   Collapse,
+  Divider,
+  Drawer,
+  Grow,
+  IconButton,
+  InputBase,
   List,
   ListItem,
   ListItemText,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+  Toolbar,
+  useMediaQuery,
 } from "@material-ui/core";
-
-import { useState, useEffect, useRef, useReducer } from "react";
-import { useRouter } from "next/router";
-
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import SortIcon from "@material-ui/icons/Sort";
-
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
-
+import { useRouter } from "next/router";
+import { useEffect, useReducer, useRef, useState } from "react";
 import menuItems from "../data/categories.json";
 
 const drawerWidth = 240;

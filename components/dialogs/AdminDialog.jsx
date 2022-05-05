@@ -1,24 +1,21 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
   DialogTitle,
   FormControl,
-  FormLabel,
-  RadioGroup,
   FormControlLabel,
-  Radio,
-  Portal,
+  FormLabel,
   InputLabel,
+  Portal,
+  Radio,
+  RadioGroup,
 } from "@material-ui/core";
-
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-
 import { makeStyles } from "@material-ui/core/styles";
-
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useRef, useState } from "react";
 import TextBox from "../TextBox";
 
@@ -62,20 +59,8 @@ const AdminDialog = ({
       endpoint = "Post";
       item = "post";
       submission = {
-        title: result.title,
-        description: result.description,
-        category: result.category,
-        tags: result.tags,
-        ecoregions: result.ecoregions,
         _id: result._id,
-        id: result.id,
-        version: result.version,
-        rows: result.rows,
-        status: result.status,
         approved: action == "Deny" ? "false" : "true",
-        updated: result.updated,
-        featured: result.featured,
-        date: result.date,
         feature: "false",
       };
       break;
@@ -84,22 +69,14 @@ const AdminDialog = ({
       item = "comment";
       submission = {
         _id: result._id,
-        date: result.date,
-        text: result.text,
         approved: action == "Deny" ? "false" : "true",
-        updated: result.updated,
       };
       break;
     case "person":
       endpoint = "Person";
       item = "profile item";
       submission = {
-        _id: result._id,
         name: result.name,
-        bio: result.bio,
-        email: result.email,
-        website: result.website,
-        socials: result.socials,
         denials: action == "Deny" ? result.denials + 1 : result.denials,
         approved: action == "Approve" ? "true" : "false",
       };

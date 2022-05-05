@@ -1,35 +1,33 @@
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-
 import {
-  Typography,
   AppBar,
-  Tabs,
-  Tab,
   Box,
-  Container,
-  List,
-  ListItem,
   Button,
+  Chip,
   CircularProgress,
+  Container,
   FormControl,
-  InputLabel,
-  Snackbar,
+  FormHelperText,
   IconButton,
   InputBase,
-  FormHelperText,
-  Chip,
+  InputLabel,
+  List,
+  ListItem,
+  Snackbar,
+  Tab,
+  Tabs,
+  Typography,
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CloseIcon from "@material-ui/icons/Close";
-import PropTypes from "prop-types";
 import { alpha, makeStyles } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/Close";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
-
-import Header from "../../components/Header";
-import DashboardDialog from "../../components/dialogs/DashboardDialog";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import DashboardComment from "../../components/comments/DashboardComment";
+import DashboardDialog from "../../components/dialogs/DashboardDialog";
+import Header from "../../components/Header";
 import TextBox from "../../components/TextBox";
 
 // taken directly from material ui tabs example
@@ -297,22 +295,13 @@ export default function Dashboard() {
   };
 
   const handleProfileSubmit = async () => {
-    const silentObject = {
-      _id: results._id,
-      email: results.email,
-      flags: results.flags,
-      denials: results.denials,
-      approved: "pending",
-    };
-
-    const changes = {
+    const value = {
+      name: results.name,
       bio: profile.bio,
       website: profile.website,
       socials: profile.socials,
+      approved: "pending",
     };
-
-    const value = Object.assign(silentObject, changes);
-
     const res = await fetch("/api/updatePerson", {
       method: "PUT",
       headers: {

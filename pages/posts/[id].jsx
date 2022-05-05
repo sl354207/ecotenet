@@ -1,50 +1,36 @@
-import { getPostById } from "../../utils/mongodb";
-import { getPostComments } from "../../utils/mongodb";
-
-import { useReducer, useState } from "react";
-
+import {
+  Container,
+  Divider,
+  IconButton,
+  Link,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import FlagIcon from "@material-ui/icons/Flag";
+import { Alert } from "@material-ui/lab";
 // The editor core
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
-
-import slate from "@react-page/plugins-slate";
-import "@react-page/plugins-slate/lib/index.css";
-
+import divider from "@react-page/plugins-divider";
 import image from "@react-page/plugins-image";
 import "@react-page/plugins-image/lib/index.css";
-
-import video from "@react-page/plugins-video";
-import "@react-page/plugins-video/lib/index.css";
-
+import slate from "@react-page/plugins-slate";
+import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
-
-import divider from "@react-page/plugins-divider";
-
-import customImage from "../../plugins/customImage";
-
-import EditorLayout from "../../components/EditorLayout";
-
-import {
-  IconButton,
-  Typography,
-  Link,
-  Container,
-  Divider,
-  Snackbar,
-} from "@material-ui/core";
-
-import FlagIcon from "@material-ui/icons/Flag";
-
-import Vote from "../../components/Vote";
-
-import { makeStyles } from "@material-ui/core/styles";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import video from "@react-page/plugins-video";
+import "@react-page/plugins-video/lib/index.css";
+import { useReducer, useState } from "react";
 import CommentList from "../../components/comments/CommentList";
 import ClientDialog from "../../components/dialogs/ClientDialog";
-import { Alert } from "@material-ui/lab";
 import Flag from "../../components/dialogs/Flag";
+import EditorLayout from "../../components/EditorLayout";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import Vote from "../../components/Vote";
+import customImage from "../../plugins/customImage";
+import { getPostById, getPostComments } from "../../utils/mongodb";
 
 const useStyles = makeStyles((theme) => ({
   box: {

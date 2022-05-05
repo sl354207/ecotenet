@@ -1,9 +1,7 @@
-import { FormControl, InputLabel, Button, Link } from "@material-ui/core";
-
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Button, FormControl, InputLabel, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { useState } from "react";
-
 import TextBox from "../TextBox";
 
 const useStyles = makeStyles(() => ({

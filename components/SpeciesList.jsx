@@ -1,5 +1,5 @@
-import SpeciesItem from "./SpeciesItem";
 import { List } from "@material-ui/core";
+import SpeciesItem from "./SpeciesItem";
 
 // pass in post as prop from PostList
 const SpeciesList = ({ results }) => {

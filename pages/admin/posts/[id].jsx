@@ -1,46 +1,34 @@
 // The editor core
-import Editor from "@react-page/editor";
-import "@react-page/editor/lib/index.css";
-
-import slate from "@react-page/plugins-slate";
-import "@react-page/plugins-slate/lib/index.css";
-
-import image from "@react-page/plugins-image";
-import "@react-page/plugins-image/lib/index.css";
-
-import video from "@react-page/plugins-video";
-import "@react-page/plugins-video/lib/index.css";
-
-import spacer from "@react-page/plugins-spacer";
-import "@react-page/plugins-spacer/lib/index.css";
-
-import divider from "@react-page/plugins-divider";
-
 import {
   Button,
-  Typography,
-  Link,
-  Container,
   CircularProgress,
+  Container,
+  Link,
   Snackbar,
+  Typography,
 } from "@material-ui/core";
-
-import useSWR from "swr";
-
 import { makeStyles } from "@material-ui/core/styles";
-
-import { useRouter } from "next/router";
-
-import { useState } from "react";
 import { Alert } from "@material-ui/lab";
-
-import Header from "../../../components/Header";
-import EditorLayout from "../../../components/EditorLayout";
-import customImage from "../../../plugins/customImage";
-
-import AdminDialog from "../../../components/dialogs/AdminDialog";
+import Editor from "@react-page/editor";
+import "@react-page/editor/lib/index.css";
+import divider from "@react-page/plugins-divider";
+import image from "@react-page/plugins-image";
+import "@react-page/plugins-image/lib/index.css";
+import slate from "@react-page/plugins-slate";
+import "@react-page/plugins-slate/lib/index.css";
+import spacer from "@react-page/plugins-spacer";
+import "@react-page/plugins-spacer/lib/index.css";
+import video from "@react-page/plugins-video";
+import "@react-page/plugins-video/lib/index.css";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR from "swr";
 import AdminCommentList from "../../../components/comments/AdminCommentList";
+import AdminDialog from "../../../components/dialogs/AdminDialog";
 import Resolve from "../../../components/dialogs/Resolve";
+import EditorLayout from "../../../components/EditorLayout";
+import Header from "../../../components/Header";
+import customImage from "../../../plugins/customImage";
 
 const useStyles = makeStyles((theme) => ({
   header: {

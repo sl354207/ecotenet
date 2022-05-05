@@ -1,27 +1,27 @@
-import { getMammalById } from "../utils/mongodb";
-import PropTypes from "prop-types";
-import { useState } from "react";
-import parse, { domToReact, attributesToProps } from "html-react-parser";
-import DOMPurify from "isomorphic-dompurify";
 import {
-  Typography,
   AppBar,
-  Tabs,
-  Tab,
   Box,
-  Link,
   Container,
+  IconButton,
+  Link,
   List,
   ListItem,
-  IconButton,
   Snackbar,
+  Tab,
+  Tabs,
+  Typography,
 } from "@material-ui/core";
-import FlagIcon from "@material-ui/icons/Flag";
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import FlagIcon from "@material-ui/icons/Flag";
 import { Alert } from "@material-ui/lab";
+import parse, { attributesToProps, domToReact } from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import Flag from "../components/dialogs/Flag";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import { getMammalById } from "../utils/mongodb";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {

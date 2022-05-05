@@ -1,22 +1,19 @@
-import { useState } from "react";
-
 import {
   Button,
-  Typography,
-  Link,
-  Container,
-  Snackbar,
   CircularProgress,
+  Container,
+  Link,
+  Snackbar,
+  Typography,
 } from "@material-ui/core";
-
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../../../components/Header";
-
 import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import useSWR from "swr";
 import AdminDialog from "../../../components/dialogs/AdminDialog";
 import Resolve from "../../../components/dialogs/Resolve";
+import Header from "../../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   profile: {

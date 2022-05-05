@@ -6,43 +6,11 @@ export default async function handler(req, res) {
   }
 
   // body must be in same format as database query
-  const {
-    title,
-    description,
-    category,
-    tags,
-    ecoregions,
-    _id,
-    id,
-    version,
-    rows,
-    status,
-    approved,
-    updated,
-    featured,
-    date,
-    feature,
-  } = req.body;
+  const { _id, ...data } = req.body;
   // console.log(req);
 
   try {
-    const update = await updatePost(
-      title,
-      description,
-      category,
-      tags,
-      ecoregions,
-      _id,
-      id,
-      version,
-      rows,
-      status,
-      approved,
-      updated,
-      featured,
-      date,
-      feature
-    );
+    const update = await updatePost(_id, data);
 
     // console.log(update);
     return res.status(200).json(update);

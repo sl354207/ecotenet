@@ -1,24 +1,19 @@
-import { getPerson } from "../../utils/mongodb";
-import { getProfilePosts } from "../../utils/mongodb";
-
-import { useState } from "react";
-
 import {
-  IconButton,
-  Typography,
-  Link,
   Container,
+  IconButton,
+  Link,
   Snackbar,
+  Typography,
 } from "@material-ui/core";
-
-import FlagIcon from "@material-ui/icons/Flag";
-
 import { makeStyles } from "@material-ui/core/styles";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-import PostList from "../../components/PostList";
-import Flag from "../../components/dialogs/Flag";
+import FlagIcon from "@material-ui/icons/Flag";
 import { Alert } from "@material-ui/lab";
+import { useState } from "react";
+import Flag from "../../components/dialogs/Flag";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import PostList from "../../components/PostList";
+import { getPerson, getProfilePosts } from "../../utils/mongodb";
 
 const useStyles = makeStyles(() => ({
   profile: {

@@ -1,14 +1,11 @@
-import { useState, useMemo, useCallback } from "react";
-
-import Map, { Popup, Source, Layer, AttributionControl } from "react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-
-import Geocoder from "./Geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-
-import { useRouter } from "next/router";
 import { Button, CircularProgress, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { useRouter } from "next/router";
+import { useCallback, useMemo, useState } from "react";
+import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
+import Geocoder from "./Geocoder";
 
 const useStyles = makeStyles(() => ({
   popup: {

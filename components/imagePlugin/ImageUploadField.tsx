@@ -1,8 +1,8 @@
-import React from 'react';
-
-import { HTMLFieldProps, connectField } from 'uniforms';
-
 import BackupIcon from '@material-ui/icons/Backup';
+import React from 'react';
+import { connectField, HTMLFieldProps } from 'uniforms';
+
+
 
 //CHECK UNIFORMS DOCS AND CLOUDINARY DOCS for more details on how component works.
 

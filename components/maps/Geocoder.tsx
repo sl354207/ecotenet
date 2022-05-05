@@ -1,7 +1,7 @@
-import * as React from 'react';
-import {useState} from 'react';
-import {useControl, Marker, ControlPosition} from 'react-map-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import * as React from 'react';
+import { useState } from 'react';
+import { ControlPosition, Marker, useControl } from 'react-map-gl';
 
 type GeocoderControlProps = {
   mapboxAccessToken: string;

@@ -1,23 +1,19 @@
-import { useState } from "react";
-
-import { useRouter } from "next/router";
-
 import {
   Button,
+  Link,
+  Snackbar,
   Step,
   StepButton,
   Stepper,
-  Snackbar,
-  Link,
 } from "@material-ui/core";
-
 import { alpha, makeStyles } from "@material-ui/core/styles";
-
 import { Alert } from "@material-ui/lab";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import DashboardDialog from "../dialogs/DashboardDialog";
 import PostDetails from "./PostDetails";
-import PostRegion from "./PostRegion";
 import PostEditor from "./PostEditor";
+import PostRegion from "./PostRegion";
 
 const useStyles = makeStyles((theme) => ({
   stepLabel: {
@@ -184,7 +180,8 @@ const StepForm = ({ post, pathName }) => {
       };
     }
     // combine form value and editor value into one object to pass to api.
-    const value = Object.assign(postObject, details, ecoObject, silentObject);
+
+    const value = { ...silentObject, ...postObject, ...details, ...ecoObject };
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":

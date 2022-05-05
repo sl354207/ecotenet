@@ -1,17 +1,15 @@
-import { useRef } from "react";
-import CommentForm from "./CommentForm";
 import {
   Button,
-  Typography,
-  ListItem,
-  Link,
   IconButton,
+  Link,
+  ListItem,
+  Typography,
 } from "@material-ui/core";
-
 import { alpha, makeStyles } from "@material-ui/core/styles";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import FlagIcon from "@material-ui/icons/Flag";
+import CommentForm from "./CommentForm";
 
 const useStyles = makeStyles((theme) => ({
   comment: {
@@ -55,8 +53,6 @@ const Comment = ({
   handleReply,
 }) => {
   const classes = useStyles();
-
-  const container = useRef(null);
 
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {

@@ -1,6 +1,5 @@
-import { useState } from "react";
-
 import {
+  Chip,
   ClickAwayListener,
   Container,
   FormControl,
@@ -13,19 +12,15 @@ import {
   TextField,
   Tooltip,
   Typography,
-  Chip,
 } from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/Info";
-
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
-
-import TextBox from "../TextBox";
-
 import { alpha, makeStyles } from "@material-ui/core/styles";
-
+import InfoIcon from "@material-ui/icons/Info";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { useState } from "react";
 import CategoriesAutoComplete from "../../data/categories_autocomplete.json";
-import Header from "../Header";
 import Description from "../Description";
+import Header from "../Header";
+import TextBox from "../TextBox";
 
 const useStyles = makeStyles((theme) => ({
   search: {

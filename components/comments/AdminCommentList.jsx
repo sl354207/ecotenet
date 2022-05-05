@@ -1,12 +1,11 @@
 import {
   Button,
-  Typography,
-  Link,
   Container,
+  Link,
   List,
   ListItem,
+  Typography,
 } from "@material-ui/core";
-
 import { alpha, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
