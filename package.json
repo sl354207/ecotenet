@@ -19,6 +19,7 @@
     "@react-page/plugins-slate": "^4.7.1",
     "@react-page/plugins-spacer": "^4.7.1",
     "@react-page/plugins-video": "^4.7.1",
+    "@stripe/stripe-js": "^1.29.0",
     "aws-sdk": "^2.1092.0",
     "html-react-parser": "^1.4.8",
     "isomorphic-dompurify": "^0.18.0",
@@ -28,6 +29,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-map-gl": "^7.0.9",
+    "stripe": "^8.222.0",
     "swr": "^1.2.2",
     "uniforms": "^3.8.1"
   },
