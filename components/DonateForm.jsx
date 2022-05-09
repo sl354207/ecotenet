@@ -1,9 +1,9 @@
 import { Button, Input, Slider } from "@material-ui/core";
 import { alpha, makeStyles } from "@material-ui/core/styles";
+import { fetchPostJSON } from "@utils/stripe/api-helpers";
+import getStripe from "@utils/stripe/get-stripe";
+import { formatAmountForDisplay } from "@utils/stripe/stripe-helpers";
 import { useState } from "react";
-import { fetchPostJSON } from "../utils/stripe/api-helpers";
-import getStripe from "../utils/stripe/get-stripe";
-import { formatAmountForDisplay } from "../utils/stripe/stripe-helpers";
 
 const useStyles = makeStyles((theme) => ({
   input: {

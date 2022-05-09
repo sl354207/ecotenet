@@ -1,3 +1,7 @@
+import Description from "@components/Description";
+import Header from "@components/Header";
+import TextBox from "@components/TextBox";
+import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import {
   Chip,
   ClickAwayListener,
@@ -17,10 +21,6 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import InfoIcon from "@material-ui/icons/Info";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { useState } from "react";
-import CategoriesAutoComplete from "../../data/categories_autocomplete.json";
-import Description from "../Description";
-import Header from "../Header";
-import TextBox from "../TextBox";
 
 const useStyles = makeStyles((theme) => ({
   search: {

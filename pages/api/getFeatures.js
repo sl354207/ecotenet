@@ -1,4 +1,4 @@
-import { getFeatureCandidates } from "../../utils/mongodb";
+import { getFeatureCandidates } from "@utils/mongodb";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {

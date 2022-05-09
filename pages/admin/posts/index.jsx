@@ -1,3 +1,5 @@
+import AdminDrawer from "@components/AdminDrawer";
+import Header from "@components/Header";
 import {
   CircularProgress,
   Link,
@@ -12,8 +14,6 @@ import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
-import AdminDrawer from "../../../components/AdminDrawer";
-import Header from "../../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   root: {

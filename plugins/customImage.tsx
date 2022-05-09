@@ -1,10 +1,11 @@
+import ImageRender from '@/components/imagePlugin/ImageRender';
+import ImageUploadField from '@/components/imagePlugin/ImageUploadField';
 import { CellPlugin } from '@react-page/editor';
-
 import React from 'react';
 
-import ImageRender from '../components/imagePlugin/ImageRender';
 
-import ImageUploadField from '../components/imagePlugin/ImageUploadField'
+
+
 
 // use a type here, not an interface. Set types for data for typescript.
 type Data = {

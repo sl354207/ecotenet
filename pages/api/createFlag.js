@@ -1,4 +1,4 @@
-import { createFlag } from "../../utils/mongodb";
+import { createFlag } from "@utils/mongodb";
 
 // api endpoint to post a comment to the database
 export default async function handler(req, res) {

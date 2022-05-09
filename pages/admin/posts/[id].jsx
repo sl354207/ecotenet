@@ -1,4 +1,8 @@
-// The editor core
+import AdminCommentList from "@components/comments/AdminCommentList";
+import AdminDialog from "@components/dialogs/AdminDialog";
+import Resolve from "@components/dialogs/Resolve";
+import EditorLayout from "@components/EditorLayout";
+import Header from "@components/Header";
 import {
   Button,
   CircularProgress,
@@ -9,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
+import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
@@ -23,12 +28,6 @@ import "@react-page/plugins-video/lib/index.css";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
-import AdminCommentList from "../../../components/comments/AdminCommentList";
-import AdminDialog from "../../../components/dialogs/AdminDialog";
-import Resolve from "../../../components/dialogs/Resolve";
-import EditorLayout from "../../../components/EditorLayout";
-import Header from "../../../components/Header";
-import customImage from "../../../plugins/customImage";
 
 const useStyles = makeStyles((theme) => ({
   header: {

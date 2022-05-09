@@ -1,6 +1,6 @@
+import { fetchGetJSON } from "@utils/stripe/api-helpers";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { fetchGetJSON } from "../utils/stripe/api-helpers";
 
 const approved = () => {
   const router = useRouter();

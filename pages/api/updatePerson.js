@@ -1,4 +1,4 @@
-import { updatePerson } from "../../utils/mongodb";
+import { updatePerson } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "PUT") {

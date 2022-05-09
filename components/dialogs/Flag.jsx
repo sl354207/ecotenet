@@ -1,3 +1,4 @@
+import TextBox from "@components/TextBox";
 import {
   Button,
   Dialog,
@@ -8,7 +9,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
-import TextBox from "../TextBox";
 
 const useStyles = makeStyles((theme) => ({
   text: {

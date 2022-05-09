@@ -1,4 +1,4 @@
-import { getPerson } from "../../utils/mongodb";
+import { getPerson } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

@@ -1,8 +1,8 @@
+import Description from "@components/Description";
+import Footer from "@components/Footer";
+import Header from "@components/Header";
 import { Container, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Description from "../components/Description";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 
 const useStyles = makeStyles(() => ({
   spacer: {

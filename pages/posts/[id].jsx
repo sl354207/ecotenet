@@ -1,3 +1,10 @@
+import CommentList from "@components/comments/CommentList";
+import ClientDialog from "@components/dialogs/ClientDialog";
+import Flag from "@components/dialogs/Flag";
+import EditorLayout from "@components/EditorLayout";
+import Footer from "@components/Footer";
+import Header from "@components/Header";
+import Vote from "@components/Vote";
 import {
   Container,
   Divider,
@@ -9,6 +16,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 import { Alert } from "@material-ui/lab";
+import customImage from "@plugins/customImage";
 // The editor core
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -21,16 +29,8 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
+import { getPostById, getPostComments } from "@utils/mongodb";
 import { useReducer, useState } from "react";
-import CommentList from "../../components/comments/CommentList";
-import ClientDialog from "../../components/dialogs/ClientDialog";
-import Flag from "../../components/dialogs/Flag";
-import EditorLayout from "../../components/EditorLayout";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import Vote from "../../components/Vote";
-import customImage from "../../plugins/customImage";
-import { getPostById, getPostComments } from "../../utils/mongodb";
 
 const useStyles = makeStyles((theme) => ({
   box: {

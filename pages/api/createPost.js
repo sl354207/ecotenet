@@ -1,4 +1,4 @@
-import { createPost } from "../../utils/mongodb";
+import { createPost } from "@utils/mongodb";
 
 // api endpoint to post a post to the database
 export default async function handler(req, res) {

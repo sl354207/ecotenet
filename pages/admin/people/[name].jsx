@@ -1,3 +1,6 @@
+import AdminDialog from "@components/dialogs/AdminDialog";
+import Resolve from "@components/dialogs/Resolve";
+import Header from "@components/Header";
 import {
   Button,
   CircularProgress,
@@ -11,9 +14,6 @@ import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
-import AdminDialog from "../../../components/dialogs/AdminDialog";
-import Resolve from "../../../components/dialogs/Resolve";
-import Header from "../../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   profile: {

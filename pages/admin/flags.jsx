@@ -1,3 +1,6 @@
+import AdminDrawer from "@components/AdminDrawer";
+import Resolve from "@components/dialogs/Resolve";
+import Header from "@components/Header";
 import {
   Button,
   CircularProgress,
@@ -11,9 +14,6 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { useState } from "react";
 import useSWR from "swr";
-import AdminDrawer from "../../components/AdminDrawer";
-import Resolve from "../../components/dialogs/Resolve";
-import Header from "../../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   root: {

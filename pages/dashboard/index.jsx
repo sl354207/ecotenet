@@ -1,3 +1,7 @@
+import DashboardComment from "@components/comments/DashboardComment";
+import DashboardDialog from "@components/dialogs/DashboardDialog";
+import Header from "@components/Header";
+import TextBox from "@components/TextBox";
 import {
   AppBar,
   Box,
@@ -25,10 +29,6 @@ import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import DashboardComment from "../../components/comments/DashboardComment";
-import DashboardDialog from "../../components/dialogs/DashboardDialog";
-import Header from "../../components/Header";
-import TextBox from "../../components/TextBox";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {

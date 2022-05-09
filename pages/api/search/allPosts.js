@@ -1,4 +1,4 @@
-import { searchAllPosts } from "../../../utils/mongodb";
+import { searchAllPosts } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

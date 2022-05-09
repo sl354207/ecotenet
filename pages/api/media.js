@@ -1,4 +1,4 @@
-import { generateUploadURL } from "../../utils/aws";
+import { generateUploadURL } from "@utils/aws";
 
 // api endpoint to get image from aws s3 bucket
 export default async function handler(req, res) {

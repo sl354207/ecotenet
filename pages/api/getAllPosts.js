@@ -1,4 +1,4 @@
-import { getPosts } from "../../utils/mongodb";
+import { getPosts } from "@utils/mongodb";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {

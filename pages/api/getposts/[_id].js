@@ -1,4 +1,4 @@
-import { getPostById } from "../../../utils/mongodb";
+import { getPostById } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

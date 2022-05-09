@@ -1,4 +1,4 @@
-import { deleteComment } from "../../utils/mongodb";
+import { deleteComment } from "@utils/mongodb";
 
 // api endpoint to delete a draft from database
 export default async function handler(req, res) {

@@ -1,4 +1,4 @@
-import { searchEcoPosts } from "../../../utils/mongodb";
+import { searchEcoPosts } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

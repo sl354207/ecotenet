@@ -1,12 +1,12 @@
+import Layout from "@components/Layout";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
+import "@styles/globals.css";
+import theme from "@utils/theme";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import "../styles/globals.css";
-import theme from "../utils/theme";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;

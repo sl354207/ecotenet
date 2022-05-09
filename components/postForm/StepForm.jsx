@@ -1,3 +1,4 @@
+import DashboardDialog from "@components/dialogs/DashboardDialog";
 import {
   Button,
   Link,
@@ -10,7 +11,6 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import DashboardDialog from "../dialogs/DashboardDialog";
 import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";

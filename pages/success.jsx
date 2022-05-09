@@ -1,4 +1,7 @@
 // UPDATE TO ECORGEGION INDEX OR SOMETHING
+import Flag from "@components/dialogs/Flag";
+import Footer from "@components/Footer";
+import Header from "@components/Header";
 import { Container, IconButton, Link, Snackbar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
@@ -6,9 +9,6 @@ import { Alert } from "@material-ui/lab";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { useState } from "react";
-import Flag from "../components/dialogs/Flag";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
 
 const useStyles = makeStyles((theme) => ({
   tableRow: {

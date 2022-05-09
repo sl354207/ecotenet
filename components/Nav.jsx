@@ -1,3 +1,4 @@
+import menuItems from "@data/categories.json";
 import {
   AppBar,
   Button,
@@ -28,7 +29,6 @@ import SortIcon from "@material-ui/icons/Sort";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
-import menuItems from "../data/categories.json";
 
 const drawerWidth = 240;
 

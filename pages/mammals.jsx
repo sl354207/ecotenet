@@ -1,4 +1,7 @@
 // PUT IN UNIQUE_ID FOLDER EVENTUALLY
+import Footer from "@components/Footer";
+import Header from "@components/Header";
+import SpeciesItem from "@components/SpeciesItem";
 import {
   AppBar,
   Button,
@@ -12,11 +15,8 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { getMammals } from "@utils/mongodb";
 import { useRef } from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import SpeciesItem from "../components/SpeciesItem";
-import { getMammals } from "../utils/mongodb";
 
 const useStyles = makeStyles(() => ({
   subHeader: {

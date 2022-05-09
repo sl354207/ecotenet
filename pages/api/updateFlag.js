@@ -1,4 +1,4 @@
-import { updateFlag } from "../../utils/mongodb";
+import { updateFlag } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "PUT") {

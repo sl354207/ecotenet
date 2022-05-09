@@ -1,5 +1,5 @@
+import MapMain from "@components/maps/MapMain";
 import React from "react";
-import MapMain from "../components/maps/MapMain";
 
 export default function MapPage() {
   // need to dynamically import to work with mapbox

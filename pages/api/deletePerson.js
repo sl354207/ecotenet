@@ -1,4 +1,4 @@
-import { deletePerson } from "../../utils/mongodb";
+import { deletePerson } from "@utils/mongodb";
 
 // api endpoint to delete a published post from database
 export default async function handler(req, res) {

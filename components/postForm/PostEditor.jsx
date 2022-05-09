@@ -1,5 +1,9 @@
+import Description from "@components/Description";
+import EditorLayout from "@components/EditorLayout";
+import Header from "@components/Header";
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
@@ -11,10 +15,6 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
-import customImage from "../../plugins/customImage";
-import Description from "../Description";
-import EditorLayout from "../EditorLayout";
-import Header from "../Header";
 
 const useStyles = makeStyles(() => ({
   description: {

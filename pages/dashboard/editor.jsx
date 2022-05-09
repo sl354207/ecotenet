@@ -1,4 +1,4 @@
-import StepForm from "../../components/postForm/StepForm";
+import StepForm from "@components/postForm/StepForm";
 
 const DashboardEditor = () => {
   const initialDetailValues = {

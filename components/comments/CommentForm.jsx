@@ -1,7 +1,7 @@
+import TextBox from "@components/TextBox";
 import { Button, FormControl, InputLabel, Portal } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRef, useState } from "react";
-import TextBox from "../TextBox";
 
 const useStyles = makeStyles(() => ({
   comment: {

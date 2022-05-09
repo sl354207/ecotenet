@@ -1,3 +1,6 @@
+import Description from "@components/Description";
+import Header from "@components/Header";
+import MapEditor from "@components/maps/MapEditor";
 import {
   Chip,
   Container,
@@ -8,9 +11,6 @@ import {
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { Autocomplete } from "@material-ui/lab";
 import { useCallback, useReducer, useState } from "react";
-import Description from "../Description";
-import Header from "../Header";
-import MapEditor from "../maps/MapEditor";
 
 const useStyles = makeStyles((theme) => ({
   search: {

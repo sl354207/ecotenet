@@ -1,3 +1,6 @@
+import Flag from "@components/dialogs/Flag";
+import Footer from "@components/Footer";
+import Header from "@components/Header";
 import {
   AppBar,
   Box,
@@ -14,14 +17,11 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 import { Alert } from "@material-ui/lab";
+import { getMammalById } from "@utils/mongodb";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import PropTypes from "prop-types";
 import { useState } from "react";
-import Flag from "../components/dialogs/Flag";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import { getMammalById } from "../utils/mongodb";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {

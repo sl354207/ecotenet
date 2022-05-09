@@ -1,3 +1,4 @@
+import TextBox from "@components/TextBox";
 import {
   Button,
   Dialog,
@@ -13,7 +14,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { useRef, useState } from "react";
-import TextBox from "../TextBox";
 
 const useStyles = makeStyles(() => ({
   comment: {

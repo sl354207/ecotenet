@@ -1,4 +1,4 @@
-import { updateDenials } from "../../utils/mongodb";
+import { updateDenials } from "@utils/mongodb";
 
 export default async function handler(req, res) {
   if (req.method !== "PUT") {
