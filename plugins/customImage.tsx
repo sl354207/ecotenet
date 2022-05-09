@@ -1,5 +1,5 @@
-import ImageRender from '@/components/imagePlugin/ImageRender';
-import ImageUploadField from '@/components/imagePlugin/ImageUploadField';
+import ImageRender from '@components/imagePlugin/ImageRender';
+import ImageUploadField from '@components/imagePlugin/ImageUploadField';
 import { CellPlugin } from '@react-page/editor';
 import React from 'react';
 
