@@ -38,7 +38,7 @@ const DonateForm = () => {
     e.preventDefault();
     setLoading(true);
     // Create a Checkout Session.
-    const response = await fetchPostJSON("/api/checkout_sessions", {
+    const response = await fetchPostJSON("/api/checkout", {
       amount: value,
     });
 
@@ -63,17 +63,6 @@ const DonateForm = () => {
   };
   return (
     <form onSubmit={handleSubmit}>
-      {/* <CustomDonationInput
-        className="checkout-style"
-        name="customDonation"
-        value={input.customDonation}
-        min={1.0}
-        // update
-        max={1000.0}
-        step={1.0}
-        currency="usd"
-        onChange={handleInputChange}
-      /> */}
       <label>
         Custom donation amount ({formatAmountForDisplay(1.0, "usd")}-
         {formatAmountForDisplay(1000.0, "usd")}):
@@ -96,6 +85,7 @@ const DonateForm = () => {
           color="secondary"
           onChange={handleSliderChange}
           aria-labelledby="input-slider"
+          min={1.0}
           max={1000.0}
         />
       </label>
