@@ -1,11 +1,11 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Input,
   Slider,
   Tab,
   Tabs,
-  useMediaQuery,
 } from "@material-ui/core";
 import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
@@ -92,16 +92,24 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     minWidth: 300,
   },
+  progress: {
+    marginInline: "auto",
+    display: "flex",
+    justifySelf: "center",
+  },
 }));
 
 const DonateForm = () => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(5.0);
-  const [monthly, setMonthly] = useState(5.0);
+  const [monthly, setMonthly] = useState({
+    amount: 5.0,
+    priceID: "price_1KyfgSIxZCxSXd1iyenrfWb5",
+  });
 
   const handleInputChange = (event) => {
     setValue(
@@ -109,9 +117,47 @@ const DonateForm = () => {
     );
   };
   const handleMonthlyChange = (event) => {
-    setMonthly(
-      event.currentTarget.value === "" ? "" : Number(event.currentTarget.value)
-    );
+    switch (event.currentTarget.value) {
+      case "2":
+        setMonthly({
+          amount: Number(event.currentTarget.value),
+          priceID: "price_1KydUGIxZCxSXd1ihseMlZY1",
+        });
+        break;
+      case "5":
+        setMonthly({
+          amount: Number(event.currentTarget.value),
+          priceID: "price_1KyfgSIxZCxSXd1iyenrfWb5",
+        });
+        break;
+      case "10":
+        setMonthly({
+          amount: Number(event.currentTarget.value),
+          priceID: "price_1KyfgpIxZCxSXd1i61bID9fv",
+        });
+        break;
+      case "20":
+        setMonthly({
+          amount: Number(event.currentTarget.value),
+          priceID: "price_1KyfhZIxZCxSXd1i0FMziStb",
+        });
+        break;
+      case "50":
+        setMonthly({
+          amount: Number(event.currentTarget.value),
+          priceID: "price_1Kyfi8IxZCxSXd1iv0I8IsNs",
+        });
+        break;
+      case "100":
+        setMonthly({
+          amount: Number(event.currentTarget.value),
+          priceID: "price_1KyfihIxZCxSXd1iHsLTrftf",
+        });
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleSliderChange = (event, newValue) => {
@@ -127,7 +173,8 @@ const DonateForm = () => {
     setLoading(true);
     // Create a Checkout Session.
     const response = await fetchPostJSON("/api/checkout", {
-      amount: monthly,
+      amount: monthly.amount,
+      priceID: monthly.priceID,
     });
 
     if (response.statusCode === 500) {
@@ -201,12 +248,22 @@ const DonateForm = () => {
         <form onSubmit={handleMonthlyDonation}>
           <label></label>
           <ToggleButtonGroup
-            value={monthly}
+            value={monthly.amount}
             exclusive
             onChange={handleMonthlyChange}
             className={classes.toggleGroup}
             aria-label="text alignment"
           >
+            <ToggleButton
+              value={2.0}
+              aria-label="left aligned"
+              className={classes.toggle}
+              classes={{
+                selected: classes.selected,
+              }}
+            >
+              {formatAmountForDisplay(2, "usd")}
+            </ToggleButton>
             <ToggleButton
               value={5.0}
               aria-label="left aligned"
@@ -258,16 +315,23 @@ const DonateForm = () => {
               {formatAmountForDisplay(100, "usd")}
             </ToggleButton>
           </ToggleButtonGroup>
-
-          <Button
-            variant="contained"
-            color="secondary"
-            type="submit"
-            disabled={loading}
-            className={classes.button}
-          >
-            Donate {formatAmountForDisplay(monthly, "usd")}/Month
-          </Button>
+          {loading ? (
+            <CircularProgress
+              color="secondary"
+              disableShrink={true}
+              className={classes.progress}
+            />
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              type="submit"
+              disabled={loading}
+              className={classes.button}
+            >
+              Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
+            </Button>
+          )}
         </form>
       </TabPanel>
       <TabPanel value={tab} index={1}>
@@ -298,16 +362,23 @@ const DonateForm = () => {
             min={1.0}
             max={1000.0}
           />
-
-          <Button
-            variant="contained"
-            color="secondary"
-            type="submit"
-            disabled={loading}
-            className={classes.button}
-          >
-            Donate {formatAmountForDisplay(value, "usd")}
-          </Button>
+          {loading ? (
+            <CircularProgress
+              color="secondary"
+              disableShrink={true}
+              className={classes.progress}
+            />
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              type="submit"
+              disabled={loading}
+              className={classes.button}
+            >
+              Donate {formatAmountForDisplay(value, "usd")}
+            </Button>
+          )}
         </form>
       </TabPanel>
     </>

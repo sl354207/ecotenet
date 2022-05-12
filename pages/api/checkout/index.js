@@ -12,21 +12,41 @@ export default async function handler(req, res) {
       if (!(amount >= 1.0 && amount <= 1000.0)) {
         throw new Error("Invalid amount.");
       }
-      // Create Checkout Sessions from body params.
-      const params = {
-        submit_type: "donate",
-        payment_method_types: ["card"],
-        line_items: [
-          {
-            name: "Donation",
-            amount: formatAmountForStripe(amount, "usd"),
-            currency: "usd",
-            quantity: 1,
-          },
-        ],
-        success_url: `${req.headers.origin}/approved?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/donate`,
-      };
+      let params;
+      if (req.body.priceID) {
+        // Create Checkout Sessions from body params.
+        const priceID = req.body.priceID;
+        params = {
+          mode: "subscription",
+          payment_method_types: ["card"],
+          line_items: [
+            {
+              price: priceID,
+              // For metered billing, do not pass quantity
+              quantity: 1,
+            },
+          ],
+          success_url: `${req.headers.origin}/approved?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${req.headers.origin}/donate`,
+        };
+      } else {
+        // Create Checkout Sessions from body params.
+        params = {
+          submit_type: "donate",
+          payment_method_types: ["card"],
+          line_items: [
+            {
+              name: "Donation",
+              amount: formatAmountForStripe(amount, "usd"),
+              currency: "usd",
+              quantity: 1,
+            },
+          ],
+          success_url: `${req.headers.origin}/approved?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${req.headers.origin}/donate`,
+        };
+      }
+
       const checkoutSession = await stripe.checkout.sessions.create(params);
 
       res.status(200).json(checkoutSession);

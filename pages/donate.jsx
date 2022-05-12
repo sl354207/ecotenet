@@ -4,7 +4,7 @@ import { Container } from "@material-ui/core";
 
 const donate = () => {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="sm">
       <Header title="Donations" />
       <DonateForm />
     </Container>

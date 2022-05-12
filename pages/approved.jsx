@@ -1,8 +1,16 @@
+import Header from "@components/Header";
+import { Container, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { fetchGetJSON } from "@utils/stripe/api-helpers";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
+const useStyles = makeStyles(() => ({
+  status: { marginTop: 20 },
+}));
+
 const approved = () => {
+  const classes = useStyles();
   const router = useRouter();
 
   // Fetch CheckoutSession from static page via
@@ -12,16 +20,15 @@ const approved = () => {
     fetchGetJSON
   );
 
-  const formattedContent = JSON.stringify(data, null, 2);
-
   if (error) return <div>failed to load</div>;
   return (
-    <>
-      <h1>Checkout Payment Result</h1>
-      <h2>Status: {data?.payment_intent?.status ?? "loading..."}</h2>
-      <h3>CheckoutSession response:</h3>
-      <pre>{formattedContent ?? "loading..."}</pre>
-    </>
+    <Container>
+      <Header title="Checkout Results" />
+      <Typography variant="h6" align="center" className={classes.status}>
+        Payment Status: {data?.status ?? "loading..."}
+      </Typography>
+      {/* ADD POSSIBLE ERROR MESSAGES AND ADD EMAIL AND THANK YOUS AND WHATNOT */}
+    </Container>
   );
 };
 
