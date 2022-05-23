@@ -3,6 +3,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import "@styles/globals.css";
 import theme from "@utils/theme";
+import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
@@ -44,13 +45,15 @@ export default function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Layout ecoFilter={ecoFilter}>
-          <Component ecoFilter={ecoFilter} {...pageProps} />
-        </Layout>
-      </ThemeProvider>
+      <SessionProvider session={pageProps.session} refetchInterval={0}>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Layout ecoFilter={ecoFilter}>
+            <Component ecoFilter={ecoFilter} {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </SessionProvider>
     </>
   );
 }
