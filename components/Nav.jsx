@@ -27,6 +27,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import SortIcon from "@material-ui/icons/Sort";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
 
@@ -146,6 +147,9 @@ const reducer = (menuItems, action) => {
 };
 
 const Nav = ({ ecoFilter }) => {
+  const { data: session, status } = useSession();
+  console.log(session);
+  // console.log(status);
   const router = useRouter();
   const classes = useStyles();
 
@@ -212,6 +216,10 @@ const Nav = ({ ecoFilter }) => {
   const filter = createFilterOptions();
   // set tag options for autocomplete
   const tags = [];
+
+  // const user = {
+  //   role: "test",
+  // };
 
   return (
     <>
@@ -366,12 +374,21 @@ const Nav = ({ ecoFilter }) => {
                   Create Post
                 </Button>
                 <Button
-                  href="/signin"
                   variant="outlined"
                   color="secondary"
                   className={classes.spacer}
+                  onClick={
+                    status == "authenticated"
+                      ? () => signOut()
+                      : () =>
+                          signIn("email", {
+                            user: {
+                              role: "test",
+                            },
+                          })
+                  }
                 >
-                  Sign In
+                  {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
                 </Button>
 
                 <Button
@@ -463,7 +480,7 @@ const Nav = ({ ecoFilter }) => {
                             <MenuItem
                               onClick={() => {
                                 setPopper(false);
-                                router.push("/signin");
+                                signIn();
                               }}
                               className={classes.popperBottom}
                             >
