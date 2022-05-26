@@ -78,14 +78,14 @@ export default NextAuth({
     //   return token;
     // },
     async signIn({ user, account, profile, email, credentials }) {
-      console.log(user);
+      // console.log(user);
       if (!user?.role) {
         user.role = "Client";
         user.banned = false;
       }
       return true;
     },
-    async jwt(token, user, account, profile, isNewUser) {
+    async jwt({ token, user, account, profile, isNewUser }) {
       // if (account?.accessToken) {
       //   token.accessToken = account.accessToken;
       // }
@@ -98,7 +98,7 @@ export default NextAuth({
       // console.log(token);
       return token;
     },
-    async session(session, token) {
+    async session({ session, token }) {
       // if (token?.accessToken) {
       //   session.accessToken = token.accessToken;
       // }

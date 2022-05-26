@@ -378,14 +378,7 @@ const Nav = ({ ecoFilter }) => {
                   color="secondary"
                   className={classes.spacer}
                   onClick={
-                    status == "authenticated"
-                      ? () => signOut()
-                      : () =>
-                          signIn("email", {
-                            user: {
-                              role: "test",
-                            },
-                          })
+                    status == "authenticated" ? () => signOut() : () => signIn()
                   }
                 >
                   {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
