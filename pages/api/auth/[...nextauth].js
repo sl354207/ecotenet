@@ -55,28 +55,13 @@ export default NextAuth({
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
-    // newUser: "/new", // If set, new users will be directed here on first sign in
+    newUser: "/auth/new-user", // If set, new users will be directed here on first sign in
   },
 
   // Callbacks are asynchronous functions you can use to control what happens
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    // async signIn(user, account, profile) { return true },
-    // async redirect(url, baseUrl) { return baseUrl },
-    // async session(session, user) {
-    //   // console.log(session);
-    //   // console.log(user);
-    //   return session;
-    // },
-    // async jwt(token, user, account, profile, isNewUser) {
-    //   // console.log(token);
-    //   // console.log(user);
-    //   // console.log(account);
-    //   // console.log(profile);
-    //   // console.log(isNewUser);
-    //   return token;
-    // },
     async signIn({ user, account, profile, email, credentials }) {
       // console.log(user);
       if (!user?.role) {
@@ -92,9 +77,9 @@ export default NextAuth({
       if (user?.role) {
         token.role = user.role;
       }
-      if (user?.banned) {
-        token.banned = user.banned;
-      }
+      // if (user?.banned) {
+      //   token.banned = user.banned;
+      // }
       // console.log(token);
       return token;
     },
@@ -105,9 +90,9 @@ export default NextAuth({
       if (token?.role) {
         session.user.role = token.role;
       }
-      if (token?.banned) {
-        session.user.banned = token.banned;
-      }
+      // if (token?.banned) {
+      //   session.user.banned = token.banned;
+      // }
       // console.log(session);
       return session;
     },

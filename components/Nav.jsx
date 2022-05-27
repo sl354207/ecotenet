@@ -148,7 +148,7 @@ const reducer = (menuItems, action) => {
 
 const Nav = ({ ecoFilter }) => {
   const { data: session, status } = useSession();
-  console.log(session);
+  // console.log(session);
   // console.log(status);
   const router = useRouter();
   const classes = useStyles();
