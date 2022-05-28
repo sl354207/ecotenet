@@ -557,12 +557,12 @@ const getPerson = async (name) => {
 
   return person;
 };
-const updatePerson = async (name, data) => {
+const updatePerson = async (email, data) => {
   const { db } = await connectToDatabase();
 
-  const response = await db.collection("people").updateOne(
+  const response = await db.collection("users").updateOne(
     {
-      name: name,
+      email: email,
     },
     { $set: data }
   );
@@ -692,6 +692,16 @@ const updateNotification = async (_id, viewed) => {
   return response;
 };
 
+const checkName = async (name) => {
+  const { db } = await connectToDatabase();
+
+  const response = await db.collection("users").findOne({
+    name: { $regex: new RegExp("^" + name + "$", "i") },
+  });
+
+  return response;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -728,4 +738,5 @@ module.exports = {
   createNotification,
   getNotifications,
   updateNotification,
+  checkName,
 };

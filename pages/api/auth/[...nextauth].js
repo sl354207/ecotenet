@@ -65,8 +65,12 @@ export default NextAuth({
     async signIn({ user, account, profile, email, credentials }) {
       // console.log(user);
       if (!user?.role) {
-        user.role = "Client";
-        user.banned = false;
+        user.role = "user";
+        user.bio = "";
+        user.website = "";
+        user.socials = [];
+        user.denials = 0;
+        user.approved = "pending";
       }
       return true;
     },

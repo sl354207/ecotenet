@@ -3,6 +3,9 @@ import Header from "@components/Header";
 import TextBox from "@components/TextBox";
 import { Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 const useStyles = makeStyles(() => ({
   layout: {
@@ -12,6 +15,57 @@ const useStyles = makeStyles(() => ({
 
 const newUser = () => {
   const classes = useStyles();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const [name, setName] = useState("");
+
+  // update text input field
+  const handleChange = (event) => {
+    setName(event.target.value);
+  };
+
+  // handle comment submission to database through api
+  const handleNameUpdate = async (name) => {
+    //combine all objects and send to api
+    const user = {
+      email: session.user.email,
+      name: name,
+    };
+
+    const res = await fetch(`/api/checkName?q=${name}`, {
+      method: "GET",
+    });
+    if (res.ok) {
+      const check = await res.text();
+      if (check.length) {
+        const test = JSON.parse(check);
+        const res1 = await fetch("/api/updatePerson", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        });
+        if (res1.ok) {
+          // mutate();
+          // setSnackbar({
+          //   open: true,
+          //   severity: "success",
+          //   message: "Comment updated successfully",
+          // });
+          // setCommentValue("");
+          // console.log("ok");
+          // router.push("/");
+        } else {
+        }
+      } else {
+      }
+    }
+  };
+
+  //
+
   return (
     <Container>
       <Header title="New Profile" />
@@ -22,11 +76,15 @@ const newUser = () => {
           placeHolder="profile name"
           id="name"
           autoFocus={true}
-          // handleChange={handleChange}
+          handleChange={handleChange}
           rows={1}
           inputProps={{ maxLength: 60 }}
         />
-        <Button variant="contained" color="secondary">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => handleNameUpdate(name)}
+        >
           Submit
         </Button>
       </div>

@@ -6,11 +6,11 @@ export default async function handler(req, res) {
   }
 
   // body must be in same format as database query
-  const { name, ...data } = req.body;
-  console.log(req.body);
+  const { email, ...data } = req.body;
+  // console.log(req.body);
 
   try {
-    const update = await updatePerson(name, data);
+    const update = await updatePerson(email, data);
 
     // console.log(update);
     return res.status(200).json(update);
