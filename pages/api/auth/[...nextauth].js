@@ -64,6 +64,7 @@ export default NextAuth({
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       // console.log(user);
+      // console.log(account);
       if (!user?.role) {
         user.role = "user";
         user.bio = "";
@@ -71,6 +72,7 @@ export default NextAuth({
         user.socials = [];
         user.denials = 0;
         user.approved = "pending";
+        // user.isNew = true;
       }
       return true;
     },
@@ -81,8 +83,8 @@ export default NextAuth({
       if (user?.role) {
         token.role = user.role;
       }
-      // if (user?.banned) {
-      //   token.banned = user.banned;
+      // if (user?.isNew) {
+      //   token.isNew = user.isNew;
       // }
       // console.log(token);
       return token;
@@ -94,8 +96,8 @@ export default NextAuth({
       if (token?.role) {
         session.user.role = token.role;
       }
-      // if (token?.banned) {
-      //   session.user.banned = token.banned;
+      // if (token?.isNew) {
+      //   session.user.isNew = token.isNew;
       // }
       // console.log(session);
       return session;

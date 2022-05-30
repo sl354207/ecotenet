@@ -17,6 +17,8 @@ const newUser = () => {
   const classes = useStyles();
   const router = useRouter();
   const { data: session, status } = useSession();
+  console.log(session);
+  // console.log(status);
 
   const [name, setName] = useState("");
 
@@ -31,6 +33,7 @@ const newUser = () => {
     const user = {
       email: session.user.email,
       name: name,
+      isNew: false,
     };
 
     const res = await fetch(`/api/checkName?q=${name}`, {
@@ -38,8 +41,9 @@ const newUser = () => {
     });
     if (res.ok) {
       const check = await res.text();
-      if (check.length) {
-        const test = JSON.parse(check);
+      // console.log(check);
+      if (!check.length) {
+        // const test = JSON.parse(check);
         const res1 = await fetch("/api/updatePerson", {
           method: "PUT",
           headers: {
@@ -56,7 +60,7 @@ const newUser = () => {
           // });
           // setCommentValue("");
           // console.log("ok");
-          // router.push("/");
+          router.push("/");
         } else {
         }
       } else {
