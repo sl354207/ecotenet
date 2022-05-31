@@ -1,4 +1,5 @@
 import Layout from "@components/Layout";
+import { UserProvider } from "@components/UserContext";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import "@styles/globals.css";
@@ -46,13 +47,15 @@ export default function MyApp(props) {
         />
       </Head>
       <SessionProvider session={pageProps.session} refetchInterval={0}>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Layout ecoFilter={ecoFilter}>
-            <Component ecoFilter={ecoFilter} {...pageProps} />
-          </Layout>
-        </ThemeProvider>
+        <UserProvider>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <Layout ecoFilter={ecoFilter}>
+              <Component ecoFilter={ecoFilter} {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </UserProvider>
       </SessionProvider>
     </>
   );

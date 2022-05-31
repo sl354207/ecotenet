@@ -1,26 +1,48 @@
 import Description from "@components/Description";
 import Header from "@components/Header";
 import TextBox from "@components/TextBox";
-import { Button, Container } from "@material-ui/core";
+import { useUserContext } from "@components/UserContext";
+import { Button, Container, Snackbar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSession } from "next-auth/react";
+import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   layout: {
     display: "grid",
+  },
+  origin: {
+    marginTop: 400,
+    [theme.breakpoints.up("sm")]: {
+      marginTop: 300,
+    },
   },
 }));
 
 const newUser = () => {
   const classes = useStyles();
   const router = useRouter();
-  const { data: session, status } = useSession();
-  console.log(session);
+  // const { data: session, status } = useSession();
+  // console.log(session);
   // console.log(status);
+  const { userName, setUserName } = useUserContext();
 
   const [name, setName] = useState("");
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    severity: "success",
+    message: "Post submitted successfully",
+  });
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      setSnackbar({ ...snackbar, open: false });
+    }
+
+    setSnackbar({ ...snackbar, open: false });
+  };
 
   // update text input field
   const handleChange = (event) => {
@@ -31,9 +53,8 @@ const newUser = () => {
   const handleNameUpdate = async (name) => {
     //combine all objects and send to api
     const user = {
-      email: session.user.email,
+      email: userName.email,
       name: name,
-      isNew: false,
     };
 
     const res = await fetch(`/api/checkName?q=${name}`, {
@@ -60,11 +81,29 @@ const newUser = () => {
           // });
           // setCommentValue("");
           // console.log("ok");
+          setUserName({ ...userName, name: name });
           router.push("/");
         } else {
+          setSnackbar({
+            open: true,
+            severity: "error",
+            message:
+              "There was a problem submitting your name. Please try again",
+          });
         }
       } else {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: "That name is already taken. Please try another name",
+        });
       }
+    } else {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem please try again",
+      });
     }
   };
 
@@ -88,10 +127,27 @@ const newUser = () => {
           variant="contained"
           color="secondary"
           onClick={() => handleNameUpdate(name)}
+          disabled={name == "" ? true : false}
         >
           Submit
         </Button>
       </div>
+      <Snackbar
+        classes={{
+          anchorOriginTopCenter: classes.origin,
+        }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

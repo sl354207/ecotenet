@@ -27,10 +27,10 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import SortIcon from "@material-ui/icons/Sort";
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
-
+import { useUserContext } from "./UserContext";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -147,9 +147,18 @@ const reducer = (menuItems, action) => {
 };
 
 const Nav = ({ ecoFilter }) => {
-  const { data: session, status } = useSession();
-  console.log(session);
+  // const { data: session, status } = useSession();
+  // console.log(session);
   // console.log(status);
+  const { userName } = useUserContext();
+  // console.log(userName);
+  let status;
+  if (userName == undefined) {
+    status = "loading";
+  } else {
+    status = userName.status;
+  }
+
   const router = useRouter();
   const classes = useStyles();
 
@@ -216,10 +225,6 @@ const Nav = ({ ecoFilter }) => {
   const filter = createFilterOptions();
   // set tag options for autocomplete
   const tags = [];
-
-  // const user = {
-  //   role: "test",
-  // };
 
   return (
     <>
@@ -378,9 +383,17 @@ const Nav = ({ ecoFilter }) => {
                   color="secondary"
                   className={classes.spacer}
                   onClick={
+                    // userName.status == "authenticated"
+                    //   ? () => signOut()
+                    //   : () => signIn()
                     status == "authenticated" ? () => signOut() : () => signIn()
                   }
                 >
+                  {/* {userName.status == "authenticated" ? (
+                    <>Sign Out</>
+                  ) : (
+                    <>Sign In</>
+                  )} */}
                   {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
                 </Button>
 
