@@ -102,6 +102,13 @@ export default NextAuth({
       // console.log(session);
       return session;
     },
+    // async redirect({ url, baseUrl }) {
+    //   // Allows relative callback URLs
+    //   if (url.startsWith("/")) return `${baseUrl}${url}`;
+    //   // Allows callback URLs on the same origin
+    //   else if (new URL(url).origin === baseUrl) return url;
+    //   return baseUrl;
+    // },
   },
 
   // Events are useful for logging
@@ -113,7 +120,11 @@ export default NextAuth({
 
   // You can set the theme to 'light', 'dark' or use 'auto' to default to the
   // whatever prefers-color-scheme is set to in the browser. Default is 'auto'
-  // theme: "light",
+  // theme: {
+  //   colorScheme: "dark", // "auto" | "dark" | "light"
+  //   brandColor: "#94c9ff", // Hex color code
+  //   logo: "", // Absolute URL to image
+  // },
 
   // Enable debug messages in the console if you are having problems
   debug: true,

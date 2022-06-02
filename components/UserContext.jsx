@@ -7,21 +7,23 @@ export const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const { data: session, status } = useSession();
+  // console.log(session);
 
-  const [userName, setUserName] = useState();
-  status == "authenticated"
-    ? {
-        email: session.user.email,
-        name: session.user.name,
-        role: session.user.role,
-        status: status,
-      }
-    : {
-        email: "",
-        name: "",
-        role: "user",
-        status: "",
-      };
+  const [userName, setUserName] = useState(
+    status == "authenticated"
+      ? {
+          email: session.user.email,
+          name: session.user.name,
+          role: session.user.role,
+          status: status,
+        }
+      : {
+          email: "",
+          name: "",
+          role: "user",
+          status: "",
+        }
+  );
 
   //   const value = useMemo(
   //     () => ({ userName, setUserName }),
@@ -45,6 +47,7 @@ export const UserProvider = ({ children }) => {
 
     // return { userName, setUserName };
   }, [status]);
+  console.log(userName);
 
   return (
     <UserContext.Provider value={{ userName, setUserName }}>

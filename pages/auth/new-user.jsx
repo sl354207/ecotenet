@@ -27,6 +27,7 @@ const newUser = () => {
   // console.log(session);
   // console.log(status);
   const { userName, setUserName } = useUserContext();
+  // console.log(userName);
 
   const [name, setName] = useState("");
 

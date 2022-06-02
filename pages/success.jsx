@@ -2,12 +2,15 @@
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import { useUserContext } from "@components/UserContext";
 import { Container, IconButton, Link, Snackbar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 import { Alert } from "@material-ui/lab";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,6 +51,15 @@ const useStyles = makeStyles((theme) => ({
 
 const success = ({ wiki }) => {
   const classes = useStyles();
+  const router = useRouter();
+  const { userName } = useUserContext();
+  // console.log(userName);
+  let status;
+  if (userName == undefined) {
+    status = "loading";
+  } else {
+    status = userName.status;
+  }
 
   const [dialog, setDialog] = useState(false);
 
@@ -66,7 +78,13 @@ const success = ({ wiki }) => {
   };
 
   const handleOpenDialog = () => {
-    setDialog(true);
+    if (status == "authenticated" && userName.name == undefined) {
+      router.push("/auth/new-user");
+    } else if (status !== "authenticated") {
+      signIn();
+    } else {
+      setDialog(true);
+    }
   };
 
   const handleCloseDialog = () => {

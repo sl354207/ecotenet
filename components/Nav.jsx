@@ -274,17 +274,29 @@ const Nav = ({ ecoFilter }) => {
                   <Button href="/species" variant="text" color="secondary">
                     Species Map
                   </Button>
-
-                  <Button href="/dashboard" variant="text" color="secondary">
-                    Dashboard
-                  </Button>
+                  {status == "authenticated" && (
+                    <Button
+                      // href="/dashboard"
+                      variant="text"
+                      color="secondary"
+                      onClick={
+                        status == "authenticated" && userName.name == undefined
+                          ? () => router.push("/auth/new-user")
+                          : () => router.push("/dashboard")
+                      }
+                    >
+                      Dashboard
+                    </Button>
+                  )}
                 </div>
               </div>
             )}
 
             <div className={classes.search}>
               <div className={classes.searchIcon}>
-                <SearchIcon onClick={() => router.push("/success")} />
+                <SearchIcon
+                // onClick={() => router.push("/success")}
+                />
               </div>
 
               <Autocomplete
@@ -371,29 +383,34 @@ const Nav = ({ ecoFilter }) => {
 
             {!isMobile && (
               <>
-                <Button
-                  href="/dashboard/editor"
-                  variant="outlined"
-                  color="secondary"
-                >
-                  Create Post
-                </Button>
+                {status == "authenticated" && (
+                  <Button
+                    // href="/dashboard/editor"
+                    variant="outlined"
+                    color="secondary"
+                    onClick={
+                      status == "authenticated" && userName.name == undefined
+                        ? () => router.push("/auth/new-user")
+                        : () => router.push("/dashboard/editor")
+                    }
+                  >
+                    Create Post
+                  </Button>
+                )}
+
                 <Button
                   variant="outlined"
                   color="secondary"
                   className={classes.spacer}
                   onClick={
-                    // userName.status == "authenticated"
-                    //   ? () => signOut()
-                    //   : () => signIn()
-                    status == "authenticated" ? () => signOut() : () => signIn()
+                    status == "authenticated"
+                      ? () =>
+                          signOut({
+                            callbackUrl: "http://localhost:3000",
+                          })
+                      : () => signIn()
                   }
                 >
-                  {/* {userName.status == "authenticated" ? (
-                    <>Sign Out</>
-                  ) : (
-                    <>Sign In</>
-                  )} */}
                   {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
                 </Button>
 
@@ -464,30 +481,59 @@ const Nav = ({ ecoFilter }) => {
                             >
                               Species Map
                             </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/dashboard");
-                              }}
-                              className={classes.popperTop}
-                            >
-                              Dashboard
-                            </MenuItem>
+                            {status == "authenticated" && (
+                              <MenuItem
+                                onClick={
+                                  status == "authenticated" &&
+                                  userName.name == undefined
+                                    ? () => {
+                                        setPopper(false);
+                                        router.push("/auth/new-user");
+                                      }
+                                    : () => {
+                                        setPopper(false);
+                                        router.push("/dashboard");
+                                      }
+                                }
+                                className={classes.popperTop}
+                              >
+                                Dashboard
+                              </MenuItem>
+                            )}
+                            {status == "authenticated" && (
+                              <MenuItem
+                                onClick={
+                                  status == "authenticated" &&
+                                  userName.name == undefined
+                                    ? () => {
+                                        setPopper(false);
+                                        router.push("/auth/new-user");
+                                      }
+                                    : () => {
+                                        setPopper(false);
+                                        router.push("/dashboard/editor");
+                                      }
+                                }
+                                className={classes.popperBottom}
+                              >
+                                Create Post
+                              </MenuItem>
+                            )}
 
                             <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/dashboard/editor");
-                              }}
-                              className={classes.popperBottom}
-                            >
-                              Create Post
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                signIn();
-                              }}
+                              onClick={
+                                status == "authenticated"
+                                  ? () => {
+                                      setPopper(false);
+                                      signOut({
+                                        callbackUrl: "http://localhost:3000",
+                                      });
+                                    }
+                                  : () => {
+                                      setPopper(false);
+                                      signIn();
+                                    }
+                              }
                               className={classes.popperBottom}
                             >
                               Sign In
