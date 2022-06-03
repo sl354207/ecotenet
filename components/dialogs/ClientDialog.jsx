@@ -17,6 +17,7 @@ const ClientDialog = ({
   mutate,
   closeForm,
   post_id,
+  name,
 }) => {
   let endpoint;
   let item;
@@ -35,7 +36,7 @@ const ClientDialog = ({
       endpoint = "Comment";
       item = "comment";
       submission = {
-        name: "Muskrat",
+        name: name,
         post_id: post_id,
         comment_ref: result.comment_ref,
         date: new Date().toUTCString(),

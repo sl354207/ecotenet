@@ -26,7 +26,7 @@ const newUser = () => {
   // const { data: session, status } = useSession();
   // console.log(session);
   // console.log(status);
-  const { userName, setUserName } = useUserContext();
+  const { user, setUser } = useUserContext();
   // console.log(userName);
 
   const [name, setName] = useState("");
@@ -53,8 +53,8 @@ const newUser = () => {
   // handle comment submission to database through api
   const handleNameUpdate = async (name) => {
     //combine all objects and send to api
-    const user = {
-      email: userName.email,
+    const submission = {
+      email: user.email,
       name: name,
     };
 
@@ -71,7 +71,7 @@ const newUser = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(submission),
         });
         if (res1.ok) {
           // mutate();
@@ -82,7 +82,8 @@ const newUser = () => {
           // });
           // setCommentValue("");
           // console.log("ok");
-          setUserName({ ...userName, name: name });
+          // setUser({ ...user, name: name });
+          sessionStorage.setItem("name", name);
           router.push("/");
         } else {
           setSnackbar({

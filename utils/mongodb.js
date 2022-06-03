@@ -551,7 +551,7 @@ const getPeople = async () => {
 const getPerson = async (name) => {
   const { db } = await connectToDatabase();
 
-  const person = await db.collection("people").findOne({
+  const person = await db.collection("users").findOne({
     name: name,
   });
 

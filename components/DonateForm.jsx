@@ -7,7 +7,7 @@ import {
   Tab,
   Tabs,
 } from "@material-ui/core";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import { alpha, makeStyles } from "@material-ui/core/styles";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { fetchPostJSON } from "@utils/stripe/api-helpers";
 import getStripe from "@utils/stripe/get-stripe";
@@ -101,7 +101,6 @@ const useStyles = makeStyles((theme) => ({
 
 const DonateForm = () => {
   const classes = useStyles();
-  const theme = useTheme();
 
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false);

@@ -20,7 +20,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Flag = ({ open, handleClose, contentType, result, setSnackbar }) => {
+const Flag = ({
+  open,
+  handleClose,
+  contentType,
+  result,
+  name,
+  setSnackbar,
+}) => {
   const classes = useStyles();
 
   const [value, setValue] = useState();
@@ -33,7 +40,7 @@ const Flag = ({ open, handleClose, contentType, result, setSnackbar }) => {
   const handleSubmit = async () => {
     //   UPDATE NAME AND ID
     const submission = {
-      name: "Muskrat",
+      name: name,
       flagged: result.name ? result.name : "ecotenet",
       type: contentType,
       text: value,

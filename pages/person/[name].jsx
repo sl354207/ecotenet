@@ -2,6 +2,7 @@ import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import PostList from "@components/PostList";
+import { useUserContext } from "@components/UserContext";
 import {
   Container,
   IconButton,
@@ -13,6 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
 import { Alert } from "@material-ui/lab";
 import { getPerson, getProfilePosts } from "@utils/mongodb";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -42,6 +45,8 @@ const useStyles = makeStyles(() => ({
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = ({ person, posts }) => {
   const classes = useStyles();
+  const router = useRouter();
+  const { user } = useUserContext();
 
   const [dialog, setDialog] = useState(false);
 
@@ -60,7 +65,16 @@ const person = ({ person, posts }) => {
   };
 
   const handleOpenDialog = () => {
-    setDialog(true);
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setDialog(true);
+      }
+    }
   };
 
   const handleCloseDialog = () => {
@@ -123,6 +137,7 @@ const person = ({ person, posts }) => {
           contentType="profile"
           result={person}
           setSnackbar={setSnackbar}
+          name={user.name}
         />
         <Snackbar
           anchorOrigin={{

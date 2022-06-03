@@ -15,6 +15,7 @@ const DashboardDialog = ({
   action,
   className,
   result,
+  name,
   setSnackbar,
   mutate,
 }) => {
@@ -82,7 +83,7 @@ const DashboardDialog = ({
       item = "draft";
       submission = {
         title: result.title,
-        name: "Muskrat",
+        name: name,
         description: result.description,
         category: result.category,
         tags: result.tags,

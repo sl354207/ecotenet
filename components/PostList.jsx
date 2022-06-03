@@ -27,7 +27,7 @@ const PostList = ({ posts, featured }) => {
               color="secondary"
               fullWidth
               className={classes.button}
-              href={featured ? `featured/${post._id}` : `posts/${post._id}`}
+              href={featured ? `/featured/${post._id}` : `/posts/${post._id}`}
             >
               <div className={classes.card}>
                 <Typography

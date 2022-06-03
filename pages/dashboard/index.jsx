@@ -2,6 +2,7 @@ import DashboardComment from "@components/comments/DashboardComment";
 import DashboardDialog from "@components/dialogs/DashboardDialog";
 import Header from "@components/Header";
 import TextBox from "@components/TextBox";
+import { useUserContext } from "@components/UserContext";
 import {
   AppBar,
   Box,
@@ -176,13 +177,20 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Dashboard() {
   const classes = useStyles();
+  const { user } = useUserContext();
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
 
   const [value, setValue] = useState(0);
 
-  const [fetchApi, setFetchApi] = useState("/api/getPerson?q=Muskrat");
+  const [fetchApi, setFetchApi] = useState();
+  useEffect(() => {
+    if (user) {
+      setFetchApi(`/api/getPerson?q=${user.name}`);
+    }
+  }, [user]);
+  console.log(fetchApi);
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
@@ -194,7 +202,8 @@ export default function Dashboard() {
     message: "Post submitted successfully",
   });
 
-  const { data: results, mutate } = useSWR(fetchApi, fetcher);
+  const { data: results, mutate } = useSWR(user ? fetchApi : null, fetcher);
+  // console.log(results);
 
   const [profile, setProfile] = useState({
     bio: "",
@@ -218,23 +227,23 @@ export default function Dashboard() {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        setFetchApi(`/api/getPerson?q=Muskrat`);
+        setFetchApi(`/api/getPerson?q=${user.name}`);
         break;
       case 1:
-        setFetchApi(`/api/getposts?q1=Muskrat&q2=published`);
+        setFetchApi(`/api/getposts?q1=${user.name}&q2=published`);
 
         break;
       case 2:
-        setFetchApi(`/api/getposts?q1=Muskrat&q2=draft`);
+        setFetchApi(`/api/getposts?q1=${user.name}&q2=draft`);
 
         break;
       case 3:
         // update comments request
-        setFetchApi(`/api/getDashboardComments?q=Muskrat`);
+        setFetchApi(`/api/getDashboardComments?q=${user.name}`);
 
         break;
       case 4:
-        setFetchApi(`/api/getNotifications?q=Muskrat`);
+        setFetchApi(`/api/getNotifications?q=${user.name}`);
 
         break;
       default:
@@ -296,7 +305,7 @@ export default function Dashboard() {
 
   const handleProfileSubmit = async () => {
     const value = {
-      name: results.name,
+      email: user.email,
       bio: profile.bio,
       website: profile.website,
       socials: profile.socials,

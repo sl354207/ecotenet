@@ -1,6 +1,7 @@
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import { useUserContext } from "@components/UserContext";
 import {
   AppBar,
   Box,
@@ -20,6 +21,8 @@ import { Alert } from "@material-ui/lab";
 import { getMammalById } from "@utils/mongodb";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -110,6 +113,8 @@ const useStyles = makeStyles((theme) => ({
 
 const mammal = ({ mammal, wiki }) => {
   const classes = useStyles();
+  const router = useRouter();
+  const { user } = useUserContext();
   const [value, setValue] = useState(0);
 
   const [dialog, setDialog] = useState(false);
@@ -129,7 +134,16 @@ const mammal = ({ mammal, wiki }) => {
   };
 
   const handleOpenDialog = () => {
-    setDialog(true);
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setDialog(true);
+      }
+    }
   };
 
   const handleCloseDialog = () => {
@@ -360,6 +374,7 @@ const mammal = ({ mammal, wiki }) => {
           contentType="species"
           result={mammal}
           setSnackbar={setSnackbar}
+          name={user.name}
         />
         <Snackbar
           anchorOrigin={{

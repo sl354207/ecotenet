@@ -4,6 +4,7 @@ import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/EditorLayout";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import { useUserContext } from "@components/UserContext";
 import Vote from "@components/Vote";
 import {
   Container,
@@ -30,6 +31,8 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { getPostById, getPostComments } from "@utils/mongodb";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -83,6 +86,8 @@ const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post, comments }) => {
   const classes = useStyles();
+  const router = useRouter();
+  const { user } = useUserContext();
   // set post as value of editor
   const [value, setValue] = useState(post);
 
@@ -149,14 +154,23 @@ const post = ({ post, comments }) => {
   };
 
   const handleOpenDialog = (action, result) => {
-    setItem(result);
-    setAction(action);
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setItem(result);
+        setAction(action);
 
-    setDialog(true);
-    console.log(action);
-    console.log(result);
-    if (action == "Comment") {
-      dispatch({ type: "open", payload: result.comment_ref });
+        setDialog(true);
+        // console.log(action);
+        // console.log(result);
+        if (action == "Comment") {
+          dispatch({ type: "open", payload: result.comment_ref });
+        }
+      }
     }
   };
 
@@ -172,16 +186,34 @@ const post = ({ post, comments }) => {
   };
 
   const toggleForm = () => {
-    setShowForm(!showForm);
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setShowForm(!showForm);
+      }
+    }
   };
   const closeForm = () => {
     setShowForm(false);
   };
 
   const handleOpenFlag = (action, result) => {
-    setItem(result);
-    setAction(action);
-    setFlag(true);
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setItem(result);
+        setAction(action);
+        setFlag(true);
+      }
+    }
   };
 
   const handleCloseFlag = () => {
@@ -189,7 +221,16 @@ const post = ({ post, comments }) => {
   };
 
   const handleReply = (toggle, ID) => {
-    dispatch({ type: toggle, payload: ID });
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        dispatch({ type: toggle, payload: ID });
+      }
+    }
   };
 
   const date = new Date(post.date);
@@ -271,6 +312,7 @@ const post = ({ post, comments }) => {
         result={item}
         setSnackbar={setSnackbar}
         closeForm={closeForm}
+        name={user.name}
       />
       <Flag
         open={flag}
@@ -278,6 +320,7 @@ const post = ({ post, comments }) => {
         contentType={action}
         result={item}
         setSnackbar={setSnackbar}
+        name={user.name}
       />
       <Snackbar
         anchorOrigin={{

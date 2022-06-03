@@ -150,13 +150,13 @@ const Nav = ({ ecoFilter }) => {
   // const { data: session, status } = useSession();
   // console.log(session);
   // console.log(status);
-  const { userName } = useUserContext();
+  const { user } = useUserContext();
   // console.log(userName);
   let status;
-  if (userName == undefined) {
+  if (user == undefined) {
     status = "loading";
   } else {
-    status = userName.status;
+    status = user.status;
   }
 
   const router = useRouter();
@@ -280,7 +280,7 @@ const Nav = ({ ecoFilter }) => {
                       variant="text"
                       color="secondary"
                       onClick={
-                        status == "authenticated" && userName.name == undefined
+                        status == "authenticated" && user.name == undefined
                           ? () => router.push("/auth/new-user")
                           : () => router.push("/dashboard")
                       }
@@ -389,7 +389,7 @@ const Nav = ({ ecoFilter }) => {
                     variant="outlined"
                     color="secondary"
                     onClick={
-                      status == "authenticated" && userName.name == undefined
+                      status == "authenticated" && user.name == undefined
                         ? () => router.push("/auth/new-user")
                         : () => router.push("/dashboard/editor")
                     }
@@ -402,6 +402,7 @@ const Nav = ({ ecoFilter }) => {
                   variant="outlined"
                   color="secondary"
                   className={classes.spacer}
+                  disabled={status == "loading"}
                   onClick={
                     status == "authenticated"
                       ? () =>
@@ -485,7 +486,7 @@ const Nav = ({ ecoFilter }) => {
                               <MenuItem
                                 onClick={
                                   status == "authenticated" &&
-                                  userName.name == undefined
+                                  user.name == undefined
                                     ? () => {
                                         setPopper(false);
                                         router.push("/auth/new-user");
@@ -504,7 +505,7 @@ const Nav = ({ ecoFilter }) => {
                               <MenuItem
                                 onClick={
                                   status == "authenticated" &&
-                                  userName.name == undefined
+                                  user.name == undefined
                                     ? () => {
                                         setPopper(false);
                                         router.push("/auth/new-user");
@@ -521,6 +522,7 @@ const Nav = ({ ecoFilter }) => {
                             )}
 
                             <MenuItem
+                              disabled={status == "loading"}
                               onClick={
                                 status == "authenticated"
                                   ? () => {

@@ -52,13 +52,13 @@ const useStyles = makeStyles((theme) => ({
 const success = ({ wiki }) => {
   const classes = useStyles();
   const router = useRouter();
-  const { userName } = useUserContext();
+  const { user } = useUserContext();
   // console.log(userName);
   let status;
-  if (userName == undefined) {
+  if (user == undefined) {
     status = "loading";
   } else {
-    status = userName.status;
+    status = user.status;
   }
 
   const [dialog, setDialog] = useState(false);
@@ -78,12 +78,15 @@ const success = ({ wiki }) => {
   };
 
   const handleOpenDialog = () => {
-    if (status == "authenticated" && userName.name == undefined) {
-      router.push("/auth/new-user");
-    } else if (status !== "authenticated") {
+    if (user.status == "unauthenticated" || user.status == "loading") {
       signIn();
-    } else {
-      setDialog(true);
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setDialog(true);
+      }
     }
   };
 
@@ -236,6 +239,7 @@ const success = ({ wiki }) => {
           contentType="ecoregion"
           result={{ _id: "test" }}
           setSnackbar={setSnackbar}
+          name={user.name}
         />
         <Snackbar
           anchorOrigin={{

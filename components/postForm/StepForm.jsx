@@ -1,4 +1,5 @@
 import DashboardDialog from "@components/dialogs/DashboardDialog";
+import { useUserContext } from "@components/UserContext";
 import {
   Button,
   Link,
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 const StepForm = ({ post, pathName }) => {
   const classes = useStyles();
   const router = useRouter();
+  const { user } = useUserContext();
 
   const { title, description, category, tags, ecoregions } = post;
 
@@ -160,7 +162,7 @@ const StepForm = ({ post, pathName }) => {
 
     if (pathName == "editor") {
       silentObject = {
-        name: "Muskrat",
+        name: user.name,
         status: "draft",
         approved: "false",
         updated: false,
@@ -564,6 +566,7 @@ const StepForm = ({ post, pathName }) => {
         className={classes.dialog}
         result={item}
         setSnackbar={setSnackbar}
+        name={user.name}
       />
       <Snackbar
         anchorOrigin={{
