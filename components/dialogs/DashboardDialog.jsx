@@ -150,13 +150,21 @@ const DashboardDialog = ({
           contentType == "create"
             ? `/api/create${endpoint}`
             : `/api/update${endpoint}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(submission),
-          }
+          contentType == "create"
+            ? {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(submission),
+              }
+            : {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(submission),
+              }
         );
         if (!res2.ok) {
           setSnackbar({
@@ -167,7 +175,7 @@ const DashboardDialog = ({
         }
 
         if (res2.ok && contentType == "create") {
-          const ID = await res.json();
+          const ID = await res2.json();
           router.push(`/dashboard/posts/${ID.insertedId}`);
           handleClose();
           setSnackbar({

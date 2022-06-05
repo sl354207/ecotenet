@@ -645,7 +645,7 @@ const updateFlag = async (_id, status) => {
     {
       _id: ObjectId(_id),
     },
-    { $set: status }
+    { $set: { status: status } }
   );
 
   return response;
@@ -686,7 +686,7 @@ const updateNotification = async (_id, viewed) => {
     {
       _id: ObjectId(_id),
     },
-    { $set: viewed }
+    { $set: { viewed: viewed } }
   );
 
   return response;

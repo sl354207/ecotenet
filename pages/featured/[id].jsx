@@ -88,6 +88,7 @@ const post = ({ post, comments }) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
+  console.log(user);
   // set post as value of editor
   const [value, setValue] = useState(post);
 
@@ -312,7 +313,7 @@ const post = ({ post, comments }) => {
         result={item}
         setSnackbar={setSnackbar}
         closeForm={closeForm}
-        name={user.name}
+        name={user && user.name}
       />
       <Flag
         open={flag}
@@ -320,7 +321,7 @@ const post = ({ post, comments }) => {
         contentType={action}
         result={item}
         setSnackbar={setSnackbar}
-        name={user.name}
+        name={user && user.name}
       />
       <Snackbar
         anchorOrigin={{

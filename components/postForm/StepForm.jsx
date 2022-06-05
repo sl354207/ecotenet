@@ -566,7 +566,7 @@ const StepForm = ({ post, pathName }) => {
         className={classes.dialog}
         result={item}
         setSnackbar={setSnackbar}
-        name={user.name}
+        name={user && user.name}
       />
       <Snackbar
         anchorOrigin={{

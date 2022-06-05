@@ -61,7 +61,7 @@ export const UserProvider = ({ children }) => {
           status: status,
         });
       }
-      console.log(userName);
+      // console.log(userName);
     }
     // status == "authenticated"
     //   ? setUser({
@@ -80,7 +80,7 @@ export const UserProvider = ({ children }) => {
     // return { userName, setUserName };
   }, [router.pathname, status]);
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

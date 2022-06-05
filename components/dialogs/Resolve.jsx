@@ -105,7 +105,7 @@ const Resolve = ({
           setSnackbar({
             open: true,
             severity: "error",
-            message: `There was a problem resolvng flag. Please try again later`,
+            message: `There was a problem resolving flag. Please try again later`,
           });
         }
       } else {
