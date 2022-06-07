@@ -82,7 +82,7 @@ const adminFlags = () => {
     setDialog(false);
   };
 
-  const { data: results, mutate } = useSWR("/api/getFlags", fetcher);
+  const { data: results, mutate } = useSWR("/api/flags", fetcher);
 
   let list;
 

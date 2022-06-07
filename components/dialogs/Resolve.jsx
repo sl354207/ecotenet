@@ -57,11 +57,11 @@ const Resolve = ({
 
   const handleSubmit = async () => {
     const flag = {
-      _id: ID,
+      // _id: ID,
       status: "resolved",
     };
 
-    const res = await fetch("/api/updateFlag", {
+    const res = await fetch(`/api/flags/${ID}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

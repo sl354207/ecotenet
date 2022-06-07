@@ -702,6 +702,19 @@ const checkName = async (name) => {
   return response;
 };
 
+const checkPerson = async (name) => {
+  const { db } = await connectToDatabase();
+
+  const response = await db.collection("users").findOne(
+    {
+      name: name,
+    },
+    { name: 1, email: 1 }
+  );
+
+  return response;
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -739,4 +752,5 @@ module.exports = {
   getNotifications,
   updateNotification,
   checkName,
+  checkPerson,
 };

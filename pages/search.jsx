@@ -66,7 +66,7 @@ const search = ({ ecoFilter }) => {
   const queryFilter = router.query.s;
 
   const { data: results } = useSWR(
-    `/api/search/${queryFilter}?q=${query}`,
+    `/api/search?q=${query}&filter=${queryFilter}`,
     fetcher
   );
 

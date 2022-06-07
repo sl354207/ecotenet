@@ -203,7 +203,7 @@ const species = () => {
 
   const handleChange = async (e) => {
     if (e.target.value) {
-      const res = await fetch(`/api/search/autoSpecies?q=${e.target.value}`, {
+      const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

@@ -61,7 +61,7 @@ const admin = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const { data: stats } = useSWR("/api/getStats", fetcher);
+  const { data: stats } = useSWR("/api/admin/stats", fetcher);
   const { data: posts, mutate } = useSWR("/api/getFeatures", fetcher);
 
   const updateFeature = async (action, post) => {
