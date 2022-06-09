@@ -66,7 +66,7 @@ const adminPosts = () => {
   };
 
   const { data: results } = useSWR(
-    "/api/getAllPosts?q1=published&q2=pending",
+    "/api/admin/posts?q1=published&q2=pending",
     fetcher
   );
 

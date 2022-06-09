@@ -124,10 +124,10 @@ const post = () => {
     setResolve(false);
   };
 
-  const { data: post } = useSWR(ID ? `/api/getposts/${ID}` : null, fetcher);
+  const { data: post } = useSWR(ID ? `/api/admin/posts/${ID}` : null, fetcher);
 
   const { data: comments, mutate } = useSWR(
-    comment_query ? `/api/getPostComments?q=${ID}` : null,
+    comment_query ? `/api/admin/posts/${ID}/comments` : null,
     fetcher
   );
 

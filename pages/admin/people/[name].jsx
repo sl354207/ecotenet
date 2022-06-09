@@ -91,7 +91,7 @@ const person = () => {
   };
 
   const { data: results } = useSWR(
-    name ? `/api/getPerson?q=${name}` : null,
+    name ? `/api/admin/users/${name}` : null,
     fetcher
   );
 
@@ -134,37 +134,37 @@ const person = () => {
         >
           Delete
         </Button>
-        {results.approved == "true" && (
-          <div className={classes.profile}>
-            {results.bio !== "" && (
-              <>
-                <Typography gutterBottom>Bio:</Typography>
-                <Typography gutterBottom variant="body1">
-                  {results.bio}
-                </Typography>
-              </>
-            )}
-            {results.website !== "" && (
-              <Typography gutterBottom>
-                Personal Website: <Link>{results.website}</Link>
+        {/* {results.approved == "true" && ( */}
+        <div className={classes.profile}>
+          {results.bio !== "" && (
+            <>
+              <Typography gutterBottom>Bio:</Typography>
+              <Typography gutterBottom variant="body1">
+                {results.bio}
               </Typography>
-            )}
-            {Array.isArray(results.socials) && results.socials.length > 0 && (
-              <Typography className={classes.socials} gutterBottom>
-                Socials:{" "}
-                {results.socials.map((social) => (
-                  <Link
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`${social}`}
-                  >
-                    {social}
-                  </Link>
-                ))}
-              </Typography>
-            )}
-          </div>
-        )}
+            </>
+          )}
+          {results.website !== "" && (
+            <Typography gutterBottom>
+              Personal Website: <Link>{results.website}</Link>
+            </Typography>
+          )}
+          {Array.isArray(results.socials) && results.socials.length > 0 && (
+            <Typography className={classes.socials} gutterBottom>
+              Socials:{" "}
+              {results.socials.map((social) => (
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${social}`}
+                >
+                  {social}
+                </Link>
+              ))}
+            </Typography>
+          )}
+        </div>
+        {/* )} */}
       </>
     );
   }

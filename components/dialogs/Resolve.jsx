@@ -61,7 +61,7 @@ const Resolve = ({
       status: "resolved",
     };
 
-    const res = await fetch(`/api/flags/${ID}`, {
+    const res = await fetch(`/api/admin/flags/${ID}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const Resolve = ({
           viewed: false,
         };
 
-        const res1 = await fetch("/api/createNotification", {
+        const res1 = await fetch("/api/admin/notifications", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

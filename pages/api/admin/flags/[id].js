@@ -1,22 +1,23 @@
-import { getStats } from "@utils/mongodb";
+import { updateFlag } from "@utils/mongodb";
 // import { getSession } from "next-auth/react";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
   // const session = await getSession({ req });
-  // // console.log(session);
+
   // if (session && session.user.role == "admin") {
-  if (req.method !== "GET") {
+  if (req.method !== "PUT") {
     return res.status(405).json({ msg: "Method not allowed" });
   }
-  // try get request, if successful return response, otherwise return error message
-  try {
-    const stats = await getStats();
+  const { status } = req.body;
 
-    return res.status(200).json(stats);
+  const _id = req.query.id;
+
+  try {
+    const updatedFlag = await updateFlag(_id, status);
+    return res.status(200).json(updatedFlag);
   } catch (err) {
     console.error(err);
-
     res.status(500).json({ msg: "Something went wrong." });
   }
   // } else {
@@ -24,4 +25,5 @@ export default async function handler(req, res) {
   //   res.status(401);
   // }
   // res.end();
+  //   console.log(session);
 }

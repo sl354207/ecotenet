@@ -92,7 +92,7 @@ const adminPeople = () => {
     setDialog(false);
   };
 
-  const { data: results, mutate } = useSWR("/api/getPeople", fetcher);
+  const { data: results, mutate } = useSWR("/api/admin/users", fetcher);
 
   let list;
 

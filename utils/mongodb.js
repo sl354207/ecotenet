@@ -539,7 +539,7 @@ const getPeople = async () => {
   const { db } = await connectToDatabase();
 
   const people = await db
-    .collection("people")
+    .collection("users")
     .find({
       approved: "pending",
     })

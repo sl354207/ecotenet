@@ -62,18 +62,18 @@ const admin = () => {
   };
 
   const { data: stats } = useSWR("/api/admin/stats", fetcher);
-  const { data: posts, mutate } = useSWR("/api/getFeatures", fetcher);
+  const { data: posts, mutate } = useSWR("/api/admin/posts", fetcher);
 
   const updateFeature = async (action, post) => {
     switch (action) {
       case "addFeature":
         const submission = {
-          _id: post._id,
+          // _id: post._id,
           featured: true,
           feature: "true",
         };
 
-        const res = await fetch("/api/updatePost", {
+        const res = await fetch(`/api/admin/posts/${post._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -91,7 +91,7 @@ const admin = () => {
             viewed: false,
           };
 
-          const res1 = await fetch("/api/createNotification", {
+          const res1 = await fetch("/api/admin/notifications", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -130,12 +130,12 @@ const admin = () => {
         break;
       case "removeFeature":
         const submission1 = {
-          _id: post._id,
+          // _id: post._id,
           featured: true,
           feature: "pending",
         };
 
-        const res1 = await fetch("/api/updatePost", {
+        const res1 = await fetch(`/api/admin/posts/${post._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -163,12 +163,12 @@ const admin = () => {
         break;
       case "removeList":
         const submission2 = {
-          _id: post._id,
+          // _id: post._id,
           featured: true,
           feature: "false",
         };
 
-        const res2 = await fetch("/api/updatePost", {
+        const res2 = await fetch(`/api/admin/posts/${post._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

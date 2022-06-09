@@ -1,27 +1,23 @@
-import { getFeatureCandidates } from "@utils/mongodb";
+import { getPostComments } from "@utils/mongodb";
 
-// api endpoint to get all posts from database
+// api endpoint to get all posts by user from database
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== "GET") {
     return res.status(405);
   }
-  // const k = req.query;
 
-  // if (Object.keys(k).length) {
-  //   console.log(Object.keys(k));
-  // } else {
-  //   console.log("no");
-  // }
-
+  const { id } = req.query;
+  //   console.log(q);
   // try get request, if successful return response, otherwise return error message
   try {
-    const features = await getFeatureCandidates();
+    const comments = await getPostComments(id);
 
-    return res.status(200).json(features);
+    return res.status(200).json(comments);
   } catch (err) {
     console.error(err);
 
     res.status(500).json({ msg: "Something went wrong." });
   }
+  //   res.end();
 }

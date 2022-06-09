@@ -100,10 +100,7 @@ const adminComments = () => {
     setDialog(false);
   };
 
-  const { data: results, mutate } = useSWR(
-    "/api/getComments?q=pending",
-    fetcher
-  );
+  const { data: results, mutate } = useSWR("/api/admin/comments", fetcher);
 
   let list;
 

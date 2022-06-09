@@ -1,4 +1,4 @@
-import { getFeatureCandidates } from "@utils/mongodb";
+import { getPeople } from "@utils/mongodb";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
@@ -6,19 +6,12 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405);
   }
-  // const k = req.query;
-
-  // if (Object.keys(k).length) {
-  //   console.log(Object.keys(k));
-  // } else {
-  //   console.log("no");
-  // }
 
   // try get request, if successful return response, otherwise return error message
   try {
-    const features = await getFeatureCandidates();
+    const people = await getPeople();
 
-    return res.status(200).json(features);
+    return res.status(200).json(people);
   } catch (err) {
     console.error(err);
 
