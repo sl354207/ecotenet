@@ -46,13 +46,14 @@ const DashboardComment = ({
     //combine all objects and send to api
     const comment = {
       _id: result._id,
+      name: result.name,
       date: new Date().toUTCString(),
       text: commentValue,
       approved: "pending",
       updated: true,
     };
 
-    const res = await fetch("/api/updateComment", {
+    const res = await fetch(`/api/dashboard/comments/${result._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -187,7 +187,7 @@ export default function Dashboard() {
   const [fetchApi, setFetchApi] = useState();
   useEffect(() => {
     if (user) {
-      setFetchApi(`/api/getPerson?q=${user.name}`);
+      setFetchApi(`/api/dashboard/users/${user.name}`);
     }
   }, [user]);
   console.log(fetchApi);
@@ -227,23 +227,23 @@ export default function Dashboard() {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        setFetchApi(`/api/getPerson?q=${user.name}`);
+        setFetchApi(`/api/dashboard/users/${user.name}`);
         break;
       case 1:
-        setFetchApi(`/api/getposts?q1=${user.name}&q2=published`);
+        setFetchApi(`/api/dashboard/posts?name=${user.name}&status=published`);
 
         break;
       case 2:
-        setFetchApi(`/api/getposts?q1=${user.name}&q2=draft`);
+        setFetchApi(`/api/dashboard/posts?name=${user.name}&status=draft`);
 
         break;
       case 3:
         // update comments request
-        setFetchApi(`/api/getDashboardComments?q=${user.name}`);
+        setFetchApi(`/api/dashboard/comments?name=${user.name}`);
 
         break;
       case 4:
-        setFetchApi(`/api/getNotifications?q=${user.name}`);
+        setFetchApi(`/api/dashboard/notifications?name=${user.name}`);
 
         break;
       default:
@@ -253,11 +253,12 @@ export default function Dashboard() {
 
   const handleNotify = async (ID) => {
     const notify = {
+      name: user.name,
       _id: ID,
       viewed: true,
     };
 
-    const res = await fetch("/api/updateNotification", {
+    const res = await fetch(`/api/dashboard/notifications/${ID}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -311,7 +312,7 @@ export default function Dashboard() {
       socials: profile.socials,
       approved: "pending",
     };
-    const res = await fetch("/api/updatePerson", {
+    const res = await fetch(`/api/dashboard/users/${user.name}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

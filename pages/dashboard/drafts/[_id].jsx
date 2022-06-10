@@ -1,4 +1,5 @@
 import StepForm from "@components/postForm/StepForm";
+import { useUserContext } from "@components/UserContext";
 import { CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
@@ -19,13 +20,18 @@ export default function DraftByUser() {
   // set id to id in url query
   const router = useRouter();
   // console.log(router.query);
-  const _id = router.query._id;
+  const id = router.query._id;
   // capture url path to pass to form
   const pathName = router.pathname;
   // console.log(_id);
 
+  const { user } = useUserContext();
+
   // retrieve drafts from drafts api. convert swr data to name posts.
-  const { data: post } = useSWR(_id ? `/api/getposts/${_id}` : null, fetcher);
+  const { data: post } = useSWR(
+    id ? `/api/dashboard/posts/${id}?name=${user.name}` : null,
+    fetcher
+  );
 
   // loading state until draft is retrieved
   if (!post || post == undefined)
@@ -38,5 +44,5 @@ export default function DraftByUser() {
       />
     );
 
-  return <StepForm post={post} pathName={pathName} />;
+  return <StepForm post={post} pathName={pathName} user={user} />;
 }

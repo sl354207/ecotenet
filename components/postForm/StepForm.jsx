@@ -1,5 +1,4 @@
 import DashboardDialog from "@components/dialogs/DashboardDialog";
-import { useUserContext } from "@components/UserContext";
 import {
   Button,
   Link,
@@ -48,10 +47,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // pass in post and url path as props
-const StepForm = ({ post, pathName }) => {
+const StepForm = ({ post, pathName, user }) => {
   const classes = useStyles();
   const router = useRouter();
-  const { user } = useUserContext();
 
   const { title, description, category, tags, ecoregions } = post;
 
@@ -179,6 +177,7 @@ const StepForm = ({ post, pathName }) => {
         featured: false,
         feature: "false",
         date: "",
+        name: user.name,
       };
     }
     // combine form value and editor value into one object to pass to api.
@@ -187,7 +186,7 @@ const StepForm = ({ post, pathName }) => {
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
-        const res1 = await fetch("/api/updatePost", {
+        const res1 = await fetch(`/api/dashboard/posts/${post._id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -212,7 +211,7 @@ const StepForm = ({ post, pathName }) => {
       case "/dashboard/posts/[_id]":
         break;
       case "editor":
-        const res3 = await fetch("/api/createPost", {
+        const res3 = await fetch("/api/dashboard/posts", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

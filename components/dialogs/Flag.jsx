@@ -49,7 +49,7 @@ const Flag = ({
       status: "pending",
       date: new Date().toUTCString(),
     };
-    const res = await fetch("/api/flags", {
+    const res = await fetch("/api/dashboard/flags", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
