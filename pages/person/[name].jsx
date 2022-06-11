@@ -137,7 +137,7 @@ const person = ({ person, posts }) => {
           contentType="profile"
           result={person}
           setSnackbar={setSnackbar}
-          name={user.name}
+          name={user && user.name}
         />
         <Snackbar
           anchorOrigin={{
@@ -158,6 +158,7 @@ const person = ({ person, posts }) => {
   );
 };
 
+// UPDATE
 // fetch post data at build time
 export const getServerSideProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
@@ -165,7 +166,7 @@ export const getServerSideProps = async (context) => {
 
   const person = await getPerson(name);
 
-  const posts = await getProfilePosts(name, "published", "true");
+  const posts = await getProfilePosts(name);
 
   return {
     props: {

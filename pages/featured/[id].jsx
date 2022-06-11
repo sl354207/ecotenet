@@ -88,7 +88,7 @@ const post = ({ post, comments }) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
-  console.log(user);
+  // console.log(user);
   // set post as value of editor
   const [value, setValue] = useState(post);
 

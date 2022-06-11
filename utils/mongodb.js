@@ -155,12 +155,12 @@ const getDashboardPosts = async (name, status) => {
   return posts;
 };
 
-const getProfilePosts = async (name, status, approved) => {
+const getProfilePosts = async (name) => {
   const { db } = await connectToDatabase();
 
   const posts = await db
     .collection("posts")
-    .find({ name: name, status: status, approved: approved })
+    .find({ name: name, status: "published", approved: "true" })
     .sort({ count: -1 })
     .toArray();
 

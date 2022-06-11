@@ -312,7 +312,7 @@ const post = ({ post, comments }) => {
         result={item}
         setSnackbar={setSnackbar}
         closeForm={closeForm}
-        name={user.name}
+        name={user && user.name}
       />
       <Flag
         open={flag}
@@ -320,7 +320,7 @@ const post = ({ post, comments }) => {
         contentType={action}
         result={item}
         setSnackbar={setSnackbar}
-        name={user.name}
+        name={user && user.name}
       />
       <Snackbar
         anchorOrigin={{
