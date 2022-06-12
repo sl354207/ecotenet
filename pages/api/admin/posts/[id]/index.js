@@ -3,11 +3,11 @@ import { deletePost, getPostById, updatePost } from "@utils/mongodb";
 export default async function handler(req, res) {
   const method = req.method;
   // set id based on id of url query
-  const _id = req.query.id;
+  const id = req.query.id;
   switch (method) {
     case "GET":
       try {
-        const post = await getPostById(_id);
+        const post = await getPostById(id);
 
         return res.status(200).json(post);
       } catch (err) {
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
       break;
     case "PUT":
-      const { ...data } = req.body;
+      const { _id, ...data } = req.body;
       // console.log(req);
 
       try {
@@ -33,8 +33,9 @@ export default async function handler(req, res) {
       break;
 
     case "DELETE":
+      const deleteId = req.body._id;
       try {
-        const deleted = await deletePost(_id);
+        const deleted = await deletePost(deleteId);
         return res.status(200).json(deleted);
       } catch (err) {
         console.error(err);

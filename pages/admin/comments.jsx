@@ -138,7 +138,7 @@ const adminComments = () => {
                       variant="outlined"
                       color="secondary"
                       onClick={() =>
-                        handleOpenDialog("Approve", "comment", result)
+                        handleOpenDialog("Approve", "Comment", result)
                       }
                     >
                       Approve
@@ -148,7 +148,7 @@ const adminComments = () => {
                       color="secondary"
                       className={classes.desktop}
                       onClick={() =>
-                        handleOpenDialog("Deny", "comment", result)
+                        handleOpenDialog("Deny", "Comment", result)
                       }
                     >
                       Deny
@@ -158,7 +158,7 @@ const adminComments = () => {
                       color="secondary"
                       className={`${classes.desktop} ${classes.delete}`}
                       onClick={() =>
-                        handleOpenDialog("Delete", "comment", result)
+                        handleOpenDialog("Delete", "Comment", result)
                       }
                     >
                       Delete
@@ -170,7 +170,7 @@ const adminComments = () => {
                       variant="outlined"
                       color="secondary"
                       onClick={() =>
-                        handleOpenDialog("Approve", "comment", result)
+                        handleOpenDialog("Approve", "Comment", result)
                       }
                     >
                       Approve
@@ -180,7 +180,7 @@ const adminComments = () => {
                       color="secondary"
                       className={classes.button}
                       onClick={() =>
-                        handleOpenDialog("Deny", "comment", result)
+                        handleOpenDialog("Deny", "Comment", result)
                       }
                     >
                       Deny
@@ -190,7 +190,7 @@ const adminComments = () => {
                       color="secondary"
                       className={`${classes.button} ${classes.delete}`}
                       onClick={() =>
-                        handleOpenDialog("Delete", "comment", result)
+                        handleOpenDialog("Delete", "Comment", result)
                       }
                     >
                       Delete

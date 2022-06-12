@@ -143,31 +143,6 @@ const StepForm = ({ post, pathName, user }) => {
     // })
   };
 
-  // const createDraft = async (draft) => {
-  //   const res = await fetch("/api/dashboard/posts", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(draft),
-  //   });
-
-  //   return res;
-  // };
-
-  // const updateDraft = async (draft, id) => {
-  //   const res = await fetch(`/api/dashboard/posts/${id}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(draft),
-  //   });
-
-  //   return res;
-  // };
-
-  // UPDATE ONCE AUTHENTICATION IS USED
   // function to create a new draft. Takes in form values and editor value.
   const saveDraft = async (postValue, details, clickInfo) => {
     const ecoObject = {
@@ -209,7 +184,7 @@ const StepForm = ({ post, pathName, user }) => {
     const value = { ...silentObject, ...postObject, ...details, ...ecoObject };
 
     switch (pathName) {
-      case "/dashboard/drafts/[_id]":
+      case "/dashboard/posts/[_id]":
         const updateResponse = await updatePost(value, "dashboard");
         if (updateResponse.ok) {
           setSnackbar({
@@ -225,8 +200,6 @@ const StepForm = ({ post, pathName, user }) => {
             message: "There was a problem saving draft. Please try again later",
           });
         }
-        break;
-      case "/dashboard/posts/[_id]":
         break;
       case "editor":
         const createResponse = await createPost(value);
@@ -285,7 +258,7 @@ const StepForm = ({ post, pathName, user }) => {
                 Back
               </Button>
 
-              {pathName == "/dashboard/posts/[_id]" ? (
+              {post.status == "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
@@ -374,7 +347,7 @@ const StepForm = ({ post, pathName, user }) => {
                 Back
               </Button>
 
-              {pathName == "/dashboard/posts/[_id]" ? (
+              {post.status == "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
@@ -458,7 +431,7 @@ const StepForm = ({ post, pathName, user }) => {
                 Back
               </Button>
 
-              {pathName == "/dashboard/posts/[_id]" ? (
+              {post.status == "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save

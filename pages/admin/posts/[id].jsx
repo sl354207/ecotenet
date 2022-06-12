@@ -180,7 +180,7 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  onClick={() => handleOpenDialog("Approve", "post", post)}
+                  onClick={() => handleOpenDialog("Approve", "Post", post)}
                 >
                   Approve
                 </Button>
@@ -188,7 +188,7 @@ const post = () => {
                   variant="outlined"
                   color="secondary"
                   className={classes.button}
-                  onClick={() => handleOpenDialog("Deny", "post", post)}
+                  onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
                   Deny
                 </Button>
@@ -196,7 +196,7 @@ const post = () => {
                   variant="outlined"
                   color="secondary"
                   className={`${classes.button} ${classes.delete}`}
-                  onClick={() => handleOpenDialog("Delete", "post", post)}
+                  onClick={() => handleOpenDialog("Delete", "Post", post)}
                 >
                   Delete
                 </Button>
@@ -215,7 +215,7 @@ const post = () => {
                   variant="outlined"
                   color="secondary"
                   className={classes.button}
-                  onClick={() => handleOpenDialog("Deny", "post", post)}
+                  onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
                   Deny
                 </Button>
@@ -223,7 +223,7 @@ const post = () => {
                   variant="outlined"
                   color="secondary"
                   className={`${classes.button} ${classes.delete}`}
-                  onClick={() => handleOpenDialog("Delete", "post", post)}
+                  onClick={() => handleOpenDialog("Delete", "Post", post)}
                 >
                   Delete
                 </Button>

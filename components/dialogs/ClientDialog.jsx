@@ -51,13 +51,6 @@ const ClientDialog = ({
 
   const handleSubmit = async () => {
     if (contentType == "Comment") {
-      // const res = await fetch("/api/createComment", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(submission),
-      // });
       const createResponse = await createComment(submission);
       handleClose("reply");
 
@@ -81,13 +74,6 @@ const ClientDialog = ({
         });
       }
     } else {
-      // const res = await fetch(`/api/update${endpoint}`, {
-      //   method: "PUT",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(submission),
-      // });
       const updateResponse = await updatePost(submission, "dashboard");
 
       if (updateResponse.ok) {

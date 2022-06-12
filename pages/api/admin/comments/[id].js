@@ -4,9 +4,9 @@ export default async function handler(req, res) {
   const method = req.method;
   switch (method) {
     case "PUT":
-      const { _id, ...data } = req.body;
+      const { id, ...data } = req.body;
       try {
-        const updatedComment = await updateComment(_id, data);
+        const updatedComment = await updateComment(id, data);
         return res.status(200).json(updatedComment);
       } catch (err) {
         console.error(err);
@@ -17,11 +17,11 @@ export default async function handler(req, res) {
 
     case "DELETE":
       // set id based on request body
-      const id = req.body;
+      const deleteId = req.body.id;
 
       // try delete request, if successful return response, otherwise return error message
       try {
-        const deleted = await deleteComment(id);
+        const deleted = await deleteComment(deleteId);
         return res.status(200).json(deleted);
       } catch (err) {
         console.error(err);

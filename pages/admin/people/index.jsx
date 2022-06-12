@@ -149,7 +149,7 @@ const adminPeople = () => {
                     variant="outlined"
                     color="secondary"
                     onClick={() =>
-                      handleOpenDialog("Approve", "person", result)
+                      handleOpenDialog("Approve", "Person", result)
                     }
                   >
                     Approve
@@ -158,7 +158,7 @@ const adminPeople = () => {
                     variant="outlined"
                     color="secondary"
                     className={classes.desktop}
-                    onClick={() => handleOpenDialog("Deny", "person", result)}
+                    onClick={() => handleOpenDialog("Deny", "Person", result)}
                   >
                     Deny
                   </Button>
@@ -166,7 +166,7 @@ const adminPeople = () => {
                     variant="outlined"
                     color="secondary"
                     className={`${classes.desktop} ${classes.delete}`}
-                    onClick={() => handleOpenDialog("Delete", "person", result)}
+                    onClick={() => handleOpenDialog("Delete", "Person", result)}
                   >
                     Delete
                   </Button>

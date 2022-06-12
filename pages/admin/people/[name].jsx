@@ -122,7 +122,7 @@ const person = () => {
           variant="outlined"
           color="secondary"
           className={classes.button}
-          onClick={() => handleOpenDialog("Deny", "person", results)}
+          onClick={() => handleOpenDialog("Deny", "Person", results)}
         >
           Deny
         </Button>
@@ -130,7 +130,7 @@ const person = () => {
           variant="outlined"
           color="secondary"
           className={`${classes.button} ${classes.delete}`}
-          onClick={() => handleOpenDialog("Delete", "person", results)}
+          onClick={() => handleOpenDialog("Delete", "Person", results)}
         >
           Delete
         </Button>

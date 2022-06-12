@@ -54,13 +54,6 @@ const DashboardComment = ({
       updated: true,
     };
 
-    // const res = await fetch(`/api/dashboard/comments/${result._id}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(comment),
-    // });
     const updateResponse = await updateComment(comment, "dashboard");
     if (updateResponse.ok) {
       mutate();

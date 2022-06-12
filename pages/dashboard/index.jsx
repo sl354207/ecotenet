@@ -259,12 +259,12 @@ export default function Dashboard() {
       viewed: true,
     };
 
-    const notifyReponse = await updateNotification(notify);
+    const notifyResponse = await updateNotification(notify);
 
-    if (notifyReponse.ok) {
+    if (notifyResponse.ok) {
       mutate();
     }
-    if (!notifyReponse.ok) {
+    if (!notifyResponse.ok) {
       setSnackbar({
         open: true,
         severity: "error",
@@ -707,7 +707,7 @@ export default function Dashboard() {
                             className={classes.edit}
                             startIcon={<EditIcon />}
                             size="small"
-                            href={`/dashboard/drafts/${result._id}`}
+                            href={`/dashboard/posts/${result._id}`}
                           >
                             Edit
                           </Button>

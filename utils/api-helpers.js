@@ -1,5 +1,5 @@
-export async function updateUser(profile, name, endpoint) {
-  const res = await fetch(`/api/${endpoint}/users/${name}`, {
+export async function updateUser(profile, endpoint) {
+  const res = await fetch(`/api/${endpoint}/users/${profile.name}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

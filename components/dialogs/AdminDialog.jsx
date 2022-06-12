@@ -17,7 +17,15 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { createNotification } from "@utils/api-helpers";
+import {
+  createNotification,
+  deleteComment,
+  deletePost,
+  deleteUser,
+  updateComment,
+  updatePost,
+  updateUser,
+} from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -51,36 +59,42 @@ const AdminDialog = ({
 }) => {
   const classes = useStyles();
 
-  let endpoint;
   let item;
   let submission;
+  let deletion;
 
   switch (contentType) {
-    case "post":
-      endpoint = "Post";
+    case "Post":
       item = "post";
       submission = {
         _id: result._id,
         approved: action == "Deny" ? "false" : "true",
         feature: "false",
       };
-      break;
-    case "comment":
-      endpoint = "Comment";
-      item = "comment";
-      submission = {
+      deletion = {
         _id: result._id,
-        approved: action == "Deny" ? "false" : "true",
       };
       break;
-    case "person":
-      endpoint = "Person";
+    case "Comment":
+      item = "comment";
+      submission = {
+        id: result._id,
+        approved: action == "Deny" ? "false" : "true",
+      };
+      deletion = {
+        id: result._id,
+      };
+      break;
+    case "Person":
       item = "profile item";
       submission = {
         name: result.name,
+        email: result.email,
         denials: action == "Deny" ? result.denials + 1 : result.denials,
         approved: action == "Approve" ? "true" : "false",
       };
+      deletion = result.name;
+
       break;
     default:
       break;
@@ -102,20 +116,51 @@ const AdminDialog = ({
     setAddInfo(event.target.value);
   };
 
+  const deleteItem = async () => {
+    switch (contentType) {
+      case "Post":
+        const postResponse = await deletePost(deletion, "admin");
+
+        return postResponse;
+      case "Comment":
+        const commentResponse = await deleteComment(deletion, "admin");
+
+        return commentResponse;
+      case "Person":
+        const userResponse = await deleteUser(deletion, "admin");
+
+        return userResponse;
+
+      default:
+        break;
+    }
+  };
+
+  const updateItem = async () => {
+    switch (contentType) {
+      case "Post":
+        const postResponse = await updatePost(submission, "admin");
+
+        return postResponse;
+      case "Comment":
+        const commentResponse = await updateComment(submission, "admin");
+
+        return commentResponse;
+      case "Person":
+        const userResponse = await updateUser(submission, "admin");
+
+        return userResponse;
+
+      default:
+        break;
+    }
+  };
+
   const handleSubmit = async () => {
     if (action == "Delete") {
-      const res = await fetch(`/api/delete${endpoint}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body:
-          contentType == "person"
-            ? JSON.stringify(result.name)
-            : JSON.stringify(result._id),
-      });
+      const deleteResponse = await deleteItem();
 
-      if (res.ok && contentType !== "person") {
+      if (deleteResponse.ok && contentType !== "Person") {
         const notify = {
           name: result.name,
           reason: reason,
@@ -126,16 +171,9 @@ const AdminDialog = ({
           viewed: false,
         };
 
-        // const res1 = await fetch("/api/createNotification", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(notify),
-        // });
-        const notifyRepsonse = await createNotification(notify);
+        const notifyResponse = await createNotification(notify);
 
-        if (notifyRepsonse.ok) {
+        if (notifyResponse.ok) {
           if (mutate) {
             mutate();
           }
@@ -144,34 +182,28 @@ const AdminDialog = ({
           setSnackbar({
             open: true,
             severity: "success",
-            message: `${endpoint} deleted successfully`,
+            message: `${contentType} deleted successfully`,
           });
         }
-        if (!notifyRepsonse.ok) {
+        if (!notifyResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
-            message: `There was a problem deleting ${endpoint}. Please try again later`,
+            message: `There was a problem deleting ${item}. Please try again later`,
           });
         }
       }
-      if (!res.ok) {
+      if (!deleteResponse.ok) {
         setSnackbar({
           open: true,
           severity: "error",
-          message: `There was a problem deleting ${endpoint}. Please try again later`,
+          message: `There was a problem deleting ${item}. Please try again later`,
         });
       }
     } else {
-      const res = await fetch(`/api/update${endpoint}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submission),
-      });
+      const updateResponse = await updateItem();
       if (action == "Deny") {
-        if (res.ok) {
+        if (updateResponse.ok) {
           const notify = {
             name: result.name,
             reason: reason,
@@ -182,9 +214,9 @@ const AdminDialog = ({
             viewed: false,
           };
 
-          const notifyRepsonse = await createNotification(notify);
+          const notifyResponse = await createNotification(notify);
 
-          if (notifyRepsonse.ok) {
+          if (notifyResponse.ok) {
             if (mutate) {
               mutate();
             }
@@ -193,26 +225,26 @@ const AdminDialog = ({
             setSnackbar({
               open: true,
               severity: "success",
-              message: `${endpoint} denied successfully`,
+              message: `${contentType} denied successfully`,
             });
           }
-          if (!notifyRepsonse.ok) {
+          if (!notifyResponse.ok) {
             setSnackbar({
               open: true,
               severity: "error",
-              message: `There was a problem denying ${endpoint}. Please try again later`,
+              message: `There was a problem denying ${item}. Please try again later`,
             });
           }
         }
-        if (!res.ok) {
+        if (!updateResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
-            message: `There was a problem denying ${endpoint}. Please try again later`,
+            message: `There was a problem denying ${item}. Please try again later`,
           });
         }
       } else {
-        if (res.ok) {
+        if (updateResponse.ok) {
           if (mutate) {
             mutate();
           }
@@ -220,14 +252,14 @@ const AdminDialog = ({
           setSnackbar({
             open: true,
             severity: "success",
-            message: `${endpoint} approved successfully`,
+            message: `${contentType} approved successfully`,
           });
         }
-        if (!res.ok) {
+        if (!updateResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
-            message: `There was a problem approving ${endpoint}. Please try again later`,
+            message: `There was a problem approving ${item}. Please try again later`,
           });
         }
       }
@@ -252,7 +284,7 @@ const AdminDialog = ({
       {action == "Approve" ? (
         <DialogContent className={className}>
           <DialogContentText id="update" color="textPrimary">
-            Are you sure you want to approve {endpoint}?
+            Are you sure you want to approve {item}?
           </DialogContentText>
         </DialogContent>
       ) : (

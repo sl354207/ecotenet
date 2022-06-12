@@ -56,30 +56,6 @@ const Resolve = ({
     setAddInfo(event.target.value);
   };
 
-  // const createNotification = async (notify) => {
-  //   const res = await fetch("/api/admin/notifications", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(notify),
-  //   });
-
-  //   return res;
-  // };
-
-  // const updateFlag = async (flag, id) => {
-  //   const res = await fetch(`/api/admin/flags/${id}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(flag),
-  //   });
-
-  //   return res;
-  // };
-
   const handleSubmit = async () => {
     const flag = {
       id: ID,
@@ -101,9 +77,9 @@ const Resolve = ({
           viewed: false,
         };
 
-        const notifyReponse = await createNotification(notify);
+        const notifyResponse = await createNotification(notify);
 
-        if (notifyReponse.ok) {
+        if (notifyResponse.ok) {
           if (mutate) {
             mutate();
           }
@@ -114,7 +90,7 @@ const Resolve = ({
             message: `Flag resolved successfully`,
           });
         }
-        if (!notifyReponse.ok) {
+        if (!notifyResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",

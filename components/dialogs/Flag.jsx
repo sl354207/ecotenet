@@ -38,18 +38,6 @@ const Flag = ({
     setValue(event.target.value);
   };
 
-  // const createFlag = async (flag) => {
-  //   const res = await fetch("/api/dashboard/flags", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(flag),
-  //   });
-
-  //   return res;
-  // };
-
   const handleSubmit = async () => {
     //   UPDATE NAME AND ID
     const flag = {

@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
         break;
       case "PUT":
-        const { email, ...data } = req.body;
+        const { email, name, ...data } = req.body;
         // console.log(req.body);
         if (session.user.email == email) {
           try {
