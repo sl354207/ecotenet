@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { createFlag } from "@utils/api-helpers";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,9 +38,21 @@ const Flag = ({
     setValue(event.target.value);
   };
 
+  // const createFlag = async (flag) => {
+  //   const res = await fetch("/api/dashboard/flags", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(flag),
+  //   });
+
+  //   return res;
+  // };
+
   const handleSubmit = async () => {
     //   UPDATE NAME AND ID
-    const submission = {
+    const flag = {
       name: name,
       flagged: result.name ? result.name : "ecotenet",
       type: contentType,
@@ -49,23 +62,18 @@ const Flag = ({
       status: "pending",
       date: new Date().toUTCString(),
     };
-    const res = await fetch("/api/dashboard/flags", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(submission),
-    });
+
+    const flagResponse = await createFlag(flag);
     handleClose();
 
-    if (res.ok) {
+    if (flagResponse.ok) {
       setSnackbar({
         open: true,
         severity: "success",
         message: "Flag submitted successfully",
       });
     }
-    if (!res.ok) {
+    if (!flagResponse.ok) {
       setSnackbar({
         open: true,
         severity: "error",

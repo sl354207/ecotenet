@@ -6,6 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
+import { createComment, updatePost } from "@utils/api-helpers";
 
 const ClientDialog = ({
   open,
@@ -19,21 +20,19 @@ const ClientDialog = ({
   post_id,
   name,
 }) => {
-  let endpoint;
   let item;
   let submission;
 
   switch (contentType) {
     case "Vote":
-      endpoint = "Post";
       item = "vote";
       submission = {
         _id: post_id,
+        name: name,
         count: result,
       };
       break;
     case "Comment":
-      endpoint = "Comment";
       item = "comment";
       submission = {
         name: name,
@@ -52,16 +51,17 @@ const ClientDialog = ({
 
   const handleSubmit = async () => {
     if (contentType == "Comment") {
-      const res = await fetch("/api/createComment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submission),
-      });
+      // const res = await fetch("/api/createComment", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(submission),
+      // });
+      const createResponse = await createComment(submission);
       handleClose("reply");
 
-      if (res.ok) {
+      if (createResponse.ok) {
         if (closeForm) {
           closeForm();
         }
@@ -72,7 +72,7 @@ const ClientDialog = ({
           message: "Comment submitted successfully",
         });
       }
-      if (!res.ok) {
+      if (!createResponse.ok) {
         setSnackbar({
           open: true,
           severity: "error",
@@ -81,15 +81,16 @@ const ClientDialog = ({
         });
       }
     } else {
-      const res = await fetch(`/api/update${endpoint}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submission),
-      });
+      // const res = await fetch(`/api/update${endpoint}`, {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(submission),
+      // });
+      const updateResponse = await updatePost(submission, "dashboard");
 
-      if (res.ok) {
+      if (updateResponse.ok) {
         if (mutate) {
           mutate();
         }
@@ -100,7 +101,7 @@ const ClientDialog = ({
           message: `${contentType} submit successfully`,
         });
       }
-      if (!res.ok) {
+      if (!updateResponse.ok) {
         setSnackbar({
           open: true,
           severity: "error",

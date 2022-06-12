@@ -13,6 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { createNotification, updateFlag } from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -55,22 +56,40 @@ const Resolve = ({
     setAddInfo(event.target.value);
   };
 
+  // const createNotification = async (notify) => {
+  //   const res = await fetch("/api/admin/notifications", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(notify),
+  //   });
+
+  //   return res;
+  // };
+
+  // const updateFlag = async (flag, id) => {
+  //   const res = await fetch(`/api/admin/flags/${id}`, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(flag),
+  //   });
+
+  //   return res;
+  // };
+
   const handleSubmit = async () => {
     const flag = {
-      // _id: ID,
+      id: ID,
       status: "resolved",
     };
 
-    const res = await fetch(`/api/admin/flags/${ID}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(flag),
-    });
+    const flagResponse = await updateFlag(flag);
     handleClose();
 
-    if (res.ok) {
+    if (flagResponse.ok) {
       if (addInfo !== "") {
         const notify = {
           name: name,
@@ -82,15 +101,9 @@ const Resolve = ({
           viewed: false,
         };
 
-        const res1 = await fetch("/api/admin/notifications", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(notify),
-        });
+        const notifyReponse = await createNotification(notify);
 
-        if (res1.ok) {
+        if (notifyReponse.ok) {
           if (mutate) {
             mutate();
           }
@@ -101,7 +114,7 @@ const Resolve = ({
             message: `Flag resolved successfully`,
           });
         }
-        if (!res1.ok) {
+        if (!notifyReponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
@@ -120,7 +133,7 @@ const Resolve = ({
         });
       }
     }
-    if (!res.ok) {
+    if (!flagResponse.ok) {
       setSnackbar({
         open: true,
         severity: "error",

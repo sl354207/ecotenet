@@ -2,6 +2,7 @@ import TextBox from "@components/TextBox";
 import { Button, FormControl, InputLabel, Link } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { updateComment } from "@utils/api-helpers";
 import { useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -45,7 +46,7 @@ const DashboardComment = ({
   const handleCommentUpdate = async (commentValue) => {
     //combine all objects and send to api
     const comment = {
-      _id: result._id,
+      id: result._id,
       name: result.name,
       date: new Date().toUTCString(),
       text: commentValue,
@@ -53,14 +54,15 @@ const DashboardComment = ({
       updated: true,
     };
 
-    const res = await fetch(`/api/dashboard/comments/${result._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(comment),
-    });
-    if (res.ok) {
+    // const res = await fetch(`/api/dashboard/comments/${result._id}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(comment),
+    // });
+    const updateResponse = await updateComment(comment, "dashboard");
+    if (updateResponse.ok) {
       mutate();
       setSnackbar({
         open: true,
@@ -68,6 +70,13 @@ const DashboardComment = ({
         message: "Comment updated successfully",
       });
       setCommentValue("");
+    }
+    if (!updateResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem saving comment. Please try again later",
+      });
     }
   };
 

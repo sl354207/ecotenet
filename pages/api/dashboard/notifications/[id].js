@@ -10,11 +10,11 @@ export default async function handler(req, res) {
     if (req.method !== "PUT") {
       return res.status(405).json({ msg: "Method not allowed" });
     }
-    const { name, _id, viewed } = req.body;
+    const { name, id, viewed } = req.body;
     // console.log(name);
     if (session.user.name && session.user.name == name) {
       try {
-        const updatedNotification = await updateNotification(_id, viewed);
+        const updatedNotification = await updateNotification(id, viewed);
         return res.status(200).json(updatedNotification);
       } catch (err) {
         console.error(err);

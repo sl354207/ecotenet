@@ -27,6 +27,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { updateNotification, updateUser } from "@utils/api-helpers";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -190,7 +191,7 @@ export default function Dashboard() {
       setFetchApi(`/api/dashboard/users/${user.name}`);
     }
   }, [user]);
-  console.log(fetchApi);
+  // console.log(fetchApi);
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
@@ -251,25 +252,19 @@ export default function Dashboard() {
     }
   };
 
-  const handleNotify = async (ID) => {
+  const handleUpdateNotify = async (ID) => {
     const notify = {
+      id: ID,
       name: user.name,
-      _id: ID,
       viewed: true,
     };
 
-    const res = await fetch(`/api/dashboard/notifications/${ID}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notify),
-    });
+    const notifyReponse = await updateNotification(notify);
 
-    if (res.ok) {
+    if (notifyReponse.ok) {
       mutate();
     }
-    if (!res.ok) {
+    if (!notifyReponse.ok) {
       setSnackbar({
         open: true,
         severity: "error",
@@ -312,14 +307,10 @@ export default function Dashboard() {
       socials: profile.socials,
       approved: "pending",
     };
-    const res = await fetch(`/api/dashboard/users/${user.name}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
-    if (res.ok) {
+
+    const profileUpdate = await updateUser(value, user.name, "dashboard");
+
+    if (profileUpdate.ok) {
       mutate();
       setSnackbar({
         open: true,
@@ -327,7 +318,7 @@ export default function Dashboard() {
         message: "Profile saved successfully",
       });
     }
-    if (!res.ok) {
+    if (!profileUpdate.ok) {
       setSnackbar({
         open: true,
         severity: "error",
@@ -815,7 +806,9 @@ export default function Dashboard() {
                         </div>
 
                         <div className={classes.buttonGroup}>
-                          <IconButton onClick={() => handleNotify(result._id)}>
+                          <IconButton
+                            onClick={() => handleUpdateNotify(result._id)}
+                          >
                             <CloseIcon />
                           </IconButton>
                         </div>

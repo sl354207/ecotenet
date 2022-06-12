@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import { alpha, makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
+import { createPost, updatePost } from "@utils/api-helpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PostDetails from "./PostDetails";
@@ -87,7 +88,6 @@ const StepForm = ({ post, pathName, user }) => {
 
     setSnackbar({ ...snackbar, open: false });
   };
-
   const handleOpenDialog = (action, type, postValue, details, clickInfo) => {
     const result = {
       title: details.title,
@@ -143,9 +143,33 @@ const StepForm = ({ post, pathName, user }) => {
     // })
   };
 
+  // const createDraft = async (draft) => {
+  //   const res = await fetch("/api/dashboard/posts", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(draft),
+  //   });
+
+  //   return res;
+  // };
+
+  // const updateDraft = async (draft, id) => {
+  //   const res = await fetch(`/api/dashboard/posts/${id}`, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(draft),
+  //   });
+
+  //   return res;
+  // };
+
   // UPDATE ONCE AUTHENTICATION IS USED
   // function to create a new draft. Takes in form values and editor value.
-  const save = async (postValue, details, clickInfo) => {
+  const saveDraft = async (postValue, details, clickInfo) => {
     const ecoObject = {
       ecoregions: clickInfo,
     };
@@ -186,21 +210,15 @@ const StepForm = ({ post, pathName, user }) => {
 
     switch (pathName) {
       case "/dashboard/drafts/[_id]":
-        const res1 = await fetch(`/api/dashboard/posts/${post._id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(value),
-        });
-        if (res1.ok) {
+        const updateResponse = await updatePost(value, "dashboard");
+        if (updateResponse.ok) {
           setSnackbar({
             open: true,
             severity: "success",
             message: "Draft saved successfully",
           });
         }
-        if (!res1.ok) {
+        if (!updateResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
@@ -211,16 +229,10 @@ const StepForm = ({ post, pathName, user }) => {
       case "/dashboard/posts/[_id]":
         break;
       case "editor":
-        const res3 = await fetch("/api/dashboard/posts", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(value),
-        });
+        const createResponse = await createPost(value);
 
-        if (res3.ok) {
-          const ID = await res3.json();
+        if (createResponse.ok) {
+          const ID = await createResponse.json();
           router.push(`/dashboard/drafts/${ID.insertedId}`);
           setSnackbar({
             open: true,
@@ -228,7 +240,7 @@ const StepForm = ({ post, pathName, user }) => {
             message: "Draft saved successfully",
           });
         }
-        if (!res3.ok) {
+        if (!createResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
@@ -306,7 +318,7 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={() => save(postValue, details, clickInfo)}
+                    onClick={() => saveDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                   >
@@ -395,7 +407,7 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={() => save(postValue, details, clickInfo)}
+                    onClick={() => saveDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                   >
@@ -479,7 +491,7 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={() => save(postValue, details, clickInfo)}
+                    onClick={() => saveDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                   >

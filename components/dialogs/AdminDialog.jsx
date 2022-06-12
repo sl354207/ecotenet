@@ -17,6 +17,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { createNotification } from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -125,15 +126,16 @@ const AdminDialog = ({
           viewed: false,
         };
 
-        const res1 = await fetch("/api/createNotification", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(notify),
-        });
+        // const res1 = await fetch("/api/createNotification", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(notify),
+        // });
+        const notifyRepsonse = await createNotification(notify);
 
-        if (res1.ok) {
+        if (notifyRepsonse.ok) {
           if (mutate) {
             mutate();
           }
@@ -145,7 +147,7 @@ const AdminDialog = ({
             message: `${endpoint} deleted successfully`,
           });
         }
-        if (!res1.ok) {
+        if (!notifyRepsonse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
@@ -180,15 +182,9 @@ const AdminDialog = ({
             viewed: false,
           };
 
-          const res1 = await fetch("/api/createNotification", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(notify),
-          });
+          const notifyRepsonse = await createNotification(notify);
 
-          if (res1.ok) {
+          if (notifyRepsonse.ok) {
             if (mutate) {
               mutate();
             }
@@ -200,7 +196,7 @@ const AdminDialog = ({
               message: `${endpoint} denied successfully`,
             });
           }
-          if (!res1.ok) {
+          if (!notifyRepsonse.ok) {
             setSnackbar({
               open: true,
               severity: "error",

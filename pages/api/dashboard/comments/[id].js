@@ -7,11 +7,11 @@ export default async function handler(req, res) {
     const method = req.method;
     switch (method) {
       case "PUT":
-        const { _id, name, ...data } = req.body;
+        const { id, name, ...data } = req.body;
 
         if (session.user.name && session.user.name == name) {
           try {
-            const updatedComment = await updateComment(_id, data);
+            const updatedComment = await updateComment(id, data);
             return res.status(200).json(updatedComment);
           } catch (err) {
             console.error(err);
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
           if (person && person.email == session.user.email) {
             // try get request, if successful return response, otherwise return error message
             try {
-              const updatedComment = await updateComment(_id, data);
+              const updatedComment = await updateComment(id, data);
               return res.status(200).json(updatedComment);
             } catch (err) {
               console.error(err);
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
         break;
       case "DELETE":
-        const id = req.body._id;
+        const deleteId = req.body._id;
         const deleteName = req.body.name;
 
         // try delete request, if successful return response, otherwise return error message
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
         // console.log(req.body);
         if (session.user.name && session.user.name == deleteName) {
           try {
-            const deleted = await deleteComment(id);
+            const deleted = await deleteComment(deleteId);
             return res.status(200).json(deleted);
           } catch (err) {
             console.error(err);
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
           if (person && person.email == session.user.email) {
             // try get request, if successful return response, otherwise return error message
             try {
-              const deleted = await deleteComment(id);
+              const deleted = await deleteComment(deleteId);
               return res.status(200).json(deleted);
             } catch (err) {
               console.error(err);
