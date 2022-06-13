@@ -630,7 +630,7 @@ export default function Dashboard() {
                             startIcon={<DeleteIcon />}
                             size="small"
                             onClick={() =>
-                              handleOpenDialog("Delete", "post", result)
+                              handleOpenDialog("delete", "Post", result)
                             }
                           >
                             Delete
@@ -718,7 +718,7 @@ export default function Dashboard() {
                             startIcon={<DeleteIcon />}
                             size="small"
                             onClick={() =>
-                              handleOpenDialog("Delete", "draft", result)
+                              handleOpenDialog("delete", "Post", result)
                             }
                           >
                             Delete
@@ -750,10 +750,11 @@ export default function Dashboard() {
                         <DashboardComment
                           result={result}
                           handleDeleteOpen={() =>
-                            handleOpenDialog("Delete", "comment", result)
+                            handleOpenDialog("delete", "Comment", result)
                           }
                           setSnackbar={setSnackbar}
                           mutate={mutate}
+                          name={user && user.name}
                         />
                       </ListItem>
                     );
@@ -831,6 +832,7 @@ export default function Dashboard() {
         result={item}
         setSnackbar={setSnackbar}
         mutate={mutate}
+        name={user && user.name}
       />
       <Snackbar
         anchorOrigin={{

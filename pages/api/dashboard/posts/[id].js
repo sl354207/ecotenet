@@ -1,4 +1,9 @@
-import { checkPerson, getPostById, updatePost } from "@utils/mongodb";
+import {
+  checkPerson,
+  deletePost,
+  getPostById,
+  updatePost,
+} from "@utils/mongodb";
 import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
@@ -89,7 +94,7 @@ export default async function handler(req, res) {
         // console.log(req.body);
         if (session.user.name && session.user.name == deleteName) {
           try {
-            const deleted = await deleteComment(deleteId);
+            const deleted = await deletePost(deleteId);
             return res.status(200).json(deleted);
           } catch (err) {
             console.error(err);
@@ -101,7 +106,7 @@ export default async function handler(req, res) {
           if (person && person.email == session.user.email) {
             // try get request, if successful return response, otherwise return error message
             try {
-              const deleted = await deleteComment(deleteId);
+              const deleted = await deletePost(deleteId);
               return res.status(200).json(deleted);
             } catch (err) {
               console.error(err);

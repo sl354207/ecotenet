@@ -6,6 +6,13 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
+import {
+  createPost,
+  deleteComment,
+  deletePost,
+  deleteUser,
+  updatePost,
+} from "@utils/api-helpers";
 import { useRouter } from "next/router";
 
 const DashboardDialog = ({
@@ -20,206 +27,263 @@ const DashboardDialog = ({
   mutate,
 }) => {
   const router = useRouter();
-  let endpoint;
+
   let item;
-  let submission;
 
   switch (contentType) {
-    case "post":
-      endpoint = "Post";
+    case "Post":
       item = "post";
-      submission = {
-        title: result.title,
-        description: result.description,
-        category: result.category,
-        tags: result.tags,
-        ecoregions: result.ecoregions,
-        _id: result._id,
-        id: result.id,
-        version: result.version,
-        rows: result.rows,
-        status: "published",
-        approved: "pending",
-        updated: true,
-        featured: result.featured,
-        date: new Date().toUTCString(),
-        feature: "false",
-      };
+
       break;
-    case "comment":
-      endpoint = "Comment";
+    case "Comment":
       item = "comment";
-      submission = {
-        _id: result._id,
-        date: new Date().toUTCString(),
-        text: result.text,
-        approved: "pending",
-        updated: true,
-      };
+
       break;
-    case "draft":
-      endpoint = "Post";
-      item = "draft";
-      submission = {
-        title: result.title,
-        description: result.description,
-        category: result.category,
-        tags: result.tags,
-        ecoregions: result.ecoregions,
-        _id: result._id,
-        id: result.id,
-        version: result.version,
-        rows: result.rows,
-        status: action == "Publish" ? "published" : "draft",
-        approved: action == "Publish" ? "pending" : "false",
-        updated: false,
-        featured: false,
-        date: action == "Publish" ? new Date().toUTCString() : "",
-        feature: "false",
-      };
-      break;
-    case "create":
-      endpoint = "Post";
-      item = "draft";
-      submission = {
-        title: result.title,
-        name: name,
-        description: result.description,
-        category: result.category,
-        tags: result.tags,
-        ecoregions: result.ecoregions,
-        id: result.id,
-        version: result.version,
-        rows: result.rows,
-        status: action == "Publish" ? "published" : "draft",
-        approved: action == "Publish" ? "pending" : "false",
-        updated: false,
-        featured: false,
-        date: action == "Publish" ? new Date().toUTCString() : "",
-        feature: "false",
-      };
+
+    case "Person":
+      item = "person";
+
       break;
     default:
       break;
   }
 
-  const handleSubmit = async () => {
+  const handleDeletePost = async () => {
+    const deletion = {
+      _id: result._id,
+      name: name,
+    };
+
+    const postResponse = await deletePost(deletion, "dashboard");
+
+    if (postResponse.ok) {
+      if (mutate) {
+        mutate();
+      }
+
+      handleClose();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: `Post deleted successfully`,
+      });
+    }
+
+    if (!postResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem deleting post. Please try again later`,
+      });
+    }
+  };
+  const handleDeleteComment = async () => {
+    const deletion = {
+      id: result._id,
+      name: name,
+    };
+
+    const commentResponse = await deleteComment(deletion, "dashboard");
+
+    if (commentResponse.ok) {
+      if (mutate) {
+        mutate();
+      }
+
+      handleClose();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: `Comment deleted successfully`,
+      });
+    }
+
+    if (!commentResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem deleting comment. Please try again later`,
+      });
+    }
+  };
+
+  // UPDATE
+  const handleDeletePerson = async () => {
+    const deletion = result.name;
+
+    const userResponse = await deleteUser(deletion, "dashboard");
+
+    if (userResponse.ok) {
+      if (mutate) {
+        mutate();
+      }
+
+      handleClose();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: `Person deleted successfully`,
+      });
+    }
+    if (!userResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem deleting person. Please try again later`,
+      });
+    }
+  };
+
+  const handleUpdatePublishedPost = async () => {
+    const submission = {
+      name: name,
+      title: result.title,
+      description: result.description,
+      category: result.category,
+      tags: result.tags,
+      ecoregions: result.ecoregions,
+      _id: result._id,
+      id: result.id,
+      version: result.version,
+      rows: result.rows,
+      status: "published",
+      approved: "pending",
+      updated: true,
+      featured: result.featured,
+      date: new Date().toUTCString(),
+      feature: "false",
+    };
+
+    const postResponse = await updatePost(submission, "dashboard");
+
+    if (postResponse.ok) {
+      handleClose();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: `Post submitted successfully`,
+      });
+      router.reload();
+    }
+
+    if (!postResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem submitting post. Please try again later`,
+      });
+    }
+  };
+  const handlePublishSavedDraft = async () => {
+    const submission = {
+      name: name,
+      title: result.title,
+      description: result.description,
+      category: result.category,
+      tags: result.tags,
+      ecoregions: result.ecoregions,
+      _id: result._id,
+      id: result.id,
+      version: result.version,
+      rows: result.rows,
+      status: "published",
+      approved: "pending",
+      updated: false,
+      featured: false,
+      date: new Date().toUTCString(),
+      feature: "false",
+    };
+
+    const postResponse = await updatePost(submission, "dashboard");
+
+    if (postResponse.ok) {
+      handleClose();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: `Post submitted successfully`,
+      });
+      router.reload();
+    }
+    if (!postResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem submitting post. Please try again later`,
+      });
+    }
+  };
+  const handlePublishNewDraft = async () => {
+    const submission = {
+      title: result.title,
+      name: name,
+      description: result.description,
+      category: result.category,
+      tags: result.tags,
+      ecoregions: result.ecoregions,
+      id: result.id,
+      version: result.version,
+      rows: result.rows,
+      status: "published",
+      approved: "pending",
+      updated: false,
+      featured: false,
+      date: new Date().toUTCString(),
+      feature: "false",
+    };
+
+    const postResponse = await createPost(submission);
+
+    if (postResponse.ok) {
+      handleClose();
+      const ID = await postResponse.json();
+      router.push(`/dashboard/posts/${ID.insertedId}`);
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Post submitted successfully",
+      });
+    }
+    if (!postResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem submitting post. Please try again later`,
+      });
+    }
+  };
+
+  const handleDeleteItem = async () => {
+    switch (contentType) {
+      case "Post":
+        await handleDeletePost();
+
+        break;
+      case "Comment":
+        await handleDeleteComment();
+
+        break;
+      case "Person":
+        await handleDeletePerson();
+
+        break;
+
+      default:
+        break;
+    }
+  };
+  const handleSubmitItem = async () => {
     switch (action) {
-      case "Save":
-        const res = await fetch(
-          contentType == "create"
-            ? `/api/create${endpoint}`
-            : `/api/update${endpoint}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(submission),
-          }
-        );
-        if (!res.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message: `There was a problem saving ${endpoint}. Please try again later`,
-          });
-        }
-
-        if (res.ok && contentType == "create") {
-          const ID = await res.json();
-          router.push(`/dashboard/drafts/${ID.insertedId}`);
-          handleClose();
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: `${endpoint} saved successfully`,
-          });
-        } else {
-          handleClose();
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: `${endpoint} saved successfully`,
-          });
-        }
+      case "update":
+        await handleUpdatePublishedPost();
 
         break;
-      case "Publish":
-        const res2 = await fetch(
-          contentType == "create"
-            ? `/api/create${endpoint}`
-            : `/api/update${endpoint}`,
-          contentType == "create"
-            ? {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(submission),
-              }
-            : {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(submission),
-              }
-        );
-        if (!res2.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message: `There was a problem publishing ${endpoint}. Please try again later`,
-          });
-        }
+      case "publish":
+        await handlePublishSavedDraft();
 
-        if (res2.ok && contentType == "create") {
-          const ID = await res2.json();
-          router.push(`/dashboard/posts/${ID.insertedId}`);
-          handleClose();
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: `${endpoint} published successfully`,
-          });
-        } else {
-          handleClose();
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: `${endpoint} published successfully`,
-          });
-        }
         break;
-      case "Delete":
-        const res3 = await fetch(`/api/delete${endpoint}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(result._id),
-        });
-
-        if (res3.ok) {
-          if (mutate) {
-            mutate();
-          }
-
-          handleClose();
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: `${endpoint} deleted successfully`,
-          });
-        }
-        if (!res3.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message: `There was a problem deleting ${endpoint}. Please try again later`,
-          });
-        }
+      case "create":
+        await handlePublishNewDraft();
 
         break;
 
@@ -241,12 +305,12 @@ const DashboardDialog = ({
         color="textPrimary"
         align="center"
       >
-        {action}
+        {action == "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
       <DialogContent className={className}>
         <DialogContentText id="update" color="textPrimary">
-          Are you sure you want to {action} {endpoint}?
+          Are you sure you want to {action} {item}?
         </DialogContentText>
       </DialogContent>
 
@@ -255,11 +319,15 @@ const DashboardDialog = ({
           Cancel
         </Button>
         <Button
-          onClick={() => handleSubmit()}
+          onClick={
+            action == "delete"
+              ? () => handleDeleteItem()
+              : () => handleSubmitItem()
+          }
           color="secondary"
           variant="outlined"
         >
-          {action}
+          {action == "delete" ? "delete" : "submit"}
         </Button>
       </DialogActions>
     </Dialog>

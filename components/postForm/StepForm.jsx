@@ -143,7 +143,6 @@ const StepForm = ({ post, pathName, user }) => {
     // })
   };
 
-  // function to create a new draft. Takes in form values and editor value.
   const saveDraft = async (postValue, details, clickInfo) => {
     const ecoObject = {
       ecoregions: clickInfo,
@@ -155,76 +154,80 @@ const StepForm = ({ post, pathName, user }) => {
       rows: postValue != null ? postValue.rows : [],
     };
 
-    let silentObject = {};
+    const silentObject = {
+      name: user.name,
+      status: "draft",
+      approved: "false",
+      updated: false,
+      featured: false,
+      feature: "false",
+      date: "",
+    };
 
-    if (pathName == "editor") {
-      silentObject = {
-        name: user.name,
-        status: "draft",
-        approved: "false",
-        updated: false,
-        featured: false,
-        feature: "false",
-        date: "",
-      };
-    } else {
-      silentObject = {
-        _id: post._id,
-        status: "draft",
-        approved: "false",
-        updated: false,
-        featured: false,
-        feature: "false",
-        date: "",
-        name: user.name,
-      };
+    const value = { ...silentObject, ...postObject, ...details, ...ecoObject };
+
+    const createResponse = await createPost(value);
+
+    if (createResponse.ok) {
+      const ID = await createResponse.json();
+      router.push(`/dashboard/posts/${ID.insertedId}`);
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Draft saved successfully",
+      });
     }
+    if (!createResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem saving draft. Please try again later",
+      });
+    }
+  };
+
+  // function to create a new draft. Takes in form values and editor value.
+  const updateDraft = async (postValue, details, clickInfo) => {
+    const ecoObject = {
+      ecoregions: clickInfo,
+    };
+
+    const postObject = {
+      id: postValue != null ? postValue.id : "",
+      version: postValue != null ? postValue.version : 1,
+      rows: postValue != null ? postValue.rows : [],
+    };
+
+    const silentObject = {
+      _id: post._id,
+      status: "draft",
+      approved: "false",
+      updated: false,
+      featured: false,
+      feature: "false",
+      date: "",
+      name: user.name,
+    };
+
     // combine form value and editor value into one object to pass to api.
 
     const value = { ...silentObject, ...postObject, ...details, ...ecoObject };
 
-    switch (pathName) {
-      case "/dashboard/posts/[_id]":
-        const updateResponse = await updatePost(value, "dashboard");
-        if (updateResponse.ok) {
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: "Draft saved successfully",
-          });
-        }
-        if (!updateResponse.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message: "There was a problem saving draft. Please try again later",
-          });
-        }
-        break;
-      case "editor":
-        const createResponse = await createPost(value);
-
-        if (createResponse.ok) {
-          const ID = await createResponse.json();
-          router.push(`/dashboard/drafts/${ID.insertedId}`);
-          setSnackbar({
-            open: true,
-            severity: "success",
-            message: "Draft saved successfully",
-          });
-        }
-        if (!createResponse.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message: "There was a problem saving draft. Please try again later",
-          });
-        }
-
-        break;
-
-      default:
-        break;
+    const updateResponse = await updatePost(value, "dashboard");
+    if (updateResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: "Draft saved successfully",
+      });
+      router.reload();
+    }
+    if (!updateResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: "There was a problem saving draft. Please try again later",
+      });
     }
   };
 
@@ -270,8 +273,8 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          "Publish",
-                          "post",
+                          "update",
+                          "Post",
                           postValue,
                           details,
                           clickInfo
@@ -291,7 +294,11 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={() => saveDraft(postValue, details, clickInfo)}
+                    onClick={
+                      pathName == "editor"
+                        ? () => saveDraft(postValue, details, clickInfo)
+                        : () => updateDraft(postValue, details, clickInfo)
+                    }
                     variant="contained"
                     color="secondary"
                   >
@@ -304,8 +311,8 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          "Publish",
-                          pathName == "editor" ? "create" : "draft",
+                          pathName == "editor" ? "create" : "publish",
+                          "Post",
                           postValue,
                           details,
                           clickInfo
@@ -359,8 +366,8 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          "Publish",
-                          "post",
+                          "update",
+                          "Post",
                           postValue,
                           details,
                           clickInfo
@@ -380,7 +387,11 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={() => saveDraft(postValue, details, clickInfo)}
+                    onClick={
+                      pathName == "editor"
+                        ? () => saveDraft(postValue, details, clickInfo)
+                        : () => updateDraft(postValue, details, clickInfo)
+                    }
                     variant="contained"
                     color="secondary"
                   >
@@ -394,8 +405,8 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          "Publish",
-                          pathName == "editor" ? "create" : "draft",
+                          pathName == "editor" ? "create" : "publish",
+                          "Post",
                           postValue,
                           details,
                           clickInfo
@@ -443,8 +454,8 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          "Publish",
-                          "post",
+                          "update",
+                          "Post",
                           postValue,
                           details,
                           clickInfo
@@ -464,7 +475,11 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={() => saveDraft(postValue, details, clickInfo)}
+                    onClick={
+                      pathName == "editor"
+                        ? () => saveDraft(postValue, details, clickInfo)
+                        : () => updateDraft(postValue, details, clickInfo)
+                    }
                     variant="contained"
                     color="secondary"
                   >
@@ -477,8 +492,8 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          "Publish",
-                          pathName == "editor" ? "create" : "draft",
+                          pathName == "editor" ? "create" : "publish",
+                          "Post",
                           postValue,
                           details,
                           clickInfo

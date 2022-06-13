@@ -32,6 +32,7 @@ const DashboardComment = ({
   handleDeleteOpen,
   mutate,
   setSnackbar,
+  name,
 }) => {
   const classes = useStyles();
 
@@ -47,7 +48,7 @@ const DashboardComment = ({
     //combine all objects and send to api
     const comment = {
       id: result._id,
-      name: result.name,
+      name: name,
       date: new Date().toUTCString(),
       text: commentValue,
       approved: "pending",

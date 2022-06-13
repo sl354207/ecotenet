@@ -55,7 +55,7 @@ export default async function handler(req, res) {
           id,
           version,
           rows,
-          count,
+
           status,
           approved,
           updated,

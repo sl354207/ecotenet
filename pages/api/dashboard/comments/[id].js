@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
         break;
       case "DELETE":
-        const deleteId = req.body._id;
+        const deleteId = req.body.id;
         const deleteName = req.body.name;
 
         // try delete request, if successful return response, otherwise return error message

@@ -60,40 +60,18 @@ const AdminDialog = ({
   const classes = useStyles();
 
   let item;
-  let submission;
-  let deletion;
 
   switch (contentType) {
     case "Post":
       item = "post";
-      submission = {
-        _id: result._id,
-        approved: action == "Deny" ? "false" : "true",
-        feature: "false",
-      };
-      deletion = {
-        _id: result._id,
-      };
+
       break;
     case "Comment":
       item = "comment";
-      submission = {
-        id: result._id,
-        approved: action == "Deny" ? "false" : "true",
-      };
-      deletion = {
-        id: result._id,
-      };
+
       break;
     case "Person":
       item = "profile item";
-      submission = {
-        name: result.name,
-        email: result.email,
-        denials: action == "Deny" ? result.denials + 1 : result.denials,
-        approved: action == "Approve" ? "true" : "false",
-      };
-      deletion = result.name;
 
       break;
     default:
@@ -116,62 +94,135 @@ const AdminDialog = ({
     setAddInfo(event.target.value);
   };
 
-  const deleteItem = async () => {
-    switch (contentType) {
-      case "Post":
-        const postResponse = await deletePost(deletion, "admin");
+  const handleNotify = async (type, action) => {
+    const notify = {
+      name: result.name,
+      reason: reason,
+      text: `a ${type} of yours was ${action} for a ${reason} violation`,
+      add_info: addInfo,
+      ref: result._id,
+      date: new Date().toUTCString(),
+      viewed: false,
+    };
 
-        return postResponse;
-      case "Comment":
-        const commentResponse = await deleteComment(deletion, "admin");
+    const notifyResponse = await createNotification(notify);
 
-        return commentResponse;
-      case "Person":
-        const userResponse = await deleteUser(deletion, "admin");
+    return notifyResponse;
+  };
 
-        return userResponse;
+  const handleDeletePost = async () => {
+    const deletion = {
+      _id: result._id,
+    };
 
-      default:
-        break;
+    const postResponse = await deletePost(deletion, "admin");
+
+    if (postResponse.ok) {
+      const notifyResponse = await handleNotify("post", "deleted");
+      if (notifyResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+
+        handleClose();
+        setSnackbar({
+          open: true,
+          severity: "success",
+          message: `Post deleted successfully`,
+        });
+      }
+      if (!notifyResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem creating notification but post was deleted`,
+        });
+      }
+    }
+    if (!postResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem deleting post. Please try again later`,
+      });
+    }
+  };
+  const handleDeleteComment = async () => {
+    const deletion = {
+      id: result._id,
+    };
+
+    const commentResponse = await deleteComment(deletion, "admin");
+
+    if (commentResponse.ok) {
+      const notifyResponse = await handleNotify("comment", "deleted");
+
+      if (notifyResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+
+        handleClose();
+        setSnackbar({
+          open: true,
+          severity: "success",
+          message: `Comment deleted successfully`,
+        });
+      }
+      if (!notifyResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem creating notification but comment was deleted`,
+        });
+      }
+    }
+    if (!commentResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem deleting comment. Please try again later`,
+      });
+    }
+  };
+  const handleDeletePerson = async () => {
+    const deletion = result.name;
+
+    const userResponse = await deleteUser(deletion, "admin");
+
+    if (userResponse.ok) {
+      if (mutate) {
+        mutate();
+      }
+
+      handleClose();
+      setSnackbar({
+        open: true,
+        severity: "success",
+        message: `Person deleted successfully`,
+      });
+    }
+    if (!userResponse.ok) {
+      setSnackbar({
+        open: true,
+        severity: "error",
+        message: `There was a problem deleting person. Please try again later`,
+      });
     }
   };
 
-  const updateItem = async () => {
-    switch (contentType) {
-      case "Post":
-        const postResponse = await updatePost(submission, "admin");
+  const handleUpdatePost = async () => {
+    const submission = {
+      _id: result._id,
+      approved: action == "Deny" ? "false" : "true",
+      feature: "false",
+    };
 
-        return postResponse;
-      case "Comment":
-        const commentResponse = await updateComment(submission, "admin");
+    const postResponse = await updatePost(submission, "admin");
 
-        return commentResponse;
-      case "Person":
-        const userResponse = await updateUser(submission, "admin");
-
-        return userResponse;
-
-      default:
-        break;
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (action == "Delete") {
-      const deleteResponse = await deleteItem();
-
-      if (deleteResponse.ok && contentType !== "Person") {
-        const notify = {
-          name: result.name,
-          reason: reason,
-          text: `a ${item} of yours was deleted for a ${reason} violation`,
-          add_info: addInfo,
-          ref: result._id,
-          date: new Date().toUTCString(),
-          viewed: false,
-        };
-
-        const notifyResponse = await createNotification(notify);
+    if (action == "Deny") {
+      if (postResponse.ok) {
+        const notifyResponse = await handleNotify("post", "denied");
 
         if (notifyResponse.ok) {
           if (mutate) {
@@ -182,87 +233,205 @@ const AdminDialog = ({
           setSnackbar({
             open: true,
             severity: "success",
-            message: `${contentType} deleted successfully`,
+            message: `Post denied successfully`,
           });
         }
         if (!notifyResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
-            message: `There was a problem deleting ${item}. Please try again later`,
+            message: `There was a problem creating notification but post was denied`,
           });
         }
       }
-      if (!deleteResponse.ok) {
+      if (!postResponse.ok) {
         setSnackbar({
           open: true,
           severity: "error",
-          message: `There was a problem deleting ${item}. Please try again later`,
+          message: `There was a problem denying post. Please try again later`,
         });
       }
     } else {
-      const updateResponse = await updateItem();
-      if (action == "Deny") {
-        if (updateResponse.ok) {
-          const notify = {
-            name: result.name,
-            reason: reason,
-            text: `a ${item} of yours was denied for a ${reason} violation`,
-            add_info: addInfo,
-            ref: result._id,
-            date: new Date().toUTCString(),
-            viewed: false,
-          };
-
-          const notifyResponse = await createNotification(notify);
-
-          if (notifyResponse.ok) {
-            if (mutate) {
-              mutate();
-            }
-
-            handleClose();
-            setSnackbar({
-              open: true,
-              severity: "success",
-              message: `${contentType} denied successfully`,
-            });
-          }
-          if (!notifyResponse.ok) {
-            setSnackbar({
-              open: true,
-              severity: "error",
-              message: `There was a problem denying ${item}. Please try again later`,
-            });
-          }
+      if (postResponse.ok) {
+        if (mutate) {
+          mutate();
         }
-        if (!updateResponse.ok) {
-          setSnackbar({
-            open: true,
-            severity: "error",
-            message: `There was a problem denying ${item}. Please try again later`,
-          });
-        }
-      } else {
-        if (updateResponse.ok) {
+        handleClose();
+        setSnackbar({
+          open: true,
+          severity: "success",
+          message: `Post approved successfully`,
+        });
+      }
+      if (!postResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem approving post. Please try again later`,
+        });
+      }
+    }
+  };
+  const handleUpdateComment = async () => {
+    const submission = {
+      id: result._id,
+      approved: action == "Deny" ? "false" : "true",
+    };
+
+    const commentResponse = await updateComment(submission, "admin");
+
+    if (action == "Deny") {
+      if (commentResponse.ok) {
+        const notifyResponse = await handleNotify("comment", "denied");
+
+        if (notifyResponse.ok) {
           if (mutate) {
             mutate();
           }
+
           handleClose();
           setSnackbar({
             open: true,
             severity: "success",
-            message: `${contentType} approved successfully`,
+            message: `Comment denied successfully`,
           });
         }
-        if (!updateResponse.ok) {
+        if (!notifyResponse.ok) {
           setSnackbar({
             open: true,
             severity: "error",
-            message: `There was a problem approving ${item}. Please try again later`,
+            message: `There was a problem creating notification but comment was denied`,
           });
         }
       }
+      if (!commentResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem denying comment. Please try again later`,
+        });
+      }
+    } else {
+      if (commentResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+        handleClose();
+        setSnackbar({
+          open: true,
+          severity: "success",
+          message: `Comment approved successfully`,
+        });
+      }
+      if (!commentResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem approving comment. Please try again later`,
+        });
+      }
+    }
+  };
+  const handleUpdatePerson = async () => {
+    const submission = {
+      name: result.name,
+      email: result.email,
+      denials: action == "Deny" ? result.denials + 1 : result.denials,
+      approved: action == "Approve" ? "true" : "false",
+    };
+
+    const userResponse = await updateUser(submission, "admin");
+
+    if (action == "Deny") {
+      if (userResponse.ok) {
+        const notifyResponse = await handleNotify("profile item", "denied");
+
+        if (notifyResponse.ok) {
+          if (mutate) {
+            mutate();
+          }
+
+          handleClose();
+          setSnackbar({
+            open: true,
+            severity: "success",
+            message: `Profile denied successfully`,
+          });
+        }
+        if (!notifyResponse.ok) {
+          setSnackbar({
+            open: true,
+            severity: "error",
+            message: `There was a problem creating notification but profile was denied`,
+          });
+        }
+      }
+      if (!userResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem denying profile. Please try again later`,
+        });
+      }
+    } else {
+      if (userResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+        handleClose();
+        setSnackbar({
+          open: true,
+          severity: "success",
+          message: `Profile approved successfully`,
+        });
+      }
+      if (!userResponse.ok) {
+        setSnackbar({
+          open: true,
+          severity: "error",
+          message: `There was a problem approving profile. Please try again later`,
+        });
+      }
+    }
+  };
+
+  const handleUpdateItem = async () => {
+    switch (contentType) {
+      case "Post":
+        await handleUpdatePost();
+
+        break;
+      case "Comment":
+        await handleUpdateComment();
+
+        break;
+      case "Person":
+        await handleUpdatePerson();
+
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleDeleteItem = async () => {
+    switch (contentType) {
+      case "Post":
+        await handleDeletePost();
+
+        break;
+      case "Comment":
+        await handleDeleteComment();
+
+        break;
+      case "Person":
+        await handleDeletePerson();
+
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -351,7 +520,11 @@ const AdminDialog = ({
           Cancel
         </Button>
         <Button
-          onClick={() => handleSubmit()}
+          onClick={
+            action == "Delete"
+              ? () => handleDeleteItem()
+              : () => handleUpdateItem()
+          }
           color="secondary"
           variant="outlined"
         >
