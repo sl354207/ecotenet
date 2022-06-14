@@ -1,3 +1,4 @@
+import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import {
   Button,
@@ -35,16 +36,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Resolve = ({
-  open,
-  handleClose,
-  name,
-  ID,
-  className,
-  setSnackbar,
-  mutate,
-}) => {
+const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
   const classes = useStyles();
+  const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [addInfo, setAddInfo] = useState("");
 
@@ -85,6 +79,7 @@ const Resolve = ({
           }
 
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "success",
             message: `Flag resolved successfully`,
@@ -92,6 +87,7 @@ const Resolve = ({
         }
         if (!notifyResponse.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message: `There was a problem resolving flag. Please try again later`,
@@ -103,6 +99,7 @@ const Resolve = ({
         }
 
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "success",
           message: `Flag resolved successfully`,
@@ -111,6 +108,7 @@ const Resolve = ({
     }
     if (!flagResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem resolving flag. Please try again later`,

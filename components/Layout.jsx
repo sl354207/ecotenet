@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Meta from "./Meta";
 import Nav from "./Nav";
+import { SnackbarProvider } from "./SnackbarContext";
 
 // pass in children as a prop so any components in Layout tag in _app.js get rendered inside Layout
 const Layout = ({ children, ecoFilter }) => {
@@ -13,7 +14,9 @@ const Layout = ({ children, ecoFilter }) => {
       {router.route !== "/auth/new-user" && <Nav ecoFilter={ecoFilter} />}
 
       <div>
-        <main>{children}</main>
+        <main>
+          <SnackbarProvider>{children}</SnackbarProvider>
+        </main>
       </div>
     </>
   );

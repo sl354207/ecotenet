@@ -3,16 +3,9 @@ import Footer from "@components/Footer";
 import Header from "@components/Header";
 import PostList from "@components/PostList";
 import { useUserContext } from "@components/UserContext";
-import {
-  Container,
-  IconButton,
-  Link,
-  Snackbar,
-  Typography,
-} from "@material-ui/core";
+import { Container, IconButton, Link, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
-import { Alert } from "@material-ui/lab";
 import { getPerson, getProfilePosts } from "@utils/mongodb";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -49,20 +42,6 @@ const person = ({ person, posts }) => {
   const { user } = useUserContext();
 
   const [dialog, setDialog] = useState(false);
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const handleOpenDialog = () => {
     if (user.status == "unauthenticated" || user.status == "loading") {
@@ -136,22 +115,8 @@ const person = ({ person, posts }) => {
           handleClose={() => handleCloseDialog()}
           contentType="profile"
           result={person}
-          setSnackbar={setSnackbar}
           name={user && user.name}
         />
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </Container>
       <Footer />
     </>

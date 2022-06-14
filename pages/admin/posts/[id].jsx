@@ -8,11 +8,9 @@ import {
   CircularProgress,
   Container,
   Link,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
 import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -90,20 +88,6 @@ const post = () => {
   const [resolve, setResolve] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const handleOpenDialog = (action, type, result) => {
     setItem(result);
@@ -279,7 +263,6 @@ const post = () => {
         handleClose={handleCloseDialog}
         className={classes.dialog}
         result={item}
-        setSnackbar={setSnackbar}
         mutate={mutate}
       />
       <Resolve
@@ -287,22 +270,8 @@ const post = () => {
         handleClose={handleCloseResolve}
         name={flagee}
         ID={flag}
-        setSnackbar={setSnackbar}
         mutate={mutate}
       />
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

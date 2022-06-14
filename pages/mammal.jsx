@@ -10,14 +10,12 @@ import {
   Link,
   List,
   ListItem,
-  Snackbar,
   Tab,
   Tabs,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
-import { Alert } from "@material-ui/lab";
 import { getMammalById } from "@utils/mongodb";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -115,23 +113,10 @@ const mammal = ({ mammal, wiki }) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
+
   const [value, setValue] = useState(0);
 
   const [dialog, setDialog] = useState(false);
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const handleOpenDialog = () => {
     if (user.status == "unauthenticated" || user.status == "loading") {
@@ -373,22 +358,8 @@ const mammal = ({ mammal, wiki }) => {
           handleClose={() => handleCloseDialog()}
           contentType="species"
           result={mammal}
-          setSnackbar={setSnackbar}
           name={user.name}
         />
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </Container>
       <Footer />
     </>

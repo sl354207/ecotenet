@@ -1,10 +1,10 @@
 import Description from "@components/Description";
 import Header from "@components/Header";
+import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import { useUserContext } from "@components/UserContext";
-import { Button, Container, Snackbar } from "@material-ui/core";
+import { Button, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -12,12 +12,12 @@ const useStyles = makeStyles((theme) => ({
   layout: {
     display: "grid",
   },
-  origin: {
-    marginTop: 400,
-    [theme.breakpoints.up("sm")]: {
-      marginTop: 300,
-    },
-  },
+  // origin: {
+  //   marginTop: 400,
+  //   [theme.breakpoints.up("sm")]: {
+  //     marginTop: 300,
+  //   },
+  // },
 }));
 
 const newUser = () => {
@@ -27,23 +27,16 @@ const newUser = () => {
   // console.log(session);
   // console.log(status);
   const { user, setUser } = useUserContext();
+  const { snackbar, setSnackbar } = useSnackbarContext();
+  setSnackbar({
+    ...snackbar,
+    class: true,
+    vertical: "top",
+    horizontal: "center",
+  });
   // console.log(userName);
 
   const [name, setName] = useState("");
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   // update text input field
   const handleChange = (event) => {
@@ -87,6 +80,7 @@ const newUser = () => {
           router.push("/");
         } else {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message:
@@ -95,6 +89,7 @@ const newUser = () => {
         }
       } else {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: "That name is already taken. Please try another name",
@@ -102,6 +97,7 @@ const newUser = () => {
       }
     } else {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: "There was a problem please try again",
@@ -134,7 +130,7 @@ const newUser = () => {
           Submit
         </Button>
       </div>
-      <Snackbar
+      {/* <Snackbar
         classes={{
           anchorOriginTopCenter: classes.origin,
         }}
@@ -149,7 +145,7 @@ const newUser = () => {
         <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
           {snackbar.message}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </Container>
   );
 };

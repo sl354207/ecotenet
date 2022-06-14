@@ -1,3 +1,4 @@
+import { useSnackbarContext } from "@components/SnackbarContext";
 import {
   Button,
   Dialog,
@@ -14,12 +15,12 @@ const ClientDialog = ({
   contentType,
   className,
   result,
-  setSnackbar,
   mutate,
   closeForm,
   post_id,
   name,
 }) => {
+  const { snackbar, setSnackbar } = useSnackbarContext();
   let item;
 
   switch (contentType) {
@@ -56,6 +57,7 @@ const ClientDialog = ({
       }
 
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Comment submitted successfully",
@@ -63,6 +65,7 @@ const ClientDialog = ({
     }
     if (!createResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message:
@@ -85,6 +88,7 @@ const ClientDialog = ({
       }
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `${contentType} submit successfully`,
@@ -92,6 +96,7 @@ const ClientDialog = ({
     }
     if (!updateResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem submitting ${item}. Please try again later`,

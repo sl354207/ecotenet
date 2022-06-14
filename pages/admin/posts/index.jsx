@@ -6,13 +6,10 @@ import {
   List,
   ListItem,
   ListItemText,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import { alpha, makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,20 +47,6 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 const adminPosts = () => {
   const classes = useStyles();
   const router = useRouter();
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const { data: results } = useSWR(
     "/api/admin/posts?q1=published&q2=pending",
@@ -120,19 +103,6 @@ const adminPosts = () => {
       <div className={classes.content}>
         <Header title="Posts" />
         {list}
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </div>
     </div>
   );

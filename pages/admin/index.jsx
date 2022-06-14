@@ -1,5 +1,6 @@
 import AdminDrawer from "@components/AdminDrawer";
 import Header from "@components/Header";
+import { useSnackbarContext } from "@components/SnackbarContext";
 import {
   Button,
   CircularProgress,
@@ -7,12 +8,9 @@ import {
   Link,
   List,
   ListItem,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
-import { useState } from "react";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,20 +44,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const admin = () => {
   const classes = useStyles();
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
+  const { snackbar, setSnackbar } = useSnackbarContext();
 
   const { data: stats } = useSWR("/api/admin/stats", fetcher);
   const { data: posts, mutate } = useSWR("/api/admin/posts", fetcher);
@@ -105,6 +90,7 @@ const admin = () => {
             }
 
             setSnackbar({
+              ...snackbar,
               open: true,
               severity: "success",
               message: "Feature added successfully",
@@ -112,6 +98,7 @@ const admin = () => {
           }
           if (!res1.ok) {
             setSnackbar({
+              ...snackbar,
               open: true,
               severity: "error",
               message:
@@ -121,6 +108,7 @@ const admin = () => {
         }
         if (!res.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message:
@@ -146,6 +134,7 @@ const admin = () => {
         if (res1.ok) {
           mutate();
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "success",
             message:
@@ -154,6 +143,7 @@ const admin = () => {
         }
         if (!res1.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message:
@@ -179,6 +169,7 @@ const admin = () => {
         if (res2.ok) {
           mutate();
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "success",
             message: "Feature removed from list",
@@ -186,6 +177,7 @@ const admin = () => {
         }
         if (!res2.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message:
@@ -357,19 +349,6 @@ const admin = () => {
         {statSection}
         <Header title="Feature Candidates" />
         {list}
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </div>
     </div>
   );

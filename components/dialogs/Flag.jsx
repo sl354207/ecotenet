@@ -1,3 +1,4 @@
+import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import {
   Button,
@@ -21,15 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Flag = ({
-  open,
-  handleClose,
-  contentType,
-  result,
-  name,
-  setSnackbar,
-}) => {
+const Flag = ({ open, handleClose, contentType, result, name }) => {
   const classes = useStyles();
+  const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [value, setValue] = useState();
 
@@ -56,6 +51,7 @@ const Flag = ({
 
     if (flagResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Flag submitted successfully",
@@ -63,6 +59,7 @@ const Flag = ({
     }
     if (!flagResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: "There was a problem submitting flag. Please try again later",

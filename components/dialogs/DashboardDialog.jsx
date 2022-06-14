@@ -23,6 +23,7 @@ const DashboardDialog = ({
   className,
   result,
   name,
+  snackbar,
   setSnackbar,
   mutate,
 }) => {
@@ -63,6 +64,7 @@ const DashboardDialog = ({
 
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `Post deleted successfully`,
@@ -71,6 +73,7 @@ const DashboardDialog = ({
 
     if (!postResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem deleting post. Please try again later`,
@@ -92,6 +95,7 @@ const DashboardDialog = ({
 
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `Comment deleted successfully`,
@@ -100,6 +104,7 @@ const DashboardDialog = ({
 
     if (!commentResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
@@ -120,6 +125,7 @@ const DashboardDialog = ({
 
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `Person deleted successfully`,
@@ -127,6 +133,7 @@ const DashboardDialog = ({
     }
     if (!userResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem deleting person. Please try again later`,
@@ -159,6 +166,7 @@ const DashboardDialog = ({
     if (postResponse.ok) {
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `Post submitted successfully`,
@@ -168,6 +176,7 @@ const DashboardDialog = ({
 
     if (!postResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
@@ -199,6 +208,7 @@ const DashboardDialog = ({
     if (postResponse.ok) {
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `Post submitted successfully`,
@@ -207,6 +217,7 @@ const DashboardDialog = ({
     }
     if (!postResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
@@ -239,6 +250,7 @@ const DashboardDialog = ({
       const ID = await postResponse.json();
       router.push(`/dashboard/posts/${ID.insertedId}`);
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Post submitted successfully",
@@ -246,6 +258,7 @@ const DashboardDialog = ({
     }
     if (!postResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,

@@ -7,11 +7,9 @@ import {
   Link,
   List,
   ListItem,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import { alpha, makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -58,20 +56,6 @@ const adminFlags = () => {
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ name: "", ID: "" });
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Comment submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const handleOpenResolve = (name, ID) => {
     setDialog(true);
@@ -214,22 +198,8 @@ const adminFlags = () => {
           handleClose={handleCloseResolve}
           name={action.name}
           ID={action.ID}
-          setSnackbar={setSnackbar}
           mutate={mutate}
         />
-        <Snackbar
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
-          }}
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleCloseSnackbar}
-        >
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </div>
     </div>
   );

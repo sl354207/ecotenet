@@ -11,12 +11,10 @@ import {
   Divider,
   IconButton,
   Link,
-  Snackbar,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FlagIcon from "@material-ui/icons/Flag";
-import { Alert } from "@material-ui/lab";
 import customImage from "@plugins/customImage";
 // The editor core
 import Editor from "@react-page/editor";
@@ -101,12 +99,6 @@ const post = ({ post, comments }) => {
 
   const [showForm, setShowForm] = useState(false);
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
   comments.forEach((reply) => {
     reply.open = false;
   });
@@ -144,14 +136,6 @@ const post = ({ post, comments }) => {
   };
 
   const [state, dispatch] = useReducer(reducer, comments);
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   const handleOpenDialog = (action, result) => {
     if (user.status == "unauthenticated" || user.status == "loading") {
@@ -310,7 +294,6 @@ const post = ({ post, comments }) => {
         className={classes.dialog}
         post_id={post._id}
         result={item}
-        setSnackbar={setSnackbar}
         closeForm={closeForm}
         name={user && user.name}
       />
@@ -319,22 +302,9 @@ const post = ({ post, comments }) => {
         handleClose={handleCloseFlag}
         contentType={action}
         result={item}
-        setSnackbar={setSnackbar}
         name={user && user.name}
       />
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+
       <Footer />
     </>
   );

@@ -1,3 +1,4 @@
+import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import {
   Button,
@@ -54,10 +55,10 @@ const AdminDialog = ({
   action,
   className,
   result,
-  setSnackbar,
   mutate,
 }) => {
   const classes = useStyles();
+  const { snackbar, setSnackbar } = useSnackbarContext();
 
   let item;
 
@@ -126,6 +127,7 @@ const AdminDialog = ({
 
         handleClose();
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "success",
           message: `Post deleted successfully`,
@@ -133,6 +135,7 @@ const AdminDialog = ({
       }
       if (!notifyResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem creating notification but post was deleted`,
@@ -141,6 +144,7 @@ const AdminDialog = ({
     }
     if (!postResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem deleting post. Please try again later`,
@@ -164,6 +168,7 @@ const AdminDialog = ({
 
         handleClose();
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "success",
           message: `Comment deleted successfully`,
@@ -171,6 +176,7 @@ const AdminDialog = ({
       }
       if (!notifyResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem creating notification but comment was deleted`,
@@ -179,6 +185,7 @@ const AdminDialog = ({
     }
     if (!commentResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
@@ -197,6 +204,7 @@ const AdminDialog = ({
 
       handleClose();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: `Person deleted successfully`,
@@ -204,6 +212,7 @@ const AdminDialog = ({
     }
     if (!userResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: `There was a problem deleting person. Please try again later`,
@@ -231,6 +240,7 @@ const AdminDialog = ({
 
           handleClose();
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "success",
             message: `Post denied successfully`,
@@ -238,6 +248,7 @@ const AdminDialog = ({
         }
         if (!notifyResponse.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message: `There was a problem creating notification but post was denied`,
@@ -246,6 +257,7 @@ const AdminDialog = ({
       }
       if (!postResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem denying post. Please try again later`,
@@ -258,6 +270,7 @@ const AdminDialog = ({
         }
         handleClose();
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "success",
           message: `Post approved successfully`,
@@ -265,6 +278,7 @@ const AdminDialog = ({
       }
       if (!postResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem approving post. Please try again later`,
@@ -291,6 +305,7 @@ const AdminDialog = ({
 
           handleClose();
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "success",
             message: `Comment denied successfully`,
@@ -298,6 +313,7 @@ const AdminDialog = ({
         }
         if (!notifyResponse.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message: `There was a problem creating notification but comment was denied`,
@@ -306,6 +322,7 @@ const AdminDialog = ({
       }
       if (!commentResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem denying comment. Please try again later`,
@@ -318,6 +335,7 @@ const AdminDialog = ({
         }
         handleClose();
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "success",
           message: `Comment approved successfully`,
@@ -325,6 +343,7 @@ const AdminDialog = ({
       }
       if (!commentResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem approving comment. Please try again later`,
@@ -353,6 +372,7 @@ const AdminDialog = ({
 
           handleClose();
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "success",
             message: `Profile denied successfully`,
@@ -360,6 +380,7 @@ const AdminDialog = ({
         }
         if (!notifyResponse.ok) {
           setSnackbar({
+            ...snackbar,
             open: true,
             severity: "error",
             message: `There was a problem creating notification but profile was denied`,
@@ -368,6 +389,7 @@ const AdminDialog = ({
       }
       if (!userResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem denying profile. Please try again later`,
@@ -380,6 +402,7 @@ const AdminDialog = ({
         }
         handleClose();
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "success",
           message: `Profile approved successfully`,
@@ -387,6 +410,7 @@ const AdminDialog = ({
       }
       if (!userResponse.ok) {
         setSnackbar({
+          ...snackbar,
           open: true,
           severity: "error",
           message: `There was a problem approving profile. Please try again later`,

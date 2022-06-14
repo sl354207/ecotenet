@@ -31,6 +31,7 @@ const DashboardComment = ({
   result,
   handleDeleteOpen,
   mutate,
+  snackbar,
   setSnackbar,
   name,
 }) => {
@@ -59,6 +60,7 @@ const DashboardComment = ({
     if (updateResponse.ok) {
       mutate();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Comment updated successfully",
@@ -67,6 +69,7 @@ const DashboardComment = ({
     }
     if (!updateResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: "There was a problem saving comment. Please try again later",

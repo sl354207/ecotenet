@@ -1,14 +1,7 @@
 import DashboardDialog from "@components/dialogs/DashboardDialog";
-import {
-  Button,
-  Link,
-  Snackbar,
-  Step,
-  StepButton,
-  Stepper,
-} from "@material-ui/core";
+import { useSnackbarContext } from "@components/SnackbarContext";
+import { Button, Link, Step, StepButton, Stepper } from "@material-ui/core";
 import { alpha, makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
 import { createPost, updatePost } from "@utils/api-helpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -54,6 +47,8 @@ const StepForm = ({ post, pathName, user }) => {
 
   const { title, description, category, tags, ecoregions } = post;
 
+  const { snackbar, setSnackbar } = useSnackbarContext();
+
   // set form step state
   const [activeStep, setActiveStep] = useState(0);
 
@@ -75,19 +70,6 @@ const StepForm = ({ post, pathName, user }) => {
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
-  };
   const handleOpenDialog = (action, type, postValue, details, clickInfo) => {
     const result = {
       title: details.title,
@@ -172,6 +154,7 @@ const StepForm = ({ post, pathName, user }) => {
       const ID = await createResponse.json();
       router.push(`/dashboard/posts/${ID.insertedId}`);
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Draft saved successfully",
@@ -179,6 +162,7 @@ const StepForm = ({ post, pathName, user }) => {
     }
     if (!createResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: "There was a problem saving draft. Please try again later",
@@ -216,6 +200,7 @@ const StepForm = ({ post, pathName, user }) => {
     const updateResponse = await updatePost(value, "dashboard");
     if (updateResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Draft saved successfully",
@@ -224,6 +209,7 @@ const StepForm = ({ post, pathName, user }) => {
     }
     if (!updateResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: "There was a problem saving draft. Please try again later",
@@ -564,22 +550,10 @@ const StepForm = ({ post, pathName, user }) => {
         handleClose={handleCloseDialog}
         className={classes.dialog}
         result={item}
+        snackbar={snackbar}
         setSnackbar={setSnackbar}
         name={user && user.name}
       />
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
 
       {handleSteps(activeStep)}
     </>

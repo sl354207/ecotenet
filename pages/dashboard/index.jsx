@@ -1,6 +1,7 @@
 import DashboardComment from "@components/comments/DashboardComment";
 import DashboardDialog from "@components/dialogs/DashboardDialog";
 import Header from "@components/Header";
+import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import { useUserContext } from "@components/UserContext";
 import {
@@ -17,7 +18,6 @@ import {
   InputLabel,
   List,
   ListItem,
-  Snackbar,
   Tab,
   Tabs,
   Typography,
@@ -26,7 +26,7 @@ import { alpha, makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import { Alert, Autocomplete, createFilterOptions } from "@material-ui/lab";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import { updateNotification, updateUser } from "@utils/api-helpers";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -179,6 +179,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 export default function Dashboard() {
   const classes = useStyles();
   const { user } = useUserContext();
+  const { snackbar, setSnackbar } = useSnackbarContext();
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -196,12 +197,6 @@ export default function Dashboard() {
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
-
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: "success",
-    message: "Post submitted successfully",
-  });
 
   const { data: results, mutate } = useSWR(user ? fetchApi : null, fetcher);
   // console.log(results);
@@ -266,6 +261,7 @@ export default function Dashboard() {
     }
     if (!notifyResponse.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message:
@@ -313,6 +309,7 @@ export default function Dashboard() {
     if (profileUpdate.ok) {
       mutate();
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "success",
         message: "Profile saved successfully",
@@ -320,19 +317,12 @@ export default function Dashboard() {
     }
     if (!profileUpdate.ok) {
       setSnackbar({
+        ...snackbar,
         open: true,
         severity: "error",
         message: "There was a problem saving profile. Please try again later",
       });
     }
-  };
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
-    }
-
-    setSnackbar({ ...snackbar, open: false });
   };
 
   const handleOpenDialog = (action, type, result) => {
@@ -752,6 +742,7 @@ export default function Dashboard() {
                           handleDeleteOpen={() =>
                             handleOpenDialog("delete", "Comment", result)
                           }
+                          snackbar={snackbar}
                           setSnackbar={setSnackbar}
                           mutate={mutate}
                           name={user && user.name}
@@ -830,23 +821,11 @@ export default function Dashboard() {
         handleClose={handleCloseDialog}
         className={classes.dialog}
         result={item}
+        snackbar={snackbar}
         setSnackbar={setSnackbar}
         mutate={mutate}
         name={user && user.name}
       />
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 }
