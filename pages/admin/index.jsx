@@ -53,7 +53,7 @@ const admin = () => {
     switch (action) {
       case "addFeature":
         const submission = {
-          // _id: post._id,
+          _id: post._id,
           featured: true,
           feature: "true",
         };
@@ -118,7 +118,7 @@ const admin = () => {
         break;
       case "removeFeature":
         const submission1 = {
-          // _id: post._id,
+          _id: post._id,
           featured: true,
           feature: "pending",
         };
@@ -153,7 +153,7 @@ const admin = () => {
         break;
       case "removeList":
         const submission2 = {
-          // _id: post._id,
+          _id: post._id,
           featured: true,
           feature: "false",
         };

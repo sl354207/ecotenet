@@ -49,10 +49,13 @@ export default async function handler(req, res) {
         break;
       case "PUT":
         const { email, name, ...data } = req.body;
-        // console.log(req.body);
+
         if (session.user.email == email) {
           try {
-            const update = await updatePerson(email, data);
+            const update = await updatePerson(
+              email,
+              Object.keys(data).length ? data : { name: name }
+            );
 
             // console.log(update);
             return res.status(200).json(update);

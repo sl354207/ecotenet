@@ -28,12 +28,12 @@ const newUser = () => {
   // console.log(status);
   const { user, setUser } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  setSnackbar({
-    ...snackbar,
-    class: true,
-    vertical: "top",
-    horizontal: "center",
-  });
+  // setSnackbar({
+  //   ...snackbar,
+  //   class: true,
+  //   vertical: "top",
+  //   horizontal: "center",
+  // });
   // console.log(userName);
 
   const [name, setName] = useState("");
@@ -51,7 +51,7 @@ const newUser = () => {
       name: name,
     };
 
-    const res = await fetch(`/api/checkName?q=${name}`, {
+    const res = await fetch(`/api/dashboard/name?name=${name}`, {
       method: "GET",
     });
     if (res.ok) {
@@ -59,7 +59,7 @@ const newUser = () => {
       // console.log(check);
       if (!check.length) {
         // const test = JSON.parse(check);
-        const res1 = await fetch("/api/updatePerson", {
+        const res1 = await fetch(`/api/dashboard/users/${name}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -80,7 +80,9 @@ const newUser = () => {
           router.push("/");
         } else {
           setSnackbar({
-            ...snackbar,
+            class: true,
+            vertical: "top",
+            horizontal: "center",
             open: true,
             severity: "error",
             message:
@@ -89,7 +91,9 @@ const newUser = () => {
         }
       } else {
         setSnackbar({
-          ...snackbar,
+          class: true,
+          vertical: "top",
+          horizontal: "center",
           open: true,
           severity: "error",
           message: "That name is already taken. Please try another name",
@@ -97,7 +101,9 @@ const newUser = () => {
       }
     } else {
       setSnackbar({
-        ...snackbar,
+        class: true,
+        vertical: "top",
+        horizontal: "center",
         open: true,
         severity: "error",
         message: "There was a problem please try again",
