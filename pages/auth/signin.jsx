@@ -1,5 +1,8 @@
+import Description from "@components/Description";
 import EmailInput from "@components/EmailInput";
+import Header from "@components/Header";
 import VerificationStep from "@components/VerificationStep";
+import { Container } from "@material-ui/core";
 import { getProviders, getSession } from "next-auth/react";
 // import { getProviders, getSession } from "next-auth/client";
 import { useRouter } from "next/dist/client/router";
@@ -8,7 +11,10 @@ import { useState } from "react";
 const SigninPage = ({ providers, isLoggedIn }) => {
   const { query } = useRouter();
   const { error } = query;
+  // UPDATE
   const callbackUrl = "http://localhost:3000";
+
+  // PERHAPS USE ISLOGGEDIN TO HIDE PAGE
 
   const [email, setEmail] = useState("");
   const [showVerificationStep, setShowVerificationStep] = useState(false);
@@ -18,31 +24,29 @@ const SigninPage = ({ providers, isLoggedIn }) => {
 
   if (showVerificationStep) {
     return (
-      <div>
+      <Container>
+        <Header title="Verification Code" />
         <VerificationStep email={email} callbackUrl={callbackUrl} />
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div>
-      <div>
-        <h2>Sign in with your email</h2>
+    <Container>
+      <Header title="Email Sign in" />
+      <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes" />
 
-        {emailProvider.map((provider) => (
-          <EmailInput
-            key={provider.id}
-            provider={provider}
-            onSuccess={(email) => {
-              setEmail(email);
-              setShowVerificationStep(true);
-            }}
-          />
-        ))}
-      </div>
-
-      {/* {credentials} */}
-    </div>
+      {emailProvider.map((provider) => (
+        <EmailInput
+          key={provider.id}
+          provider={provider}
+          onSuccess={(email) => {
+            setEmail(email);
+            setShowVerificationStep(true);
+          }}
+        />
+      ))}
+    </Container>
   );
 };
 

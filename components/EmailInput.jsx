@@ -1,25 +1,67 @@
+import { Button, FormControl, FormHelperText } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
+import TextBox from "./TextBox";
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    display: "flex",
+    flexGrow: 1,
+    margin: "10px 0 10px 0",
+  },
+  label: {
+    color: theme.palette.text.primary,
+    position: "relative",
+    transform: "none",
+  },
+  helper: {
+    color: theme.palette.text.primary,
+    fontSize: 16,
+  },
+  layout: {
+    display: "grid",
+  },
+}));
 
 const EmailInput = ({ provider, onSuccess }) => {
+  const classes = useStyles();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ on: false });
+
+  let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
 
   const handleSignin = useCallback(async () => {
-    setLoading(true);
-    const res = await signIn("email", {
-      email: email,
-      redirect: false,
-    });
-    setLoading(false);
-    if (res?.error) {
-      if (res?.url) {
-        window.location.replace(res.url);
-      }
+    if (!regex.test(email)) {
+      setError({ on: true, message: "Invalid Email Address" });
     } else {
-      onSuccess(email);
+      setLoading(true);
+      const res = await signIn("email", {
+        email: email,
+        redirect: false,
+      });
+      setLoading(false);
+
+      if (res?.error) {
+        setError({
+          on: true,
+          message:
+            "There a was a problem sending email. Please try again later",
+        });
+
+        if (res?.url) {
+          window.location.replace(res.url);
+        }
+      } else {
+        onSuccess(email);
+      }
     }
   }, [email, onSuccess]);
+
+  const handleChange = (e) => {
+    setEmail(e.target.value);
+  };
 
   const onKeyPress = useCallback(
     (e) => {
@@ -31,18 +73,31 @@ const EmailInput = ({ provider, onSuccess }) => {
   );
 
   return (
-    <div>
-      <input
-        type="email"
-        name="email"
-        placeholder="e.g. jane.doe@company.com"
-        value={email}
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        onKeyPress={onKeyPress}
-      />
-      <button disabled={loading}>Next</button>
+    <div className={classes.layout}>
+      <FormControl className={classes.form} error={error.on}>
+        <TextBox
+          defaultValue={""}
+          placeHolder="email@site.com"
+          id="email"
+          autoFocus={true}
+          handleChange={handleChange}
+          rows={1}
+          inputProps={{ type: "email" }}
+          multiline={false}
+          onKeyPress={onKeyPress}
+        />
+        <FormHelperText className={classes.helper} id="component-error-text">
+          {error && error.message}
+        </FormHelperText>
+      </FormControl>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleSignin}
+        disabled={loading}
+      >
+        Submit
+      </Button>
     </div>
   );
 };

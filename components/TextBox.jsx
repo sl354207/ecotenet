@@ -25,8 +25,10 @@ const TextBox = ({
   rows,
   className,
   autoFocus,
+  multiline,
   inputProps,
   name,
+  onKeyPress,
 }) => {
   return (
     <TextInput
@@ -36,10 +38,11 @@ const TextBox = ({
       name={name}
       autoFocus={autoFocus}
       onChange={handleChange}
-      multiline
+      multiline={multiline}
       minRows={rows}
       className={className}
       inputProps={inputProps}
+      onKeyPress={onKeyPress}
       error
     />
   );

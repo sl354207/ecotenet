@@ -18,29 +18,29 @@ const useStyles = makeStyles((theme) => ({
   //     marginTop: 300,
   //   },
   // },
+  button: {
+    marginTop: 10,
+  },
 }));
 
 const newUser = () => {
   const classes = useStyles();
   const router = useRouter();
-  // const { data: session, status } = useSession();
-  // console.log(session);
-  // console.log(status);
+
   const { user, setUser } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  // setSnackbar({
-  //   ...snackbar,
-  //   class: true,
-  //   vertical: "top",
-  //   horizontal: "center",
-  // });
-  // console.log(userName);
 
   const [name, setName] = useState("");
 
   // update text input field
   const handleChange = (event) => {
     setName(event.target.value);
+  };
+
+  const onKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleNameUpdate(name);
+    }
   };
 
   // handle comment submission to database through api
@@ -125,33 +125,20 @@ const newUser = () => {
           autoFocus={true}
           handleChange={handleChange}
           rows={1}
+          multiline={false}
           inputProps={{ maxLength: 60 }}
+          onKeyPress={onKeyPress}
         />
         <Button
           variant="contained"
           color="secondary"
           onClick={() => handleNameUpdate(name)}
           disabled={name == "" ? true : false}
+          className={classes.button}
         >
           Submit
         </Button>
       </div>
-      {/* <Snackbar
-        classes={{
-          anchorOriginTopCenter: classes.origin,
-        }}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        open={snackbar.open}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar> */}
     </Container>
   );
 };
