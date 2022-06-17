@@ -1,5 +1,6 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "@utils/promise";
+import { randomBytes } from "crypto";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import nodemailer from "nodemailer";
@@ -23,10 +24,13 @@ export default async function auth(req, res) {
         server: process.env.EMAIL_SERVER,
         from: process.env.EMAIL_FROM,
         maxAge: 5 * 60,
-        // generateVerificationToken: async () => {
-        //   const token = await generateAuthtoken();
-        //   return token;
-        // },
+        generateVerificationToken: async () => {
+          // const token = await generateAuthtoken();
+          const token = await (async function () {
+            return randomBytes(4).toString("hex");
+          })();
+          return token;
+        },
         sendVerificationRequest: ({
           identifier: email,
           url,
@@ -44,7 +48,8 @@ export default async function auth(req, res) {
               {
                 to: email,
                 from,
-                subject: `Sign in to ${host}`,
+                subject: `Sign in to Ecotenet`,
+                // subject: `Sign in to ${host}`,
                 text: text({ url, host, token, email }),
                 html: html({ url, host, token, email }),
               },
@@ -94,7 +99,9 @@ export default async function auth(req, res) {
                   <td align="center" style="padding: 20px 0;">
                     <table border="0" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td align="center" style="border-radius: 5px;" bgcolor="${buttonBackgroundColor}"><a href="${url}" target="_blank" style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${buttonTextColor}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${buttonBorderColor}; display: inline-block; font-weight: bold;">Sign in</a></td>
+                      <td align="center" style="padding: 10px 0px 0px 0px; font-size: 24px; font-family: Helvetica, Arial, sans-serif; color: ${textColor};">
+                      Verification Code: <strong>${token}</strong> 
+                    </td>
                       </tr>
                     </table>
                   </td>
@@ -105,12 +112,12 @@ export default async function auth(req, res) {
                   </td>
                 </tr>
               </table>
-              <p>${token}</p>
+              
             </body>
             `;
             }
             function text({ url, host, token, email }) {
-              return `Enter token: ${token} to sign in to ${host}\n${url} for ${email}\n\n`;
+              return `Enter verification code: ${token} to sign in to ${host}\n${url} for ${email}\n\n`;
             }
           });
         },

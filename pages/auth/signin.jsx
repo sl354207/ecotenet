@@ -33,19 +33,25 @@ const SigninPage = ({ providers, isLoggedIn }) => {
 
   return (
     <Container>
-      <Header title="Email Sign in" />
-      <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes" />
+      {!isLoggedIn ? (
+        <>
+          <Header title="Email Sign in" />
+          <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes" />
 
-      {emailProvider.map((provider) => (
-        <EmailInput
-          key={provider.id}
-          provider={provider}
-          onSuccess={(email) => {
-            setEmail(email);
-            setShowVerificationStep(true);
-          }}
-        />
-      ))}
+          {emailProvider.map((provider) => (
+            <EmailInput
+              key={provider.id}
+              provider={provider}
+              onSuccess={(email) => {
+                setEmail(email);
+                setShowVerificationStep(true);
+              }}
+            />
+          ))}
+        </>
+      ) : (
+        <Header title="You are already signed in" />
+      )}
     </Container>
   );
 };

@@ -1,5 +1,6 @@
-import { Button, FormControl } from "@material-ui/core";
+import { Button, FormControl, FormHelperText } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import TextBox from "./TextBox";
 
@@ -29,10 +30,35 @@ const useStyles = makeStyles((theme) => ({
 const VerificationStep = ({ email, callbackUrl }) => {
   const classes = useStyles();
   const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ on: false });
+  const [resend, setResend] = useState(false);
 
   const handleChange = (e) => {
     setCode(e.target.value);
   };
+
+  const handleResend = useCallback(async () => {
+    setLoading(true);
+    const res = await signIn("email", {
+      email: email,
+      redirect: false,
+    });
+    setLoading(false);
+
+    if (res?.error) {
+      setError({
+        on: true,
+        message: "There a was a problem sending email. Please try again later",
+      });
+
+      if (res?.url) {
+        window.location.replace(res.url);
+      }
+    } else {
+      setResend(true);
+    }
+  }, [email]);
 
   const onReady = useCallback(() => {
     window.location.href = `/api/auth/callback/email?email=${encodeURIComponent(
@@ -50,23 +76,8 @@ const VerificationStep = ({ email, callbackUrl }) => {
   );
 
   return (
-    // <div>
-    //   <h2>Verify email</h2>
-    //   <p>Insert the magic code you received on your email</p>
-    //   <label>
-    //     Magic code:
-    //     <input
-    //       type="text"
-    //       value={code}
-    //       onChange={(e) => setCode(e.target.value)}
-    //       onKeyPress={onKeyPress}
-    //     />
-    //   </label>
-
-    //   <button onClick={onReady}>Go</button>
-    // </div>
     <div className={classes.layout}>
-      <FormControl className={classes.form}>
+      <FormControl className={classes.form} error={error.on}>
         <TextBox
           defaultValue={""}
           autoFocus={true}
@@ -75,9 +86,25 @@ const VerificationStep = ({ email, callbackUrl }) => {
           multiline={false}
           onKeyPress={onKeyPress}
         />
-        {/* <FormHelperText className={classes.helper} id="component-error-text">
-        {error && error.message}
-      </FormHelperText> */}
+        <FormHelperText className={classes.helper} id="component-error-text">
+          {error && error.message ? (
+            <>{error.message}</>
+          ) : (
+            <>
+              {!resend ? (
+                <>
+                  If you did not receive an email:{" "}
+                  <Button onClick={handleResend}>Resend</Button>
+                </>
+              ) : (
+                <>
+                  We have sent another email. Please try restarting the sign in
+                  process or contact us if you are not receiving an email
+                </>
+              )}
+            </>
+          )}
+        </FormHelperText>
       </FormControl>
       <Button variant="contained" color="secondary" onClick={onReady}>
         Submit
