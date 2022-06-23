@@ -52,6 +52,7 @@ const VerificationStep = ({ email, callbackUrl }) => {
         message: "There a was a problem sending email. Please try again later",
       });
 
+      // UPDATE. FIND OUT IF NECESSARY
       if (res?.url) {
         window.location.replace(res.url);
       }
@@ -68,7 +69,8 @@ const VerificationStep = ({ email, callbackUrl }) => {
 
   const onKeyPress = useCallback(
     (e) => {
-      if (e.key === "Enter") {
+      // console.log(e);
+      if (e.key === "Enter" && e.target.value.length >= 8) {
         onReady();
       }
     },
@@ -106,7 +108,12 @@ const VerificationStep = ({ email, callbackUrl }) => {
           )}
         </FormHelperText>
       </FormControl>
-      <Button variant="contained" color="secondary" onClick={onReady}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={onReady}
+        disabled={code.length < 8}
+      >
         Submit
       </Button>
     </div>
