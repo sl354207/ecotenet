@@ -1,7 +1,6 @@
 import ImageRender from '@components/imagePlugin/ImageRender';
 import ImageUploadField from '@components/imagePlugin/ImageUploadField';
 import { CellPlugin } from '@react-page/editor';
-import React from 'react';
 
 
 
@@ -33,7 +32,7 @@ const customImage: CellPlugin<Data> = {
       properties: {
         title: {
           type: 'string',
-          default: 'someDefaultValue',
+          // default: 'someDefaultValue',
         },
         imageUrl: {
           type: 'string',
@@ -48,7 +47,7 @@ const customImage: CellPlugin<Data> = {
           },
         },
       },
-      required: ['title'],
+      // required: ['title'],
     },
   },
 };

@@ -16,6 +16,11 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 
+// const darkTheme = createTheme({
+//   ...defaultThemeOptions,
+//   palette: { mode: "dark" },
+// });
+
 const useStyles = makeStyles(() => ({
   description: {
     marginLeft: 10,
@@ -49,6 +54,7 @@ const PostEditor = ({ value, setPostValue }) => {
           cellPlugins={cellPlugins}
           value={value}
           onChange={setPostValue}
+          // uiTheme={darkTheme}
         />
       </EditorLayout>
     </Container>
