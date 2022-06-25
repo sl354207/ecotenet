@@ -8,7 +8,7 @@ import { CellPlugin } from '@react-page/editor';
 
 // use a type here, not an interface. Set types for data for typescript.
 type Data = {
-  title: string,
+  caption: string,
   imageUrl: string,
   description: string
 }
@@ -30,15 +30,16 @@ const customImage: CellPlugin<Data> = {
     type: 'autoform',
     schema: {
       properties: {
-        title: {
-          type: 'string',
-          // default: 'someDefaultValue',
-        },
         imageUrl: {
           type: 'string',
           // pass in ImageUploadField component to perform functionality
           uniforms: { component: ImageUploadField },
         },
+        caption: {
+          type: 'string',
+          // default: 'someDefaultValue',
+        },
+        
         description: {
           type: 'string',
           uniforms: {

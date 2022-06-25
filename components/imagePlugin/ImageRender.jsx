@@ -1,37 +1,59 @@
+import { makeStyles } from "@material-ui/core/styles";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
-
 const ImageIcon = lazyLoad(() => import("@material-ui/icons/Landscape"));
+
+const useStyles = makeStyles(() => ({
+  image: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  placeholder: {
+    position: "relative",
+    width: "100%",
+    textAlign: "center",
+  },
+  icon: {
+    width: "100%",
+    height: "auto",
+    padding: "0",
+    color: "#aaa",
+    textAlign: "center",
+    minWidth: 64,
+    minHeight: 64,
+    maxHeight: 256,
+  },
+}));
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data }) => {
   console.log(data);
+
+  const classes = useStyles();
   return (
     <div>
-      {/* <h1>{data.title}</h1> */}
       {data.imageUrl ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
-        <Image
-          src={data.imageUrl}
-          alt={"Picture of the author"}
-          width={500}
-          height={500}
-        />
+        <div className={classes.image}>
+          <figure>
+            <Image
+              src={data.imageUrl}
+              alt={"Picture of the author"}
+              width={500}
+              height={500}
+              // layout="fill"
+              // className={classes.image}
+            />
+
+            <figcaption>{data.caption}</figcaption>
+          </figure>
+        </div>
       ) : (
-        <ImageIcon
-          style={{
-            width: "100%",
-            height: "auto",
-            padding: "0",
-            color: "#aaa",
-            textAlign: "center",
-            minWidth: 64,
-            minHeight: 64,
-            maxHeight: 256,
-          }}
-        />
+        <div className={classes.placeholder}>
+          <ImageIcon className={classes.icon} />
+        </div>
       )}
-      <p>{data.description}</p>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button, CircularProgress, TextField, Typography } from '@material-ui/core';
 // import BackupIcon from '@material-ui/icons/Backup';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import ErrorIcon from '@material-ui/icons/Error';
@@ -186,7 +186,7 @@ const BAD_EXTENSION_ERROR_CODE = 2;
 const TOO_BIG_ERROR_CODE = 3;
 const UPLOADING_ERROR_CODE = 4;
 
-function ImageUploadField({ onChange, value }: ImageProps) 
+function ImageUploadField({ onChange, value }: ImageProps, {imageUrl}) 
    {
     
   // static defaultProps = {
@@ -197,7 +197,8 @@ function ImageUploadField({ onChange, value }: ImageProps)
   // };
   const allowedExtensions = ['jpg', 'jpeg', 'png']
   const maxFileSize = 5242880
-  fileInput?: HTMLInputElement | null;
+  let fileInput
+  // fileInput?: HTMLInputElement | null;
 
   // state: ImageUploadState = {
   //   isUploading: false,
@@ -225,6 +226,7 @@ function ImageUploadField({ onChange, value }: ImageProps)
   };
 
   const handleError = (errorCode: number) => {
+    console.log(errorCode)
     let errorText: string | null;
 
     switch (errorCode) {
@@ -232,7 +234,8 @@ function ImageUploadField({ onChange, value }: ImageProps)
         errorText = 'No file selected';
         break;
       case BAD_EXTENSION_ERROR_CODE:
-        errorText = 'Bad file type';
+      //  setState( {...state, hasError: true, errorText: 'Bad file type'}) 
+       errorText = 'Bad file type'
         break;
       case TOO_BIG_ERROR_CODE:
         errorText = 'File is too big';
@@ -245,40 +248,44 @@ function ImageUploadField({ onChange, value }: ImageProps)
         break;
     }
     // Need to flick "isUploading" because otherwise the handler doesn't fire properly
-    setState({ hasError: true, errorText, isUploading: true }, () =>
-      setState({ isUploading: false })
+    setState({ ...state, hasError: true, errorText,  }, 
+      
     );
-    setTimeout(() => setState({ ...state, hasError: false, errorText: '' }), 5000);
+    setTimeout(() => setState({ ...state, hasError: false, errorText: '' }), 4000);
   };
 
-  const handleFileSelected: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleFileSelected = (e) => {
+    // console.log(e)
     if (!e.target.files || !e.target.files[0]) {
       handleError(NO_FILE_ERROR_CODE);
       return;
     }
     const file = e.target.files[0];
+    console.log(file)
     if (!hasExtension(file.name)) {
+      // console.log(file.size)
       handleError(BAD_EXTENSION_ERROR_CODE);
       return;
     }
     if (maxFileSize && file.size > maxFileSize) {
+      // console.log(file.size)
       handleError(TOO_BIG_ERROR_CODE);
       return;
     }
     else {
-      readFile(file).then((data) => (data));
-      if (imageUpload) {
-        setState({ ...state, isUploading: true });
-        imageUpload(file, handleReportProgress)
-          .then((resp) => {
-            setState({ ...state, progress: undefined, isUploading: false });
-            imageUploaded && imageUploaded(resp);
-          })
-          .catch((error) => {
-            setState({ ...state, isUploading: false });
-            imageUploadError && imageUploadError(error);
-          });
-    }
+    //   readFile(file).then((data) => (data));
+    //   if (imageUpload) {
+    //     setState({ ...state, isUploading: true });
+    //     imageUpload(file, handleReportProgress)
+    //       .then((resp) => {
+    //         setState({ ...state, progress: undefined, isUploading: false });
+    //         imageUploaded && imageUploaded(resp);
+    //       })
+    //       .catch((error) => {
+    //         setState({ ...state, isUploading: false });
+    //         imageUploadError && imageUploadError(error);
+    //       });
+    // }
     
     // if (imageLoaded) {
     //   readFile(file).then((data) => imageLoaded?.(data));
@@ -294,28 +301,31 @@ function ImageUploadField({ onChange, value }: ImageProps)
     //       setState({ ...state, isUploading: false });
     //       imageUploadError && imageUploadError(error);
     //     });
+    const imageUrl = URL.createObjectURL(file);
+
+          onChange(imageUrl);
     }
   };
 
-  const readFile = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+  // const readFile = (file: File) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
 
-      // Read the image via FileReader API and save image result in state.
-      reader.onload = function (e: ProgressEvent) {
-        // Add the file name to the data URL
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let dataUrl: string = (e.target as any).result;
-        dataUrl = dataUrl.replace(';base64', `;name=${file.name};base64`);
-        resolve({ file, dataUrl });
-      };
+  //     // Read the image via FileReader API and save image result in state.
+  //     reader.onload = function (e: ProgressEvent) {
+  //       // Add the file name to the data URL
+  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //       let dataUrl: string = (e.target as any).result;
+  //       dataUrl = dataUrl.replace(';base64', `;name=${file.name};base64`);
+  //       resolve({ file, dataUrl });
+  //     };
 
-      reader.readAsDataURL(file);
-    });
-  }
+  //     reader.readAsDataURL(file);
+  //   });
+  // }
 
-  const handleFileUploadClick: React.MouseEventHandler<HTMLElement> = () =>
-    fileInput?.click();
+  // const handleFileUploadClick: React.MouseEventHandler<HTMLElement> = () =>
+  //   fileInput?.click();
 
   const handleReportProgress = (progress: number) => setState({ ...state, progress });
 
@@ -346,26 +356,66 @@ function ImageUploadField({ onChange, value }: ImageProps)
   
     return (
       <>
-        <Button
+      <div style={{display: 'flex'}}>
+      {/* <label htmlFor="file-input"> */}
+      <Button
           disabled={state.isUploading}
           variant="contained"
           color={state.hasError ? 'secondary' : 'primary'}
-          onClick={handleFileUploadClick}
-          
+          // onClick={handleFileUploadClick}
+          component='label'
           size="small"
         >
           {/* {renderChildren()} */}
           {buttonInside}
-        </Button>
-        {!state.isUploading && (
-          <input
+          {/* {!state.isUploading && ( */}
+        <input
+          id='file-input'
             style={{ display: 'none' }}
-            ref={(fileInput) => (fileInput = fileInput)}
+            // ref={(fileInput) => (fileInput = fileInput)}
             type="file"
-            onChange={handleFileSelected}
+            onChange={ handleFileSelected}
           />
-        )}
+        {/* )} */}
+          
+        </Button>
+      {/* </label> */}
+      <Typography variant="body1" style={{ margin: '20px 16px 0 16px' }}>
+              or
+            </Typography>
+            <TextField
+          placeholder='http://example.com/image.png'
+          label='Existing image URL'
+          name="src"
+          // style={{ flex: 1 }}
+          value={imageUrl}
+          onChange={(e) =>
+            {
+              const imageUrl = e.target.value
+              onChange(imageUrl)
+              
+            
+            }
+           
+          }
+        />
+        
+        
+      </div>
+      <Button
+      
+      variant="contained"
+      color={state.hasError ? 'secondary' : 'primary'}
+      
+     
+      
+    >
+      save
+      
+    </Button>
       </>
+      
+
     );
   
 }
