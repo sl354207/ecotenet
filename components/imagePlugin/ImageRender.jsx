@@ -24,15 +24,19 @@ const useStyles = makeStyles(() => ({
     minHeight: 64,
     maxHeight: 256,
   },
+  border: {
+    border: "1px solid red",
+  },
 }));
 
 // ImageRender takes in data as prop passed down from testPlugin
-const ImageRender = ({ data }) => {
+const ImageRender = ({ data, preview }) => {
   console.log(data);
+  // console.log(preview);
 
   const classes = useStyles();
   return (
-    <div>
+    <div className={data.imageUrl && !preview ? classes.border : null}>
       {data.imageUrl ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <div className={classes.image}>

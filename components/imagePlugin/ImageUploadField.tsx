@@ -1,9 +1,17 @@
 import { Button, CircularProgress, TextField, Typography } from '@material-ui/core';
 // import BackupIcon from '@material-ui/icons/Backup';
+import { makeStyles } from "@material-ui/core/styles";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import ErrorIcon from '@material-ui/icons/Error';
 import { useState } from 'react';
 import { connectField, HTMLFieldProps } from 'uniforms';
+
+const useStyles = makeStyles(() => ({
+  upload: {
+    display: 'grid',
+    marginBottom: 10,
+  }
+}));
 
 
 
@@ -186,9 +194,11 @@ const BAD_EXTENSION_ERROR_CODE = 2;
 const TOO_BIG_ERROR_CODE = 3;
 const UPLOADING_ERROR_CODE = 4;
 
-function ImageUploadField({ onChange, value }: ImageProps, {imageUrl}) 
+function ImageUploadField({onChange, value}: ImageProps, ) 
    {
-    
+    // console.log(value)
+    // console.log(data)
+    const classes = useStyles();
   // static defaultProps = {
   //   icon: <CloudUploadIcon style={{ marginLeft: '8px' }} />,
   //   allowedExtensions: ['jpg', 'jpeg', 'png'],
@@ -197,7 +207,7 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
   // };
   const allowedExtensions = ['jpg', 'jpeg', 'png']
   const maxFileSize = 5242880
-  let fileInput
+  // let fileInput
   // fileInput?: HTMLInputElement | null;
 
   // state: ImageUploadState = {
@@ -226,7 +236,7 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
   };
 
   const handleError = (errorCode: number) => {
-    console.log(errorCode)
+    // console.log(errorCode)
     let errorText: string | null;
 
     switch (errorCode) {
@@ -261,7 +271,7 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
       return;
     }
     const file = e.target.files[0];
-    console.log(file)
+    // console.log(file)
     if (!hasExtension(file.name)) {
       // console.log(file.size)
       handleError(BAD_EXTENSION_ERROR_CODE);
@@ -356,7 +366,7 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
   
     return (
       <>
-      <div style={{display: 'flex'}}>
+      <div className={classes.upload}>
       {/* <label htmlFor="file-input"> */}
       <Button
           disabled={state.isUploading}
@@ -364,7 +374,7 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
           color={state.hasError ? 'secondary' : 'primary'}
           // onClick={handleFileUploadClick}
           component='label'
-          size="small"
+          
         >
           {/* {renderChildren()} */}
           {buttonInside}
@@ -387,8 +397,8 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
           placeholder='http://example.com/image.png'
           label='Existing image URL'
           name="src"
-          // style={{ flex: 1 }}
-          value={imageUrl}
+          style={{ flex: 1 }}
+          value={value || ''}
           onChange={(e) =>
             {
               const imageUrl = e.target.value
@@ -402,17 +412,25 @@ function ImageUploadField({ onChange, value }: ImageProps, {imageUrl})
         
         
       </div>
+      <div style={{ display: 'flex' }}>
       <Button
-      
       variant="contained"
       color={state.hasError ? 'secondary' : 'primary'}
+      fullWidth
+      style={{ marginRight: 5 }}
+      >
+        save
+      </Button>
+      <Button
+      variant="contained"
+      color={state.hasError ? 'secondary' : 'primary'}
+      fullWidth
+      style={{ marginLeft: 5 }}
+      >
+        delete
+      </Button>
+      </div>
       
-     
-      
-    >
-      save
-      
-    </Button>
       </>
       
 
