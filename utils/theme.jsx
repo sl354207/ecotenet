@@ -1,7 +1,7 @@
-import { createTheme, adaptV4Theme } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
 // Create a theme instance.
-const theme = createTheme(adaptV4Theme({
+const theme = createTheme({
   palette: {
     primary: {
       main: "#001e3c",
@@ -36,18 +36,34 @@ const theme = createTheme(adaptV4Theme({
       activatedOpacity: "0.24",
     },
   },
-  overrides: {
+  // overrides: {
+  //   MuiContainer: {
+  //     root: {
+  //       minHeight: "60vh",
+  //     },
+  //   },
+  //   MuiLink: {
+  //     root: {
+  //       color: "#c8fcff",
+  //     },
+  //   },
+  // },
+  components: {
     MuiContainer: {
-      root: {
-        minHeight: "60vh",
+      styleOverrides: {
+        root: {
+          minHeight: "60vh",
+        },
       },
     },
     MuiLink: {
-      root: {
-        color: "#c8fcff",
+      styleOverrides: {
+        root: {
+          color: "#c8fcff",
+        },
       },
     },
   },
-}));
+});
 
 export default theme;
