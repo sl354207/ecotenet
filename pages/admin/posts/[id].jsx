@@ -9,8 +9,8 @@ import {
   Container,
   Link,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -133,9 +133,13 @@ const post = () => {
     list = (
       <>
         {comment_query ? (
-          <Link href="/admin/flags">&#10229;Flags</Link>
+          <Link href="/admin/flags" underline="hover">
+            &#10229;Flags
+          </Link>
         ) : (
-          <Link href="/admin/posts">&#10229;Posts</Link>
+          <Link href="/admin/posts" underline="hover">
+            &#10229;Posts
+          </Link>
         )}
 
         <Container className={classes.container}>
@@ -144,7 +148,9 @@ const post = () => {
             <div className={classes.content}>
               <div className={classes.items}>
                 <Typography align="center" variant="h6">
-                  <Link href="#">{post.name}</Link>
+                  <Link href="#" underline="hover">
+                    {post.name}
+                  </Link>
                 </Typography>
                 <Typography className={classes.date} align="left" variant="h6">
                   {date.toDateString()}
@@ -153,7 +159,7 @@ const post = () => {
               <Typography variant="h6">
                 Ecoregions:{" "}
                 {post.ecoregions.map((ecoregion) => (
-                  <Link href="#" color="secondary">
+                  <Link href="#" color="secondary" underline="hover">
                     Eco-{ecoregion},{" "}
                   </Link>
                 ))}

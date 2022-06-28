@@ -9,8 +9,8 @@ import {
   List,
   ListItem,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
@@ -221,98 +221,96 @@ const admin = () => {
         <Typography>Feature count: {count}</Typography>
         <List>
           {posts.map((post) => {
-            return (
-              <>
-                <ListItem key={post._id} className={classes.buttonPost}>
-                  <Grid container spacing={1} className={classes.spacing}>
-                    <Grid item xs={4} className={classes.text}>
-                      <Link
-                        href="/privacy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {post.name}
-                      </Link>
-                    </Grid>
-
-                    <Grid item xs={4} className={classes.text}>
-                      <Typography>Current Feature: {post.feature}</Typography>
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      <Link
-                        href={`/posts/${post._id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Post
-                      </Link>
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      <Typography>{post.title}</Typography>
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      <Typography>
-                        Featured Before: {post.featured ? "true" : "false"}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      {post.feature == "true" ? (
-                        <Button variant="outlined" color="secondary" disabled>
-                          Add to Features
-                        </Button>
-                      ) : (
-                        <>
-                          {count >= 10 ? (
-                            <Button
-                              variant="outlined"
-                              color="secondary"
-                              disabled
-                            >
-                              Add to Features
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outlined"
-                              color="secondary"
-                              onClick={() => updateFeature("addFeature", post)}
-                            >
-                              Add to Features
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      <Typography>{post.date}</Typography>
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      <Typography variant="h6" color="secondary">
-                        {post.count}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} className={classes.text}>
-                      {post.feature !== "true" ? (
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => updateFeature("removeList", post)}
-                        >
-                          Remove from List
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => updateFeature("removeFeature", post)}
-                        >
-                          Remove from Features
-                        </Button>
-                      )}
-                    </Grid>
+            return <>
+              <ListItem key={post._id} className={classes.buttonPost}>
+                <Grid container spacing={1} className={classes.spacing}>
+                  <Grid item xs={4} className={classes.text}>
+                    <Link
+                      href="/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover">
+                      {post.name}
+                    </Link>
                   </Grid>
-                </ListItem>
-              </>
-            );
+
+                  <Grid item xs={4} className={classes.text}>
+                    <Typography>Current Feature: {post.feature}</Typography>
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    <Link
+                      href={`/posts/${post._id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover">
+                      View Post
+                    </Link>
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    <Typography>{post.title}</Typography>
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    <Typography>
+                      Featured Before: {post.featured ? "true" : "false"}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    {post.feature == "true" ? (
+                      <Button variant="outlined" color="secondary" disabled>
+                        Add to Features
+                      </Button>
+                    ) : (
+                      <>
+                        {count >= 10 ? (
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            disabled
+                          >
+                            Add to Features
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() => updateFeature("addFeature", post)}
+                          >
+                            Add to Features
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    <Typography>{post.date}</Typography>
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    <Typography variant="h6" color="secondary">
+                      {post.count}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={4} className={classes.text}>
+                    {post.feature !== "true" ? (
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => updateFeature("removeList", post)}
+                      >
+                        Remove from List
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => updateFeature("removeFeature", post)}
+                      >
+                        Remove from Features
+                      </Button>
+                    )}
+                  </Grid>
+                </Grid>
+              </ListItem>
+            </>;
           })}
         </List>
       </>

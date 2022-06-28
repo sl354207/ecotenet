@@ -13,8 +13,9 @@ import {
   Toolbar,
   Typography,
   useMediaQuery,
-} from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import { getMammals } from "@utils/mongodb";
 import { useRef } from "react";
 
@@ -40,7 +41,7 @@ const mammals = ({ mammals }) => {
   const classes = useStyles();
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
   // create new array containing only unique first letters of scientific name of mammals
   const uniqueFirst = [

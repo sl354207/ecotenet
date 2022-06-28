@@ -1,7 +1,7 @@
 import Layout from "@components/Layout";
 import { UserProvider } from "@components/UserContext";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import "@styles/globals.css";
 import theme from "@utils/theme";
 import { SessionProvider } from "next-auth/react";
@@ -37,17 +37,17 @@ export default function MyApp(props) {
     }
   }, [router.pathname]);
 
-  return (
-    <>
-      <Head>
-        <title>My page</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-      </Head>
-      <SessionProvider session={pageProps.session} refetchInterval={0}>
-        <UserProvider>
+  return <>
+    <Head>
+      <title>My page</title>
+      <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width"
+      />
+    </Head>
+    <SessionProvider session={pageProps.session} refetchInterval={0}>
+      <UserProvider>
+        <StyledEngineProvider injectFirst>
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
@@ -55,10 +55,10 @@ export default function MyApp(props) {
               <Component ecoFilter={ecoFilter} {...pageProps} />
             </Layout>
           </ThemeProvider>
-        </UserProvider>
-      </SessionProvider>
-    </>
-  );
+        </StyledEngineProvider>
+      </UserProvider>
+    </SessionProvider>
+  </>;
 }
 
 MyApp.propTypes = {

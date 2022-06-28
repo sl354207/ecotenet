@@ -8,8 +8,9 @@ import {
   List,
   ListItem,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -103,13 +104,17 @@ const adminPeople = () => {
             <>
               <ListItem key={result._id} className={classes.buttonPost}>
                 <div className={classes.comment}>
-                  <Link>{result.name}</Link>
+                  <Link underline="hover">{result.name}</Link>
 
                   <Typography>bio: {result.bio}</Typography>
                   <Typography>email: {result.email}</Typography>
                   <Typography>
                     website:{" "}
-                    <Link target="_blank" rel="noopener noreferrer">
+                    <Link
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover"
+                    >
                       {result.website}
                     </Link>
                   </Typography>
@@ -117,7 +122,11 @@ const adminPeople = () => {
                     socials:{" "}
                     {result.socials.map((social) => (
                       <>
-                        <Link target="_blank" rel="noopener noreferrer">
+                        <Link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          underline="hover"
+                        >
                           {social}
                         </Link>
                         ,{" "}

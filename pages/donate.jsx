@@ -1,6 +1,6 @@
 import DonateForm from "@components/DonateForm";
 import Header from "@components/Header";
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 
 const donate = () => {
   return (

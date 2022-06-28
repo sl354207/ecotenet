@@ -1,6 +1,6 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import { Button, CircularProgress, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button, CircularProgress, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";

@@ -1,6 +1,6 @@
-import { Button, IconButton, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { ArrowDropDown, ArrowDropUp } from "@material-ui/icons";
+import { Button, IconButton, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -42,34 +42,32 @@ const Vote = ({ post_count, count, setCount, handleOpenDialog }) => {
       setCount(count - 1);
     }
   };
-  return (
-    <>
-      <div className={classes.root}>
-        <div className={classes.count}>
-          <IconButton onClick={handleCountUp} color="secondary">
-            <ArrowDropUp fontSize="large" />
-          </IconButton>
-          <Typography align="center">{count}</Typography>
-          <IconButton onClick={handleCountDown} color="secondary">
-            <ArrowDropDown fontSize="large" />
-          </IconButton>
-        </div>
+  return <>
+    <div className={classes.root}>
+      <div className={classes.count}>
+        <IconButton onClick={handleCountUp} color="secondary" size="large">
+          <ArrowDropUp fontSize="large" />
+        </IconButton>
+        <Typography align="center">{count}</Typography>
+        <IconButton onClick={handleCountDown} color="secondary" size="large">
+          <ArrowDropDown fontSize="large" />
+        </IconButton>
       </div>
-      {count !== post_count ? (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleOpenDialog("Vote", count)}
-        >
-          Vote
-        </Button>
-      ) : (
-        <Button variant="contained" color="secondary" disabled>
-          Vote
-        </Button>
-      )}
-    </>
-  );
+    </div>
+    {count !== post_count ? (
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => handleOpenDialog("Vote", count)}
+      >
+        Vote
+      </Button>
+    ) : (
+      <Button variant="contained" color="secondary" disabled>
+        Vote
+      </Button>
+    )}
+  </>;
 };
 
 export default Vote;

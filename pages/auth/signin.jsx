@@ -2,7 +2,7 @@ import Description from "@components/Description";
 import EmailInput from "@components/EmailInput";
 import Header from "@components/Header";
 import VerificationStep from "@components/VerificationStep";
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { getProviders, getSession } from "next-auth/react";
 // import { getProviders, getSession } from "next-auth/client";
 import { useRouter } from "next/dist/client/router";

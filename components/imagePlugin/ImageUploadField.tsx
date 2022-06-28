@@ -1,8 +1,7 @@
-import { Button, CircularProgress, TextField, Typography } from '@material-ui/core';
-// import BackupIcon from '@material-ui/icons/Backup';
-import { makeStyles } from "@material-ui/core/styles";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import ErrorIcon from '@material-ui/icons/Error';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import ErrorIcon from '@mui/icons-material/Error';
 import { useState } from 'react';
 import { connectField, HTMLFieldProps } from 'uniforms';
 
@@ -220,6 +219,7 @@ function ImageUploadField({onChange, value}: ImageProps, )
   // const [hasError, setHasError] = useState(false)
   // const [errorText, setErrorText] = useState('')
   // const [progress, setProgress] = useState(0)
+  const [image, setImage] = useState(undefined)
   const [state, setState] = useState({
     isUploading: false,
     hasError: false,
@@ -312,8 +312,9 @@ function ImageUploadField({onChange, value}: ImageProps, )
     //       imageUploadError && imageUploadError(error);
     //     });
     const imageUrl = URL.createObjectURL(file);
+    setImage('')
 
-          onChange(imageUrl);
+    onChange(imageUrl);
     }
   };
 
@@ -336,6 +337,11 @@ function ImageUploadField({onChange, value}: ImageProps, )
 
   // const handleFileUploadClick: React.MouseEventHandler<HTMLElement> = () =>
   //   fileInput?.click();
+  const deleteImage = (img) => {
+    img = undefined
+    onChange(img)
+    setImage(undefined)
+  }
 
   const handleReportProgress = (progress: number) => setState({ ...state, progress });
 
@@ -398,10 +404,12 @@ function ImageUploadField({onChange, value}: ImageProps, )
           label='Existing image URL'
           name="src"
           style={{ flex: 1 }}
-          value={value || ''}
+          value={image || ''}
+          disabled={image == ''}
           onChange={(e) =>
             {
               const imageUrl = e.target.value
+              setImage(imageUrl)
               onChange(imageUrl)
               
             
@@ -418,16 +426,19 @@ function ImageUploadField({onChange, value}: ImageProps, )
       color={state.hasError ? 'secondary' : 'primary'}
       fullWidth
       style={{ marginRight: 5 }}
+      disabled={image !== ''}
       >
-        save
+        save image
       </Button>
       <Button
       variant="contained"
       color={state.hasError ? 'secondary' : 'primary'}
       fullWidth
       style={{ marginLeft: 5 }}
+      onClick={(value) => deleteImage(value)}
+      disabled={image == undefined}
       >
-        delete
+        delete image
       </Button>
       </div>
       

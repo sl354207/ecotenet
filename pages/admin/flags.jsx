@@ -8,8 +8,9 @@ import {
   List,
   ListItem,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -89,99 +90,97 @@ const adminFlags = () => {
     list = (
       <List>
         {results.map((result) => {
-          return (
-            <>
-              <ListItem key={result._id} className={classes.buttonPost}>
-                <div className={classes.comment}>
-                  <Typography>
-                    Flagged by: <Link>{result.name}</Link>
-                  </Typography>
-                  <Typography>Flag type: {result.type}</Typography>
-                  <Typography>Flag text: {result.text}</Typography>
-                  <Typography>
-                    Name flagged: <Link>{result.flagged}</Link>
-                  </Typography>
-                </div>
+          return <>
+            <ListItem key={result._id} className={classes.buttonPost}>
+              <div className={classes.comment}>
+                <Typography>
+                  Flagged by: <Link underline="hover">{result.name}</Link>
+                </Typography>
+                <Typography>Flag type: {result.type}</Typography>
+                <Typography>Flag text: {result.text}</Typography>
+                <Typography>
+                  Name flagged: <Link underline="hover">{result.flagged}</Link>
+                </Typography>
+              </div>
 
-                <div className={classes.mobile}>
-                  {result.type == "comment" && (
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      href={`/admin/posts/${result.ref}?q=${result.content_id}&flag=${result._id}&flagee=${result.name}`}
-                    >
-                      View Post
-                    </Button>
-                  )}
-                  {result.type == "post" && (
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      href={`/admin/posts/${result.content_id}?q=flag&flag=${result._id}&flagee=${result.name}`}
-                    >
-                      View Post
-                    </Button>
-                  )}
+              <div className={classes.mobile}>
+                {result.type == "comment" && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    href={`/admin/posts/${result.ref}?q=${result.content_id}&flag=${result._id}&flagee=${result.name}`}
+                  >
+                    View Post
+                  </Button>
+                )}
+                {result.type == "post" && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    href={`/admin/posts/${result.content_id}?q=flag&flag=${result._id}&flagee=${result.name}`}
+                  >
+                    View Post
+                  </Button>
+                )}
 
-                  {result.type == "profile" && (
+                {result.type == "profile" && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    href={`/admin/people/${result.flagged}?flag=${result._id}&flagee=${result.name}`}
+                  >
+                    View Profile
+                  </Button>
+                )}
+                {result.type == "ecoregion" && (
+                  <>
                     <Button
                       variant="outlined"
                       color="secondary"
-                      href={`/admin/people/${result.flagged}?flag=${result._id}&flagee=${result.name}`}
+                      href={`/ecoregions/${result.content_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      View Profile
+                      View Page
                     </Button>
-                  )}
-                  {result.type == "ecoregion" && (
-                    <>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        href={`/ecoregions/${result.content_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Page
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        className={classes.desktop}
-                        onClick={() =>
-                          handleOpenResolve(result.name, result._id)
-                        }
-                      >
-                        Resolve
-                      </Button>
-                    </>
-                  )}
-                  {result.type == "species" && (
-                    <>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        href={`/species/${result.content_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Page
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        className={classes.desktop}
-                        onClick={() =>
-                          handleOpenResolve(result.name, result._id)
-                        }
-                      >
-                        Resolve
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </ListItem>
-            </>
-          );
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={classes.desktop}
+                      onClick={() =>
+                        handleOpenResolve(result.name, result._id)
+                      }
+                    >
+                      Resolve
+                    </Button>
+                  </>
+                )}
+                {result.type == "species" && (
+                  <>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      href={`/species/${result.content_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Page
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={classes.desktop}
+                      onClick={() =>
+                        handleOpenResolve(result.name, result._id)
+                      }
+                    >
+                      Resolve
+                    </Button>
+                  </>
+                )}
+              </div>
+            </ListItem>
+          </>;
         })}
       </List>
     );

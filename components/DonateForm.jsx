@@ -6,9 +6,10 @@ import {
   Slider,
   Tab,
   Tabs,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { fetchPostJSON } from "@utils/stripe/api-helpers";
 import getStripe from "@utils/stripe/get-stripe";
 import { formatAmountForDisplay } from "@utils/stripe/stripe-helpers";

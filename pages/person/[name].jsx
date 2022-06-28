@@ -3,9 +3,9 @@ import Footer from "@components/Footer";
 import Header from "@components/Header";
 import PostList from "@components/PostList";
 import { useUserContext } from "@components/UserContext";
-import { Container, IconButton, Link, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import FlagIcon from "@material-ui/icons/Flag";
+import { Container, IconButton, Link, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import FlagIcon from "@mui/icons-material/Flag";
 import { getPerson, getProfilePosts } from "@utils/mongodb";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -60,67 +60,65 @@ const person = ({ person, posts }) => {
     setDialog(false);
   };
 
-  return (
-    <>
-      <Container>
-        <div className={classes.flagBox}>
-          <div className={classes.spacer}></div>
-          <Header title={person.name} />
-          <IconButton
-            className={classes.flag}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenDialog()}
-          >
-            <FlagIcon />
-          </IconButton>
+  return <>
+    <Container>
+      <div className={classes.flagBox}>
+        <div className={classes.spacer}></div>
+        <Header title={person.name} />
+        <IconButton
+          className={classes.flag}
+          color="inherit"
+          aria-label="flag"
+          size="small"
+          onClick={() => handleOpenDialog()}
+        >
+          <FlagIcon />
+        </IconButton>
+      </div>
+
+      {person.approved == "true" && (
+        <div className={classes.profile}>
+          {person.bio !== "" && (
+            <>
+              <Typography gutterBottom>Bio:</Typography>
+              <Typography gutterBottom variant="body1">
+                {person.bio}
+              </Typography>
+            </>
+          )}
+          {person.website !== "" && (
+            <Typography gutterBottom>
+              Personal Website: <Link underline="hover">{person.website}</Link>
+            </Typography>
+          )}
+          {Array.isArray(person.socials) && person.socials.length > 0 && (
+            <Typography className={classes.socials} gutterBottom>
+              Socials:{" "}
+              {person.socials.map((social) => (
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${social}`}
+                  underline="hover">
+                  {social}
+                </Link>
+              ))}
+            </Typography>
+          )}
         </div>
+      )}
 
-        {person.approved == "true" && (
-          <div className={classes.profile}>
-            {person.bio !== "" && (
-              <>
-                <Typography gutterBottom>Bio:</Typography>
-                <Typography gutterBottom variant="body1">
-                  {person.bio}
-                </Typography>
-              </>
-            )}
-            {person.website !== "" && (
-              <Typography gutterBottom>
-                Personal Website: <Link>{person.website}</Link>
-              </Typography>
-            )}
-            {Array.isArray(person.socials) && person.socials.length > 0 && (
-              <Typography className={classes.socials} gutterBottom>
-                Socials:{" "}
-                {person.socials.map((social) => (
-                  <Link
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`${social}`}
-                  >
-                    {social}
-                  </Link>
-                ))}
-              </Typography>
-            )}
-          </div>
-        )}
-
-        <PostList posts={posts} />
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="profile"
-          result={person}
-          name={user && user.name}
-        />
-      </Container>
-      <Footer />
-    </>
-  );
+      <PostList posts={posts} />
+      <Flag
+        open={dialog}
+        handleClose={() => handleCloseDialog()}
+        contentType="profile"
+        result={person}
+        name={user && user.name}
+      />
+    </Container>
+    <Footer />
+  </>;
 };
 
 // UPDATE

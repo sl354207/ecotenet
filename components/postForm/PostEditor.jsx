@@ -1,8 +1,8 @@
 import Description from "@components/Description";
 import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
-import { Container } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -54,6 +54,8 @@ const PostEditor = ({ value, setPostValue }) => {
           cellPlugins={cellPlugins}
           value={value}
           onChange={setPostValue}
+          undoRedoEnabled={false}
+          zoomEnabled={false}
           // uiTheme={darkTheme}
         />
       </EditorLayout>

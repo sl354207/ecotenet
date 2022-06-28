@@ -1,7 +1,8 @@
 import DashboardDialog from "@components/dialogs/DashboardDialog";
 import { useSnackbarContext } from "@components/SnackbarContext";
-import { Button, Link, Step, StepButton, Stepper } from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+import { Button, Link, Step, StepButton, Stepper } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import { createPost, updatePost } from "@utils/api-helpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -236,14 +237,10 @@ const StepForm = ({ post, pathName, user }) => {
     switch (step) {
       case 0:
         return (
+          // add back in when ready  formErrors={formErrors}
           <>
             <div className={classes.stepNav}>
-              <Button
-                variant="contained"
-                color="default"
-                onClick={handleBack}
-                disabled
-              >
+              <Button variant="contained" onClick={handleBack} disabled>
                 Back
               </Button>
 
@@ -317,7 +314,7 @@ const StepForm = ({ post, pathName, user }) => {
                 </>
               )}
 
-              <Button variant="contained" color="default" onClick={handleNext}>
+              <Button variant="contained" onClick={handleNext}>
                 Next
               </Button>
             </div>
@@ -329,14 +326,13 @@ const StepForm = ({ post, pathName, user }) => {
               handleRemoveChip={handleRemoveChip}
             />
           </>
-
-          // add back in when ready  formErrors={formErrors}
         );
       case 1:
         return (
+          // add back in when ready  formErrors={formErrors}
           <>
             <div className={classes.stepNav}>
-              <Button variant="contained" color="default" onClick={handleBack}>
+              <Button variant="contained" onClick={handleBack}>
                 Back
               </Button>
 
@@ -411,153 +407,142 @@ const StepForm = ({ post, pathName, user }) => {
                 </>
               )}
 
-              <Button variant="contained" color="default" onClick={handleNext}>
+              <Button variant="contained" onClick={handleNext}>
                 Next
               </Button>
             </div>
             <PostEditor value={postValue} setPostValue={setPostValue} />
           </>
-
-          // add back in when ready  formErrors={formErrors}
         );
       case 2:
-        return (
-          <>
-            <div className={classes.stepNav}>
-              <Button variant="contained" color="default" onClick={handleBack}>
-                Back
-              </Button>
+        return <>
+          <div className={classes.stepNav}>
+            <Button variant="contained" onClick={handleBack}>
+              Back
+            </Button>
 
-              {post.status == "published" ? (
-                <>
-                  <Button variant="contained" color="secondary" disabled>
-                    Save
-                  </Button>
-                  {details.title != "" &&
-                  details.category != "" &&
-                  clickInfo.length > 0 &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "update",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <>
+            {post.status == "published" ? (
+              <>
+                <Button variant="contained" color="secondary" disabled>
+                  Save
+                </Button>
+                {details.title != "" &&
+                details.category != "" &&
+                clickInfo.length > 0 &&
+                postValue.rows.length > 0 ? (
                   <Button
-                    onClick={
-                      pathName == "editor"
-                        ? () => saveDraft(postValue, details, clickInfo)
-                        : () => updateDraft(postValue, details, clickInfo)
+                    onClick={() =>
+                      handleOpenDialog(
+                        "update",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
                     }
                     variant="contained"
                     color="secondary"
                   >
-                    Save
+                    Publish
                   </Button>
-                  {details.title != "" &&
-                  details.category != "" &&
-                  clickInfo.length > 0 &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          pathName == "editor" ? "create" : "publish",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
-                </>
-              )}
+                ) : (
+                  <Button variant="contained" color="secondary" disabled>
+                    Publish
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={
+                    pathName == "editor"
+                      ? () => saveDraft(postValue, details, clickInfo)
+                      : () => updateDraft(postValue, details, clickInfo)
+                  }
+                  variant="contained"
+                  color="secondary"
+                >
+                  Save
+                </Button>
+                {details.title != "" &&
+                details.category != "" &&
+                clickInfo.length > 0 &&
+                postValue.rows.length > 0 ? (
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        pathName == "editor" ? "create" : "publish",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                  >
+                    Publish
+                  </Button>
+                ) : (
+                  <Button variant="contained" color="secondary" disabled>
+                    Publish
+                  </Button>
+                )}
+              </>
+            )}
 
-              <Button
-                variant="contained"
-                color="default"
-                onClick={handleNext}
-                disabled
-              >
-                Next
-              </Button>
-            </div>
-            <PostRegion clickInfo={clickInfo} setClickInfo={setClickInfo} />
-          </>
-        );
+            <Button variant="contained" onClick={handleNext} disabled>
+              Next
+            </Button>
+          </div>
+          <PostRegion clickInfo={clickInfo} setClickInfo={setClickInfo} />
+        </>;
       // add back in when ready  formErrors={formErrors}
       default:
         break;
     }
   };
 
-  return (
-    <>
-      <Link href="/dashboard" className={classes.link}>
-        &#10229;Dashboard
-      </Link>
-      <Stepper
-        alternativeLabel
-        nonLinear
-        activeStep={activeStep}
-        className={classes.stepper}
-      >
-        <Step>
-          <StepButton onClick={handleStep(0)} className={classes.stepLabel}>
-            details
-          </StepButton>
-        </Step>
-        <Step>
-          <StepButton onClick={handleStep(1)} className={classes.stepLabel}>
-            body
-          </StepButton>
-        </Step>
-        <Step>
-          <StepButton onClick={handleStep(2)} className={classes.stepLabel}>
-            map
-          </StepButton>
-        </Step>
-      </Stepper>
-      <DashboardDialog
-        contentType={action.type}
-        action={action.action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        className={classes.dialog}
-        result={item}
-        snackbar={snackbar}
-        setSnackbar={setSnackbar}
-        name={user && user.name}
-      />
+  return <>
+    <Link href="/dashboard" className={classes.link} underline="hover">
+      &#10229;Dashboard
+    </Link>
+    <Stepper
+      alternativeLabel
+      nonLinear
+      activeStep={activeStep}
+      className={classes.stepper}
+    >
+      <Step>
+        <StepButton onClick={handleStep(0)} className={classes.stepLabel}>
+          details
+        </StepButton>
+      </Step>
+      <Step>
+        <StepButton onClick={handleStep(1)} className={classes.stepLabel}>
+          body
+        </StepButton>
+      </Step>
+      <Step>
+        <StepButton onClick={handleStep(2)} className={classes.stepLabel}>
+          map
+        </StepButton>
+      </Step>
+    </Stepper>
+    <DashboardDialog
+      contentType={action.type}
+      action={action.action}
+      open={dialog}
+      handleClose={handleCloseDialog}
+      className={classes.dialog}
+      result={item}
+      snackbar={snackbar}
+      setSnackbar={setSnackbar}
+      name={user && user.name}
+    />
 
-      {handleSteps(activeStep)}
-    </>
-  );
+    {handleSteps(activeStep)}
+  </>;
 };
 
 export default StepForm;

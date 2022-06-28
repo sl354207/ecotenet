@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@material-ui/core";
+} from "@mui/material";
 import { createComment, updatePost } from "@utils/api-helpers";
 
 const ClientDialog = ({

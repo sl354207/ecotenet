@@ -5,8 +5,8 @@ import {
   Grid,
   Link,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
   spacing: {
@@ -40,25 +40,25 @@ const Footer = () => {
 
         <Grid container spacing={2} className={classes.spacing}>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/privacy" underline="hover">Privacy Policy</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/contact">Contact Us</Link>
+            <Link href="/contact" underline="hover">Contact Us</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/featured">Featured Posts</Link>
+            <Link href="/featured" underline="hover">Featured Posts</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/terms">Terms of Use</Link>
+            <Link href="/terms" underline="hover">Terms of Use</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/about">About Us</Link>
+            <Link href="/about" underline="hover">About Us</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/species">Species Map</Link>
+            <Link href="/species" underline="hover">Species Map</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}>
-            <Link href="/sitemap">Site Map</Link>
+            <Link href="/sitemap" underline="hover">Site Map</Link>
           </Grid>
           <Grid item xs={4} className={classes.text}></Grid>
           <Grid item xs={4} className={classes.text}>

@@ -5,8 +5,8 @@ import {
   ListItem,
   ListItemText,
   Toolbar,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from "next/router";
 
 const drawerWidth = 120;

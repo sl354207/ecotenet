@@ -7,8 +7,9 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -83,12 +84,14 @@ const adminPosts = () => {
                 onClick={() => router.push(`/admin/posts/${result._id}`)}
               >
                 <div className={classes.post}>
-                  <Link>{result.name}</Link>
+                  <Link underline="hover">{result.name}</Link>
 
                   <ListItemText primary={result.title}></ListItemText>
                 </div>
 
-                <Link href={`/admin/posts/${result._id}`}>View Post</Link>
+                <Link href={`/admin/posts/${result._id}`} underline="hover">
+                  View Post
+                </Link>
               </ListItem>
             </>
           );

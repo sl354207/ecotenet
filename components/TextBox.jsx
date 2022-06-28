@@ -1,5 +1,7 @@
-import { InputBase } from "@material-ui/core";
-import { alpha, withStyles } from "@material-ui/core/styles";
+import { InputBase } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+
+import withStyles from '@mui/styles/withStyles';
 
 const TextInput = withStyles((theme) => ({
   input: {

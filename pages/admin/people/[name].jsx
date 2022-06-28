@@ -7,8 +7,8 @@ import {
   Container,
   Link,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
@@ -130,7 +130,7 @@ const person = () => {
           )}
           {results.website !== "" && (
             <Typography gutterBottom>
-              Personal Website: <Link>{results.website}</Link>
+              Personal Website: <Link underline="hover">{results.website}</Link>
             </Typography>
           )}
           {Array.isArray(results.socials) && results.socials.length > 0 && (
@@ -141,6 +141,7 @@ const person = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`${social}`}
+                  underline="hover"
                 >
                   {social}
                 </Link>
@@ -154,7 +155,9 @@ const person = () => {
   }
   return (
     <>
-      <Link href="/admin/flags">&#10229;Flags</Link>
+      <Link href="/admin/flags" underline="hover">
+        &#10229;Flags
+      </Link>
       <Container>
         {person}
         <AdminDialog

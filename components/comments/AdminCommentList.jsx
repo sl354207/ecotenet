@@ -5,8 +5,10 @@ import {
   List,
   ListItem,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
   buttonPost: {
@@ -70,92 +72,90 @@ const AdminCommentList = ({
       <Typography variant="h6">Comments:</Typography>
       <List>
         {sortedComments.map((comment) => {
-          return (
-            <>
-              <ListItem
-                key={comment._id}
-                className={
-                  comment.comment_ref !== comment._id
-                    ? classes.buttonReply
-                    : classes.buttonPost
-                }
-                style={
-                  comment._id == comment_query
-                    ? { borderColor: "#fc7ebf" }
-                    : { borderColor: "#94c9ff" }
-                }
-              >
-                <div className={classes.comment}>
-                  <Typography>{comment.date.toDateString()}</Typography>
-                  <Link>{comment.name}</Link>
+          return <>
+            <ListItem
+              key={comment._id}
+              className={
+                comment.comment_ref !== comment._id
+                  ? classes.buttonReply
+                  : classes.buttonPost
+              }
+              style={
+                comment._id == comment_query
+                  ? { borderColor: "#fc7ebf" }
+                  : { borderColor: "#94c9ff" }
+              }
+            >
+              <div className={classes.comment}>
+                <Typography>{comment.date.toDateString()}</Typography>
+                <Link underline="hover">{comment.name}</Link>
 
-                  <Typography>{comment.text}</Typography>
-                </div>
+                <Typography>{comment.text}</Typography>
+              </div>
 
-                <div className={classes.buttonMobile}>
-                  {comment._id == comment_query ? (
-                    <>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => handleOpenResolve()}
-                      >
-                        Resolve
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        className={classes.buttonDesktop}
-                        onClick={() =>
-                          handleOpenDialog("Deny", "comment", comment)
-                        }
-                      >
-                        Deny
-                      </Button>
+              <div className={classes.buttonMobile}>
+                {comment._id == comment_query ? (
+                  <>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => handleOpenResolve()}
+                    >
+                      Resolve
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={classes.buttonDesktop}
+                      onClick={() =>
+                        handleOpenDialog("Deny", "comment", comment)
+                      }
+                    >
+                      Deny
+                    </Button>
 
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        className={classes.buttonDesktop}
-                        onClick={() =>
-                          handleOpenDialog("Delete", "comment", comment)
-                        }
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      {comment_query !== "flag" && (
-                        <>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() =>
-                              handleOpenDialog("Deny", "comment", comment)
-                            }
-                          >
-                            Deny
-                          </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      className={classes.buttonDesktop}
+                      onClick={() =>
+                        handleOpenDialog("Delete", "comment", comment)
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    {comment_query !== "flag" && (
+                      <>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() =>
+                            handleOpenDialog("Deny", "comment", comment)
+                          }
+                        >
+                          Deny
+                        </Button>
 
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            className={classes.buttonDesktop}
-                            onClick={() =>
-                              handleOpenDialog("Delete", "comment", comment)
-                            }
-                          >
-                            Delete
-                          </Button>
-                        </>
-                      )}
-                    </>
-                  )}
-                </div>
-              </ListItem>
-            </>
-          );
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          className={classes.buttonDesktop}
+                          onClick={() =>
+                            handleOpenDialog("Delete", "comment", comment)
+                          }
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            </ListItem>
+          </>;
         })}
       </List>
     </Container>

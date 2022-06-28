@@ -7,9 +7,11 @@ import {
   Container,
   InputBase,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
+import { Autocomplete } from '@mui/material';
+import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -37,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     padding: theme.spacing(2, 2, 2, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(2)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(2)})`,
   },
   popper: {
     backgroundColor: theme.palette.primary.light,

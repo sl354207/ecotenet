@@ -16,10 +16,12 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import InfoIcon from "@material-ui/icons/Info";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
+import InfoIcon from "@mui/icons-material/Info";
+import { Autocomplete } from '@mui/material';
+import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -253,7 +255,7 @@ const PostDetails = ({
                 <>
                   <Typography color="inherit">
                     If you need help deciding check out our explantion for each{" "}
-                    <Link href="/category" color="secondary">
+                    <Link href="/category" color="secondary" underline="hover">
                       category
                     </Link>
                   </Typography>

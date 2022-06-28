@@ -18,15 +18,17 @@ import {
   Popper,
   Toolbar,
   useMediaQuery,
-} from "@material-ui/core";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import SortIcon from "@material-ui/icons/Sort";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+} from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MenuIcon from "@mui/icons-material/Menu";
+import SearchIcon from "@mui/icons-material/Search";
+import SortIcon from "@mui/icons-material/Sort";
+import { Autocomplete } from '@mui/material';
+import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down('md')]: {
       flexGrow: 1,
     },
   },
@@ -83,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "0ch",
     "&:focus": {
@@ -165,7 +167,7 @@ const Nav = ({ ecoFilter }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('xl'));
 
   const [popper, setPopper] = useState(false);
   const anchorRef = useRef(null);
@@ -226,407 +228,405 @@ const Nav = ({ ecoFilter }) => {
   // set tag options for autocomplete
   const tags = [];
 
-  return (
-    <>
-      <AppBar position="fixed" elevation={1}>
-        <Toolbar>
-          <>
-            {ecoFilter && (
-              <>
-                {isMobile ? (
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="filter"
-                    size="small"
-                    onClick={handleDrawerOpen}
-                  >
-                    <SortIcon className={classes.sort} />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    edge="start"
-                    className={classes.button}
-                    color="inherit"
-                    aria-label="filter"
-                    onClick={handleDrawerOpen}
-                  >
-                    <SortIcon className={classes.sort} />
-                  </IconButton>
-                )}
-              </>
-            )}
+  return <>
+    <AppBar position="fixed" elevation={1}>
+      <Toolbar>
+        <>
+          {ecoFilter && (
+            <>
+              {isMobile ? (
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="filter"
+                  size="small"
+                  onClick={handleDrawerOpen}
+                >
+                  <SortIcon className={classes.sort} />
+                </IconButton>
+              ) : (
+                <IconButton
+                  edge="start"
+                  className={classes.button}
+                  color="inherit"
+                  aria-label="filter"
+                  onClick={handleDrawerOpen}
+                  size="large">
+                  <SortIcon className={classes.sort} />
+                </IconButton>
+              )}
+            </>
+          )}
 
-            {isMobile ? (
-              <div className={classes.title}>
-                <Button href="/" size="small" className={classes.home}>
-                  et
-                </Button>
-              </div>
-            ) : (
-              <div className={classes.title}>
-                <Button href="/">ecotenet</Button>
-
-                <div className={classes.desktop}>
-                  <Button href="/featured" variant="text" color="secondary">
-                    Featured Posts
-                  </Button>
-                  <Button href="/species" variant="text" color="secondary">
-                    Species Map
-                  </Button>
-                  {status == "authenticated" && (
-                    <Button
-                      // href="/dashboard"
-                      variant="text"
-                      color="secondary"
-                      onClick={
-                        status == "authenticated" && user.name == undefined
-                          ? () => router.push("/auth/new-user")
-                          : () => router.push("/dashboard")
-                      }
-                    >
-                      Dashboard
-                    </Button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon
-                // onClick={() => router.push("/success")}
-                />
-              </div>
-
-              <Autocomplete
-                classes={{
-                  paper: classes.popper,
-                  root: classes.root,
-                  input: classes.input,
-                }}
-                autoHighlight
-                disableClearable={true}
-                onChange={(event, newValue) => {
-                  router.push(
-                    `/search?q=${newValue.inputValue}&s=${newValue.path}`
-                  );
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-
-                  if (!ecoFilter) {
-                    if (params.inputValue !== "") {
-                      filtered.push(
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all posts`,
-                          path: "allPosts",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all species`,
-                          path: "allSpecies",
-                        }
-                      );
-                    }
-                  } else {
-                    if (params.inputValue !== "") {
-                      filtered.push(
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in ecoregion posts`,
-                          path: "ecoPosts",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in ecoregion species`,
-                          path: "ecoSpecies",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all posts`,
-                          path: "allPosts",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all species`,
-                          path: "allSpecies",
-                        }
-                      );
-                    }
-                  }
-
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                id="free-solo-with-text-demo"
-                options={tags}
-                renderOption={(option) => option.title}
-                freeSolo
-                renderInput={(params) => (
-                  <InputBase
-                    {...params}
-                    placeholder="Search Site…"
-                    classes={{
-                      root: classes.root,
-                      input: classes.input,
-                    }}
-                    ref={params.InputProps.ref}
-                    inputProps={params.inputProps}
-                  />
-                )}
-              />
+          {isMobile ? (
+            <div className={classes.title}>
+              <Button href="/" size="small" className={classes.home}>
+                et
+              </Button>
             </div>
+          ) : (
+            <div className={classes.title}>
+              <Button href="/">ecotenet</Button>
 
-            {!isMobile && (
-              <>
+              <div className={classes.desktop}>
+                <Button href="/featured" variant="text" color="secondary">
+                  Featured Posts
+                </Button>
+                <Button href="/species" variant="text" color="secondary">
+                  Species Map
+                </Button>
                 {status == "authenticated" && (
                   <Button
-                    // href="/dashboard/editor"
-                    variant="outlined"
+                    // href="/dashboard"
+                    variant="text"
                     color="secondary"
                     onClick={
                       status == "authenticated" && user.name == undefined
                         ? () => router.push("/auth/new-user")
-                        : () => router.push("/dashboard/editor")
+                        : () => router.push("/dashboard")
                     }
                   >
-                    Create Post
+                    Dashboard
                   </Button>
                 )}
+              </div>
+            </div>
+          )}
 
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon
+              // onClick={() => router.push("/success")}
+              />
+            </div>
+
+            <Autocomplete
+              classes={{
+                paper: classes.popper,
+                root: classes.root,
+                input: classes.input,
+              }}
+              autoHighlight
+              disableClearable={true}
+              onChange={(event, newValue) => {
+                router.push(
+                  `/search?q=${newValue.inputValue}&s=${newValue.path}`
+                );
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                if (!ecoFilter) {
+                  if (params.inputValue !== "") {
+                    filtered.push(
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all posts`,
+                        path: "allPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all species`,
+                        path: "allSpecies",
+                      }
+                    );
+                  }
+                } else {
+                  if (params.inputValue !== "") {
+                    filtered.push(
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in ecoregion posts`,
+                        path: "ecoPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in ecoregion species`,
+                        path: "ecoSpecies",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all posts`,
+                        path: "allPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all species`,
+                        path: "allSpecies",
+                      }
+                    );
+                  }
+                }
+
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              id="free-solo-with-text-demo"
+              options={tags}
+              renderOption={(option) => option.title}
+              freeSolo
+              renderInput={(params) => (
+                <InputBase
+                  {...params}
+                  placeholder="Search Site…"
+                  classes={{
+                    root: classes.root,
+                    input: classes.input,
+                  }}
+                  ref={params.InputProps.ref}
+                  inputProps={params.inputProps}
+                />
+              )}
+            />
+          </div>
+
+          {!isMobile && (
+            <>
+              {status == "authenticated" && (
                 <Button
+                  // href="/dashboard/editor"
                   variant="outlined"
                   color="secondary"
-                  className={classes.spacer}
-                  disabled={status == "loading"}
                   onClick={
-                    status == "authenticated"
-                      ? () =>
-                          signOut({
-                            callbackUrl: "http://localhost:3000",
-                          })
-                      : () => signIn()
+                    status == "authenticated" && user.name == undefined
+                      ? () => router.push("/auth/new-user")
+                      : () => router.push("/dashboard/editor")
                   }
                 >
-                  {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+                  Create Post
                 </Button>
+              )}
 
-                <Button
-                  href="/donate"
-                  variant="contained"
-                  color="secondary"
-                  className={classes.spacer}
-                >
-                  Donate
-                </Button>
-              </>
-            )}
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={classes.spacer}
+                disabled={status == "loading"}
+                onClick={
+                  status == "authenticated"
+                    ? () =>
+                        signOut({
+                          callbackUrl: "http://localhost:3000",
+                        })
+                    : () => signIn()
+                }
+              >
+                {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+              </Button>
 
-            {isMobile && (
-              <>
-                <IconButton
-                  edge="end"
-                  color="inherit"
-                  aria-label="menu"
-                  ref={anchorRef}
-                  aria-controls={popper ? "menu-list-grow" : undefined}
-                  aria-haspopup="true"
-                  onClick={togglePopper}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Popper
-                  open={popper}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom"
-                            ? "center top"
-                            : "center bottom",
-                        minWidth: 210,
-                      }}
-                    >
-                      <Paper className={classes.popper}>
-                        <ClickAwayListener onClickAway={closePopper}>
-                          <MenuList
-                            autoFocusItem={popper}
-                            id="menu-list-grow"
-                            onKeyDown={handlePopperKeyDown}
+              <Button
+                href="/donate"
+                variant="contained"
+                color="secondary"
+                className={classes.spacer}
+              >
+                Donate
+              </Button>
+            </>
+          )}
+
+          {isMobile && (
+            <>
+              <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                ref={anchorRef}
+                aria-controls={popper ? "menu-list-grow" : undefined}
+                aria-haspopup="true"
+                onClick={togglePopper}
+                size="large">
+                <MenuIcon />
+              </IconButton>
+              <Popper
+                open={popper}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom"
+                          ? "center top"
+                          : "center bottom",
+                      minWidth: 210,
+                    }}
+                  >
+                    <Paper className={classes.popper}>
+                      <ClickAwayListener onClickAway={closePopper}>
+                        <MenuList
+                          autoFocusItem={popper}
+                          id="menu-list-grow"
+                          onKeyDown={handlePopperKeyDown}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              setPopper(false);
+                              router.push("/featured");
+                            }}
+                            className={classes.popperTop}
                           >
+                            Featured Posts
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              setPopper(false);
+                              router.push("/species");
+                            }}
+                            className={classes.popperTop}
+                          >
+                            Species Map
+                          </MenuItem>
+                          {status == "authenticated" && (
                             <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/featured");
-                              }}
-                              className={classes.popperTop}
-                            >
-                              Featured Posts
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/species");
-                              }}
-                              className={classes.popperTop}
-                            >
-                              Species Map
-                            </MenuItem>
-                            {status == "authenticated" && (
-                              <MenuItem
-                                onClick={
-                                  status == "authenticated" &&
-                                  user.name == undefined
-                                    ? () => {
-                                        setPopper(false);
-                                        router.push("/auth/new-user");
-                                      }
-                                    : () => {
-                                        setPopper(false);
-                                        router.push("/dashboard");
-                                      }
-                                }
-                                className={classes.popperTop}
-                              >
-                                Dashboard
-                              </MenuItem>
-                            )}
-                            {status == "authenticated" && (
-                              <MenuItem
-                                onClick={
-                                  status == "authenticated" &&
-                                  user.name == undefined
-                                    ? () => {
-                                        setPopper(false);
-                                        router.push("/auth/new-user");
-                                      }
-                                    : () => {
-                                        setPopper(false);
-                                        router.push("/dashboard/editor");
-                                      }
-                                }
-                                className={classes.popperBottom}
-                              >
-                                Create Post
-                              </MenuItem>
-                            )}
-
-                            <MenuItem
-                              disabled={status == "loading"}
                               onClick={
-                                status == "authenticated"
+                                status == "authenticated" &&
+                                user.name == undefined
                                   ? () => {
                                       setPopper(false);
-                                      signOut({
-                                        callbackUrl: "http://localhost:3000",
-                                      });
+                                      router.push("/auth/new-user");
                                     }
                                   : () => {
                                       setPopper(false);
-                                      signIn();
+                                      router.push("/dashboard");
+                                    }
+                              }
+                              className={classes.popperTop}
+                            >
+                              Dashboard
+                            </MenuItem>
+                          )}
+                          {status == "authenticated" && (
+                            <MenuItem
+                              onClick={
+                                status == "authenticated" &&
+                                user.name == undefined
+                                  ? () => {
+                                      setPopper(false);
+                                      router.push("/auth/new-user");
+                                    }
+                                  : () => {
+                                      setPopper(false);
+                                      router.push("/dashboard/editor");
                                     }
                               }
                               className={classes.popperBottom}
                             >
-                              Sign In
+                              Create Post
                             </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/donate");
-                              }}
-                              className={classes.donate}
-                            >
-                              Donate
-                            </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-              </>
-            )}
+                          )}
 
-            <Drawer
-              className={classes.drawer}
-              anchor="left"
-              open={drawerOpen}
-              onClose={handleDrawerClose}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-            >
-              <div className={classes.header}>
-                <Button
-                  className={classes.title}
-                  onClick={() => {
-                    setDrawerOpen(false);
-                    router.push("/");
-                  }}
-                >
-                  ecotenet
-                </Button>
-                <IconButton onClick={handleDrawerClose}>
-                  <ChevronLeftIcon />
-                </IconButton>
-              </div>
-              <Divider />
-              {state.map((menuItem) => {
-                const { menuTitle, menuSubs, pageURL, openList } = menuItem;
-
-                return (
-                  <List
-                    component="nav"
-                    aria-labelledby="nested-list"
-                    key="mainlist"
-                  >
-                    <ListItem
-                      button
-                      key={menuTitle}
-                      onClick={() => handleListClick(menuTitle)}
-                    >
-                      <ListItemText primary={menuTitle} />
-                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </ListItem>
-                    <Collapse in={openList} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding key="sublist">
-                        {menuSubs.map((menuSub) => (
-                          <ListItem
-                            button
-                            key={menuSub}
-                            className={classes.nested}
-                            onClick={() => {
-                              handleDrawerClose(Event);
-                              router.push(pageURL);
-                            }}
+                          <MenuItem
+                            disabled={status == "loading"}
+                            onClick={
+                              status == "authenticated"
+                                ? () => {
+                                    setPopper(false);
+                                    signOut({
+                                      callbackUrl: "http://localhost:3000",
+                                    });
+                                  }
+                                : () => {
+                                    setPopper(false);
+                                    signIn();
+                                  }
+                            }
+                            className={classes.popperBottom}
                           >
-                            <ListItemText primary={menuSub} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Collapse>
-                    <Divider />
-                  </List>
-                );
-              })}
-            </Drawer>
-          </>
-        </Toolbar>
-      </AppBar>
-      <Toolbar></Toolbar>
-    </>
-  );
+                            Sign In
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              setPopper(false);
+                              router.push("/donate");
+                            }}
+                            className={classes.donate}
+                          >
+                            Donate
+                          </MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </>
+          )}
+
+          <Drawer
+            className={classes.drawer}
+            anchor="left"
+            open={drawerOpen}
+            onClose={handleDrawerClose}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.header}>
+              <Button
+                className={classes.title}
+                onClick={() => {
+                  setDrawerOpen(false);
+                  router.push("/");
+                }}
+              >
+                ecotenet
+              </Button>
+              <IconButton onClick={handleDrawerClose} size="large">
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+            <Divider />
+            {state.map((menuItem) => {
+              const { menuTitle, menuSubs, pageURL, openList } = menuItem;
+
+              return (
+                <List
+                  component="nav"
+                  aria-labelledby="nested-list"
+                  key="mainlist"
+                >
+                  <ListItem
+                    button
+                    key={menuTitle}
+                    onClick={() => handleListClick(menuTitle)}
+                  >
+                    <ListItemText primary={menuTitle} />
+                    {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </ListItem>
+                  <Collapse in={openList} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding key="sublist">
+                      {menuSubs.map((menuSub) => (
+                        <ListItem
+                          button
+                          key={menuSub}
+                          className={classes.nested}
+                          onClick={() => {
+                            handleDrawerClose(Event);
+                            router.push(pageURL);
+                          }}
+                        >
+                          <ListItemText primary={menuSub} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                  <Divider />
+                </List>
+              );
+            })}
+          </Drawer>
+        </>
+      </Toolbar>
+    </AppBar>
+    <Toolbar></Toolbar>
+  </>;
 };
 
 export default Nav;

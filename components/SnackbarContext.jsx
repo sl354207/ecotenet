@@ -1,6 +1,6 @@
-import { Snackbar } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
+import { Snackbar } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { Alert } from '@mui/material';
 import { createContext, useContext, useState } from "react";
 
 export const SnackbarContext = createContext();

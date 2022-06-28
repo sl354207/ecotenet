@@ -1,6 +1,6 @@
 import Header from "@components/Header";
-import { Container, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Container, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { fetchGetJSON } from "@utils/stripe/api-helpers";
 import { useRouter } from "next/router";
 import useSWR from "swr";

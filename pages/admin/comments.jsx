@@ -10,8 +10,9 @@ import {
   ListItemText,
   Typography,
   useMediaQuery,
-} from "@material-ui/core";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+} from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import { useState } from "react";
 import useSWR from "swr";
 
@@ -67,7 +68,7 @@ const adminComments = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
@@ -107,83 +108,81 @@ const adminComments = () => {
     list = (
       <List>
         {results.map((result) => {
-          return (
-            <>
-              <ListItem key={result._id} className={classes.buttonPost}>
-                <div className={classes.comment}>
-                  <Link className={classes.link}>{result.name}</Link>
+          return <>
+            <ListItem key={result._id} className={classes.buttonPost}>
+              <div className={classes.comment}>
+                <Link className={classes.link} underline="hover">{result.name}</Link>
 
-                  <ListItemText primary={result.text}></ListItemText>
+                <ListItemText primary={result.text}></ListItemText>
+              </div>
+
+              {isMobile ? (
+                <div className={classes.mobile}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() =>
+                      handleOpenDialog("Approve", "Comment", result)
+                    }
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.desktop}
+                    onClick={() =>
+                      handleOpenDialog("Deny", "Comment", result)
+                    }
+                  >
+                    Deny
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={`${classes.desktop} ${classes.delete}`}
+                    onClick={() =>
+                      handleOpenDialog("Delete", "Comment", result)
+                    }
+                  >
+                    Delete
+                  </Button>
                 </div>
-
-                {isMobile ? (
-                  <div className={classes.mobile}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() =>
-                        handleOpenDialog("Approve", "Comment", result)
-                      }
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={classes.desktop}
-                      onClick={() =>
-                        handleOpenDialog("Deny", "Comment", result)
-                      }
-                    >
-                      Deny
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={`${classes.desktop} ${classes.delete}`}
-                      onClick={() =>
-                        handleOpenDialog("Delete", "Comment", result)
-                      }
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() =>
-                        handleOpenDialog("Approve", "Comment", result)
-                      }
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={classes.button}
-                      onClick={() =>
-                        handleOpenDialog("Deny", "Comment", result)
-                      }
-                    >
-                      Deny
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      className={`${classes.button} ${classes.delete}`}
-                      onClick={() =>
-                        handleOpenDialog("Delete", "Comment", result)
-                      }
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
-              </ListItem>
-            </>
-          );
+              ) : (
+                <div>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() =>
+                      handleOpenDialog("Approve", "Comment", result)
+                    }
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() =>
+                      handleOpenDialog("Deny", "Comment", result)
+                    }
+                  >
+                    Deny
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={`${classes.button} ${classes.delete}`}
+                    onClick={() =>
+                      handleOpenDialog("Delete", "Comment", result)
+                    }
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
+            </ListItem>
+          </>;
         })}
       </List>
     );

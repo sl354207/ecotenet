@@ -7,9 +7,10 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-} from "@material-ui/core";
-import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
-import { Autocomplete } from "@material-ui/lab";
+} from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
+import { Autocomplete } from '@mui/material';
 import { useCallback, useReducer, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -196,7 +197,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
 
   const [results, setResults] = useState([]);
 

@@ -1,7 +1,7 @@
-import { Button, List } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Button, List } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
 

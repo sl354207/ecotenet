@@ -3,8 +3,8 @@ import Header from "@components/Header";
 import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import { useUserContext } from "@components/UserContext";
-import { Button, Container } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button, Container } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from "next/router";
 import { useState } from "react";
 

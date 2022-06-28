@@ -12,9 +12,9 @@ import {
   IconButton,
   Link,
   Typography,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import FlagIcon from "@material-ui/icons/Flag";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import FlagIcon from "@mui/icons-material/Flag";
 import customImage from "@plugins/customImage";
 // The editor core
 import Editor from "@react-page/editor";
@@ -220,95 +220,93 @@ const post = ({ post, comments }) => {
 
   const date = new Date(post.date);
 
-  return (
-    <>
-      <Container className={classes.container}>
-        <div className={classes.flagBox}>
-          <div className={classes.spacer}></div>
-          <Header title={post.title} />
-          <IconButton
-            className={classes.flag}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenFlag("post", post)}
-          >
-            <FlagIcon />
-          </IconButton>
-        </div>
-        <div className={classes.box}>
-          <div className={classes.content}>
-            <div className={classes.items}>
-              <Typography align="center" variant="h6">
-                <Link href={`/person/${post.name}`} color="secondary">
-                  {post.name}
-                </Link>
-              </Typography>
-              <Typography className={classes.date} align="left" variant="h6">
-                {date.toDateString()}
-              </Typography>
-            </div>
-            <Typography variant="h6">
-              Ecoregions:{" "}
-              {post.ecoregions.map((ecoregion) => (
-                <Link href="#" color="secondary">
-                  Eco-{ecoregion},{" "}
-                </Link>
-              ))}
+  return <>
+    <Container className={classes.container}>
+      <div className={classes.flagBox}>
+        <div className={classes.spacer}></div>
+        <Header title={post.title} />
+        <IconButton
+          className={classes.flag}
+          color="inherit"
+          aria-label="flag"
+          size="small"
+          onClick={() => handleOpenFlag("post", post)}
+        >
+          <FlagIcon />
+        </IconButton>
+      </div>
+      <div className={classes.box}>
+        <div className={classes.content}>
+          <div className={classes.items}>
+            <Typography align="center" variant="h6">
+              <Link href={`/person/${post.name}`} color="secondary" underline="hover">
+                {post.name}
+              </Link>
+            </Typography>
+            <Typography className={classes.date} align="left" variant="h6">
+              {date.toDateString()}
             </Typography>
           </div>
-
-          <Vote
-            post_count={post.count}
-            count={count}
-            setCount={setCount}
-            handleOpenDialog={handleOpenDialog}
-          />
+          <Typography variant="h6">
+            Ecoregions:{" "}
+            {post.ecoregions.map((ecoregion) => (
+              <Link href="#" color="secondary" underline="hover">
+                Eco-{ecoregion},{" "}
+              </Link>
+            ))}
+          </Typography>
         </div>
-        <EditorLayout>
-          <Editor
-            cellPlugins={cellPlugins}
-            value={value}
-            onChange={setValue}
-            readOnly
-          />
-        </EditorLayout>
-        <Divider />
-        <Typography variant="h6" className={classes.comments}>
-          Comments:
-        </Typography>
-        <CommentList
-          comments={state}
-          post_id={post._id}
+
+        <Vote
+          post_count={post.count}
+          count={count}
+          setCount={setCount}
           handleOpenDialog={handleOpenDialog}
-          handleOpenFlag={handleOpenFlag}
-          showForm={showForm}
-          handleForm={toggleForm}
-          handleReply={handleReply}
         />
-      </Container>
-
-      <ClientDialog
-        contentType={action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        className={classes.dialog}
+      </div>
+      <EditorLayout>
+        <Editor
+          cellPlugins={cellPlugins}
+          value={value}
+          onChange={setValue}
+          readOnly
+        />
+      </EditorLayout>
+      <Divider />
+      <Typography variant="h6" className={classes.comments}>
+        Comments:
+      </Typography>
+      <CommentList
+        comments={state}
         post_id={post._id}
-        result={item}
-        closeForm={closeForm}
-        name={user && user.name}
+        handleOpenDialog={handleOpenDialog}
+        handleOpenFlag={handleOpenFlag}
+        showForm={showForm}
+        handleForm={toggleForm}
+        handleReply={handleReply}
       />
-      <Flag
-        open={flag}
-        handleClose={handleCloseFlag}
-        contentType={action}
-        result={item}
-        name={user && user.name}
-      />
+    </Container>
 
-      <Footer />
-    </>
-  );
+    <ClientDialog
+      contentType={action}
+      open={dialog}
+      handleClose={handleCloseDialog}
+      className={classes.dialog}
+      post_id={post._id}
+      result={item}
+      closeForm={closeForm}
+      name={user && user.name}
+    />
+    <Flag
+      open={flag}
+      handleClose={handleCloseFlag}
+      contentType={action}
+      result={item}
+      name={user && user.name}
+    />
+
+    <Footer />
+  </>;
 };
 
 // fetch post data at build time

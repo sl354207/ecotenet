@@ -3,9 +3,9 @@ import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import { useUserContext } from "@components/UserContext";
-import { Container, IconButton, Link } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import FlagIcon from "@material-ui/icons/Flag";
+import { Container, IconButton, Link } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import FlagIcon from "@mui/icons-material/Flag";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ffffff!important",
   },
   table: {
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down('sm')]: {
       margin: "auto",
       float: "none",
     },
@@ -91,7 +91,7 @@ const success = ({ wiki }) => {
             color="secondary"
             target="_blank"
             rel="noopener noreferrer"
-          >
+            underline="hover">
             {domToReact(domNode.children, options)}
           </Link>
         );

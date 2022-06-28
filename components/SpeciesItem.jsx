@@ -1,5 +1,7 @@
-import { Button, ListItem, Typography, useMediaQuery } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { Button, ListItem, Typography, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -12,7 +14,7 @@ const useStyles = makeStyles(() => ({
 const SpeciesItem = ({ result }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('xl'));
 
   return (
     <ListItem key={result._id}>

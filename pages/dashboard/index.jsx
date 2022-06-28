@@ -21,12 +21,14 @@ import {
   Tab,
   Tabs,
   Typography,
-} from "@material-ui/core";
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import CloseIcon from "@material-ui/icons/Close";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from '@mui/styles/makeStyles';
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { Autocomplete } from '@mui/material';
+import { createFilterOptions } from '@mui/material/useAutocomplete';
 import { updateNotification, updateUser } from "@utils/api-helpers";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -798,9 +800,7 @@ export default function Dashboard() {
                         </div>
 
                         <div className={classes.buttonGroup}>
-                          <IconButton
-                            onClick={() => handleUpdateNotify(result._id)}
-                          >
+                          <IconButton onClick={() => handleUpdateNotify(result._id)} size="large">
                             <CloseIcon />
                           </IconButton>
                         </div>

@@ -7,8 +7,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { createFlag } from "@utils/api-helpers";
 import { useState } from "react";
 

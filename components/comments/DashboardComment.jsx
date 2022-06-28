@@ -1,7 +1,7 @@
 import TextBox from "@components/TextBox";
-import { Button, FormControl, InputLabel, Link } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Button, FormControl, InputLabel, Link } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { updateComment } from "@utils/api-helpers";
 import { useState } from "react";
 
@@ -79,7 +79,7 @@ const DashboardComment = ({
 
   return (
     <div className={classes.comment}>
-      <Link href={`/posts/${result.post_id}`}>View Post</Link> {result.date}{" "}
+      <Link href={`/posts/${result.post_id}`} underline="hover">View Post</Link> {result.date}{" "}
       Approved: {result.approved}
       <div className={classes.text}>
         <FormControl className={classes.form}>

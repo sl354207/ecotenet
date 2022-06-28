@@ -2,7 +2,7 @@ import Description from "@components/Description";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import PostList from "@components/PostList";
-import { Container } from "@material-ui/core";
+import { Container } from "@mui/material";
 import { getFeatures } from "@utils/mongodb";
 
 const featured = ({ featured }) => {

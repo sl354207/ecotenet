@@ -1,7 +1,7 @@
-import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from '@mui/styles/makeStyles';
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
-const ImageIcon = lazyLoad(() => import("@material-ui/icons/Landscape"));
+const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
 const useStyles = makeStyles(() => ({
   image: {
@@ -36,7 +36,13 @@ const ImageRender = ({ data, preview }) => {
 
   const classes = useStyles();
   return (
-    <div className={data.imageUrl && !preview ? classes.border : null}>
+    <div
+      className={
+        data.imageUrl && data.imageUrl.startsWith("blob") && !preview
+          ? classes.border
+          : null
+      }
+    >
       {data.imageUrl ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <div className={classes.image}>
