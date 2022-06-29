@@ -2,7 +2,7 @@ import Description from "@components/Description";
 import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
 import { Container } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";

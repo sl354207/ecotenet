@@ -4,8 +4,12 @@ import Header from "@components/Header";
 import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import { useUserContext } from "@components/UserContext";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   AppBar,
+  Autocomplete,
   Box,
   Button,
   Chip,
@@ -23,12 +27,8 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { Autocomplete } from '@mui/material';
-import { createFilterOptions } from '@mui/material/useAutocomplete';
+import { createFilterOptions } from "@mui/material/useAutocomplete";
+import makeStyles from "@mui/styles/makeStyles";
 import { updateNotification, updateUser } from "@utils/api-helpers";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -348,6 +348,8 @@ export default function Dashboard() {
             onChange={handleChange}
             aria-label="simple tabs example"
             centered
+            indicatorColor="secondary"
+            textColor="inherit"
           >
             <Tab className={classes.tab} label="Profile" {...a11yProps(0)} />
             <Tab className={classes.tab} label="Posts" {...a11yProps(1)} />
@@ -800,7 +802,10 @@ export default function Dashboard() {
                         </div>
 
                         <div className={classes.buttonGroup}>
-                          <IconButton onClick={() => handleUpdateNotify(result._id)} size="large">
+                          <IconButton
+                            onClick={() => handleUpdateNotify(result._id)}
+                            size="large"
+                          >
                             <CloseIcon />
                           </IconButton>
                         </div>

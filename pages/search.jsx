@@ -3,15 +3,15 @@ import Header from "@components/Header";
 import PostList from "@components/PostList";
 import SpeciesList from "@components/SpeciesList";
 import {
+  Autocomplete,
   CircularProgress,
   Container,
   InputBase,
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
-import { Autocomplete } from '@mui/material';
-import { createFilterOptions } from '@mui/material/useAutocomplete';
+import { createFilterOptions } from "@mui/material/useAutocomplete";
+import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(2)})`,
   },
   popper: {
+    marginTop: 4,
     backgroundColor: theme.palette.primary.light,
   },
   progress: {
@@ -159,7 +160,19 @@ const search = ({ ecoFilter }) => {
           handleHomeEndKeys
           id="free-solo-with-text-demo"
           options={tags}
-          renderOption={(option) => option.title}
+          getOptionLabel={(option) => {
+            // Value selected with enter, right from the input
+            // if (typeof option === "string") {
+            //   return option;
+            // }
+            // // Add "xxx" option created dynamically
+            // if (option.inputValue) {
+            //   return option.inputValue;
+            // }
+            // Regular option
+            return "";
+          }}
+          renderOption={(props, option) => <li {...props}>{option.title}</li>}
           freeSolo
           renderInput={(params) => (
             <InputBase

@@ -2,7 +2,9 @@ import Description from "@components/Description";
 import Header from "@components/Header";
 import TextBox from "@components/TextBox";
 import CategoriesAutoComplete from "@data/categories_autocomplete.json";
+import InfoIcon from "@mui/icons-material/Info";
 import {
+  Autocomplete,
   Chip,
   ClickAwayListener,
   Container,
@@ -18,10 +20,8 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
-import InfoIcon from "@mui/icons-material/Info";
-import { Autocomplete } from '@mui/material';
-import { createFilterOptions } from '@mui/material/useAutocomplete';
+import { createFilterOptions } from "@mui/material/useAutocomplete";
+import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -224,7 +224,14 @@ const PostDetails = ({
               value={category}
               options={CategoriesAutoComplete}
               groupBy={(option) => option.title}
-              getOptionLabel={(option) => option.sub}
+              getOptionLabel={(option) => {
+                // console.log(option);
+                if (option && option.sub) {
+                  return option.sub;
+                } else {
+                  return "";
+                }
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}

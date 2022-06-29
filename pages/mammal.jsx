@@ -2,6 +2,7 @@ import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import { useUserContext } from "@components/UserContext";
+import FlagIcon from "@mui/icons-material/Flag";
 import {
   AppBar,
   Box,
@@ -14,8 +15,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import FlagIcon from "@mui/icons-material/Flag";
+import makeStyles from "@mui/styles/makeStyles";
 import { getMammalById } from "@utils/mongodb";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ffffff!important",
   },
   table: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       margin: "auto",
       float: "none",
     },
@@ -150,7 +150,8 @@ const mammal = ({ mammal, wiki }) => {
             color="secondary"
             target="_blank"
             rel="noopener noreferrer"
-            underline="hover">
+            underline="hover"
+          >
             {domToReact(domNode.children, options)}
           </Link>
         );
@@ -236,132 +237,139 @@ const mammal = ({ mammal, wiki }) => {
     },
   };
 
-  return <>
-    <Container>
-      <div className={classes.flagBox}>
-        <div className={classes.spacer}></div>
-        <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
-        <IconButton
-          className={classes.flag}
-          color="inherit"
-          aria-label="flag"
-          size="small"
-          onClick={() => handleOpenDialog()}
-        >
-          <FlagIcon />
-        </IconButton>
-      </div>
-
-      <Typography variant="h6" className={classes.ecoregions}>
-        Ecoregions:{" "}
-        {mammal.unique_id.map((id) => (
-          <Link href="#" color="secondary" underline="hover">
-            Eco-{id}
-            {", "}
-          </Link>
-        ))}
-      </Typography>
-
-      <div className={classes.tabs}>
-        <AppBar position="static" elevation={0} className={classes.tabBar}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="simple tabs example"
-            centered
+  return (
+    <>
+      <Container>
+        <div className={classes.flagBox}>
+          <div className={classes.spacer}></div>
+          <Header title={`${mammal.Scientific_Name}: ${mammal.COMMON_NAME}`} />
+          <IconButton
+            className={classes.flag}
+            color="inherit"
+            aria-label="flag"
+            size="small"
+            onClick={() => handleOpenDialog()}
           >
-            <Tab
-              className={classes.tab}
-              label="General Info"
-              {...a11yProps(0)}
-            />
-            <Tab
-              className={classes.tab}
-              label="Additional Resources"
-              {...a11yProps(1)}
-            />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={value} index={0}>
-          {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-          {wiki.remaining.sections.map((section) => {
-            if (section.anchor == "Gallery") {
-              return <></>;
-            } else if (section.toclevel == 2) {
-              return (
-                <>
-                  <h2>{section.line}</h2>
-                  {parse(DOMPurify.sanitize(section.text), options)}
-                </>
-              );
-            } else {
-              return (
-                <>
-                  <h1>{section.line}</h1>
-                  {parse(DOMPurify.sanitize(section.text), options)}
-                </>
-              );
-            }
-          })}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <List>
-            <ListItem>
-              <Link
-                variant="h6"
-                href={`https://www.inaturalist.org/search?q=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="hover">
-                iNaturalist
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link
-                variant="h6"
-                href={`https://commons.wikimedia.org/w/index.php?search=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }+${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                }&title=Special:MediaSearch&go=Go&type=image`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="hover">
-                Wikimedia Commons
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link
-                variant="h6"
-                href={`https://www.iucnredlist.org/search?query=${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[0]
-                }%20${
-                  mammal.Scientific_Name.toLowerCase().split(" ")[1]
-                }&searchType=species`}
-                color="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="hover">
-                IUCN Red List
-              </Link>
-            </ListItem>
-          </List>
-        </TabPanel>
-      </div>
-      <Flag
-        open={dialog}
-        handleClose={() => handleCloseDialog()}
-        contentType="species"
-        result={mammal}
-        name={user.name}
-      />
-    </Container>
-    <Footer />
-  </>;
+            <FlagIcon />
+          </IconButton>
+        </div>
+
+        <Typography variant="h6" className={classes.ecoregions}>
+          Ecoregions:{" "}
+          {mammal.unique_id.map((id) => (
+            <Link href="#" color="secondary" underline="hover">
+              Eco-{id}
+              {", "}
+            </Link>
+          ))}
+        </Typography>
+
+        <div className={classes.tabs}>
+          <AppBar position="static" elevation={0} className={classes.tabBar}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="simple tabs example"
+              centered
+              indicatorColor="secondary"
+              textColor="inherit"
+            >
+              <Tab
+                className={classes.tab}
+                label="General Info"
+                {...a11yProps(0)}
+              />
+              <Tab
+                className={classes.tab}
+                label="Additional Resources"
+                {...a11yProps(1)}
+              />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+            {wiki.remaining.sections.map((section) => {
+              if (section.anchor == "Gallery") {
+                return <></>;
+              } else if (section.toclevel == 2) {
+                return (
+                  <>
+                    <h2>{section.line}</h2>
+                    {parse(DOMPurify.sanitize(section.text), options)}
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <h1>{section.line}</h1>
+                    {parse(DOMPurify.sanitize(section.text), options)}
+                  </>
+                );
+              }
+            })}
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <List>
+              <ListItem>
+                <Link
+                  variant="h6"
+                  href={`https://www.inaturalist.org/search?q=${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                  }%20${mammal.Scientific_Name.toLowerCase().split(" ")[1]}`}
+                  color="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="hover"
+                >
+                  iNaturalist
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  variant="h6"
+                  href={`https://commons.wikimedia.org/w/index.php?search=${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                  }+${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[1]
+                  }&title=Special:MediaSearch&go=Go&type=image`}
+                  color="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="hover"
+                >
+                  Wikimedia Commons
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  variant="h6"
+                  href={`https://www.iucnredlist.org/search?query=${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[0]
+                  }%20${
+                    mammal.Scientific_Name.toLowerCase().split(" ")[1]
+                  }&searchType=species`}
+                  color="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="hover"
+                >
+                  IUCN Red List
+                </Link>
+              </ListItem>
+            </List>
+          </TabPanel>
+        </div>
+        <Flag
+          open={dialog}
+          handleClose={() => handleCloseDialog()}
+          contentType="species"
+          result={mammal}
+          name={user && user.name}
+        />
+      </Container>
+      <Footer />
+    </>
+  );
 };
 
 // fetch mammal data at build time

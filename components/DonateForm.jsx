@@ -6,10 +6,11 @@ import {
   Slider,
   Tab,
   Tabs,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import makeStyles from "@mui/styles/makeStyles";
 import { fetchPostJSON } from "@utils/stripe/api-helpers";
 import getStripe from "@utils/stripe/get-stripe";
 import { formatAmountForDisplay } from "@utils/stripe/stripe-helpers";
@@ -231,6 +232,8 @@ const DonateForm = () => {
         onChange={handleTabChange}
         aria-label="simple tabs example"
         centered
+        indicatorColor="secondary"
+        textColor="inherit"
       >
         <Tab
           className={classes.tab}

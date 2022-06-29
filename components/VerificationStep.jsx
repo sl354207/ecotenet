@@ -1,5 +1,5 @@
 import { Button, FormControl, FormHelperText } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import TextBox from "./TextBox";
@@ -96,7 +96,13 @@ const VerificationStep = ({ email, callbackUrl }) => {
               {!resend ? (
                 <>
                   If you did not receive an email:{" "}
-                  <Button onClick={handleResend}>Resend</Button>
+                  <Button
+                    onClick={handleResend}
+                    variant="text"
+                    color="secondary"
+                  >
+                    Resend
+                  </Button>
                 </>
               ) : (
                 <>

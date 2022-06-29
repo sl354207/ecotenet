@@ -2,6 +2,7 @@ import Description from "@components/Description";
 import Header from "@components/Header";
 import MapEditor from "@components/maps/MapEditor";
 import {
+  Autocomplete,
   Chip,
   Container,
   TextField,
@@ -9,8 +10,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
-import { Autocomplete } from '@mui/material';
+import makeStyles from "@mui/styles/makeStyles";
 import { useCallback, useReducer, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   popper: {
+    marginTop: 4,
     backgroundColor: theme.palette.primary.light,
   },
   delete: {
@@ -197,7 +198,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   const [results, setResults] = useState([]);
 

@@ -3,6 +3,7 @@ import Footer from "@components/Footer";
 import Header from "@components/Header";
 import MapSpecies from "@components/maps/MapSpecies";
 import {
+  Autocomplete,
   Chip,
   Container,
   TextField,
@@ -10,8 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
-import { Autocomplete } from '@mui/material';
+import makeStyles from "@mui/styles/makeStyles";
 import { useReducer, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   popper: {
+    marginTop: 4,
     backgroundColor: theme.palette.primary.light,
   },
   delete: {
@@ -197,7 +198,7 @@ const species = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   const [results, setResults] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
