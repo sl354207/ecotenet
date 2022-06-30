@@ -1,7 +1,7 @@
-import { Button, CircularProgress, TextField, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ErrorIcon from '@mui/icons-material/Error';
+import { Button, CircularProgress, TextField, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { useState } from 'react';
 import { connectField, HTMLFieldProps } from 'uniforms';
 
@@ -219,7 +219,7 @@ function ImageUploadField({onChange, value}: ImageProps, )
   // const [hasError, setHasError] = useState(false)
   // const [errorText, setErrorText] = useState('')
   // const [progress, setProgress] = useState(0)
-  const [image, setImage] = useState(undefined)
+  const [image, setImage] = useState(value || undefined)
   const [state, setState] = useState({
     isUploading: false,
     hasError: false,
@@ -242,19 +242,27 @@ function ImageUploadField({onChange, value}: ImageProps, )
     switch (errorCode) {
       case NO_FILE_ERROR_CODE:
         errorText = 'No file selected';
+        
+        
         break;
       case BAD_EXTENSION_ERROR_CODE:
       //  setState( {...state, hasError: true, errorText: 'Bad file type'}) 
        errorText = 'Bad file type'
+       
+      
         break;
       case TOO_BIG_ERROR_CODE:
         errorText = 'File is too big';
+       
+       
         break;
       case UPLOADING_ERROR_CODE:
         errorText = 'Error while uploading';
+        
         break;
       default:
         errorText = 'Unknown error';
+        
         break;
     }
     // Need to flick "isUploading" because otherwise the handler doesn't fire properly
@@ -345,27 +353,82 @@ function ImageUploadField({onChange, value}: ImageProps, )
 
   const handleReportProgress = (progress: number) => setState({ ...state, progress });
 
-  let buttonInside;
+  let uploadInside;
+  let saveInside;
 
   
     if (state.isUploading) {
-      buttonInside =  <CircularProgress value={state.progress} size={19} />;
+      saveInside =  <CircularProgress value={state.progress} size={19} />;
+     
+    } if (state.hasError){
+      switch (state.errorText) {
+        case '':
+          saveInside = <>save image</>
+          uploadInside = <> Upload Image
+            <CloudUploadIcon style={{ marginLeft: '8px' }} /></> 
+          break;
+        case 'No file selected':
+          saveInside = <>save image</>
+          uploadInside = (
+            <>
+              {state.errorText}
+              <ErrorIcon style={{ marginLeft: '8px' }} />
+            </>
+          ); 
+        case 'Bad file type':
+          saveInside = <>save image</>
+          uploadInside = (
+            <>
+              {state.errorText}
+              <ErrorIcon style={{ marginLeft: '8px' }} />
+            </>
+          ); 
+          break;
+        case 'File is too big':
+          saveInside = <>save image</>
+          uploadInside = (
+            <>
+              {state.errorText}
+              <ErrorIcon style={{ marginLeft: '8px' }} />
+            </>
+          ); 
+          break;
+        case 'Error while uploading':
+          saveInside = (
+            <>
+              {state.errorText}
+              <ErrorIcon style={{ marginLeft: '8px' }} />
+            </>
+          );
+          uploadInside = <> Upload Image
+      <CloudUploadIcon style={{ marginLeft: '8px' }} /></> 
+          break;
+        case 'Unknown error':
+          saveInside = (
+            <>
+              {state.errorText}
+              <ErrorIcon style={{ marginLeft: '8px' }} />
+            </>
+            
+          );
+          uploadInside = <> Upload Image
+            <CloudUploadIcon style={{ marginLeft: '8px' }} /></> 
+          break;
+      
+        default:
+          break;
+      }
+      
     }
-    if (state.hasError) {
-      buttonInside = (
-        <>
-          {state.errorText}
-          <ErrorIcon style={{ marginLeft: '8px' }} />
-        </>
-      );
-    }
+    
     else {
-     buttonInside = (
+     saveInside = (
         <>
-          Upload Image
-          <CloudUploadIcon style={{ marginLeft: '8px' }} />
+          save image
         </>
       );
+      uploadInside = <> Upload Image
+      <CloudUploadIcon style={{ marginLeft: '8px' }} /></>
     } 
   
 
@@ -375,15 +438,16 @@ function ImageUploadField({onChange, value}: ImageProps, )
       <div className={classes.upload}>
       {/* <label htmlFor="file-input"> */}
       <Button
-          disabled={state.isUploading}
+          disabled={state.isUploading == true || image == ''}
           variant="contained"
-          color={state.hasError ? 'secondary' : 'primary'}
+          color={state.hasError ? 'error' : 'primary'}
           // onClick={handleFileUploadClick}
           component='label'
           
         >
           {/* {renderChildren()} */}
-          {buttonInside}
+          {uploadInside}
+          
           {/* {!state.isUploading && ( */}
         <input
           id='file-input'
@@ -423,12 +487,12 @@ function ImageUploadField({onChange, value}: ImageProps, )
       <div style={{ display: 'flex' }}>
       <Button
       variant="contained"
-      color={state.hasError ? 'secondary' : 'primary'}
+      color={state.hasError ? 'error' : 'warning'}
       fullWidth
       style={{ marginRight: 5 }}
       disabled={image !== ''}
       >
-        save image
+        {saveInside}
       </Button>
       <Button
       variant="contained"

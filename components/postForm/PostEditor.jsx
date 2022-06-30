@@ -1,10 +1,10 @@
 import Description from "@components/Description";
 import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
-import { Container } from "@mui/material";
+import { Container, createTheme } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
-import Editor from "@react-page/editor";
+import Editor, { defaultThemeOptions } from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
 import image from "@react-page/plugins-image";
@@ -16,10 +16,10 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 
-// const darkTheme = createTheme({
-//   ...defaultThemeOptions,
-//   palette: { mode: "dark" },
-// });
+const darkTheme = createTheme({
+  ...defaultThemeOptions,
+  palette: { mode: "dark" },
+});
 
 const useStyles = makeStyles(() => ({
   description: {
@@ -56,7 +56,7 @@ const PostEditor = ({ value, setPostValue }) => {
           onChange={setPostValue}
           undoRedoEnabled={false}
           zoomEnabled={false}
-          // uiTheme={darkTheme}
+          uiTheme={darkTheme}
         />
       </EditorLayout>
     </Container>

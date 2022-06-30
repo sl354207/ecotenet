@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
 const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
@@ -25,7 +25,8 @@ const useStyles = makeStyles(() => ({
     maxHeight: 256,
   },
   border: {
-    border: "1px solid red",
+    border: "2px solid #ffa726",
+    borderRadius: 4,
   },
 }));
 
@@ -56,7 +57,9 @@ const ImageRender = ({ data, preview }) => {
               // className={classes.image}
             />
 
-            <figcaption>{data.caption}</figcaption>
+            <figcaption>
+              {data.caption}. {data.citation && <em>{data.citation}</em>}
+            </figcaption>
           </figure>
         </div>
       ) : (

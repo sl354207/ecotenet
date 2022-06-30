@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { connectField } from "uniforms";
 
 const useStyles = makeStyles(() => ({
@@ -16,7 +16,7 @@ function ImageDescription({ onChange, value }) {
   return (
     <>
       <TextField
-        placeholder="test"
+        placeholder="brief description of image(for accessibility)"
         label="Alternative Description"
         name="src"
         className={classes.field}
