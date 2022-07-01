@@ -1,8 +1,10 @@
 import ImageCaption from '@components/imagePlugin/ImageCaption';
 import ImageCitation from '@components/imagePlugin/ImageCitation';
 import ImageDescription from '@components/imagePlugin/ImageDescription';
+import ImageHeight from '@components/imagePlugin/ImageHeight';
 import ImageRender from '@components/imagePlugin/ImageRender';
 import ImageUploadField from '@components/imagePlugin/ImageUploadField';
+import ImageWidth from '@components/imagePlugin/ImageWidth';
 import { CellPlugin, lazyLoad } from '@react-page/editor';
 
 const Panorama = lazyLoad(() => import('@mui/icons-material/Panorama'));
@@ -14,13 +16,26 @@ const Panorama = lazyLoad(() => import('@mui/icons-material/Panorama'));
 // use a type here, not an interface. Set types for data for typescript.
 type Data = {
   caption: string,
-  imageUrl: string,
+  imageUrl: {url: string, saved: boolean}
   description: string, 
-  citation: string
+  citation: string,
+  width: number,
+  height: number
+  
 }
+
 
 // plugin takes in Data/data input into plugin fields.
 const customImage: CellPlugin<Data> = {
+  createInitialData: () => ({
+    caption: undefined,
+    imageUrl: {url: undefined, saved: false},
+    description: undefined,
+    citation: undefined,
+    width: undefined,
+    height: undefined
+  }),
+  
    // the Renderer displays the output of the plugin.
   Renderer: ({ data, isPreviewMode }) => (
     // pass data down from plugin to ImageRender prop
@@ -37,45 +52,85 @@ const customImage: CellPlugin<Data> = {
   //   <ImageProvider props={props}/>
   // ),
   // controls set the functionality and formatting of the plugin
-  controls: {
-    type: 'autoform',
-    schema: {
-      properties: {
-        imageUrl: {
-          type: 'string',
-          // pass in ImageUploadField component to perform functionality
-          uniforms: { component: ImageUploadField },
-        },
-        caption: {
-          type: 'string',
-          // default: 'someDefaultValue',
-          uniforms: {
-            component: ImageCaption
-          }
-        },
-        citation: {
-          type: 'string',
-          uniforms: {
-            component: ImageCitation
+  controls: [{
+    title: 'Image',
+    controls: {
+      type: 'autoform',
+      schema: {
+        properties: {
+          imageUrl: {
+            type: 'object',
+            properties: {
+              url: {
+                type: 'string'
+              },
+              saved: {
+                type: 'boolean'
+              }
+            },
+            // pass in ImageUploadField component to perform functionality
+            uniforms: { component: ImageUploadField  },
             
           },
-          // default: 'someDefaultValue',
-        },
-        
-        description: {
-          type: 'string',
-          uniforms: {
-            component: ImageDescription
-            // label: 'Alternate Description',
-            
-            // multiline: true,
-            // rows: 4,
+          width: {
+            type: 'number',
+            // default: 'someDefaultValue',
+            uniforms: {
+              component: ImageWidth
+            }
           },
+          height: {
+            type: 'number',
+            uniforms: {
+              component: ImageHeight
+              
+            },
+            // default: 'someDefaultValue',
+          },
+          
         },
+        // required: ['title'],
       },
-      // required: ['title'],
     },
-  },
+  },{
+    title: 'Details',
+    controls: {
+      type: 'autoform',
+      schema: {
+        properties: {
+          
+          caption: {
+            type: 'string',
+            // default: 'someDefaultValue',
+            uniforms: {
+              component: ImageCaption
+            }
+          },
+          citation: {
+            type: 'string',
+            uniforms: {
+              component: ImageCitation
+              
+            },
+            // default: 'someDefaultValue',
+          },
+          
+          description: {
+            type: 'string',
+            uniforms: {
+              component: ImageDescription
+              // label: 'Alternate Description',
+              
+              // multiline: true,
+              // rows: 4,
+            },
+          },
+        },
+        // required: ['title'],
+      },
+    },
+    
+}]
 };
 
 export default customImage;

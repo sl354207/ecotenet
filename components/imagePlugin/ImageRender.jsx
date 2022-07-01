@@ -39,17 +39,17 @@ const ImageRender = ({ data, preview }) => {
   return (
     <div
       className={
-        data.imageUrl && data.imageUrl.startsWith("blob") && !preview
+        data.imageUrl.url && data.imageUrl.saved == false && !preview
           ? classes.border
           : null
       }
     >
-      {data.imageUrl ? (
+      {data.imageUrl.url ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <div className={classes.image}>
           <figure>
             <Image
-              src={data.imageUrl}
+              src={data.imageUrl.url}
               alt={"Picture of the author"}
               width={500}
               height={500}
