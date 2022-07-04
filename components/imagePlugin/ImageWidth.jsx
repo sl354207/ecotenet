@@ -3,11 +3,11 @@ import makeStyles from "@mui/styles/makeStyles";
 import { connectField } from "uniforms";
 
 const useStyles = makeStyles(() => ({
-  //   field: {
-  //     display: "flex",
-  //     flexGrow: 1,
-  //     marginBottom: 5,
-  //   },
+  field: {
+    display: "flex",
+    flexGrow: 1,
+    marginBottom: 5,
+  },
 }));
 
 function ImageWidth({ onChange, value }) {
@@ -16,15 +16,18 @@ function ImageWidth({ onChange, value }) {
   return (
     <>
       <TextField
-        placeholder="brief description of image(for accessibility)"
+        placeholder="default width is set to 500"
         label="Width"
         name="src"
+        type="number"
+        // defaultValue={500}
         className={classes.field}
-        style={{ width: "400px" }}
+        // style={{ width: "400px" }}
         value={value || ""}
         onChange={(e) => {
-          const description = e.target.value;
-          onChange(description);
+          console.log(typeof e.target.value);
+          const width = Number(e.target.value);
+          onChange(width);
         }}
       />
     </>

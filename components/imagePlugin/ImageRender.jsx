@@ -34,6 +34,27 @@ const useStyles = makeStyles(() => ({
 const ImageRender = ({ data, preview }) => {
   console.log(data);
   // console.log(preview);
+  const isValidHttpUrl = (string) => {
+    let url;
+    if (
+      url.match(/\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/) !=
+      null
+    ) {
+      try {
+        url = new URL(string);
+      } catch (e) {
+        return false;
+      }
+
+      return url.protocol === "http:" || url.protocol === "https:";
+    } else {
+      return false;
+    }
+  };
+
+  //   const checkURL = (url) => {
+  //     return(url.match(/\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/) != null);
+  // }
 
   const classes = useStyles();
   return (
@@ -46,22 +67,43 @@ const ImageRender = ({ data, preview }) => {
     >
       {data.imageUrl.url ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
-        <div className={classes.image}>
-          <figure>
-            <Image
-              src={data.imageUrl.url}
-              alt={"Picture of the author"}
-              width={500}
-              height={500}
-              // layout="fill"
-              // className={classes.image}
-            />
+        <>
+          {/* {data.imageUrl.saved ? ( */}
+          <div className={classes.image}>
+            <figure>
+              <Image
+                src={data.imageUrl.url || ""}
+                alt={data.description || ""}
+                width={data.width || 500}
+                height={data.height || 500}
+                // layout="fill"
+                // className={classes.image}
+              />
 
-            <figcaption>
-              {data.caption}. {data.citation && <em>{data.citation}</em>}
-            </figcaption>
-          </figure>
-        </div>
+              <figcaption>
+                {data.caption}. {data.citation && <em>{data.citation}</em>}
+              </figcaption>
+            </figure>
+          </div>
+          {/* ) : (
+            <div className={classes.image}>
+              <figure>
+                <img
+                  src={data.imageUrl.url || ""}
+                  alt={data.imageUrl.description || ""}
+                  width={data.width || 500}
+                  height={data.height || 500}
+                  // layout="fill"
+                  // className={classes.image}
+                />
+
+                <figcaption>
+                  {data.caption}. {data.citation && <em>{data.citation}</em>}
+                </figcaption>
+              </figure>
+            </div>
+          )} */}
+        </>
       ) : (
         <div className={classes.placeholder}>
           <ImageIcon className={classes.icon} />

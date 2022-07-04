@@ -53,9 +53,10 @@ const customImage: CellPlugin<Data> = {
   // ),
   // controls set the functionality and formatting of the plugin
   controls: [{
-    title: 'Image',
+    title: 'Upload',
     controls: {
       type: 'autoform',
+      columnCount: 1,
       schema: {
         properties: {
           imageUrl: {
@@ -96,6 +97,7 @@ const customImage: CellPlugin<Data> = {
     title: 'Details',
     controls: {
       type: 'autoform',
+      columnCount: 1,
       schema: {
         properties: {
           

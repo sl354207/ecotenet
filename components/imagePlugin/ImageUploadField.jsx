@@ -5,11 +5,26 @@ import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 import { connectField } from "uniforms";
 
-const useStyles = makeStyles(() => ({
-  // upload: {
-  //   display: "flex",
-  //   marginBottom: 10,
-  // },
+const useStyles = makeStyles((theme) => ({
+  upload: {
+    display: "flex",
+    marginBottom: 10,
+    [theme.breakpoints.down("md")]: {
+      // width: 250,
+      display: "grid",
+      // marginBottom: 5,
+    },
+  },
+  field: {
+    display: "flex",
+    flexGrow: 1,
+    marginBottom: 5,
+    width: 300,
+    [theme.breakpoints.down("md")]: {
+      width: 250,
+      display: "flex",
+    },
+  },
 }));
 
 //CHECK UNIFORMS DOCS AND CLOUDINARY DOCS for more details on how component works.
@@ -450,17 +465,15 @@ function ImageUploadField({ onChange, value }) {
           {/* )} */}
         </Button>
         {/* </label> */}
-        <Typography
-          variant="body1"
-          // style={{ margin: "20px 16px 0 16px" }}
-        >
+        <Typography variant="body1" style={{ margin: "20px 16px 0 16px" }}>
           or
         </Typography>
         <TextField
           placeholder="http://example.com/image.png"
           label="Existing image URL"
-          name="src"
-          style={{ flex: 1 }}
+          name="url"
+          // style={{ flex: 1 }}
+          className={classes.field}
           value={image.url || ""}
           disabled={image.url == ""}
           onChange={(e) => {
@@ -470,9 +483,7 @@ function ImageUploadField({ onChange, value }) {
           }}
         />
       </div>
-      <div
-      // style={{ display: "flex" }}
-      >
+      <div style={{ display: "flex" }}>
         <Button
           variant="contained"
           color={state.hasError ? "error" : "warning"}
