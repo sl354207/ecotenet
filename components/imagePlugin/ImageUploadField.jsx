@@ -221,6 +221,7 @@ function ImageUploadField({ onChange, value }) {
   // const [errorText, setErrorText] = useState('')
   // const [progress, setProgress] = useState(0)
   const [image, setImage] = useState(value || { url: undefined, saved: false });
+  console.log(value);
   const [state, setState] = useState({
     isUploading: false,
     hasError: false,
@@ -318,7 +319,7 @@ function ImageUploadField({ onChange, value }) {
       //       imageUploadError && imageUploadError(error);
       //     });
       const imageUrl = URL.createObjectURL(file);
-      setImage({ url: "", saved: false });
+      setImage({ url: "blob", saved: false });
 
       onChange({ url: imageUrl, saved: false });
     }
@@ -445,7 +446,10 @@ function ImageUploadField({ onChange, value }) {
       <div className={classes.upload}>
         {/* <label htmlFor="file-input"> */}
         <Button
-          disabled={state.isUploading == true || image.url !== undefined}
+          disabled={
+            (image.url && image.url !== "" && image.url.startsWith("blob:")) ||
+            (image.url !== undefined && image.url !== "")
+          }
           variant="contained"
           color={state.hasError ? "error" : "primary"}
           // onClick={handleFileUploadClick}
@@ -475,7 +479,7 @@ function ImageUploadField({ onChange, value }) {
           // style={{ flex: 1 }}
           className={classes.field}
           value={image.url || ""}
-          disabled={image.url == ""}
+          disabled={image.url && value.url.startsWith("blob:")}
           onChange={(e) => {
             const imageUrl = e.target.value;
             setImage({ url: imageUrl, saved: false });
@@ -489,9 +493,13 @@ function ImageUploadField({ onChange, value }) {
           color={state.hasError ? "error" : "warning"}
           fullWidth
           style={{ marginRight: 5 }}
-          disabled={image.url !== "" || image.saved == true}
+          disabled={
+            image.url == undefined ||
+            (image.url !== "blob" && image.url.startsWith("blob:") == false) ||
+            image.saved == true
+          }
           onClick={() => {
-            setImage({ url: "", saved: true });
+            setImage({ url: "blob", saved: true });
             onChange({ url: value.url, saved: true });
           }}
         >
@@ -503,7 +511,7 @@ function ImageUploadField({ onChange, value }) {
           fullWidth
           style={{ marginLeft: 5 }}
           onClick={(value) => deleteImage(value)}
-          disabled={image.url == undefined}
+          disabled={image.url == undefined || image.url == ""}
         >
           delete image
         </Button>

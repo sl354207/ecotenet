@@ -1,3 +1,4 @@
+import { Link, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
@@ -6,7 +7,7 @@ const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 const useStyles = makeStyles(() => ({
   image: {
     width: "100%",
-    display: "flex",
+    display: "grid",
     justifyContent: "center",
   },
   placeholder: {
@@ -35,20 +36,18 @@ const ImageRender = ({ data, preview }) => {
   console.log(data);
   // console.log(preview);
   const isValidHttpUrl = (string) => {
-    let url;
-    if (
-      url.match(/\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/) !=
-      null
-    ) {
-      try {
-        url = new URL(string);
-      } catch (e) {
-        return false;
-      }
-
-      return url.protocol === "http:" || url.protocol === "https:";
+    if (/^blob:http:\/\//.test(string)) {
+      console.log("true blob");
+      return true;
     } else {
-      return false;
+      console.log(
+        /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
+          string
+        )
+      );
+      return /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
+        string
+      );
     }
   };
 
@@ -60,30 +59,52 @@ const ImageRender = ({ data, preview }) => {
   return (
     <div
       className={
-        data.imageUrl.url && data.imageUrl.saved == false && !preview
+        data.imageUrl.url &&
+        data.imageUrl.url.startsWith("blob:") &&
+        data.imageUrl.saved == false &&
+        !preview
           ? classes.border
           : null
       }
     >
-      {data.imageUrl.url ? (
+      {isValidHttpUrl(data.imageUrl.url) ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <>
           {/* {data.imageUrl.saved ? ( */}
           <div className={classes.image}>
             <figure>
               <Image
-                src={data.imageUrl.url || ""}
+                src={data.imageUrl.url}
+                // src={data.imageUrl.url || ""}
                 alt={data.description || ""}
                 width={data.width || 500}
                 height={data.height || 500}
                 // layout="fill"
                 // className={classes.image}
               />
-
               <figcaption>
-                {data.caption}. {data.citation && <em>{data.citation}</em>}
+                {data.caption && (
+                  <Typography variant="caption">{data.caption}.</Typography>
+                )}{" "}
+                {data.citation && <em>{data.citation}</em>}
+                {data.imageUrl.url.startsWith("http") && (
+                  <Link
+                    href={data.imageUrl.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Link
+                  </Link>
+                )}
               </figcaption>
             </figure>
+            {/* {data.caption && (
+              <Typography variant="caption">{data.caption}.</Typography>
+            )}
+            {data.citation && <em>{data.citation}</em>}
+            {data.imageUrl.url.startsWith("http") && (
+              <Typography variant="caption">{data.imageUrl.url}</Typography>
+            )} */}
           </div>
           {/* ) : (
             <div className={classes.image}>
