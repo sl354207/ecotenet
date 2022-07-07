@@ -35,80 +35,80 @@ const useStyles = makeStyles((theme) => ({
 // ImageUploadField allows you to upload image file from computer. It then uploads that local file to the cloud and returns the cloud file. The function takes in the field changes through onChange and stores them in value
 // function ImageUploadField({ onChange, value }: ImageProps) {
 //   // uploadFile takes in the local file as photo, uploads the file to storage and returns the url through xhr. A callback is needed to retrieve the url as it is asynchronous data.
-//   const uploadFile = async (photo, callback) => {
-//     // post request url
-//     // const url = "https://api.cloudinary.com/v1_1/demo/upload";
+const uploadFile = async (photo, callback) => {
+  // post request url
+  // const url = "https://api.cloudinary.com/v1_1/demo/upload";
 
-//     // // create xhr object. Check docs for more details.
-//     // const xhr = new XMLHttpRequest();
+  // // create xhr object. Check docs for more details.
+  // const xhr = new XMLHttpRequest();
 
-//     // // create form data object. FormData api is used to submit xhr data to a form more easily. Check docs.
-//     // const fd = new FormData();
+  // // create form data object. FormData api is used to submit xhr data to a form more easily. Check docs.
+  // const fd = new FormData();
 
-//     // // open xhr request to the specified url, set it as an asynchronous POST request.
-//     // xhr.open('POST', url, true);
+  // // open xhr request to the specified url, set it as an asynchronous POST request.
+  // xhr.open('POST', url, true);
 
-//     // // set name of the header and the value.
-//     // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  // // set name of the header and the value.
+  // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-//     // // Reset the upload progress bar
-//     // //  document.getElementById('progress').style.width = 0;
+  // // Reset the upload progress bar
+  // //  document.getElementById('progress').style.width = 0;
 
-//     // // Update progress (can be used to show progress indicator)
+  // // Update progress (can be used to show progress indicator)
 
-//     // // track the progress of the uploaded file
-//     // xhr.upload.addEventListener("progress", function(e) {
-//     //   // const progress = Math.round((e.loaded * 100.0) / e.total);
-//     //   // document.getElementById('progress').style.width = progress + "%";
+  // // track the progress of the uploaded file
+  // xhr.upload.addEventListener("progress", function(e) {
+  //   // const progress = Math.round((e.loaded * 100.0) / e.total);
+  //   // document.getElementById('progress').style.width = progress + "%";
 
-//     //   console.log(`fileuploadprogress data.loaded: ${e.loaded},
-//     // data.total: ${e.total}`);
-//     // });
+  //   console.log(`fileuploadprogress data.loaded: ${e.loaded},
+  // data.total: ${e.total}`);
+  // });
 
-//     // // handle any functionality returned by request.
-//     // xhr.onreadystatechange = function(e) {
-//     //   // if fetch is successful return url.
-//     //   if (xhr.readyState == 4 && xhr.status == 200) {
-//     //     // File uploaded successfully
-//     //     const response = JSON.parse(xhr.responseText);
-//     //     // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
+  // // handle any functionality returned by request.
+  // xhr.onreadystatechange = function(e) {
+  //   // if fetch is successful return url.
+  //   if (xhr.readyState == 4 && xhr.status == 200) {
+  //     // File uploaded successfully
+  //     const response = JSON.parse(xhr.responseText);
+  //     // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
 
-//         // console.log(photo.name.split('.')[1])
+  // console.log(photo.name.split('.')[1])
 
-//         // // get secure url from our server
-//         // const url  = await fetch("/api/media").then(res => res.json())
-//         // // console.log(url)
+  // // get secure url from our server
+  const url = await fetch("/api/media").then((res) => res.json());
+  // console.log(url)
 
-//         // // post the image direclty to the s3 bucket
-//         // await fetch(url, {
-//         //   method: "PUT",
-//         //   headers: {
-//         //     "Content-Type": "multipart/form-data"
-//         //   },
-//         //   body: photo
-//         // })
+  // // post the image direclty to the s3 bucket
+  await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    body: photo,
+  });
 
-//         // const imageUrl = url.split('?')[0]
-//         const imageUrl = URL.createObjectURL(photo);
+  const imageUrl = url.split("?")[0];
+  // const imageUrl = URL.createObjectURL(photo);
 
-//         // console.log(typeof imageUrl)
+  // console.log(typeof imageUrl)
 
-//         // // const url = response.secure_url;
+  // // const url = response.secure_url;
 
-//         // // add callback so url is available outside function.
-//         callback(imageUrl);
+  // // add callback so url is available outside function.
+  callback(imageUrl);
 
-//         //  console.log(url);
-//         // Create a thumbnail of the uploaded image, with 150px width
-//         // const tokens = url.split('/');
-//         // tokens.splice(-2, 0, 'w_150,c_scale');
-//         // const img = new Image(); // HTML5 Constructor
-//         // img.src = tokens.join('/');
-//         // img.alt = response.public_id;
-//         // document.getElementById('gallery').appendChild(img);
+  //  console.log(url);
+  // Create a thumbnail of the uploaded image, with 150px width
+  // const tokens = url.split('/');
+  // tokens.splice(-2, 0, 'w_150,c_scale');
+  // const img = new Image(); // HTML5 Constructor
+  // img.src = tokens.join('/');
+  // img.alt = response.public_id;
+  // document.getElementById('gallery').appendChild(img);
 
-//       // console.log(xhr.onreadystatechange);
-//   };
+  // console.log(xhr.onreadystatechange);
+};
 
 //     // add upload preset key:value for cloudinary submission
 //     // fd.append('upload_preset', 'doc_codepen_example');
@@ -145,16 +145,16 @@ const useStyles = makeStyles((theme) => ({
 //         accept="image/*"
 //         id="file-input"
 //         // when the input changes call function whose event target is the files property from type file (see input type file docs).
-//         onChange={async ({ target: { files } }) => {
-//           // if a file is present run uploadFile.
-//           if (files && files[0]) {
-//             // use first file in FileList(see docs). pass in callback function to have access to fetched url asynchronously.
-//             await uploadFile(files[0], async function(url){
-//               // call onChange with fetched url to make available to component.
-//               onChange(url);
-//             });
-//           }
-//         }}
+// onChange={async ({ target: { files } }) => {
+//   // if a file is present run uploadFile.
+//   if (files && files[0]) {
+//     // use first file in FileList(see docs). pass in callback function to have access to fetched url asynchronously.
+//     await uploadFile(files[0], async function(url){
+//       // call onChange with fetched url to make available to component.
+//       onChange(url);
+//     });
+//   }
+// }}
 //         // onChange={async (e) => {
 //         //   // imagine you have a function that takes a file and returns a url once it is uploaded, e.g. to s3
 //         //   const imageUrl = URL.createObjectURL(e.target.files[0]);
@@ -220,6 +220,7 @@ function ImageUploadField({ onChange, value }) {
   // const [hasError, setHasError] = useState(false)
   // const [errorText, setErrorText] = useState('')
   // const [progress, setProgress] = useState(0)
+  const [file, setFile] = useState();
   const [image, setImage] = useState(value || { url: undefined, saved: false });
   console.log(value);
   const [state, setState] = useState({
@@ -279,7 +280,7 @@ function ImageUploadField({ onChange, value }) {
       return;
     }
     const file = e.target.files[0];
-    // console.log(file)
+    // console.log(file);
     if (!hasExtension(file.name)) {
       // console.log(file.size)
       handleError(BAD_EXTENSION_ERROR_CODE);
@@ -318,7 +319,9 @@ function ImageUploadField({ onChange, value }) {
       //       setState({ ...state, isUploading: false });
       //       imageUploadError && imageUploadError(error);
       //     });
+
       const imageUrl = URL.createObjectURL(file);
+      setFile(file);
       setImage({ url: "blob", saved: false });
 
       onChange({ url: imageUrl, saved: false });
@@ -344,6 +347,14 @@ function ImageUploadField({ onChange, value }) {
 
   // const handleFileUploadClick: React.MouseEventHandler<HTMLElement> = () =>
   //   fileInput?.click();
+  const saveImage = async (img) => {
+    console.log(img);
+    await uploadFile(img, async function (url) {
+      // call onChange with fetched url to make available to component.
+      // onChange(url);
+      onChange({ url: url, saved: true });
+    });
+  };
   const deleteImage = (img) => {
     img.url = undefined;
     onChange({ url: img.url, saved: false });
@@ -499,8 +510,9 @@ function ImageUploadField({ onChange, value }) {
             image.saved == true
           }
           onClick={() => {
-            setImage({ url: "blob", saved: true });
-            onChange({ url: value.url, saved: true });
+            saveImage(file);
+            // setImage({ url: "blob", saved: true });
+            // onChange({ url: value.url, saved: true });
           }}
         >
           {saveInside}

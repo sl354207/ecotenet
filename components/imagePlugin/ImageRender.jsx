@@ -45,9 +45,7 @@ const ImageRender = ({ data, preview }) => {
           string
         )
       );
-      return /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-        string
-      );
+      return /^https?:\/\/./.test(string);
     }
   };
 
