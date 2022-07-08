@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
-  console.log(data);
+  // console.log(data);
   // console.log(preview);
   const isValidHttpUrl = (string) => {
     if (/^blob:http:\/\//.test(string)) {
@@ -45,7 +45,9 @@ const ImageRender = ({ data, preview }) => {
           string
         )
       );
-      return /^https?:\/\/./.test(string);
+      return /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
+        string
+      );
     }
   };
 
@@ -57,22 +59,22 @@ const ImageRender = ({ data, preview }) => {
   return (
     <div
       className={
-        data.imageUrl.url &&
-        data.imageUrl.url.startsWith("blob:") &&
-        data.imageUrl.saved == false &&
+        data.image.url &&
+        data.image.url.startsWith("blob:") &&
+        data.image.saved == false &&
         !preview
           ? classes.border
           : null
       }
     >
-      {isValidHttpUrl(data.imageUrl.url) ? (
+      {isValidHttpUrl(data.image.url) ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <>
           {/* {data.imageUrl.saved ? ( */}
           <div className={classes.image}>
             <figure>
               <Image
-                src={data.imageUrl.url}
+                src={data.image.url}
                 // src={data.imageUrl.url || ""}
                 alt={data.description || ""}
                 width={data.width || 500}
@@ -85,9 +87,9 @@ const ImageRender = ({ data, preview }) => {
                   <Typography variant="caption">{data.caption}.</Typography>
                 )}{" "}
                 {data.citation && <em>{data.citation}</em>}
-                {data.imageUrl.url.startsWith("http") && (
+                {data.image.url.startsWith("http") && (
                   <Link
-                    href={data.imageUrl.url}
+                    href={data.image.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

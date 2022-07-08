@@ -16,7 +16,7 @@ const Panorama = lazyLoad(() => import('@mui/icons-material/Panorama'));
 // use a type here, not an interface. Set types for data for typescript.
 type Data = {
   caption: string,
-  imageUrl: {url: string, saved: boolean}
+  image: {url: string, saved: boolean, file: object}
   description: string, 
   citation: string,
   width: number,
@@ -29,7 +29,7 @@ type Data = {
 const customImage: CellPlugin<Data> = {
   createInitialData: () => ({
     caption: undefined,
-    imageUrl: {url: undefined, saved: false},
+    image: {url: undefined, saved: false, file: {}},
     description: undefined,
     citation: undefined,
     width: undefined,
@@ -59,7 +59,7 @@ const customImage: CellPlugin<Data> = {
       columnCount: 1,
       schema: {
         properties: {
-          imageUrl: {
+          image: {
             type: 'object',
             properties: {
               url: {
@@ -67,7 +67,8 @@ const customImage: CellPlugin<Data> = {
               },
               saved: {
                 type: 'boolean'
-              }
+              },
+              
             },
             // pass in ImageUploadField component to perform functionality
             uniforms: { component: ImageUploadField  },

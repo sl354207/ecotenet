@@ -6,10 +6,13 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405);
   }
+  const name = req.query.name;
+  const id = req.query.id;
+  const type = req.query.type;
 
   // try get request, if successful return response, otherwise return error message
   try {
-    const url = await generateUploadURL();
+    const url = await generateUploadURL(name, id, type);
     // await console.log(res.json(url))
     return res.status(200).json(url);
   } catch (err) {
