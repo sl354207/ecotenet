@@ -3,7 +3,7 @@ import { useSnackbarContext } from "@components/SnackbarContext";
 import { Button, Link, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
-import { createPost, updatePost } from "@utils/api-helpers";
+import { updatePost } from "@utils/api-helpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PostDetails from "./PostDetails";
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // pass in post and url path as props
-const StepForm = ({ post, pathName, user }) => {
+const StepForm = ({ post, user }) => {
   const classes = useStyles();
   const router = useRouter();
 
@@ -124,51 +124,6 @@ const StepForm = ({ post, pathName, user }) => {
     // setFormErrors({
     //   [name]: error
     // })
-  };
-
-  const saveDraft = async (postValue, details, clickInfo) => {
-    const ecoObject = {
-      ecoregions: clickInfo,
-    };
-
-    const postObject = {
-      id: postValue != null ? postValue.id : "",
-      version: postValue != null ? postValue.version : 1,
-      rows: postValue != null ? postValue.rows : [],
-    };
-
-    const silentObject = {
-      name: user.name,
-      status: "draft",
-      approved: "false",
-      updated: false,
-      featured: false,
-      feature: "false",
-      date: "",
-    };
-
-    const value = { ...silentObject, ...postObject, ...details, ...ecoObject };
-
-    const createResponse = await createPost(value);
-
-    if (createResponse.ok) {
-      const ID = await createResponse.json();
-      router.push(`/dashboard/posts/${ID.insertedId}`);
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: "Draft saved successfully",
-      });
-    }
-    if (!createResponse.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "error",
-        message: "There was a problem saving draft. Please try again later",
-      });
-    }
   };
 
   // function to create a new draft. Takes in form values and editor value.
@@ -282,11 +237,7 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={
-                      pathName == "editor"
-                        ? () => saveDraft(postValue, details, clickInfo)
-                        : () => updateDraft(postValue, details, clickInfo)
-                    }
+                    onClick={() => updateDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                   >
@@ -299,7 +250,7 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          pathName == "editor" ? "create" : "publish",
+                          "publish",
                           "Post",
                           postValue,
                           details,
@@ -374,11 +325,7 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={
-                      pathName == "editor"
-                        ? () => saveDraft(postValue, details, clickInfo)
-                        : () => updateDraft(postValue, details, clickInfo)
-                    }
+                    onClick={() => updateDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                   >
@@ -392,7 +339,7 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          pathName == "editor" ? "create" : "publish",
+                          "publish",
                           "Post",
                           postValue,
                           details,
@@ -460,11 +407,7 @@ const StepForm = ({ post, pathName, user }) => {
               ) : (
                 <>
                   <Button
-                    onClick={
-                      pathName == "editor"
-                        ? () => saveDraft(postValue, details, clickInfo)
-                        : () => updateDraft(postValue, details, clickInfo)
-                    }
+                    onClick={() => updateDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
                   >
@@ -477,7 +420,7 @@ const StepForm = ({ post, pathName, user }) => {
                     <Button
                       onClick={() =>
                         handleOpenDialog(
-                          pathName == "editor" ? "create" : "publish",
+                          "publish",
                           "Post",
                           postValue,
                           details,

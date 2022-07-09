@@ -11,13 +11,13 @@ const Layout = ({ children, ecoFilter }) => {
   return (
     <>
       <Meta />
-      {router.route !== "/auth/new-user" && <Nav ecoFilter={ecoFilter} />}
 
-      <div>
-        <main>
-          <SnackbarProvider>{children}</SnackbarProvider>
-        </main>
-      </div>
+      <SnackbarProvider>
+        {router.route !== "/auth/new-user" && <Nav ecoFilter={ecoFilter} />}
+        <div>
+          <main>{children}</main>
+        </div>
+      </SnackbarProvider>
     </>
   );
 };

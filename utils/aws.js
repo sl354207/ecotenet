@@ -18,11 +18,11 @@ const s3 = new aws.S3({
 
 const randomBytes = promisify(crypto.randomBytes);
 
-export async function generateUploadURL(name, id, type) {
+export async function generateUploadURL(name, postId, type) {
   const rawBytes = await randomBytes(16);
   const imageName = rawBytes.toString("hex");
   const ext = type.substring(type.indexOf("/") + 1);
-  const file = `${name}/${id}/${imageName}.${ext}`;
+  const file = `${name}/${postId}/${imageName}.${ext}`;
 
   const params = {
     Bucket: bucketName,
@@ -37,8 +37,8 @@ export async function generateUploadURL(name, id, type) {
     console.error(error);
   }
 }
-export async function generateDeleteURL(name, id, key) {
-  const file = `${name}/${id}/${key}`;
+export async function generateDeleteURL(name, postId, key) {
+  const file = `${name}/${postId}/${key}`;
   const params = {
     Bucket: bucketName,
     Key: file,

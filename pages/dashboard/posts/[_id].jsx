@@ -20,8 +20,6 @@ export default function DraftByUser() {
   // set id to id in url query
   const router = useRouter();
   const id = router.query._id;
-  // capture url path to pass to form
-  const pathName = router.pathname;
 
   const { user } = useUserContext();
 
@@ -42,5 +40,5 @@ export default function DraftByUser() {
       />
     );
 
-  return <StepForm post={post} pathName={pathName} user={user} />;
+  return <StepForm post={post} user={user} />;
 }

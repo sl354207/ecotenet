@@ -29,10 +29,13 @@ import {
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { alpha, useTheme } from "@mui/material/styles";
 
+import { useSnackbarContext } from "@components/SnackbarContext";
 import makeStyles from "@mui/styles/makeStyles";
+import { createPost } from "@utils/api-helpers";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
+import CreatePostButton from "./CreatePostButton";
 import { useUserContext } from "./UserContext";
 const drawerWidth = 240;
 
@@ -155,6 +158,7 @@ const Nav = ({ ecoFilter }) => {
   // console.log(session);
   // console.log(status);
   const { user } = useUserContext();
+  const { snackbar, setSnackbar } = useSnackbarContext();
   // console.log(userName);
   let status;
   if (user == undefined) {
@@ -192,6 +196,42 @@ const Nav = ({ ecoFilter }) => {
       setPopper(false);
     }
   }
+
+  const startPost = async () => {
+    const value = {
+      title: "",
+      description: "",
+      category: "",
+      tags: [],
+      ecoregions: [],
+      id: "",
+      status: "",
+      name: user.name,
+      status: "draft",
+      approved: "false",
+      updated: false,
+      featured: false,
+      feature: "false",
+      date: "",
+      version: 1,
+      rows: [],
+    };
+
+    const createResponse = await createPost(value);
+
+    if (createResponse.ok) {
+      const ID = await createResponse.json();
+      router.push(`/dashboard/posts/${ID.insertedId}`);
+    }
+    if (!createResponse.ok) {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        severity: "error",
+        message: "There was a problem creating post. Please try again later",
+      });
+    }
+  };
 
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = useRef(popper);
@@ -410,18 +450,24 @@ const Nav = ({ ecoFilter }) => {
             {!isMobile && (
               <>
                 {status == "authenticated" && (
-                  <Button
-                    // href="/dashboard/editor"
-                    variant="outlined"
-                    color="secondary"
-                    onClick={
-                      status == "authenticated" && user.name == undefined
-                        ? () => router.push("/auth/new-user")
-                        : () => router.push("/dashboard/editor")
-                    }
-                  >
-                    Create Post
-                  </Button>
+                  <>
+                    {user.name == undefined ? (
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => router.push("/auth/new-user")}
+                      >
+                        Create Post
+                      </Button>
+                    ) : (
+                      <CreatePostButton
+                        name={user && user.name}
+                        snackbar={snackbar}
+                        setSnackbar={setSnackbar}
+                        nav={true}
+                      />
+                    )}
+                  </>
                 )}
 
                 <Button
@@ -539,7 +585,7 @@ const Nav = ({ ecoFilter }) => {
                                       }
                                     : () => {
                                         setPopper(false);
-                                        router.push("/dashboard/editor");
+                                        startPost();
                                       }
                                 }
                                 className={classes.popperBottom}

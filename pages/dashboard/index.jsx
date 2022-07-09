@@ -1,4 +1,5 @@
 import DashboardComment from "@components/comments/DashboardComment";
+import CreatePostButton from "@components/CreatePostButton";
 import DashboardDialog from "@components/dialogs/DashboardDialog";
 import Header from "@components/Header";
 import { useSnackbarContext } from "@components/SnackbarContext";
@@ -180,6 +181,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Dashboard() {
   const classes = useStyles();
+
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -549,14 +551,11 @@ export default function Dashboard() {
           )}
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Button
-            href="/dashboard/editor"
-            variant="contained"
-            color="secondary"
-            size="large"
-          >
-            Create New Post
-          </Button>
+          <CreatePostButton
+            name={user && user.name}
+            snackbar={snackbar}
+            setSnackbar={setSnackbar}
+          />
           {!results ? (
             <CircularProgress
               color="secondary"
@@ -639,14 +638,11 @@ export default function Dashboard() {
           )}
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <Button
-            href="/dashboard/editor"
-            variant="contained"
-            color="secondary"
-            size="large"
-          >
-            Create New Post
-          </Button>
+          <CreatePostButton
+            name={user && user.name}
+            snackbar={snackbar}
+            setSnackbar={setSnackbar}
+          />
           {!results ? (
             <CircularProgress
               color="secondary"

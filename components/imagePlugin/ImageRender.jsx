@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
-  // console.log(data);
+  console.log(data);
   // console.log(preview);
   const isValidHttpUrl = (string) => {
     if (/^blob:http:\/\//.test(string)) {
@@ -45,7 +45,9 @@ const ImageRender = ({ data, preview }) => {
           string
         )
       );
-      return /^https?:\/\/./.test(string);
+      return /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
+        string
+      );
     }
   };
 
@@ -68,60 +70,66 @@ const ImageRender = ({ data, preview }) => {
       {isValidHttpUrl(data.image.url) ? (
         // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <>
-          {/* {data.imageUrl.saved ? ( */}
-          <div className={classes.image}>
-            <figure>
-              <Image
-                src={data.image.url}
-                // src={data.imageUrl.url || ""}
-                alt={data.description || ""}
-                width={data.width || 500}
-                height={data.height || 500}
-                // layout="fill"
-                // className={classes.image}
-              />
-              <figcaption>
-                {data.caption && (
-                  <Typography variant="caption">{data.caption}.</Typography>
-                )}{" "}
-                {data.citation && <em>{data.citation}</em>}
-                {data.image.url.startsWith("http") && (
-                  <Link
-                    href={data.image.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Link
-                  </Link>
-                )}
-              </figcaption>
-            </figure>
-            {/* {data.caption && (
-              <Typography variant="caption">{data.caption}.</Typography>
-            )}
-            {data.citation && <em>{data.citation}</em>}
-            {data.imageUrl.url.startsWith("http") && (
-              <Typography variant="caption">{data.imageUrl.url}</Typography>
-            )} */}
-          </div>
-          {/* ) : (
+          {data.image.url.startsWith("https://eco-media-bucket.s3") ? (
             <div className={classes.image}>
               <figure>
-                <img
-                  src={data.imageUrl.url || ""}
-                  alt={data.imageUrl.description || ""}
+                <Image
+                  src={data.image.url}
+                  // src={data.imageUrl.url || ""}
+                  alt={data.description || ""}
                   width={data.width || 500}
                   height={data.height || 500}
                   // layout="fill"
                   // className={classes.image}
                 />
-
                 <figcaption>
-                  {data.caption}. {data.citation && <em>{data.citation}</em>}
+                  {data.caption && (
+                    <Typography variant="caption">{data.caption}.</Typography>
+                  )}{" "}
+                  {data.citation && <em>{data.citation}</em>}
+                  {data.image.url.startsWith("http") && (
+                    <Link
+                      href={data.image.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Link
+                    </Link>
+                  )}
                 </figcaption>
               </figure>
             </div>
-          )} */}
+          ) : (
+            <div className={classes.image}>
+              <figure>
+                <img
+                  src={data.image.url}
+                  alt={data.description || ""}
+                  width={data.width || 500}
+                  height={data.height || 500}
+                  loading="lazy"
+                  // layout="fill"
+                  // className={classes.image}
+                />
+
+                <figcaption>
+                  {data.caption && (
+                    <Typography variant="caption">{data.caption}.</Typography>
+                  )}{" "}
+                  {data.citation && <em>{data.citation}</em>}
+                  {data.image.url.startsWith("http") && (
+                    <Link
+                      href={data.image.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Link
+                    </Link>
+                  )}
+                </figcaption>
+              </figure>
+            </div>
+          )}
         </>
       ) : (
         <div className={classes.placeholder}>
