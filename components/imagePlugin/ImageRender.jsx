@@ -9,6 +9,7 @@ const useStyles = makeStyles(() => ({
     width: "100%",
     display: "grid",
     justifyContent: "center",
+    position: "relative",
   },
   placeholder: {
     position: "relative",
@@ -51,10 +52,6 @@ const ImageRender = ({ data, preview }) => {
     }
   };
 
-  //   const checkURL = (url) => {
-  //     return(url.match(/\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/) != null);
-  // }
-
   const classes = useStyles();
   return (
     <div
@@ -68,56 +65,115 @@ const ImageRender = ({ data, preview }) => {
       }
     >
       {isValidHttpUrl(data.image.url) ? (
-        // /* show preview*/ <img style={{ width: 300 }} src={data.imageUrl} />
         <>
           {data.image.url.startsWith("https://eco-media-bucket.s3") ? (
             <div className={classes.image}>
               <figure>
                 <Image
                   src={data.image.url}
-                  // src={data.imageUrl.url || ""}
                   alt={data.description || ""}
                   width={data.width || 500}
                   height={data.height || 500}
-                  // layout="fill"
-                  // className={classes.image}
                 />
                 <figcaption>
                   {data.caption && (
                     <Typography variant="caption">{data.caption}.</Typography>
                   )}{" "}
                   {data.citation && <em>{data.citation}</em>}
-                  {data.image.url.startsWith("http") && (
-                    <Link
-                      href={data.image.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Link
-                    </Link>
-                  )}
                 </figcaption>
               </figure>
             </div>
           ) : (
             <div className={classes.image}>
               <figure>
-                <img
-                  src={data.image.url}
-                  alt={data.description || ""}
-                  width={data.width || 500}
-                  height={data.height || 500}
-                  loading="lazy"
-                  // layout="fill"
-                  // className={classes.image}
-                />
+                <span
+                  style={{
+                    boxSizing: "border-box",
+                    display: "inline-block",
+                    position: "relative",
+                    maxWidth: "100%",
+                    overflow: "hidden",
+                    width: "initial",
+                    height: "initial",
+                    background: "none",
+                    opacity: 1,
+                    border: 0,
+                    margin: 0,
+                    padding: 0,
+                  }}
+                >
+                  <span
+                    style={{
+                      boxSizing: "border-box",
+                      display: "block",
+                      maxWidth: "100%",
+                      width: "initial",
+                      height: "initial",
+                      background: "none",
+                      opacity: 1,
+                      border: 0,
+                      margin: 0,
+                      padding: 0,
+                    }}
+                  >
+                    <img
+                      style={{
+                        display: "block",
+                        maxWidth: "100%",
+                        width: "initial",
+                        height: "initial",
+                        background: "none",
+                        opacity: 1,
+                        border: 0,
+                        margin: 0,
+                        padding: 0,
+                      }}
+                      alt=""
+                      aria-hidden={true}
+                      src={`data:image/svg+xml,%3csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20version=%271.1%27%20width=%27${
+                        data.width || 500
+                      }%27%20height=%27${data.height || 500}%27/%3e`}
+                    />
+                  </span>
+
+                  <img
+                    srcSet={`${data.image.url} 2x`}
+                    src={data.image.url}
+                    alt={data.description || ""}
+                    width={data.width || 500}
+                    height={data.height || 500}
+                    loading="lazy"
+                    decoding="async"
+                    data-nimg="intrinsic"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+
+                      boxSizing: "border-box",
+                      padding: 0,
+                      border: "none",
+                      margin: "auto",
+
+                      display: "block",
+                      width: 0,
+                      height: 0,
+                      minWidth: "100%",
+                      maxWidth: "100%",
+                      minHeight: "100%",
+                      maxHeight: "100%",
+                    }}
+                  />
+                </span>
 
                 <figcaption>
                   {data.caption && (
                     <Typography variant="caption">{data.caption}.</Typography>
                   )}{" "}
                   {data.citation && <em>{data.citation}</em>}
-                  {data.image.url.startsWith("http") && (
+                  {!data.image.url.startsWith("blob:") && (
                     <Link
                       href={data.image.url}
                       target="_blank"

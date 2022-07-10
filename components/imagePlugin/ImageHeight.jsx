@@ -23,6 +23,7 @@ function ImageHeight({ onChange, value }) {
         className={classes.field}
         // style={{ width: "400px" }}
         type="number"
+        // inputProps={{ max: "1200" }}
         value={value || ""}
         onChange={(e) => {
           const height = Number(e.target.value);
