@@ -1,11 +1,12 @@
 import { generateUploadURL } from "@utils/aws";
 
-// api endpoint to get image from aws s3 bucket
+// api endpoint to get all posts from database
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== "GET") {
     return res.status(405);
   }
+
   const name = req.query.name;
   const postId = req.query.post_id;
   const type = req.query.type;

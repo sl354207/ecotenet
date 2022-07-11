@@ -170,7 +170,7 @@ function ImageUploadField({ onChange, value }) {
     try {
       // // get secure url from our server
       const url = await fetch(
-        `/api/media?name=${user.name}&post_id=${postId}&type=${photo.type}`
+        `/api/dashboard/media?name=${user.name}&post_id=${postId}&type=${photo.type}`
       ).then((res) => res.json());
       // console.log(url)
 
@@ -209,7 +209,7 @@ function ImageUploadField({ onChange, value }) {
       const key = photo.substring(photo.lastIndexOf("/") + 1);
       // // get secure url from our server
       const url = await fetch(
-        `/api/media/${key}?name=${user.name}&post_id=${postId}`
+        `/api/dashboard/media/${key}?name=${user.name}&post_id=${postId}`
       ).then((res) => res.json());
       // console.log(url)
 
