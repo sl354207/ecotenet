@@ -10,7 +10,9 @@ import {
   createPost,
   deleteComment,
   deletePost,
+  deletePostMedia,
   deleteUser,
+  deleteUserMedia,
   updatePost,
 } from "@utils/api-helpers";
 import { useRouter } from "next/router";
@@ -55,23 +57,39 @@ const DashboardDialog = ({
       name: name,
     };
 
-    const postResponse = await deletePost(deletion, "dashboard");
+    const mediaResponse = await deletePostMedia(
+      deletion.name,
+      deletion._id,
+      "dashboard"
+    );
 
-    if (postResponse.ok) {
-      if (mutate) {
-        mutate();
+    if (mediaResponse.ok) {
+      const postResponse = await deletePost(deletion, "dashboard");
+
+      if (postResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+
+        handleClose();
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "success",
+          message: `Post deleted successfully`,
+        });
       }
 
-      handleClose();
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: `Post deleted successfully`,
-      });
+      if (!postResponse.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "error",
+          message: `There was a problem deleting post. Please try again later`,
+        });
+      }
     }
-
-    if (!postResponse.ok) {
+    if (!mediaResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
@@ -116,22 +134,34 @@ const DashboardDialog = ({
   const handleDeletePerson = async () => {
     const deletion = result.name;
 
-    const userResponse = await deleteUser(deletion, "dashboard");
+    const mediaResponse = await deleteUserMedia(deletion, "dashboard");
 
-    if (userResponse.ok) {
-      if (mutate) {
-        mutate();
+    if (mediaResponse.ok) {
+      const userResponse = await deleteUser(deletion, "dashboard");
+
+      if (userResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+
+        handleClose();
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "success",
+          message: `Person deleted successfully`,
+        });
       }
-
-      handleClose();
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: `Person deleted successfully`,
-      });
+      if (!userResponse.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "error",
+          message: `There was a problem deleting person. Please try again later`,
+        });
+      }
     }
-    if (!userResponse.ok) {
+    if (!mediaResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,

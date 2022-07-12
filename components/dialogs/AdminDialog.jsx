@@ -1,5 +1,7 @@
 import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Button,
   Dialog,
@@ -15,14 +17,14 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import makeStyles from "@mui/styles/makeStyles";
 import {
   createNotification,
   deleteComment,
   deletePost,
+  deletePostMedia,
   deleteUser,
+  deleteUserMedia,
   updateComment,
   updatePost,
   updateUser,
@@ -116,33 +118,48 @@ const AdminDialog = ({
       _id: result._id,
     };
 
-    const postResponse = await deletePost(deletion, "admin");
+    const mediaResponse = await deletePostMedia(
+      result.name,
+      result._id,
+      "admin"
+    );
+    if (mediaResponse.ok) {
+      const postResponse = await deletePost(deletion, "admin");
 
-    if (postResponse.ok) {
-      const notifyResponse = await handleNotify("post", "deleted");
-      if (notifyResponse.ok) {
-        if (mutate) {
-          mutate();
+      if (postResponse.ok) {
+        const notifyResponse = await handleNotify("post", "deleted");
+        if (notifyResponse.ok) {
+          if (mutate) {
+            mutate();
+          }
+
+          handleClose();
+          setSnackbar({
+            ...snackbar,
+            open: true,
+            severity: "success",
+            message: `Post deleted successfully`,
+          });
         }
-
-        handleClose();
-        setSnackbar({
-          ...snackbar,
-          open: true,
-          severity: "success",
-          message: `Post deleted successfully`,
-        });
+        if (!notifyResponse.ok) {
+          setSnackbar({
+            ...snackbar,
+            open: true,
+            severity: "error",
+            message: `There was a problem creating notification but post was deleted`,
+          });
+        }
       }
-      if (!notifyResponse.ok) {
+      if (!postResponse.ok) {
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "error",
-          message: `There was a problem creating notification but post was deleted`,
+          message: `There was a problem deleting post. Please try again later`,
         });
       }
     }
-    if (!postResponse.ok) {
+    if (!mediaResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
@@ -151,6 +168,7 @@ const AdminDialog = ({
       });
     }
   };
+
   const handleDeleteComment = async () => {
     const deletion = {
       id: result._id,
@@ -195,22 +213,34 @@ const AdminDialog = ({
   const handleDeletePerson = async () => {
     const deletion = result.name;
 
-    const userResponse = await deleteUser(deletion, "admin");
+    const mediaResponse = await deleteUserMedia(deletion, "admin");
 
-    if (userResponse.ok) {
-      if (mutate) {
-        mutate();
+    if (mediaResponse.ok) {
+      const userResponse = await deleteUser(deletion, "admin");
+
+      if (userResponse.ok) {
+        if (mutate) {
+          mutate();
+        }
+
+        handleClose();
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "success",
+          message: `Person deleted successfully`,
+        });
       }
-
-      handleClose();
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: `Person deleted successfully`,
-      });
+      if (!userResponse.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "error",
+          message: `There was a problem deleting person. Please try again later`,
+        });
+      }
     }
-    if (!userResponse.ok) {
+    if (!mediaResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,

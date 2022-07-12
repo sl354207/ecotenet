@@ -209,7 +209,7 @@ function ImageUploadField({ onChange, value }) {
       const key = photo.substring(photo.lastIndexOf("/") + 1);
       // // get secure url from our server
       const url = await fetch(
-        `/api/dashboard/media/${key}?name=${user.name}&post_id=${postId}`
+        `/api/dashboard/media/${user.name}?post_id=${postId}&key=${key}`
       ).then((res) => res.json());
       // console.log(url)
 

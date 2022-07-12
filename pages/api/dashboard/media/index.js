@@ -1,11 +1,14 @@
 import { generateUploadURL } from "@utils/aws";
-import { checkPerson } from "@utils/mongodb";
 import { getSession } from "next-auth/react";
 
 // api endpoint to get image from aws s3 bucket
 export default async function handler(req, res) {
   const session = await getSession({ req });
   if (session) {
+    if (req.method !== "GET") {
+      return res.status(405);
+    }
+    // console.log(req);
     const name = req.query.name;
     const postId = req.query.post_id;
     const type = req.query.type;

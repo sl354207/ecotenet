@@ -20,6 +20,12 @@ export async function deleteUser(name, endpoint) {
 
   return res;
 }
+
+export async function deleteUserMedia(name, endpoint) {
+  const res = await fetch(`/api/${endpoint}/media/${name}`);
+
+  return res;
+}
 export async function createNotification(notification) {
   const res = await fetch("/api/admin/notifications", {
     method: "POST",
@@ -72,6 +78,11 @@ export async function deletePost(post, endpoint) {
     },
     body: JSON.stringify(post),
   });
+
+  return res;
+}
+export async function deletePostMedia(name, postId, endpoint) {
+  const res = await fetch(`/api/${endpoint}/media/${name}?post_id=${postId}`);
 
   return res;
 }

@@ -68,24 +68,39 @@ const ImageRender = ({ data, preview }) => {
         <>
           {data.image.url.startsWith("https://eco-media-bucket.s3") ? (
             <div className={classes.image}>
-              <figure>
+              <figure
+                style={{
+                  display: "table",
+                }}
+              >
                 <Image
                   src={data.image.url}
                   alt={data.description || ""}
                   width={data.width || 500}
                   height={data.height || 500}
                 />
-                <figcaption>
+                <figcaption
+                  style={{
+                    display: "table-caption",
+                    captionSide: "bottom",
+                  }}
+                >
                   {data.caption && (
                     <Typography variant="caption">{data.caption}.</Typography>
                   )}{" "}
-                  {data.citation && <em>{data.citation}</em>}
+                  {data.citation && (
+                    <Typography variant="caption">{data.citation}</Typography>
+                  )}
                 </figcaption>
               </figure>
             </div>
           ) : (
             <div className={classes.image}>
-              <figure>
+              <figure
+                style={{
+                  display: "table",
+                }}
+              >
                 <span
                   style={{
                     boxSizing: "border-box",
@@ -168,11 +183,18 @@ const ImageRender = ({ data, preview }) => {
                   />
                 </span>
 
-                <figcaption>
+                <figcaption
+                  style={{
+                    display: "table-caption",
+                    captionSide: "bottom",
+                  }}
+                >
                   {data.caption && (
                     <Typography variant="caption">{data.caption}.</Typography>
                   )}{" "}
-                  {data.citation && <em>{data.citation}</em>}
+                  {data.citation && (
+                    <Typography variant="caption">{data.citation}</Typography>
+                  )}
                   {!data.image.url.startsWith("blob:") && (
                     <Link
                       href={data.image.url}
