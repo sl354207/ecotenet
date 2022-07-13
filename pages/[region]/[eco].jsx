@@ -3,9 +3,9 @@ import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import { useUserContext } from "@components/UserContext";
-import { Container, IconButton, Link } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
 import FlagIcon from "@mui/icons-material/Flag";
+import { Container, IconButton, Link, Typography } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ffffff!important",
   },
   table: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       margin: "auto",
       float: "none",
     },
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const success = ({ wiki }) => {
+const eco = ({ wiki, ecoName, id }) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
@@ -91,7 +91,8 @@ const success = ({ wiki }) => {
             color="secondary"
             target="_blank"
             rel="noopener noreferrer"
-            underline="hover">
+            underline="hover"
+          >
             {domToReact(domNode.children, options)}
           </Link>
         );
@@ -183,7 +184,7 @@ const success = ({ wiki }) => {
         <div className={classes.flagBox}>
           <div className={classes.spacer}></div>
           <Header
-            title="Eco-313: Appalachian mixed mesophytic forests"
+            title={`Eco-${id}: ${ecoName}`}
             className={classes.description}
           />
           <IconButton
@@ -197,33 +198,40 @@ const success = ({ wiki }) => {
           </IconButton>
         </div>
 
-        {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-        {wiki.remaining.sections.map((section) => {
-          if (section.anchor == "Gallery") {
-            return <></>;
-          } else if (section.toclevel == 2) {
-            return (
-              <>
-                <h2>{section.line}</h2>
-                {parse(DOMPurify.sanitize(section.text), options)}
-              </>
-            );
-          } else {
-            return (
-              <>
-                <h1>{section.line}</h1>
-                {parse(DOMPurify.sanitize(section.text), options)}
-              </>
-            );
-          }
-        })}
+        {!wiki ? (
+          <Typography>page not found</Typography>
+        ) : (
+          <>
+            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+            {wiki.remaining.sections.map((section) => {
+              if (section.anchor == "Gallery") {
+                return <></>;
+              } else if (section.toclevel == 2) {
+                return (
+                  <>
+                    <h2>{section.line}</h2>
+                    {parse(DOMPurify.sanitize(section.text), options)}
+                  </>
+                );
+              } else {
+                return (
+                  <>
+                    <h1>{section.line}</h1>
+                    {parse(DOMPurify.sanitize(section.text), options)}
+                  </>
+                );
+              }
+            })}
+          </>
+        )}
+
         {/* UPDATE */}
         <Flag
           open={dialog}
           handleClose={() => handleCloseDialog()}
           contentType="ecoregion"
           result={{ _id: "test" }}
-          name={user.name}
+          name={user && user.name}
         />
       </Container>
       <Footer />
@@ -232,9 +240,14 @@ const success = ({ wiki }) => {
 };
 
 // CHANGE
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
+  // console.log(context);
+  const ecoName = context.params.eco;
+  const unSlug = ecoName.replaceAll("_", " ");
+
+  const id = context.params.region;
   const wikiRes = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/Appalachian_mixed_mesophytic_forests?redirect=true`,
+    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${ecoName}?redirect=true`,
     {
       method: "GET",
       headers: {
@@ -249,9 +262,12 @@ export const getServerSideProps = async () => {
 
   return {
     props: {
-      wiki: JSON.parse(JSON.stringify(wiki)),
+      wiki:
+        wiki.title == "Not found." ? null : JSON.parse(JSON.stringify(wiki)),
+      ecoName: unSlug,
+      id: id,
     },
   };
 };
 
-export default success;
+export default eco;

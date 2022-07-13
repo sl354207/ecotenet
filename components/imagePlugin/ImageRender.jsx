@@ -34,18 +34,18 @@ const useStyles = makeStyles(() => ({
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
-  console.log(data);
+  // console.log(data);
   // console.log(preview);
   const isValidHttpUrl = (string) => {
     if (/^blob:http:\/\//.test(string)) {
-      console.log("true blob");
+      // console.log("true blob");
       return true;
     } else {
-      console.log(
-        /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-          string
-        )
-      );
+      // console.log(
+      //   /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
+      //     string
+      //   )
+      // );
       return /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
         string
       );

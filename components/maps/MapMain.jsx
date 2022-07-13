@@ -1,6 +1,6 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
@@ -104,15 +104,15 @@ const MapMain = () => {
       .toString()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
       .trim()
-      .replace(/\s+/g, "-")
+      .replace(/\s+/g, "_")
       .replace(/[^\w-]+/g, "")
-      .replace(/--+/g, "-");
+      .replace(/--+/g, "_");
 
-  const handleClick = (event) => {
+  const handleClick = (ecoName, selectedRegion) => {
+    const slug = slugify(ecoName);
     setShowLoad(true);
-    router.push("/success");
+    router.push(`${selectedRegion}/${slug}`);
   };
 
   return (
@@ -187,7 +187,7 @@ const MapMain = () => {
                       disableElevation={true}
                       size="small"
                       color="primary"
-                      onClick={handleClick}
+                      onClick={() => handleClick(ecoName, selectedRegion)}
                     >
                       Enter
                     </Button>

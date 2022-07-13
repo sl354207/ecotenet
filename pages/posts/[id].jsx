@@ -4,17 +4,19 @@ import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/EditorLayout";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import { useSnackbarContext } from "@components/SnackbarContext";
 import { useUserContext } from "@components/UserContext";
 import Vote from "@components/Vote";
+import FlagIcon from "@mui/icons-material/Flag";
 import {
+  Button,
   Container,
   Divider,
   IconButton,
   Link,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import FlagIcon from "@mui/icons-material/Flag";
+import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 // The editor core
 import Editor from "@react-page/editor";
@@ -28,6 +30,7 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
+import { updatePost } from "@utils/api-helpers";
 import { getPostById, getPostComments } from "@utils/mongodb";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -86,6 +89,7 @@ const post = ({ post, comments }) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
+  const { snackbar, setSnackbar } = useSnackbarContext();
   // set post as value of editor
   const [value, setValue] = useState(post);
 
@@ -169,6 +173,33 @@ const post = ({ post, comments }) => {
     }
   };
 
+  const handleAddFeature = async () => {
+    const submission = {
+      _id: post._id,
+      feature: "pending",
+    };
+
+    const res = await updatePost(submission, "admin");
+
+    if (res.ok) {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        severity: "success",
+        message: "Added to feature list",
+      });
+    }
+    if (!res.ok) {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        severity: "error",
+        message:
+          "There was a problem submitting feature. Please try again later",
+      });
+    }
+  };
+
   const toggleForm = () => {
     if (user.status == "unauthenticated" || user.status == "loading") {
       signIn();
@@ -219,93 +250,112 @@ const post = ({ post, comments }) => {
 
   const date = new Date(post.date);
 
-  return <>
-    <Container className={classes.container}>
-      <div className={classes.flagBox}>
-        <div className={classes.spacer}></div>
-        <Header title={post.title} />
-        <IconButton
-          className={classes.flag}
-          color="inherit"
-          aria-label="flag"
-          size="small"
-          onClick={() => handleOpenFlag("post", post)}
-        >
-          <FlagIcon />
-        </IconButton>
-      </div>
-      <div className={classes.box}>
-        <div className={classes.content}>
-          <div className={classes.items}>
-            <Typography align="center" variant="h6">
-              <Link href={`/person/${post.name}`} color="secondary" underline="hover">
-                {post.name}
-              </Link>
-            </Typography>
-            <Typography className={classes.date} align="left" variant="h6">
-              {date.toDateString()}
+  return (
+    <>
+      <Container className={classes.container}>
+        <div className={classes.flagBox}>
+          <div className={classes.spacer}></div>
+          <Header title={post.title} />
+          <div className={classes.flag}>
+            {user && user.role === "admin" && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleAddFeature()}
+              >
+                Feature List
+              </Button>
+            )}
+
+            <IconButton
+              // className={classes.flag}
+              sx={{ marginLeft: 2 }}
+              color="inherit"
+              aria-label="flag"
+              size="small"
+              onClick={() => handleOpenFlag("post", post)}
+            >
+              <FlagIcon />
+            </IconButton>
+          </div>
+        </div>
+        <div className={classes.box}>
+          <div className={classes.content}>
+            <div className={classes.items}>
+              <Typography align="center" variant="h6">
+                <Link
+                  href={`/person/${post.name}`}
+                  color="secondary"
+                  underline="hover"
+                >
+                  {post.name}
+                </Link>
+              </Typography>
+              <Typography className={classes.date} align="left" variant="h6">
+                {date.toDateString()}
+              </Typography>
+            </div>
+            <Typography variant="h6">
+              Ecoregions:{" "}
+              {post.ecoregions.map((ecoregion) => (
+                <Link href="#" color="secondary" underline="hover">
+                  Eco-{ecoregion},{" "}
+                </Link>
+              ))}
             </Typography>
           </div>
-          <Typography variant="h6">
-            Ecoregions:{" "}
-            {post.ecoregions.map((ecoregion) => (
-              <Link href="#" color="secondary" underline="hover">
-                Eco-{ecoregion},{" "}
-              </Link>
-            ))}
-          </Typography>
+
+          <Vote
+            post_count={post.count}
+            count={count}
+            setCount={setCount}
+            handleOpenDialog={handleOpenDialog}
+          />
         </div>
-
-        <Vote
-          post_count={post.count}
-          count={count}
-          setCount={setCount}
+        <EditorLayout>
+          <Editor
+            cellPlugins={cellPlugins}
+            value={value}
+            onChange={setValue}
+            readOnly
+          />
+        </EditorLayout>
+        <Divider />
+        <Typography variant="h6" className={classes.comments}>
+          Comments:
+        </Typography>
+        <CommentList
+          comments={state}
+          post_id={post._id}
           handleOpenDialog={handleOpenDialog}
+          handleOpenFlag={handleOpenFlag}
+          showForm={showForm}
+          handleForm={toggleForm}
+          handleReply={handleReply}
         />
-      </div>
-      <EditorLayout>
-        <Editor
-          cellPlugins={cellPlugins}
-          value={value}
-          onChange={setValue}
-          readOnly
-        />
-      </EditorLayout>
-      <Divider />
-      <Typography variant="h6" className={classes.comments}>
-        Comments:
-      </Typography>
-      <CommentList
-        comments={state}
+      </Container>
+
+      <ClientDialog
+        contentType={action}
+        open={dialog}
+        handleClose={handleCloseDialog}
+        className={classes.dialog}
         post_id={post._id}
-        handleOpenDialog={handleOpenDialog}
-        handleOpenFlag={handleOpenFlag}
-        showForm={showForm}
-        handleForm={toggleForm}
-        handleReply={handleReply}
+        result={item}
+        closeForm={closeForm}
+        name={user && user.name}
       />
-    </Container>
+      <Flag
+        open={flag}
+        handleClose={handleCloseFlag}
+        contentType={action}
+        result={item}
+        name={user && user.name}
+      />
 
-    <ClientDialog
-      contentType={action}
-      open={dialog}
-      handleClose={handleCloseDialog}
-      className={classes.dialog}
-      post_id={post._id}
-      result={item}
-      closeForm={closeForm}
-      name={user && user.name}
-    />
-    <Flag
-      open={flag}
-      handleClose={handleCloseFlag}
-      contentType={action}
-      result={item}
-      name={user && user.name}
-    />
-
-    <Footer />
-  </>;
+      <Footer />
+    </>
+  );
 };
 
 // fetch post data at build time

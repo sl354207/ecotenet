@@ -80,6 +80,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.primary.light,
     minHeight: 80,
+    minWidth: "inherit",
+    padding: "inherit",
     borderRadius: "10px",
     "&:hover": {
       color: theme.text,
@@ -175,6 +177,9 @@ const useStyles = makeStyles((theme) => ({
   helper: {
     color: theme.palette.text.primary,
   },
+  email: {
+    display: "contents",
+  },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -211,6 +216,8 @@ export default function Dashboard() {
     socials: "",
     approved: "",
   });
+
+  const [email, setEmail] = useState(user && user.email);
 
   useEffect(() => {
     if (results) {
@@ -301,6 +308,7 @@ export default function Dashboard() {
 
   const handleProfileSubmit = async () => {
     const value = {
+      name: user.name,
       email: user.email,
       bio: profile.bio,
       website: profile.website,
@@ -308,7 +316,7 @@ export default function Dashboard() {
       approved: "pending",
     };
 
-    const profileUpdate = await updateUser(value, user.name, "dashboard");
+    const profileUpdate = await updateUser(value, "dashboard");
 
     if (profileUpdate.ok) {
       mutate();
@@ -326,6 +334,42 @@ export default function Dashboard() {
         severity: "error",
         message: "There was a problem saving profile. Please try again later",
       });
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  // UPDATE ONCE MUTATE USER SESSION IS IMPLEMENTED IN NEXT AUTH OR CHANGE UPDATE PERSON FUNCTIONALITY
+  const handleEmailUpdate = async () => {
+    let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+    if (!regex.test(email)) {
+      setError({ on: true, message: "Invalid Email Address" });
+    } else {
+      const value = {
+        name: user.name,
+        email: email,
+      };
+      const emailUpdate = await updateUser(value, "dashboard");
+
+      if (emailUpdate.ok) {
+        mutate();
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "success",
+          message: "Email changed successfully",
+        });
+      }
+      if (!emailUpdate.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "error",
+          message: "There was a problem changing email. Please try again later",
+        });
+      }
     }
   };
 
@@ -524,6 +568,7 @@ export default function Dashboard() {
               <Typography variant="h5" gutterBottom>
                 Private Settings:
               </Typography>
+
               <FormControl className={classes.form}>
                 <InputLabel
                   htmlFor="email"
@@ -535,17 +580,30 @@ export default function Dashboard() {
                 >
                   Email:
                 </InputLabel>
-
-                <TextBox
-                  defaultValue={results.email}
-                  placeHolder="email@site.com"
-                  id="email"
-                  autoFocus={false}
-                  // handleChange={handleChange}
-
-                  rows={1}
-                  inputProps={{ type: "email" }}
-                />
+                <div style={{ display: "flex" }}>
+                  <TextBox
+                    defaultValue={results.email}
+                    placeHolder="email@site.com"
+                    id="email"
+                    autoFocus={false}
+                    handleChange={handleEmailChange}
+                    rows={1}
+                    multiline={false}
+                    inputProps={{ type: "email" }}
+                    className={classes.email}
+                  />
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ marginLeft: 2 }}
+                    onClick={() => handleEmailUpdate()}
+                    disabled={
+                      email == "" || email == user.email || email == undefined
+                    }
+                  >
+                    Update Email
+                  </Button>
+                </div>
               </FormControl>
             </>
           )}
