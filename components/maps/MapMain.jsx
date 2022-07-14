@@ -112,7 +112,7 @@ const MapMain = () => {
   const handleClick = (ecoName, selectedRegion) => {
     const slug = slugify(ecoName);
     setShowLoad(true);
-    router.push(`${selectedRegion}/${slug}`);
+    router.push(`/ecoregion/${slug}?id=${selectedRegion}`);
   };
 
   return (

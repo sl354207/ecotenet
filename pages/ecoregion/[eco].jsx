@@ -239,13 +239,14 @@ const eco = ({ wiki, ecoName, id }) => {
   );
 };
 
-// CHANGE
+// CHANGE to static potentially
 export const getServerSideProps = async (context) => {
   // console.log(context);
   const ecoName = context.params.eco;
+  const id = context.query.id;
   const unSlug = ecoName.replaceAll("_", " ");
 
-  const id = context.params.region;
+  // const id = context.params.id;
   const wikiRes = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${ecoName}?redirect=true`,
     {

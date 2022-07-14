@@ -1,7 +1,7 @@
 import { Button, ListItem, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 const SpeciesItem = ({ result }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('xl'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl"));
 
   return (
     <ListItem key={result._id}>
@@ -23,7 +23,7 @@ const SpeciesItem = ({ result }) => {
         color="secondary"
         fullWidth
         className={classes.button}
-        href="/mammal"
+        href={`/species/${result._id}`}
       >
         {isMobile ? (
           <>

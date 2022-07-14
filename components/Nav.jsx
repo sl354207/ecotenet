@@ -323,7 +323,7 @@ const Nav = ({ ecoFilter }) => {
                   <Button href="/featured" variant="text" color="secondary">
                     Featured Posts
                   </Button>
-                  <Button href="/species" variant="text" color="secondary">
+                  <Button href="/species-map" variant="text" color="secondary">
                     Species Map
                   </Button>
                   {status == "authenticated" && (
@@ -549,7 +549,7 @@ const Nav = ({ ecoFilter }) => {
                             <MenuItem
                               onClick={() => {
                                 setPopper(false);
-                                router.push("/species");
+                                router.push("/species-map");
                               }}
                               className={classes.popperTop}
                             >
@@ -658,7 +658,7 @@ const Nav = ({ ecoFilter }) => {
               </div>
               <Divider />
               {state.map((menuItem) => {
-                const { menuTitle, menuSubs, pageURL, openList } = menuItem;
+                const { menuTitle, menuSubs, openList } = menuItem;
 
                 return (
                   <List
@@ -683,7 +683,14 @@ const Nav = ({ ecoFilter }) => {
                             className={classes.nested}
                             onClick={() => {
                               handleDrawerClose(Event);
-                              router.push(pageURL);
+                              router.push({
+                                pathname: `/[region]/[category]`,
+                                query: {
+                                  region: ecoFilter,
+                                  category: menuSub.replaceAll("/", "_"),
+                                  title: menuTitle,
+                                },
+                              });
                             }}
                           >
                             <ListItemText primary={menuSub} />

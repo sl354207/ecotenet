@@ -194,7 +194,7 @@ const reducer = (speciesChips, action) => {
   }
 };
 
-const species = () => {
+const speciesMap = () => {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -418,4 +418,4 @@ const species = () => {
   );
 };
 
-export default species;
+export default speciesMap;

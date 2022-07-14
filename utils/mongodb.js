@@ -105,6 +105,22 @@ const getPosts = async (status, approved) => {
 
   return posts;
 };
+const getPostsByCategoryAndRegion = async (category, ecoregion) => {
+  const { db } = await connectToDatabase();
+
+  const posts = await db
+    .collection("posts")
+    .find({
+      status: "published",
+      approved: "true",
+      category: category,
+      ecoregions: ecoregion,
+    })
+    .sort({ count: -1 })
+    .toArray();
+
+  return posts;
+};
 // query database to get all published posts
 const getFeatures = async () => {
   const { db } = await connectToDatabase();
@@ -278,12 +294,12 @@ const deleteComment = async (_id) => {
   return deleted;
 };
 
-// CHANGE TO SPECIES INSTEAD OF MAMMALS
+// UPDATE TO SPECIES TYPE FROM CLASS
 //get mammals by unique eco id
-const getMammals = async (CLASS, unique_id) => {
+const getSpecies = async (CLASS, unique_id) => {
   const { db } = await connectToDatabase();
 
-  const mammals = await db
+  const species = await db
     .collection("species")
     .find({
       CLASS: CLASS,
@@ -292,19 +308,19 @@ const getMammals = async (CLASS, unique_id) => {
     .sort({ Scientific_Name: 1 })
     .toArray();
 
-  return mammals;
+  return species;
 };
 
 // CHANGE TO SPECIES INSTEAD OF MAMMALS
 // retrieve single mammal by id from database
-const getMammalById = async (id) => {
+const getSpeciesById = async (id) => {
   const { db } = await connectToDatabase();
 
-  const mammal = await db.collection("species").findOne({
+  const species = await db.collection("species").findOne({
     _id: ObjectId(id),
   });
 
-  return mammal;
+  return species;
 };
 
 const searchAllPosts = async (query) => {
@@ -719,6 +735,7 @@ module.exports = {
   connectToDatabase,
   createPost,
   getPosts,
+  getPostsByCategoryAndRegion,
   getFeatures,
   getFeatureCandidates,
   getDashboardPosts,
@@ -732,8 +749,8 @@ module.exports = {
   getDashboardComments,
   updateComment,
   deleteComment,
-  getMammals,
-  getMammalById,
+  getSpecies,
+  getSpeciesById,
   searchAllPosts,
   searchAllSpecies,
   searchEcoPosts,

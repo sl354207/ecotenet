@@ -22,6 +22,7 @@ export default function MyApp(props) {
   }, []);
 
   const router = useRouter();
+  // console.log(router);
   // category filter logic. Revisit
   const [ecoFilter, setEcoFilter] = useState("");
 
@@ -29,9 +30,9 @@ export default function MyApp(props) {
   useEffect(() => {
     let ecoregion = sessionStorage.getItem("ecoregion");
 
-    if (router.pathname == "/success") {
-      sessionStorage.setItem("ecoregion", router.pathname);
-      setEcoFilter(router.pathname);
+    if (router.pathname == "/ecoregion/[eco]") {
+      sessionStorage.setItem("ecoregion", router.query.id);
+      setEcoFilter(router.query.id);
     } else {
       setEcoFilter(ecoregion);
     }
