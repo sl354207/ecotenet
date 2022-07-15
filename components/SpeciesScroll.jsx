@@ -46,10 +46,10 @@ const SpeciesScroll = ({ category }) => {
   // create object where keys equal uniqueFirst value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
   const refs = uniqueFirst.reduce((acc, value) => {
     acc[value] = createRef();
-    console.log(acc);
+    // console.log(acc);
     return acc;
   }, {});
-  console.log(refs);
+  // console.log(refs);
 
   // scroll to clicked subheader section of page
   const handleClick = (id, yOffset) => {

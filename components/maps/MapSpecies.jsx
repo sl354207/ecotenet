@@ -1,6 +1,6 @@
 import Coords from "@data/eco_coord.json";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -148,7 +148,8 @@ const MapSpecies = ({ clickInfo, state }) => {
 
   const handleClick = (event) => {
     setShowLoad(true);
-    router.push("/success");
+
+    router.push(`/ecoregion/${selectedRegion}`);
   };
 
   const clickedRegions = clickInfo;

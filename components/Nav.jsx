@@ -42,6 +42,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: theme.spacing(2),
+    // color: "#ffa726"
   },
   title: {
     flexGrow: 1,
@@ -105,6 +106,8 @@ const useStyles = makeStyles((theme) => ({
   },
   sort: {
     color: theme.palette.secondary.light,
+    // color: "#ffa726",
+    // color: theme.palette.text.primary,
   },
   home: {
     minWidth: "auto",
@@ -291,7 +294,7 @@ const Nav = ({ ecoFilter }) => {
                   <IconButton
                     edge="start"
                     className={classes.button}
-                    color="inherit"
+                    // color="inherit"
                     aria-label="filter"
                     onClick={handleDrawerOpen}
                     size="large"

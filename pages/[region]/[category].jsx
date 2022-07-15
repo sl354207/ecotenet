@@ -2,136 +2,35 @@ import Footer from "@components/Footer";
 import Header from "@components/Header";
 import PostList from "@components/PostList";
 import SpeciesScroll from "@components/SpeciesScroll";
-import { Container, useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+import { Container, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { getPostsByCategoryAndRegion, getSpecies } from "@utils/mongodb";
 
 const useStyles = makeStyles(() => ({
-  subHeader: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    top: 60,
+  header: {
     marginTop: 20,
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-  },
-  subList: {
-    display: "flex",
-    justifyContent: "center",
   },
 }));
 
 const categoryList = ({ category, title }) => {
-  // console.log(category);
   const classes = useStyles();
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-
-  // let uniqueFirst;
-  // let refs;
-
-  // if (category[0].Scientific_Name) {
-  //   // create new array containing only unique first letters of scientific name of mammals
-  //   uniqueFirst = [...new Set(category.map((item) => item.Scientific_Name[0]))];
-
-  //   // create object where keys equal uniqueFirst value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
-  //   refs = uniqueFirst.reduce((acc, value) => {
-  //     acc[value] = useRef();
-  //     return acc;
-  //   }, {});
-  // }
-
-  // const uniqueFirst = [
-  //   ...new Set(category.map((item) => item.Scientific_Name[0])),
-  // ];
-
-  // // create object where keys equal uniqueFirst value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
-  // const refs = uniqueFirst.reduce((acc, value) => {
-  //   acc[value] = useRef();
-  //   return acc;
-  // }, {});
-
-  // // scroll to clicked subheader section of page
-  // const handleClick = (id, yOffset) => {
-  //   // set el to clicked elements ref
-  //   const el = refs[id].current;
-  //   // get the position of el within browser window plus an offset
-  //   const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-  //   // scroll to postion within window
-  //   window.scrollTo({ top: y, behavior: "smooth" });
-  // };
   return (
     <>
       <Container>
         <Header title={title} />
-        {category[0].Scientific_Name ? (
-          // <>
-          //   <AppBar
-          //     component="div"
-          //     position="sticky"
-          //     className={classes.subHeader}
-          //   >
-          //     {uniqueFirst.map((item) => (
-          //       <>
-          //         {isMobile ? (
-          //           <Button
-          //             key={item}
-          //             onClick={() => handleClick(item, -260)}
-          //             className={classes.subList}
-          //             variant="outlined"
-          //             color="secondary"
-          //           >
-          //             <Typography variant="h5" align="center">
-          //               {item}
-          //             </Typography>
-          //           </Button>
-          //         ) : (
-          //           <Button
-          //             key={item}
-          //             onClick={() => handleClick(item, -140)}
-          //             className={classes.subList}
-          //             variant="outlined"
-          //             color="secondary"
-          //           >
-          //             <Typography variant="h5" align="center">
-          //               {item}
-          //             </Typography>
-          //           </Button>
-          //         )}
-          //       </>
-          //     ))}
-          //   </AppBar>
-          //   <Toolbar />
-          //   <List>
-          //     {uniqueFirst.map((entry) => {
-          //       return (
-          //         <>
-          //           <ListItem key={entry} ref={refs[entry]}>
-          //             <ListItemText>
-          //               <Typography variant="h5" color="secondary">
-          //                 {entry}
-          //               </Typography>
-          //             </ListItemText>
-          //           </ListItem>
-          //           {category.map((item) => {
-          //             if (item.Scientific_Name[0] === entry) {
-          //               return <SpeciesItem result={item} />;
-          //             }
-          //           })}
-          //           <Divider />
-          //         </>
-          //       );
-          //     })}
-          //   </List>
-          // </>
-          <SpeciesScroll category={category} />
+        {category.length === 0 ? (
+          <Typography variant="h6" align="center" className={classes.header}>
+            no results
+          </Typography>
         ) : (
-          <PostList posts={category} />
+          <>
+            {category[0].Scientific_Name ? (
+              <SpeciesScroll category={category} />
+            ) : (
+              <PostList posts={category} />
+            )}
+          </>
         )}
       </Container>
       <Footer />

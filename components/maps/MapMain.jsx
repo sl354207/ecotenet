@@ -110,9 +110,9 @@ const MapMain = () => {
       .replace(/--+/g, "_");
 
   const handleClick = (ecoName, selectedRegion) => {
-    const slug = slugify(ecoName);
+    // const slug = slugify(ecoName);
     setShowLoad(true);
-    router.push(`/ecoregion/${slug}?id=${selectedRegion}`);
+    router.push(`/ecoregion/${selectedRegion}`);
   };
 
   return (

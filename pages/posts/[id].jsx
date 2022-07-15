@@ -298,7 +298,11 @@ const post = ({ post, comments }) => {
             <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (
-                <Link href="#" color="secondary" underline="hover">
+                <Link
+                  href={`/ecoregion/${ecoregion}`}
+                  color="secondary"
+                  underline="hover"
+                >
                   Eco-{ecoregion},{" "}
                 </Link>
               ))}
@@ -310,6 +314,8 @@ const post = ({ post, comments }) => {
             count={count}
             setCount={setCount}
             handleOpenDialog={handleOpenDialog}
+            name={user && user.name}
+            voters={post.voters}
           />
         </div>
         <EditorLayout>

@@ -66,6 +66,7 @@ const createPost = async (
   feature
 ) => {
   const count = 0;
+  const voters = [];
 
   const { db } = await connectToDatabase();
 
@@ -86,6 +87,7 @@ const createPost = async (
     featured,
     date,
     feature,
+    voters,
   };
 
   const response = await db.collection("posts").insertOne(data);
@@ -730,6 +732,18 @@ const checkPerson = async (name) => {
 
   return response;
 };
+const getEcoregion = async (id) => {
+  const { db } = await connectToDatabase();
+
+  const response = await db.collection("ecoregions").findOne(
+    {
+      unique_id: id,
+    },
+    { unique_id: 1, name: 1, url: 1 }
+  );
+
+  return response;
+};
 
 module.exports = {
   connectToDatabase,
@@ -770,4 +784,5 @@ module.exports = {
   updateNotification,
   checkName,
   checkPerson,
+  getEcoregion,
 };

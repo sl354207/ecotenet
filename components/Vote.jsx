@@ -1,6 +1,6 @@
-import { Button, IconButton, Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { Button, IconButton, Typography } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 
 const useStyles = makeStyles(() => ({
@@ -14,7 +14,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Vote = ({ post_count, count, setCount, handleOpenDialog }) => {
+const Vote = ({
+  post_count,
+  count,
+  setCount,
+  handleOpenDialog,
+  voters,
+  name,
+}) => {
   const classes = useStyles();
 
   //set limit for count
@@ -42,32 +49,46 @@ const Vote = ({ post_count, count, setCount, handleOpenDialog }) => {
       setCount(count - 1);
     }
   };
-  return <>
-    <div className={classes.root}>
-      <div className={classes.count}>
-        <IconButton onClick={handleCountUp} color="secondary" size="large">
-          <ArrowDropUp fontSize="large" />
-        </IconButton>
-        <Typography align="center">{count}</Typography>
-        <IconButton onClick={handleCountDown} color="secondary" size="large">
-          <ArrowDropDown fontSize="large" />
-        </IconButton>
+  return (
+    <>
+      <div className={classes.root}>
+        <div className={classes.count}>
+          <IconButton
+            onClick={handleCountUp}
+            color="secondary"
+            size="large"
+            disabled={voters.includes(name)}
+          >
+            <ArrowDropUp fontSize="large" />
+          </IconButton>
+          <Typography align="center">{count}</Typography>
+          <IconButton
+            onClick={handleCountDown}
+            color="secondary"
+            size="large"
+            disabled={voters.includes(name)}
+          >
+            <ArrowDropDown fontSize="large" />
+          </IconButton>
+        </div>
       </div>
-    </div>
-    {count !== post_count ? (
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => handleOpenDialog("Vote", count)}
-      >
-        Vote
-      </Button>
-    ) : (
-      <Button variant="contained" color="secondary" disabled>
-        Vote
-      </Button>
-    )}
-  </>;
+      {count !== post_count ? (
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() =>
+            handleOpenDialog("Vote", { count: count, voters: voters })
+          }
+        >
+          Vote
+        </Button>
+      ) : (
+        <Button variant="contained" color="secondary" disabled>
+          Vote
+        </Button>
+      )}
+    </>
+  );
 };
 
 export default Vote;

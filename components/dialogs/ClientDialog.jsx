@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { createComment, updatePost } from "@utils/api-helpers";
+import { useRouter } from "next/router";
 
 const ClientDialog = ({
   open,
@@ -20,6 +21,7 @@ const ClientDialog = ({
   post_id,
   name,
 }) => {
+  const router = useRouter();
   const { snackbar, setSnackbar } = useSnackbarContext();
   let item;
 
@@ -78,14 +80,12 @@ const ClientDialog = ({
     const submission = {
       _id: post_id,
       name: name,
-      count: result,
+      count: result.count,
+      voters: [...result.voters, name],
     };
     const updateResponse = await updatePost(submission, "dashboard");
 
     if (updateResponse.ok) {
-      if (mutate) {
-        mutate();
-      }
       handleClose();
       setSnackbar({
         ...snackbar,
@@ -93,7 +93,9 @@ const ClientDialog = ({
         severity: "success",
         message: `${contentType} submit successfully`,
       });
+      router.reload();
     }
+
     if (!updateResponse.ok) {
       setSnackbar({
         ...snackbar,

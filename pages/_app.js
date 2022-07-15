@@ -31,8 +31,8 @@ export default function MyApp(props) {
     let ecoregion = sessionStorage.getItem("ecoregion");
 
     if (router.pathname == "/ecoregion/[eco]") {
-      sessionStorage.setItem("ecoregion", router.query.id);
-      setEcoFilter(router.query.id);
+      sessionStorage.setItem("ecoregion", router.query.eco);
+      setEcoFilter(router.query.eco);
     } else {
       setEcoFilter(ecoregion);
     }
