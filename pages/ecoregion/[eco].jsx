@@ -254,7 +254,7 @@ export const getServerSideProps = async (context) => {
 
   const eco = await getEcoregion(id);
   // const ecoName = eco.name
-  const unSlug = eco.name.replaceAll(" ", "_");
+  const unSlug = eco.name.replace(" ", "_");
   // console.log(typeof eco.name);
 
   let wikiRes;
@@ -284,7 +284,7 @@ export const getServerSideProps = async (context) => {
 
     default:
       wikiRes = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replaceAll(
+        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
           " ",
           "_"
         )}?redirect=true`,
