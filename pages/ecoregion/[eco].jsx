@@ -253,7 +253,9 @@ export const getServerSideProps = async (context) => {
   // const id = context.query.id;
 
   const eco = await getEcoregion(id);
-  // const unSlug = eco.name.replaceAll(" ", "_");
+  // const ecoName = eco.name
+  const unSlug = eco.name.replaceAll(" ", "_");
+  // console.log(typeof eco.name);
 
   let wikiRes;
   let wiki;
@@ -261,10 +263,7 @@ export const getServerSideProps = async (context) => {
   switch (eco.url) {
     case undefined:
       wikiRes = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.name.replaceAll(
-          " ",
-          "_"
-        )}?redirect=true`,
+        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`,
         {
           method: "GET",
           headers: {
@@ -320,6 +319,8 @@ export const getServerSideProps = async (context) => {
   // );
 
   // const wiki = await wikiRes.json();
+  // console.log(eco.name);
+  // console.log(id);
 
   return {
     props: {
