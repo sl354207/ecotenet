@@ -63,6 +63,87 @@ const theme = createTheme({
         },
       },
     },
+    // MuiAutocomplete: {
+    //   // variants: [
+    //   //   {
+    //   //     props: { disableClearable: true },
+    //   //     style: {
+    //   //       root: {
+    //   //         position: "relative",
+    //   //         border: `1px solid ${alpha("#94c9ff", 0.5)}`,
+    //   //         borderRadius: 4,
+    //   //         backgroundColor: "#132f4c",
+    //   //         "&:focus-within": {
+    //   //           backgroundColor: "#132f4c",
+    //   //           border: `1px solid ${alpha("#94c9ff", 1)}`,
+    //   //           borderRadius: 4,
+    //   //         },
+    //   //         marginTop: 20,
+    //   //         marginBottom: 20,
+    //   //         marginLeft: 4,
+    //   //         width: "auto",
+    //   //       },
+    //   //       paper: {
+    //   //         marginTop: 4,
+    //   //         backgroundColor: "#132f4c",
+    //   //       },
+    //   //     },
+    //   //   },
+    //   //   {
+    //   //     props: { disableClearable: false },
+    //   //     style: {
+    //   //       root: {
+    //   //         position: "relative",
+    //   //         border: `1px solid ${alpha("#94c9ff", 0.5)}`,
+    //   //         borderRadius: 4,
+    //   //         backgroundColor: "#132f4c",
+    //   //         "&:focus-within": {
+    //   //           backgroundColor: "#132f4c",
+    //   //           border: `1px solid ${alpha("#94c9ff", 1)}`,
+    //   //           borderRadius: 4,
+    //   //         },
+    //   //         marginTop: 20,
+    //   //         marginBottom: 20,
+    //   //         marginLeft: 4,
+    //   //         width: "auto",
+    //   //       },
+    //   //       paper: {
+    //   //         marginTop: 4,
+    //   //         backgroundColor: "#132f4c",
+    //   //       },
+    //   //     },
+    //   //   },
+    //   // ],
+    //   styleOverrides: {
+    //     root: {
+    //       position: "relative",
+    //       border: `1px solid ${alpha("#94c9ff", 0.5)}`,
+    //       borderRadius: 4,
+    //       backgroundColor: "#132f4c",
+    //       "&:focus-within": {
+    //         backgroundColor: "#132f4c",
+    //         border: `1px solid ${alpha("#94c9ff", 1)}`,
+    //         borderRadius: 4,
+    //       },
+    //       marginTop: 20,
+    //       marginBottom: 20,
+    //       marginLeft: 4,
+    //       width: "auto",
+    //     },
+    //     paper: {
+    //       marginTop: 4,
+    //       backgroundColor: "#132f4c",
+    //     },
+    //   },
+    // },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          marginTop: 4,
+          backgroundColor: "#132f4c",
+        },
+      },
+    },
   },
 });
 

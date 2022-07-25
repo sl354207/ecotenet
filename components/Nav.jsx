@@ -355,10 +355,22 @@ const Nav = ({ ecoFilter }) => {
               </div>
 
               <Autocomplete
-                classes={{
-                  paper: classes.popper,
-                  root: classes.root,
-                  input: classes.input,
+                // classes={{
+                //   paper: classes.popper,
+                //   root: classes.root,
+                //   input: classes.input,
+                // }}
+                sx={{
+                  "&.MuiAutocomplete-input": {
+                    padding: theme.spacing(1, 1, 1, 0),
+                    // vertical padding + font size from searchIcon
+                    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                    transition: theme.transitions.create("width"),
+                    width: "0ch",
+                    "&:focus": {
+                      width: "20ch",
+                    },
+                  },
                 }}
                 autoHighlight
                 disableClearable={true}
@@ -417,7 +429,7 @@ const Nav = ({ ecoFilter }) => {
                 selectOnFocus
                 clearOnBlur
                 handleHomeEndKeys
-                id="free-solo-with-text-demo"
+                id="nav"
                 options={tags}
                 getOptionLabel={(option) => {
                   // Value selected with enter, right from the input
@@ -439,9 +451,21 @@ const Nav = ({ ecoFilter }) => {
                   <InputBase
                     {...params}
                     placeholder="Search Site…"
-                    classes={{
-                      root: classes.root,
-                      input: classes.input,
+                    // classes={{
+                    //   root: classes.root,
+                    //   input: classes.input,
+                    // }}
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        padding: theme.spacing(1, 1, 1, 0),
+                        // vertical padding + font size from searchIcon
+                        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                        transition: theme.transitions.create("width"),
+                        width: "0ch",
+                        "&:focus": {
+                          width: "20ch",
+                        },
+                      },
                     }}
                     ref={params.InputProps.ref}
                     inputProps={params.inputProps}

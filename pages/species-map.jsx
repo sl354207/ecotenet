@@ -14,6 +14,26 @@ import { alpha, useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import { useReducer, useState } from "react";
 
+// const SuccessAuto = styled(Autocomplete)(({ theme }) => ({
+//   position: "relative",
+//   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   borderRadius: theme.shape.borderRadius,
+//   backgroundColor: theme.palette.primary.light,
+//   "&:focus-within": {
+//     backgroundColor: theme.palette.primary.light,
+//     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//     borderRadius: theme.shape.borderRadius,
+//   },
+//   marginTop: 20,
+//   marginBottom: 20,
+//   marginLeft: theme.spacing(1),
+//   width: "auto",
+//   "& .MuiAutocomplete-paper": {
+//     marginTop: 4,
+//     backgroundColor: theme.palette.primary.light,
+//   },
+// }));
+
 const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
@@ -287,15 +307,30 @@ const speciesMap = () => {
           className={classes.descriptionMargin}
         />
         <Autocomplete
-          className={classes.search}
-          classes={{ paper: classes.popper }}
+          // className={classes.search}
+          // classes={{ paper: classes.popper }}
+          sx={{
+            position: "relative",
+            border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+            borderRadius: theme.shape.borderRadius,
+            backgroundColor: theme.palette.primary.light,
+            "&:focus-within": {
+              backgroundColor: theme.palette.primary.light,
+              border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+              borderRadius: theme.shape.borderRadius,
+            },
+            marginTop: 4,
+            marginBottom: 1,
+            // marginLeft: theme.spacing(1),
+            width: "auto",
+          }}
           autoHighlight
           onChange={(event, newValue) => handleSubmit(event, newValue)}
           selectOnFocus
           clearOnBlur
           blurOnSelect
           handleHomeEndKeys
-          id="free-solo-with-text-demo"
+          id="species-map"
           options={
             results
               ? results.map(
@@ -310,8 +345,35 @@ const speciesMap = () => {
               {...params}
               placeholder="Search…"
               variant="outlined"
-              classes={{
-                root: classes.root,
+              // classes={{
+              //   root: classes.root,
+              // }}
+              sx={{
+                color: theme.palette.text.primary,
+                borderRadius: theme.shape.borderRadius,
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: theme.shape.borderRadius,
+                  },
+                  "&:hover fieldset": {
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: theme.shape.borderRadius,
+                  },
+                  "&.Mui-focused fieldset": {
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: theme.shape.borderRadius,
+                  },
+                },
               }}
               ref={params.InputProps.ref}
               inputProps={params.inputProps}
