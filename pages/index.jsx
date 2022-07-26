@@ -1,5 +1,4 @@
 import MapMain from "@components/maps/MapMain";
-import React from "react";
 
 export default function MapPage() {
   // need to dynamically import to work with mapbox
@@ -9,7 +8,7 @@ export default function MapPage() {
   // });
 
   return (
-    <div id="map">
+    <div id="map-main">
       <MapMain />
     </div>
   );

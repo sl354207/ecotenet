@@ -17,40 +17,40 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
-  header: {
-    marginTop: 20,
-  },
-  search: {
-    position: "relative",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.light,
-    "&:focus-within": {
-      backgroundColor: theme.palette.primary.light,
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      borderRadius: theme.shape.borderRadius,
-    },
-    marginTop: 20,
-    marginBottom: 20,
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
-  root: {
-    color: theme.palette.text.primary,
-  },
-  input: {
-    padding: theme.spacing(2, 2, 2, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(2)})`,
-  },
-  popper: {
-    marginTop: 4,
-    backgroundColor: theme.palette.primary.light,
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
+  // header: {
+  //   marginTop: 20,
+  // },
+  // search: {
+  //   position: "relative",
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+  //   borderRadius: theme.shape.borderRadius,
+  //   backgroundColor: theme.palette.primary.light,
+  //   "&:focus-within": {
+  //     backgroundColor: theme.palette.primary.light,
+  //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+  //     borderRadius: theme.shape.borderRadius,
+  //   },
+  //   marginTop: 20,
+  //   marginBottom: 20,
+  //   marginLeft: theme.spacing(1),
+  //   width: "auto",
+  // },
+  // root: {
+  //   color: theme.palette.text.primary,
+  // },
+  // input: {
+  //   padding: theme.spacing(2, 2, 2, 0),
+  //   paddingLeft: `calc(1em + ${theme.spacing(2)})`,
+  // },
+  // popper: {
+  //   marginTop: 4,
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -82,12 +82,22 @@ const search = ({ ecoFilter }) => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        // className={classes.progress}
+        sx={{
+          margin: "100px auto",
+          display: "flex",
+          justifySelf: "center",
+        }}
       />
     );
   } else if (Array.isArray(results) && results.length == 0) {
     list = (
-      <Typography variant="h6" align="center" className={classes.header}>
+      <Typography
+        variant="h6"
+        align="center"
+        // className={classes.header}
+        sx={{ marginTop: "20px" }}
+      >
         no results
       </Typography>
     );
