@@ -12,6 +12,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -101,8 +102,23 @@ const search = ({ ecoFilter }) => {
       <Container>
         <Header title="Search Results" />
         <Autocomplete
-          className={classes.search}
-          classes={{ paper: classes.popper }}
+          // className={classes.search}
+          // classes={{ paper: classes.popper }}
+          sx={{
+            position: "relative",
+            border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+            borderRadius: "4px",
+            backgroundColor: theme.palette.primary.light,
+            "&:focus-within": {
+              backgroundColor: theme.palette.primary.light,
+              border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+              borderRadius: "4px",
+            },
+            marginTop: 4,
+            marginBottom: 1,
+            marginLeft: theme.spacing(1),
+            width: "auto",
+          }}
           autoHighlight
           disableClearable={true}
           onChange={(event, newValue) => {
@@ -178,9 +194,11 @@ const search = ({ ecoFilter }) => {
             <InputBase
               {...params}
               placeholder="Search…"
-              classes={{
-                root: classes.root,
-                input: classes.input,
+              sx={{
+                "& .MuiInputBase-input": {
+                  padding: theme.spacing(2, 2, 2, 0),
+                  paddingLeft: `calc(1em + ${theme.spacing(2)})`,
+                },
               }}
               ref={params.InputProps.ref}
               inputProps={params.inputProps}

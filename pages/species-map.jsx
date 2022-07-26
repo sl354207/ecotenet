@@ -312,12 +312,12 @@ const speciesMap = () => {
           sx={{
             position: "relative",
             border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-            borderRadius: theme.shape.borderRadius,
+            borderRadius: "4px",
             backgroundColor: theme.palette.primary.light,
             "&:focus-within": {
               backgroundColor: theme.palette.primary.light,
               border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-              borderRadius: theme.shape.borderRadius,
+              borderRadius: "4px",
             },
             marginTop: 4,
             marginBottom: 1,
@@ -330,7 +330,7 @@ const speciesMap = () => {
           clearOnBlur
           blurOnSelect
           handleHomeEndKeys
-          id="species-map"
+          id="species-map-auto"
           options={
             results
               ? results.map(
@@ -350,28 +350,28 @@ const speciesMap = () => {
               // }}
               sx={{
                 color: theme.palette.text.primary,
-                borderRadius: theme.shape.borderRadius,
+                borderRadius: "4px",
                 "& .MuiOutlinedInput-root": {
                   "& fieldset": {
                     border: `1px solid ${alpha(
                       theme.palette.secondary.main,
                       0.5
                     )}`,
-                    borderRadius: theme.shape.borderRadius,
+                    borderRadius: "4px",
                   },
                   "&:hover fieldset": {
                     border: `1px solid ${alpha(
                       theme.palette.secondary.main,
                       0.5
                     )}`,
-                    borderRadius: theme.shape.borderRadius,
+                    borderRadius: "4px",
                   },
                   "&.Mui-focused fieldset": {
                     border: `1px solid ${alpha(
                       theme.palette.secondary.main,
                       0.5
                     )}`,
-                    borderRadius: theme.shape.borderRadius,
+                    borderRadius: "4px",
                   },
                 },
               }}

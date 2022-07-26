@@ -315,8 +315,23 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         *denotes required field
       </Typography>
       <Autocomplete
-        className={classes.search}
-        classes={{ paper: classes.popper }}
+        // className={classes.search}
+        // classes={{ paper: classes.popper }}
+        sx={{
+          position: "relative",
+          border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+          borderRadius: "4px",
+          backgroundColor: theme.palette.primary.light,
+          "&:focus-within": {
+            backgroundColor: theme.palette.primary.light,
+            border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+            borderRadius: "4px",
+          },
+          marginTop: 4,
+          marginBottom: 1,
+          // marginLeft: theme.spacing(1),
+          width: "auto",
+        }}
         autoHighlight
         onChange={(event, newValue) => handleSubmit(event, newValue)}
         selectOnFocus
@@ -337,8 +352,35 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             {...params}
             placeholder="Search…"
             variant="outlined"
-            classes={{
-              root: classes.root,
+            // classes={{
+            //   root: classes.root,
+            // }}
+            sx={{
+              color: theme.palette.text.primary,
+              borderRadius: "4px",
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    0.5
+                  )}`,
+                  borderRadius: "4px",
+                },
+                "&:hover fieldset": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    0.5
+                  )}`,
+                  borderRadius: "4px",
+                },
+                "&.Mui-focused fieldset": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    0.5
+                  )}`,
+                  borderRadius: "4px",
+                },
+              },
             }}
             ref={params.InputProps.ref}
             inputProps={params.inputProps}

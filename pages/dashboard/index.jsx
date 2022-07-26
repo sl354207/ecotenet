@@ -31,6 +31,7 @@ import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import makeStyles from "@mui/styles/makeStyles";
 import { updateNotification, updateUser } from "@utils/api-helpers";
+import theme from "@utils/theme";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -498,8 +499,28 @@ export default function Dashboard() {
                   Socials:
                 </InputLabel>
                 <Autocomplete
-                  className={classes.search}
-                  classes={{ paper: classes.popper }}
+                  // className={classes.search}
+                  // classes={{ paper: classes.popper }}
+                  sx={{
+                    position: "relative",
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: "4px",
+                    backgroundColor: theme.palette.primary.main,
+                    "&:focus-within": {
+                      backgroundColor: theme.palette.primary.main,
+                      border: `1px solid ${alpha(
+                        theme.palette.secondary.main,
+                        1
+                      )}`,
+                      borderRadius: "4px",
+                    },
+                    // marginTop: 6,
+                    // marginBottom: 10,
+                    width: "auto",
+                  }}
                   autoHighlight
                   disabled={
                     profile.socials && profile.socials.length > 2 ? true : false
@@ -531,16 +552,19 @@ export default function Dashboard() {
                   id="socials"
                   name="socials"
                   options={[]}
-                  renderOption={(option) => option.title}
+                  renderOption={(props, option) => (
+                    <li {...props}>{option.title}</li>
+                  )}
                   freeSolo
                   filterSelectedOptions={false}
                   renderInput={(params) => (
                     <InputBase
                       {...params}
                       placeholder="example.com"
-                      classes={{
-                        root: classes.root,
-                        input: classes.input,
+                      sx={{
+                        "& .MuiInputBase-input": {
+                          padding: "20px 10px 20px 10px",
+                        },
                       }}
                       ref={params.InputProps.ref}
                       inputProps={params.inputProps}

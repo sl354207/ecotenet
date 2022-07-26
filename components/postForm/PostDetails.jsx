@@ -22,6 +22,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -205,11 +206,43 @@ const PostDetails = ({
             </InputLabel>
 
             <Autocomplete
-              className={classes.search}
-              classes={{
-                paper: classes.popper,
-                groupLabel: classes.groupLabel,
-                noOptions: classes.noOptions,
+              // className={classes.search}
+              // classes={
+              //   {
+              //     // paper: classes.popper,
+              //     // groupLabel: classes.groupLabel,
+              //     // noOptions: classes.noOptions,
+              //   }
+              // }
+              sx={{
+                position: "relative",
+                border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+                borderRadius: "4px",
+                backgroundColor: theme.palette.primary.main,
+                "&:focus-within": {
+                  backgroundColor: theme.palette.primary.main,
+                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+                  borderRadius: "4px",
+                },
+                // marginTop: 6,
+                // marginBottom: 10,
+                width: "auto",
+              }}
+              ListboxProps={{
+                sx: {
+                  "& .MuiAutocomplete-groupLabel": {
+                    backgroundColor: theme.palette.primary.light,
+                    color: alpha(theme.palette.text.primary, 0.6),
+                    fontSize: 16,
+                  },
+                  "& .MuiAutocomplete-groupUl": {
+                    backgroundColor: theme.palette.primary.light,
+                  },
+                  "& .MuiAutocomplete-paper": {
+                    backgroundColor: theme.palette.primary.light,
+                    color: alpha(theme.palette.text.primary, 0.6),
+                  },
+                },
               }}
               autoHighlight
               id="category"
@@ -223,6 +256,13 @@ const PostDetails = ({
               defaultValue={category || ""}
               value={category}
               options={CategoriesAutoComplete}
+              noOptionsText={
+                <Typography
+                  sx={{ color: alpha(theme.palette.text.primary, 0.6) }}
+                >
+                  no options
+                </Typography>
+              }
               groupBy={(option) => option.title}
               getOptionLabel={(option) => {
                 // console.log(option);
@@ -237,8 +277,30 @@ const PostDetails = ({
                   {...params}
                   placeholder="Select category"
                   variant="outlined"
-                  classes={{
-                    root: classes.select,
+                  // classes={{
+                  //   root: classes.select,
+                  // }}
+                  sx={{
+                    color: theme.palette.text.primary,
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        border: `1px solid ${alpha(
+                          theme.palette.secondary.main,
+                          0.5
+                        )}`,
+                        border: "none",
+                      },
+                      "& .Mui-focused fieldset": {
+                        border: `1px solid ${alpha(
+                          theme.palette.secondary.main,
+                          0.5
+                        )}`,
+                      },
+                    },
                   }}
                   ref={params.InputProps.ref}
                   inputProps={params.inputProps}
@@ -289,8 +351,22 @@ const PostDetails = ({
               Keywords:
             </InputLabel>
             <Autocomplete
-              className={classes.search}
-              classes={{ paper: classes.popper }}
+              // className={classes.search}
+              // classes={{ paper: classes.popper }}
+              sx={{
+                position: "relative",
+                border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+                borderRadius: "4px",
+                backgroundColor: theme.palette.primary.main,
+                "&:focus-within": {
+                  backgroundColor: theme.palette.primary.main,
+                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+                  borderRadius: "4px",
+                },
+                // marginTop: 6,
+                // marginBottom: 10,
+                width: "auto",
+              }}
               autoHighlight
               disabled={tags.length > 2 ? true : false}
               disableClearable={true}
@@ -320,16 +396,23 @@ const PostDetails = ({
               id="tags"
               name="tags"
               options={[]}
-              renderOption={(option) => option.title}
+              renderOption={(props, option) => (
+                <li {...props}>{option.title}</li>
+              )}
               freeSolo
               filterSelectedOptions={false}
               renderInput={(params) => (
                 <InputBase
                   {...params}
                   placeholder="Add keywords"
-                  classes={{
-                    root: classes.root,
-                    input: classes.input,
+                  // classes={{
+                  //   root: classes.root,
+                  //   input: classes.input,
+                  // }}
+                  sx={{
+                    "& .MuiInputBase-input": {
+                      padding: "18px 9px 17px 9px",
+                    },
                   }}
                   ref={params.InputProps.ref}
                   inputProps={params.inputProps}

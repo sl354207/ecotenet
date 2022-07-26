@@ -429,7 +429,7 @@ const Nav = ({ ecoFilter }) => {
                 selectOnFocus
                 clearOnBlur
                 handleHomeEndKeys
-                id="nav"
+                id="nav-auto"
                 options={tags}
                 getOptionLabel={(option) => {
                   // Value selected with enter, right from the input
