@@ -6,11 +6,11 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 const useStyles = makeStyles(() => ({
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -36,7 +36,8 @@ export default function DraftByUser() {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        // className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
 

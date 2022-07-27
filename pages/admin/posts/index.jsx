@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -21,26 +22,26 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  header: {
-    marginTop: 20,
-  },
-  buttonPost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  post: {
-    display: "flow-root",
-    flexGrow: 1,
-  },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
+  // header: {
+  //   marginTop: 20,
+  // },
+  // buttonPost: {
+  //   display: "flex",
+  //   justifyContent: "start",
+  //   textTransform: "none",
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+  //   margin: "20px auto",
+  //   borderRadius: "10px",
+  // },
+  // post: {
+  //   display: "flow-root",
+  //   flexGrow: 1,
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -62,12 +63,12 @@ const adminPosts = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else if (Array.isArray(results) && results.length == 0) {
     list = (
-      <Typography variant="h6" align="center" className={classes.header}>
+      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
         no results
       </Typography>
     );
@@ -79,11 +80,22 @@ const adminPosts = () => {
             <>
               <ListItem
                 key={result._id}
-                className={classes.buttonPost}
+                // className={classes.buttonPost}
+                sx={{
+                  display: "flex",
+                  justifyContent: "start",
+                  textTransform: "none",
+                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+                  margin: "20px auto",
+                  borderRadius: "10px",
+                }}
                 button
                 onClick={() => router.push(`/admin/posts/${result._id}`)}
               >
-                <div className={classes.post}>
+                <div
+                  // className={classes.post}
+                  style={{ display: "flow-root", flexGrow: 1 }}
+                >
                   <Link underline="hover">{result.name}</Link>
 
                   <ListItemText primary={result.title}></ListItemText>
@@ -101,9 +113,15 @@ const adminPosts = () => {
   }
 
   return (
-    <div className={classes.root}>
+    <div
+      // className={classes.root}
+      style={{ display: "flex" }}
+    >
       <AdminDrawer />
-      <div className={classes.content}>
+      <div
+        // className={classes.content}
+        style={{ flexGrow: 1, padding: theme.spacing(3) }}
+      >
         <Header title="Posts" />
         {list}
       </div>

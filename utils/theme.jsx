@@ -36,18 +36,7 @@ const theme = createTheme({
       activatedOpacity: "0.24",
     },
   },
-  // overrides: {
-  //   MuiContainer: {
-  //     root: {
-  //       minHeight: "60vh",
-  //     },
-  //   },
-  //   MuiLink: {
-  //     root: {
-  //       color: "#c8fcff",
-  //     },
-  //   },
-  // },
+
   components: {
     MuiContainer: {
       styleOverrides: {
@@ -63,87 +52,37 @@ const theme = createTheme({
         },
       },
     },
-    // MuiAutocomplete: {
-    //   // variants: [
-    //   //   {
-    //   //     props: { disableClearable: true },
-    //   //     style: {
-    //   //       root: {
-    //   //         position: "relative",
-    //   //         border: `1px solid ${alpha("#94c9ff", 0.5)}`,
-    //   //         borderRadius: 4,
-    //   //         backgroundColor: "#132f4c",
-    //   //         "&:focus-within": {
-    //   //           backgroundColor: "#132f4c",
-    //   //           border: `1px solid ${alpha("#94c9ff", 1)}`,
-    //   //           borderRadius: 4,
-    //   //         },
-    //   //         marginTop: 20,
-    //   //         marginBottom: 20,
-    //   //         marginLeft: 4,
-    //   //         width: "auto",
-    //   //       },
-    //   //       paper: {
-    //   //         marginTop: 4,
-    //   //         backgroundColor: "#132f4c",
-    //   //       },
-    //   //     },
-    //   //   },
-    //   //   {
-    //   //     props: { disableClearable: false },
-    //   //     style: {
-    //   //       root: {
-    //   //         position: "relative",
-    //   //         border: `1px solid ${alpha("#94c9ff", 0.5)}`,
-    //   //         borderRadius: 4,
-    //   //         backgroundColor: "#132f4c",
-    //   //         "&:focus-within": {
-    //   //           backgroundColor: "#132f4c",
-    //   //           border: `1px solid ${alpha("#94c9ff", 1)}`,
-    //   //           borderRadius: 4,
-    //   //         },
-    //   //         marginTop: 20,
-    //   //         marginBottom: 20,
-    //   //         marginLeft: 4,
-    //   //         width: "auto",
-    //   //       },
-    //   //       paper: {
-    //   //         marginTop: 4,
-    //   //         backgroundColor: "#132f4c",
-    //   //       },
-    //   //     },
-    //   //   },
-    //   // ],
-    //   styleOverrides: {
-    //     root: {
-    //       position: "relative",
-    //       border: `1px solid ${alpha("#94c9ff", 0.5)}`,
-    //       borderRadius: 4,
-    //       backgroundColor: "#132f4c",
-    //       "&:focus-within": {
-    //         backgroundColor: "#132f4c",
-    //         border: `1px solid ${alpha("#94c9ff", 1)}`,
-    //         borderRadius: 4,
-    //       },
-    //       marginTop: 20,
-    //       marginBottom: 20,
-    //       marginLeft: 4,
-    //       width: "auto",
-    //     },
-    //     paper: {
-    //       marginTop: 4,
-    //       backgroundColor: "#132f4c",
-    //     },
-    //   },
-    // },
     MuiPaper: {
       styleOverrides: {
         root: {
           marginTop: 4,
           marginBottom: 4,
           backgroundColor: "#132f4c",
-          // color: `${alpha("#001e3c", 0.6)}`,
         },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: `#ffffff!important`,
+          position: "relative",
+          transform: "none",
+          "&.Mui-focused": {
+            color: "#ffffff!important",
+            position: "relative",
+            transform: "none",
+          },
+        },
+        formControl: {
+          color: `#ffffff!important`,
+          position: "relative",
+          transform: "none",
+        },
+        // focused: {
+        //   color: `#ffffff!important`,
+        //   position: "relative",
+        //   transform: "none",
+        // },
       },
     },
   },

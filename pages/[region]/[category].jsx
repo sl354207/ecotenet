@@ -7,9 +7,9 @@ import makeStyles from "@mui/styles/makeStyles";
 import { getPostsByCategoryAndRegion, getSpecies } from "@utils/mongodb";
 
 const useStyles = makeStyles(() => ({
-  header: {
-    marginTop: 20,
-  },
+  // header: {
+  //   marginTop: 20,
+  // },
 }));
 
 const categoryList = ({ category, title }) => {
@@ -20,7 +20,12 @@ const categoryList = ({ category, title }) => {
       <Container>
         <Header title={title} />
         {category.length === 0 ? (
-          <Typography variant="h6" align="center" className={classes.header}>
+          <Typography
+            variant="h6"
+            align="center"
+            // className={classes.header}
+            sx={{ marginTop: "20px" }}
+          >
             no results
           </Typography>
         ) : (

@@ -67,120 +67,118 @@ function a11yProps(index) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  tabs: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    marginTop: 20,
-    borderRadius: "10px",
-  },
-  tabBar: {
-    backgroundColor: theme.palette.primary.light,
-    borderRadius: "10px",
-  },
-  tab: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.primary.light,
-    minHeight: 80,
-    minWidth: "inherit",
-    padding: "inherit",
-    borderRadius: "10px",
-    "&:hover": {
-      color: theme.text,
-      opacity: 1,
-    },
-  },
-  buttonPost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  card: {
-    flex: "auto",
-    marginRight: 20,
-  },
-  buttonGroup: {
-    display: "grid",
-    margin: "auto 0px auto 20px",
-  },
-  edit: {
-    margin: "4px 0px",
-    minWidth: "fit-content",
-    justifyContent: "start",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  form: {
-    display: "flex",
-    flexGrow: 1,
-    margin: "10px 0 10px 0",
-  },
-  label: {
-    color: `${theme.palette.text.primary}!important`,
-    position: "relative",
-    transform: "none",
-  },
-  search: {
-    position: "relative",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.main,
-
-    "&:focus-within": {
-      backgroundColor: theme.palette.primary.main,
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      borderRadius: theme.shape.borderRadius,
-    },
-
-    marginTop: 6,
-    marginBottom: 10,
-    width: "auto",
-  },
-  root: {
-    color: theme.palette.text.primary,
-  },
-  input: {
-    padding: 18,
-  },
-  popper: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  delete: {
-    WebkitTapHighlightColor: "transparent",
-    color: theme.palette.secondary.main,
-    height: 22,
-    width: 22,
-    cursor: "pointer",
-    margin: "0 5px 0 -6px",
-    "&:hover": {
-      color: alpha(theme.palette.secondary.main, 0.7),
-    },
-  },
-  chip: {
-    borderColor: theme.palette.secondary.main,
-    borderWidth: 2,
-    color: theme.palette.text.primary,
-    height: 40,
-    margin: "0px 5px 10px 5px",
-  },
-  save: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  helper: {
-    color: theme.palette.text.primary,
-  },
-  email: {
-    display: "contents",
-  },
+  // tabs: {
+  //   flexGrow: 1,
+  //   backgroundColor: theme.palette.background.paper,
+  //   marginTop: 20,
+  //   borderRadius: "10px",
+  // },
+  // tabBar: {
+  //   backgroundColor: theme.palette.primary.light,
+  //   borderRadius: "10px",
+  // },
+  // tab: {
+  //   flexGrow: 1,
+  //   backgroundColor: theme.palette.primary.light,
+  //   minHeight: 80,
+  //   minWidth: "inherit",
+  //   padding: "inherit",
+  //   borderRadius: "10px",
+  //   "&:hover": {
+  //     color: theme.text,
+  //     opacity: 1,
+  //   },
+  // },
+  // buttonPost: {
+  //   display: "flex",
+  //   justifyContent: "start",
+  //   textTransform: "none",
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+  //   margin: "20px auto",
+  //   borderRadius: "10px",
+  // },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
+  // card: {
+  //   flex: "auto",
+  //   marginRight: 20,
+  // },
+  // buttonGroup: {
+  //   display: "grid",
+  //   margin: "auto 0px auto 20px",
+  // },
+  // edit: {
+  //   margin: "4px 0px",
+  //   minWidth: "fit-content",
+  //   justifyContent: "start",
+  // },
+  // dialog: {
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // form: {
+  //   display: "flex",
+  //   flexGrow: 1,
+  //   margin: "10px 0 10px 0",
+  // },
+  // label: {
+  //   color: `${theme.palette.text.primary}!important`,
+  //   position: "relative",
+  //   transform: "none",
+  // },
+  // search: {
+  //   position: "relative",
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+  //   borderRadius: theme.shape.borderRadius,
+  //   backgroundColor: theme.palette.primary.main,
+  //   "&:focus-within": {
+  //     backgroundColor: theme.palette.primary.main,
+  //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+  //     borderRadius: theme.shape.borderRadius,
+  //   },
+  //   marginTop: 6,
+  //   marginBottom: 10,
+  //   width: "auto",
+  // },
+  // root: {
+  //   color: theme.palette.text.primary,
+  // },
+  // input: {
+  //   padding: 18,
+  // },
+  // popper: {
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // delete: {
+  //   WebkitTapHighlightColor: "transparent",
+  //   color: theme.palette.secondary.main,
+  //   height: 22,
+  //   width: 22,
+  //   cursor: "pointer",
+  //   margin: "0 5px 0 -6px",
+  //   "&:hover": {
+  //     color: alpha(theme.palette.secondary.main, 0.7),
+  //   },
+  // },
+  // chip: {
+  //   borderColor: theme.palette.secondary.main,
+  //   borderWidth: 2,
+  //   color: theme.palette.text.primary,
+  //   height: 40,
+  //   margin: "0px 5px 10px 5px",
+  // },
+  // save: {
+  //   display: "flex",
+  //   justifyContent: "space-between",
+  // },
+  // helper: {
+  //   color: theme.palette.text.primary,
+  // },
+  // email: {
+  //   display: "contents",
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -388,8 +386,24 @@ export default function Dashboard() {
   return (
     <Container>
       <Header title="Dashboard" />
-      <div className={classes.tabs}>
-        <AppBar position="static" elevation={0} className={classes.tabBar}>
+      <div
+        // className={classes.tabs}
+        style={{
+          flexGrow: 1,
+          backgroundColor: theme.palette.background.paper,
+          marginTop: "20px",
+          borderRadius: "10px",
+        }}
+      >
+        <AppBar
+          position="static"
+          elevation={0}
+          // className={classes.tabBar}
+          sx={{
+            backgroundColor: theme.palette.primary.light,
+            borderRadius: "10px",
+          }}
+        >
           <Tabs
             value={value}
             onChange={handleChange}
@@ -398,12 +412,87 @@ export default function Dashboard() {
             indicatorColor="secondary"
             textColor="inherit"
           >
-            <Tab className={classes.tab} label="Profile" {...a11yProps(0)} />
-            <Tab className={classes.tab} label="Posts" {...a11yProps(1)} />
-            <Tab className={classes.tab} label="Drafts" {...a11yProps(2)} />
-            <Tab className={classes.tab} label="Comments" {...a11yProps(3)} />
             <Tab
-              className={classes.tab}
+              sx={{
+                flexGrow: 1,
+                backgroundColor: theme.palette.primary.light,
+                minHeight: "80px",
+                minWidth: "inherit",
+                padding: "inherit",
+                borderRadius: "10px",
+                "&:hover": {
+                  color: theme.text,
+                  opacity: 1,
+                },
+              }}
+              label="Profile"
+              {...a11yProps(0)}
+            />
+            <Tab
+              sx={{
+                flexGrow: 1,
+                backgroundColor: theme.palette.primary.light,
+                minHeight: "80px",
+                minWidth: "inherit",
+                padding: "inherit",
+                borderRadius: "10px",
+                "&:hover": {
+                  color: theme.text,
+                  opacity: 1,
+                },
+              }}
+              // className={classes.tab}
+              label="Posts"
+              {...a11yProps(1)}
+            />
+            <Tab
+              sx={{
+                flexGrow: 1,
+                backgroundColor: theme.palette.primary.light,
+                minHeight: "80px",
+                minWidth: "inherit",
+                padding: "inherit",
+                borderRadius: "10px",
+                "&:hover": {
+                  color: theme.text,
+                  opacity: 1,
+                },
+              }}
+              // className={classes.tab}
+              label="Drafts"
+              {...a11yProps(2)}
+            />
+            <Tab
+              sx={{
+                flexGrow: 1,
+                backgroundColor: theme.palette.primary.light,
+                minHeight: "80px",
+                minWidth: "inherit",
+                padding: "inherit",
+                borderRadius: "10px",
+                "&:hover": {
+                  color: theme.text,
+                  opacity: 1,
+                },
+              }}
+              // className={classes.tab}
+              label="Comments"
+              {...a11yProps(3)}
+            />
+            <Tab
+              sx={{
+                flexGrow: 1,
+                backgroundColor: theme.palette.primary.light,
+                minHeight: "80px",
+                minWidth: "inherit",
+                padding: "inherit",
+                borderRadius: "10px",
+                "&:hover": {
+                  color: theme.text,
+                  opacity: 1,
+                },
+              }}
+              // className={classes.tab}
               label="Notifications"
               {...a11yProps(4)}
             />
@@ -416,11 +505,19 @@ export default function Dashboard() {
               color="secondary"
               size={100}
               disableShrink={true}
-              className={classes.progress}
+              // className={classes.progress}
+              sx={{
+                margin: "100px auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <>
-              <div className={classes.save}>
+              <div
+                // className={classes.save}
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
                 <Typography variant="h5" gutterBottom>
                   Public Profile: optional
                 </Typography>
@@ -444,17 +541,11 @@ export default function Dashboard() {
               <Typography variant="body1" gutterBottom>
                 Approved: {results.approved}
               </Typography>
-              <FormControl className={classes.form}>
-                <InputLabel
-                  htmlFor="bio"
-                  classes={{
-                    root: classes.label,
-                    formControl: classes.label,
-                    focused: classes.label,
-                  }}
-                >
-                  Bio:
-                </InputLabel>
+              <FormControl
+                // className={classes.form}
+                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+              >
+                <InputLabel htmlFor="bio">Bio:</InputLabel>
 
                 <TextBox
                   defaultValue={results.bio}
@@ -465,17 +556,10 @@ export default function Dashboard() {
                   rows={10}
                 />
               </FormControl>
-              <FormControl className={classes.form}>
-                <InputLabel
-                  htmlFor="website"
-                  classes={{
-                    root: classes.label,
-                    formControl: classes.label,
-                    focused: classes.label,
-                  }}
-                >
-                  Personal Website:
-                </InputLabel>
+              <FormControl
+                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+              >
+                <InputLabel htmlFor="website">Personal Website:</InputLabel>
 
                 <TextBox
                   defaultValue={results.website}
@@ -487,17 +571,10 @@ export default function Dashboard() {
                   inputProps={{ type: "url" }}
                 />
               </FormControl>
-              <FormControl className={classes.form}>
-                <InputLabel
-                  htmlFor="socials"
-                  classes={{
-                    root: classes.label,
-                    formControl: classes.label,
-                    focused: classes.label,
-                  }}
-                >
-                  Socials:
-                </InputLabel>
+              <FormControl
+                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+              >
+                <InputLabel htmlFor="socials">Socials:</InputLabel>
                 <Autocomplete
                   // className={classes.search}
                   // classes={{ paper: classes.popper }}
@@ -571,7 +648,10 @@ export default function Dashboard() {
                     />
                   )}
                 />
-                <FormHelperText className={classes.helper}>
+                <FormHelperText
+                  // className={classes.helper}
+                  sx={{ color: theme.palette.text.primary }}
+                >
                   Add social media links (3 max)
                 </FormHelperText>
               </FormControl>
@@ -581,9 +661,23 @@ export default function Dashboard() {
                     <Chip
                       label={social}
                       variant="outlined"
-                      className={classes.chip}
-                      classes={{
-                        deleteIcon: classes.delete,
+                      sx={{
+                        borderColor: theme.palette.secondary.main,
+                        borderWidth: 2,
+                        color: theme.palette.text.primary,
+                        height: 40,
+                        margin: "0px 5px 10px 5px",
+
+                        "& .MuiChip-deleteIcon": {
+                          WebkitTapHighlightColor: "transparent",
+                          color: theme.palette.secondary.main,
+                          fontSize: 22,
+                          cursor: "pointer",
+                          margin: "0 5px 0 -6px",
+                          "&:hover": {
+                            color: alpha(theme.palette.secondary.main, 0.7),
+                          },
+                        },
                       }}
                       onDelete={() => handleRemoveChip(profile.socials, social)}
                     ></Chip>
@@ -593,17 +687,10 @@ export default function Dashboard() {
                 Private Settings:
               </Typography>
 
-              <FormControl className={classes.form}>
-                <InputLabel
-                  htmlFor="email"
-                  classes={{
-                    root: classes.label,
-                    formControl: classes.label,
-                    focused: classes.label,
-                  }}
-                >
-                  Email:
-                </InputLabel>
+              <FormControl
+                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+              >
+                <InputLabel htmlFor="email">Email:</InputLabel>
                 <div style={{ display: "flex" }}>
                   <TextBox
                     defaultValue={results.email}
@@ -614,7 +701,8 @@ export default function Dashboard() {
                     rows={1}
                     multiline={false}
                     inputProps={{ type: "email" }}
-                    className={classes.email}
+                    // className={{ display: "contents" }}
+                    // // sx={{ display: "contents" }}
                   />
                   <Button
                     variant="outlined"
@@ -643,7 +731,11 @@ export default function Dashboard() {
               color="secondary"
               size={100}
               disableShrink={true}
-              className={classes.progress}
+              sx={{
+                margin: "100px auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <>
@@ -651,8 +743,25 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonPost}>
-                        <div className={classes.card}>
+                      <ListItem
+                        key={result._id}
+                        // className={classes.buttonPost}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            0.5
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <div
+                          // className={classes.card}
+                          style={{ flex: "auto", marginRight: "20px" }}
+                        >
                           <Typography
                             gutterBottom
                             color="textPrimary"
@@ -687,11 +796,22 @@ export default function Dashboard() {
                             {result.count}
                           </Typography>
                         </div>
-                        <div className={classes.buttonGroup}>
+                        <div
+                          // className={classes.buttonGroup}
+                          style={{
+                            display: "grid",
+                            margin: "auto 0px auto 20px",
+                          }}
+                        >
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.edit}
+                            // className={classes.edit}
+                            sx={{
+                              margin: "4px 0px",
+                              minWidth: "fit-content",
+                              justifyContent: "start",
+                            }}
                             startIcon={<EditIcon />}
                             size="small"
                             href={`/dashboard/posts/${result._id}`}
@@ -701,7 +821,11 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.edit}
+                            sx={{
+                              margin: "4px 0px",
+                              minWidth: "fit-content",
+                              justifyContent: "start",
+                            }}
                             startIcon={<DeleteIcon />}
                             size="small"
                             onClick={() =>
@@ -730,7 +854,11 @@ export default function Dashboard() {
               color="secondary"
               size={100}
               disableShrink={true}
-              className={classes.progress}
+              sx={{
+                margin: "100px auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <>
@@ -738,8 +866,21 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonPost}>
-                        <div className={classes.card}>
+                      <ListItem
+                        key={result._id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            0.5
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <div style={{ flex: "auto", marginRight: "20px" }}>
                           <Typography
                             gutterBottom
                             variant="h5"
@@ -772,11 +913,20 @@ export default function Dashboard() {
                             {result.count}
                           </Typography>
                         </div>
-                        <div className={classes.buttonGroup}>
+                        <div
+                          style={{
+                            display: "grid",
+                            margin: "auto 0px auto 20px",
+                          }}
+                        >
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.edit}
+                            sx={{
+                              margin: "4px 0px",
+                              minWidth: "fit-content",
+                              justifyContent: "start",
+                            }}
                             startIcon={<EditIcon />}
                             size="small"
                             href={`/dashboard/posts/${result._id}`}
@@ -786,7 +936,11 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            className={classes.edit}
+                            sx={{
+                              margin: "4px 0px",
+                              minWidth: "fit-content",
+                              justifyContent: "start",
+                            }}
                             startIcon={<DeleteIcon />}
                             size="small"
                             onClick={() =>
@@ -810,7 +964,11 @@ export default function Dashboard() {
               color="secondary"
               size={100}
               disableShrink={true}
-              className={classes.progress}
+              sx={{
+                margin: "100px auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <>
@@ -818,7 +976,20 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonPost}>
+                      <ListItem
+                        key={result._id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            0.5
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
+                      >
                         <DashboardComment
                           result={result}
                           handleDeleteOpen={() =>
@@ -843,7 +1014,11 @@ export default function Dashboard() {
               color="secondary"
               size={100}
               disableShrink={true}
-              className={classes.progress}
+              sx={{
+                margin: "100px auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <>
@@ -851,8 +1026,21 @@ export default function Dashboard() {
                 <List>
                   {results.map((result) => {
                     return (
-                      <ListItem key={result._id} className={classes.buttonPost}>
-                        <div className={classes.card}>
+                      <ListItem
+                        key={result._id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            0.5
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <div style={{ flex: "auto", marginRight: "20px" }}>
                           <Typography
                             gutterBottom
                             color="textPrimary"
@@ -879,7 +1067,12 @@ export default function Dashboard() {
                           )}
                         </div>
 
-                        <div className={classes.buttonGroup}>
+                        <div
+                          style={{
+                            display: "grid",
+                            margin: "auto 0px auto 20px",
+                          }}
+                        >
                           <IconButton
                             onClick={() => handleUpdateNotify(result._id)}
                             size="large"
@@ -902,7 +1095,7 @@ export default function Dashboard() {
         action={action.action}
         open={dialog}
         handleClose={handleCloseDialog}
-        className={classes.dialog}
+        // className={classes.dialog}
         result={item}
         snackbar={snackbar}
         setSnackbar={setSnackbar}

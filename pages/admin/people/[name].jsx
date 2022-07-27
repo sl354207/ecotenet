@@ -14,27 +14,27 @@ import { useState } from "react";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
-  profile: {
-    margin: 16,
-  },
-  socials: {
-    display: "grid",
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  button: {
-    marginLeft: 4,
-  },
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
+  // profile: {
+  //   margin: 16,
+  // },
+  // socials: {
+  //   display: "grid",
+  // },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
+  // button: {
+  //   marginLeft: 4,
+  // },
+  // delete: {
+  //   color: "#fc7ebf",
+  //   borderColor: "#fc7ebf",
+  // },
+  // dialog: {
+  //   backgroundColor: theme.palette.primary.light,
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -87,7 +87,7 @@ const person = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else {
@@ -105,7 +105,8 @@ const person = () => {
         <Button
           variant="outlined"
           color="secondary"
-          className={classes.button}
+          // className={classes.button}
+          sx={{ marginLeft: "4px" }}
           onClick={() => handleOpenDialog("Deny", "Person", results)}
         >
           Deny
@@ -113,13 +114,17 @@ const person = () => {
         <Button
           variant="outlined"
           color="secondary"
-          className={`${classes.button} ${classes.delete}`}
+          // className={`${classes.button} ${classes.delete}`}
+          sx={{ marginLeft: "4px", color: "#fc7ebf", borderColor: "#fc7ebf" }}
           onClick={() => handleOpenDialog("Delete", "Person", results)}
         >
           Delete
         </Button>
         {/* {results.approved == "true" && ( */}
-        <div className={classes.profile}>
+        <div
+          // className={classes.profile}
+          style={{ margin: "16px" }}
+        >
           {results.bio !== "" && (
             <>
               <Typography gutterBottom>Bio:</Typography>
@@ -134,7 +139,11 @@ const person = () => {
             </Typography>
           )}
           {Array.isArray(results.socials) && results.socials.length > 0 && (
-            <Typography className={classes.socials} gutterBottom>
+            <Typography
+              // className={classes.socials}
+              sx={{ display: "grid" }}
+              gutterBottom
+            >
               Socials:{" "}
               {results.socials.map((social) => (
                 <Link
@@ -165,7 +174,7 @@ const person = () => {
           action={action.action}
           open={dialog}
           handleClose={handleCloseDialog}
-          className={classes.dialog}
+          // className={classes.dialog}
           result={item}
         />
         <Resolve

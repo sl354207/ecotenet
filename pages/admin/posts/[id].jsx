@@ -23,50 +23,51 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
-  header: {
-    marginTop: 20,
-  },
-  box: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    flexDirection: "column",
-    maxWidth: 800,
-    flexGrow: 1,
-    marginLeft: 20,
-  },
-  items: {
-    display: "flex",
-  },
-  date: {
-    marginLeft: 20,
-    fontStyle: "italic",
-  },
-  container: {
-    backgroundColor: theme.palette.primary.main,
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  button: {
-    marginLeft: 4,
-  },
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
+  // header: {
+  //   marginTop: 20,
+  // },
+  // box: {
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // content: {
+  //   flexDirection: "column",
+  //   maxWidth: 800,
+  //   flexGrow: 1,
+  //   marginLeft: 20,
+  // },
+  // items: {
+  //   display: "flex",
+  // },
+  // date: {
+  //   marginLeft: 20,
+  //   fontStyle: "italic",
+  // },
+  // container: {
+  //   backgroundColor: theme.palette.primary.main,
+  // },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
+  // dialog: {
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // button: {
+  //   marginLeft: 4,
+  // },
+  // delete: {
+  //   color: "#fc7ebf",
+  //   borderColor: "#fc7ebf",
+  // },
 }));
 
 // Define which plugins we want to use.
@@ -125,7 +126,7 @@ const post = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else {
@@ -142,17 +143,43 @@ const post = () => {
           </Link>
         )}
 
-        <Container className={classes.container}>
+        <Container
+          // className={classes.container}
+          sx={{ backgroundColor: theme.palette.primary.main }}
+        >
           <Header title={post.title} />
-          <div className={classes.box}>
-            <div className={classes.content}>
-              <div className={classes.items}>
+          <div
+            // className={classes.box}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              // className={classes.content}
+              style={{
+                flexDirection: "column",
+                maxWidth: "800px",
+                flexGrow: 1,
+                marginLeft: "20px",
+              }}
+            >
+              <div
+                // className={classes.items}
+                style={{ display: "flex" }}
+              >
                 <Typography align="center" variant="h6">
                   <Link href="#" underline="hover">
                     {post.name}
                   </Link>
                 </Typography>
-                <Typography className={classes.date} align="left" variant="h6">
+                <Typography
+                  // className={classes.date}
+                  sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                  align="left"
+                  variant="h6"
+                >
                   {date.toDateString()}
                 </Typography>
               </div>
@@ -177,7 +204,8 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  className={classes.button}
+                  // className={classes.button}
+                  sx={{ marginLeft: "4px" }}
                   onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
                   Deny
@@ -185,7 +213,12 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  className={`${classes.button} ${classes.delete}`}
+                  // className={`${classes.button} ${classes.delete}`}
+                  sx={{
+                    marginLeft: "4px",
+                    color: "#fc7ebf",
+                    borderColor: "#fc7ebf",
+                  }}
                   onClick={() => handleOpenDialog("Delete", "Post", post)}
                 >
                   Delete
@@ -204,7 +237,7 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  className={classes.button}
+                  sx={{ marginLeft: "4px" }}
                   onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
                   Deny
@@ -212,7 +245,11 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  className={`${classes.button} ${classes.delete}`}
+                  sx={{
+                    marginLeft: "4px",
+                    color: "#fc7ebf",
+                    borderColor: "#fc7ebf",
+                  }}
                   onClick={() => handleOpenDialog("Delete", "Post", post)}
                 >
                   Delete
@@ -237,12 +274,17 @@ const post = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else if (Array.isArray(comments) && comments.length == 0) {
     commentList = (
-      <Typography variant="h6" align="center" className={classes.header}>
+      <Typography
+        variant="h6"
+        align="center"
+        // className={classes.header}
+        sx={{ marginTop: "20px" }}
+      >
         no results
       </Typography>
     );
@@ -267,7 +309,7 @@ const post = () => {
         action={action.action}
         open={dialog}
         handleClose={handleCloseDialog}
-        className={classes.dialog}
+        // className={classes.dialog}
         result={item}
         mutate={mutate}
       />

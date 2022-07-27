@@ -32,53 +32,54 @@ import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { updatePost } from "@utils/api-helpers";
 import { getPostById, getPostComments } from "@utils/mongodb";
+import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  box: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    flexDirection: "column",
-    maxWidth: 800,
-    flexGrow: 1,
-    marginLeft: 20,
-  },
-  items: {
-    display: "flex",
-  },
-  date: {
-    marginLeft: 20,
-    fontStyle: "italic",
-  },
-  container: {
-    backgroundColor: theme.palette.primary.main,
-  },
-  comments: {
-    marginTop: 20,
-  },
+  // box: {
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // content: {
+  //   flexDirection: "column",
+  //   maxWidth: 800,
+  //   flexGrow: 1,
+  //   marginLeft: 20,
+  // },
+  // items: {
+  //   display: "flex",
+  // },
+  // date: {
+  //   marginLeft: 20,
+  //   fontStyle: "italic",
+  // },
+  // container: {
+  //   backgroundColor: theme.palette.primary.main,
+  // },
+  // comments: {
+  //   marginTop: 20,
+  // },
   dialog: {
     backgroundColor: theme.palette.primary.light,
   },
-  flagBox: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  spacer: {
-    display: "flex",
-    marginRight: "auto",
-    visibility: "hidden",
-    minWidth: 30,
-  },
-  flag: {
-    display: "flex",
-    marginLeft: "auto",
-    marginTop: "auto",
-  },
+  // flagBox: {
+  //   display: "flex",
+  //   justifyContent: "center",
+  // },
+  // spacer: {
+  //   display: "flex",
+  //   marginRight: "auto",
+  //   visibility: "hidden",
+  //   minWidth: 30,
+  // },
+  // flag: {
+  //   display: "flex",
+  //   marginLeft: "auto",
+  //   marginTop: "auto",
+  // },
 }));
 
 // Define which plugins we want to use.
@@ -252,11 +253,28 @@ const post = ({ post, comments }) => {
 
   return (
     <>
-      <Container className={classes.container}>
-        <div className={classes.flagBox}>
-          <div className={classes.spacer}></div>
+      <Container
+        // className={classes.container}
+        sx={{ backgroundColor: theme.palette.primary.main }}
+      >
+        <div
+          // className={classes.flagBox}
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <div
+            // className={classes.spacer}
+            style={{
+              display: "flex",
+              marginRight: "auto",
+              visibility: "hidden",
+              minWidth: "30px",
+            }}
+          ></div>
           <Header title={post.title} />
-          <div className={classes.flag}>
+          <div
+            // className={classes.flag}
+            style={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
+          >
             {user && user.role === "admin" && (
               <Button
                 variant="outlined"
@@ -279,9 +297,27 @@ const post = ({ post, comments }) => {
             </IconButton>
           </div>
         </div>
-        <div className={classes.box}>
-          <div className={classes.content}>
-            <div className={classes.items}>
+        <div
+          // className={classes.box}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            // className={classes.content}
+            style={{
+              flexDirection: "column",
+              maxWidth: "800px",
+              flexGrow: 1,
+              marginLeft: "20px",
+            }}
+          >
+            <div
+              // className={classes.items}
+              style={{ display: "flex" }}
+            >
               <Typography align="center" variant="h6">
                 <Link
                   href={`/person/${post.name}`}
@@ -291,7 +327,12 @@ const post = ({ post, comments }) => {
                   {post.name}
                 </Link>
               </Typography>
-              <Typography className={classes.date} align="left" variant="h6">
+              <Typography
+                // className={classes.date}
+                sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                align="left"
+                variant="h6"
+              >
                 {date.toDateString()}
               </Typography>
             </div>
@@ -327,7 +368,11 @@ const post = ({ post, comments }) => {
           />
         </EditorLayout>
         <Divider />
-        <Typography variant="h6" className={classes.comments}>
+        <Typography
+          variant="h6"
+          // className={classes.comments}
+          sx={{ marginTop: "20px" }}
+        >
           Comments:
         </Typography>
         <CommentList
@@ -345,7 +390,7 @@ const post = ({ post, comments }) => {
         contentType={action}
         open={dialog}
         handleClose={handleCloseDialog}
-        className={classes.dialog}
+        // className={classes.dialog}
         post_id={post._id}
         result={item}
         closeForm={closeForm}

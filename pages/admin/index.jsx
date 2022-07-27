@@ -10,34 +10,35 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  header: {
-    marginTop: 20,
-  },
-  buttonPost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    border: `1px solid ${theme.palette.secondary.main}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  spacing: {
-    marginTop: 20,
-  },
-  text: {
-    textAlign: "center",
-  },
+  // root: {
+  //   display: "flex",
+  // },
+  // content: {
+  //   flexGrow: 1,
+  //   padding: theme.spacing(3),
+  // },
+  // header: {
+  //   marginTop: 20,
+  // },
+  // buttonPost: {
+  //   display: "flex",
+  //   justifyContent: "start",
+  //   textTransform: "none",
+  //   border: `1px solid ${theme.palette.secondary.main}`,
+  //   margin: "20px auto",
+  //   borderRadius: "10px",
+  // },
+  // spacing: {
+  //   marginTop: 20,
+  // },
+  // text: {
+  //   textAlign: "center",
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -201,12 +202,18 @@ const admin = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        // className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else if (Array.isArray(posts) && posts.length == 0) {
     list = (
-      <Typography variant="h6" align="center" className={classes.header}>
+      <Typography
+        variant="h6"
+        align="center"
+        // className={classes.header}
+        sx={{ marginTop: "20px" }}
+      >
         no results
       </Typography>
     );
@@ -221,96 +228,121 @@ const admin = () => {
         <Typography>Feature count: {count}</Typography>
         <List>
           {posts.map((post) => {
-            return <>
-              <ListItem key={post._id} className={classes.buttonPost}>
-                <Grid container spacing={1} className={classes.spacing}>
-                  <Grid item xs={4} className={classes.text}>
-                    <Link
-                      href="/privacy"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      underline="hover">
-                      {post.name}
-                    </Link>
-                  </Grid>
+            return (
+              <>
+                <ListItem
+                  key={post._id}
+                  // className={classes.buttonPost}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "start",
+                    textTransform: "none",
+                    border: `1px solid ${theme.palette.secondary.main}`,
+                    margin: "20px auto",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <Grid
+                    container
+                    spacing={1}
+                    // className={classes.spacing}
+                    sx={{ marginTop: "20px" }}
+                  >
+                    <Grid
+                      item
+                      xs={4}
+                      // className={classes.text}
+                      sx={{ textAlign: "center" }}
+                    >
+                      <Link
+                        href="/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        {post.name}
+                      </Link>
+                    </Grid>
 
-                  <Grid item xs={4} className={classes.text}>
-                    <Typography>Current Feature: {post.feature}</Typography>
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    <Link
-                      href={`/posts/${post._id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      underline="hover">
-                      View Post
-                    </Link>
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    <Typography>{post.title}</Typography>
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    <Typography>
-                      Featured Before: {post.featured ? "true" : "false"}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    {post.feature == "true" ? (
-                      <Button variant="outlined" color="secondary" disabled>
-                        Add to Features
-                      </Button>
-                    ) : (
-                      <>
-                        {count >= 10 ? (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            disabled
-                          >
-                            Add to Features
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() => updateFeature("addFeature", post)}
-                          >
-                            Add to Features
-                          </Button>
-                        )}
-                      </>
-                    )}
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    <Typography>{post.date}</Typography>
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    <Typography variant="h6" color="secondary">
-                      {post.count}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4} className={classes.text}>
-                    {post.feature !== "true" ? (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => updateFeature("removeList", post)}
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      <Typography>Current Feature: {post.feature}</Typography>
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      <Link
+                        href={`/posts/${post._id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
                       >
-                        Remove from List
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => updateFeature("removeFeature", post)}
-                      >
-                        Remove from Features
-                      </Button>
-                    )}
+                        View Post
+                      </Link>
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      <Typography>{post.title}</Typography>
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      <Typography>
+                        Featured Before: {post.featured ? "true" : "false"}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      {post.feature == "true" ? (
+                        <Button variant="outlined" color="secondary" disabled>
+                          Add to Features
+                        </Button>
+                      ) : (
+                        <>
+                          {count >= 10 ? (
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              disabled
+                            >
+                              Add to Features
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              onClick={() => updateFeature("addFeature", post)}
+                            >
+                              Add to Features
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      <Typography>{post.date}</Typography>
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      <Typography variant="h6" color="secondary">
+                        {post.count}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                      {post.feature !== "true" ? (
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => updateFeature("removeList", post)}
+                        >
+                          Remove from List
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => updateFeature("removeFeature", post)}
+                        >
+                          Remove from Features
+                        </Button>
+                      )}
+                    </Grid>
                   </Grid>
-                </Grid>
-              </ListItem>
-            </>;
+                </ListItem>
+              </>
+            );
           })}
         </List>
       </>
@@ -324,7 +356,7 @@ const admin = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else {
@@ -340,9 +372,15 @@ const admin = () => {
   }
 
   return (
-    <div className={classes.root}>
+    <div
+      // className={classes.root}
+      style={{ display: "flex" }}
+    >
       <AdminDrawer />
-      <div className={classes.content}>
+      <div
+        // className={classes.content}
+        style={{ flexGrow: 1, padding: theme.spacing(3) }}
+      >
         <Header title="Stats" />
         {statSection}
         <Header title="Feature Candidates" />

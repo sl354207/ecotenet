@@ -4,23 +4,23 @@ import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import { useUserContext } from "@components/UserContext";
 import { Button, Container } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  layout: {
-    display: "grid",
-  },
+  // layout: {
+  //   display: "grid",
+  // },
   // origin: {
   //   marginTop: 400,
   //   [theme.breakpoints.up("sm")]: {
   //     marginTop: 300,
   //   },
   // },
-  button: {
-    marginTop: 10,
-  },
+  // button: {
+  //   marginTop: 10,
+  // },
 }));
 
 const newUser = () => {
@@ -117,7 +117,10 @@ const newUser = () => {
     <Container>
       <Header title="New Profile" />
       <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
-      <div className={classes.layout}>
+      <div
+        // className={classes.layout}
+        style={{ display: "grid" }}
+      >
         <TextBox
           defaultValue=""
           placeHolder="profile name"
@@ -134,7 +137,8 @@ const newUser = () => {
           color="secondary"
           onClick={() => handleNameUpdate(name)}
           disabled={name == "" ? true : false}
-          className={classes.button}
+          // className={classes.button}
+          sx={{ marginTop: "10px" }}
         >
           Submit
         </Button>

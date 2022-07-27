@@ -1,7 +1,7 @@
 import { InputBase } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
-import withStyles from '@mui/styles/withStyles';
+import withStyles from "@mui/styles/withStyles";
 
 const TextInput = withStyles((theme) => ({
   input: {
@@ -42,7 +42,8 @@ const TextBox = ({
       onChange={handleChange}
       multiline={multiline}
       minRows={rows}
-      className={className}
+      // className={className}
+      sx={{ display: "contents" }}
       inputProps={inputProps}
       onKeyPress={onKeyPress}
       error

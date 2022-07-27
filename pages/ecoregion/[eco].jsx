@@ -7,6 +7,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Link, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { getEcoregion } from "@utils/mongodb";
+import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -14,42 +15,42 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  tableRow: {
-    backgroundColor: "#001e3c!important",
-    textAlign: "center",
-    color: "#ffffff!important",
-  },
-  table: {
-    [theme.breakpoints.down("sm")]: {
-      margin: "auto",
-      float: "none",
-    },
-    float: "right",
-    border: "thin solid",
-    marginLeft: 10,
-  },
-  description: {
-    marginBottom: 40,
-  },
-  flagBox: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  spacer: {
-    display: "flex",
-    marginRight: "auto",
-    visibility: "hidden",
-    minWidth: 30,
-  },
-  flag: {
-    display: "flex",
-    marginLeft: "auto",
-    marginTop: "auto",
-    marginBottom: "auto",
-  },
-  header: {
-    marginTop: 20,
-  },
+  // tableRow: {
+  //   backgroundColor: "#001e3c!important",
+  //   textAlign: "center",
+  //   color: "#ffffff!important",
+  // },
+  // table: {
+  //   [theme.breakpoints.down("sm")]: {
+  //     margin: "auto",
+  //     float: "none",
+  //   },
+  //   float: "right",
+  //   border: "thin solid",
+  //   marginLeft: 10,
+  // },
+  // description: {
+  //   marginBottom: 40,
+  // },
+  // flagBox: {
+  //   display: "flex",
+  //   justifyContent: "center",
+  // },
+  // spacer: {
+  //   display: "flex",
+  //   marginRight: "auto",
+  //   visibility: "hidden",
+  //   minWidth: 30,
+  // },
+  // flag: {
+  //   display: "flex",
+  //   marginLeft: "auto",
+  //   marginTop: "auto",
+  //   marginBottom: "auto",
+  // },
+  // header: {
+  //   marginTop: 20,
+  // },
 }));
 
 const eco = ({ wiki, ecoName, id }) => {
@@ -128,7 +129,19 @@ const eco = ({ wiki, ecoName, id }) => {
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <table {...props} className={classes.table}>
+          <table
+            {...props}
+            // className={classes.table}
+            style={{
+              [theme.breakpoints.down("sm")]: {
+                margin: "auto",
+                float: "none",
+              },
+              float: "right",
+              border: "thin solid",
+              marginLeft: 10,
+            }}
+          >
             {domToReact(domNode.children, options)}
           </table>
         );
@@ -136,7 +149,15 @@ const eco = ({ wiki, ecoName, id }) => {
       if (domNode.attribs && domNode.children && domNode.name === "th") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <th {...props} className={classes.tableRow}>
+          <th
+            {...props}
+            // className={classes.tableRow}
+            style={{
+              backgroundColor: "#001e3c!important",
+              textAlign: "center",
+              color: "#ffffff!important",
+            }}
+          >
             {domToReact(domNode.children, options)}
           </th>
         );
@@ -144,7 +165,14 @@ const eco = ({ wiki, ecoName, id }) => {
       if (domNode.attribs && domNode.children && domNode.name === "tr") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <tr {...props} className={classes.tableRow}>
+          <tr
+            {...props}
+            style={{
+              backgroundColor: "#001e3c!important",
+              textAlign: "center",
+              color: "#ffffff!important",
+            }}
+          >
             {domToReact(domNode.children, options)}
           </tr>
         );
@@ -152,7 +180,14 @@ const eco = ({ wiki, ecoName, id }) => {
       if (domNode.attribs && domNode.children && domNode.name === "td") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <td {...props} className={classes.tableRow}>
+          <td
+            {...props}
+            style={{
+              backgroundColor: "#001e3c!important",
+              textAlign: "center",
+              color: "#ffffff!important",
+            }}
+          >
             {domToReact(domNode.children, options)}
           </td>
         );
@@ -164,7 +199,14 @@ const eco = ({ wiki, ecoName, id }) => {
       ) {
         const props = attributesToProps(domNode.attribs);
         return (
-          <div {...props} className={classes.tableRow}>
+          <div
+            {...props}
+            style={{
+              backgroundColor: "#001e3c!important",
+              textAlign: "center",
+              color: "#ffffff!important",
+            }}
+          >
             {domToReact(domNode.children, options)}
           </div>
         );
@@ -185,14 +227,32 @@ const eco = ({ wiki, ecoName, id }) => {
   return (
     <>
       <Container>
-        <div className={classes.flagBox}>
-          <div className={classes.spacer}></div>
+        <div
+          // className={classes.flagBox}
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <div
+            // className={classes.spacer}
+            style={{
+              display: "flex",
+              marginRight: "auto",
+              visibility: "hidden",
+              minWidth: 30,
+            }}
+          ></div>
           <Header
             title={`Eco-${id}: ${ecoName}`}
-            className={classes.description}
+            // className={classes.description}
+            sx={{ marginBottom: "40px" }}
           />
           <IconButton
-            className={classes.flag}
+            // className={classes.flag}
+            sx={{
+              display: "flex",
+              marginLeft: "auto",
+              marginTop: "auto",
+              marginBottom: "auto",
+            }}
             color="inherit"
             aria-label="flag"
             size="small"
@@ -203,7 +263,12 @@ const eco = ({ wiki, ecoName, id }) => {
         </div>
 
         {!wiki ? (
-          <Typography variant="h6" align="justify" className={classes.header}>
+          <Typography
+            variant="h6"
+            align="justify"
+            // className={classes.header}
+            sx={{ marginTop: 20 }}
+          >
             We currently don't have a summary of this ecoregion. If you want to
             help us out you can create a wikipedia page for the ecoregion.
           </Typography>

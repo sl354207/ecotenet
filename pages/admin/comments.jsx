@@ -12,54 +12,54 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 import useSWR from "swr";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  progress: {
-    margin: "100px auto",
-    display: "flex",
-    justifySelf: "center",
-  },
-  header: {
-    marginTop: 20,
-  },
-  buttonPost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  mobile: {
-    display: "grid",
-  },
-  desktop: {
-    marginTop: 4,
-  },
-  button: {
-    marginLeft: 4,
-  },
-  delete: {
-    color: "#fc7ebf",
-    borderColor: "#fc7ebf",
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  comment: {
-    display: "flow-root",
-    flexGrow: 1,
-  },
+  // root: {
+  //   display: "flex",
+  // },
+  // content: {
+  //   flexGrow: 1,
+  //   padding: theme.spacing(3),
+  // },
+  // progress: {
+  //   margin: "100px auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
+  // header: {
+  //   marginTop: 20,
+  // },
+  // buttonPost: {
+  //   display: "flex",
+  //   justifyContent: "start",
+  //   textTransform: "none",
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+  //   margin: "20px auto",
+  //   borderRadius: "10px",
+  // },
+  // mobile: {
+  //   display: "grid",
+  // },
+  // desktop: {
+  //   marginTop: 4,
+  // },
+  // button: {
+  //   marginLeft: 4,
+  // },
+  // delete: {
+  //   color: "#fc7ebf",
+  //   borderColor: "#fc7ebf",
+  // },
+  // dialog: {
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // comment: {
+  //   display: "flow-root",
+  //   flexGrow: 1,
+  // },
 }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -68,7 +68,7 @@ const adminComments = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
@@ -95,12 +95,17 @@ const adminComments = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        className={classes.progress}
+        sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else if (Array.isArray(results) && results.length == 0) {
     list = (
-      <Typography variant="h6" align="center" className={classes.header}>
+      <Typography
+        variant="h6"
+        align="center"
+        // className={classes.header}
+        sx={{ marginTop: "20px" }}
+      >
         no results
       </Typography>
     );
@@ -108,90 +113,123 @@ const adminComments = () => {
     list = (
       <List>
         {results.map((result) => {
-          return <>
-            <ListItem key={result._id} className={classes.buttonPost}>
-              <div className={classes.comment}>
-                <Link className={classes.link} underline="hover">{result.name}</Link>
+          return (
+            <>
+              <ListItem
+                key={result._id}
+                sx={{
+                  display: "flex",
+                  justifyContent: "start",
+                  textTransform: "none",
+                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+                  margin: "20px auto",
+                  borderRadius: "10px",
+                }}
+              >
+                <div style={{ display: "flow-root", flexGrow: 1 }}>
+                  <Link underline="hover">{result.name}</Link>
 
-                <ListItemText primary={result.text}></ListItemText>
-              </div>
+                  <ListItemText primary={result.text}></ListItemText>
+                </div>
 
-              {isMobile ? (
-                <div className={classes.mobile}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() =>
-                      handleOpenDialog("Approve", "Comment", result)
-                    }
+                {isMobile ? (
+                  <div
+                    // className={classes.mobile}
+                    style={{ display: "grid" }}
                   >
-                    Approve
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={classes.desktop}
-                    onClick={() =>
-                      handleOpenDialog("Deny", "Comment", result)
-                    }
-                  >
-                    Deny
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={`${classes.desktop} ${classes.delete}`}
-                    onClick={() =>
-                      handleOpenDialog("Delete", "Comment", result)
-                    }
-                  >
-                    Delete
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() =>
-                      handleOpenDialog("Approve", "Comment", result)
-                    }
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={classes.button}
-                    onClick={() =>
-                      handleOpenDialog("Deny", "Comment", result)
-                    }
-                  >
-                    Deny
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    className={`${classes.button} ${classes.delete}`}
-                    onClick={() =>
-                      handleOpenDialog("Delete", "Comment", result)
-                    }
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
-            </ListItem>
-          </>;
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() =>
+                        handleOpenDialog("Approve", "Comment", result)
+                      }
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      sx={{ marginTop: "4px" }}
+                      onClick={() =>
+                        handleOpenDialog("Deny", "Comment", result)
+                      }
+                    >
+                      Deny
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      // className={`${classes.desktop} ${classes.delete}`}
+                      sx={{
+                        marginTop: "4px",
+                        color: "#fc7ebf",
+                        borderColor: "#fc7ebf",
+                      }}
+                      onClick={() =>
+                        handleOpenDialog("Delete", "Comment", result)
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() =>
+                        handleOpenDialog("Approve", "Comment", result)
+                      }
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      // className={classes.button}
+                      sx={{ marginLeft: "4px" }}
+                      onClick={() =>
+                        handleOpenDialog("Deny", "Comment", result)
+                      }
+                    >
+                      Deny
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      // className={`${classes.button} ${classes.delete}`}
+                      sx={{
+                        marginLeft: "4px",
+                        marginTop: "4px",
+                        color: "#fc7ebf",
+                        borderColor: "#fc7ebf",
+                      }}
+                      onClick={() =>
+                        handleOpenDialog("Delete", "Comment", result)
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </ListItem>
+            </>
+          );
         })}
       </List>
     );
   }
 
   return (
-    <div className={classes.root}>
+    <div
+      // className={classes.root}
+      style={{ display: "flex" }}
+    >
       <AdminDrawer />
-      <div className={classes.content}>
+      <div
+        // className={classes.content}
+        style={{ flexGrow: 1, padding: theme.spacing(3) }}
+      >
         <Header title="Comments" />
         {list}
         <AdminDialog
@@ -199,7 +237,7 @@ const adminComments = () => {
           action={action.action}
           open={dialog}
           handleClose={handleCloseDialog}
-          className={classes.dialog}
+          // className={classes.dialog}
           result={item}
           mutate={mutate}
         />
