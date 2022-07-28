@@ -1,10 +1,10 @@
 import AdminDrawer from "@components/AdminDrawer";
 import AdminDialog from "@components/dialogs/AdminDialog";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import {
   Button,
   CircularProgress,
-  Link,
   List,
   ListItem,
   ListItemText,

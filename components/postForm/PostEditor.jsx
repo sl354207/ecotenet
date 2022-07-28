@@ -22,9 +22,9 @@ const darkTheme = createTheme({
 });
 
 const useStyles = makeStyles(() => ({
-  description: {
-    marginLeft: 10,
-  },
+  // description: {
+  //   marginLeft: 10,
+  // },
 }));
 
 // Define which plugins we want to use.
@@ -46,7 +46,7 @@ const PostEditor = ({ value, setPostValue }) => {
         desktop you may want to adjust your browser window size to see how your
         layout reacts on smaller screens"
         align="left"
-        className={classes.description}
+        // className={classes.description}
       />
 
       <EditorLayout>

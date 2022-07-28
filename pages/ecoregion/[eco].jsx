@@ -2,9 +2,10 @@
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Container, IconButton, Link, Typography } from "@mui/material";
+import { Container, IconButton, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { getEcoregion } from "@utils/mongodb";
 import theme from "@utils/theme";

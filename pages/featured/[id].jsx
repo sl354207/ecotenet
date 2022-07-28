@@ -4,16 +4,11 @@ import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/EditorLayout";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import { useUserContext } from "@components/UserContext";
 import Vote from "@components/Vote";
 import FlagIcon from "@mui/icons-material/Flag";
-import {
-  Container,
-  Divider,
-  IconButton,
-  Link,
-  Typography,
-} from "@mui/material";
+import { Container, Divider, IconButton, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 // The editor core

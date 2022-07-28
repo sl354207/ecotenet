@@ -1,9 +1,11 @@
 import DashboardDialog from "@components/dialogs/DashboardDialog";
+import Link from "@components/Link";
 import { useSnackbarContext } from "@components/SnackbarContext";
-import { Button, Link, Step, StepButton, Stepper } from "@mui/material";
+import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 import { updatePost } from "@utils/api-helpers";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PostDetails from "./PostDetails";
@@ -11,34 +13,34 @@ import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
 
 const useStyles = makeStyles((theme) => ({
-  stepLabel: {
-    "& .MuiStepLabel-label": {
-      color: alpha(theme.palette.text.primary, 0.7),
-    },
-    "& .MuiStepLabel-active": {
-      color: theme.palette.text.primary,
-    },
-    "& .MuiStepIcon-active": {
-      color: `${theme.palette.secondary.dark}!important`,
-    },
-    "& .MuiStepIcon-root": {
-      color: alpha(theme.palette.secondary.dark, 0.4),
-    },
-  },
-  stepper: {
-    backgroundColor: theme.palette.primary.dark,
-  },
-  stepNav: {
-    display: "flex",
-    justifyContent: "space-around",
-    marginBottom: 20,
-  },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  link: {
-    marginLeft: 10,
-  },
+  // stepLabel: {
+  //   "& .MuiStepLabel-label": {
+  //     color: alpha(theme.palette.text.primary, 0.7),
+  //   },
+  //   "& .MuiStepLabel-active": {
+  //     color: theme.palette.text.primary,
+  //   },
+  //   "& .MuiStepIcon-active": {
+  //     color: `${theme.palette.secondary.dark}!important`,
+  //   },
+  //   "& .MuiStepIcon-root": {
+  //     color: alpha(theme.palette.secondary.dark, 0.4),
+  //   },
+  // },
+  // stepper: {
+  //   backgroundColor: theme.palette.primary.dark,
+  // },
+  // stepNav: {
+  //   display: "flex",
+  //   justifyContent: "space-around",
+  //   marginBottom: 20,
+  // },
+  // dialog: {
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // link: {
+  //   marginLeft: 10,
+  // },
 }));
 
 // pass in post and url path as props
@@ -194,7 +196,14 @@ const StepForm = ({ post, user }) => {
         return (
           // add back in when ready  formErrors={formErrors}
           <>
-            <div className={classes.stepNav}>
+            <div
+              // className={classes.stepNav}
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "20px",
+              }}
+            >
               <Button
                 variant="outlined"
                 color="secondary"
@@ -287,7 +296,13 @@ const StepForm = ({ post, user }) => {
         return (
           // add back in when ready  formErrors={formErrors}
           <>
-            <div className={classes.stepNav}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "20px",
+              }}
+            >
               <Button variant="outlined" color="secondary" onClick={handleBack}>
                 Back
               </Button>
@@ -369,7 +384,13 @@ const StepForm = ({ post, user }) => {
       case 2:
         return (
           <>
-            <div className={classes.stepNav}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginBottom: "20px",
+              }}
+            >
               <Button variant="outlined" color="secondary" onClick={handleBack}>
                 Back
               </Button>
@@ -460,28 +481,76 @@ const StepForm = ({ post, user }) => {
 
   return (
     <>
-      <Link href="/dashboard" className={classes.link} underline="hover">
+      <Link href="/dashboard" underline="hover">
         &#10229;Dashboard
       </Link>
       <Stepper
         alternativeLabel
         nonLinear
         activeStep={activeStep}
-        className={classes.stepper}
-        style={{ padding: 24 }}
+        // className={classes.stepper}
+        sx={{ backgroundColor: theme.palette.primary.dark, padding: "24px" }}
       >
         <Step>
-          <StepButton onClick={handleStep(0)} className={classes.stepLabel}>
+          <StepButton
+            onClick={handleStep(0)}
+            sx={{
+              "& .MuiStepLabel-label": {
+                color: alpha(theme.palette.text.primary, 0.7),
+              },
+              "& .MuiStepLabel-active": {
+                color: theme.palette.text.primary,
+              },
+              "& .MuiStepIcon-active": {
+                color: `${theme.palette.secondary.dark}!important`,
+              },
+              "& .MuiStepIcon-root": {
+                color: alpha(theme.palette.secondary.dark, 0.4),
+              },
+            }}
+          >
             details
           </StepButton>
         </Step>
         <Step>
-          <StepButton onClick={handleStep(1)} className={classes.stepLabel}>
+          <StepButton
+            onClick={handleStep(1)}
+            sx={{
+              "& .MuiStepLabel-label": {
+                color: alpha(theme.palette.text.primary, 0.7),
+              },
+              "& .MuiStepLabel-active": {
+                color: theme.palette.text.primary,
+              },
+              "& .MuiStepIcon-active": {
+                color: `${theme.palette.secondary.dark}!important`,
+              },
+              "& .MuiStepIcon-root": {
+                color: alpha(theme.palette.secondary.dark, 0.4),
+              },
+            }}
+          >
             body
           </StepButton>
         </Step>
         <Step>
-          <StepButton onClick={handleStep(2)} className={classes.stepLabel}>
+          <StepButton
+            onClick={handleStep(2)}
+            sx={{
+              "& .MuiStepLabel-label": {
+                color: alpha(theme.palette.text.primary, 0.7),
+              },
+              "& .MuiStepLabel-active": {
+                color: theme.palette.text.primary,
+              },
+              "& .MuiStepIcon-active": {
+                color: `${theme.palette.secondary.dark}!important`,
+              },
+              "& .MuiStepIcon-root": {
+                color: alpha(theme.palette.secondary.dark, 0.4),
+              },
+            }}
+          >
             map
           </StepButton>
         </Step>
@@ -491,7 +560,7 @@ const StepForm = ({ post, user }) => {
         action={action.action}
         open={dialog}
         handleClose={handleCloseDialog}
-        className={classes.dialog}
+        // className={classes.dialog}
         result={item}
         snackbar={snackbar}
         setSnackbar={setSnackbar}

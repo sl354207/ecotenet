@@ -1,8 +1,8 @@
 import AdminDrawer from "@components/AdminDrawer";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import {
   CircularProgress,
-  Link,
   List,
   ListItem,
   ListItemText,

@@ -1,10 +1,11 @@
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import PostList from "@components/PostList";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Container, IconButton, Link, Typography } from "@mui/material";
+import { Container, IconButton, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { getPerson, getProfilePosts } from "@utils/mongodb";
 import { signIn } from "next-auth/react";

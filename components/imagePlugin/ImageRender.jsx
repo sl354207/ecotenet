@@ -1,4 +1,5 @@
-import { Link, Typography } from "@mui/material";
+import Link from "@components/Link";
+import { Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";

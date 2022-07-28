@@ -4,14 +4,14 @@ import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 
 const useStyles = makeStyles(() => ({
-  root: {
-    marginLeft: 20,
-  },
-  count: {
-    display: "flex",
-    flexDirection: "column",
-    maxWidth: 50,
-  },
+  // root: {
+  //   marginLeft: 20,
+  // },
+  // count: {
+  //   display: "flex",
+  //   flexDirection: "column",
+  //   maxWidth: 50,
+  // },
 }));
 
 const Vote = ({
@@ -51,8 +51,14 @@ const Vote = ({
   };
   return (
     <>
-      <div className={classes.root}>
-        <div className={classes.count}>
+      <div
+        // className={classes.root}
+        style={{ marginLeft: "20px" }}
+      >
+        <div
+          // className={classes.count}
+          style={{ display: "flex", flexDirection: "column", maxWidth: "50px" }}
+        >
           <IconButton
             onClick={handleCountUp}
             color="secondary"

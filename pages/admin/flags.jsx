@@ -1,10 +1,10 @@
 import AdminDrawer from "@components/AdminDrawer";
 import Resolve from "@components/dialogs/Resolve";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import {
   Button,
   CircularProgress,
-  Link,
   List,
   ListItem,
   Typography,

@@ -1,27 +1,28 @@
 import { Button, FormControl, FormHelperText } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import TextBox from "./TextBox";
 
 const useStyles = makeStyles((theme) => ({
-  form: {
-    display: "flex",
-    flexGrow: 1,
-    margin: "10px 0 10px 0",
-  },
-  label: {
-    color: theme.palette.text.primary,
-    position: "relative",
-    transform: "none",
-  },
-  helper: {
-    color: theme.palette.text.primary,
-    fontSize: 16,
-  },
-  layout: {
-    display: "grid",
-  },
+  // form: {
+  //   display: "flex",
+  //   flexGrow: 1,
+  //   margin: "10px 0 10px 0",
+  // },
+  // label: {
+  //   color: theme.palette.text.primary,
+  //   position: "relative",
+  //   transform: "none",
+  // },
+  // helper: {
+  //   color: theme.palette.text.primary,
+  //   fontSize: 16,
+  // },
+  // layout: {
+  //   display: "grid",
+  // },
 }));
 
 /**
@@ -78,8 +79,15 @@ const VerificationStep = ({ email, callbackUrl }) => {
   );
 
   return (
-    <div className={classes.layout}>
-      <FormControl className={classes.form} error={error.on}>
+    <div
+      // className={classes.layout}
+      style={{ display: "grid" }}
+    >
+      <FormControl
+        // className={classes.form}
+        sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+        error={error.on}
+      >
         <TextBox
           defaultValue={""}
           autoFocus={true}
@@ -88,7 +96,11 @@ const VerificationStep = ({ email, callbackUrl }) => {
           multiline={false}
           onKeyPress={onKeyPress}
         />
-        <FormHelperText className={classes.helper} id="component-error-text">
+        <FormHelperText
+          // className={classes.helper}
+          sx={{ color: theme.palette.text.primary, fontSize: 16 }}
+          id="component-error-text"
+        >
           {error && error.message ? (
             <>{error.message}</>
           ) : (

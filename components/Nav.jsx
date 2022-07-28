@@ -40,104 +40,104 @@ import { useUserContext } from "./UserContext";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    marginRight: theme.spacing(2),
-    // color: "#ffa726"
-  },
-  title: {
-    flexGrow: 1,
-    [theme.breakpoints.down("md")]: {
-      flexGrow: 1,
-    },
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-    backgroundColor: theme.palette.primary.light,
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: "auto",
-    marginRight: 10,
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  root: {
-    color: "inherit",
-  },
-  input: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "0ch",
-    "&:focus": {
-      width: "20ch",
-    },
-  },
-  popper: {
-    marginTop: 4,
-    backgroundColor: theme.palette.primary.light,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-  sort: {
-    color: theme.palette.secondary.light,
-    // color: "#ffa726",
-    // color: theme.palette.text.primary,
-  },
-  home: {
-    minWidth: "auto",
-  },
-  spacer: {
-    marginLeft: 10,
-  },
-  desktop: {
-    display: "inline-flex",
-  },
-  popperTop: {
-    color: theme.palette.secondary.main,
-  },
-  popperBottom: {
-    color: theme.palette.secondary.main,
-    border: `1px solid ${theme.palette.secondary.main}`,
-    borderRadius: 4,
-    marginBottom: 4,
-  },
-  donate: {
-    border: `1px solid ${theme.palette.secondary.main}`,
-    borderRadius: 4,
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.text.secondary,
-    "&:hover": {
-      backgroundColor: "#0071e4",
-      border: "1px solid #0071e4",
-      borderRadius: 4,
-    },
-  },
+  // button: {
+  //   marginRight: theme.spacing(2),
+  //   // color: "#ffa726"
+  // },
+  // title: {
+  //   flexGrow: 1,
+  //   [theme.breakpoints.down("md")]: {
+  //     flexGrow: 1,
+  //   },
+  // },
+  // drawer: {
+  //   width: drawerWidth,
+  //   flexShrink: 0,
+  // },
+  // drawerPaper: {
+  //   width: drawerWidth,
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // header: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   padding: theme.spacing(0, 1),
+  //   // necessary for content to be below app bar
+  //   ...theme.mixins.toolbar,
+  // },
+  // search: {
+  //   position: "relative",
+  //   borderRadius: theme.shape.borderRadius,
+  //   backgroundColor: alpha(theme.palette.common.white, 0.15),
+  //   "&:hover": {
+  //     backgroundColor: alpha(theme.palette.common.white, 0.25),
+  //   },
+  //   marginLeft: 0,
+  //   width: "auto",
+  //   marginRight: 10,
+  // },
+  // searchIcon: {
+  //   padding: theme.spacing(0, 2),
+  //   height: "100%",
+  //   position: "absolute",
+  //   display: "flex",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
+  // root: {
+  //   color: "inherit",
+  // },
+  // input: {
+  //   padding: theme.spacing(1, 1, 1, 0),
+  //   // vertical padding + font size from searchIcon
+  //   paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+  //   transition: theme.transitions.create("width"),
+  //   width: "0ch",
+  //   "&:focus": {
+  //     width: "20ch",
+  //   },
+  // },
+  // popper: {
+  //   marginTop: 4,
+  //   backgroundColor: theme.palette.primary.light,
+  // },
+  // nested: {
+  //   paddingLeft: theme.spacing(4),
+  // },
+  // sort: {
+  //   color: theme.palette.secondary.light,
+  //   // color: "#ffa726",
+  //   // color: theme.palette.text.primary,
+  // },
+  // home: {
+  //   minWidth: "auto",
+  // },
+  // spacer: {
+  //   marginLeft: 10,
+  // },
+  // desktop: {
+  //   display: "inline-flex",
+  // },
+  // popperTop: {
+  //   color: theme.palette.secondary.main,
+  // },
+  // popperBottom: {
+  //   color: theme.palette.secondary.main,
+  //   border: `1px solid ${theme.palette.secondary.main}`,
+  //   borderRadius: 4,
+  //   marginBottom: 4,
+  // },
+  // donate: {
+  //   border: `1px solid ${theme.palette.secondary.main}`,
+  //   borderRadius: 4,
+  //   backgroundColor: theme.palette.secondary.main,
+  //   color: theme.palette.text.secondary,
+  //   "&:hover": {
+  //     backgroundColor: "#0071e4",
+  //     border: "1px solid #0071e4",
+  //     borderRadius: 4,
+  //   },
+  // },
 }));
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
@@ -275,7 +275,7 @@ const Nav = ({ ecoFilter }) => {
 
   return (
     <>
-      <AppBar position="fixed" elevation={1}>
+      <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
         <Toolbar>
           <>
             {ecoFilter && (
@@ -288,41 +288,65 @@ const Nav = ({ ecoFilter }) => {
                     size="small"
                     onClick={handleDrawerOpen}
                   >
-                    <SortIcon className={classes.sort} />
+                    <SortIcon
+                      // className={classes.sort}
+                      sx={{ color: theme.palette.secondary.light }}
+                    />
                   </IconButton>
                 ) : (
                   <IconButton
                     edge="start"
-                    className={classes.button}
+                    // className={classes.button}
+                    sx={{ marginRight: theme.spacing(2) }}
                     // color="inherit"
                     aria-label="filter"
                     onClick={handleDrawerOpen}
                     size="large"
                   >
-                    <SortIcon className={classes.sort} />
+                    <SortIcon sx={{ color: theme.palette.secondary.light }} />
                   </IconButton>
                 )}
               </>
             )}
 
             {isMobile ? (
-              <div className={classes.title}>
+              <div
+                // className={classes.title}
+                style={{
+                  flexGrow: 1,
+                  [theme.breakpoints.down("md")]: {
+                    flexGrow: 1,
+                  },
+                }}
+              >
                 <Button
                   href="/"
                   size="small"
                   color="inherit"
-                  className={classes.home}
+                  // className={classes.home}
+                  sx={{ minWidth: "auto" }}
                 >
                   et
                 </Button>
               </div>
             ) : (
-              <div className={classes.title}>
+              <div
+                // className={classes.title}
+                style={{
+                  flexGrow: 1,
+                  [theme.breakpoints.down("md")]: {
+                    flexGrow: 1,
+                  },
+                }}
+              >
                 <Button href="/" variant="text" color="inherit">
                   ecotenet
                 </Button>
 
-                <div className={classes.desktop}>
+                <div
+                  // className={classes.desktop}
+                  style={{ display: "inline-flex" }}
+                >
                   <Button href="/featured" variant="text" color="secondary">
                     Featured Posts
                   </Button>
@@ -347,8 +371,31 @@ const Nav = ({ ecoFilter }) => {
               </div>
             )}
 
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
+            <div
+              // className={classes.search}
+              style={{
+                position: "relative",
+                borderRadius: theme.shape.borderRadius,
+                backgroundColor: alpha(theme.palette.common.white, 0.15),
+                "&:hover": {
+                  backgroundColor: alpha(theme.palette.common.white, 0.25),
+                },
+                marginLeft: 0,
+                width: "auto",
+                marginRight: "10px",
+              }}
+            >
+              <div
+                // className={classes.searchIcon}
+                style={{
+                  padding: theme.spacing(0, 2),
+                  height: "100%",
+                  position: "absolute",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <SearchIcon
                 // onClick={() => router.push("/success")}
                 />
@@ -500,7 +547,8 @@ const Nav = ({ ecoFilter }) => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  className={classes.spacer}
+                  // className={classes.spacer}
+                  sx={{ marginLeft: "10px" }}
                   disabled={status == "loading"}
                   onClick={
                     status == "authenticated"
@@ -518,7 +566,7 @@ const Nav = ({ ecoFilter }) => {
                   href="/donate"
                   variant="contained"
                   color="secondary"
-                  className={classes.spacer}
+                  sx={{ marginLeft: "10px" }}
                 >
                   Donate
                 </Button>
@@ -557,7 +605,9 @@ const Nav = ({ ecoFilter }) => {
                         minWidth: 210,
                       }}
                     >
-                      <Paper className={classes.popper}>
+                      <Paper
+                      // className={classes.popper}
+                      >
                         <ClickAwayListener onClickAway={closePopper}>
                           <MenuList
                             autoFocusItem={popper}
@@ -569,7 +619,8 @@ const Nav = ({ ecoFilter }) => {
                                 setPopper(false);
                                 router.push("/featured");
                               }}
-                              className={classes.popperTop}
+                              // className={classes.popperTop}
+                              sx={{ color: theme.palette.secondary.main }}
                             >
                               Featured Posts
                             </MenuItem>
@@ -578,7 +629,7 @@ const Nav = ({ ecoFilter }) => {
                                 setPopper(false);
                                 router.push("/species-map");
                               }}
-                              className={classes.popperTop}
+                              sx={{ color: theme.palette.secondary.main }}
                             >
                               Species Map
                             </MenuItem>
@@ -596,7 +647,7 @@ const Nav = ({ ecoFilter }) => {
                                         router.push("/dashboard");
                                       }
                                 }
-                                className={classes.popperTop}
+                                sx={{ color: theme.palette.secondary.main }}
                               >
                                 Dashboard
                               </MenuItem>
@@ -615,7 +666,13 @@ const Nav = ({ ecoFilter }) => {
                                         startPost();
                                       }
                                 }
-                                className={classes.popperBottom}
+                                // className={classes.popperBottom}
+                                sx={{
+                                  color: theme.palette.secondary.main,
+                                  border: `1px solid ${theme.palette.secondary.main}`,
+                                  borderRadius: "4px",
+                                  marginBottom: "4px",
+                                }}
                               >
                                 Create Post
                               </MenuItem>
@@ -636,7 +693,12 @@ const Nav = ({ ecoFilter }) => {
                                       signIn();
                                     }
                               }
-                              className={classes.popperBottom}
+                              sx={{
+                                color: theme.palette.secondary.main,
+                                border: `1px solid ${theme.palette.secondary.main}`,
+                                borderRadius: "4px",
+                                marginBottom: "4px",
+                              }}
                             >
                               Sign In
                             </MenuItem>
@@ -645,7 +707,18 @@ const Nav = ({ ecoFilter }) => {
                                 setPopper(false);
                                 router.push("/donate");
                               }}
-                              className={classes.donate}
+                              // className={classes.donate}
+                              sx={{
+                                border: `1px solid ${theme.palette.secondary.main}`,
+                                borderRadius: "4px",
+                                backgroundColor: theme.palette.secondary.main,
+                                color: theme.palette.text.secondary,
+                                "&:hover": {
+                                  backgroundColor: "#0071e4",
+                                  border: "1px solid #0071e4",
+                                  borderRadius: "4px",
+                                },
+                              }}
                             >
                               Donate
                             </MenuItem>
@@ -659,17 +732,41 @@ const Nav = ({ ecoFilter }) => {
             )}
 
             <Drawer
-              className={classes.drawer}
+              // className={classes.drawer}
+              sx={{
+                width: drawerWidth,
+                flexShrink: 0,
+                "& .MuiDrawer-paper": {
+                  width: drawerWidth,
+                  backgroundColor: theme.palette.primary.light,
+                  margin: 0,
+                },
+              }}
               anchor="left"
               open={drawerOpen}
               onClose={handleDrawerClose}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
+              // classes={{
+              //   paper: classes.drawerPaper,
+              // }}
             >
-              <div className={classes.header}>
+              <div
+                // className={classes.header}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: theme.spacing(0, 1),
+                  // necessary for content to be below app bar
+                  ...theme.mixins.toolbar,
+                }}
+              >
                 <Button
-                  className={classes.title}
+                  // className={classes.title}
+                  sx={{
+                    flexGrow: 1,
+                    [theme.breakpoints.down("md")]: {
+                      flexGrow: 1,
+                    },
+                  }}
                   onClick={() => {
                     setDrawerOpen(false);
                     router.push("/");
@@ -707,7 +804,8 @@ const Nav = ({ ecoFilter }) => {
                           <ListItem
                             button
                             key={menuSub}
-                            className={classes.nested}
+                            // className={classes.nested}
+                            sx={{ paddingLeft: theme.spacing(4) }}
                             onClick={() => {
                               handleDrawerClose(Event);
                               router.push({

@@ -1,15 +1,10 @@
-import {
-  Button,
-  IconButton,
-  Link,
-  ListItem,
-  Typography,
-} from "@mui/material";
-import { alpha } from "@mui/material/styles";
-import makeStyles from '@mui/styles/makeStyles';
+import Link from "@components/Link";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FlagIcon from "@mui/icons-material/Flag";
+import { Button, IconButton, ListItem, Typography } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import makeStyles from "@mui/styles/makeStyles";
 import CommentForm from "./CommentForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,74 +52,80 @@ const Comment = ({
 
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
-    return <>
-      <ListItem className={classes.comment}>
-        <div className={classes.box}>
-          <div className={classes.content}>
-            <div className={classes.items}>
-              <Typography
-                className={classes.author}
-                align="center"
-                variant="body1"
-              >
-                <Link href={`/person/${comment.name}`} color="secondary" underline="hover">
-                  {comment.name}
-                </Link>
-              </Typography>
-              <Typography
-                className={classes.date}
-                align="left"
-                variant="body1"
-              >
-                {comment.updated ? (
-                  //
-                  <>Updated on {comment.date.toDateString()}</>
-                ) : (
-                  //
-                  <>{comment.date.toDateString()}</>
-                )}
-              </Typography>
+    return (
+      <>
+        <ListItem className={classes.comment}>
+          <div className={classes.box}>
+            <div className={classes.content}>
+              <div className={classes.items}>
+                <Typography
+                  className={classes.author}
+                  align="center"
+                  variant="body1"
+                >
+                  <Link
+                    href={`/person/${comment.name}`}
+                    color="secondary"
+                    underline="hover"
+                  >
+                    {comment.name}
+                  </Link>
+                </Typography>
+                <Typography
+                  className={classes.date}
+                  align="left"
+                  variant="body1"
+                >
+                  {comment.updated ? (
+                    //
+                    <>Updated on {comment.date.toDateString()}</>
+                  ) : (
+                    //
+                    <>{comment.date.toDateString()}</>
+                  )}
+                </Typography>
+              </div>
+              <Typography variant="h6">{comment.text}</Typography>
             </div>
-            <Typography variant="h6">{comment.text}</Typography>
-          </div>
 
-          {/* display reply button and comment form with comment ref to original comment*/}
-          {comment.comment_ref === comment._id && (
-            <>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={
-                  comment.open
-                    ? () => handleReply("close", comment._id)
-                    : () => handleReply("open", comment._id)
-                }
-                endIcon={
-                  comment.open ? <ExpandLessIcon /> : <ExpandMoreIcon />
-                }
-              >
-                reply
-              </Button>
-            </>
-          )}
-          <IconButton
-            className={classes.flag}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenFlag("comment", comment)}
-          >
-            <FlagIcon />
-          </IconButton>
-        </div>
-      </ListItem>
-      <CommentForm
-        post_id={post_id}
-        comment_ref={comment._id}
-        showForm={comment.open}
-        handleOpenDialog={handleOpenDialog}
-      />
-    </>;
+            {/* display reply button and comment form with comment ref to original comment*/}
+            {comment.comment_ref === comment._id && (
+              <>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={
+                    comment.open
+                      ? () => handleReply("close", comment._id)
+                      : () => handleReply("open", comment._id)
+                  }
+                  endIcon={
+                    comment.open ? <ExpandLessIcon /> : <ExpandMoreIcon />
+                  }
+                >
+                  reply
+                </Button>
+              </>
+            )}
+            <IconButton
+              className={classes.flag}
+              color="inherit"
+              aria-label="flag"
+              size="small"
+              onClick={() => handleOpenFlag("comment", comment)}
+            >
+              <FlagIcon />
+            </IconButton>
+          </div>
+        </ListItem>
+        <CommentForm
+          post_id={post_id}
+          comment_ref={comment._id}
+          showForm={comment.open}
+          handleOpenDialog={handleOpenDialog}
+        />
+      </>
+    );
   } else {
     return (
       <ListItem className={classes.reply}>
@@ -136,7 +137,11 @@ const Comment = ({
                 align="center"
                 variant="body1"
               >
-                <Link href={`/person/${comment.name}`} color="secondary" underline="hover">
+                <Link
+                  href={`/person/${comment.name}`}
+                  color="secondary"
+                  underline="hover"
+                >
                   {comment.name}
                 </Link>
               </Typography>

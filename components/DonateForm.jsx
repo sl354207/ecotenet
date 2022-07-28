@@ -14,6 +14,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import { fetchPostJSON } from "@utils/stripe/api-helpers";
 import getStripe from "@utils/stripe/get-stripe";
 import { formatAmountForDisplay } from "@utils/stripe/stripe-helpers";
+import theme from "@utils/theme";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -47,58 +48,58 @@ function a11yProps(index) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  tab: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.primary.light,
-    margin: 20,
-    minHeight: 80,
-    borderRadius: "10px",
-    "&:hover": {
-      color: theme.text,
-      opacity: 1,
-    },
-  },
-  input: {
-    position: "relative",
-    backgroundColor: theme.palette.primary.main,
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
-    display: "flex",
-    padding: "10px 10px",
-    flexGrow: 1,
-    "&:focus-within": {
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      flexGrow: 1,
-    },
-  },
-  toggleGroup: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  toggle: {
-    color: "rgba(255, 255, 255, 0.7)",
-    padding: "30px!important",
-    marginInline: "20px!important",
-    marginBlock: "10px!important",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}!important`,
-    borderRadius: "4px!important",
-  },
-  selected: {
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}!important`,
-    borderRadius: "4px!important",
-  },
-  button: {
-    display: "flex",
-    margin: "auto",
-    marginTop: 10,
-    minWidth: 300,
-  },
-  progress: {
-    marginInline: "auto",
-    display: "flex",
-    justifySelf: "center",
-  },
+  // tab: {
+  //   flexGrow: 1,
+  //   backgroundColor: theme.palette.primary.light,
+  //   margin: 20,
+  //   minHeight: 80,
+  //   borderRadius: "10px",
+  //   "&:hover": {
+  //     color: theme.text,
+  //     opacity: 1,
+  //   },
+  // },
+  // input: {
+  //   position: "relative",
+  //   backgroundColor: theme.palette.primary.main,
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+  //   borderRadius: 4,
+  //   display: "flex",
+  //   padding: "10px 10px",
+  //   flexGrow: 1,
+  //   "&:focus-within": {
+  //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+  //     flexGrow: 1,
+  //   },
+  // },
+  // toggleGroup: {
+  //   display: "flex",
+  //   flexWrap: "wrap",
+  //   justifyContent: "center",
+  // },
+  // toggle: {
+  //   color: "rgba(255, 255, 255, 0.7)",
+  //   padding: "30px!important",
+  //   marginInline: "20px!important",
+  //   marginBlock: "10px!important",
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}!important`,
+  //   borderRadius: "4px!important",
+  // },
+  // selected: {
+  //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}!important`,
+  //   borderRadius: "4px!important",
+  // },
+  // button: {
+  //   display: "flex",
+  //   margin: "auto",
+  //   marginTop: 10,
+  //   minWidth: 300,
+  // },
+  // progress: {
+  //   marginInline: "auto",
+  //   display: "flex",
+  //   justifySelf: "center",
+  // },
 }));
 
 const DonateForm = () => {
@@ -236,12 +237,33 @@ const DonateForm = () => {
         textColor="inherit"
       >
         <Tab
-          className={classes.tab}
+          // className={classes.tab}
+          sx={{
+            flexGrow: 1,
+            backgroundColor: theme.palette.primary.light,
+            margin: "20px",
+            minHeight: "80px",
+            borderRadius: "10px",
+            "&:hover": {
+              color: theme.text,
+              opacity: 1,
+            },
+          }}
           label="Monthly Donation"
           {...a11yProps(0)}
         />
         <Tab
-          className={classes.tab}
+          sx={{
+            flexGrow: 1,
+            backgroundColor: theme.palette.primary.light,
+            margin: "20px",
+            minHeight: "80px",
+            borderRadius: "10px",
+            "&:hover": {
+              color: theme.text,
+              opacity: 1,
+            },
+          }}
           label="One Time Donation"
           {...a11yProps(1)}
         />
@@ -254,15 +276,34 @@ const DonateForm = () => {
             value={monthly.amount}
             exclusive
             onChange={handleMonthlyChange}
-            className={classes.toggleGroup}
+            // className={classes.toggleGroup}
+            sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
             aria-label="text alignment"
           >
             <ToggleButton
               value={2.0}
               aria-label="left aligned"
-              className={classes.toggle}
-              classes={{
-                selected: classes.selected,
+              // className={classes.toggle}
+              // classes={{
+              //   selected: classes.selected,
+              // }}
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                padding: "30px!important",
+                marginInline: "20px!important",
+                marginBlock: "10px!important",
+                border: `1px solid ${alpha(
+                  theme.palette.secondary.main,
+                  0.5
+                )}!important`,
+                borderRadius: "4px!important",
+                "&:focus": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    1
+                  )}!important`,
+                  borderRadius: "4px!important",
+                },
               }}
             >
               {formatAmountForDisplay(2, "usd")}
@@ -270,9 +311,23 @@ const DonateForm = () => {
             <ToggleButton
               value={5.0}
               aria-label="left aligned"
-              className={classes.toggle}
-              classes={{
-                selected: classes.selected,
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                padding: "30px!important",
+                marginInline: "20px!important",
+                marginBlock: "10px!important",
+                border: `1px solid ${alpha(
+                  theme.palette.secondary.main,
+                  0.5
+                )}!important`,
+                borderRadius: "4px!important",
+                "&:focus": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    1
+                  )}!important`,
+                  borderRadius: "4px!important",
+                },
               }}
             >
               {formatAmountForDisplay(5, "usd")}
@@ -280,9 +335,23 @@ const DonateForm = () => {
             <ToggleButton
               value={10.0}
               aria-label="centered"
-              className={classes.toggle}
-              classes={{
-                selected: classes.selected,
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                padding: "30px!important",
+                marginInline: "20px!important",
+                marginBlock: "10px!important",
+                border: `1px solid ${alpha(
+                  theme.palette.secondary.main,
+                  0.5
+                )}!important`,
+                borderRadius: "4px!important",
+                "&:focus": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    1
+                  )}!important`,
+                  borderRadius: "4px!important",
+                },
               }}
             >
               {formatAmountForDisplay(10, "usd")}
@@ -290,9 +359,23 @@ const DonateForm = () => {
             <ToggleButton
               value={20.0}
               aria-label="right aligned"
-              className={classes.toggle}
-              classes={{
-                selected: classes.selected,
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                padding: "30px!important",
+                marginInline: "20px!important",
+                marginBlock: "10px!important",
+                border: `1px solid ${alpha(
+                  theme.palette.secondary.main,
+                  0.5
+                )}!important`,
+                borderRadius: "4px!important",
+                "&:focus": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    1
+                  )}!important`,
+                  borderRadius: "4px!important",
+                },
               }}
             >
               {formatAmountForDisplay(20, "usd")}
@@ -300,9 +383,23 @@ const DonateForm = () => {
             <ToggleButton
               value={50.0}
               aria-label="justified"
-              className={classes.toggle}
-              classes={{
-                selected: classes.selected,
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                padding: "30px!important",
+                marginInline: "20px!important",
+                marginBlock: "10px!important",
+                border: `1px solid ${alpha(
+                  theme.palette.secondary.main,
+                  0.5
+                )}!important`,
+                borderRadius: "4px!important",
+                "&:focus": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    1
+                  )}!important`,
+                  borderRadius: "4px!important",
+                },
               }}
             >
               {formatAmountForDisplay(50, "usd")}
@@ -310,9 +407,23 @@ const DonateForm = () => {
             <ToggleButton
               value={100.0}
               aria-label="justified"
-              className={classes.toggle}
-              classes={{
-                selected: classes.selected,
+              sx={{
+                color: "rgba(255, 255, 255, 0.7)",
+                padding: "30px!important",
+                marginInline: "20px!important",
+                marginBlock: "10px!important",
+                border: `1px solid ${alpha(
+                  theme.palette.secondary.main,
+                  0.5
+                )}!important`,
+                borderRadius: "4px!important",
+                "&:focus": {
+                  border: `1px solid ${alpha(
+                    theme.palette.secondary.main,
+                    1
+                  )}!important`,
+                  borderRadius: "4px!important",
+                },
               }}
             >
               {formatAmountForDisplay(100, "usd")}
@@ -322,7 +433,12 @@ const DonateForm = () => {
             <CircularProgress
               color="secondary"
               disableShrink={true}
-              className={classes.progress}
+              // className={classes.progress}
+              sx={{
+                marginInline: "auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <Button
@@ -330,7 +446,13 @@ const DonateForm = () => {
               color="secondary"
               type="submit"
               disabled={loading}
-              className={classes.button}
+              // className={classes.button}
+              sx={{
+                display: "flex",
+                margin: "auto",
+                marginTop: "10px",
+                minWidth: "300px",
+              }}
             >
               Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
             </Button>
@@ -344,7 +466,20 @@ const DonateForm = () => {
             {formatAmountForDisplay(1000.0, "usd")}):
           </label>
           <Input
-            className={classes.input}
+            // className={classes.input}
+            sx={{
+              position: "relative",
+              backgroundColor: theme.palette.primary.main,
+              border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+              borderRadius: "4px",
+              display: "flex",
+              padding: "10px 10px",
+              flexGrow: 1,
+              "&:focus-within": {
+                border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+                flexGrow: 1,
+              },
+            }}
             value={value}
             color="secondary"
             disableUnderline
@@ -369,7 +504,11 @@ const DonateForm = () => {
             <CircularProgress
               color="secondary"
               disableShrink={true}
-              className={classes.progress}
+              sx={{
+                marginInline: "auto",
+                display: "flex",
+                justifySelf: "center",
+              }}
             />
           ) : (
             <Button
@@ -377,7 +516,12 @@ const DonateForm = () => {
               color="secondary"
               type="submit"
               disabled={loading}
-              className={classes.button}
+              sx={{
+                display: "flex",
+                margin: "auto",
+                marginTop: "10px",
+                minWidth: "300px",
+              }}
             >
               Donate {formatAmountForDisplay(value, "usd")}
             </Button>

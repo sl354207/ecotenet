@@ -4,11 +4,11 @@ import { useTheme } from "@mui/material/styles";
 import makeStyles from "@mui/styles/makeStyles";
 
 const useStyles = makeStyles(() => ({
-  button: {
-    display: "block",
-    justifyContent: "start",
-    textTransform: "none",
-  },
+  // button: {
+  //   display: "block",
+  //   justifyContent: "start",
+  //   textTransform: "none",
+  // },
 }));
 
 const SpeciesItem = ({ result }) => {
@@ -22,7 +22,12 @@ const SpeciesItem = ({ result }) => {
         variant="outlined"
         color="secondary"
         fullWidth
-        className={classes.button}
+        // className={classes.button}
+        sx={{
+          display: "block",
+          justifyContent: "start",
+          textTransform: "none",
+        }}
         href={`/species/${result._id}`}
       >
         {isMobile ? (

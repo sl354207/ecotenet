@@ -1,5 +1,6 @@
 import Description from "@components/Description";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import TextBox from "@components/TextBox";
 import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import InfoIcon from "@mui/icons-material/Info";
@@ -14,7 +15,6 @@ import {
   IconButton,
   InputBase,
   InputLabel,
-  Link,
   TextField,
   Tooltip,
   Typography,

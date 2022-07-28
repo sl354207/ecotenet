@@ -2,6 +2,7 @@
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
@@ -9,7 +10,6 @@ import {
   Box,
   Container,
   IconButton,
-  Link,
   List,
   ListItem,
   Tab,

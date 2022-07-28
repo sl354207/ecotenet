@@ -6,23 +6,23 @@ import {
   ListItemText,
   Toolbar,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 
 const drawerWidth = 120;
 
 const useStyles = makeStyles(() => ({
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  paper: {
-    width: drawerWidth,
-    zIndex: 0,
-  },
-  container: {
-    overflow: "auto",
-  },
+  // drawer: {
+  //   // width: drawerWidth,
+  //   // flexShrink: 0,
+  // },
+  // paper: {
+  //   width: drawerWidth,
+  //   zIndex: 0,
+  // },
+  // container: {
+  //   overflow: "auto",
+  // },
 }));
 
 const AdminDrawer = () => {
@@ -30,14 +30,22 @@ const AdminDrawer = () => {
   const router = useRouter();
   return (
     <Drawer
-      className={classes.drawer}
+      // className={classes.drawer}
       variant="permanent"
-      classes={{
-        paper: classes.paper,
+      // classes={{
+      //   paper: classes.paper,
+      // }}
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        zIndex: 0,
       }}
     >
       <Toolbar />
-      <div className={classes.container}>
+      <div
+        // className={classes.container}
+        style={{ overflow: "auto" }}
+      >
         <List>
           <ListItem button key="home" onClick={() => router.push("/admin")}>
             <ListItemText primary="Home" />

@@ -1,13 +1,8 @@
 import AdminDialog from "@components/dialogs/AdminDialog";
 import Resolve from "@components/dialogs/Resolve";
 import Header from "@components/Header";
-import {
-  Button,
-  CircularProgress,
-  Container,
-  Link,
-  Typography,
-} from "@mui/material";
+import Link from "@components/Link";
+import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import { useState } from "react";

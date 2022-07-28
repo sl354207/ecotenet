@@ -15,21 +15,21 @@ import makeStyles from "@mui/styles/makeStyles";
 import { createRef } from "react";
 
 const useStyles = makeStyles(() => ({
-  subHeader: {
-    display: "flex",
-    flexGrow: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    top: 60,
-    marginTop: 20,
-    border: "1px solid #94c9ff",
-    borderRadius: "10px",
-  },
-  subList: {
-    display: "flex",
-    justifyContent: "center",
-  },
+  // subHeader: {
+  //   display: "flex",
+  //   flexGrow: 1,
+  //   flexDirection: "row",
+  //   flexWrap: "wrap",
+  //   justifyContent: "center",
+  //   top: 60,
+  //   marginTop: 20,
+  //   border: "1px solid #94c9ff",
+  //   borderRadius: "10px",
+  // },
+  // subList: {
+  //   display: "flex",
+  //   justifyContent: "center",
+  // },
 }));
 
 const SpeciesScroll = ({ category }) => {
@@ -62,14 +62,30 @@ const SpeciesScroll = ({ category }) => {
   };
   return (
     <>
-      <AppBar component="div" position="sticky" className={classes.subHeader}>
+      <AppBar
+        component="div"
+        position="sticky"
+        // className={classes.subHeader}
+        sx={{
+          display: "flex",
+          flexGrow: 1,
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          top: "60px",
+          marginTop: "20px",
+          border: "1px solid #94c9ff",
+          borderRadius: "10px",
+        }}
+      >
         {uniqueFirst.map((item) => (
           <>
             {isMobile ? (
               <Button
                 key={item}
                 onClick={() => handleClick(item, -260)}
-                className={classes.subList}
+                // className={classes.subList}
+                sx={{ display: "flex", justifyContent: "center" }}
                 variant="outlined"
                 color="secondary"
               >
@@ -81,7 +97,7 @@ const SpeciesScroll = ({ category }) => {
               <Button
                 key={item}
                 onClick={() => handleClick(item, -140)}
-                className={classes.subList}
+                sx={{ display: "flex", justifyContent: "center" }}
                 variant="outlined"
                 color="secondary"
               >

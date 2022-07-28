@@ -1,6 +1,6 @@
-import { Snackbar } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import { Alert } from '@mui/material';
+import { Alert, Snackbar } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import { createContext, useContext, useState } from "react";
 
 export const SnackbarContext = createContext();
@@ -8,12 +8,12 @@ export const SnackbarContext = createContext();
 export const useSnackbarContext = () => useContext(SnackbarContext);
 
 const useStyles = makeStyles((theme) => ({
-  origin: {
-    marginTop: 400,
-    [theme.breakpoints.up("sm")]: {
-      marginTop: 300,
-    },
-  },
+  // origin: {
+  //   marginTop: 400,
+  //   [theme.breakpoints.up("sm")]: {
+  //     marginTop: 300,
+  //   },
+  // },
 }));
 
 export const SnackbarProvider = ({ children }) => {
@@ -39,8 +39,20 @@ export const SnackbarProvider = ({ children }) => {
     <SnackbarContext.Provider value={{ snackbar, setSnackbar }}>
       {children}
       <Snackbar
-        classes={
-          snackbar.class ? { anchorOriginTopCenter: classes.origin } : {}
+        // classes={
+        //   snackbar.class ? { anchorOriginTopCenter: classes.origin } : {}
+        // }
+        sx={
+          snackbar.class
+            ? {
+                "& .MuiSnackbar-anchorOriginTopCenter": {
+                  marginTop: "400px",
+                  [theme.breakpoints.up("sm")]: {
+                    marginTop: "300px",
+                  },
+                },
+              }
+            : {}
         }
         anchorOrigin={{
           vertical: snackbar.vertical,

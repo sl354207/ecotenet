@@ -85,6 +85,16 @@ const theme = createTheme({
         // },
       },
     },
+    // MuiInputBase: {
+    //   styleOverrides: {
+    //     root: {
+    //       "&.Mui-focused": {
+    //         border: `1px solid #94c9ff!important`,
+    //         flexGrow: 1,
+    //       },
+    //     },
+    //   },
+    // },
   },
 });
 

@@ -1,23 +1,21 @@
 import { InputBase } from "@mui/material";
-import { alpha } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 
-import withStyles from "@mui/styles/withStyles";
-
-const TextInput = withStyles((theme) => ({
-  input: {
+const TextInput = styled(InputBase)(({ theme }) => ({
+  "& .MuiInputBase-input": {
     position: "relative",
     backgroundColor: theme.palette.primary.main,
     border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: 4,
+    borderRadius: "4px",
     width: "auto",
     padding: "20px 10px",
     flexGrow: 1,
-    "&:focus": {
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      flexGrow: 1,
-    },
   },
-}))(InputBase);
+  "& .MuiInputBase-input:focus": {
+    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}!important`,
+    flexGrow: 1,
+  },
+}));
 
 const TextBox = ({
   id,
