@@ -16,7 +16,6 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { getSpeciesById } from "@utils/mongodb";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
@@ -56,63 +55,63 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
-  // tabs: {
-  //   flexGrow: 1,
-  //   backgroundColor: theme.palette.background.paper,
-  //   borderRadius: "10px",
-  // },
-  // tabBar: {
-  //   backgroundColor: theme.palette.primary.light,
-  //   borderRadius: "10px",
-  // },
-  // ecoregions: {
-  //   marginTop: 20,
-  //   marginBottom: 20,
-  // },
-  // tab: {
-  //   flexGrow: 1,
-  //   backgroundColor: theme.palette.primary.light,
-  //   minHeight: 80,
-  //   borderRadius: "10px",
-  //   "&:hover": {
-  //     color: theme.text,
-  //     opacity: 1,
-  //   },
-  // },
-  // tableRow: {
-  //   backgroundColor: "#001e3c!important",
-  //   textAlign: "center",
-  //   color: "#ffffff!important",
-  // },
-  // table: {
-  //   [theme.breakpoints.down("sm")]: {
-  //     margin: "auto",
-  //     float: "none",
-  //   },
-  //   float: "right",
-  //   border: "thin solid",
-  //   marginLeft: 10,
-  // },
-  // flagBox: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  // },
-  // spacer: {
-  //   display: "flex",
-  //   marginRight: "auto",
-  //   visibility: "hidden",
-  //   minWidth: 30,
-  // },
-  // flag: {
-  //   display: "flex",
-  //   marginLeft: "auto",
-  //   marginTop: "auto",
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // tabs: {
+//   //   flexGrow: 1,
+//   //   backgroundColor: theme.palette.background.paper,
+//   //   borderRadius: "10px",
+//   // },
+//   // tabBar: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   borderRadius: "10px",
+//   // },
+//   // ecoregions: {
+//   //   marginTop: 20,
+//   //   marginBottom: 20,
+//   // },
+//   // tab: {
+//   //   flexGrow: 1,
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   minHeight: 80,
+//   //   borderRadius: "10px",
+//   //   "&:hover": {
+//   //     color: theme.text,
+//   //     opacity: 1,
+//   //   },
+//   // },
+//   // tableRow: {
+//   //   backgroundColor: "#001e3c!important",
+//   //   textAlign: "center",
+//   //   color: "#ffffff!important",
+//   // },
+//   // table: {
+//   //   [theme.breakpoints.down("sm")]: {
+//   //     margin: "auto",
+//   //     float: "none",
+//   //   },
+//   //   float: "right",
+//   //   border: "thin solid",
+//   //   marginLeft: 10,
+//   // },
+//   // flagBox: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   // },
+//   // spacer: {
+//   //   display: "flex",
+//   //   marginRight: "auto",
+//   //   visibility: "hidden",
+//   //   minWidth: 30,
+//   // },
+//   // flag: {
+//   //   display: "flex",
+//   //   marginLeft: "auto",
+//   //   marginTop: "auto",
+//   // },
+// }));
 
 const species = ({ species, wiki }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
 

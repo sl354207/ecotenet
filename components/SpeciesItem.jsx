@@ -1,18 +1,16 @@
 import { Button, ListItem, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-import makeStyles from "@mui/styles/makeStyles";
-
-const useStyles = makeStyles(() => ({
-  // button: {
-  //   display: "block",
-  //   justifyContent: "start",
-  //   textTransform: "none",
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // button: {
+//   //   display: "block",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   // },
+// }));
 
 const SpeciesItem = ({ result }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xl"));
 

@@ -3,39 +3,38 @@ import Resolve from "@components/dialogs/Resolve";
 import Header from "@components/Header";
 import Link from "@components/Link";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-const useStyles = makeStyles((theme) => ({
-  // profile: {
-  //   margin: 16,
-  // },
-  // socials: {
-  //   display: "grid",
-  // },
-  // progress: {
-  //   margin: "100px auto",
-  //   display: "flex",
-  //   justifySelf: "center",
-  // },
-  // button: {
-  //   marginLeft: 4,
-  // },
-  // delete: {
-  //   color: "#fc7ebf",
-  //   borderColor: "#fc7ebf",
-  // },
-  // dialog: {
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // profile: {
+//   //   margin: 16,
+//   // },
+//   // socials: {
+//   //   display: "grid",
+//   // },
+//   // progress: {
+//   //   margin: "100px auto",
+//   //   display: "flex",
+//   //   justifySelf: "center",
+//   // },
+//   // button: {
+//   //   marginLeft: 4,
+//   // },
+//   // delete: {
+//   //   color: "#fc7ebf",
+//   //   borderColor: "#fc7ebf",
+//   // },
+//   // dialog: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+// }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const router = useRouter();
 

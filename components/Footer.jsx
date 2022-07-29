@@ -1,28 +1,27 @@
 import { Button, Container, Divider, Grid, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import Link from "./Link";
 
-const useStyles = makeStyles(() => ({
-  // spacing: {
-  //   marginTop: 20,
-  // },
-  // text: {
-  //   textAlign: "center",
-  // },
-  // footer: {
-  //   position: "relative",
-  //   bottom: 20,
-  //   left: 0,
-  //   right: 0,
-  //   marginTop: 40,
-  // },
-  // container: {
-  //   minHeight: "fit-content",
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // spacing: {
+//   //   marginTop: 20,
+//   // },
+//   // text: {
+//   //   textAlign: "center",
+//   // },
+//   // footer: {
+//   //   position: "relative",
+//   //   bottom: 20,
+//   //   left: 0,
+//   //   right: 0,
+//   //   marginTop: 40,
+//   // },
+//   // container: {
+//   //   minHeight: "fit-content",
+//   // },
+// }));
 
 const Footer = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <footer

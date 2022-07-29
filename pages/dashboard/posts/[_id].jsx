@@ -1,22 +1,21 @@
 import StepForm from "@components/postForm/StepForm";
 import { useUserContext } from "@components/UserContext";
 import { CircularProgress } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-const useStyles = makeStyles(() => ({
-  // progress: {
-  //   margin: "100px auto",
-  //   display: "flex",
-  //   justifySelf: "center",
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // progress: {
+//   //   margin: "100px auto",
+//   //   display: "flex",
+//   //   justifySelf: "center",
+//   // },
+// }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function DraftByUser() {
-  const classes = useStyles();
+  // const classes = useStyles();
   // set id to id in url query
   const router = useRouter();
   const id = router.query._id;

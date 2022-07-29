@@ -11,30 +11,29 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { createRef } from "react";
 
-const useStyles = makeStyles(() => ({
-  // subHeader: {
-  //   display: "flex",
-  //   flexGrow: 1,
-  //   flexDirection: "row",
-  //   flexWrap: "wrap",
-  //   justifyContent: "center",
-  //   top: 60,
-  //   marginTop: 20,
-  //   border: "1px solid #94c9ff",
-  //   borderRadius: "10px",
-  // },
-  // subList: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // subHeader: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   //   flexDirection: "row",
+//   //   flexWrap: "wrap",
+//   //   justifyContent: "center",
+//   //   top: 60,
+//   //   marginTop: 20,
+//   //   border: "1px solid #94c9ff",
+//   //   borderRadius: "10px",
+//   // },
+//   // subList: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   // },
+// }));
 
 const SpeciesScroll = ({ category }) => {
   // console.log(category);
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));

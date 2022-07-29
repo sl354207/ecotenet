@@ -1,21 +1,20 @@
 import { Button, List, ListItem, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 
-const useStyles = makeStyles(() => ({
-  // button: {
-  //   display: "flex",
-  //   justifyContent: "start",
-  //   textTransform: "none",
-  // },
-  // card: {
-  //   flex: "auto",
-  //   marginRight: 20,
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // button: {
+//   //   display: "flex",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   // },
+//   // card: {
+//   //   flex: "auto",
+//   //   marginRight: 20,
+//   // },
+// }));
 
 // pass down posts from database to PostList as a prop
 const PostList = ({ posts, featured }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <List>

@@ -3,17 +3,16 @@ import Header from "@components/Header";
 import PostList from "@components/PostList";
 import SpeciesScroll from "@components/SpeciesScroll";
 import { Container, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { getPostsByCategoryAndRegion, getSpecies } from "@utils/mongodb";
 
-const useStyles = makeStyles(() => ({
-  // header: {
-  //   marginTop: 20,
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // header: {
+//   //   marginTop: 20,
+//   // },
+// }));
 
 const categoryList = ({ category, title }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <>

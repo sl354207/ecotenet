@@ -1,17 +1,16 @@
 import { TextField } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { connectField } from "uniforms";
 
-const useStyles = makeStyles(() => ({
-  field: {
-    display: "flex",
-    flexGrow: 1,
-    marginBottom: 5,
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // field: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   //   marginBottom: 5,
+//   // },
+// }));
 
 function ImageHeight({ onChange, value }) {
-  const classes = useStyles();
+  // const classes = useStyles();ls
 
   return (
     <>
@@ -20,7 +19,8 @@ function ImageHeight({ onChange, value }) {
         // defaultValue={500}
         label="Height"
         name="src"
-        className={classes.field}
+        // className={classes.field}
+        sx={{ display: "flex", flexGrow: 1, marginBottom: "5px" }}
         // style={{ width: "400px" }}
         type="number"
         // inputProps={{ max: "1200" }}

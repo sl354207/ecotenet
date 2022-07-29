@@ -30,7 +30,6 @@ import { createFilterOptions } from "@mui/material/Autocomplete";
 import { alpha, useTheme } from "@mui/material/styles";
 
 import { useSnackbarContext } from "@components/SnackbarContext";
-import makeStyles from "@mui/styles/makeStyles";
 import { createPost } from "@utils/api-helpers";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -39,106 +38,106 @@ import CreatePostButton from "./CreatePostButton";
 import { useUserContext } from "./UserContext";
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
-  // button: {
-  //   marginRight: theme.spacing(2),
-  //   // color: "#ffa726"
-  // },
-  // title: {
-  //   flexGrow: 1,
-  //   [theme.breakpoints.down("md")]: {
-  //     flexGrow: 1,
-  //   },
-  // },
-  // drawer: {
-  //   width: drawerWidth,
-  //   flexShrink: 0,
-  // },
-  // drawerPaper: {
-  //   width: drawerWidth,
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // header: {
-  //   display: "flex",
-  //   alignItems: "center",
-  //   padding: theme.spacing(0, 1),
-  //   // necessary for content to be below app bar
-  //   ...theme.mixins.toolbar,
-  // },
-  // search: {
-  //   position: "relative",
-  //   borderRadius: theme.shape.borderRadius,
-  //   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  //   "&:hover": {
-  //     backgroundColor: alpha(theme.palette.common.white, 0.25),
-  //   },
-  //   marginLeft: 0,
-  //   width: "auto",
-  //   marginRight: 10,
-  // },
-  // searchIcon: {
-  //   padding: theme.spacing(0, 2),
-  //   height: "100%",
-  //   position: "absolute",
-  //   display: "flex",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
-  // root: {
-  //   color: "inherit",
-  // },
-  // input: {
-  //   padding: theme.spacing(1, 1, 1, 0),
-  //   // vertical padding + font size from searchIcon
-  //   paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-  //   transition: theme.transitions.create("width"),
-  //   width: "0ch",
-  //   "&:focus": {
-  //     width: "20ch",
-  //   },
-  // },
-  // popper: {
-  //   marginTop: 4,
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // nested: {
-  //   paddingLeft: theme.spacing(4),
-  // },
-  // sort: {
-  //   color: theme.palette.secondary.light,
-  //   // color: "#ffa726",
-  //   // color: theme.palette.text.primary,
-  // },
-  // home: {
-  //   minWidth: "auto",
-  // },
-  // spacer: {
-  //   marginLeft: 10,
-  // },
-  // desktop: {
-  //   display: "inline-flex",
-  // },
-  // popperTop: {
-  //   color: theme.palette.secondary.main,
-  // },
-  // popperBottom: {
-  //   color: theme.palette.secondary.main,
-  //   border: `1px solid ${theme.palette.secondary.main}`,
-  //   borderRadius: 4,
-  //   marginBottom: 4,
-  // },
-  // donate: {
-  //   border: `1px solid ${theme.palette.secondary.main}`,
-  //   borderRadius: 4,
-  //   backgroundColor: theme.palette.secondary.main,
-  //   color: theme.palette.text.secondary,
-  //   "&:hover": {
-  //     backgroundColor: "#0071e4",
-  //     border: "1px solid #0071e4",
-  //     borderRadius: 4,
-  //   },
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // button: {
+//   //   marginRight: theme.spacing(2),
+//   //   // color: "#ffa726"
+//   // },
+//   // title: {
+//   //   flexGrow: 1,
+//   //   [theme.breakpoints.down("md")]: {
+//   //     flexGrow: 1,
+//   //   },
+//   // },
+//   // drawer: {
+//   //   width: drawerWidth,
+//   //   flexShrink: 0,
+//   // },
+//   // drawerPaper: {
+//   //   width: drawerWidth,
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // header: {
+//   //   display: "flex",
+//   //   alignItems: "center",
+//   //   padding: theme.spacing(0, 1),
+//   //   // necessary for content to be below app bar
+//   //   ...theme.mixins.toolbar,
+//   // },
+//   // search: {
+//   //   position: "relative",
+//   //   borderRadius: theme.shape.borderRadius,
+//   //   backgroundColor: alpha(theme.palette.common.white, 0.15),
+//   //   "&:hover": {
+//   //     backgroundColor: alpha(theme.palette.common.white, 0.25),
+//   //   },
+//   //   marginLeft: 0,
+//   //   width: "auto",
+//   //   marginRight: 10,
+//   // },
+//   // searchIcon: {
+//   //   padding: theme.spacing(0, 2),
+//   //   height: "100%",
+//   //   position: "absolute",
+//   //   display: "flex",
+//   //   alignItems: "center",
+//   //   justifyContent: "center",
+//   // },
+//   // root: {
+//   //   color: "inherit",
+//   // },
+//   // input: {
+//   //   padding: theme.spacing(1, 1, 1, 0),
+//   //   // vertical padding + font size from searchIcon
+//   //   paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+//   //   transition: theme.transitions.create("width"),
+//   //   width: "0ch",
+//   //   "&:focus": {
+//   //     width: "20ch",
+//   //   },
+//   // },
+//   // popper: {
+//   //   marginTop: 4,
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // nested: {
+//   //   paddingLeft: theme.spacing(4),
+//   // },
+//   // sort: {
+//   //   color: theme.palette.secondary.light,
+//   //   // color: "#ffa726",
+//   //   // color: theme.palette.text.primary,
+//   // },
+//   // home: {
+//   //   minWidth: "auto",
+//   // },
+//   // spacer: {
+//   //   marginLeft: 10,
+//   // },
+//   // desktop: {
+//   //   display: "inline-flex",
+//   // },
+//   // popperTop: {
+//   //   color: theme.palette.secondary.main,
+//   // },
+//   // popperBottom: {
+//   //   color: theme.palette.secondary.main,
+//   //   border: `1px solid ${theme.palette.secondary.main}`,
+//   //   borderRadius: 4,
+//   //   marginBottom: 4,
+//   // },
+//   // donate: {
+//   //   border: `1px solid ${theme.palette.secondary.main}`,
+//   //   borderRadius: 4,
+//   //   backgroundColor: theme.palette.secondary.main,
+//   //   color: theme.palette.text.secondary,
+//   //   "&:hover": {
+//   //     backgroundColor: "#0071e4",
+//   //     border: "1px solid #0071e4",
+//   //     borderRadius: 4,
+//   //   },
+//   // },
+// }));
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {
@@ -171,7 +170,7 @@ const Nav = ({ ecoFilter }) => {
   }
 
   const router = useRouter();
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 

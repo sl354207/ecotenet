@@ -1,19 +1,18 @@
 import Coords from "@data/eco_coord.json";
 import { Typography } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-const useStyles = makeStyles(() => ({
-  popup: {
-    display: "grid",
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // popup: {
+//   //   display: "grid",
+//   // },
+// }));
 
 const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  const classes = useStyles();
+  // const classes = useStyles();
 
   // base layer
   const ecoFill = {
@@ -288,7 +287,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
               onClose={() => setShowPopup(false)}
               maxWidth="500px"
             >
-              <div className={classes.popup}>
+              <div style={{ display: "grid" }}>
                 <Typography color="textSecondary" align="center">
                   {ecoName}
                 </Typography>

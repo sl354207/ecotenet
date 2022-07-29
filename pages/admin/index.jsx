@@ -10,41 +10,40 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import theme from "@utils/theme";
 import useSWR from "swr";
 
-const useStyles = makeStyles((theme) => ({
-  // root: {
-  //   display: "flex",
-  // },
-  // content: {
-  //   flexGrow: 1,
-  //   padding: theme.spacing(3),
-  // },
-  // header: {
-  //   marginTop: 20,
-  // },
-  // buttonPost: {
-  //   display: "flex",
-  //   justifyContent: "start",
-  //   textTransform: "none",
-  //   border: `1px solid ${theme.palette.secondary.main}`,
-  //   margin: "20px auto",
-  //   borderRadius: "10px",
-  // },
-  // spacing: {
-  //   marginTop: 20,
-  // },
-  // text: {
-  //   textAlign: "center",
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // root: {
+//   //   display: "flex",
+//   // },
+//   // content: {
+//   //   flexGrow: 1,
+//   //   padding: theme.spacing(3),
+//   // },
+//   // header: {
+//   //   marginTop: 20,
+//   // },
+//   // buttonPost: {
+//   //   display: "flex",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   //   border: `1px solid ${theme.palette.secondary.main}`,
+//   //   margin: "20px auto",
+//   //   borderRadius: "10px",
+//   // },
+//   // spacing: {
+//   //   marginTop: 20,
+//   // },
+//   // text: {
+//   //   textAlign: "center",
+//   // },
+// }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const admin = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   const { data: stats } = useSWR("/api/admin/stats", fetcher);

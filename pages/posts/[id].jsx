@@ -16,7 +16,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 // The editor core
 import Editor from "@react-page/editor";
@@ -37,57 +36,57 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
-  // box: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
-  // content: {
-  //   flexDirection: "column",
-  //   maxWidth: 800,
-  //   flexGrow: 1,
-  //   marginLeft: 20,
-  // },
-  // items: {
-  //   display: "flex",
-  // },
-  // date: {
-  //   marginLeft: 20,
-  //   fontStyle: "italic",
-  // },
-  // container: {
-  //   backgroundColor: theme.palette.primary.main,
-  // },
-  // comments: {
-  //   marginTop: 20,
-  // },
-  dialog: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  // flagBox: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  // },
-  // spacer: {
-  //   display: "flex",
-  //   marginRight: "auto",
-  //   visibility: "hidden",
-  //   minWidth: 30,
-  // },
-  // flag: {
-  //   display: "flex",
-  //   marginLeft: "auto",
-  //   marginTop: "auto",
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // box: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   //   alignItems: "center",
+//   // },
+//   // content: {
+//   //   flexDirection: "column",
+//   //   maxWidth: 800,
+//   //   flexGrow: 1,
+//   //   marginLeft: 20,
+//   // },
+//   // items: {
+//   //   display: "flex",
+//   // },
+//   // date: {
+//   //   marginLeft: 20,
+//   //   fontStyle: "italic",
+//   // },
+//   // container: {
+//   //   backgroundColor: theme.palette.primary.main,
+//   // },
+//   // comments: {
+//   //   marginTop: 20,
+//   // },
+//   dialog: {
+//     backgroundColor: theme.palette.primary.light,
+//   },
+//   // flagBox: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   // },
+//   // spacer: {
+//   //   display: "flex",
+//   //   marginRight: "auto",
+//   //   visibility: "hidden",
+//   //   minWidth: 30,
+//   // },
+//   // flag: {
+//   //   display: "flex",
+//   //   marginLeft: "auto",
+//   //   marginTop: "auto",
+//   // },
+// }));
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post, comments }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();

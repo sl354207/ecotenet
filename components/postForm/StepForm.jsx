@@ -3,7 +3,6 @@ import Link from "@components/Link";
 import { useSnackbarContext } from "@components/SnackbarContext";
 import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { updatePost } from "@utils/api-helpers";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
@@ -12,40 +11,40 @@ import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
 
-const useStyles = makeStyles((theme) => ({
-  // stepLabel: {
-  //   "& .MuiStepLabel-label": {
-  //     color: alpha(theme.palette.text.primary, 0.7),
-  //   },
-  //   "& .MuiStepLabel-active": {
-  //     color: theme.palette.text.primary,
-  //   },
-  //   "& .MuiStepIcon-active": {
-  //     color: `${theme.palette.secondary.dark}!important`,
-  //   },
-  //   "& .MuiStepIcon-root": {
-  //     color: alpha(theme.palette.secondary.dark, 0.4),
-  //   },
-  // },
-  // stepper: {
-  //   backgroundColor: theme.palette.primary.dark,
-  // },
-  // stepNav: {
-  //   display: "flex",
-  //   justifyContent: "space-around",
-  //   marginBottom: 20,
-  // },
-  // dialog: {
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // link: {
-  //   marginLeft: 10,
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // stepLabel: {
+//   //   "& .MuiStepLabel-label": {
+//   //     color: alpha(theme.palette.text.primary, 0.7),
+//   //   },
+//   //   "& .MuiStepLabel-active": {
+//   //     color: theme.palette.text.primary,
+//   //   },
+//   //   "& .MuiStepIcon-active": {
+//   //     color: `${theme.palette.secondary.dark}!important`,
+//   //   },
+//   //   "& .MuiStepIcon-root": {
+//   //     color: alpha(theme.palette.secondary.dark, 0.4),
+//   //   },
+//   // },
+//   // stepper: {
+//   //   backgroundColor: theme.palette.primary.dark,
+//   // },
+//   // stepNav: {
+//   //   display: "flex",
+//   //   justifyContent: "space-around",
+//   //   marginBottom: 20,
+//   // },
+//   // dialog: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // link: {
+//   //   marginLeft: 10,
+//   // },
+// }));
 
 // pass in post and url path as props
 const StepForm = ({ post, user }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
 
   const { title, description, category, tags, ecoregions } = post;

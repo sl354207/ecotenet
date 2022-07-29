@@ -21,90 +21,89 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
-import makeStyles from "@mui/styles/makeStyles";
 import theme from "@utils/theme";
 import { useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
-  search: {
-    position: "relative",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.primary.main,
-    "&:focus-within": {
-      backgroundColor: theme.palette.primary.main,
-      border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-      borderRadius: theme.shape.borderRadius,
-    },
-    marginTop: 6,
-    marginBottom: 10,
-    width: "auto",
-  },
-  root: {
-    color: theme.palette.text.primary,
-  },
-  input: {
-    padding: 18,
-  },
-  select: {
-    color: theme.palette.text.primary,
-    "& .MuiOutlinedInput-root": {
-      "&:hover fieldset": {
-        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-        border: "none",
-      },
-      "&.Mui-focused fieldset": {
-        border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-      },
-    },
-  },
-  popper: {
-    backgroundColor: theme.palette.primary.light,
-  },
-  form: {
-    display: "flex",
-    flexGrow: 1,
-    marginBottom: 12,
-  },
-  label: {
-    color: `${theme.palette.text.primary}!important`,
-    position: "relative",
-    transform: "none",
-  },
-  delete: {
-    WebkitTapHighlightColor: "transparent",
-    color: theme.palette.secondary.main,
-    height: 22,
-    width: 22,
-    cursor: "pointer",
-    margin: "0 5px 0 -6px",
-    "&:hover": {
-      color: alpha(theme.palette.secondary.main, 0.7),
-    },
-  },
-  chip: {
-    borderColor: theme.palette.secondary.main,
-    borderWidth: 2,
-    color: theme.palette.text.primary,
-    height: 40,
-    margin: "0px 5px 10px 5px",
-  },
-  groupLabel: {
-    backgroundColor: theme.palette.primary.light,
-    color: alpha(theme.palette.text.primary, 0.6),
-  },
-  noOptions: {
-    color: alpha(theme.palette.text.primary, 0.6),
-  },
-  helper: {
-    color: theme.palette.text.primary,
-  },
-  required: {
-    marginTop: 20,
-    marginLeft: 10,
-    marginBottom: 20,
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // search: {
+//   //   position: "relative",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //   borderRadius: theme.shape.borderRadius,
+//   //   backgroundColor: theme.palette.primary.main,
+//   //   "&:focus-within": {
+//   //     backgroundColor: theme.palette.primary.main,
+//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //     borderRadius: theme.shape.borderRadius,
+//   //   },
+//   //   marginTop: 6,
+//   //   marginBottom: 10,
+//   //   width: "auto",
+//   // },
+//   // root: {
+//   //   color: theme.palette.text.primary,
+//   // },
+//   // input: {
+//   //   padding: 18,
+//   // },
+//   // select: {
+//   //   color: theme.palette.text.primary,
+//   //   "& .MuiOutlinedInput-root": {
+//   //     "&:hover fieldset": {
+//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //       border: "none",
+//   //     },
+//   //     "&.Mui-focused fieldset": {
+//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //     },
+//   //   },
+//   // },
+//   // popper: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // form: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   //   marginBottom: 12,
+//   // },
+//   // label: {
+//   //   color: `${theme.palette.text.primary}!important`,
+//   //   position: "relative",
+//   //   transform: "none",
+//   // },
+//   // delete: {
+//   //   WebkitTapHighlightColor: "transparent",
+//   //   color: theme.palette.secondary.main,
+//   //   height: 22,
+//   //   width: 22,
+//   //   cursor: "pointer",
+//   //   margin: "0 5px 0 -6px",
+//   //   "&:hover": {
+//   //     color: alpha(theme.palette.secondary.main, 0.7),
+//   //   },
+//   // },
+//   // chip: {
+//   //   borderColor: theme.palette.secondary.main,
+//   //   borderWidth: 2,
+//   //   color: theme.palette.text.primary,
+//   //   height: 40,
+//   //   margin: "0px 5px 10px 5px",
+//   // },
+//   // groupLabel: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   color: alpha(theme.palette.text.primary, 0.6),
+//   // },
+//   // noOptions: {
+//   //   color: alpha(theme.palette.text.primary, 0.6),
+//   // },
+//   // helper: {
+//   //   color: theme.palette.text.primary,
+//   // },
+//   // required: {
+//   //   marginTop: 20,
+//   //   marginLeft: 10,
+//   //   marginBottom: 20,
+//   // },
+// }));
 
 //pass in and destructure props.
 const PostDetails = ({
@@ -113,7 +112,7 @@ const PostDetails = ({
   setDetails,
   handleRemoveChip,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [open, setOpen] = useState(false);
 
@@ -139,22 +138,22 @@ const PostDetails = ({
         post"
         align="left"
       />
-      <Typography variant="body1" align="left" className={classes.required}>
+      <Typography
+        variant="body1"
+        align="left"
+        // className={classes.required}
+        sx={{ marginTop: "20px", marginBottom: "20px" }}
+      >
         *denotes required field
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.form} required>
-            <InputLabel
-              htmlFor="title"
-              classes={{
-                root: classes.label,
-                formControl: classes.label,
-                focused: classes.label,
-              }}
-            >
-              Title:
-            </InputLabel>
+          <FormControl
+            // className={classes.form}
+            sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
+            required
+          >
+            <InputLabel htmlFor="title">Title:</InputLabel>
             <TextBox
               defaultValue={title || ""}
               placeHolder=" title of post(max length 60 characters)"
@@ -167,17 +166,10 @@ const PostDetails = ({
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.form}>
-            <InputLabel
-              htmlFor="description"
-              classes={{
-                root: classes.label,
-                formControl: classes.label,
-                focused: classes.label,
-              }}
-            >
-              Description:
-            </InputLabel>
+          <FormControl
+            sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
+          >
+            <InputLabel htmlFor="description">Description:</InputLabel>
             <TextBox
               defaultValue={description || ""}
               placeHolder=" short summary of post(max length 160 characters) "
@@ -187,23 +179,20 @@ const PostDetails = ({
               rows={2}
               inputProps={{ maxLength: 160 }}
             />
-            <FormHelperText className={classes.helper}>
+            <FormHelperText
+              // className={classes.helper}
+              sx={{ color: theme.palette.text.primary }}
+            >
               Helps with search functionality
             </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.form} required>
-            <InputLabel
-              htmlFor="category"
-              classes={{
-                root: classes.label,
-                formControl: classes.label,
-                focused: classes.label,
-              }}
-            >
-              Category:
-            </InputLabel>
+          <FormControl
+            sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
+            required
+          >
+            <InputLabel htmlFor="category">Category:</InputLabel>
 
             <Autocomplete
               // className={classes.search}
@@ -339,17 +328,10 @@ const PostDetails = ({
           </ClickAwayListener>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <FormControl className={classes.form}>
-            <InputLabel
-              htmlFor="keywords"
-              classes={{
-                root: classes.label,
-                formControl: classes.label,
-                focused: classes.label,
-              }}
-            >
-              Keywords:
-            </InputLabel>
+          <FormControl
+            sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
+          >
+            <InputLabel htmlFor="keywords">Keywords:</InputLabel>
             <Autocomplete
               // className={classes.search}
               // classes={{ paper: classes.popper }}
@@ -419,7 +401,10 @@ const PostDetails = ({
                 />
               )}
             />
-            <FormHelperText className={classes.helper}>
+            <FormHelperText
+              // className={classes.helper}
+              sx={{ color: theme.palette.text.primary }}
+            >
               Helps with search functionality (3 max)
             </FormHelperText>
           </FormControl>
@@ -428,9 +413,26 @@ const PostDetails = ({
               <Chip
                 label={tag}
                 variant="outlined"
-                className={classes.chip}
-                classes={{
-                  deleteIcon: classes.delete,
+                // className={classes.chip}
+                // classes={{
+                //   deleteIcon: classes.delete,
+                // }}
+                sx={{
+                  borderColor: theme.palette.secondary.main,
+                  borderWidth: 2,
+                  color: theme.palette.text.primary,
+                  height: 40,
+                  margin: "0px 5px 10px 5px",
+                  "& .MuiChip-deleteIcon": {
+                    WebkitTapHighlightColor: "transparent",
+                    color: theme.palette.secondary.main,
+                    fontSize: 22,
+                    cursor: "pointer",
+                    margin: "0 5px 0 -6px",
+                    "&:hover": {
+                      color: alpha(theme.palette.secondary.main, 0.7),
+                    },
+                  },
                 }}
                 onDelete={() => handleRemoveChip(tags, tag)}
               ></Chip>

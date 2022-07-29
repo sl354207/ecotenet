@@ -10,7 +10,6 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { fetchPostJSON } from "@utils/stripe/api-helpers";
 import getStripe from "@utils/stripe/get-stripe";
 import { formatAmountForDisplay } from "@utils/stripe/stripe-helpers";
@@ -47,63 +46,63 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
-  // tab: {
-  //   flexGrow: 1,
-  //   backgroundColor: theme.palette.primary.light,
-  //   margin: 20,
-  //   minHeight: 80,
-  //   borderRadius: "10px",
-  //   "&:hover": {
-  //     color: theme.text,
-  //     opacity: 1,
-  //   },
-  // },
-  // input: {
-  //   position: "relative",
-  //   backgroundColor: theme.palette.primary.main,
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //   borderRadius: 4,
-  //   display: "flex",
-  //   padding: "10px 10px",
-  //   flexGrow: 1,
-  //   "&:focus-within": {
-  //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-  //     flexGrow: 1,
-  //   },
-  // },
-  // toggleGroup: {
-  //   display: "flex",
-  //   flexWrap: "wrap",
-  //   justifyContent: "center",
-  // },
-  // toggle: {
-  //   color: "rgba(255, 255, 255, 0.7)",
-  //   padding: "30px!important",
-  //   marginInline: "20px!important",
-  //   marginBlock: "10px!important",
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}!important`,
-  //   borderRadius: "4px!important",
-  // },
-  // selected: {
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}!important`,
-  //   borderRadius: "4px!important",
-  // },
-  // button: {
-  //   display: "flex",
-  //   margin: "auto",
-  //   marginTop: 10,
-  //   minWidth: 300,
-  // },
-  // progress: {
-  //   marginInline: "auto",
-  //   display: "flex",
-  //   justifySelf: "center",
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // tab: {
+//   //   flexGrow: 1,
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   margin: 20,
+//   //   minHeight: 80,
+//   //   borderRadius: "10px",
+//   //   "&:hover": {
+//   //     color: theme.text,
+//   //     opacity: 1,
+//   //   },
+//   // },
+//   // input: {
+//   //   position: "relative",
+//   //   backgroundColor: theme.palette.primary.main,
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //   borderRadius: 4,
+//   //   display: "flex",
+//   //   padding: "10px 10px",
+//   //   flexGrow: 1,
+//   //   "&:focus-within": {
+//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //     flexGrow: 1,
+//   //   },
+//   // },
+//   // toggleGroup: {
+//   //   display: "flex",
+//   //   flexWrap: "wrap",
+//   //   justifyContent: "center",
+//   // },
+//   // toggle: {
+//   //   color: "rgba(255, 255, 255, 0.7)",
+//   //   padding: "30px!important",
+//   //   marginInline: "20px!important",
+//   //   marginBlock: "10px!important",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}!important`,
+//   //   borderRadius: "4px!important",
+//   // },
+//   // selected: {
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}!important`,
+//   //   borderRadius: "4px!important",
+//   // },
+//   // button: {
+//   //   display: "flex",
+//   //   margin: "auto",
+//   //   marginTop: 10,
+//   //   minWidth: 300,
+//   // },
+//   // progress: {
+//   //   marginInline: "auto",
+//   //   display: "flex",
+//   //   justifySelf: "center",
+//   // },
+// }));
 
 const DonateForm = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false);

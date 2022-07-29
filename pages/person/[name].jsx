@@ -6,39 +6,38 @@ import PostList from "@components/PostList";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { getPerson, getProfilePosts } from "@utils/mongodb";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  // profile: {
-  //   margin: 16,
-  // },
-  // socials: {
-  //   display: "grid",
-  // },
-  // flagBox: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  // },
-  // spacer: {
-  //   display: "flex",
-  //   marginRight: "auto",
-  //   visibility: "hidden",
-  //   minWidth: 30,
-  // },
-  // flag: {
-  //   display: "flex",
-  //   marginLeft: "auto",
-  //   marginTop: "auto",
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // profile: {
+//   //   margin: 16,
+//   // },
+//   // socials: {
+//   //   display: "grid",
+//   // },
+//   // flagBox: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   // },
+//   // spacer: {
+//   //   display: "flex",
+//   //   marginRight: "auto",
+//   //   visibility: "hidden",
+//   //   minWidth: 30,
+//   // },
+//   // flag: {
+//   //   display: "flex",
+//   //   marginLeft: "auto",
+//   //   marginTop: "auto",
+//   // },
+// }));
 
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = ({ person, posts }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
 

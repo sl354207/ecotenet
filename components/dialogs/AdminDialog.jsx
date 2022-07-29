@@ -17,7 +17,6 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import {
   createNotification,
   deleteComment,
@@ -31,24 +30,24 @@ import {
 } from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  comment: {
-    display: "flex",
-    alignItems: "center",
-  },
-  form: {
-    flexGrow: 1,
-  },
-  addition: {
-    display: "block",
-  },
-  info: {
-    padding: "5px 0px 10px 0px",
-  },
-  button: {
-    marginTop: 18,
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // comment: {
+//   //   display: "flex",
+//   //   alignItems: "center",
+//   // },
+//   // form: {
+//   //   flexGrow: 1,
+//   // },
+//   // addition: {
+//   //   display: "block",
+//   // },
+//   info: {
+//     padding: "5px 0px 10px 0px",
+//   },
+//   // button: {
+//   //   marginTop: 18,
+//   // },
+// }));
 
 const AdminDialog = ({
   open,
@@ -59,7 +58,7 @@ const AdminDialog = ({
   result,
   mutate,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   let item;
@@ -496,22 +495,17 @@ const AdminDialog = ({
       aria-labelledby="update"
       aria-describedby="update"
     >
-      <DialogTitle
-        id="update"
-        className={className}
-        color="textPrimary"
-        align="center"
-      >
+      <DialogTitle id="update" color="textPrimary" align="center">
         {action}
       </DialogTitle>
       {action == "Approve" ? (
-        <DialogContent className={className}>
+        <DialogContent>
           <DialogContentText id="update" color="textPrimary">
             Are you sure you want to approve {item}?
           </DialogContentText>
         </DialogContent>
       ) : (
-        <DialogContent className={className}>
+        <DialogContent>
           <FormControl component="fieldset">
             <FormLabel component="legend" color="secondary" focused={true}>
               Reason
@@ -539,16 +533,24 @@ const AdminDialog = ({
           <Button
             variant="outlined"
             color="secondary"
-            className={classes.button}
+            // className={classes.button}
+            sx={{ marginTop: "18px" }}
             onClick={() => setShowForm(!showForm)}
             endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           >
             Add Info
           </Button>
-          <div className={classes.addition} disableGutters>
+          <div
+            // className={classes.addition}
+            style={{ display: "block" }}
+            disableGutters
+          >
             {showForm ? (
               <Portal container={container.current}>
-                <FormControl className={classes.form}>
+                <FormControl
+                  // className={classes.form}
+                  sx={{ flexGrow: 1 }}
+                >
                   <InputLabel shrink htmlFor="commentform"></InputLabel>
                   <TextBox
                     id="info"
@@ -556,7 +558,6 @@ const AdminDialog = ({
                     defaultValue=""
                     placeHolder="additional comment on notification"
                     rows={1}
-                    className={classes.info}
                     autoFocus={false}
                     name="info"
                   />
@@ -564,12 +565,16 @@ const AdminDialog = ({
               </Portal>
             ) : null}
 
-            <div ref={container} className={classes.comment} />
+            <div
+              ref={container}
+              // className={classes.comment}
+              style={{ display: "flex", alignItems: "center" }}
+            />
           </div>
         </DialogContent>
       )}
 
-      <DialogActions className={className}>
+      <DialogActions>
         <Button onClick={handleClose} color="secondary" variant="outlined">
           Cancel
         </Button>

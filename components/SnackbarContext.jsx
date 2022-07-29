@@ -1,5 +1,4 @@
 import { Alert, Snackbar } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import theme from "@utils/theme";
 import { createContext, useContext, useState } from "react";
 
@@ -7,17 +6,17 @@ export const SnackbarContext = createContext();
 
 export const useSnackbarContext = () => useContext(SnackbarContext);
 
-const useStyles = makeStyles((theme) => ({
-  // origin: {
-  //   marginTop: 400,
-  //   [theme.breakpoints.up("sm")]: {
-  //     marginTop: 300,
-  //   },
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // origin: {
+//   //   marginTop: 400,
+//   //   [theme.breakpoints.up("sm")]: {
+//   //     marginTop: 300,
+//   //   },
+//   // },
+// }));
 
 export const SnackbarProvider = ({ children }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",

@@ -1,18 +1,17 @@
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, IconButton, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  // root: {
-  //   marginLeft: 20,
-  // },
-  // count: {
-  //   display: "flex",
-  //   flexDirection: "column",
-  //   maxWidth: 50,
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // root: {
+//   //   marginLeft: 20,
+//   // },
+//   // count: {
+//   //   display: "flex",
+//   //   flexDirection: "column",
+//   //   maxWidth: 50,
+//   // },
+// }));
 
 const Vote = ({
   post_count,
@@ -22,7 +21,7 @@ const Vote = ({
   voters,
   name,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   //set limit for count
   const [limit, setLimit] = useState(0);

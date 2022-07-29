@@ -1,16 +1,15 @@
 import Header from "@components/Header";
 import { Container, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { fetchGetJSON } from "@utils/stripe/api-helpers";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-const useStyles = makeStyles(() => ({
-  // status: { marginTop: 20 },
-}));
+// const useStyles = makeStyles(() => ({
+//   // status: { marginTop: 20 },
+// }));
 
 const approved = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
 
   // Fetch CheckoutSession from static page via

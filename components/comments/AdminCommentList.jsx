@@ -2,38 +2,38 @@ import Link from "@components/Link";
 import { Button, Container, List, ListItem, Typography } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
-import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 
-const useStyles = makeStyles((theme) => ({
-  buttonPost: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-    margin: "20px auto",
-    borderRadius: "10px",
-  },
-  buttonReply: {
-    display: "flex",
-    justifyContent: "start",
-    textTransform: "none",
-    border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-    marginLeft: 60,
-    width: "auto",
-    marginTop: "20px",
-    borderRadius: "10px",
-  },
-  buttonMobile: {
-    display: "grid",
-  },
-  buttonDesktop: {
-    marginTop: 4,
-  },
-  comment: {
-    display: "flow-root",
-    flexGrow: 1,
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // buttonPost: {
+//   //   display: "flex",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //   margin: "20px auto",
+//   //   borderRadius: "10px",
+//   // },
+//   // buttonReply: {
+//   //   display: "flex",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //   marginLeft: 60,
+//   //   width: "auto",
+//   //   marginTop: "20px",
+//   //   borderRadius: "10px",
+//   // },
+//   // buttonMobile: {
+//   //   display: "grid",
+//   // },
+//   // buttonDesktop: {
+//   //   marginTop: 4,
+//   // },
+//   // comment: {
+//   //   display: "flow-root",
+//   //   flexGrow: 1,
+//   // },
+// }));
 //pass in comments and post id from parent post
 const AdminCommentList = ({
   comments,
@@ -41,7 +41,7 @@ const AdminCommentList = ({
   handleOpenDialog,
   handleOpenResolve,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -70,10 +70,37 @@ const AdminCommentList = ({
             <>
               <ListItem
                 key={comment._id}
-                className={
+                // className={
+                //   comment.comment_ref !== comment._id
+                //     ? classes.buttonReply
+                //     : classes.buttonPost
+                // }
+                sx={
                   comment.comment_ref !== comment._id
-                    ? classes.buttonReply
-                    : classes.buttonPost
+                    ? {
+                        display: "flex",
+                        justifyContent: "start",
+                        textTransform: "none",
+                        border: `1px solid ${alpha(
+                          theme.palette.secondary.main,
+                          1
+                        )}`,
+                        marginLeft: "60px",
+                        width: "auto",
+                        marginTop: "20px",
+                        borderRadius: "10px",
+                      }
+                    : {
+                        display: "flex",
+                        justifyContent: "start",
+                        textTransform: "none",
+                        border: `1px solid ${alpha(
+                          theme.palette.secondary.main,
+                          1
+                        )}`,
+                        margin: "20px auto",
+                        borderRadius: "10px",
+                      }
                 }
                 style={
                   comment._id == comment_query
@@ -81,14 +108,20 @@ const AdminCommentList = ({
                     : { borderColor: "#94c9ff" }
                 }
               >
-                <div className={classes.comment}>
+                <div
+                  // className={classes.comment}
+                  style={{ display: "flow-root", flexGrow: 1 }}
+                >
                   <Typography>{comment.date.toDateString()}</Typography>
                   <Link underline="hover">{comment.name}</Link>
 
                   <Typography>{comment.text}</Typography>
                 </div>
 
-                <div className={classes.buttonMobile}>
+                <div
+                  // className={classes.buttonMobile}
+                  style={{ display: "grid" }}
+                >
                   {comment._id == comment_query ? (
                     <>
                       <Button
@@ -101,7 +134,8 @@ const AdminCommentList = ({
                       <Button
                         variant="outlined"
                         color="secondary"
-                        className={classes.buttonDesktop}
+                        // className={classes.buttonDesktop}
+                        sx={{ marginTop: "4px" }}
                         onClick={() =>
                           handleOpenDialog("Deny", "comment", comment)
                         }
@@ -112,7 +146,7 @@ const AdminCommentList = ({
                       <Button
                         variant="outlined"
                         color="secondary"
-                        className={classes.buttonDesktop}
+                        sx={{ marginTop: "4px" }}
                         onClick={() =>
                           handleOpenDialog("Delete", "comment", comment)
                         }
@@ -137,7 +171,7 @@ const AdminCommentList = ({
                           <Button
                             variant="outlined"
                             color="secondary"
-                            className={classes.buttonDesktop}
+                            sx={{ marginTop: "4px" }}
                             onClick={() =>
                               handleOpenDialog("Delete", "comment", comment)
                             }

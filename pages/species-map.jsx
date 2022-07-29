@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import { useReducer, useState } from "react";
 
 // const SuccessAuto = styled(Autocomplete)(({ theme }) => ({
@@ -34,79 +33,79 @@ import { useReducer, useState } from "react";
 //   },
 // }));
 
-const useStyles = makeStyles((theme) => ({
-  // search: {
-  //   position: "relative",
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //   borderRadius: theme.shape.borderRadius,
-  //   backgroundColor: theme.palette.primary.light,
-  //   "&:focus-within": {
-  //     backgroundColor: theme.palette.primary.light,
-  //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-  //     borderRadius: theme.shape.borderRadius,
-  //   },
-  //   marginTop: 20,
-  //   marginBottom: 20,
-  //   marginLeft: theme.spacing(1),
-  //   width: "auto",
-  // },
-  // root: {
-  //   color: theme.palette.text.primary,
-  //   "& .MuiOutlinedInput-root": {
-  //     "& fieldset": {
-  //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //     },
-  //     "&:hover fieldset": {
-  //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //     },
-  //     "&.Mui-focused fieldset": {
-  //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //     },
-  //   },
-  // },
-  // popper: {
-  //   marginTop: 4,
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // delete: {
-  //   WebkitTapHighlightColor: "transparent",
-  //   color: theme.palette.secondary.main,
-  //   height: 22,
-  //   width: 22,
-  //   cursor: "pointer",
-  //   margin: "0 5px 0 -6px",
-  //   "&:hover": {
-  //     color: alpha(theme.palette.secondary.main, 0.7),
-  //   },
-  // },
-  // chip: {
-  //   borderWidth: 2,
-  //   color: theme.palette.text.primary,
-  //   height: 40,
-  //   margin: "0px 5px 10px 5px",
-  // },
-  // hidden: {
-  //   visibility: "hidden",
-  // },
-  // mobile: {
-  //   display: "inline-grid",
-  // },
-  // outline1: {
-  //   borderColor: "#ff00ff",
-  // },
-  // outline2: {
-  //   borderColor: "#ffff00",
-  // },
-  // outline3: {
-  //   borderColor: "#00ffff",
-  // },
-  // descriptionMargin: {
-  //   marginLeft: 10,
-  // },
-  // note: {
-  //   marginTop: 10,
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // search: {
+//   //   position: "relative",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //   borderRadius: theme.shape.borderRadius,
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   "&:focus-within": {
+//   //     backgroundColor: theme.palette.primary.light,
+//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //     borderRadius: theme.shape.borderRadius,
+//   //   },
+//   //   marginTop: 20,
+//   //   marginBottom: 20,
+//   //   marginLeft: theme.spacing(1),
+//   //   width: "auto",
+//   // },
+//   // root: {
+//   //   color: theme.palette.text.primary,
+//   //   "& .MuiOutlinedInput-root": {
+//   //     "& fieldset": {
+//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //     },
+//   //     "&:hover fieldset": {
+//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //     },
+//   //     "&.Mui-focused fieldset": {
+//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //     },
+//   //   },
+//   // },
+//   // popper: {
+//   //   marginTop: 4,
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // delete: {
+//   //   WebkitTapHighlightColor: "transparent",
+//   //   color: theme.palette.secondary.main,
+//   //   height: 22,
+//   //   width: 22,
+//   //   cursor: "pointer",
+//   //   margin: "0 5px 0 -6px",
+//   //   "&:hover": {
+//   //     color: alpha(theme.palette.secondary.main, 0.7),
+//   //   },
+//   // },
+//   // chip: {
+//   //   borderWidth: 2,
+//   //   color: theme.palette.text.primary,
+//   //   height: 40,
+//   //   margin: "0px 5px 10px 5px",
+//   // },
+//   // hidden: {
+//   //   visibility: "hidden",
+//   // },
+//   // mobile: {
+//   //   display: "inline-grid",
+//   // },
+//   // outline1: {
+//   //   borderColor: "#ff00ff",
+//   // },
+//   // outline2: {
+//   //   borderColor: "#ffff00",
+//   // },
+//   // outline3: {
+//   //   borderColor: "#00ffff",
+//   // },
+//   // descriptionMargin: {
+//   //   marginLeft: 10,
+//   // },
+//   // note: {
+//   //   marginTop: 10,
+//   // },
+// }));
 
 const speciesChips = [
   { count: 0 },
@@ -215,7 +214,7 @@ const reducer = (speciesChips, action) => {
 };
 
 const speciesMap = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));

@@ -6,7 +6,6 @@ import Link from "@components/Link";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { getEcoregion } from "@utils/mongodb";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
@@ -15,47 +14,47 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
-  // tableRow: {
-  //   backgroundColor: "#001e3c!important",
-  //   textAlign: "center",
-  //   color: "#ffffff!important",
-  // },
-  // table: {
-  //   [theme.breakpoints.down("sm")]: {
-  //     margin: "auto",
-  //     float: "none",
-  //   },
-  //   float: "right",
-  //   border: "thin solid",
-  //   marginLeft: 10,
-  // },
-  // description: {
-  //   marginBottom: 40,
-  // },
-  // flagBox: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  // },
-  // spacer: {
-  //   display: "flex",
-  //   marginRight: "auto",
-  //   visibility: "hidden",
-  //   minWidth: 30,
-  // },
-  // flag: {
-  //   display: "flex",
-  //   marginLeft: "auto",
-  //   marginTop: "auto",
-  //   marginBottom: "auto",
-  // },
-  // header: {
-  //   marginTop: 20,
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // tableRow: {
+//   //   backgroundColor: "#001e3c!important",
+//   //   textAlign: "center",
+//   //   color: "#ffffff!important",
+//   // },
+//   // table: {
+//   //   [theme.breakpoints.down("sm")]: {
+//   //     margin: "auto",
+//   //     float: "none",
+//   //   },
+//   //   float: "right",
+//   //   border: "thin solid",
+//   //   marginLeft: 10,
+//   // },
+//   // description: {
+//   //   marginBottom: 40,
+//   // },
+//   // flagBox: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   // },
+//   // spacer: {
+//   //   display: "flex",
+//   //   marginRight: "auto",
+//   //   visibility: "hidden",
+//   //   minWidth: 30,
+//   // },
+//   // flag: {
+//   //   display: "flex",
+//   //   marginLeft: "auto",
+//   //   marginTop: "auto",
+//   //   marginBottom: "auto",
+//   // },
+//   // header: {
+//   //   marginTop: 20,
+//   // },
+// }));
 
 const eco = ({ wiki, ecoName, id }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
   // console.log(userName);

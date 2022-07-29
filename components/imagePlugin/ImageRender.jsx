@@ -1,37 +1,36 @@
 import Link from "@components/Link";
 import { Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
 const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
-const useStyles = makeStyles(() => ({
-  image: {
-    width: "100%",
-    display: "grid",
-    justifyContent: "center",
-    position: "relative",
-  },
-  placeholder: {
-    position: "relative",
-    width: "100%",
-    textAlign: "center",
-  },
-  icon: {
-    width: "100%",
-    height: "auto",
-    padding: "0",
-    color: "#aaa",
-    textAlign: "center",
-    minWidth: 64,
-    minHeight: 64,
-    maxHeight: 256,
-  },
-  border: {
-    border: "2px solid #ffa726",
-    borderRadius: 4,
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // image: {
+//   //   width: "100%",
+//   //   display: "grid",
+//   //   justifyContent: "center",
+//   //   position: "relative",
+//   // },
+//   // placeholder: {
+//   //   position: "relative",
+//   //   width: "100%",
+//   //   textAlign: "center",
+//   // },
+//   // icon: {
+//   //   width: "100%",
+//   //   height: "auto",
+//   //   padding: "0",
+//   //   color: "#aaa",
+//   //   textAlign: "center",
+//   //   minWidth: 64,
+//   //   minHeight: 64,
+//   //   maxHeight: 256,
+//   // },
+//   // border: {
+//   //   border: "2px solid #ffa726",
+//   //   borderRadius: 4,
+//   // },
+// }));
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
@@ -53,22 +52,38 @@ const ImageRender = ({ data, preview }) => {
     }
   };
 
-  const classes = useStyles();
+  // const classes = useStyles();
   return (
     <div
-      className={
+      // className={
+      //   data.image.url &&
+      //   data.image.url.startsWith("blob:") &&
+      //   data.image.saved == false &&
+      //   !preview
+      //     ? classes.border
+      //     : null
+      // }
+      style={
         data.image.url &&
         data.image.url.startsWith("blob:") &&
         data.image.saved == false &&
         !preview
-          ? classes.border
+          ? { border: "2px solid #ffa726", borderRadius: "4px" }
           : null
       }
     >
       {isValidHttpUrl(data.image.url) ? (
         <>
           {data.image.url.startsWith("https://eco-media-bucket.s3") ? (
-            <div className={classes.image}>
+            <div
+              // className={classes.image}
+              style={{
+                width: "100%",
+                display: "grid",
+                justifyContent: "center",
+                position: "relative",
+              }}
+            >
               <figure
                 style={{
                   display: "table",
@@ -96,7 +111,15 @@ const ImageRender = ({ data, preview }) => {
               </figure>
             </div>
           ) : (
-            <div className={classes.image}>
+            <div
+              // className={classes.image}
+              sx={{
+                width: "100%",
+                display: "grid",
+                justifyContent: "center",
+                position: "relative",
+              }}
+            >
               <figure
                 style={{
                   display: "table",
@@ -211,8 +234,23 @@ const ImageRender = ({ data, preview }) => {
           )}
         </>
       ) : (
-        <div className={classes.placeholder}>
-          <ImageIcon className={classes.icon} />
+        <div
+          // className={classes.placeholder}
+          style={{ position: "relative", width: "100%", textAlign: "center" }}
+        >
+          <ImageIcon
+            // className={classes.icon}
+            sx={{
+              width: "100%",
+              height: "auto",
+              padding: "0",
+              color: "#aaa",
+              textAlign: "center",
+              minWidth: "64px",
+              minHeight: "64px",
+              maxHeight: "256px",
+            }}
+          />
         </div>
       )}
     </div>

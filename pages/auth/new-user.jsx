@@ -4,27 +4,26 @@ import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
 import { useUserContext } from "@components/UserContext";
 import { Button, Container } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
-  // layout: {
-  //   display: "grid",
-  // },
-  // origin: {
-  //   marginTop: 400,
-  //   [theme.breakpoints.up("sm")]: {
-  //     marginTop: 300,
-  //   },
-  // },
-  // button: {
-  //   marginTop: 10,
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // layout: {
+//   //   display: "grid",
+//   // },
+//   // origin: {
+//   //   marginTop: 400,
+//   //   [theme.breakpoints.up("sm")]: {
+//   //     marginTop: 300,
+//   //   },
+//   // },
+//   // button: {
+//   //   marginTop: 10,
+//   // },
+// }));
 
 const newUser = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
 
   const { user, setUser } = useUserContext();

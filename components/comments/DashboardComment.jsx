@@ -2,31 +2,30 @@ import Link from "@components/Link";
 import TextBox from "@components/TextBox";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, FormControl, InputLabel } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { updateComment } from "@utils/api-helpers";
 import { useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  buttonGroup: {
-    display: "grid",
-    margin: "auto 0px auto 20px",
-  },
-  buttonEdit: {
-    margin: "4px 0px",
-    minWidth: "fit-content",
-    justifyContent: "start",
-  },
-  form: {
-    flexGrow: 1,
-  },
-  text: {
-    display: "flex",
-    flexGrow: 1,
-  },
-  comment: {
-    flexGrow: 1,
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // buttonGroup: {
+//   //   display: "grid",
+//   //   margin: "auto 0px auto 20px",
+//   // },
+//   // buttonEdit: {
+//   //   margin: "4px 0px",
+//   //   minWidth: "fit-content",
+//   //   justifyContent: "start",
+//   // },
+//   // form: {
+//   //   flexGrow: 1,
+//   // },
+//   // text: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   // },
+//   // comment: {
+//   //   flexGrow: 1,
+//   // },
+// }));
 
 const DashboardComment = ({
   result,
@@ -36,7 +35,7 @@ const DashboardComment = ({
   setSnackbar,
   name,
 }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [commentValue, setCommentValue] = useState("");
 
@@ -79,13 +78,22 @@ const DashboardComment = ({
   };
 
   return (
-    <div className={classes.comment}>
+    <div
+      // className={classes.comment}
+      style={{ flexGrow: 1 }}
+    >
       <Link href={`/posts/${result.post_id}`} underline="hover">
         View Post
       </Link>{" "}
       {result.date} Approved: {result.approved}
-      <div className={classes.text}>
-        <FormControl className={classes.form}>
+      <div
+        // className={classes.text}
+        style={{ display: "flex", flexGrow: 1 }}
+      >
+        <FormControl
+          // className={classes.form}
+          sx={{ flexGrow: 1 }}
+        >
           <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
           <TextBox
             defaultValue={result.text}
@@ -95,12 +103,20 @@ const DashboardComment = ({
             autoFocus={false}
           />
         </FormControl>
-        <div className={classes.buttonGroup}>
+        <div
+          // className={classes.buttonGroup}
+          style={{ display: "grid", margin: "auto 0px auto 20px" }}
+        >
           {commentValue != "" ? (
             <Button
               variant="contained"
               color="secondary"
-              className={classes.buttonEdit}
+              // className={classes.buttonEdit}
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
               size="small"
               onClick={() => handleCommentUpdate(commentValue)}
             >
@@ -110,7 +126,11 @@ const DashboardComment = ({
             <Button
               variant="contained"
               color="secondary"
-              className={classes.buttonEdit}
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
               size="small"
               disabled
             >
@@ -121,7 +141,11 @@ const DashboardComment = ({
           <Button
             variant="contained"
             color="secondary"
-            className={classes.buttonEdit}
+            sx={{
+              margin: "4px 0px",
+              minWidth: "fit-content",
+              justifyContent: "start",
+            }}
             startIcon={<DeleteIcon />}
             size="small"
             onClick={handleDeleteOpen}

@@ -1,17 +1,16 @@
 import { TextField } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import { connectField } from "uniforms";
 
-const useStyles = makeStyles(() => ({
-  field: {
-    display: "flex",
-    flexGrow: 1,
-    marginBottom: 5,
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // field: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   //   marginBottom: 5,
+//   // },
+// }));
 
 function ImageWidth({ onChange, value }) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <>
@@ -21,11 +20,12 @@ function ImageWidth({ onChange, value }) {
         name="src"
         type="number"
         // defaultValue={500}
-        className={classes.field}
+        // className={classes.field}
+        sx={{ display: "flex", flexGrow: 1, marginBottom: "5px" }}
         // style={{ width: "400px" }}
         value={value || ""}
         onChange={(e) => {
-          console.log(typeof e.target.value);
+          // console.log(typeof e.target.value);
           const width = Number(e.target.value);
           onChange(width);
         }}

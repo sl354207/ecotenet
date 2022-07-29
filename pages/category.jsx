@@ -2,16 +2,15 @@ import Description from "@components/Description";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import { Container, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 
-const useStyles = makeStyles(() => ({
-  // spacer: {
-  //   marginBottom: 10,
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // spacer: {
+//   //   marginBottom: 10,
+//   // },
+// }));
 
 const category = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <>

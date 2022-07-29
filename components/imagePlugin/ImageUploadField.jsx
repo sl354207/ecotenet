@@ -2,32 +2,32 @@ import { useUserContext } from "@components/UserContext";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ErrorIcon from "@mui/icons-material/Error";
 import { Button, CircularProgress, TextField, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { connectField } from "uniforms";
 
-const useStyles = makeStyles((theme) => ({
-  upload: {
-    display: "flex",
-    marginBottom: 10,
-    [theme.breakpoints.down("md")]: {
-      // width: 250,
-      display: "grid",
-      // marginBottom: 5,
-    },
-  },
-  field: {
-    display: "flex",
-    flexGrow: 1,
-    marginBottom: 5,
-    width: 300,
-    [theme.breakpoints.down("md")]: {
-      width: 250,
-      display: "flex",
-    },
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // upload: {
+//   //   display: "flex",
+//   //   marginBottom: 10,
+//   //   [theme.breakpoints.down("md")]: {
+//   //     // width: 250,
+//   //     display: "grid",
+//   //     // marginBottom: 5,
+//   //   },
+//   // },
+//   // field: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   //   marginBottom: 5,
+//   //   width: 300,
+//   //   [theme.breakpoints.down("md")]: {
+//   //     width: 250,
+//   //     display: "flex",
+//   //   },
+//   // },
+// }));
 
 //CHECK UNIFORMS DOCS DOCS for more details on how component works.
 
@@ -38,7 +38,7 @@ const UPLOADING_ERROR_CODE = 4;
 const DELETING_ERROR_CODE = 4;
 
 function ImageUploadField({ onChange, value }) {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { user } = useUserContext();
   const router = useRouter();
   const postId = router.query._id;
@@ -281,7 +281,7 @@ function ImageUploadField({ onChange, value }) {
       <>
         {" "}
         Upload Image
-        <CloudUploadIcon style={{ marginLeft: "8px" }} />
+        <CloudUploadIcon sx={{ marginLeft: "8px" }} />
       </>
     );
     deleteInside = <>delete image</>;
@@ -291,7 +291,7 @@ function ImageUploadField({ onChange, value }) {
       <>
         {" "}
         Upload Image
-        <CloudUploadIcon style={{ marginLeft: "8px" }} />
+        <CloudUploadIcon sx={{ marginLeft: "8px" }} />
       </>
     );
     deleteInside = <CircularProgress size={19} />;
@@ -303,7 +303,7 @@ function ImageUploadField({ onChange, value }) {
           <>
             {" "}
             Upload Image
-            <CloudUploadIcon style={{ marginLeft: "8px" }} />
+            <CloudUploadIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = <>delete image</>;
@@ -313,7 +313,7 @@ function ImageUploadField({ onChange, value }) {
         uploadInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = <>delete image</>;
@@ -322,7 +322,7 @@ function ImageUploadField({ onChange, value }) {
         uploadInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = <>delete image</>;
@@ -332,7 +332,7 @@ function ImageUploadField({ onChange, value }) {
         uploadInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = <>delete image</>;
@@ -341,14 +341,14 @@ function ImageUploadField({ onChange, value }) {
         saveInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         uploadInside = (
           <>
             {" "}
             Upload Image
-            <CloudUploadIcon style={{ marginLeft: "8px" }} />
+            <CloudUploadIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = <>delete image</>;
@@ -359,13 +359,13 @@ function ImageUploadField({ onChange, value }) {
           <>
             {" "}
             Upload Image
-            <CloudUploadIcon style={{ marginLeft: "8px" }} />
+            <CloudUploadIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         break;
@@ -373,19 +373,19 @@ function ImageUploadField({ onChange, value }) {
         saveInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         uploadInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = (
           <>
             {state.errorText}
-            <ErrorIcon style={{ marginLeft: "8px" }} />
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         break;
@@ -399,7 +399,7 @@ function ImageUploadField({ onChange, value }) {
       <>
         {" "}
         Upload Image
-        <CloudUploadIcon style={{ marginLeft: "8px" }} />
+        <CloudUploadIcon sx={{ marginLeft: "8px" }} />
       </>
     );
     deleteInside = <>delete image</>;
@@ -407,7 +407,18 @@ function ImageUploadField({ onChange, value }) {
 
   return (
     <>
-      <div className={classes.upload}>
+      <div
+        // className={classes.upload}
+        style={{
+          display: "flex",
+          marginBottom: "10px",
+          [theme.breakpoints.down("md")]: {
+            // width: 250,
+            display: "grid",
+            // marginBottom: 5,
+          },
+        }}
+      >
         {/* <label htmlFor="file-input"> */}
         <Button
           disabled={
@@ -434,7 +445,7 @@ function ImageUploadField({ onChange, value }) {
           {/* )} */}
         </Button>
         {/* </label> */}
-        <Typography variant="body1" style={{ margin: "20px 16px 0 16px" }}>
+        <Typography variant="body1" sx={{ margin: "20px 16px 0 16px" }}>
           or
         </Typography>
         <TextField
@@ -442,7 +453,17 @@ function ImageUploadField({ onChange, value }) {
           label="Existing image URL"
           name="url"
           // style={{ flex: 1 }}
-          className={classes.field}
+          // className={classes.field}
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+            marginBottom: "5px",
+            width: "300px",
+            [theme.breakpoints.down("md")]: {
+              width: "250px",
+              display: "flex",
+            },
+          }}
           value={
             value.url &&
             (value.url.startsWith("blob:") ||
@@ -467,7 +488,7 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.hasError ? "error" : "warning"}
           fullWidth
-          style={{ marginRight: 5 }}
+          sx={{ marginRight: "5px" }}
           disabled={
             state.isUploading ||
             state.isDeleting ||
@@ -485,7 +506,7 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.hasError ? "secondary" : "primary"}
           fullWidth
-          style={{ marginLeft: 5 }}
+          sx={{ marginLeft: "5px" }}
           onClick={() => deleteImage(value)}
           disabled={
             state.isUploading ||

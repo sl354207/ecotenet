@@ -10,58 +10,57 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import makeStyles from "@mui/styles/makeStyles";
 import theme from "@utils/theme";
 import { useState } from "react";
 import useSWR from "swr";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-  // progress: {
-  //   margin: "100px auto",
-  //   display: "flex",
-  //   justifySelf: "center",
-  // },
-  // header: {
-  //   marginTop: 20,
-  // },
-  // buttonPost: {
-  //   display: "flex",
-  //   justifyContent: "start",
-  //   textTransform: "none",
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-  //   margin: "20px auto",
-  //   borderRadius: "10px",
-  // },
-  // mobile: {
-  //   display: "grid",
-  // },
-  // desktop: {
-  //   marginTop: 4,
-  // },
-  // delete: {
-  //   color: "#fc7ebf",
-  //   borderColor: "#fc7ebf",
-  // },
-  // dialog: {
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // comment: {
-  //   display: "flow-root",
-  //   flexGrow: 1,
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: "flex",
+//   },
+//   content: {
+//     flexGrow: 1,
+//     padding: theme.spacing(3),
+//   },
+//   // progress: {
+//   //   margin: "100px auto",
+//   //   display: "flex",
+//   //   justifySelf: "center",
+//   // },
+//   // header: {
+//   //   marginTop: 20,
+//   // },
+//   // buttonPost: {
+//   //   display: "flex",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //   margin: "20px auto",
+//   //   borderRadius: "10px",
+//   // },
+//   // mobile: {
+//   //   display: "grid",
+//   // },
+//   // desktop: {
+//   //   marginTop: 4,
+//   // },
+//   // delete: {
+//   //   color: "#fc7ebf",
+//   //   borderColor: "#fc7ebf",
+//   // },
+//   // dialog: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // comment: {
+//   //   display: "flow-root",
+//   //   flexGrow: 1,
+//   // },
+// }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminPeople = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });

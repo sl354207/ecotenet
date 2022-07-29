@@ -2,7 +2,6 @@ import Description from "@components/Description";
 import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
 import { Container, createTheme } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 import Editor, { defaultThemeOptions } from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -21,18 +20,18 @@ const darkTheme = createTheme({
   palette: { mode: "dark" },
 });
 
-const useStyles = makeStyles(() => ({
-  // description: {
-  //   marginLeft: 10,
-  // },
-}));
+// const useStyles = makeStyles(() => ({
+//   // description: {
+//   //   marginLeft: 10,
+//   // },
+// }));
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
 // take in handleNext to change form step, and editor state values.
 const PostEditor = ({ value, setPostValue }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   return (
     <Container>

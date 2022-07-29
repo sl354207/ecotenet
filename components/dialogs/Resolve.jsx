@@ -1,5 +1,7 @@
 import { useSnackbarContext } from "@components/SnackbarContext";
 import TextBox from "@components/TextBox";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Button,
   Dialog,
@@ -11,33 +13,30 @@ import {
   InputLabel,
   Portal,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { createNotification, updateFlag } from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  comment: {
-    display: "flex",
-    alignItems: "center",
-  },
-  form: {
-    flexGrow: 1,
-  },
-  addition: {
-    display: "block",
-  },
-  info: {
-    padding: "5px 0px 10px 0px",
-  },
-  button: {
-    marginTop: 18,
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // comment: {
+//   //   display: "flex",
+//   //   alignItems: "center",
+//   // },
+//   // form: {
+//   //   flexGrow: 1,
+//   // },
+//   // addition: {
+//   //   display: "block",
+//   // },
+//   // info: {
+//   //   padding: "5px 0px 10px 0px",
+//   // },
+//   // button: {
+//   //   marginTop: 18,
+//   // },
+// }));
 
 const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [addInfo, setAddInfo] = useState("");
@@ -123,32 +122,35 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
       aria-labelledby="update"
       aria-describedby="update"
     >
-      <DialogTitle
-        id="update"
-        className={className}
-        color="textPrimary"
-        align="center"
-      >
+      <DialogTitle id="update" color="textPrimary" align="center">
         Resolve
       </DialogTitle>
 
-      <DialogContent className={className}>
+      <DialogContent>
         <DialogContentText id="update" color="textPrimary">
           Are you sure you want to resolve flag?
         </DialogContentText>
         <Button
           variant="outlined"
           color="secondary"
-          className={classes.button}
+          // className={classes.button}
+          sx={{ marginTop: "18px" }}
           onClick={() => setShowForm(!showForm)}
           endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         >
           Add Info
         </Button>
-        <div className={classes.addition} disableGutters>
+        <div
+          // className={classes.addition}
+          style={{ display: "block" }}
+          disableGutters
+        >
           {showForm ? (
             <Portal container={container.current}>
-              <FormControl className={classes.form}>
+              <FormControl
+                // className={classes.form}
+                sx={{ flexGrow: 1 }}
+              >
                 <InputLabel shrink htmlFor="commentform"></InputLabel>
                 <TextBox
                   id="info"
@@ -156,7 +158,7 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
                   defaultValue=""
                   placeHolder="additional comment on notification"
                   rows={1}
-                  className={classes.info}
+                  // className={classes.info}
                   autoFocus={false}
                   name="info"
                 />
@@ -164,11 +166,15 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
             </Portal>
           ) : null}
 
-          <div ref={container} className={classes.comment} />
+          <div
+            ref={container}
+            // className={classes.comment}
+            style={{ display: "flex", alignItems: "center" }}
+          />
         </div>
       </DialogContent>
 
-      <DialogActions className={className}>
+      <DialogActions>
         <Button onClick={handleClose} color="secondary" variant="outlined">
           Cancel
         </Button>

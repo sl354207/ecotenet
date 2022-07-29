@@ -29,7 +29,6 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
-import makeStyles from "@mui/styles/makeStyles";
 import { updateNotification, updateUser } from "@utils/api-helpers";
 import theme from "@utils/theme";
 import PropTypes from "prop-types";
@@ -66,125 +65,125 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
-  // tabs: {
-  //   flexGrow: 1,
-  //   backgroundColor: theme.palette.background.paper,
-  //   marginTop: 20,
-  //   borderRadius: "10px",
-  // },
-  // tabBar: {
-  //   backgroundColor: theme.palette.primary.light,
-  //   borderRadius: "10px",
-  // },
-  // tab: {
-  //   flexGrow: 1,
-  //   backgroundColor: theme.palette.primary.light,
-  //   minHeight: 80,
-  //   minWidth: "inherit",
-  //   padding: "inherit",
-  //   borderRadius: "10px",
-  //   "&:hover": {
-  //     color: theme.text,
-  //     opacity: 1,
-  //   },
-  // },
-  // buttonPost: {
-  //   display: "flex",
-  //   justifyContent: "start",
-  //   textTransform: "none",
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //   margin: "20px auto",
-  //   borderRadius: "10px",
-  // },
-  // progress: {
-  //   margin: "100px auto",
-  //   display: "flex",
-  //   justifySelf: "center",
-  // },
-  // card: {
-  //   flex: "auto",
-  //   marginRight: 20,
-  // },
-  // buttonGroup: {
-  //   display: "grid",
-  //   margin: "auto 0px auto 20px",
-  // },
-  // edit: {
-  //   margin: "4px 0px",
-  //   minWidth: "fit-content",
-  //   justifyContent: "start",
-  // },
-  // dialog: {
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // form: {
-  //   display: "flex",
-  //   flexGrow: 1,
-  //   margin: "10px 0 10px 0",
-  // },
-  // label: {
-  //   color: `${theme.palette.text.primary}!important`,
-  //   position: "relative",
-  //   transform: "none",
-  // },
-  // search: {
-  //   position: "relative",
-  //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-  //   borderRadius: theme.shape.borderRadius,
-  //   backgroundColor: theme.palette.primary.main,
-  //   "&:focus-within": {
-  //     backgroundColor: theme.palette.primary.main,
-  //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-  //     borderRadius: theme.shape.borderRadius,
-  //   },
-  //   marginTop: 6,
-  //   marginBottom: 10,
-  //   width: "auto",
-  // },
-  // root: {
-  //   color: theme.palette.text.primary,
-  // },
-  // input: {
-  //   padding: 18,
-  // },
-  // popper: {
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // delete: {
-  //   WebkitTapHighlightColor: "transparent",
-  //   color: theme.palette.secondary.main,
-  //   height: 22,
-  //   width: 22,
-  //   cursor: "pointer",
-  //   margin: "0 5px 0 -6px",
-  //   "&:hover": {
-  //     color: alpha(theme.palette.secondary.main, 0.7),
-  //   },
-  // },
-  // chip: {
-  //   borderColor: theme.palette.secondary.main,
-  //   borderWidth: 2,
-  //   color: theme.palette.text.primary,
-  //   height: 40,
-  //   margin: "0px 5px 10px 5px",
-  // },
-  // save: {
-  //   display: "flex",
-  //   justifyContent: "space-between",
-  // },
-  // helper: {
-  //   color: theme.palette.text.primary,
-  // },
-  // email: {
-  //   display: "contents",
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // tabs: {
+//   //   flexGrow: 1,
+//   //   backgroundColor: theme.palette.background.paper,
+//   //   marginTop: 20,
+//   //   borderRadius: "10px",
+//   // },
+//   // tabBar: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   borderRadius: "10px",
+//   // },
+//   // tab: {
+//   //   flexGrow: 1,
+//   //   backgroundColor: theme.palette.primary.light,
+//   //   minHeight: 80,
+//   //   minWidth: "inherit",
+//   //   padding: "inherit",
+//   //   borderRadius: "10px",
+//   //   "&:hover": {
+//   //     color: theme.text,
+//   //     opacity: 1,
+//   //   },
+//   // },
+//   // buttonPost: {
+//   //   display: "flex",
+//   //   justifyContent: "start",
+//   //   textTransform: "none",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //   margin: "20px auto",
+//   //   borderRadius: "10px",
+//   // },
+//   // progress: {
+//   //   margin: "100px auto",
+//   //   display: "flex",
+//   //   justifySelf: "center",
+//   // },
+//   // card: {
+//   //   flex: "auto",
+//   //   marginRight: 20,
+//   // },
+//   // buttonGroup: {
+//   //   display: "grid",
+//   //   margin: "auto 0px auto 20px",
+//   // },
+//   // edit: {
+//   //   margin: "4px 0px",
+//   //   minWidth: "fit-content",
+//   //   justifyContent: "start",
+//   // },
+//   // dialog: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // form: {
+//   //   display: "flex",
+//   //   flexGrow: 1,
+//   //   margin: "10px 0 10px 0",
+//   // },
+//   // label: {
+//   //   color: `${theme.palette.text.primary}!important`,
+//   //   position: "relative",
+//   //   transform: "none",
+//   // },
+//   // search: {
+//   //   position: "relative",
+//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+//   //   borderRadius: theme.shape.borderRadius,
+//   //   backgroundColor: theme.palette.primary.main,
+//   //   "&:focus-within": {
+//   //     backgroundColor: theme.palette.primary.main,
+//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+//   //     borderRadius: theme.shape.borderRadius,
+//   //   },
+//   //   marginTop: 6,
+//   //   marginBottom: 10,
+//   //   width: "auto",
+//   // },
+//   // root: {
+//   //   color: theme.palette.text.primary,
+//   // },
+//   // input: {
+//   //   padding: 18,
+//   // },
+//   // popper: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // delete: {
+//   //   WebkitTapHighlightColor: "transparent",
+//   //   color: theme.palette.secondary.main,
+//   //   height: 22,
+//   //   width: 22,
+//   //   cursor: "pointer",
+//   //   margin: "0 5px 0 -6px",
+//   //   "&:hover": {
+//   //     color: alpha(theme.palette.secondary.main, 0.7),
+//   //   },
+//   // },
+//   // chip: {
+//   //   borderColor: theme.palette.secondary.main,
+//   //   borderWidth: 2,
+//   //   color: theme.palette.text.primary,
+//   //   height: 40,
+//   //   margin: "0px 5px 10px 5px",
+//   // },
+//   // save: {
+//   //   display: "flex",
+//   //   justifyContent: "space-between",
+//   // },
+//   // helper: {
+//   //   color: theme.palette.text.primary,
+//   // },
+//   // email: {
+//   //   display: "contents",
+//   // },
+// }));
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Dashboard() {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();

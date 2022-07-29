@@ -342,22 +342,17 @@ const DashboardDialog = ({
       aria-labelledby="update"
       aria-describedby="update"
     >
-      <DialogTitle
-        id="update"
-        className={className}
-        color="textPrimary"
-        align="center"
-      >
+      <DialogTitle id="update" color="textPrimary" align="center">
         {action == "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
-      <DialogContent className={className}>
+      <DialogContent>
         <DialogContentText id="update" color="textPrimary">
           Are you sure you want to {action} {item}?
         </DialogContentText>
       </DialogContent>
 
-      <DialogActions className={className}>
+      <DialogActions>
         <Button onClick={handleClose} color="secondary" variant="outlined">
           Cancel
         </Button>

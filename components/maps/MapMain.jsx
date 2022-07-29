@@ -1,22 +1,21 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 import Geocoder from "./Geocoder";
 
-const useStyles = makeStyles(() => ({
-  popup: {
-    display: "grid",
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   // popup: {
+//   //   display: "grid",
+//   // },
+// }));
 
 const MapMain = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  const classes = useStyles();
+  // const classes = useStyles();
 
   //  base layer
   const ecoFill = {
@@ -173,7 +172,7 @@ const MapMain = () => {
               onClose={() => setShowPopup(false)}
               maxWidth="500px"
             >
-              <div className={classes.popup}>
+              <div style={{ display: "grid" }}>
                 {!showLoad ? (
                   <>
                     <Typography color="textSecondary" align="center">

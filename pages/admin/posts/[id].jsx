@@ -5,7 +5,6 @@ import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
 import Link from "@components/Link";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
-import makeStyles from "@mui/styles/makeStyles";
 import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -23,47 +22,47 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-const useStyles = makeStyles((theme) => ({
-  // header: {
-  //   marginTop: 20,
-  // },
-  // box: {
-  //   display: "flex",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
-  // content: {
-  //   flexDirection: "column",
-  //   maxWidth: 800,
-  //   flexGrow: 1,
-  //   marginLeft: 20,
-  // },
-  // items: {
-  //   display: "flex",
-  // },
-  // date: {
-  //   marginLeft: 20,
-  //   fontStyle: "italic",
-  // },
-  // container: {
-  //   backgroundColor: theme.palette.primary.main,
-  // },
-  // progress: {
-  //   margin: "100px auto",
-  //   display: "flex",
-  //   justifySelf: "center",
-  // },
-  // dialog: {
-  //   backgroundColor: theme.palette.primary.light,
-  // },
-  // button: {
-  //   marginLeft: 4,
-  // },
-  // delete: {
-  //   color: "#fc7ebf",
-  //   borderColor: "#fc7ebf",
-  // },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   // header: {
+//   //   marginTop: 20,
+//   // },
+//   // box: {
+//   //   display: "flex",
+//   //   justifyContent: "center",
+//   //   alignItems: "center",
+//   // },
+//   // content: {
+//   //   flexDirection: "column",
+//   //   maxWidth: 800,
+//   //   flexGrow: 1,
+//   //   marginLeft: 20,
+//   // },
+//   // items: {
+//   //   display: "flex",
+//   // },
+//   // date: {
+//   //   marginLeft: 20,
+//   //   fontStyle: "italic",
+//   // },
+//   // container: {
+//   //   backgroundColor: theme.palette.primary.main,
+//   // },
+//   // progress: {
+//   //   margin: "100px auto",
+//   //   display: "flex",
+//   //   justifySelf: "center",
+//   // },
+//   // dialog: {
+//   //   backgroundColor: theme.palette.primary.light,
+//   // },
+//   // button: {
+//   //   marginLeft: 4,
+//   // },
+//   // delete: {
+//   //   color: "#fc7ebf",
+//   //   borderColor: "#fc7ebf",
+//   // },
+// }));
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
@@ -71,7 +70,7 @@ const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = () => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const router = useRouter();
 
   const ID = router.query.id;
