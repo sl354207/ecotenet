@@ -98,7 +98,10 @@ const person = () => {
           )}
           {results.website !== "" && (
             <Typography gutterBottom>
-              Personal Website: <Link underline="hover">{results.website}</Link>
+              Personal Website:{" "}
+              <Link href={results.website} underline="hover">
+                {results.website}
+              </Link>
             </Typography>
           )}
           {Array.isArray(results.socials) && results.socials.length > 0 && (
@@ -108,7 +111,7 @@ const person = () => {
                 <Link
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${social}`}
+                  href={social}
                   underline="hover"
                 >
                   {social}

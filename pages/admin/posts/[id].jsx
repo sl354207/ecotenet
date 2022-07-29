@@ -113,7 +113,7 @@ const post = () => {
             >
               <div style={{ display: "flex" }}>
                 <Typography align="center" variant="h6">
-                  <Link href="#" underline="hover">
+                  <Link href={`/admin/people/${post.name}`} underline="hover">
                     {post.name}
                   </Link>
                 </Typography>
@@ -128,7 +128,11 @@ const post = () => {
               <Typography variant="h6">
                 Ecoregions:{" "}
                 {post.ecoregions.map((ecoregion) => (
-                  <Link href="#" color="secondary" underline="hover">
+                  <Link
+                    href={`/ecoregion/${ecoregion}`}
+                    color="secondary"
+                    underline="hover"
+                  >
                     Eco-{ecoregion},{" "}
                   </Link>
                 ))}

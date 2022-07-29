@@ -60,7 +60,9 @@ const adminPosts = () => {
                 onClick={() => router.push(`/admin/posts/${result._id}`)}
               >
                 <div style={{ display: "flow-root", flexGrow: 1 }}>
-                  <Link underline="hover">{result.name}</Link>
+                  <Link href={`/admin/people/${result.name}`} underline="hover">
+                    {result.name}
+                  </Link>
 
                   <ListItemText primary={result.title}></ListItemText>
                 </div>

@@ -64,7 +64,10 @@ const Link = React.forwardRef(function Link(props, ref) {
   } = props;
 
   const router = useRouter();
+  console.log(`href: ${href}`);
   const pathname = typeof href === "string" ? href : href.pathname;
+  console.log(`pathname: ${pathname}`);
+
   const className = clsx(classNameProps, {
     [activeClassName]: router.pathname === pathname && activeClassName,
   });

@@ -209,7 +209,7 @@ const admin = () => {
                   <Grid container spacing={1} sx={{ marginTop: "20px" }}>
                     <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Link
-                        href="/privacy"
+                        href={`/admin/people/${post.name}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         underline="hover"

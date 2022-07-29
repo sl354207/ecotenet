@@ -67,13 +67,24 @@ const adminFlags = () => {
               >
                 <div style={{ display: "flow-root", flexGrow: 1 }}>
                   <Typography>
-                    Flagged by: <Link underline="hover">{result.name}</Link>
+                    Flagged by:{" "}
+                    <Link
+                      href={`/admin/people/${result.name}`}
+                      underline="hover"
+                    >
+                      {result.name}
+                    </Link>
                   </Typography>
                   <Typography>Flag type: {result.type}</Typography>
                   <Typography>Flag text: {result.text}</Typography>
                   <Typography>
                     Name flagged:{" "}
-                    <Link underline="hover">{result.flagged}</Link>
+                    <Link
+                      href={`/admin/people/${result.flagged}`}
+                      underline="hover"
+                    >
+                      {result.flagged}
+                    </Link>
                   </Typography>
                 </div>
 

@@ -69,13 +69,16 @@ const adminPeople = () => {
                 }}
               >
                 <div style={{ display: "flow-root", flexGrow: 1 }}>
-                  <Link underline="hover">{result.name}</Link>
+                  <Link href={`/admin/people/${result.name}`} underline="hover">
+                    {result.name}
+                  </Link>
 
                   <Typography>bio: {result.bio}</Typography>
                   <Typography>email: {result.email}</Typography>
                   <Typography>
                     website:{" "}
                     <Link
+                      href={result.website}
                       target="_blank"
                       rel="noopener noreferrer"
                       underline="hover"
@@ -88,6 +91,7 @@ const adminPeople = () => {
                     {result.socials.map((social) => (
                       <>
                         <Link
+                          href={social}
                           target="_blank"
                           rel="noopener noreferrer"
                           underline="hover"
