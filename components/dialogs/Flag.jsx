@@ -12,18 +12,7 @@ import { createFlag } from "@utils/api-helpers";
 import theme from "@utils/theme";
 import { useState } from "react";
 
-// const useStyles = makeStyles((theme) => ({
-//   text: {
-//     padding: "5px 0px 10px 0px",
-//     display: "flex",
-//   },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-// }));
-
 const Flag = ({ open, handleClose, contentType, result, name }) => {
-  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [value, setValue] = useState();
@@ -76,7 +65,6 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       >
         <DialogTitle
           id="update"
-          // className={classes.dialog}
           sx={{ backgroundColor: theme.palette.primary.light }}
           color="textPrimary"
           align="center"
@@ -84,10 +72,7 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
           Flag {contentType}
         </DialogTitle>
 
-        <DialogContent
-          // className={classes.dialog}
-          sx={{ backgroundColor: theme.palette.primary.light }}
-        >
+        <DialogContent sx={{ backgroundColor: theme.palette.primary.light }}>
           <DialogContentText id="update" color="textPrimary">
             Why would you like to flag this item?
           </DialogContentText>
@@ -97,7 +82,6 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
             defaultValue=""
             placeHolder=""
             rows={1}
-            // className={classes.text}
             autoFocus={true}
             name="flag"
           />

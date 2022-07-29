@@ -7,23 +7,7 @@ import { Button, Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-// const useStyles = makeStyles((theme) => ({
-//   // layout: {
-//   //   display: "grid",
-//   // },
-//   // origin: {
-//   //   marginTop: 400,
-//   //   [theme.breakpoints.up("sm")]: {
-//   //     marginTop: 300,
-//   //   },
-//   // },
-//   // button: {
-//   //   marginTop: 10,
-//   // },
-// }));
-
 const newUser = () => {
-  // const classes = useStyles();
   const router = useRouter();
 
   const { user, setUser } = useUserContext();
@@ -66,15 +50,6 @@ const newUser = () => {
           body: JSON.stringify(submission),
         });
         if (res1.ok) {
-          // mutate();
-          // setSnackbar({
-          //   open: true,
-          //   severity: "success",
-          //   message: "Comment updated successfully",
-          // });
-          // setCommentValue("");
-          // console.log("ok");
-          // setUser({ ...user, name: name });
           sessionStorage.setItem("name", name);
           router.push("/");
         } else {
@@ -116,10 +91,7 @@ const newUser = () => {
     <Container>
       <Header title="New Profile" />
       <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
-      <div
-        // className={classes.layout}
-        style={{ display: "grid" }}
-      >
+      <div style={{ display: "grid" }}>
         <TextBox
           defaultValue=""
           placeHolder="profile name"
@@ -136,7 +108,6 @@ const newUser = () => {
           color="secondary"
           onClick={() => handleNameUpdate(name)}
           disabled={name == "" ? true : false}
-          // className={classes.button}
           sx={{ marginTop: "10px" }}
         >
           Submit

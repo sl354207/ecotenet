@@ -5,16 +5,9 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-// const useStyles = makeStyles(() => ({
-//   // popup: {
-//   //   display: "grid",
-//   // },
-// }));
-
 const MapSpecies = ({ clickInfo, state }) => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  // const classes = useStyles();ls
 
   // base layer
   const ecoFill = {
@@ -296,10 +289,7 @@ const MapSpecies = ({ clickInfo, state }) => {
               onClose={() => setShowPopup(false)}
               maxWidth="500px"
             >
-              <div
-                // className={classes.popup}
-                style={{ display: "grid" }}
-              >
+              <div style={{ display: "grid" }}>
                 {!showLoad ? (
                   <>
                     <Typography color="textSecondary" align="center">

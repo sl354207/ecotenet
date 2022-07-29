@@ -5,18 +5,6 @@ import theme from "@utils/theme";
 import Comment from "./Comment";
 import CommentForm from "./CommentForm";
 
-// const useStyles = makeStyles((theme) => ({
-//   // comments: {
-//   //   backgroundColor: theme.palette.primary.main,
-//   // },
-//   // add: {
-//   //   marginBottom: 5,
-//   // },
-//   // noAdd: {
-//   //   marginBottom: 10,
-//   // },
-// }));
-
 //pass in comments and post id from parent post
 const CommentList = ({
   comments,
@@ -27,8 +15,6 @@ const CommentList = ({
   handleOpenFlag,
   handleReply,
 }) => {
-  // const classes = useStyles();
-
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
     if (comment.comment_ref === "") {
@@ -48,16 +34,12 @@ const CommentList = ({
   });
 
   return (
-    <List
-      // className={classes.comments}
-      sx={{ backgroundColor: theme.palette.primary.main }}
-    >
+    <List sx={{ backgroundColor: theme.palette.primary.main }}>
       <Button
         variant="outlined"
         color="secondary"
         onClick={handleForm}
         endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        // className={showForm ? classes.add : classes.noAdd}
         sx={showForm ? { marginBottom: "5px" } : { marginBottom: "10px" }}
       >
         Add Comment

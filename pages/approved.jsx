@@ -4,12 +4,7 @@ import { fetchGetJSON } from "@utils/stripe/api-helpers";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-// const useStyles = makeStyles(() => ({
-//   // status: { marginTop: 20 },
-// }));
-
 const approved = () => {
-  // const classes = useStyles();
   const router = useRouter();
 
   // Fetch CheckoutSession from static page via
@@ -23,12 +18,7 @@ const approved = () => {
   return (
     <Container>
       <Header title="Checkout Results" />
-      <Typography
-        variant="h6"
-        align="center"
-        // className={classes.status}
-        sx={{ marginTop: "20px" }}
-      >
+      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
         Payment Status: {data?.status ?? "loading..."}
       </Typography>
       {/* ADD POSSIBLE ERROR MESSAGES AND ADD EMAIL AND THANK YOUS AND WHATNOT */}

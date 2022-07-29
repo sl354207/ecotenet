@@ -55,63 +55,7 @@ function a11yProps(index) {
   };
 }
 
-// const useStyles = makeStyles((theme) => ({
-//   // tabs: {
-//   //   flexGrow: 1,
-//   //   backgroundColor: theme.palette.background.paper,
-//   //   borderRadius: "10px",
-//   // },
-//   // tabBar: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   borderRadius: "10px",
-//   // },
-//   // ecoregions: {
-//   //   marginTop: 20,
-//   //   marginBottom: 20,
-//   // },
-//   // tab: {
-//   //   flexGrow: 1,
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   minHeight: 80,
-//   //   borderRadius: "10px",
-//   //   "&:hover": {
-//   //     color: theme.text,
-//   //     opacity: 1,
-//   //   },
-//   // },
-//   // tableRow: {
-//   //   backgroundColor: "#001e3c!important",
-//   //   textAlign: "center",
-//   //   color: "#ffffff!important",
-//   // },
-//   // table: {
-//   //   [theme.breakpoints.down("sm")]: {
-//   //     margin: "auto",
-//   //     float: "none",
-//   //   },
-//   //   float: "right",
-//   //   border: "thin solid",
-//   //   marginLeft: 10,
-//   // },
-//   // flagBox: {
-//   //   display: "flex",
-//   //   justifyContent: "center",
-//   // },
-//   // spacer: {
-//   //   display: "flex",
-//   //   marginRight: "auto",
-//   //   visibility: "hidden",
-//   //   minWidth: 30,
-//   // },
-//   // flag: {
-//   //   display: "flex",
-//   //   marginLeft: "auto",
-//   //   marginTop: "auto",
-//   // },
-// }));
-
 const species = ({ species, wiki }) => {
-  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
 
@@ -186,7 +130,6 @@ const species = ({ species, wiki }) => {
         return (
           <table
             {...props}
-            // className={classes.table}
             style={{
               [theme.breakpoints.down("sm")]: {
                 margin: "auto",
@@ -206,7 +149,6 @@ const species = ({ species, wiki }) => {
         return (
           <th
             {...props}
-            // className={classes.tableRow}
             style={{
               backgroundColor: "#001e3c!important",
               textAlign: "center",
@@ -222,7 +164,6 @@ const species = ({ species, wiki }) => {
         return (
           <tr
             {...props}
-            // className={classes.tableRow}
             style={{
               backgroundColor: "#001e3c!important",
               textAlign: "center",
@@ -238,7 +179,6 @@ const species = ({ species, wiki }) => {
         return (
           <td
             {...props}
-            // className={classes.tableRow}
             style={{
               backgroundColor: "#001e3c!important",
               textAlign: "center",
@@ -258,7 +198,6 @@ const species = ({ species, wiki }) => {
         return (
           <div
             {...props}
-            // className={classes.tableRow}
             style={{
               backgroundColor: "#001e3c!important",
               textAlign: "center",
@@ -285,12 +224,8 @@ const species = ({ species, wiki }) => {
   return (
     <>
       <Container>
-        <div
-          // className={classes.flagBox}
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
-            // className={classes.spacer}
             style={{
               display: "flex",
               marginRight: "auto",
@@ -302,7 +237,6 @@ const species = ({ species, wiki }) => {
             title={`${species.Scientific_Name}: ${species.COMMON_NAME}`}
           />
           <IconButton
-            // className={classes.flag}
             sx={{
               display: "flex",
               marginLeft: "auto",
@@ -319,7 +253,6 @@ const species = ({ species, wiki }) => {
 
         <Typography
           variant="h6"
-          // className={classes.ecoregions}
           sx={{
             marginTop: "20px",
             marginBottom: "20px",
@@ -335,7 +268,6 @@ const species = ({ species, wiki }) => {
         </Typography>
 
         <div
-          // className={classes.tabs}
           style={{
             flexGrow: 1,
             backgroundColor: theme.palette.background.paper,
@@ -345,7 +277,6 @@ const species = ({ species, wiki }) => {
           <AppBar
             position="static"
             elevation={0}
-            // className={classes.tabBar}
             sx={{
               backgroundColor: theme.palette.primary.light,
               borderRadius: "10px",
@@ -360,7 +291,6 @@ const species = ({ species, wiki }) => {
               textColor="inherit"
             >
               <Tab
-                // className={classes.tab}
                 sx={{
                   flexGrow: 1,
                   backgroundColor: theme.palette.primary.light,
@@ -375,7 +305,6 @@ const species = ({ species, wiki }) => {
                 {...a11yProps(0)}
               />
               <Tab
-                // className={classes.tab}
                 sx={{
                   flexGrow: 1,
                   backgroundColor: theme.palette.primary.light,

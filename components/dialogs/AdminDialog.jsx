@@ -30,25 +30,6 @@ import {
 } from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
-// const useStyles = makeStyles(() => ({
-//   // comment: {
-//   //   display: "flex",
-//   //   alignItems: "center",
-//   // },
-//   // form: {
-//   //   flexGrow: 1,
-//   // },
-//   // addition: {
-//   //   display: "block",
-//   // },
-//   info: {
-//     padding: "5px 0px 10px 0px",
-//   },
-//   // button: {
-//   //   marginTop: 18,
-//   // },
-// }));
-
 const AdminDialog = ({
   open,
   handleClose,
@@ -58,7 +39,6 @@ const AdminDialog = ({
   result,
   mutate,
 }) => {
-  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   let item;
@@ -533,24 +513,16 @@ const AdminDialog = ({
           <Button
             variant="outlined"
             color="secondary"
-            // className={classes.button}
             sx={{ marginTop: "18px" }}
             onClick={() => setShowForm(!showForm)}
             endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           >
             Add Info
           </Button>
-          <div
-            // className={classes.addition}
-            style={{ display: "block" }}
-            disableGutters
-          >
+          <div style={{ display: "block" }} disablegutters="true">
             {showForm ? (
               <Portal container={container.current}>
-                <FormControl
-                  // className={classes.form}
-                  sx={{ flexGrow: 1 }}
-                >
+                <FormControl sx={{ flexGrow: 1 }}>
                   <InputLabel shrink htmlFor="commentform"></InputLabel>
                   <TextBox
                     id="info"
@@ -567,7 +539,6 @@ const AdminDialog = ({
 
             <div
               ref={container}
-              // className={classes.comment}
               style={{ display: "flex", alignItems: "center" }}
             />
           </div>

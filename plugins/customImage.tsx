@@ -10,9 +10,6 @@ import { CellPlugin, lazyLoad } from '@react-page/editor';
 const Panorama = lazyLoad(() => import('@mui/icons-material/Panorama'));
 
 
-
-
-
 // use a type here, not an interface. Set types for data for typescript.
 type Data = {
   caption: string,
@@ -76,7 +73,7 @@ const customImage: CellPlugin<Data> = {
           },
           width: {
             type: 'number',
-            // default: 'someDefaultValue',
+            
             uniforms: {
               component: ImageWidth
             }
@@ -87,11 +84,11 @@ const customImage: CellPlugin<Data> = {
               component: ImageHeight
               
             },
-            // default: 'someDefaultValue',
+           
           },
           
         },
-        // required: ['title'],
+       
       },
     },
   },{
@@ -104,7 +101,7 @@ const customImage: CellPlugin<Data> = {
           
           caption: {
             type: 'string',
-            // default: 'someDefaultValue',
+            
             uniforms: {
               component: ImageCaption
             }
@@ -115,21 +112,18 @@ const customImage: CellPlugin<Data> = {
               component: ImageCitation
               
             },
-            // default: 'someDefaultValue',
+           
           },
           
           description: {
             type: 'string',
             uniforms: {
               component: ImageDescription
-              // label: 'Alternate Description',
               
-              // multiline: true,
-              // rows: 4,
             },
           },
         },
-        // required: ['title'],
+        
       },
     },
     

@@ -2,17 +2,6 @@ import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { Button, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 
-// const useStyles = makeStyles(() => ({
-//   // root: {
-//   //   marginLeft: 20,
-//   // },
-//   // count: {
-//   //   display: "flex",
-//   //   flexDirection: "column",
-//   //   maxWidth: 50,
-//   // },
-// }));
-
 const Vote = ({
   post_count,
   count,
@@ -21,8 +10,6 @@ const Vote = ({
   voters,
   name,
 }) => {
-  // const classes = useStyles();
-
   //set limit for count
   const [limit, setLimit] = useState(0);
 
@@ -50,12 +37,8 @@ const Vote = ({
   };
   return (
     <>
-      <div
-        // className={classes.root}
-        style={{ marginLeft: "20px" }}
-      >
+      <div style={{ marginLeft: "20px" }}>
         <div
-          // className={classes.count}
           style={{ display: "flex", flexDirection: "column", maxWidth: "50px" }}
         >
           <IconButton

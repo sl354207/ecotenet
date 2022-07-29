@@ -28,8 +28,6 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 
-// ls
-
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
@@ -174,16 +172,9 @@ const post = ({ post, comments }) => {
 
   return (
     <>
-      <Container
-        // className={classes.container}
-        sx={{ backgroundColor: theme.palette.primary.main }}
-      >
-        <div
-          // className={classes.flagBox}
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+      <Container sx={{ backgroundColor: theme.palette.primary.main }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
-            // className={classes.spacer}
             style={{
               display: "flex",
               marginRight: "auto",
@@ -193,7 +184,6 @@ const post = ({ post, comments }) => {
           ></div>
           <Header title={post.title} />
           <IconButton
-            // className={classes.flag}
             sx={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
             color="inherit"
             aria-label="flag"
@@ -204,7 +194,6 @@ const post = ({ post, comments }) => {
           </IconButton>
         </div>
         <div
-          // className={classes.box}
           style={{
             display: "flex",
             justifyContent: "center",
@@ -212,7 +201,6 @@ const post = ({ post, comments }) => {
           }}
         >
           <div
-            // className={classes.content}
             style={{
               flexDirection: "column",
               maxWidth: "800px",
@@ -220,10 +208,7 @@ const post = ({ post, comments }) => {
               marginLeft: "20px",
             }}
           >
-            <div
-              // className={classes.items}
-              style={{ display: "flex" }}
-            >
+            <div style={{ display: "flex" }}>
               <Typography align="center" variant="h6">
                 <Link
                   href={`/person/${post.name}`}
@@ -233,7 +218,7 @@ const post = ({ post, comments }) => {
                   {post.name}
                 </Link>
               </Typography>
-              <Typography // className={classes.date}
+              <Typography
                 sx={{ marginLeft: "20px", fontStyle: "italic" }}
                 align="left"
                 variant="h6"
@@ -273,10 +258,7 @@ const post = ({ post, comments }) => {
           />
         </EditorLayout>
         <Divider />
-        <Typography
-          variant="h6" // className={classes.comments}
-          sx={{ marginTop: "20px" }}
-        >
+        <Typography variant="h6" sx={{ marginTop: "20px" }}>
           Comments:
         </Typography>
         <CommentList
@@ -294,7 +276,6 @@ const post = ({ post, comments }) => {
         contentType={action}
         open={dialog}
         handleClose={handleCloseDialog}
-        // className={classes.dialog}
         post_id={post._id}
         result={item}
         closeForm={closeForm}

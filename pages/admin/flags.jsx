@@ -14,47 +14,9 @@ import theme from "@utils/theme";
 import { useState } from "react";
 import useSWR from "swr";
 
-// const useStyles = makeStyles((theme) => ({
-//   // root: {
-//   //   display: "flex",
-//   // },
-//   // content: {
-//   //   flexGrow: 1,
-//   //   padding: theme.spacing(3),
-//   // },
-//   // progress: {
-//   //   margin: "100px auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-//   // buttonPost: {
-//   //   display: "flex",
-//   //   justifyContent: "start",
-//   //   textTransform: "none",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //   margin: "20px auto",
-//   //   borderRadius: "10px",
-//   // },
-//   // mobile: {
-//   //   display: "grid",
-//   // },
-//   // desktop: {
-//   //   marginTop: 4,
-//   // },
-//   // comment: {
-//   //   display: "flow-root",
-//   //   flexGrow: 1,
-//   // },
-// }));
-
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminFlags = () => {
-  // const classes = useStyles();
-
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ name: "", ID: "" });
 
@@ -77,18 +39,12 @@ const adminFlags = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        // className={classes.progress}
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else if (Array.isArray(results) && results.length == 0) {
     list = (
-      <Typography
-        variant="h6"
-        align="center"
-        // className={classes.header}
-        sx={{ marginTop: "20px" }}
-      >
+      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
         no results
       </Typography>
     );
@@ -100,7 +56,6 @@ const adminFlags = () => {
             <>
               <ListItem
                 key={result._id}
-                // className={classes.buttonPost}
                 sx={{
                   display: "flex",
                   justifyContent: "start",
@@ -110,10 +65,7 @@ const adminFlags = () => {
                   borderRadius: "10px",
                 }}
               >
-                <div
-                  // className={classes.comment}
-                  style={{ display: "flow-root", flexGrow: 1 }}
-                >
+                <div style={{ display: "flow-root", flexGrow: 1 }}>
                   <Typography>
                     Flagged by: <Link underline="hover">{result.name}</Link>
                   </Typography>
@@ -125,10 +77,7 @@ const adminFlags = () => {
                   </Typography>
                 </div>
 
-                <div
-                  // className={classes.mobile}
-                  style={{ display: "grid" }}
-                >
+                <div style={{ display: "grid" }}>
                   {result.type == "comment" && (
                     <Button
                       variant="outlined"
@@ -171,7 +120,6 @@ const adminFlags = () => {
                       <Button
                         variant="outlined"
                         color="secondary"
-                        // className={classes.desktop}
                         sx={{ marginTop: "4px" }}
                         onClick={() =>
                           handleOpenResolve(result.name, result._id)
@@ -214,15 +162,9 @@ const adminFlags = () => {
   }
 
   return (
-    <div
-      // className={classes.root}
-      style={{ display: "flex" }}
-    >
+    <div style={{ display: "flex" }}>
       <AdminDrawer />
-      <div
-        // className={classes.content}
-        style={{ flexGrow: 1, padding: theme.spacing(3) }}
-      >
+      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
         <Header title="Flags" />
         {list}
         <Resolve

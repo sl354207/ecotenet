@@ -11,33 +11,8 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-// const useStyles = makeStyles(() => ({
-//   // profile: {
-//   //   margin: 16,
-//   // },
-//   // socials: {
-//   //   display: "grid",
-//   // },
-//   // flagBox: {
-//   //   display: "flex",
-//   //   justifyContent: "center",
-//   // },
-//   // spacer: {
-//   //   display: "flex",
-//   //   marginRight: "auto",
-//   //   visibility: "hidden",
-//   //   minWidth: 30,
-//   // },
-//   // flag: {
-//   //   display: "flex",
-//   //   marginLeft: "auto",
-//   //   marginTop: "auto",
-//   // },
-// }));
-
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = ({ person, posts }) => {
-  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
 
@@ -63,12 +38,8 @@ const person = ({ person, posts }) => {
   return (
     <>
       <Container>
-        <div
-          // className={classes.flagBox}
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
-            // className={classes.spacer}
             style={{
               display: "flex",
               marginRight: "auto",
@@ -78,7 +49,6 @@ const person = ({ person, posts }) => {
           ></div>
           <Header title={person.name} />
           <IconButton
-            // className={classes.flag}
             sx={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
             color="inherit"
             aria-label="flag"
@@ -90,10 +60,7 @@ const person = ({ person, posts }) => {
         </div>
 
         {person.approved == "true" && (
-          <div
-            // className={classes.profile}
-            style={{ margin: "16px" }}
-          >
+          <div style={{ margin: "16px" }}>
             {person.bio !== "" && (
               <>
                 <Typography gutterBottom>Bio:</Typography>
@@ -109,11 +76,7 @@ const person = ({ person, posts }) => {
               </Typography>
             )}
             {Array.isArray(person.socials) && person.socials.length > 0 && (
-              <Typography
-                // className={classes.socials}
-                sx={{ display: "grid" }}
-                gutterBottom
-              >
+              <Typography sx={{ display: "grid" }} gutterBottom>
                 Socials:{" "}
                 {person.socials.map((social) => (
                   <Link

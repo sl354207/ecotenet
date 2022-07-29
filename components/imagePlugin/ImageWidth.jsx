@@ -1,17 +1,7 @@
 import { TextField } from "@mui/material";
 import { connectField } from "uniforms";
 
-// const useStyles = makeStyles(() => ({
-//   // field: {
-//   //   display: "flex",
-//   //   flexGrow: 1,
-//   //   marginBottom: 5,
-//   // },
-// }));
-
 function ImageWidth({ onChange, value }) {
-  // const classes = useStyles();
-
   return (
     <>
       <TextField
@@ -19,13 +9,9 @@ function ImageWidth({ onChange, value }) {
         label="Width"
         name="src"
         type="number"
-        // defaultValue={500}
-        // className={classes.field}
         sx={{ display: "flex", flexGrow: 1, marginBottom: "5px" }}
-        // style={{ width: "400px" }}
         value={value || ""}
         onChange={(e) => {
-          // console.log(typeof e.target.value);
           const width = Number(e.target.value);
           onChange(width);
         }}

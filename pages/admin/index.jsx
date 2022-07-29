@@ -13,37 +13,9 @@ import {
 import theme from "@utils/theme";
 import useSWR from "swr";
 
-// const useStyles = makeStyles((theme) => ({
-//   // root: {
-//   //   display: "flex",
-//   // },
-//   // content: {
-//   //   flexGrow: 1,
-//   //   padding: theme.spacing(3),
-//   // },
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-//   // buttonPost: {
-//   //   display: "flex",
-//   //   justifyContent: "start",
-//   //   textTransform: "none",
-//   //   border: `1px solid ${theme.palette.secondary.main}`,
-//   //   margin: "20px auto",
-//   //   borderRadius: "10px",
-//   // },
-//   // spacing: {
-//   //   marginTop: 20,
-//   // },
-//   // text: {
-//   //   textAlign: "center",
-//   // },
-// }));
-
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const admin = () => {
-  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   const { data: stats } = useSWR("/api/admin/stats", fetcher);
@@ -201,18 +173,12 @@ const admin = () => {
         color="secondary"
         size={100}
         disableShrink={true}
-        // className={classes.progress}
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
   } else if (Array.isArray(posts) && posts.length == 0) {
     list = (
-      <Typography
-        variant="h6"
-        align="center"
-        // className={classes.header}
-        sx={{ marginTop: "20px" }}
-      >
+      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
         no results
       </Typography>
     );
@@ -231,7 +197,6 @@ const admin = () => {
               <>
                 <ListItem
                   key={post._id}
-                  // className={classes.buttonPost}
                   sx={{
                     display: "flex",
                     justifyContent: "start",
@@ -241,18 +206,8 @@ const admin = () => {
                     borderRadius: "10px",
                   }}
                 >
-                  <Grid
-                    container
-                    spacing={1}
-                    // className={classes.spacing}
-                    sx={{ marginTop: "20px" }}
-                  >
-                    <Grid
-                      item
-                      xs={4}
-                      // className={classes.text}
-                      sx={{ textAlign: "center" }}
-                    >
+                  <Grid container spacing={1} sx={{ marginTop: "20px" }}>
+                    <Grid item xs={4} sx={{ textAlign: "center" }}>
                       <Link
                         href="/privacy"
                         target="_blank"
@@ -371,15 +326,9 @@ const admin = () => {
   }
 
   return (
-    <div
-      // className={classes.root}
-      style={{ display: "flex" }}
-    >
+    <div style={{ display: "flex" }}>
       <AdminDrawer />
-      <div
-        // className={classes.content}
-        style={{ flexGrow: 1, padding: theme.spacing(3) }}
-      >
+      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
         <Header title="Stats" />
         {statSection}
         <Header title="Feature Candidates" />

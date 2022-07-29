@@ -1,13 +1,12 @@
 import Layout from "@components/Layout";
 import { UserProvider } from "@components/UserContext";
-// import CssBaseline from "@mui/material/CssBaseline";
-// import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
+
 import "@styles/globals.css";
-// import theme from "@utils/theme";
+
 import { SessionProvider } from "next-auth/react";
-// import Head from "next/head";
+
 import { useRouter } from "next/router";
-// import PropTypes from "prop-types";
+
 import { useEffect, useState } from "react";
 
 import { CacheProvider } from "@emotion/react";

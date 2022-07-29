@@ -4,34 +4,6 @@ import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
 const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
-// const useStyles = makeStyles(() => ({
-//   // image: {
-//   //   width: "100%",
-//   //   display: "grid",
-//   //   justifyContent: "center",
-//   //   position: "relative",
-//   // },
-//   // placeholder: {
-//   //   position: "relative",
-//   //   width: "100%",
-//   //   textAlign: "center",
-//   // },
-//   // icon: {
-//   //   width: "100%",
-//   //   height: "auto",
-//   //   padding: "0",
-//   //   color: "#aaa",
-//   //   textAlign: "center",
-//   //   minWidth: 64,
-//   //   minHeight: 64,
-//   //   maxHeight: 256,
-//   // },
-//   // border: {
-//   //   border: "2px solid #ffa726",
-//   //   borderRadius: 4,
-//   // },
-// }));
-
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
   // console.log(data);
@@ -52,17 +24,8 @@ const ImageRender = ({ data, preview }) => {
     }
   };
 
-  // const classes = useStyles();
   return (
     <div
-      // className={
-      //   data.image.url &&
-      //   data.image.url.startsWith("blob:") &&
-      //   data.image.saved == false &&
-      //   !preview
-      //     ? classes.border
-      //     : null
-      // }
       style={
         data.image.url &&
         data.image.url.startsWith("blob:") &&
@@ -76,7 +39,6 @@ const ImageRender = ({ data, preview }) => {
         <>
           {data.image.url.startsWith("https://eco-media-bucket.s3") ? (
             <div
-              // className={classes.image}
               style={{
                 width: "100%",
                 display: "grid",
@@ -112,8 +74,7 @@ const ImageRender = ({ data, preview }) => {
             </div>
           ) : (
             <div
-              // className={classes.image}
-              sx={{
+              style={{
                 width: "100%",
                 display: "grid",
                 justifyContent: "center",
@@ -235,11 +196,9 @@ const ImageRender = ({ data, preview }) => {
         </>
       ) : (
         <div
-          // className={classes.placeholder}
           style={{ position: "relative", width: "100%", textAlign: "center" }}
         >
           <ImageIcon
-            // className={classes.icon}
             sx={{
               width: "100%",
               height: "auto",

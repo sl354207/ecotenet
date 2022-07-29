@@ -5,28 +5,6 @@ import { Button, FormControl, InputLabel } from "@mui/material";
 import { updateComment } from "@utils/api-helpers";
 import { useState } from "react";
 
-// const useStyles = makeStyles(() => ({
-//   // buttonGroup: {
-//   //   display: "grid",
-//   //   margin: "auto 0px auto 20px",
-//   // },
-//   // buttonEdit: {
-//   //   margin: "4px 0px",
-//   //   minWidth: "fit-content",
-//   //   justifyContent: "start",
-//   // },
-//   // form: {
-//   //   flexGrow: 1,
-//   // },
-//   // text: {
-//   //   display: "flex",
-//   //   flexGrow: 1,
-//   // },
-//   // comment: {
-//   //   flexGrow: 1,
-//   // },
-// }));
-
 const DashboardComment = ({
   result,
   handleDeleteOpen,
@@ -35,8 +13,6 @@ const DashboardComment = ({
   setSnackbar,
   name,
 }) => {
-  // const classes = useStyles();
-
   const [commentValue, setCommentValue] = useState("");
 
   // update text input field
@@ -78,22 +54,13 @@ const DashboardComment = ({
   };
 
   return (
-    <div
-      // className={classes.comment}
-      style={{ flexGrow: 1 }}
-    >
+    <div style={{ flexGrow: 1 }}>
       <Link href={`/posts/${result.post_id}`} underline="hover">
         View Post
       </Link>{" "}
       {result.date} Approved: {result.approved}
-      <div
-        // className={classes.text}
-        style={{ display: "flex", flexGrow: 1 }}
-      >
-        <FormControl
-          // className={classes.form}
-          sx={{ flexGrow: 1 }}
-        >
+      <div style={{ display: "flex", flexGrow: 1 }}>
+        <FormControl sx={{ flexGrow: 1 }}>
           <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
           <TextBox
             defaultValue={result.text}
@@ -103,15 +70,11 @@ const DashboardComment = ({
             autoFocus={false}
           />
         </FormControl>
-        <div
-          // className={classes.buttonGroup}
-          style={{ display: "grid", margin: "auto 0px auto 20px" }}
-        >
+        <div style={{ display: "grid", margin: "auto 0px auto 20px" }}>
           {commentValue != "" ? (
             <Button
               variant="contained"
               color="secondary"
-              // className={classes.buttonEdit}
               sx={{
                 margin: "4px 0px",
                 minWidth: "fit-content",

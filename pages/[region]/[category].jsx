@@ -5,26 +5,13 @@ import SpeciesScroll from "@components/SpeciesScroll";
 import { Container, Typography } from "@mui/material";
 import { getPostsByCategoryAndRegion, getSpecies } from "@utils/mongodb";
 
-// const useStyles = makeStyles(() => ({
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-// }));
-
 const categoryList = ({ category, title }) => {
-  // const classes = useStyles();
-
   return (
     <>
       <Container>
         <Header title={title} />
         {category.length === 0 ? (
-          <Typography
-            variant="h6"
-            align="center"
-            // className={classes.header}
-            sx={{ marginTop: "20px" }}
-          >
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results
           </Typography>
         ) : (

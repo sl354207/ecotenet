@@ -7,39 +7,6 @@ import { alpha } from "@mui/material/styles";
 import theme from "@utils/theme";
 import CommentForm from "./CommentForm";
 
-// const useStyles = makeStyles((theme) => ({
-//   // comment: {
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   borderRadius: 4,
-//   //   marginBottom: 10,
-//   // },
-//   // reply: {
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   borderRadius: 4,
-//   //   marginLeft: 60,
-//   //   width: "auto",
-//   //   marginBottom: 10,
-//   // },
-//   // box: {
-//   //   display: "flex",
-//   //   alignItems: "center",
-//   //   flexGrow: 1,
-//   // },
-//   // content: {
-//   //   flexGrow: 1,
-//   // },
-//   // items: {
-//   //   display: "flex",
-//   // },
-//   // date: {
-//   //   marginLeft: 20,
-//   //   fontStyle: "italic",
-//   // },
-//   // flag: {
-//   //   marginLeft: 10,
-//   // },
-// }));
-
 //pass in comment and post id from comments
 const Comment = ({
   comment,
@@ -48,32 +15,20 @@ const Comment = ({
   handleOpenFlag,
   handleReply,
 }) => {
-  // const classes = useStyles();
-
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
     return (
       <>
         <ListItem
-          // className={classes.comment}
           sx={{
             border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
             borderRadius: "4px",
             marginBottom: "10px",
           }}
         >
-          <div
-            // className={classes.box}
-            style={{ display: "flex", alignItems: "center", flexGrow: 1 }}
-          >
-            <div
-              // className={classes.content}
-              style={{ flexGrow: 1 }}
-            >
-              <div
-                // className={classes.items}
-                style={{ display: "flex" }}
-              >
+          <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+            <div style={{ flexGrow: 1 }}>
+              <div style={{ display: "flex" }}>
                 <Typography align="center" variant="body1">
                   <Link
                     href={`/person/${comment.name}`}
@@ -84,7 +39,6 @@ const Comment = ({
                   </Link>
                 </Typography>
                 <Typography
-                  // className={classes.date}
                   sx={{ marginLeft: "20px", fontStyle: "italic" }}
                   align="left"
                   variant="body1"
@@ -121,7 +75,6 @@ const Comment = ({
               </>
             )}
             <IconButton
-              // className={classes.flag}
               sx={{ marginLeft: "10px" }}
               color="inherit"
               aria-label="flag"
@@ -143,7 +96,6 @@ const Comment = ({
   } else {
     return (
       <ListItem
-        // className={classes.reply}
         sx={{
           border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
           borderRadius: "4px",
@@ -152,18 +104,9 @@ const Comment = ({
           marginBottom: "10px",
         }}
       >
-        <div
-          // className={classes.box}
-          style={{ display: "flex", alignItems: "center", flexGrow: 1 }}
-        >
-          <div
-            // className={classes.content}
-            style={{ flexGrow: 1 }}
-          >
-            <div
-              // className={classes.items}
-              style={{ display: "flex" }}
-            >
+        <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+          <div style={{ flexGrow: 1 }}>
+            <div style={{ display: "flex" }}>
               <Typography align="center" variant="body1">
                 <Link
                   href={`/person/${comment.name}`}

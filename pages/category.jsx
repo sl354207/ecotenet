@@ -3,15 +3,7 @@ import Footer from "@components/Footer";
 import Header from "@components/Header";
 import { Container, Typography } from "@mui/material";
 
-// const useStyles = makeStyles(() => ({
-//   // spacer: {
-//   //   marginBottom: 10,
-//   // },
-// }));
-
 const category = () => {
-  // const classes = useStyles();
-
   return (
     <>
       <Container>

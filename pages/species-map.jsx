@@ -13,100 +13,6 @@ import {
 import { alpha, useTheme } from "@mui/material/styles";
 import { useReducer, useState } from "react";
 
-// const SuccessAuto = styled(Autocomplete)(({ theme }) => ({
-//   position: "relative",
-//   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: theme.palette.primary.light,
-//   "&:focus-within": {
-//     backgroundColor: theme.palette.primary.light,
-//     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//     borderRadius: theme.shape.borderRadius,
-//   },
-//   marginTop: 20,
-//   marginBottom: 20,
-//   marginLeft: theme.spacing(1),
-//   width: "auto",
-//   "& .MuiAutocomplete-paper": {
-//     marginTop: 4,
-//     backgroundColor: theme.palette.primary.light,
-//   },
-// }));
-
-// const useStyles = makeStyles((theme) => ({
-//   // search: {
-//   //   position: "relative",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   borderRadius: theme.shape.borderRadius,
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   "&:focus-within": {
-//   //     backgroundColor: theme.palette.primary.light,
-//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //     borderRadius: theme.shape.borderRadius,
-//   //   },
-//   //   marginTop: 20,
-//   //   marginBottom: 20,
-//   //   marginLeft: theme.spacing(1),
-//   //   width: "auto",
-//   // },
-//   // root: {
-//   //   color: theme.palette.text.primary,
-//   //   "& .MuiOutlinedInput-root": {
-//   //     "& fieldset": {
-//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //     },
-//   //     "&:hover fieldset": {
-//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //     },
-//   //     "&.Mui-focused fieldset": {
-//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //     },
-//   //   },
-//   // },
-//   // popper: {
-//   //   marginTop: 4,
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // delete: {
-//   //   WebkitTapHighlightColor: "transparent",
-//   //   color: theme.palette.secondary.main,
-//   //   height: 22,
-//   //   width: 22,
-//   //   cursor: "pointer",
-//   //   margin: "0 5px 0 -6px",
-//   //   "&:hover": {
-//   //     color: alpha(theme.palette.secondary.main, 0.7),
-//   //   },
-//   // },
-//   // chip: {
-//   //   borderWidth: 2,
-//   //   color: theme.palette.text.primary,
-//   //   height: 40,
-//   //   margin: "0px 5px 10px 5px",
-//   // },
-//   // hidden: {
-//   //   visibility: "hidden",
-//   // },
-//   // mobile: {
-//   //   display: "inline-grid",
-//   // },
-//   // outline1: {
-//   //   borderColor: "#ff00ff",
-//   // },
-//   // outline2: {
-//   //   borderColor: "#ffff00",
-//   // },
-//   // outline3: {
-//   //   borderColor: "#00ffff",
-//   // },
-//   // descriptionMargin: {
-//   //   marginLeft: 10,
-//   // },
-//   // note: {
-//   //   marginTop: 10,
-//   // },
-// }));
-
 const speciesChips = [
   { count: 0 },
   {
@@ -214,7 +120,6 @@ const reducer = (speciesChips, action) => {
 };
 
 const speciesMap = () => {
-  // const classes = useStyles();
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -303,11 +208,8 @@ const speciesMap = () => {
         distribution on the map. A maximum of three species can be mapped at the
         same time"
           align="left"
-          // className={classes.descriptionMargin}
         />
         <Autocomplete
-          // className={classes.search}
-          // classes={{ paper: classes.popper }}
           sx={{
             position: "relative",
             border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
@@ -320,7 +222,7 @@ const speciesMap = () => {
             },
             marginTop: 4,
             marginBottom: 1,
-            // marginLeft: theme.spacing(1),
+
             width: "auto",
           }}
           autoHighlight
@@ -344,9 +246,6 @@ const speciesMap = () => {
               {...params}
               placeholder="Search…"
               variant="outlined"
-              // classes={{
-              //   root: classes.root,
-              // }}
               sx={{
                 color: theme.palette.text.primary,
                 borderRadius: "4px",
@@ -387,10 +286,6 @@ const speciesMap = () => {
                 label={`${state[1].scientific_name} - ${state[1].common_name}`}
                 onDelete={() => handleRemoveChip(1)}
                 variant="outlined"
-                // className={`${classes.outline1} ${classes.chip}`}
-                // classes={{
-                //   deleteIcon: classes.delete,
-                // }}
                 sx={{
                   borderWidth: 2,
                   color: theme.palette.text.primary,
@@ -411,10 +306,7 @@ const speciesMap = () => {
                 }}
               ></Chip>
             ) : (
-              <Chip
-                // className={classes.hidden}
-                sx={{ visibility: "hidden" }}
-              ></Chip>
+              <Chip sx={{ visibility: "hidden" }}></Chip>
             )}
             {Array.isArray(state[2].regions) && state[2].regions.length ? (
               <Chip
@@ -558,12 +450,7 @@ const speciesMap = () => {
         )}
 
         <MapSpecies clickInfo={clickInfo} state={state} />
-        <Typography
-          variant="subtitle2"
-          align="left"
-          // className={classes.note}
-          sx={{ marginTop: "10px" }}
-        >
+        <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
           *A species distribution often does not align perfectly with ecoregion
           boundaries, therefore a species may not be present throughout the
           entire ecoregion but only in specific areas. A species may also be

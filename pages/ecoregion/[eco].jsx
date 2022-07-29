@@ -14,47 +14,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-// const useStyles = makeStyles((theme) => ({
-//   // tableRow: {
-//   //   backgroundColor: "#001e3c!important",
-//   //   textAlign: "center",
-//   //   color: "#ffffff!important",
-//   // },
-//   // table: {
-//   //   [theme.breakpoints.down("sm")]: {
-//   //     margin: "auto",
-//   //     float: "none",
-//   //   },
-//   //   float: "right",
-//   //   border: "thin solid",
-//   //   marginLeft: 10,
-//   // },
-//   // description: {
-//   //   marginBottom: 40,
-//   // },
-//   // flagBox: {
-//   //   display: "flex",
-//   //   justifyContent: "center",
-//   // },
-//   // spacer: {
-//   //   display: "flex",
-//   //   marginRight: "auto",
-//   //   visibility: "hidden",
-//   //   minWidth: 30,
-//   // },
-//   // flag: {
-//   //   display: "flex",
-//   //   marginLeft: "auto",
-//   //   marginTop: "auto",
-//   //   marginBottom: "auto",
-//   // },
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-// }));
-
 const eco = ({ wiki, ecoName, id }) => {
-  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
   // console.log(userName);
@@ -131,7 +91,6 @@ const eco = ({ wiki, ecoName, id }) => {
         return (
           <table
             {...props}
-            // className={classes.table}
             style={{
               [theme.breakpoints.down("sm")]: {
                 margin: "auto",
@@ -151,7 +110,6 @@ const eco = ({ wiki, ecoName, id }) => {
         return (
           <th
             {...props}
-            // className={classes.tableRow}
             style={{
               backgroundColor: "#001e3c!important",
               textAlign: "center",
@@ -227,12 +185,8 @@ const eco = ({ wiki, ecoName, id }) => {
   return (
     <>
       <Container>
-        <div
-          // className={classes.flagBox}
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
-            // className={classes.spacer}
             style={{
               display: "flex",
               marginRight: "auto",
@@ -242,11 +196,9 @@ const eco = ({ wiki, ecoName, id }) => {
           ></div>
           <Header
             title={`Eco-${id}: ${ecoName}`}
-            // className={classes.description}
             sx={{ marginBottom: "40px" }}
           />
           <IconButton
-            // className={classes.flag}
             sx={{
               display: "flex",
               marginLeft: "auto",
@@ -263,12 +215,7 @@ const eco = ({ wiki, ecoName, id }) => {
         </div>
 
         {!wiki ? (
-          <Typography
-            variant="h6"
-            align="justify"
-            // className={classes.header}
-            sx={{ marginTop: 20 }}
-          >
+          <Typography variant="h6" align="justify" sx={{ marginTop: 20 }}>
             We currently don't have a summary of this ecoregion. If you want to
             help us out you can create a wikipedia page for the ecoregion.
           </Typography>

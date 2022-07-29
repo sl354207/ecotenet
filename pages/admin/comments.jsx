@@ -15,56 +15,9 @@ import { alpha, useTheme } from "@mui/material/styles";
 import { useState } from "react";
 import useSWR from "swr";
 
-// const useStyles = makeStyles((theme) => ({
-//   // root: {
-//   //   display: "flex",
-//   // },
-//   // content: {
-//   //   flexGrow: 1,
-//   //   padding: theme.spacing(3),
-//   // },
-//   // progress: {
-//   //   margin: "100px auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-//   // buttonPost: {
-//   //   display: "flex",
-//   //   justifyContent: "start",
-//   //   textTransform: "none",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //   margin: "20px auto",
-//   //   borderRadius: "10px",
-//   // },
-//   // mobile: {
-//   //   display: "grid",
-//   // },
-//   // desktop: {
-//   //   marginTop: 4,
-//   // },
-//   // button: {
-//   //   marginLeft: 4,
-//   // },
-//   // delete: {
-//   //   color: "#fc7ebf",
-//   //   borderColor: "#fc7ebf",
-//   // },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // comment: {
-//   //   display: "flow-root",
-//   //   flexGrow: 1,
-//   // },
-// }));
-
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminComments = () => {
-  // const classes = useStyles();
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -99,12 +52,7 @@ const adminComments = () => {
     );
   } else if (Array.isArray(results) && results.length == 0) {
     list = (
-      <Typography
-        variant="h6"
-        align="center"
-        // className={classes.header}
-        sx={{ marginTop: "20px" }}
-      >
+      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
         no results
       </Typography>
     );
@@ -132,10 +80,7 @@ const adminComments = () => {
                 </div>
 
                 {isMobile ? (
-                  <div
-                    // className={classes.mobile}
-                    style={{ display: "grid" }}
-                  >
+                  <div style={{ display: "grid" }}>
                     <Button
                       variant="outlined"
                       color="secondary"
@@ -158,7 +103,6 @@ const adminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      // className={`${classes.desktop} ${classes.delete}`}
                       sx={{
                         marginTop: "4px",
                         color: "#fc7ebf",
@@ -185,7 +129,6 @@ const adminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      // className={classes.button}
                       sx={{ marginLeft: "4px" }}
                       onClick={() =>
                         handleOpenDialog("Deny", "Comment", result)
@@ -196,7 +139,6 @@ const adminComments = () => {
                     <Button
                       variant="outlined"
                       color="secondary"
-                      // className={`${classes.button} ${classes.delete}`}
                       sx={{
                         marginLeft: "4px",
                         marginTop: "4px",
@@ -220,15 +162,9 @@ const adminComments = () => {
   }
 
   return (
-    <div
-      // className={classes.root}
-      style={{ display: "flex" }}
-    >
+    <div style={{ display: "flex" }}>
       <AdminDrawer />
-      <div
-        // className={classes.content}
-        style={{ flexGrow: 1, padding: theme.spacing(3) }}
-      >
+      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
         <Header title="Comments" />
         {list}
         <AdminDialog
@@ -236,7 +172,6 @@ const adminComments = () => {
           action={action.action}
           open={dialog}
           handleClose={handleCloseDialog}
-          // className={classes.dialog}
           result={item}
           mutate={mutate}
         />

@@ -24,87 +24,6 @@ import { createFilterOptions } from "@mui/material/useAutocomplete";
 import theme from "@utils/theme";
 import { useState } from "react";
 
-// const useStyles = makeStyles((theme) => ({
-//   // search: {
-//   //   position: "relative",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   borderRadius: theme.shape.borderRadius,
-//   //   backgroundColor: theme.palette.primary.main,
-//   //   "&:focus-within": {
-//   //     backgroundColor: theme.palette.primary.main,
-//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //     borderRadius: theme.shape.borderRadius,
-//   //   },
-//   //   marginTop: 6,
-//   //   marginBottom: 10,
-//   //   width: "auto",
-//   // },
-//   // root: {
-//   //   color: theme.palette.text.primary,
-//   // },
-//   // input: {
-//   //   padding: 18,
-//   // },
-//   // select: {
-//   //   color: theme.palette.text.primary,
-//   //   "& .MuiOutlinedInput-root": {
-//   //     "&:hover fieldset": {
-//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //       border: "none",
-//   //     },
-//   //     "&.Mui-focused fieldset": {
-//   //       border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //     },
-//   //   },
-//   // },
-//   // popper: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // form: {
-//   //   display: "flex",
-//   //   flexGrow: 1,
-//   //   marginBottom: 12,
-//   // },
-//   // label: {
-//   //   color: `${theme.palette.text.primary}!important`,
-//   //   position: "relative",
-//   //   transform: "none",
-//   // },
-//   // delete: {
-//   //   WebkitTapHighlightColor: "transparent",
-//   //   color: theme.palette.secondary.main,
-//   //   height: 22,
-//   //   width: 22,
-//   //   cursor: "pointer",
-//   //   margin: "0 5px 0 -6px",
-//   //   "&:hover": {
-//   //     color: alpha(theme.palette.secondary.main, 0.7),
-//   //   },
-//   // },
-//   // chip: {
-//   //   borderColor: theme.palette.secondary.main,
-//   //   borderWidth: 2,
-//   //   color: theme.palette.text.primary,
-//   //   height: 40,
-//   //   margin: "0px 5px 10px 5px",
-//   // },
-//   // groupLabel: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   color: alpha(theme.palette.text.primary, 0.6),
-//   // },
-//   // noOptions: {
-//   //   color: alpha(theme.palette.text.primary, 0.6),
-//   // },
-//   // helper: {
-//   //   color: theme.palette.text.primary,
-//   // },
-//   // required: {
-//   //   marginTop: 20,
-//   //   marginLeft: 10,
-//   //   marginBottom: 20,
-//   // },
-// }));
-
 //pass in and destructure props.
 const PostDetails = ({
   handleDetailChange,
@@ -112,8 +31,6 @@ const PostDetails = ({
   setDetails,
   handleRemoveChip,
 }) => {
-  // const classes = useStyles();
-
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -141,7 +58,6 @@ const PostDetails = ({
       <Typography
         variant="body1"
         align="left"
-        // className={classes.required}
         sx={{ marginTop: "20px", marginBottom: "20px" }}
       >
         *denotes required field
@@ -149,7 +65,6 @@ const PostDetails = ({
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <FormControl
-            // className={classes.form}
             sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
             required
           >
@@ -179,10 +94,7 @@ const PostDetails = ({
               rows={2}
               inputProps={{ maxLength: 160 }}
             />
-            <FormHelperText
-              // className={classes.helper}
-              sx={{ color: theme.palette.text.primary }}
-            >
+            <FormHelperText sx={{ color: theme.palette.text.primary }}>
               Helps with search functionality
             </FormHelperText>
           </FormControl>
@@ -195,14 +107,6 @@ const PostDetails = ({
             <InputLabel htmlFor="category">Category:</InputLabel>
 
             <Autocomplete
-              // className={classes.search}
-              // classes={
-              //   {
-              //     // paper: classes.popper,
-              //     // groupLabel: classes.groupLabel,
-              //     // noOptions: classes.noOptions,
-              //   }
-              // }
               sx={{
                 position: "relative",
                 border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
@@ -213,8 +117,7 @@ const PostDetails = ({
                   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
                   borderRadius: "4px",
                 },
-                // marginTop: 6,
-                // marginBottom: 10,
+
                 width: "auto",
               }}
               ListboxProps={{
@@ -266,9 +169,6 @@ const PostDetails = ({
                   {...params}
                   placeholder="Select category"
                   variant="outlined"
-                  // classes={{
-                  //   root: classes.select,
-                  // }}
                   sx={{
                     color: theme.palette.text.primary,
                     border: `1px solid ${alpha(
@@ -333,8 +233,6 @@ const PostDetails = ({
           >
             <InputLabel htmlFor="keywords">Keywords:</InputLabel>
             <Autocomplete
-              // className={classes.search}
-              // classes={{ paper: classes.popper }}
               sx={{
                 position: "relative",
                 border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
@@ -345,8 +243,7 @@ const PostDetails = ({
                   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
                   borderRadius: "4px",
                 },
-                // marginTop: 6,
-                // marginBottom: 10,
+
                 width: "auto",
               }}
               autoHighlight
@@ -387,10 +284,6 @@ const PostDetails = ({
                 <InputBase
                   {...params}
                   placeholder="Add keywords"
-                  // classes={{
-                  //   root: classes.root,
-                  //   input: classes.input,
-                  // }}
                   sx={{
                     "& .MuiInputBase-input": {
                       padding: "18px 9px 17px 9px",
@@ -401,10 +294,7 @@ const PostDetails = ({
                 />
               )}
             />
-            <FormHelperText
-              // className={classes.helper}
-              sx={{ color: theme.palette.text.primary }}
-            >
+            <FormHelperText sx={{ color: theme.palette.text.primary }}>
               Helps with search functionality (3 max)
             </FormHelperText>
           </FormControl>
@@ -413,10 +303,6 @@ const PostDetails = ({
               <Chip
                 label={tag}
                 variant="outlined"
-                // className={classes.chip}
-                // classes={{
-                //   deleteIcon: classes.delete,
-                // }}
                 sx={{
                   borderColor: theme.palette.secondary.main,
                   borderWidth: 2,

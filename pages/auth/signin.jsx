@@ -4,7 +4,7 @@ import Header from "@components/Header";
 import VerificationStep from "@components/VerificationStep";
 import { Container } from "@mui/material";
 import { getProviders, getSession } from "next-auth/react";
-// import { getProviders, getSession } from "next-auth/client";
+
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
 

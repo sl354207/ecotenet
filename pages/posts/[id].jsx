@@ -36,57 +36,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 
-// const useStyles = makeStyles((theme) => ({
-//   // box: {
-//   //   display: "flex",
-//   //   justifyContent: "center",
-//   //   alignItems: "center",
-//   // },
-//   // content: {
-//   //   flexDirection: "column",
-//   //   maxWidth: 800,
-//   //   flexGrow: 1,
-//   //   marginLeft: 20,
-//   // },
-//   // items: {
-//   //   display: "flex",
-//   // },
-//   // date: {
-//   //   marginLeft: 20,
-//   //   fontStyle: "italic",
-//   // },
-//   // container: {
-//   //   backgroundColor: theme.palette.primary.main,
-//   // },
-//   // comments: {
-//   //   marginTop: 20,
-//   // },
-//   dialog: {
-//     backgroundColor: theme.palette.primary.light,
-//   },
-//   // flagBox: {
-//   //   display: "flex",
-//   //   justifyContent: "center",
-//   // },
-//   // spacer: {
-//   //   display: "flex",
-//   //   marginRight: "auto",
-//   //   visibility: "hidden",
-//   //   minWidth: 30,
-//   // },
-//   // flag: {
-//   //   display: "flex",
-//   //   marginLeft: "auto",
-//   //   marginTop: "auto",
-//   // },
-// }));
-
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post, comments }) => {
-  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -252,16 +206,9 @@ const post = ({ post, comments }) => {
 
   return (
     <>
-      <Container
-        // className={classes.container}
-        sx={{ backgroundColor: theme.palette.primary.main }}
-      >
-        <div
-          // className={classes.flagBox}
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+      <Container sx={{ backgroundColor: theme.palette.primary.main }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
-            // className={classes.spacer}
             style={{
               display: "flex",
               marginRight: "auto",
@@ -271,7 +218,6 @@ const post = ({ post, comments }) => {
           ></div>
           <Header title={post.title} />
           <div
-            // className={classes.flag}
             style={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
           >
             {user && user.role === "admin" && (
@@ -285,7 +231,6 @@ const post = ({ post, comments }) => {
             )}
 
             <IconButton
-              // className={classes.flag}
               sx={{ marginLeft: 2 }}
               color="inherit"
               aria-label="flag"
@@ -297,7 +242,6 @@ const post = ({ post, comments }) => {
           </div>
         </div>
         <div
-          // className={classes.box}
           style={{
             display: "flex",
             justifyContent: "center",
@@ -305,7 +249,6 @@ const post = ({ post, comments }) => {
           }}
         >
           <div
-            // className={classes.content}
             style={{
               flexDirection: "column",
               maxWidth: "800px",
@@ -313,10 +256,7 @@ const post = ({ post, comments }) => {
               marginLeft: "20px",
             }}
           >
-            <div
-              // className={classes.items}
-              style={{ display: "flex" }}
-            >
+            <div style={{ display: "flex" }}>
               <Typography align="center" variant="h6">
                 <Link
                   href={`/person/${post.name}`}
@@ -327,7 +267,6 @@ const post = ({ post, comments }) => {
                 </Link>
               </Typography>
               <Typography
-                // className={classes.date}
                 sx={{ marginLeft: "20px", fontStyle: "italic" }}
                 align="left"
                 variant="h6"
@@ -367,11 +306,7 @@ const post = ({ post, comments }) => {
           />
         </EditorLayout>
         <Divider />
-        <Typography
-          variant="h6"
-          // className={classes.comments}
-          sx={{ marginTop: "20px" }}
-        >
+        <Typography variant="h6" sx={{ marginTop: "20px" }}>
           Comments:
         </Typography>
         <CommentList
@@ -389,7 +324,6 @@ const post = ({ post, comments }) => {
         contentType={action}
         open={dialog}
         handleClose={handleCloseDialog}
-        // className={classes.dialog}
         post_id={post._id}
         result={item}
         closeForm={closeForm}

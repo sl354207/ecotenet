@@ -46,64 +46,7 @@ function a11yProps(index) {
   };
 }
 
-// const useStyles = makeStyles((theme) => ({
-//   // tab: {
-//   //   flexGrow: 1,
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   margin: 20,
-//   //   minHeight: 80,
-//   //   borderRadius: "10px",
-//   //   "&:hover": {
-//   //     color: theme.text,
-//   //     opacity: 1,
-//   //   },
-//   // },
-//   // input: {
-//   //   position: "relative",
-//   //   backgroundColor: theme.palette.primary.main,
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   borderRadius: 4,
-//   //   display: "flex",
-//   //   padding: "10px 10px",
-//   //   flexGrow: 1,
-//   //   "&:focus-within": {
-//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //     flexGrow: 1,
-//   //   },
-//   // },
-//   // toggleGroup: {
-//   //   display: "flex",
-//   //   flexWrap: "wrap",
-//   //   justifyContent: "center",
-//   // },
-//   // toggle: {
-//   //   color: "rgba(255, 255, 255, 0.7)",
-//   //   padding: "30px!important",
-//   //   marginInline: "20px!important",
-//   //   marginBlock: "10px!important",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}!important`,
-//   //   borderRadius: "4px!important",
-//   // },
-//   // selected: {
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}!important`,
-//   //   borderRadius: "4px!important",
-//   // },
-//   // button: {
-//   //   display: "flex",
-//   //   margin: "auto",
-//   //   marginTop: 10,
-//   //   minWidth: 300,
-//   // },
-//   // progress: {
-//   //   marginInline: "auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-// }));
-
 const DonateForm = () => {
-  // const classes = useStyles();
-
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(5.0);
@@ -236,7 +179,6 @@ const DonateForm = () => {
         textColor="inherit"
       >
         <Tab
-          // className={classes.tab}
           sx={{
             flexGrow: 1,
             backgroundColor: theme.palette.primary.light,
@@ -275,17 +217,12 @@ const DonateForm = () => {
             value={monthly.amount}
             exclusive
             onChange={handleMonthlyChange}
-            // className={classes.toggleGroup}
             sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
             aria-label="text alignment"
           >
             <ToggleButton
               value={2.0}
               aria-label="left aligned"
-              // className={classes.toggle}
-              // classes={{
-              //   selected: classes.selected,
-              // }}
               sx={{
                 color: "rgba(255, 255, 255, 0.7)",
                 padding: "30px!important",
@@ -432,7 +369,6 @@ const DonateForm = () => {
             <CircularProgress
               color="secondary"
               disableShrink={true}
-              // className={classes.progress}
               sx={{
                 marginInline: "auto",
                 display: "flex",
@@ -445,7 +381,6 @@ const DonateForm = () => {
               color="secondary"
               type="submit"
               disabled={loading}
-              // className={classes.button}
               sx={{
                 display: "flex",
                 margin: "auto",
@@ -465,7 +400,6 @@ const DonateForm = () => {
             {formatAmountForDisplay(1000.0, "usd")}):
           </label>
           <Input
-            // className={classes.input}
             sx={{
               position: "relative",
               backgroundColor: theme.palette.primary.main,

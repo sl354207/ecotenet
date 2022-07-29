@@ -11,40 +11,8 @@ import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
 
-// const useStyles = makeStyles((theme) => ({
-//   // stepLabel: {
-//   //   "& .MuiStepLabel-label": {
-//   //     color: alpha(theme.palette.text.primary, 0.7),
-//   //   },
-//   //   "& .MuiStepLabel-active": {
-//   //     color: theme.palette.text.primary,
-//   //   },
-//   //   "& .MuiStepIcon-active": {
-//   //     color: `${theme.palette.secondary.dark}!important`,
-//   //   },
-//   //   "& .MuiStepIcon-root": {
-//   //     color: alpha(theme.palette.secondary.dark, 0.4),
-//   //   },
-//   // },
-//   // stepper: {
-//   //   backgroundColor: theme.palette.primary.dark,
-//   // },
-//   // stepNav: {
-//   //   display: "flex",
-//   //   justifyContent: "space-around",
-//   //   marginBottom: 20,
-//   // },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // link: {
-//   //   marginLeft: 10,
-//   // },
-// }));
-
 // pass in post and url path as props
 const StepForm = ({ post, user }) => {
-  // const classes = useStyles();
   const router = useRouter();
 
   const { title, description, category, tags, ecoregions } = post;
@@ -196,7 +164,6 @@ const StepForm = ({ post, user }) => {
           // add back in when ready  formErrors={formErrors}
           <>
             <div
-              // className={classes.stepNav}
               style={{
                 display: "flex",
                 justifyContent: "space-around",
@@ -487,7 +454,6 @@ const StepForm = ({ post, user }) => {
         alternativeLabel
         nonLinear
         activeStep={activeStep}
-        // className={classes.stepper}
         sx={{ backgroundColor: theme.palette.primary.dark, padding: "24px" }}
       >
         <Step>
@@ -559,7 +525,6 @@ const StepForm = ({ post, user }) => {
         action={action.action}
         open={dialog}
         handleClose={handleCloseDialog}
-        // className={classes.dialog}
         result={item}
         snackbar={snackbar}
         setSnackbar={setSnackbar}

@@ -7,35 +7,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-// const useStyles = makeStyles((theme) => ({
-//   // profile: {
-//   //   margin: 16,
-//   // },
-//   // socials: {
-//   //   display: "grid",
-//   // },
-//   // progress: {
-//   //   margin: "100px auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-//   // button: {
-//   //   marginLeft: 4,
-//   // },
-//   // delete: {
-//   //   color: "#fc7ebf",
-//   //   borderColor: "#fc7ebf",
-//   // },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-// }));
-
 const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = () => {
-  // const classes = useStyles();
-
   const router = useRouter();
 
   const name = router.query.name;
@@ -99,7 +73,6 @@ const person = () => {
         <Button
           variant="outlined"
           color="secondary"
-          // className={classes.button}
           sx={{ marginLeft: "4px" }}
           onClick={() => handleOpenDialog("Deny", "Person", results)}
         >
@@ -108,17 +81,13 @@ const person = () => {
         <Button
           variant="outlined"
           color="secondary"
-          // className={`${classes.button} ${classes.delete}`}
           sx={{ marginLeft: "4px", color: "#fc7ebf", borderColor: "#fc7ebf" }}
           onClick={() => handleOpenDialog("Delete", "Person", results)}
         >
           Delete
         </Button>
         {/* {results.approved == "true" && ( */}
-        <div
-          // className={classes.profile}
-          style={{ margin: "16px" }}
-        >
+        <div style={{ margin: "16px" }}>
           {results.bio !== "" && (
             <>
               <Typography gutterBottom>Bio:</Typography>
@@ -133,11 +102,7 @@ const person = () => {
             </Typography>
           )}
           {Array.isArray(results.socials) && results.socials.length > 0 && (
-            <Typography
-              // className={classes.socials}
-              sx={{ display: "grid" }}
-              gutterBottom
-            >
+            <Typography sx={{ display: "grid" }} gutterBottom>
               Socials:{" "}
               {results.socials.map((social) => (
                 <Link
@@ -168,7 +133,6 @@ const person = () => {
           action={action.action}
           open={dialog}
           handleClose={handleCloseDialog}
-          // className={classes.dialog}
           result={item}
         />
         <Resolve

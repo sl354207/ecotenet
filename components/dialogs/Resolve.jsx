@@ -16,27 +16,7 @@ import {
 import { createNotification, updateFlag } from "@utils/api-helpers";
 import { useRef, useState } from "react";
 
-// const useStyles = makeStyles(() => ({
-//   // comment: {
-//   //   display: "flex",
-//   //   alignItems: "center",
-//   // },
-//   // form: {
-//   //   flexGrow: 1,
-//   // },
-//   // addition: {
-//   //   display: "block",
-//   // },
-//   // info: {
-//   //   padding: "5px 0px 10px 0px",
-//   // },
-//   // button: {
-//   //   marginTop: 18,
-//   // },
-// }));
-
 const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
-  // const classes = useStyles();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [addInfo, setAddInfo] = useState("");
@@ -133,24 +113,16 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
         <Button
           variant="outlined"
           color="secondary"
-          // className={classes.button}
           sx={{ marginTop: "18px" }}
           onClick={() => setShowForm(!showForm)}
           endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         >
           Add Info
         </Button>
-        <div
-          // className={classes.addition}
-          style={{ display: "block" }}
-          disableGutters
-        >
+        <div style={{ display: "block" }} disablegutters="true">
           {showForm ? (
             <Portal container={container.current}>
-              <FormControl
-                // className={classes.form}
-                sx={{ flexGrow: 1 }}
-              >
+              <FormControl sx={{ flexGrow: 1 }}>
                 <InputLabel shrink htmlFor="commentform"></InputLabel>
                 <TextBox
                   id="info"
@@ -158,7 +130,6 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
                   defaultValue=""
                   placeHolder="additional comment on notification"
                   rows={1}
-                  // className={classes.info}
                   autoFocus={false}
                   name="info"
                 />
@@ -168,7 +139,6 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
 
           <div
             ref={container}
-            // className={classes.comment}
             style={{ display: "flex", alignItems: "center" }}
           />
         </div>

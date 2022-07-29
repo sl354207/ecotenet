@@ -4,15 +4,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-// const useStyles = makeStyles(() => ({
-//   // popup: {
-//   //   display: "grid",
-//   // },
-// }));
-
 const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  // const classes = useStyles();
 
   // base layer
   const ecoFill = {

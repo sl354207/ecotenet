@@ -6,17 +6,7 @@ export const SnackbarContext = createContext();
 
 export const useSnackbarContext = () => useContext(SnackbarContext);
 
-// const useStyles = makeStyles((theme) => ({
-//   // origin: {
-//   //   marginTop: 400,
-//   //   [theme.breakpoints.up("sm")]: {
-//   //     marginTop: 300,
-//   //   },
-//   // },
-// }));
-
 export const SnackbarProvider = ({ children }) => {
-  // const classes = useStyles();
   const [snackbar, setSnackbar] = useState({
     open: false,
     severity: "success",
@@ -38,9 +28,6 @@ export const SnackbarProvider = ({ children }) => {
     <SnackbarContext.Provider value={{ snackbar, setSnackbar }}>
       {children}
       <Snackbar
-        // classes={
-        //   snackbar.class ? { anchorOriginTopCenter: classes.origin } : {}
-        // }
         sx={
           snackbar.class
             ? {

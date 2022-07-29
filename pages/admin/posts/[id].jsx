@@ -22,55 +22,12 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-// const useStyles = makeStyles((theme) => ({
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-//   // box: {
-//   //   display: "flex",
-//   //   justifyContent: "center",
-//   //   alignItems: "center",
-//   // },
-//   // content: {
-//   //   flexDirection: "column",
-//   //   maxWidth: 800,
-//   //   flexGrow: 1,
-//   //   marginLeft: 20,
-//   // },
-//   // items: {
-//   //   display: "flex",
-//   // },
-//   // date: {
-//   //   marginLeft: 20,
-//   //   fontStyle: "italic",
-//   // },
-//   // container: {
-//   //   backgroundColor: theme.palette.primary.main,
-//   // },
-//   // progress: {
-//   //   margin: "100px auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // button: {
-//   //   marginLeft: 4,
-//   // },
-//   // delete: {
-//   //   color: "#fc7ebf",
-//   //   borderColor: "#fc7ebf",
-//   // },
-// }));
-
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = () => {
-  // const classes = useStyles();
   const router = useRouter();
 
   const ID = router.query.id;
@@ -137,13 +94,9 @@ const post = () => {
           </Link>
         )}
 
-        <Container
-          // className={classes.container}
-          sx={{ backgroundColor: theme.palette.primary.main }}
-        >
+        <Container sx={{ backgroundColor: theme.palette.primary.main }}>
           <Header title={post.title} />
           <div
-            // className={classes.box}
             style={{
               display: "flex",
               justifyContent: "center",
@@ -151,7 +104,6 @@ const post = () => {
             }}
           >
             <div
-              // className={classes.content}
               style={{
                 flexDirection: "column",
                 maxWidth: "800px",
@@ -159,17 +111,13 @@ const post = () => {
                 marginLeft: "20px",
               }}
             >
-              <div
-                // className={classes.items}
-                style={{ display: "flex" }}
-              >
+              <div style={{ display: "flex" }}>
                 <Typography align="center" variant="h6">
                   <Link href="#" underline="hover">
                     {post.name}
                   </Link>
                 </Typography>
                 <Typography
-                  // className={classes.date}
                   sx={{ marginLeft: "20px", fontStyle: "italic" }}
                   align="left"
                   variant="h6"
@@ -198,7 +146,6 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  // className={classes.button}
                   sx={{ marginLeft: "4px" }}
                   onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
@@ -207,7 +154,6 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  // className={`${classes.button} ${classes.delete}`}
                   sx={{
                     marginLeft: "4px",
                     color: "#fc7ebf",
@@ -273,12 +219,7 @@ const post = () => {
     );
   } else if (Array.isArray(comments) && comments.length == 0) {
     commentList = (
-      <Typography
-        variant="h6"
-        align="center"
-        // className={classes.header}
-        sx={{ marginTop: "20px" }}
-      >
+      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
         no results
       </Typography>
     );
@@ -303,7 +244,6 @@ const post = () => {
         action={action.action}
         open={dialog}
         handleClose={handleCloseDialog}
-        // className={classes.dialog}
         result={item}
         mutate={mutate}
       />

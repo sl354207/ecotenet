@@ -20,19 +20,11 @@ const darkTheme = createTheme({
   palette: { mode: "dark" },
 });
 
-// const useStyles = makeStyles(() => ({
-//   // description: {
-//   //   marginLeft: 10,
-//   // },
-// }));
-
 // Define which plugins we want to use.
 const cellPlugins = [slate(), image, video, spacer, divider, customImage];
 
 // take in handleNext to change form step, and editor state values.
 const PostEditor = ({ value, setPostValue }) => {
-  // const classes = useStyles();
-
   return (
     <Container>
       <Header title="Post Body" />
@@ -45,7 +37,6 @@ const PostEditor = ({ value, setPostValue }) => {
         desktop you may want to adjust your browser window size to see how your
         layout reacts on smaller screens"
         align="left"
-        // className={classes.description}
       />
 
       <EditorLayout>

@@ -6,16 +6,9 @@ import { useCallback, useMemo, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 import Geocoder from "./Geocoder";
 
-// const useStyles = makeStyles(() => ({
-//   // popup: {
-//   //   display: "grid",
-//   // },
-// }));
-
 const MapMain = () => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  // const classes = useStyles();
 
   //  base layer
   const ecoFill = {

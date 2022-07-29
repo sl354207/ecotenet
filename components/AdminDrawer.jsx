@@ -10,30 +10,11 @@ import { useRouter } from "next/router";
 
 const drawerWidth = 120;
 
-// const useStyles = makeStyles(() => ({
-//   // drawer: {
-//   //   // width: drawerWidth,
-//   //   // flexShrink: 0,
-//   // },
-//   // paper: {
-//   //   width: drawerWidth,
-//   //   zIndex: 0,
-//   // },
-//   // container: {
-//   //   overflow: "auto",
-//   // },
-// }));
-
 const AdminDrawer = () => {
-  // const classes = useStyles();
   const router = useRouter();
   return (
     <Drawer
-      // className={classes.drawer}
       variant="permanent"
-      // classes={{
-      //   paper: classes.paper,
-      // }}
       sx={{
         width: drawerWidth,
         flexShrink: 0,
@@ -41,10 +22,7 @@ const AdminDrawer = () => {
       }}
     >
       <Toolbar />
-      <div
-        // className={classes.container}
-        style={{ overflow: "auto" }}
-      >
+      <div style={{ overflow: "auto" }}>
         <List>
           <ListItem button key="home" onClick={() => router.push("/admin")}>
             <ListItemText primary="Home" />

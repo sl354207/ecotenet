@@ -65,126 +65,9 @@ function a11yProps(index) {
   };
 }
 
-// const useStyles = makeStyles((theme) => ({
-//   // tabs: {
-//   //   flexGrow: 1,
-//   //   backgroundColor: theme.palette.background.paper,
-//   //   marginTop: 20,
-//   //   borderRadius: "10px",
-//   // },
-//   // tabBar: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   borderRadius: "10px",
-//   // },
-//   // tab: {
-//   //   flexGrow: 1,
-//   //   backgroundColor: theme.palette.primary.light,
-//   //   minHeight: 80,
-//   //   minWidth: "inherit",
-//   //   padding: "inherit",
-//   //   borderRadius: "10px",
-//   //   "&:hover": {
-//   //     color: theme.text,
-//   //     opacity: 1,
-//   //   },
-//   // },
-//   // buttonPost: {
-//   //   display: "flex",
-//   //   justifyContent: "start",
-//   //   textTransform: "none",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   margin: "20px auto",
-//   //   borderRadius: "10px",
-//   // },
-//   // progress: {
-//   //   margin: "100px auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-//   // card: {
-//   //   flex: "auto",
-//   //   marginRight: 20,
-//   // },
-//   // buttonGroup: {
-//   //   display: "grid",
-//   //   margin: "auto 0px auto 20px",
-//   // },
-//   // edit: {
-//   //   margin: "4px 0px",
-//   //   minWidth: "fit-content",
-//   //   justifyContent: "start",
-//   // },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // form: {
-//   //   display: "flex",
-//   //   flexGrow: 1,
-//   //   margin: "10px 0 10px 0",
-//   // },
-//   // label: {
-//   //   color: `${theme.palette.text.primary}!important`,
-//   //   position: "relative",
-//   //   transform: "none",
-//   // },
-//   // search: {
-//   //   position: "relative",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-//   //   borderRadius: theme.shape.borderRadius,
-//   //   backgroundColor: theme.palette.primary.main,
-//   //   "&:focus-within": {
-//   //     backgroundColor: theme.palette.primary.main,
-//   //     border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //     borderRadius: theme.shape.borderRadius,
-//   //   },
-//   //   marginTop: 6,
-//   //   marginBottom: 10,
-//   //   width: "auto",
-//   // },
-//   // root: {
-//   //   color: theme.palette.text.primary,
-//   // },
-//   // input: {
-//   //   padding: 18,
-//   // },
-//   // popper: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // delete: {
-//   //   WebkitTapHighlightColor: "transparent",
-//   //   color: theme.palette.secondary.main,
-//   //   height: 22,
-//   //   width: 22,
-//   //   cursor: "pointer",
-//   //   margin: "0 5px 0 -6px",
-//   //   "&:hover": {
-//   //     color: alpha(theme.palette.secondary.main, 0.7),
-//   //   },
-//   // },
-//   // chip: {
-//   //   borderColor: theme.palette.secondary.main,
-//   //   borderWidth: 2,
-//   //   color: theme.palette.text.primary,
-//   //   height: 40,
-//   //   margin: "0px 5px 10px 5px",
-//   // },
-//   // save: {
-//   //   display: "flex",
-//   //   justifyContent: "space-between",
-//   // },
-//   // helper: {
-//   //   color: theme.palette.text.primary,
-//   // },
-//   // email: {
-//   //   display: "contents",
-//   // },
-// }));
-
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function Dashboard() {
-  // const classes = useStyles();
-
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -386,7 +269,6 @@ export default function Dashboard() {
     <Container>
       <Header title="Dashboard" />
       <div
-        // className={classes.tabs}
         style={{
           flexGrow: 1,
           backgroundColor: theme.palette.background.paper,
@@ -397,7 +279,6 @@ export default function Dashboard() {
         <AppBar
           position="static"
           elevation={0}
-          // className={classes.tabBar}
           sx={{
             backgroundColor: theme.palette.primary.light,
             borderRadius: "10px",
@@ -440,7 +321,6 @@ export default function Dashboard() {
                   opacity: 1,
                 },
               }}
-              // className={classes.tab}
               label="Posts"
               {...a11yProps(1)}
             />
@@ -457,7 +337,6 @@ export default function Dashboard() {
                   opacity: 1,
                 },
               }}
-              // className={classes.tab}
               label="Drafts"
               {...a11yProps(2)}
             />
@@ -474,7 +353,6 @@ export default function Dashboard() {
                   opacity: 1,
                 },
               }}
-              // className={classes.tab}
               label="Comments"
               {...a11yProps(3)}
             />
@@ -491,7 +369,6 @@ export default function Dashboard() {
                   opacity: 1,
                 },
               }}
-              // className={classes.tab}
               label="Notifications"
               {...a11yProps(4)}
             />
@@ -504,7 +381,6 @@ export default function Dashboard() {
               color="secondary"
               size={100}
               disableShrink={true}
-              // className={classes.progress}
               sx={{
                 margin: "100px auto",
                 display: "flex",
@@ -513,10 +389,7 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              <div
-                // className={classes.save}
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="h5" gutterBottom>
                   Public Profile: optional
                 </Typography>
@@ -541,7 +414,6 @@ export default function Dashboard() {
                 Approved: {results.approved}
               </Typography>
               <FormControl
-                // className={classes.form}
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
                 <InputLabel htmlFor="bio">Bio:</InputLabel>
@@ -575,8 +447,6 @@ export default function Dashboard() {
               >
                 <InputLabel htmlFor="socials">Socials:</InputLabel>
                 <Autocomplete
-                  // className={classes.search}
-                  // classes={{ paper: classes.popper }}
                   sx={{
                     position: "relative",
                     border: `1px solid ${alpha(
@@ -593,8 +463,7 @@ export default function Dashboard() {
                       )}`,
                       borderRadius: "4px",
                     },
-                    // marginTop: 6,
-                    // marginBottom: 10,
+
                     width: "auto",
                   }}
                   autoHighlight
@@ -647,10 +516,7 @@ export default function Dashboard() {
                     />
                   )}
                 />
-                <FormHelperText
-                  // className={classes.helper}
-                  sx={{ color: theme.palette.text.primary }}
-                >
+                <FormHelperText sx={{ color: theme.palette.text.primary }}>
                   Add social media links (3 max)
                 </FormHelperText>
               </FormControl>
@@ -700,8 +566,6 @@ export default function Dashboard() {
                     rows={1}
                     multiline={false}
                     inputProps={{ type: "email" }}
-                    // className={{ display: "contents" }}
-                    // // sx={{ display: "contents" }}
                   />
                   <Button
                     variant="outlined"
@@ -744,7 +608,6 @@ export default function Dashboard() {
                     return (
                       <ListItem
                         key={result._id}
-                        // className={classes.buttonPost}
                         sx={{
                           display: "flex",
                           justifyContent: "start",
@@ -757,10 +620,7 @@ export default function Dashboard() {
                           borderRadius: "10px",
                         }}
                       >
-                        <div
-                          // className={classes.card}
-                          style={{ flex: "auto", marginRight: "20px" }}
-                        >
+                        <div style={{ flex: "auto", marginRight: "20px" }}>
                           <Typography
                             gutterBottom
                             color="textPrimary"
@@ -796,7 +656,6 @@ export default function Dashboard() {
                           </Typography>
                         </div>
                         <div
-                          // className={classes.buttonGroup}
                           style={{
                             display: "grid",
                             margin: "auto 0px auto 20px",
@@ -805,7 +664,6 @@ export default function Dashboard() {
                           <Button
                             variant="contained"
                             color="secondary"
-                            // className={classes.edit}
                             sx={{
                               margin: "4px 0px",
                               minWidth: "fit-content",
@@ -1094,7 +952,6 @@ export default function Dashboard() {
         action={action.action}
         open={dialog}
         handleClose={handleCloseDialog}
-        // className={classes.dialog}
         result={item}
         snackbar={snackbar}
         setSnackbar={setSnackbar}

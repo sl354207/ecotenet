@@ -14,54 +14,9 @@ import theme from "@utils/theme";
 import { useState } from "react";
 import useSWR from "swr";
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     display: "flex",
-//   },
-//   content: {
-//     flexGrow: 1,
-//     padding: theme.spacing(3),
-//   },
-//   // progress: {
-//   //   margin: "100px auto",
-//   //   display: "flex",
-//   //   justifySelf: "center",
-//   // },
-//   // header: {
-//   //   marginTop: 20,
-//   // },
-//   // buttonPost: {
-//   //   display: "flex",
-//   //   justifyContent: "start",
-//   //   textTransform: "none",
-//   //   border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-//   //   margin: "20px auto",
-//   //   borderRadius: "10px",
-//   // },
-//   // mobile: {
-//   //   display: "grid",
-//   // },
-//   // desktop: {
-//   //   marginTop: 4,
-//   // },
-//   // delete: {
-//   //   color: "#fc7ebf",
-//   //   borderColor: "#fc7ebf",
-//   // },
-//   // dialog: {
-//   //   backgroundColor: theme.palette.primary.light,
-//   // },
-//   // comment: {
-//   //   display: "flow-root",
-//   //   flexGrow: 1,
-//   // },
-// }));
-
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminPeople = () => {
-  // const classes = useStyles();
-
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
@@ -104,7 +59,6 @@ const adminPeople = () => {
             <>
               <ListItem
                 key={result._id}
-                // className={classes.buttonPost}
                 sx={{
                   display: "flex",
                   justifyContent: "start",
@@ -114,10 +68,7 @@ const adminPeople = () => {
                   borderRadius: "10px",
                 }}
               >
-                <div
-                  // className={classes.comment}
-                  style={{ display: "flow-root", flexGrow: 1 }}
-                >
+                <div style={{ display: "flow-root", flexGrow: 1 }}>
                   <Link underline="hover">{result.name}</Link>
 
                   <Typography>bio: {result.bio}</Typography>
@@ -151,10 +102,7 @@ const adminPeople = () => {
                   <Typography>denials: {result.denials}</Typography>
                 </div>
 
-                <div
-                  // className={classes.mobile}
-                  style={{ display: "grid" }}
-                >
+                <div style={{ display: "grid" }}>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -167,7 +115,6 @@ const adminPeople = () => {
                   <Button
                     variant="outlined"
                     color="secondary"
-                    // className={classes.desktop}
                     sx={{ marginTop: "4px" }}
                     onClick={() => handleOpenDialog("Deny", "Person", result)}
                   >
@@ -176,7 +123,6 @@ const adminPeople = () => {
                   <Button
                     variant="outlined"
                     color="secondary"
-                    // className={`${classes.desktop} ${classes.delete}`}
                     sx={{
                       marginTop: "4px",
                       color: "#fc7ebf",
@@ -196,15 +142,9 @@ const adminPeople = () => {
   }
 
   return (
-    <div
-      // className={classes.root}
-      style={{ display: "flex" }}
-    >
+    <div style={{ display: "flex" }}>
       <AdminDrawer />
-      <div
-        // className={classes.content}
-        style={{ flexGrow: 1, padding: theme.spacing(3) }}
-      >
+      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
         <Header title="People" />
         {list}
         <AdminDialog
@@ -212,7 +152,6 @@ const adminPeople = () => {
           action={action.action}
           open={dialog}
           handleClose={handleCloseDialog}
-          // className={classes.dialog}
           result={item}
           mutate={mutate}
         />
