@@ -17,7 +17,13 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
     <div style={{ display: "block" }} disablegutters="true">
       {showForm ? (
         <Portal container={container.current}>
-          <FormControl sx={{ flexGrow: 1 }}>
+          <FormControl
+            sx={
+              comment_ref !== ""
+                ? { flexGrow: 1, marginBottom: "10px", marginLeft: "60px" }
+                : { flexGrow: 1, marginBottom: "10px" }
+            }
+          >
             <InputLabel shrink htmlFor="commentform"></InputLabel>
             <TextBox
               defaultValue={null}
@@ -25,11 +31,11 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
               id="commentform"
               autoFocus={true}
               handleChange={handleChange}
-              className={
-                comment_ref != ""
-                  ? { marginLeft: "60px", padding: "0px 0px 10px 0px" }
-                  : { padding: "5px 0px 10px 0px" }
-              }
+              // className={
+              //   comment_ref != ""
+              //     ? { marginLeft: "60px", padding: "0px 0px 10px 0px" }
+              //     : { padding: "5px 0px 10px 0px" }
+              // }
             />
           </FormControl>
           <Button

@@ -1,7 +1,13 @@
 import { useUserContext } from "@components/UserContext";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Button, CircularProgress, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -19,6 +25,8 @@ function ImageUploadField({ onChange, value }) {
   const { user } = useUserContext();
   const router = useRouter();
   const postId = router.query._id;
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const allowedExtensions = ["jpg", "jpeg", "png"];
   const maxFileSize = 5242880;
@@ -336,15 +344,14 @@ function ImageUploadField({ onChange, value }) {
   return (
     <>
       <div
-        style={{
-          display: "flex",
-          marginBottom: "10px",
-          [theme.breakpoints.down("md")]: {
-            // width: 250,
-            display: "grid",
-            // marginBottom: 5,
-          },
-        }}
+        style={
+          isMobile
+            ? { display: "grid" }
+            : {
+                display: "flex",
+                marginBottom: "10px",
+              }
+        }
       >
         {/* <label htmlFor="file-input"> */}
         <Button

@@ -73,7 +73,12 @@ const AdminCommentList = ({
               >
                 <div style={{ display: "flow-root", flexGrow: 1 }}>
                   <Typography>{comment.date.toDateString()}</Typography>
-                  <Link underline="hover">{comment.name}</Link>
+                  <Link
+                    href={`/admin/people/${comment.name}`}
+                    underline="hover"
+                  >
+                    {comment.name}
+                  </Link>
 
                   <Typography>{comment.text}</Typography>
                 </div>

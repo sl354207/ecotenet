@@ -28,6 +28,7 @@ import {
   updatePost,
   updateUser,
 } from "@utils/api-helpers";
+import theme from "@utils/theme";
 import { useRef, useState } from "react";
 
 const AdminDialog = ({
@@ -499,13 +500,38 @@ const AdminDialog = ({
             >
               <FormControlLabel
                 value="language"
-                control={<Radio />}
+                control={
+                  <Radio
+                    color="secondary"
+                    sx={{
+                      color: `${theme.palette.secondary.main}!important`,
+                    }}
+                  />
+                }
                 label="Language"
               />
-              <FormControlLabel value="link" control={<Radio />} label="Link" />
+              <FormControlLabel
+                value="link"
+                control={
+                  <Radio
+                    color="secondary"
+                    sx={{
+                      color: `${theme.palette.secondary.main}!important`,
+                    }}
+                  />
+                }
+                label="Link"
+              />
               <FormControlLabel
                 value="citation"
-                control={<Radio />}
+                control={
+                  <Radio
+                    color="secondary"
+                    sx={{
+                      color: `${theme.palette.secondary.main}!important`,
+                    }}
+                  />
+                }
                 label="Citation"
               />
             </RadioGroup>
@@ -513,7 +539,7 @@ const AdminDialog = ({
           <Button
             variant="outlined"
             color="secondary"
-            sx={{ marginTop: "18px" }}
+            sx={{ marginTop: "25px" }}
             onClick={() => setShowForm(!showForm)}
             endIcon={showForm ? <ExpandLessIcon /> : <ExpandMoreIcon />}
           >
@@ -522,7 +548,7 @@ const AdminDialog = ({
           <div style={{ display: "block" }} disablegutters="true">
             {showForm ? (
               <Portal container={container.current}>
-                <FormControl sx={{ flexGrow: 1 }}>
+                <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
                   <InputLabel shrink htmlFor="commentform"></InputLabel>
                   <TextBox
                     id="info"

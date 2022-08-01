@@ -551,12 +551,12 @@ export default function Dashboard() {
               <Typography variant="h5" gutterBottom>
                 Private Settings:
               </Typography>
-
-              <FormControl
-                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-              >
-                <InputLabel htmlFor="email">Email:</InputLabel>
-                <div style={{ display: "flex" }}>
+              <div style={{ display: "flex" }}>
+                <FormControl
+                  sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+                >
+                  <InputLabel htmlFor="email">Email:</InputLabel>
+                  {/* <div style={{ display: "flex", flexGrow: 1 }}> */}
                   <TextBox
                     defaultValue={results.email}
                     placeHolder="email@site.com"
@@ -567,19 +567,25 @@ export default function Dashboard() {
                     multiline={false}
                     inputProps={{ type: "email" }}
                   />
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={{ marginLeft: 2 }}
-                    onClick={() => handleEmailUpdate()}
-                    disabled={
-                      email == "" || email == user.email || email == undefined
-                    }
-                  >
-                    Update Email
-                  </Button>
-                </div>
-              </FormControl>
+
+                  {/* </div> */}
+                </FormControl>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={{
+                    marginLeft: 2,
+                    marginTop: "32px",
+                    marginBottom: "10px",
+                  }}
+                  onClick={() => handleEmailUpdate()}
+                  disabled={
+                    email == "" || email == user.email || email == undefined
+                  }
+                >
+                  Update Email
+                </Button>
+              </div>
             </>
           )}
         </TabPanel>

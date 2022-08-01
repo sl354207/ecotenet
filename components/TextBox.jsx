@@ -41,7 +41,7 @@ const TextBox = ({
       multiline={multiline}
       minRows={rows}
       className={className}
-      sx={{ display: "contents" }}
+      sx={{ display: "flex" }}
       inputProps={inputProps}
       onKeyPress={onKeyPress}
       error

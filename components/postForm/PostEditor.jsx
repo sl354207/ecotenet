@@ -6,7 +6,6 @@ import customImage from "@plugins/customImage";
 import Editor, { defaultThemeOptions } from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
-import image from "@react-page/plugins-image";
 import "@react-page/plugins-image/lib/index.css";
 import slate from "@react-page/plugins-slate";
 import "@react-page/plugins-slate/lib/index.css";
@@ -21,7 +20,7 @@ const darkTheme = createTheme({
 });
 
 // Define which plugins we want to use.
-const cellPlugins = [slate(), image, video, spacer, divider, customImage];
+const cellPlugins = [slate(), customImage, video, spacer, divider];
 
 // take in handleNext to change form step, and editor state values.
 const PostEditor = ({ value, setPostValue }) => {

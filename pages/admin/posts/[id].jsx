@@ -9,7 +9,6 @@ import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
-import image from "@react-page/plugins-image";
 import "@react-page/plugins-image/lib/index.css";
 import slate from "@react-page/plugins-slate";
 import "@react-page/plugins-slate/lib/index.css";
@@ -23,7 +22,7 @@ import { useState } from "react";
 import useSWR from "swr";
 
 // Define which plugins we want to use.
-const cellPlugins = [slate(), image, video, spacer, divider, customImage];
+const cellPlugins = [slate(), customImage, video, spacer, divider];
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments

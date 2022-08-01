@@ -122,7 +122,7 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
         <div style={{ display: "block" }} disablegutters="true">
           {showForm ? (
             <Portal container={container.current}>
-              <FormControl sx={{ flexGrow: 1 }}>
+              <FormControl sx={{ flexGrow: 1, marginTop: "10px" }}>
                 <InputLabel shrink htmlFor="commentform"></InputLabel>
                 <TextBox
                   id="info"
