@@ -550,7 +550,7 @@ const autoSpecies = async (query) => {
           },
         },
       },
-      { $project: { Scientific_Name: 1, COMMON_NAME: 1 } },
+      { $project: { Scientific_Name: 1, COMMON_NAME: 1, unique_id: 1 } },
     ])
     .limit(50)
     .toArray();
