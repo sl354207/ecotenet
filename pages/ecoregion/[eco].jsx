@@ -221,6 +221,20 @@ const eco = ({ wiki, ecoName, id }) => {
           </Typography>
         ) : (
           <>
+            <Typography variant="h5">
+              Source:{" "}
+              <Link
+                href={`https://en.wikipedia.org/wiki/${ecoName.replace(
+                  " ",
+                  "_"
+                )}?redirect=true`}
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                Wikipedia
+              </Link>
+            </Typography>
             {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
             {wiki.remaining.sections.map((section) => {
               if (section.anchor == "Gallery") {

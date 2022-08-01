@@ -321,6 +321,20 @@ const species = ({ species, wiki }) => {
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
+            <Typography variant="h5">
+              Source:{" "}
+              <Link
+                href={`https://en.wikipedia.org/wiki/${species.Scientific_Name.replace(
+                  " ",
+                  "_"
+                )}?redirect=true`}
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                Wikipedia
+              </Link>
+            </Typography>
             {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
             {wiki.remaining.sections.map((section) => {
               if (section.anchor == "Gallery") {

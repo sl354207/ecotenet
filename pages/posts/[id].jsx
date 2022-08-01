@@ -29,7 +29,7 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { updatePost } from "@utils/api-helpers";
-import { getPostById, getPostComments } from "@utils/mongodb";
+import { getPostById, getPostComments, getPosts } from "@utils/mongodb";
 import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -341,8 +341,27 @@ const post = ({ post, comments }) => {
   );
 };
 
+// UPDATE!!! POSSIBLY ONLY STATIC FOR USER TESTING UNTIL UPGRADE ACCOUNT
+
 // fetch post data at build time
-export const getServerSideProps = async (context) => {
+// export const getServerSideProps = async (context) => {
+//   // context allows us to fetch specific data points from data such as id
+//   const _id = context.params.id;
+
+//   const post = await getPostById(_id);
+
+//   const comments = await getPostComments(post._id.toString());
+
+//   return {
+//     props: {
+//       post: JSON.parse(JSON.stringify(post)),
+//       comments: JSON.parse(JSON.stringify(comments)),
+//     },
+//   };
+// };
+
+// fetch post data at build time
+export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const _id = context.params.id;
 
@@ -355,6 +374,24 @@ export const getServerSideProps = async (context) => {
       post: JSON.parse(JSON.stringify(post)),
       comments: JSON.parse(JSON.stringify(comments)),
     },
+    // revalidate: 10,
+  };
+};
+
+// build routing paths for each post at build time
+export const getStaticPaths = async () => {
+  const posts = await getPosts("published", "true");
+
+  // create array of ids of each post in posts
+  const ids = posts.map((post) => post._id);
+
+  // create paths array with objects that follow structure given
+  const paths = ids.map((id) => ({ params: { id: id.toString() } }));
+
+  // return a path for each post id. If no id return 404
+  return {
+    paths,
+    fallback: false,
   };
 };
 
