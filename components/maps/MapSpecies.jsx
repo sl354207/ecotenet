@@ -141,7 +141,7 @@ const MapSpecies = ({ clickInfo, state }) => {
   const handleClick = (event) => {
     setShowLoad(true);
 
-    router.push(`/ecoregion/${selectedRegion}`);
+    router.push(`/ecoregions/${selectedRegion}`);
   };
 
   const clickedRegions = clickInfo;
@@ -237,6 +237,7 @@ const MapSpecies = ({ clickInfo, state }) => {
           boxZoom={false}
           dragRotate={false}
           touchPitch={false}
+          touchZoomRotate={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}

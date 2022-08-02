@@ -128,7 +128,7 @@ const post = () => {
                 Ecoregions:{" "}
                 {post.ecoregions.map((ecoregion) => (
                   <Link
-                    href={`/ecoregion/${ecoregion}`}
+                    href={`/ecoregions/${ecoregion}`}
                     color="secondary"
                     underline="hover"
                   >

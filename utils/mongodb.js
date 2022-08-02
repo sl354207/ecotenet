@@ -101,10 +101,8 @@ const getPosts = async (status, approved) => {
 
   const posts = await db
     .collection("posts")
-    .find(
-      { status: status, approved: approved },
-      { title: 1, description: 1, author: 1, count: 1, approved: 1 }
-    )
+    .find({ status: status, approved: approved })
+    .project({ title: 1, description: 1, author: 1, count: 1, approved: 1 })
     .sort({ count: -1 })
     .toArray();
 
@@ -115,15 +113,13 @@ const getPostsByCategoryAndRegion = async (category, ecoregion) => {
 
   const posts = await db
     .collection("posts")
-    .find(
-      {
-        status: "published",
-        approved: "true",
-        category: category,
-        ecoregions: ecoregion,
-      },
-      { title: 1, description: 1, author: 1, count: 1, approved: 1 }
-    )
+    .find({
+      status: "published",
+      approved: "true",
+      category: category,
+      ecoregions: ecoregion,
+    })
+    .project({ title: 1, description: 1, author: 1, count: 1, approved: 1 })
     .sort({ count: -1 })
     .toArray();
 
@@ -135,11 +131,8 @@ const getFeatures = async () => {
 
   const features = await db
     .collection("posts")
-    .find(
-      { feature: "true" },
-      { title: 1, description: 1, author: 1, count: 1, approved: 1 }
-    )
-
+    .find({ feature: "true" })
+    .project({ title: 1, description: 1, author: 1, count: 1, approved: 1 })
     .toArray();
 
   return features;
@@ -149,10 +142,15 @@ const getFeatureCandidates = async () => {
 
   const features = await db
     .collection("posts")
-    .find(
-      { feature: { $ne: "false" } },
-      { title: 1, author: 1, count: 1, date: 1, featured: 1, feature: 1 }
-    )
+    .find({ feature: { $ne: "false" } })
+    .project({
+      title: 1,
+      author: 1,
+      count: 1,
+      date: 1,
+      featured: 1,
+      feature: 1,
+    })
     .sort({ feature: -1 })
     .toArray();
 
@@ -178,10 +176,8 @@ const getDashboardPosts = async (name, status) => {
 
   const posts = await db
     .collection("posts")
-    .find(
-      { name: name, status: status },
-      { title: 1, description: 1, author: 1, count: 1, approved: 1 }
-    )
+    .find({ name: name, status: status })
+    .project({ title: 1, description: 1, author: 1, count: 1, approved: 1 })
     .sort({ count: 1 })
     .toArray();
 
@@ -193,10 +189,8 @@ const getProfilePosts = async (name) => {
 
   const posts = await db
     .collection("posts")
-    .find(
-      { name: name, status: "published", approved: "true" },
-      { title: 1, description: 1, author: 1, count: 1 }
-    )
+    .find({ name: name, status: "published", approved: "true" })
+    .project({ title: 1, description: 1, author: 1, count: 1 })
     .sort({ count: -1 })
     .toArray();
 
@@ -321,13 +315,11 @@ const getSpecies = async (CLASS, unique_id) => {
 
   const species = await db
     .collection("species")
-    .find(
-      {
-        CLASS: CLASS,
-        unique_id: unique_id,
-      },
-      { Scientific_Name: 1, COMMON_NAME: 1 }
-    )
+    .find({
+      CLASS: CLASS,
+      unique_id: unique_id,
+    })
+    .project({ Scientific_Name: 1, COMMON_NAME: 1 })
     .sort({ Scientific_Name: 1 })
     .toArray();
 
@@ -758,7 +750,22 @@ const checkPerson = async (name) => {
 
   return response;
 };
-const getEcoregion = async (id) => {
+
+const getEcoregions = async () => {
+  const { db } = await connectToDatabase();
+
+  const response = await db
+    .collection("ecoregions")
+    .find({})
+    .project({ unique_id: 1, name: 1 })
+    .toArray();
+
+  // console.log(response);
+
+  return response;
+};
+
+const getEcoregionById = async (id) => {
   const { db } = await connectToDatabase();
 
   const response = await db.collection("ecoregions").findOne(
@@ -810,5 +817,6 @@ module.exports = {
   updateNotification,
   checkName,
   checkPerson,
-  getEcoregion,
+  getEcoregions,
+  getEcoregionById,
 };

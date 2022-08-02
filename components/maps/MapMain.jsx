@@ -104,7 +104,7 @@ const MapMain = () => {
   const handleClick = (ecoName, selectedRegion) => {
     // const slug = slugify(ecoName);
     setShowLoad(true);
-    router.push(`/ecoregion/${selectedRegion}`);
+    router.push(`/ecoregions/${selectedRegion}`);
   };
 
   return (
@@ -125,6 +125,7 @@ const MapMain = () => {
           boxZoom={false}
           dragRotate={false}
           touchPitch={false}
+          touchZoomRotate={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}

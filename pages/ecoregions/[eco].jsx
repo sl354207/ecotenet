@@ -6,7 +6,7 @@ import Link from "@components/Link";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import { getEcoregion } from "@utils/mongodb";
+import { getEcoregionById } from "@utils/mongodb";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -278,7 +278,7 @@ export const getServerSideProps = async (context) => {
   const id = context.params.eco;
   // const id = context.query.id;
 
-  const eco = await getEcoregion(id);
+  const eco = await getEcoregionById(id);
   // const ecoName = eco.name
   const unSlug = eco.name.replace(" ", "_");
   // console.log(typeof eco.name);

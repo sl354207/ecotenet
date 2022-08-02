@@ -260,7 +260,11 @@ const species = ({ species, wiki }) => {
         >
           Ecoregions:{" "}
           {species.unique_id.map((id) => (
-            <Link href={`/ecoregion/${id}`} color="secondary" underline="hover">
+            <Link
+              href={`/ecoregions/${id}`}
+              color="secondary"
+              underline="hover"
+            >
               Eco-{id}
               {", "}
             </Link>

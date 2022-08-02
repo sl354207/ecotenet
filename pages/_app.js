@@ -40,7 +40,7 @@ export default function MyApp(props) {
   useEffect(() => {
     let ecoregion = sessionStorage.getItem("ecoregion");
 
-    if (router.pathname == "/ecoregion/[eco]") {
+    if (router.pathname == "/ecoregions/[eco]") {
       sessionStorage.setItem("ecoregion", router.query.eco);
       setEcoFilter(router.query.eco);
     } else {

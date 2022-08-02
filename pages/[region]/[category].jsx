@@ -5,11 +5,11 @@ import SpeciesScroll from "@components/SpeciesScroll";
 import { Container, Typography } from "@mui/material";
 import { getPostsByCategoryAndRegion, getSpecies } from "@utils/mongodb";
 
-const categoryList = ({ category, title }) => {
+const categoryList = ({ category, title, id }) => {
   return (
     <>
       <Container>
-        <Header title={title} />
+        <Header title={`Eco-${id} ${title}`} />
         {category.length === 0 ? (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results
@@ -225,6 +225,7 @@ export const getServerSideProps = async (context) => {
     props: {
       category: JSON.parse(JSON.stringify(category)),
       title: categorySub,
+      id: id,
     },
   };
 };
