@@ -6,7 +6,7 @@ const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
-  // console.log(data);
+  console.log(data);
   // console.log(preview);
   const isValidHttpUrl = (string) => {
     if (/^blob:http:\/\//.test(string)) {
