@@ -9,7 +9,7 @@ const ImageRender = ({ data, preview }) => {
   console.log(data);
   // console.log(preview);
   const isValidHttpUrl = (string) => {
-    if (/^blob:http:\/\//.test(string)) {
+    if (/^blob:https?:\/\//.test(string)) {
       // console.log("true blob");
       return true;
     } else {
