@@ -1,8 +1,9 @@
 import Link from "@components/Link";
 import TextBox from "@components/TextBox";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, FormControl, InputLabel } from "@mui/material";
+import { Button, FormControl, InputLabel, useMediaQuery } from "@mui/material";
 import { updateComment } from "@utils/api-helpers";
+import theme from "@utils/theme";
 import { useState } from "react";
 
 const DashboardComment = ({
@@ -13,6 +14,10 @@ const DashboardComment = ({
   setSnackbar,
   name,
 }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  result.date = new Date(result.date);
+
   const [commentValue, setCommentValue] = useState("");
 
   // update text input field
@@ -55,12 +60,10 @@ const DashboardComment = ({
 
   return (
     <div style={{ flexGrow: 1 }}>
-      <Link href={`/posts/${result.post_id}`} underline="hover">
-        View Post
-      </Link>{" "}
-      {result.date} Approved: {result.approved}
+      {isMobile ? result.date.toLocaleDateString() : result.date.toDateString()}{" "}
+      Approved: {result.approved}
       <div style={{ display: "flex", flexGrow: 1 }}>
-        <FormControl sx={{ flexGrow: 1 }}>
+        <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
           <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
           <TextBox
             defaultValue={result.text}
@@ -71,6 +74,15 @@ const DashboardComment = ({
           />
         </FormControl>
         <div style={{ display: "grid", margin: "auto 0px auto 20px" }}>
+          <Link
+            href={`/posts/${result.post_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            underline="hover"
+            sx={{ marginLeft: "15px" }}
+          >
+            View Post
+          </Link>
           {commentValue != "" ? (
             <Button
               variant="contained"

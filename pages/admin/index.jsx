@@ -207,7 +207,11 @@ const admin = () => {
                   }}
                 >
                   <Grid container spacing={1} sx={{ marginTop: "20px" }}>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Link
                         href={`/admin/people/${post.name}`}
                         target="_blank"
@@ -218,10 +222,18 @@ const admin = () => {
                       </Link>
                     </Grid>
 
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Typography>Current Feature: {post.feature}</Typography>
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Link
                         href={`/posts/${post._id}`}
                         target="_blank"
@@ -231,15 +243,27 @@ const admin = () => {
                         View Post
                       </Link>
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Typography>{post.title}</Typography>
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Typography>
                         Featured Before: {post.featured ? "true" : "false"}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       {post.feature == "true" ? (
                         <Button variant="outlined" color="secondary" disabled>
                           Add to Features
@@ -266,15 +290,27 @@ const admin = () => {
                         </>
                       )}
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Typography>{post.date}</Typography>
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       <Typography variant="h6" color="secondary">
                         {post.count}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4} sx={{ textAlign: "center" }}>
+                    <Grid
+                      item
+                      xs={4}
+                      sx={{ textAlign: "center", alignSelf: "center" }}
+                    >
                       {post.feature !== "true" ? (
                         <Button
                           variant="outlined"

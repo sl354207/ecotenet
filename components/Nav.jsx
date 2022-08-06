@@ -568,7 +568,11 @@ const Nav = ({ ecoFilter }) => {
                                 marginBottom: "4px",
                               }}
                             >
-                              Sign In
+                              {status == "authenticated" ? (
+                                <>Sign Out</>
+                              ) : (
+                                <>Sign In</>
+                              )}
                             </MenuItem>
                             <MenuItem
                               onClick={() => {

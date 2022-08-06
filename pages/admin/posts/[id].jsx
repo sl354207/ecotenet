@@ -4,7 +4,13 @@ import Resolve from "@components/dialogs/Resolve";
 import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
 import Link from "@components/Link";
-import { Button, CircularProgress, Container, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import customImage from "@plugins/customImage";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -28,6 +34,8 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = () => {
   const router = useRouter();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ID = router.query.id;
   const comment_query = router.query.q;
@@ -121,7 +129,7 @@ const post = () => {
                   align="left"
                   variant="h6"
                 >
-                  {date.toDateString()}
+                  {isMobile ? date.toLocaleDateString() : date.toDateString()}
                 </Typography>
               </div>
               <Typography variant="h6">
@@ -138,7 +146,7 @@ const post = () => {
               </Typography>
             </div>
             {!comment_query && (
-              <>
+              <div style={isMobile ? { display: "grid" } : { display: "flex" }}>
                 <Button
                   variant="outlined"
                   color="secondary"
@@ -149,7 +157,7 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  sx={{ marginLeft: "4px" }}
+                  sx={isMobile ? { marginTop: "4px" } : { marginLeft: "4px" }}
                   onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
                   Deny
@@ -157,19 +165,27 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  sx={{
-                    marginLeft: "4px",
-                    color: "#fc7ebf",
-                    borderColor: "#fc7ebf",
-                  }}
+                  sx={
+                    isMobile
+                      ? {
+                          marginTop: "4px",
+                          color: "#fc7ebf",
+                          borderColor: "#fc7ebf",
+                        }
+                      : {
+                          marginLeft: "4px",
+                          color: "#fc7ebf",
+                          borderColor: "#fc7ebf",
+                        }
+                  }
                   onClick={() => handleOpenDialog("Delete", "Post", post)}
                 >
                   Delete
                 </Button>
-              </>
+              </div>
             )}
             {comment_query == "flag" && (
-              <>
+              <div style={isMobile ? { display: "grid" } : { display: "flex" }}>
                 <Button
                   variant="outlined"
                   color="secondary"
@@ -180,7 +196,7 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  sx={{ marginLeft: "4px" }}
+                  sx={isMobile ? { marginTop: "4px" } : { marginLeft: "4px" }}
                   onClick={() => handleOpenDialog("Deny", "Post", post)}
                 >
                   Deny
@@ -188,16 +204,24 @@ const post = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  sx={{
-                    marginLeft: "4px",
-                    color: "#fc7ebf",
-                    borderColor: "#fc7ebf",
-                  }}
+                  sx={
+                    isMobile
+                      ? {
+                          marginTop: "4px",
+                          color: "#fc7ebf",
+                          borderColor: "#fc7ebf",
+                        }
+                      : {
+                          marginLeft: "4px",
+                          color: "#fc7ebf",
+                          borderColor: "#fc7ebf",
+                        }
+                  }
                   onClick={() => handleOpenDialog("Delete", "Post", post)}
                 >
                   Delete
                 </Button>
-              </>
+              </div>
             )}
           </div>
           <EditorLayout>

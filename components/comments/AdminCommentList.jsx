@@ -1,5 +1,12 @@
 import Link from "@components/Link";
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  List,
+  ListItem,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
 import theme from "@utils/theme";
@@ -11,6 +18,7 @@ const AdminCommentList = ({
   handleOpenDialog,
   handleOpenResolve,
 }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
     if (comment.comment_ref === "") {
@@ -72,7 +80,11 @@ const AdminCommentList = ({
                 }
               >
                 <div style={{ display: "flow-root", flexGrow: 1 }}>
-                  <Typography>{comment.date.toDateString()}</Typography>
+                  <Typography>
+                    {isMobile
+                      ? comment.date.toLocaleDateString()
+                      : comment.date.toDateString()}
+                  </Typography>
                   <Link
                     href={`/admin/people/${comment.name}`}
                     underline="hover"

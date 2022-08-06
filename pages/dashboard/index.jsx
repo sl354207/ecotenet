@@ -26,6 +26,7 @@ import {
   Tab,
   Tabs,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
@@ -70,6 +71,7 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 export default function Dashboard() {
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -471,7 +473,7 @@ export default function Dashboard() {
                     profile.socials && profile.socials.length > 2 ? true : false
                   }
                   disableClearable={true}
-                  value={profile.socials}
+                  value={profile.socials && profile.socials[0]}
                   onChange={(event, newValue) => {
                     setProfile((profile) => ({
                       ...profile,
@@ -888,6 +890,7 @@ export default function Dashboard() {
               {results.length > 0 && (
                 <List>
                   {results.map((result) => {
+                    result.date = new Date(result.date);
                     return (
                       <ListItem
                         key={result._id}
@@ -910,7 +913,9 @@ export default function Dashboard() {
                             align="left"
                             variant="body2"
                           >
-                            {result.date}
+                            {isMobile
+                              ? result.date.toLocaleDateString()
+                              : result.date.toDateString()}
                           </Typography>
                           <Typography
                             variant="h6"

@@ -2,7 +2,13 @@ import Link from "@components/Link";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Button, IconButton, ListItem, Typography } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  ListItem,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import theme from "@utils/theme";
 import CommentForm from "./CommentForm";
@@ -15,6 +21,7 @@ const Comment = ({
   handleOpenFlag,
   handleReply,
 }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
     return (
@@ -45,10 +52,19 @@ const Comment = ({
                 >
                   {comment.updated ? (
                     //
-                    <>Updated on {comment.date.toDateString()}</>
+                    <>
+                      Updated on{" "}
+                      {isMobile
+                        ? comment.date.toLocaleDateString()
+                        : comment.date.toDateString()}
+                    </>
                   ) : (
                     //
-                    <>{comment.date.toDateString()}</>
+                    <>
+                      {isMobile
+                        ? comment.date.toLocaleDateString()
+                        : comment.date.toDateString()}
+                    </>
                   )}
                 </Typography>
               </div>
@@ -123,10 +139,19 @@ const Comment = ({
               >
                 {comment.updated ? (
                   //
-                  <>Updated on {comment.date.toDateString()}</>
+                  <>
+                    Updated on{" "}
+                    {isMobile
+                      ? comment.date.toLocaleDateString()
+                      : comment.date.toDateString()}
+                  </>
                 ) : (
                   //
-                  <>{comment.date.toDateString()}</>
+                  <>
+                    {isMobile
+                      ? comment.date.toLocaleDateString()
+                      : comment.date.toDateString()}
+                  </>
                 )}
               </Typography>
             </div>

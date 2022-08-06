@@ -8,7 +8,13 @@ import Link from "@components/Link";
 import { useUserContext } from "@components/UserContext";
 import Vote from "@components/Vote";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Container, Divider, IconButton, Typography } from "@mui/material";
+import {
+  Container,
+  Divider,
+  IconButton,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import customImage from "@plugins/customImage";
 // The editor core
 import Editor from "@react-page/editor";
@@ -35,6 +41,7 @@ const post = ({ post, comments }) => {
   // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
+  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   // console.log(user);
   // set post as value of editor
   const [value, setValue] = useState(post);
@@ -222,7 +229,7 @@ const post = ({ post, comments }) => {
                 align="left"
                 variant="h6"
               >
-                {date.toDateString()}
+                {isMobile ? date.toLocaleDateString() : date.toDateString()}
               </Typography>
             </div>
             <Typography variant="h6">
