@@ -1,7 +1,13 @@
 import Link from "@components/Link";
 import TextBox from "@components/TextBox";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, FormControl, InputLabel, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputLabel,
+  useMediaQuery,
+} from "@mui/material";
 import { updateComment } from "@utils/api-helpers";
 import theme from "@utils/theme";
 import { useState } from "react";
@@ -73,61 +79,126 @@ const DashboardComment = ({
             autoFocus={false}
           />
         </FormControl>
-        <div style={{ display: "grid", margin: "auto 0px auto 20px" }}>
-          <Link
-            href={`/posts/${result.post_id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            underline="hover"
-            sx={{ marginLeft: "15px" }}
-          >
-            View Post
-          </Link>
-          {commentValue != "" ? (
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                margin: "4px 0px",
-                minWidth: "fit-content",
-                justifyContent: "start",
-              }}
-              size="small"
-              onClick={() => handleCommentUpdate(commentValue)}
+        {isMobile ? (
+          <div style={{ display: "grid", margin: "auto 0px auto 8px" }}>
+            <Link
+              href={`/posts/${result.post_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="hover"
+              sx={{ marginLeft: "8px" }}
             >
-              Save Change
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                margin: "4px 0px",
-                minWidth: "fit-content",
-                justifyContent: "start",
-              }}
-              size="small"
-              disabled
-            >
-              Save Change
-            </Button>
-          )}
+              View
+            </Link>
+            {commentValue != "" ? (
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{
+                  margin: "4px 0px",
+                  minWidth: "fit-content",
+                  justifyContent: "center",
+                }}
+                size="small"
+                onClick={() => handleCommentUpdate(commentValue)}
+              >
+                Save
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{
+                  margin: "4px 0px",
+                  minWidth: "fit-content",
+                  justifyContent: "center",
+                }}
+                size="small"
+                disabled
+              >
+                Save
+              </Button>
+            )}
 
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{
-              margin: "4px 0px",
-              minWidth: "fit-content",
-              justifyContent: "start",
-            }}
-            startIcon={<DeleteIcon />}
-            size="small"
-            onClick={handleDeleteOpen}
-          >
-            Delete
-          </Button>
-        </div>
+            {/* <Button
+              variant="contained"
+              color="secondary"
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
+              startIcon={<DeleteIcon />}
+              size="small"
+              onClick={handleDeleteOpen}
+            ></Button> */}
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="filter"
+              size="small"
+              onClick={handleDeleteOpen}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </div>
+        ) : (
+          <div style={{ display: "grid", margin: "auto 0px auto 20px" }}>
+            <Link
+              href={`/posts/${result.post_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              underline="hover"
+              sx={{ marginLeft: "15px" }}
+            >
+              View Post
+            </Link>
+            {commentValue != "" ? (
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{
+                  margin: "4px 0px",
+                  minWidth: "fit-content",
+                  justifyContent: "start",
+                }}
+                size="small"
+                onClick={() => handleCommentUpdate(commentValue)}
+              >
+                Save Change
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{
+                  margin: "4px 0px",
+                  minWidth: "fit-content",
+                  justifyContent: "start",
+                }}
+                size="small"
+                disabled
+              >
+                Save Change
+              </Button>
+            )}
+
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
+              startIcon={<DeleteIcon />}
+              size="small"
+              onClick={handleDeleteOpen}
+            >
+              Delete
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

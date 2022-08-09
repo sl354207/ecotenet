@@ -8,6 +8,7 @@ import { useUserContext } from "@components/UserContext";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import {
   AppBar,
   Autocomplete,
@@ -358,22 +359,41 @@ export default function Dashboard() {
               label="Comments"
               {...a11yProps(3)}
             />
-            <Tab
-              sx={{
-                flexGrow: 1,
-                backgroundColor: theme.palette.primary.light,
-                minHeight: "80px",
-                minWidth: "inherit",
-                padding: "inherit",
-                borderRadius: "10px",
-                "&:hover": {
-                  color: theme.text,
-                  opacity: 1,
-                },
-              }}
-              label="Notifications"
-              {...a11yProps(4)}
-            />
+            {isMobile ? (
+              <Tab
+                sx={{
+                  flexGrow: 1,
+                  backgroundColor: theme.palette.primary.light,
+                  minHeight: "80px",
+                  minWidth: "inherit",
+                  padding: "inherit",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    color: theme.text,
+                    opacity: 1,
+                  },
+                }}
+                label={<NotificationsNoneIcon />}
+                {...a11yProps(4)}
+              />
+            ) : (
+              <Tab
+                sx={{
+                  flexGrow: 1,
+                  backgroundColor: theme.palette.primary.light,
+                  minHeight: "80px",
+                  minWidth: "inherit",
+                  padding: "inherit",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    color: theme.text,
+                    opacity: 1,
+                  },
+                }}
+                label="Notifications"
+                {...a11yProps(4)}
+              />
+            )}
           </Tabs>
         </AppBar>
 
@@ -473,7 +493,7 @@ export default function Dashboard() {
                     profile.socials && profile.socials.length > 2 ? true : false
                   }
                   disableClearable={true}
-                  value={profile.socials && profile.socials[0]}
+                  value={[]}
                   onChange={(event, newValue) => {
                     setProfile((profile) => ({
                       ...profile,

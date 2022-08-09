@@ -44,7 +44,7 @@ const post = ({ post, comments }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // set post as value of editor
   const [value, setValue] = useState(post);
 

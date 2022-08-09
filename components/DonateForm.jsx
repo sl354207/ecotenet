@@ -182,7 +182,7 @@ const DonateForm = () => {
           sx={{
             flexGrow: 1,
             backgroundColor: theme.palette.primary.light,
-            margin: "20px",
+            margin: "10px",
             minHeight: "80px",
             borderRadius: "10px",
             "&:hover": {
@@ -197,7 +197,7 @@ const DonateForm = () => {
           sx={{
             flexGrow: 1,
             backgroundColor: theme.palette.primary.light,
-            margin: "20px",
+            margin: "10px",
             minHeight: "80px",
             borderRadius: "10px",
             "&:hover": {

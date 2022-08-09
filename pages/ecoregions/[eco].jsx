@@ -221,7 +221,7 @@ const eco = ({ wiki, ecoName, id }) => {
           </Typography>
         ) : (
           <>
-            <Typography variant="h5">
+            <Typography variant="h5" sx={{ marginTop: "10px" }}>
               Source:{" "}
               <Link
                 href={`https://en.wikipedia.org/wiki/${ecoName.replace(

@@ -237,7 +237,7 @@ const MapSpecies = ({ clickInfo, state }) => {
           boxZoom={false}
           dragRotate={false}
           touchPitch={false}
-          touchZoomRotate={false}
+          // touchZoomRotate={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
