@@ -1,6 +1,7 @@
 import DashboardDialog from "@components/dialogs/DashboardDialog";
 import Link from "@components/Link";
 import { useSnackbarContext } from "@components/SnackbarContext";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { updatePost } from "@utils/api-helpers";
@@ -447,8 +448,17 @@ const StepForm = ({ post, user }) => {
 
   return (
     <>
-      <Link href="/dashboard" underline="hover">
+      {/* <Link href="/dashboard" underline="hover">
         &#10229;Dashboard
+      </Link> */}
+
+      <Link
+        href="/dashboard"
+        underline="hover"
+        sx={{ display: "flex", alignItems: "center" }}
+      >
+        <ArrowBackIcon fontSize="small" />
+        Dashboard
       </Link>
       <Stepper
         alternativeLabel

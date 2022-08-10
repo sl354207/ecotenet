@@ -394,6 +394,12 @@ function ImageUploadField({ onChange, value }) {
             [theme.breakpoints.down("md")]: {
               width: "250px",
               display: "flex",
+              marginBottom: "5px",
+            },
+            [theme.breakpoints.down("sm")]: {
+              width: "150px",
+              display: "flex",
+              marginBottom: "5px",
             },
           }}
           value={

@@ -78,10 +78,26 @@ const Link = React.forwardRef(function Link(props, ref) {
 
   if (isExternal) {
     if (noLinkStyle) {
-      return <Anchor className={className} href={href} ref={ref} {...other} />;
+      return (
+        <Anchor
+          className={className}
+          href={href}
+          ref={ref}
+          sx={{ overflowWrap: "anywhere" }}
+          {...other}
+        />
+      );
     }
 
-    return <MuiLink className={className} href={href} ref={ref} {...other} />;
+    return (
+      <MuiLink
+        className={className}
+        href={href}
+        ref={ref}
+        sx={{ overflowWrap: "anywhere" }}
+        {...other}
+      />
+    );
   }
 
   const linkAs = linkAsProp || as;
@@ -102,6 +118,7 @@ const Link = React.forwardRef(function Link(props, ref) {
         ref={ref}
         {...nextjsProps}
         {...other}
+        sx={{ overflowWrap: "anywhere" }}
       />
     );
   }
@@ -113,6 +130,7 @@ const Link = React.forwardRef(function Link(props, ref) {
       ref={ref}
       {...nextjsProps}
       {...other}
+      sx={{ overflowWrap: "anywhere" }}
     />
   );
 });

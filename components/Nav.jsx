@@ -24,6 +24,7 @@ import {
   Paper,
   Popper,
   Toolbar,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { createFilterOptions } from "@mui/material/Autocomplete";
@@ -175,34 +176,21 @@ const Nav = ({ ecoFilter }) => {
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
         <Toolbar>
-          <>
-            {ecoFilter && (
-              <>
-                {isMobile ? (
-                  <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="filter"
-                    size="small"
-                    onClick={handleDrawerOpen}
-                  >
-                    <SortIcon sx={{ color: theme.palette.secondary.light }} />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    edge="start"
-                    sx={{ marginRight: theme.spacing(2) }}
-                    aria-label="filter"
-                    onClick={handleDrawerOpen}
-                    size="large"
-                  >
-                    <SortIcon sx={{ color: theme.palette.secondary.light }} />
-                  </IconButton>
-                )}
-              </>
-            )}
+          {isMobile ? (
+            <>
+              {ecoFilter && (
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="filter"
+                  size="small"
+                  onClick={handleDrawerOpen}
+                >
+                  <Typography>{ecoFilter}</Typography>
+                  <SortIcon sx={{ color: theme.palette.secondary.light }} />
+                </IconButton>
+              )}
 
-            {isMobile ? (
               <div
                 style={{
                   flexGrow: 1,
@@ -220,7 +208,417 @@ const Nav = ({ ecoFilter }) => {
                   et
                 </Button>
               </div>
-            ) : (
+
+              <div
+                style={{
+                  position: "relative",
+                  borderRadius: theme.shape.borderRadius,
+                  backgroundColor: alpha(theme.palette.common.white, 0.15),
+                  "&:hover": {
+                    backgroundColor: alpha(theme.palette.common.white, 0.25),
+                  },
+                  marginLeft: 0,
+                  width: "auto",
+                  marginRight: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    padding: theme.spacing(0, 2),
+                    height: "100%",
+                    position: "absolute",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <SearchIcon />
+                </div>
+
+                <Autocomplete
+                  sx={{
+                    "&.MuiAutocomplete-input": {
+                      padding: theme.spacing(1, 1, 1, 0),
+                      // vertical padding + font size from searchIcon
+                      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                      transition: theme.transitions.create("width"),
+                      width: "0ch",
+                      "&:focus": {
+                        width: "20ch",
+                      },
+                    },
+                  }}
+                  autoHighlight
+                  disableClearable={true}
+                  onChange={(event, newValue) => {
+                    router.push(
+                      `/search?q=${newValue.inputValue}&s=${newValue.path}`
+                    );
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+
+                    if (!ecoFilter) {
+                      if (params.inputValue !== "") {
+                        filtered.push(
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all posts`,
+                            path: "allPosts",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all species`,
+                            path: "allSpecies",
+                          }
+                        );
+                      }
+                    } else {
+                      if (params.inputValue !== "") {
+                        filtered.push(
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in ecoregion posts`,
+                            path: "ecoPosts",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in ecoregion species`,
+                            path: "ecoSpecies",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all posts`,
+                            path: "allPosts",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all species`,
+                            path: "allSpecies",
+                          }
+                        );
+                      }
+                    }
+
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="nav-auto"
+                  options={tags}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    // if (typeof option === "string") {
+                    //   return option;
+                    // }
+                    // // Add "xxx" option created dynamically
+                    // if (option.inputValue) {
+                    //   return option.inputValue;
+                    // }
+                    // Regular option
+                    return "";
+                  }}
+                  renderOption={(props, option) => (
+                    <li {...props}>{option.title}</li>
+                  )}
+                  freeSolo
+                  renderInput={(params) => (
+                    <InputBase
+                      {...params}
+                      placeholder="Search Site…"
+                      sx={{
+                        "& .MuiInputBase-input": {
+                          padding: theme.spacing(1, 1, 1, 0),
+                          // vertical padding + font size from searchIcon
+                          paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                          transition: theme.transitions.create("width"),
+                          width: "0ch",
+                          "&:focus": {
+                            width: "20ch",
+                          },
+                        },
+                      }}
+                      ref={params.InputProps.ref}
+                      inputProps={params.inputProps}
+                    />
+                  )}
+                />
+              </div>
+
+              <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                ref={anchorRef}
+                aria-controls={popper ? "menu-list-grow" : undefined}
+                aria-haspopup="true"
+                onClick={togglePopper}
+                size="large"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Popper
+                open={popper}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom" ? "center top" : "center bottom",
+                      minWidth: 210,
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={closePopper}>
+                        <MenuList
+                          autoFocusItem={popper}
+                          id="menu-list-grow"
+                          onKeyDown={handlePopperKeyDown}
+                        >
+                          <MenuItem
+                            onClick={() => {
+                              setPopper(false);
+                              router.push("/featured");
+                            }}
+                            sx={{ color: theme.palette.secondary.main }}
+                          >
+                            Featured Posts
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              setPopper(false);
+                              router.push("/species-map");
+                            }}
+                            sx={{ color: theme.palette.secondary.main }}
+                          >
+                            Species Map
+                          </MenuItem>
+                          {status == "authenticated" && (
+                            <MenuItem
+                              onClick={
+                                status == "authenticated" &&
+                                user.name == undefined
+                                  ? () => {
+                                      setPopper(false);
+                                      router.push("/auth/new-user");
+                                    }
+                                  : () => {
+                                      setPopper(false);
+                                      router.push("/dashboard");
+                                    }
+                              }
+                              sx={{ color: theme.palette.secondary.main }}
+                            >
+                              Dashboard
+                            </MenuItem>
+                          )}
+                          {status == "authenticated" ? (
+                            <MenuItem
+                              onClick={
+                                status == "authenticated" &&
+                                user.name == undefined
+                                  ? () => {
+                                      setPopper(false);
+                                      router.push("/auth/new-user");
+                                    }
+                                  : () => {
+                                      setPopper(false);
+                                      startPost();
+                                    }
+                              }
+                              sx={{
+                                color: theme.palette.secondary.main,
+                                border: `1px solid ${theme.palette.secondary.main}`,
+                                borderRadius: "4px",
+                                marginBottom: "4px",
+                              }}
+                            >
+                              Create Post
+                            </MenuItem>
+                          ) : (
+                            <MenuItem
+                              // onClick={() => {
+                              //   setPopper(false);
+                              //   signIn();
+                              // }}
+                              disabled
+                              sx={{
+                                color: theme.palette.secondary.main,
+                                border: `1px solid ${theme.palette.secondary.main}`,
+                                borderRadius: "4px",
+                                marginBottom: "4px",
+                              }}
+                            >
+                              Create Post
+                            </MenuItem>
+                          )}
+
+                          <MenuItem
+                            disabled={status == "loading"}
+                            onClick={
+                              status == "authenticated"
+                                ? () => {
+                                    setPopper(false);
+                                    signOut({
+                                      callbackUrl: "http://localhost:3000",
+                                    });
+                                  }
+                                : () => {
+                                    setPopper(false);
+                                    signIn();
+                                  }
+                            }
+                            sx={{
+                              color: theme.palette.secondary.main,
+                              border: `1px solid ${theme.palette.secondary.main}`,
+                              borderRadius: "4px",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            {status == "authenticated" ? (
+                              <>Sign Out</>
+                            ) : (
+                              <>Sign In</>
+                            )}
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              setPopper(false);
+                              router.push("/donate");
+                            }}
+                            sx={{
+                              border: `1px solid ${theme.palette.secondary.main}`,
+                              borderRadius: "4px",
+                              backgroundColor: theme.palette.secondary.main,
+                              color: theme.palette.text.secondary,
+                              "&:hover": {
+                                backgroundColor: "#0071e4",
+                                border: "1px solid #0071e4",
+                                borderRadius: "4px",
+                              },
+                            }}
+                          >
+                            Donate
+                          </MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+
+              <Drawer
+                sx={{
+                  width: drawerWidth,
+                  flexShrink: 0,
+                  "& .MuiDrawer-paper": {
+                    width: drawerWidth,
+                    backgroundColor: theme.palette.primary.light,
+                    margin: 0,
+                  },
+                }}
+                anchor="left"
+                open={drawerOpen}
+                onClose={handleDrawerClose}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: theme.spacing(0, 1),
+                    // necessary for content to be below app bar
+                    ...theme.mixins.toolbar,
+                  }}
+                >
+                  <Button
+                    sx={{
+                      flexGrow: 1,
+                      [theme.breakpoints.down("md")]: {
+                        flexGrow: 1,
+                      },
+                    }}
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      router.push("/");
+                    }}
+                    variant="text"
+                    color="inherit"
+                  >
+                    ecotenet
+                  </Button>
+                  <IconButton onClick={handleDrawerClose} size="large">
+                    <ChevronLeftIcon />
+                  </IconButton>
+                </div>
+                <Divider />
+                {state.map((menuItem) => {
+                  const { menuTitle, menuSubs, openList } = menuItem;
+
+                  return (
+                    <List
+                      component="nav"
+                      aria-labelledby="nested-list"
+                      key="mainlist"
+                    >
+                      <ListItem
+                        button
+                        key={menuTitle}
+                        onClick={() => handleListClick(menuTitle)}
+                      >
+                        <ListItemText primary={menuTitle} />
+                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </ListItem>
+                      <Collapse in={openList} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding key="sublist">
+                          {menuSubs.map((menuSub) => (
+                            <ListItem
+                              button
+                              key={menuSub}
+                              sx={{ paddingLeft: theme.spacing(4) }}
+                              onClick={() => {
+                                handleDrawerClose(Event);
+                                router.push({
+                                  pathname: `/[region]/[category]`,
+                                  query: {
+                                    region: ecoFilter,
+                                    category: menuSub.replaceAll("/", "_"),
+                                    title: menuTitle,
+                                  },
+                                });
+                              }}
+                            >
+                              <ListItemText primary={menuSub} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Collapse>
+                      <Divider />
+                    </List>
+                  );
+                })}
+              </Drawer>
+            </>
+          ) : (
+            <>
+              {ecoFilter && (
+                <IconButton
+                  edge="start"
+                  sx={{ marginRight: theme.spacing(2) }}
+                  aria-label="filter"
+                  onClick={handleDrawerOpen}
+                  size="large"
+                >
+                  <Typography>{ecoFilter}</Typography>
+                  <SortIcon sx={{ color: theme.palette.secondary.light }} />
+                </IconButton>
+              )}
+
               <div
                 style={{
                   flexGrow: 1,
@@ -255,444 +653,292 @@ const Nav = ({ ecoFilter }) => {
                   )}
                 </div>
               </div>
-            )}
 
-            <div
-              style={{
-                position: "relative",
-                borderRadius: theme.shape.borderRadius,
-                backgroundColor: alpha(theme.palette.common.white, 0.15),
-                "&:hover": {
-                  backgroundColor: alpha(theme.palette.common.white, 0.25),
-                },
-                marginLeft: 0,
-                width: "auto",
-                marginRight: "10px",
-              }}
-            >
               <div
                 style={{
-                  padding: theme.spacing(0, 2),
-                  height: "100%",
-                  position: "absolute",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  position: "relative",
+                  borderRadius: theme.shape.borderRadius,
+                  backgroundColor: alpha(theme.palette.common.white, 0.15),
+                  "&:hover": {
+                    backgroundColor: alpha(theme.palette.common.white, 0.25),
+                  },
+                  marginLeft: 0,
+                  width: "auto",
+                  marginRight: "10px",
                 }}
               >
-                <SearchIcon />
+                <div
+                  style={{
+                    padding: theme.spacing(0, 2),
+                    height: "100%",
+                    position: "absolute",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <SearchIcon />
+                </div>
+
+                <Autocomplete
+                  sx={{
+                    "&.MuiAutocomplete-input": {
+                      padding: theme.spacing(1, 1, 1, 0),
+                      // vertical padding + font size from searchIcon
+                      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                      transition: theme.transitions.create("width"),
+                      width: "0ch",
+                      "&:focus": {
+                        width: "20ch",
+                      },
+                    },
+                  }}
+                  autoHighlight
+                  disableClearable={true}
+                  onChange={(event, newValue) => {
+                    router.push(
+                      `/search?q=${newValue.inputValue}&s=${newValue.path}`
+                    );
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+
+                    if (!ecoFilter) {
+                      if (params.inputValue !== "") {
+                        filtered.push(
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all posts`,
+                            path: "allPosts",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all species`,
+                            path: "allSpecies",
+                          }
+                        );
+                      }
+                    } else {
+                      if (params.inputValue !== "") {
+                        filtered.push(
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in ecoregion posts`,
+                            path: "ecoPosts",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in ecoregion species`,
+                            path: "ecoSpecies",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all posts`,
+                            path: "allPosts",
+                          },
+                          {
+                            inputValue: params.inputValue,
+                            title: `"${params.inputValue}" in all species`,
+                            path: "allSpecies",
+                          }
+                        );
+                      }
+                    }
+
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="nav-auto"
+                  options={tags}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    // if (typeof option === "string") {
+                    //   return option;
+                    // }
+                    // // Add "xxx" option created dynamically
+                    // if (option.inputValue) {
+                    //   return option.inputValue;
+                    // }
+                    // Regular option
+                    return "";
+                  }}
+                  renderOption={(props, option) => (
+                    <li {...props}>{option.title}</li>
+                  )}
+                  freeSolo
+                  renderInput={(params) => (
+                    <InputBase
+                      {...params}
+                      placeholder="Search Site…"
+                      sx={{
+                        "& .MuiInputBase-input": {
+                          padding: theme.spacing(1, 1, 1, 0),
+                          // vertical padding + font size from searchIcon
+                          paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                          transition: theme.transitions.create("width"),
+                          width: "0ch",
+                          "&:focus": {
+                            width: "20ch",
+                          },
+                        },
+                      }}
+                      ref={params.InputProps.ref}
+                      inputProps={params.inputProps}
+                    />
+                  )}
+                />
               </div>
 
-              <Autocomplete
-                sx={{
-                  "&.MuiAutocomplete-input": {
-                    padding: theme.spacing(1, 1, 1, 0),
-                    // vertical padding + font size from searchIcon
-                    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                    transition: theme.transitions.create("width"),
-                    width: "0ch",
-                    "&:focus": {
-                      width: "20ch",
-                    },
-                  },
-                }}
-                autoHighlight
-                disableClearable={true}
-                onChange={(event, newValue) => {
-                  router.push(
-                    `/search?q=${newValue.inputValue}&s=${newValue.path}`
-                  );
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-
-                  if (!ecoFilter) {
-                    if (params.inputValue !== "") {
-                      filtered.push(
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all posts`,
-                          path: "allPosts",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all species`,
-                          path: "allSpecies",
-                        }
-                      );
-                    }
-                  } else {
-                    if (params.inputValue !== "") {
-                      filtered.push(
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in ecoregion posts`,
-                          path: "ecoPosts",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in ecoregion species`,
-                          path: "ecoSpecies",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all posts`,
-                          path: "allPosts",
-                        },
-                        {
-                          inputValue: params.inputValue,
-                          title: `"${params.inputValue}" in all species`,
-                          path: "allSpecies",
-                        }
-                      );
-                    }
-                  }
-
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                id="nav-auto"
-                options={tags}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  // if (typeof option === "string") {
-                  //   return option;
-                  // }
-                  // // Add "xxx" option created dynamically
-                  // if (option.inputValue) {
-                  //   return option.inputValue;
-                  // }
-                  // Regular option
-                  return "";
-                }}
-                renderOption={(props, option) => (
-                  <li {...props}>{option.title}</li>
-                )}
-                freeSolo
-                renderInput={(params) => (
-                  <InputBase
-                    {...params}
-                    placeholder="Search Site…"
-                    sx={{
-                      "& .MuiInputBase-input": {
-                        padding: theme.spacing(1, 1, 1, 0),
-                        // vertical padding + font size from searchIcon
-                        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                        transition: theme.transitions.create("width"),
-                        width: "0ch",
-                        "&:focus": {
-                          width: "20ch",
-                        },
-                      },
-                    }}
-                    ref={params.InputProps.ref}
-                    inputProps={params.inputProps}
-                  />
-                )}
-              />
-            </div>
-
-            {!isMobile && (
-              <>
-                {status == "authenticated" && (
-                  <>
-                    {user.name == undefined ? (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => router.push("/auth/new-user")}
-                      >
-                        Create Post
-                      </Button>
-                    ) : (
-                      <CreatePostButton
-                        name={user && user.name}
-                        snackbar={snackbar}
-                        setSnackbar={setSnackbar}
-                        nav={true}
-                      />
-                    )}
-                  </>
-                )}
-
+              {status == "authenticated" ? (
+                <>
+                  {user.name == undefined ? (
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => router.push("/auth/new-user")}
+                    >
+                      Create Post
+                    </Button>
+                  ) : (
+                    <CreatePostButton
+                      name={user && user.name}
+                      snackbar={snackbar}
+                      setSnackbar={setSnackbar}
+                      nav={true}
+                    />
+                  )}
+                </>
+              ) : (
                 <Button
                   variant="outlined"
                   color="secondary"
-                  sx={{ marginLeft: "10px" }}
-                  disabled={status == "loading"}
-                  onClick={
-                    status == "authenticated"
-                      ? () =>
-                          signOut({
-                            callbackUrl: "http://localhost:3000",
-                          })
-                      : () => signIn()
-                  }
+                  // onClick={() => signIn()}
+                  disabled
                 >
-                  {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+                  Create Post
                 </Button>
+              )}
 
-                <Button
-                  href="/donate"
-                  variant="contained"
-                  color="secondary"
-                  sx={{ marginLeft: "10px" }}
-                >
-                  Donate
-                </Button>
-              </>
-            )}
-
-            {isMobile && (
-              <>
-                <IconButton
-                  edge="end"
-                  color="inherit"
-                  aria-label="menu"
-                  ref={anchorRef}
-                  aria-controls={popper ? "menu-list-grow" : undefined}
-                  aria-haspopup="true"
-                  onClick={togglePopper}
-                  size="large"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Popper
-                  open={popper}
-                  anchorEl={anchorRef.current}
-                  role={undefined}
-                  transition
-                  disablePortal
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom"
-                            ? "center top"
-                            : "center bottom",
-                        minWidth: 210,
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={closePopper}>
-                          <MenuList
-                            autoFocusItem={popper}
-                            id="menu-list-grow"
-                            onKeyDown={handlePopperKeyDown}
-                          >
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/featured");
-                              }}
-                              sx={{ color: theme.palette.secondary.main }}
-                            >
-                              Featured Posts
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/species-map");
-                              }}
-                              sx={{ color: theme.palette.secondary.main }}
-                            >
-                              Species Map
-                            </MenuItem>
-                            {status == "authenticated" && (
-                              <MenuItem
-                                onClick={
-                                  status == "authenticated" &&
-                                  user.name == undefined
-                                    ? () => {
-                                        setPopper(false);
-                                        router.push("/auth/new-user");
-                                      }
-                                    : () => {
-                                        setPopper(false);
-                                        router.push("/dashboard");
-                                      }
-                                }
-                                sx={{ color: theme.palette.secondary.main }}
-                              >
-                                Dashboard
-                              </MenuItem>
-                            )}
-                            {status == "authenticated" && (
-                              <MenuItem
-                                onClick={
-                                  status == "authenticated" &&
-                                  user.name == undefined
-                                    ? () => {
-                                        setPopper(false);
-                                        router.push("/auth/new-user");
-                                      }
-                                    : () => {
-                                        setPopper(false);
-                                        startPost();
-                                      }
-                                }
-                                sx={{
-                                  color: theme.palette.secondary.main,
-                                  border: `1px solid ${theme.palette.secondary.main}`,
-                                  borderRadius: "4px",
-                                  marginBottom: "4px",
-                                }}
-                              >
-                                Create Post
-                              </MenuItem>
-                            )}
-
-                            <MenuItem
-                              disabled={status == "loading"}
-                              onClick={
-                                status == "authenticated"
-                                  ? () => {
-                                      setPopper(false);
-                                      signOut({
-                                        callbackUrl: "http://localhost:3000",
-                                      });
-                                    }
-                                  : () => {
-                                      setPopper(false);
-                                      signIn();
-                                    }
-                              }
-                              sx={{
-                                color: theme.palette.secondary.main,
-                                border: `1px solid ${theme.palette.secondary.main}`,
-                                borderRadius: "4px",
-                                marginBottom: "4px",
-                              }}
-                            >
-                              {status == "authenticated" ? (
-                                <>Sign Out</>
-                              ) : (
-                                <>Sign In</>
-                              )}
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => {
-                                setPopper(false);
-                                router.push("/donate");
-                              }}
-                              sx={{
-                                border: `1px solid ${theme.palette.secondary.main}`,
-                                borderRadius: "4px",
-                                backgroundColor: theme.palette.secondary.main,
-                                color: theme.palette.text.secondary,
-                                "&:hover": {
-                                  backgroundColor: "#0071e4",
-                                  border: "1px solid #0071e4",
-                                  borderRadius: "4px",
-                                },
-                              }}
-                            >
-                              Donate
-                            </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-              </>
-            )}
-
-            <Drawer
-              sx={{
-                width: drawerWidth,
-                flexShrink: 0,
-                "& .MuiDrawer-paper": {
-                  width: drawerWidth,
-                  backgroundColor: theme.palette.primary.light,
-                  margin: 0,
-                },
-              }}
-              anchor="left"
-              open={drawerOpen}
-              onClose={handleDrawerClose}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: theme.spacing(0, 1),
-                  // necessary for content to be below app bar
-                  ...theme.mixins.toolbar,
-                }}
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ marginLeft: "10px" }}
+                disabled={status == "loading"}
+                onClick={
+                  status == "authenticated"
+                    ? () =>
+                        signOut({
+                          callbackUrl: "http://localhost:3000",
+                        })
+                    : () => signIn()
+                }
               >
-                <Button
-                  sx={{
-                    flexGrow: 1,
-                    [theme.breakpoints.down("md")]: {
-                      flexGrow: 1,
-                    },
-                  }}
-                  onClick={() => {
-                    setDrawerOpen(false);
-                    router.push("/");
-                  }}
-                  variant="text"
-                  color="inherit"
-                >
-                  ecotenet
-                </Button>
-                <IconButton onClick={handleDrawerClose} size="large">
-                  <ChevronLeftIcon />
-                </IconButton>
-              </div>
-              <Divider />
-              {state.map((menuItem) => {
-                const { menuTitle, menuSubs, openList } = menuItem;
+                {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+              </Button>
 
-                return (
-                  <List
-                    component="nav"
-                    aria-labelledby="nested-list"
-                    key="mainlist"
+              <Button
+                href="/donate"
+                variant="contained"
+                color="secondary"
+                sx={{ marginLeft: "10px" }}
+              >
+                Donate
+              </Button>
+
+              <Drawer
+                sx={{
+                  width: drawerWidth,
+                  flexShrink: 0,
+                  "& .MuiDrawer-paper": {
+                    width: drawerWidth,
+                    backgroundColor: theme.palette.primary.light,
+                    margin: 0,
+                  },
+                }}
+                anchor="left"
+                open={drawerOpen}
+                onClose={handleDrawerClose}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: theme.spacing(0, 1),
+                    // necessary for content to be below app bar
+                    ...theme.mixins.toolbar,
+                  }}
+                >
+                  <Button
+                    sx={{
+                      flexGrow: 1,
+                      [theme.breakpoints.down("md")]: {
+                        flexGrow: 1,
+                      },
+                    }}
+                    onClick={() => {
+                      setDrawerOpen(false);
+                      router.push("/");
+                    }}
+                    variant="text"
+                    color="inherit"
                   >
-                    <ListItem
-                      button
-                      key={menuTitle}
-                      onClick={() => handleListClick(menuTitle)}
+                    ecotenet
+                  </Button>
+                  <IconButton onClick={handleDrawerClose} size="large">
+                    <ChevronLeftIcon />
+                  </IconButton>
+                </div>
+                <Divider />
+                {state.map((menuItem) => {
+                  const { menuTitle, menuSubs, openList } = menuItem;
+
+                  return (
+                    <List
+                      component="nav"
+                      aria-labelledby="nested-list"
+                      key="mainlist"
                     >
-                      <ListItemText primary={menuTitle} />
-                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </ListItem>
-                    <Collapse in={openList} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding key="sublist">
-                        {menuSubs.map((menuSub) => (
-                          <ListItem
-                            button
-                            key={menuSub}
-                            sx={{ paddingLeft: theme.spacing(4) }}
-                            onClick={() => {
-                              handleDrawerClose(Event);
-                              router.push({
-                                pathname: `/[region]/[category]`,
-                                query: {
-                                  region: ecoFilter,
-                                  category: menuSub.replaceAll("/", "_"),
-                                  title: menuTitle,
-                                },
-                              });
-                            }}
-                          >
-                            <ListItemText primary={menuSub} />
-                          </ListItem>
-                        ))}
-                      </List>
-                    </Collapse>
-                    <Divider />
-                  </List>
-                );
-              })}
-            </Drawer>
-          </>
+                      <ListItem
+                        button
+                        key={menuTitle}
+                        onClick={() => handleListClick(menuTitle)}
+                      >
+                        <ListItemText primary={menuTitle} />
+                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </ListItem>
+                      <Collapse in={openList} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding key="sublist">
+                          {menuSubs.map((menuSub) => (
+                            <ListItem
+                              button
+                              key={menuSub}
+                              sx={{ paddingLeft: theme.spacing(4) }}
+                              onClick={() => {
+                                handleDrawerClose(Event);
+                                router.push({
+                                  pathname: `/[region]/[category]`,
+                                  query: {
+                                    region: ecoFilter,
+                                    category: menuSub.replaceAll("/", "_"),
+                                    title: menuTitle,
+                                  },
+                                });
+                              }}
+                            >
+                              <ListItemText primary={menuSub} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Collapse>
+                      <Divider />
+                    </List>
+                  );
+                })}
+              </Drawer>
+            </>
+          )}
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>

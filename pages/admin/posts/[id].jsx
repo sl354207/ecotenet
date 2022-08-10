@@ -4,6 +4,7 @@ import Resolve from "@components/dialogs/Resolve";
 import EditorLayout from "@components/EditorLayout";
 import Header from "@components/Header";
 import Link from "@components/Link";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Button,
   CircularProgress,
@@ -92,12 +93,22 @@ const post = () => {
     list = (
       <>
         {comment_query ? (
-          <Link href="/admin/flags" underline="hover">
-            &#10229;Flags
+          <Link
+            href="/admin/flags"
+            underline="hover"
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <ArrowBackIcon fontSize="small" />
+            Flags
           </Link>
         ) : (
-          <Link href="/admin/posts" underline="hover">
-            &#10229;Posts
+          <Link
+            href="/admin/posts"
+            underline="hover"
+            sx={{ display: "flex", alignItems: "center" }}
+          >
+            <ArrowBackIcon fontSize="small" />
+            Flags
           </Link>
         )}
 

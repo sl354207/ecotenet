@@ -21,11 +21,12 @@ function ImageCitation({ onChange, value }) {
           [theme.breakpoints.down("md")]: {
             width: "250px",
             display: "flex",
-            // marginBottom: 5,
+            marginBottom: "5px",
           },
           [theme.breakpoints.down("sm")]: {
-            width: "250px",
-            // marginBottom: 5,
+            width: "150px",
+            display: "flex",
+            marginBottom: "5px",
           },
         }}
         value={value || ""}

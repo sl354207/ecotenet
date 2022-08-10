@@ -2,6 +2,8 @@ import AdminDrawer from "@components/AdminDrawer";
 import Header from "@components/Header";
 import Link from "@components/Link";
 import { useSnackbarContext } from "@components/SnackbarContext";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {
   Button,
   CircularProgress,
@@ -9,6 +11,7 @@ import {
   List,
   ListItem,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import theme from "@utils/theme";
 import useSWR from "swr";
@@ -20,6 +23,7 @@ const admin = () => {
 
   const { data: stats } = useSWR("/api/admin/stats", fetcher);
   const { data: posts, mutate } = useSWR("/api/admin/posts", fetcher);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const updateFeature = async (action, post) => {
     switch (action) {
@@ -266,7 +270,13 @@ const admin = () => {
                     >
                       {post.feature == "true" ? (
                         <Button variant="outlined" color="secondary" disabled>
-                          Add to Features
+                          {isMobile ? (
+                            <>
+                              <AddIcon></AddIcon>
+                            </>
+                          ) : (
+                            <>Add to Features</>
+                          )}
                         </Button>
                       ) : (
                         <>
@@ -276,7 +286,11 @@ const admin = () => {
                               color="secondary"
                               disabled
                             >
-                              Add to Features
+                              {isMobile ? (
+                                <AddIcon></AddIcon>
+                              ) : (
+                                <>Add to Features</>
+                              )}
                             </Button>
                           ) : (
                             <Button
@@ -284,7 +298,11 @@ const admin = () => {
                               color="secondary"
                               onClick={() => updateFeature("addFeature", post)}
                             >
-                              Add to Features
+                              {isMobile ? (
+                                <AddIcon></AddIcon>
+                              ) : (
+                                <>Add to Features</>
+                              )}
                             </Button>
                           )}
                         </>
@@ -316,8 +334,9 @@ const admin = () => {
                           variant="outlined"
                           color="secondary"
                           onClick={() => updateFeature("removeList", post)}
+                          size={isMobile ? "small" : "medium"}
                         >
-                          Remove from List
+                          {isMobile ? <>Delist</> : <>Remove from List</>}
                         </Button>
                       ) : (
                         <Button
@@ -325,7 +344,11 @@ const admin = () => {
                           color="secondary"
                           onClick={() => updateFeature("removeFeature", post)}
                         >
-                          Remove from Features
+                          {isMobile ? (
+                            <RemoveIcon></RemoveIcon>
+                          ) : (
+                            <>Remove from Features</>
+                          )}
                         </Button>
                       )}
                     </Grid>

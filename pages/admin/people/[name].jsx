@@ -2,6 +2,7 @@ import AdminDialog from "@components/dialogs/AdminDialog";
 import Resolve from "@components/dialogs/Resolve";
 import Header from "@components/Header";
 import Link from "@components/Link";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -126,8 +127,16 @@ const person = () => {
   }
   return (
     <>
-      <Link href="/admin/flags" underline="hover">
+      {/* <Link href="/admin/flags" underline="hover">
         &#10229;Flags
+      </Link> */}
+      <Link
+        href="/admin/flags"
+        underline="hover"
+        sx={{ display: "flex", alignItems: "center" }}
+      >
+        <ArrowBackIcon fontSize="small" />
+        Flags
       </Link>
       <Container>
         {person}
