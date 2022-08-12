@@ -234,7 +234,7 @@ const species = ({ species, wiki }) => {
             }}
           ></div>
           <Header
-            title={`${species.Scientific_Name}: ${species.COMMON_NAME}`}
+            title={`${species.scientific_name}: ${species.common_name}`}
           />
           <IconButton
             sx={{
@@ -328,7 +328,7 @@ const species = ({ species, wiki }) => {
             <Typography variant="h5" sx={{ marginTop: "10px" }}>
               Source:{" "}
               <Link
-                href={`https://en.wikipedia.org/wiki/${species.Scientific_Name.replace(
+                href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
                   " ",
                   "_"
                 )}?redirect=true`}
@@ -366,8 +366,8 @@ const species = ({ species, wiki }) => {
                 <Link
                   variant="h6"
                   href={`https://www.inaturalist.org/search?q=${
-                    species.Scientific_Name.toLowerCase().split(" ")[0]
-                  }%20${species.Scientific_Name.toLowerCase().split(" ")[1]}`}
+                    species.scientific_name.toLowerCase().split(" ")[0]
+                  }%20${species.scientific_name.toLowerCase().split(" ")[1]}`}
                   color="secondary"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -380,9 +380,9 @@ const species = ({ species, wiki }) => {
                 <Link
                   variant="h6"
                   href={`https://commons.wikimedia.org/w/index.php?search=${
-                    species.Scientific_Name.toLowerCase().split(" ")[0]
+                    species.scientific_name.toLowerCase().split(" ")[0]
                   }+${
-                    species.Scientific_Name.toLowerCase().split(" ")[1]
+                    species.scientific_name.toLowerCase().split(" ")[1]
                   }&title=Special:MediaSearch&go=Go&type=image`}
                   color="secondary"
                   target="_blank"
@@ -396,9 +396,9 @@ const species = ({ species, wiki }) => {
                 <Link
                   variant="h6"
                   href={`https://www.iucnredlist.org/search?query=${
-                    species.Scientific_Name.toLowerCase().split(" ")[0]
+                    species.scientific_name.toLowerCase().split(" ")[0]
                   }%20${
-                    species.Scientific_Name.toLowerCase().split(" ")[1]
+                    species.scientific_name.toLowerCase().split(" ")[1]
                   }&searchType=species`}
                   color="secondary"
                   target="_blank"
@@ -431,8 +431,8 @@ export const getServerSideProps = async (context) => {
 
   const wikiRes = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
-      species.Scientific_Name.toLowerCase().split(" ")[0]
-    }_${species.Scientific_Name.toLowerCase().split(" ")[1]}?redirect=true`,
+      species.scientific_name.toLowerCase().split(" ")[0]
+    }_${species.scientific_name.toLowerCase().split(" ")[1]}?redirect=true`,
     {
       method: "GET",
       headers: {

@@ -310,17 +310,17 @@ const deleteComment = async (_id) => {
 
 // UPDATE TO SPECIES TYPE FROM CLASS
 //get mammals by unique eco id
-const getSpecies = async (CLASS, unique_id) => {
+const getSpecies = async (speciesType, unique_id) => {
   const { db } = await connectToDatabase();
 
   const species = await db
     .collection("species")
     .find({
-      CLASS: CLASS,
+      species_type: speciesType,
       unique_id: unique_id,
     })
-    .project({ Scientific_Name: 1, COMMON_NAME: 1 })
-    .sort({ Scientific_Name: 1 })
+    .project({ scientific_name: 1, common_name: 1 })
+    .sort({ scientific_name: 1 })
     .toArray();
 
   return species;
@@ -401,7 +401,7 @@ const searchAllSpecies = async (query) => {
           index: "searchSpecies",
           text: {
             query: `${query}`,
-            path: ["COMMON_NAME", "Scientific_Name"],
+            path: ["common_name", "scientific_name"],
             fuzzy: {
               maxEdits: 1,
               maxExpansions: 20,
@@ -409,7 +409,7 @@ const searchAllSpecies = async (query) => {
           },
         },
       },
-      { $project: { Scientific_Name: 1, COMMON_NAME: 1 } },
+      { $project: { scientific_name: 1, common_name: 1 } },
     ])
     .toArray();
 
@@ -489,7 +489,7 @@ const searchEcoSpecies = async (query) => {
               {
                 text: {
                   query: `${query}`,
-                  path: ["COMMON_NAME", "Scientific_Name"],
+                  path: ["common_name", "scientific_name"],
                   fuzzy: {
                     maxEdits: 1,
                     maxExpansions: 20,
@@ -508,7 +508,7 @@ const searchEcoSpecies = async (query) => {
           },
         },
       },
-      { $project: { Scientific_Name: 1, COMMON_NAME: 1 } },
+      { $project: { scientific_name: 1, common_name: 1 } },
     ])
     .toArray();
 
@@ -529,20 +529,20 @@ const autoSpecies = async (query) => {
               {
                 autocomplete: {
                   query: `${query}`,
-                  path: "Scientific_Name",
+                  path: "scientific_name",
                 },
               },
               {
                 autocomplete: {
                   query: `${query}`,
-                  path: "COMMON_NAME",
+                  path: "common_name",
                 },
               },
             ],
           },
         },
       },
-      { $project: { Scientific_Name: 1, COMMON_NAME: 1, unique_id: 1 } },
+      { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
     ])
     .limit(50)
     .toArray();

@@ -21,15 +21,15 @@ const SpeciesItem = ({ result }) => {
         {isMobile ? (
           <>
             <Typography variant="h6" color="textPrimary" align="left">
-              <i>{result.Scientific_Name} -</i>
+              <i>{result.scientific_name} -</i>
             </Typography>
             <Typography variant="h6" color="textPrimary" align="left">
-              {result.COMMON_NAME}
+              {result.common_name}
             </Typography>
           </>
         ) : (
           <Typography variant="h6" color="textPrimary" align="left">
-            <i>{result.Scientific_Name} -</i> {result.COMMON_NAME}
+            <i>{result.scientific_name} -</i> {result.common_name}
           </Typography>
         )}
       </Button>

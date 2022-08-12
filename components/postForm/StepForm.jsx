@@ -455,7 +455,7 @@ const StepForm = ({ post, user }) => {
       <Link
         href="/dashboard"
         underline="hover"
-        sx={{ display: "flex", alignItems: "center" }}
+        style={{ display: "flex", alignItems: "center" }}
       >
         <ArrowBackIcon fontSize="small" />
         Dashboard

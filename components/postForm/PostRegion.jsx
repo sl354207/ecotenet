@@ -149,15 +149,15 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       const name = newValue.slice(0, dash - 1);
 
       for (const result of results) {
-        if (result.Scientific_Name == name) {
+        if (result.scientific_name == name) {
           switch (state[0].count) {
             case 0:
               dispatch({
                 type: "add",
                 payload: 1,
                 value: result.unique_id,
-                s_name: result.Scientific_Name,
-                c_name: result.COMMON_NAME,
+                s_name: result.scientific_name,
+                c_name: result.common_name,
               });
               break;
             case 1:
@@ -165,8 +165,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                 type: "add",
                 payload: 2,
                 value: result.unique_id,
-                s_name: result.Scientific_Name,
-                c_name: result.COMMON_NAME,
+                s_name: result.scientific_name,
+                c_name: result.common_name,
               });
               break;
             case 2:
@@ -174,8 +174,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                 type: "add",
                 payload: 3,
                 value: result.unique_id,
-                s_name: result.Scientific_Name,
-                c_name: result.COMMON_NAME,
+                s_name: result.scientific_name,
+                c_name: result.common_name,
               });
               break;
 
@@ -262,7 +262,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         options={
           results
             ? results.map(
-                (obj) => `${obj.Scientific_Name} - ${obj.COMMON_NAME}`
+                (obj) => `${obj.scientific_name} - ${obj.common_name}`
               )
             : []
         }

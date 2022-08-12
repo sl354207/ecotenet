@@ -18,7 +18,7 @@ const SpeciesScroll = ({ category }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   const uniqueFirst = [
-    ...new Set(category.map((item) => item.Scientific_Name[0])),
+    ...new Set(category.map((item) => item.scientific_name[0])),
   ];
 
   // create object where keys equal uniqueFirst value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
@@ -98,7 +98,7 @@ const SpeciesScroll = ({ category }) => {
                 </ListItemText>
               </ListItem>
               {category.map((item) => {
-                if (item.Scientific_Name[0] === entry) {
+                if (item.scientific_name[0] === entry) {
                   return <SpeciesItem result={item} />;
                 }
               })}

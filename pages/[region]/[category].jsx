@@ -16,7 +16,7 @@ const categoryList = ({ category, title, id }) => {
           </Typography>
         ) : (
           <>
-            {category[0].Scientific_Name ? (
+            {category[0].scientific_name ? (
               <SpeciesScroll category={category} />
             ) : (
               <PostList posts={category} />
@@ -85,7 +85,7 @@ export const getServerSideProps = async (context) => {
       switch (categorySub) {
         case "Mammals":
           try {
-            category = await getSpecies("Mammalia", id);
+            category = await getSpecies("mammal", id);
           } catch (err) {
             console.error(err);
           }
@@ -93,7 +93,7 @@ export const getServerSideProps = async (context) => {
           break;
         case "Reptiles":
           try {
-            category = await getSpecies("Reptilia", id);
+            category = await getSpecies("reptile", id);
           } catch (err) {
             console.error(err);
           }
@@ -101,7 +101,7 @@ export const getServerSideProps = async (context) => {
           break;
         case "Amphibians":
           try {
-            category = await getSpecies("Amphibia", id);
+            category = await getSpecies("amphibian", id);
           } catch (err) {
             console.error(err);
           }
@@ -109,18 +109,58 @@ export const getServerSideProps = async (context) => {
           break;
         case "Birds":
           try {
-            category = await getSpecies("Aves", id);
+            category = await getSpecies("bird", id);
           } catch (err) {
             console.error(err);
           }
 
           break;
-        case "Fish/Mollusk":
-          // try {
-          //   category = await getSpecies("Aves", id);
-          // } catch (err) {
-          //   console.error(err);
-          // }
+        case "Fish":
+          try {
+            category = await getSpecies("fish", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Arthropods":
+          try {
+            category = await getSpecies("arthropod", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Mollusks":
+          try {
+            category = await getSpecies("mollusk", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Cnidaria":
+          try {
+            category = await getSpecies("cnidaria", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Wormish":
+          try {
+            category = await getSpecies("worm", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "The Rest":
+          try {
+            category = await getSpecies("other_animals", id);
+          } catch (err) {
+            console.error(err);
+          }
 
           break;
 
@@ -130,27 +170,182 @@ export const getServerSideProps = async (context) => {
 
       break;
     case "Plants":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      switch (categorySub) {
+        case "Trees and Shrubs":
+          try {
+            category = await getSpecies("tree_shrub", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Vines":
+          try {
+            category = await getSpecies("vine", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Wildflowers":
+          try {
+            category = await getSpecies("wildflower", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Water Masters":
+          try {
+            category = await getSpecies("water_master", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Grassish":
+          try {
+            category = await getSpecies("graminoid", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "The Rest":
+          try {
+            category = await getSpecies("other_plants", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+
+        case "Unplaced":
+          try {
+            category = await getSpecies("uncategorized_plants", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+
+        default:
+          break;
+      }
 
       break;
     case "Fungi":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      switch (categorySub) {
+        case "Gilled":
+          try {
+            category = await getSpecies("gill_fungi", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Non-Gilled":
+          try {
+            category = await getSpecies("non_gilled_fungi", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Gasteroid":
+          try {
+            category = await getSpecies("gasteroid_fungi", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+
+        case "The Rest":
+          try {
+            category = await getSpecies("other_fungi", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+
+        case "Unplaced":
+          try {
+            category = await getSpecies("uncategorized_fungi", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+
+        default:
+          break;
+      }
 
       break;
-    case "Arthropods":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+    case "The Rest":
+      switch (categorySub) {
+        case "Bacteria":
+          try {
+            category = await getSpecies("bacteria", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Viruses":
+          try {
+            category = await getSpecies("virus", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Protozoa":
+          try {
+            category = await getSpecies("protozoa", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Chromista":
+          try {
+            category = await getSpecies("chromista", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Archaea":
+          try {
+            category = await getSpecies("archaea", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Algae":
+          try {
+            category = await getSpecies("algae", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+        case "Ciliates":
+          try {
+            category = await getSpecies("ciliate", id);
+          } catch (err) {
+            console.error(err);
+          }
+
+          break;
+
+        default:
+          break;
+      }
 
       break;
     case "Hunt":

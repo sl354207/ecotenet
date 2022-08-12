@@ -6,7 +6,12 @@
         "Reptiles",
         "Amphibians",
         "Birds",
-        "Fish/Mollusk",
+        "Fish",
+        "Arthropods",
+        "Mollusks",
+        "Cnidaria",
+        "Wormish",
+        "The Rest",
         "Guides"
       ],
       "pageURL": "/mammals",
@@ -14,19 +19,19 @@
     },
     {
       "menuTitle": "Plants",
-      "menuSubs": ["Trees", "Shrubs", "Vines", "Wildflowers", "Ferns", "Guides"],
+      "menuSubs": ["Trees and Shrubs", "Vines", "Wildflowers", "Water Masters", "Grassish", "The Rest", "Unplaced", "Guides"],
       "pageURL": "/mammals",
       "openList": false
     },
     {
       "menuTitle": "Fungi",
-      "menuSubs": ["Gilled", "Non-Gilled", "Gastromycetes", "Guides"],
+      "menuSubs": ["Gilled", "Non-Gilled", "Gasteroid", "The Rest", "Unplaced", "Guides"],
       "pageURL": "/mammals",
       "openList": false
     },
     {
-      "menuTitle": "Arthropods",
-      "menuSubs": ["Crustaceans", "Myriapods", "Chelicerates", "Insects", "Guides"],
+      "menuTitle": "The Rest",
+      "menuSubs": ["Bacteria", "Viruses", "Protozoa", "Chromista", "Archaea", "Algae", "Ciliates", "Guides"],
       "pageURL": "/mammals",
       "openList": false
     },
