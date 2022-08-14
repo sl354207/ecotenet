@@ -6,7 +6,7 @@ import PostList from "@components/PostList";
 import { useUserContext } from "@components/UserContext";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import { getPerson, getProfilePosts } from "@utils/mongodb";
+import { getPerson, getProfilePosts } from "@utils/mongodb/helpers";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";

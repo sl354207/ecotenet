@@ -1,4 +1,4 @@
-import { updateFlag } from "@utils/mongodb";
+import { updateFlag } from "@utils/mongodb/helpers";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {

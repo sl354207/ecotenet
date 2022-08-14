@@ -1,50 +1,58 @@
-import { MongoClient, ObjectId } from "mongodb";
+import clientPromise from "@utils/mongodb/promise";
+import { ObjectId } from "mongodb";
 
-const { MONGODB_URI, MONGODB_DB } = process.env;
+// const { MONGODB_URI, MONGODB_DB } = process.env;
 
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
-  );
-}
+// if (!MONGODB_URI) {
+//   throw new Error(
+//     "Please define the MONGODB_URI environment variable inside .env.local"
+//   );
+// }
 
-if (!MONGODB_DB) {
-  throw new Error(
-    "Please define the MONGODB_DB environment variable inside .env.local"
-  );
-}
+// if (!MONGODB_DB) {
+//   throw new Error(
+//     "Please define the MONGODB_DB environment variable inside .env.local"
+//   );
+// }
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
-let cached = global.mongo;
+// /**
+//  * Global is used here to maintain a cached connection across hot reloads
+//  * in development. This prevents connections growing exponentially
+//  * during API Route usage.
+//  */
+// let cached = global.mongo;
 
-if (!cached) {
-  cached = global.mongo = { conn: null, promise: null };
-}
+// if (!cached) {
+//   cached = global.mongo = { conn: null, promise: null };
+// }
+
+// const connectToDatabase = async () => {
+//   if (cached.conn) {
+//     return cached.conn;
+//   }
+
+//   if (!cached.promise) {
+//     const opts = {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     };
+
+//     cached.promise = MongoClient.connect(MONGODB_URI, opts).then((client) => {
+//       return {
+//         client,
+//         db: client.db(MONGODB_DB),
+//       };
+//     });
+//   }
+//   cached.conn = await cached.promise;
+//   return cached.conn;
+// };
 
 const connectToDatabase = async () => {
-  if (cached.conn) {
-    return cached.conn;
-  }
+  const client = await clientPromise;
+  const db = client.db("eco_site");
 
-  if (!cached.promise) {
-    const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    };
-
-    cached.promise = MongoClient.connect(MONGODB_URI, opts).then((client) => {
-      return {
-        client,
-        db: client.db(MONGODB_DB),
-      };
-    });
-  }
-  cached.conn = await cached.promise;
-  return cached.conn;
+  return db;
 };
 
 // add a post to database with specific format from editor with id, version, and rows as input data.
@@ -68,7 +76,7 @@ const createPost = async (
   const count = 0;
   const voters = [];
 
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const data = {
     title,
@@ -97,7 +105,7 @@ const createPost = async (
 
 // query database to get all published posts
 const getPosts = async (status, approved) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const posts = await db
     .collection("posts")
@@ -109,7 +117,7 @@ const getPosts = async (status, approved) => {
   return posts;
 };
 const getPostsByCategoryAndRegion = async (category, ecoregion) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const posts = await db
     .collection("posts")
@@ -127,7 +135,7 @@ const getPostsByCategoryAndRegion = async (category, ecoregion) => {
 };
 // query database to get all published posts
 const getFeatures = async () => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const features = await db
     .collection("posts")
@@ -138,7 +146,7 @@ const getFeatures = async () => {
   return features;
 };
 const getFeatureCandidates = async () => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const features = await db
     .collection("posts")
@@ -159,7 +167,7 @@ const getFeatureCandidates = async () => {
 
 // retrieve single post by id from database
 const getPostById = async (_id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const post = await db.collection("posts").findOne({
     _id: ObjectId(_id),
@@ -172,7 +180,7 @@ const getPostById = async (_id) => {
 
 // UPDATE TO GETPOSTSBYUSER
 const getDashboardPosts = async (name, status) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const posts = await db
     .collection("posts")
@@ -185,7 +193,7 @@ const getDashboardPosts = async (name, status) => {
 };
 
 const getProfilePosts = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const posts = await db
     .collection("posts")
@@ -199,7 +207,7 @@ const getProfilePosts = async (name) => {
 
 // update a post
 const updatePost = async (_id, data) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("posts").updateOne(
     {
@@ -213,7 +221,7 @@ const updatePost = async (_id, data) => {
 
 //delete a post
 const deletePost = async (_id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const post = await db.collection("posts").deleteOne({
     _id: ObjectId(_id),
@@ -239,7 +247,7 @@ const createComment = async (
   approved,
   updated
 ) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const data = { name, post_id, comment_ref, date, text, approved, updated };
   const response = await db.collection("comments").insertOne(data);
@@ -249,7 +257,7 @@ const createComment = async (
 
 //get post comments
 const getPostComments = async (id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const comments = await db
     .collection("comments")
@@ -263,7 +271,7 @@ const getPostComments = async (id) => {
 };
 
 const getDashboardComments = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const comments = await db
     .collection("comments")
@@ -273,7 +281,7 @@ const getDashboardComments = async (name) => {
   return comments;
 };
 const getComments = async (approved) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const comments = await db
     .collection("comments")
@@ -285,7 +293,7 @@ const getComments = async (approved) => {
 };
 
 const updateComment = async (_id, data) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("comments").updateOne(
     {
@@ -299,7 +307,7 @@ const updateComment = async (_id, data) => {
 
 //delete a comment
 const deleteComment = async (_id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const deleted = await db
     .collection("comments")
@@ -311,7 +319,7 @@ const deleteComment = async (_id) => {
 // UPDATE TO SPECIES TYPE FROM CLASS
 //get mammals by unique eco id
 const getSpecies = async (speciesType, unique_id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const species = await db
     .collection("species")
@@ -329,7 +337,7 @@ const getSpecies = async (speciesType, unique_id) => {
 // CHANGE TO SPECIES INSTEAD OF MAMMALS
 // retrieve single mammal by id from database
 const getSpeciesById = async (id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const species = await db.collection("species").findOne({
     _id: ObjectId(id),
@@ -339,7 +347,7 @@ const getSpeciesById = async (id) => {
 };
 
 const searchAllPosts = async (query) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const results = await db
     .collection("posts")
@@ -391,7 +399,7 @@ const searchAllPosts = async (query) => {
   return results;
 };
 const searchAllSpecies = async (query) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const results = await db
     .collection("species")
@@ -416,7 +424,7 @@ const searchAllSpecies = async (query) => {
   return results;
 };
 const searchEcoPosts = async (query) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const results = await db
     .collection("posts")
@@ -476,7 +484,7 @@ const searchEcoPosts = async (query) => {
   return results;
 };
 const searchEcoSpecies = async (query) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const results = await db
     .collection("species")
@@ -516,7 +524,7 @@ const searchEcoSpecies = async (query) => {
 };
 
 const autoSpecies = async (query) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const results = await db
     .collection("species")
@@ -551,7 +559,7 @@ const autoSpecies = async (query) => {
 };
 
 const getStats = async () => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const comments = await db.collection("comments").estimatedDocumentCount({});
   const people = await db.collection("people").estimatedDocumentCount({});
@@ -572,7 +580,7 @@ const getStats = async () => {
   return stats;
 };
 const getPeople = async () => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const people = await db
     .collection("users")
@@ -585,7 +593,7 @@ const getPeople = async () => {
 };
 
 const getPerson = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const person = await db.collection("users").findOne({
     name: name,
@@ -594,7 +602,7 @@ const getPerson = async (name) => {
   return person;
 };
 const updatePerson = async (email, data) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("users").updateOne(
     {
@@ -606,7 +614,7 @@ const updatePerson = async (email, data) => {
   return response;
 };
 const updateDenials = async (name, denials) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("people").updateOne(
     {
@@ -619,7 +627,7 @@ const updateDenials = async (name, denials) => {
 };
 
 const deletePerson = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const person = await db.collection("people").deleteOne({
     name: name,
@@ -654,7 +662,7 @@ const createFlag = async (
   status,
   date
 ) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const data = { name, flagged, type, text, content_id, ref, status, date };
   const response = await db.collection("flags").insertOne(data);
@@ -663,7 +671,7 @@ const createFlag = async (
 };
 
 const getFlags = async () => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const flags = await db
     .collection("flags")
@@ -675,7 +683,7 @@ const getFlags = async () => {
 };
 
 const updateFlag = async (_id, status) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("flags").updateOne(
     {
@@ -696,7 +704,7 @@ const createNotification = async (
   date,
   viewed
 ) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const data = { name, reason, text, add_info, ref, date, viewed };
   const response = await db.collection("notifications").insertOne(data);
@@ -705,7 +713,7 @@ const createNotification = async (
 };
 
 const getNotifications = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const notifications = await db
     .collection("notifications")
@@ -716,7 +724,7 @@ const getNotifications = async (name) => {
 };
 
 const updateNotification = async (_id, viewed) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("notifications").updateOne(
     {
@@ -729,7 +737,7 @@ const updateNotification = async (_id, viewed) => {
 };
 
 const checkName = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("users").findOne({
     name: { $regex: new RegExp("^" + name + "$", "i") },
@@ -739,7 +747,7 @@ const checkName = async (name) => {
 };
 
 const checkPerson = async (name) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("users").findOne(
     {
@@ -752,7 +760,7 @@ const checkPerson = async (name) => {
 };
 
 const getEcoregions = async () => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db
     .collection("ecoregions")
@@ -766,7 +774,7 @@ const getEcoregions = async () => {
 };
 
 const getEcoregionById = async (id) => {
-  const { db } = await connectToDatabase();
+  const db = await connectToDatabase();
 
   const response = await db.collection("ecoregions").findOne(
     {

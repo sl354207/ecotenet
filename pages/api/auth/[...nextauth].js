@@ -1,5 +1,5 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "@utils/promise";
+import clientPromise from "@utils/mongodb/promise";
 import { randomBytes } from "crypto";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";

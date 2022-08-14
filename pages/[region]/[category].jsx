@@ -3,7 +3,10 @@ import Header from "@components/Header";
 import PostList from "@components/PostList";
 import SpeciesScroll from "@components/SpeciesScroll";
 import { Container, Typography } from "@mui/material";
-import { getPostsByCategoryAndRegion, getSpecies } from "@utils/mongodb";
+import {
+  getPostsByCategoryAndRegion,
+  getSpecies,
+} from "@utils/mongodb/helpers";
 
 const categoryList = ({ category, title, id }) => {
   return (
@@ -361,51 +364,75 @@ export const getServerSideProps = async (context) => {
 
       break;
     case "Gather":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(
+          { title: categoryTitle, sub: categorySub },
+          id
+        );
+      } catch (err) {
+        console.error(err);
+      }
 
       break;
     case "Travel":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(
+          { title: categoryTitle, sub: categorySub },
+          id
+        );
+      } catch (err) {
+        console.error(err);
+      }
 
       break;
     case "Survival":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(
+          { title: categoryTitle, sub: categorySub },
+          id
+        );
+      } catch (err) {
+        console.error(err);
+      }
 
       break;
     case "Agriculture":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(
+          { title: categoryTitle, sub: categorySub },
+          id
+        );
+      } catch (err) {
+        console.error(err);
+      }
 
       break;
     case "Building":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(
+          { title: categoryTitle, sub: categorySub },
+          id
+        );
+      } catch (err) {
+        console.error(err);
+      }
 
       break;
     case "Culture":
-      // try {
-      //   category = await getSpecies(categorySub, id);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(
+          { title: categoryTitle, sub: categorySub },
+          id
+        );
+      } catch (err) {
+        console.error(err);
+      }
 
       break;
 

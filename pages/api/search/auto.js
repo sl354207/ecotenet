@@ -1,4 +1,4 @@
-import { autoSpecies } from "@utils/mongodb";
+import { autoSpecies } from "@utils/mongodb/helpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

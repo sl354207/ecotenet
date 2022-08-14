@@ -921,7 +921,7 @@ const Nav = ({ ecoFilter }) => {
                                   pathname: `/[region]/[category]`,
                                   query: {
                                     region: ecoFilter,
-                                    category: menuSub.replaceAll("/", "_"),
+                                    category: menuSub.replaceAll(" ", "_"),
                                     title: menuTitle,
                                   },
                                 });

@@ -1,4 +1,4 @@
-import { deleteComment, updateComment } from "@utils/mongodb";
+import { deleteComment, updateComment } from "@utils/mongodb/helpers";
 
 export default async function handler(req, res) {
   const method = req.method;

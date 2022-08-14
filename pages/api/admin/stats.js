@@ -1,4 +1,4 @@
-import { getStats } from "@utils/mongodb";
+import { getStats } from "@utils/mongodb/helpers";
 // import { getSession } from "next-auth/react";
 
 // api endpoint to get all posts from database

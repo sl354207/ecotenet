@@ -1,4 +1,4 @@
-import { checkName } from "@utils/mongodb";
+import { checkName } from "@utils/mongodb/helpers";
 import { getSession } from "next-auth/react";
 
 // api endpoint to get image from aws s3 bucket

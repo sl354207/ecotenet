@@ -3,7 +3,7 @@ import Footer from "@components/Footer";
 import Header from "@components/Header";
 import PostList from "@components/PostList";
 import { Container } from "@mui/material";
-import { getFeatures } from "@utils/mongodb";
+import { getFeatures } from "@utils/mongodb/helpers";
 
 const featured = ({ featured }) => {
   return (

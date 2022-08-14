@@ -16,7 +16,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { getSpeciesById } from "@utils/mongodb";
+import { getSpeciesById } from "@utils/mongodb/helpers";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
