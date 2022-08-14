@@ -922,7 +922,7 @@ const Nav = ({ ecoFilter }) => {
                                   query: {
                                     region: ecoFilter,
                                     category: menuSub.replaceAll(" ", "_"),
-                                    title: menuTitle,
+                                    title: menuTitle.replaceAll(" ", "_"),
                                   },
                                 });
                               }}

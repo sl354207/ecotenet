@@ -12,7 +12,7 @@ const categoryList = ({ category, title, id }) => {
   return (
     <>
       <Container>
-        <Header title={`Eco-${id} ${title}`} />
+        <Header title={`Eco-${id} ${title.replaceAll("_", " ")}`} />
         {category.length === 0 ? (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results
@@ -158,7 +158,7 @@ export const getServerSideProps = async (context) => {
           }
 
           break;
-        case "The Rest":
+        case "The_Rest":
           try {
             category = await getSpecies("other_animals", id);
           } catch (err) {
@@ -174,7 +174,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "Plants":
       switch (categorySub) {
-        case "Trees and Shrubs":
+        case "Trees_and_Shrubs":
           try {
             category = await getSpecies("tree_shrub", id);
           } catch (err) {
@@ -198,7 +198,7 @@ export const getServerSideProps = async (context) => {
           }
 
           break;
-        case "Water Masters":
+        case "Water_Masters":
           try {
             category = await getSpecies("water_master", id);
           } catch (err) {
@@ -214,7 +214,7 @@ export const getServerSideProps = async (context) => {
           }
 
           break;
-        case "The Rest":
+        case "The_Rest":
           try {
             category = await getSpecies("other_plants", id);
           } catch (err) {
@@ -264,7 +264,7 @@ export const getServerSideProps = async (context) => {
 
           break;
 
-        case "The Rest":
+        case "The_Rest":
           try {
             category = await getSpecies("other_fungi", id);
           } catch (err) {
@@ -287,7 +287,7 @@ export const getServerSideProps = async (context) => {
       }
 
       break;
-    case "The Rest":
+    case "The_Rest":
       switch (categorySub) {
         case "Bacteria":
           try {
