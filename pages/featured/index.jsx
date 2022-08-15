@@ -29,6 +29,7 @@ export const getStaticProps = async () => {
     props: {
       featured: JSON.parse(JSON.stringify(featured)),
     },
+    revalidate: 60,
   };
 };
 

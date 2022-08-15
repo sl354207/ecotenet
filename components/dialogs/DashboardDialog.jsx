@@ -94,7 +94,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "error",
-        message: `There was a problem deleting post. Please try again later`,
+        message: `There was a problem deleting post media. Please try again later`,
       });
     }
   };

@@ -376,7 +376,7 @@ export const getStaticProps = async (context) => {
       post: JSON.parse(JSON.stringify(post)),
       comments: JSON.parse(JSON.stringify(comments)),
     },
-    // revalidate: 10,
+    revalidate: 60,
   };
 };
 
@@ -390,10 +390,9 @@ export const getStaticPaths = async () => {
   // create paths array with objects that follow structure given
   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
 
-  // return a path for each post id. If no id return 404
   return {
     paths,
-    fallback: false,
+    fallback: blocking,
   };
 };
 

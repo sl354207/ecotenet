@@ -39,6 +39,7 @@ export const getStaticProps = async () => {
     props: {
       ecoregions: JSON.parse(JSON.stringify(ecoregions)),
     },
+    revalidate: 60,
   };
 };
 
