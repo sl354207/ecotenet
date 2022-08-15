@@ -234,9 +234,13 @@ const speciesMap = () => {
           id="species-map-auto"
           options={
             results
-              ? results.map(
-                  (obj) => `${obj.scientific_name} - ${obj.common_name}`
-                )
+              ? results.map((obj) => {
+                  if (obj.common_name) {
+                    return `${obj.scientific_name} - ${obj.common_name}`;
+                  } else {
+                    return `${obj.scientific_name}`;
+                  }
+                })
               : []
           }
           filterOptions={(x) => x}

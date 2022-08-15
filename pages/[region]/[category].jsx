@@ -15,7 +15,7 @@ const categoryList = ({ category, title, id }) => {
         <Header title={`Eco-${id} ${title.replaceAll("_", " ")}`} />
         {category.length === 0 ? (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-            no results
+            We currently do not have data on this category
           </Typography>
         ) : (
           <>

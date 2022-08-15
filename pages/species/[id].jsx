@@ -325,40 +325,53 @@ const species = ({ species, wiki }) => {
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            <Typography variant="h5" sx={{ marginTop: "10px" }}>
-              Source:{" "}
-              <Link
-                href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                  " ",
-                  "_"
-                )}?redirect=true`}
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="hover"
+            {!wiki ? (
+              <Typography
+                variant="h6"
+                align="justify"
+                sx={{ marginTop: "20px" }}
               >
-                Wikipedia
-              </Link>
-            </Typography>
-            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-            {wiki.remaining.sections.map((section) => {
-              if (section.anchor == "Gallery") {
-                return <></>;
-              } else if (section.toclevel == 2) {
-                return (
-                  <>
-                    <h2>{section.line}</h2>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <h1>{section.line}</h1>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              }
-            })}
+                We currently don't have a summary of this species. If you want
+                to help us out you can create a wikipedia page for the species.
+              </Typography>
+            ) : (
+              <>
+                <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                  Source:{" "}
+                  <Link
+                    href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                      " ",
+                      "_"
+                    )}?redirect=true`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    Wikipedia
+                  </Link>
+                </Typography>
+                {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+                {wiki.remaining.sections.map((section) => {
+                  if (section.anchor == "Gallery") {
+                    return <></>;
+                  } else if (section.toclevel == 2) {
+                    return (
+                      <>
+                        <h2>{section.line}</h2>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <h1>{section.line}</h1>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  }
+                })}
+              </>
+            )}
           </TabPanel>
           <TabPanel value={value} index={1}>
             <List>
@@ -444,11 +457,16 @@ export const getServerSideProps = async (context) => {
   );
 
   const wiki = await wikiRes.json();
+  // console.log(species);
+  // console.log(wiki);
 
   return {
     props: {
       species: JSON.parse(JSON.stringify(species)),
-      wiki: JSON.parse(JSON.stringify(wiki)),
+      wiki:
+        wiki == undefined || wiki.title == "Not found."
+          ? null
+          : JSON.parse(JSON.stringify(wiki)),
     },
   };
 };
