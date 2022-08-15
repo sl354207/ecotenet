@@ -27,7 +27,7 @@ const Meta = ({ title, keywords, description }) => {
 
 // set default meta props
 Meta.defaultProps = {
-  title: "eco site",
+  title: "ecotenet",
   keywords: "eco",
   description: "eco site",
 };
