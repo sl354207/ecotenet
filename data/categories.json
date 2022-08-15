@@ -2,35 +2,33 @@
     {
       "menuTitle": "Animals",
       "menuSubs": [
-        "Mammals",
-        "Reptiles",
-        "Amphibians",
-        "Birds",
-        "Fish",
-        "Arthropods",
-        "Mollusks",
-        "Cnidaria",
-        "Wormish",
-        "The Rest",
-        "Guides"
+        {"subTitle": "Mammals", "query": "mammal"},
+        {"subTitle": "Reptiles", "query": "reptile"},
+        {"subTitle": "Amphibians", "query": "amphibian"},
+        {"subTitle": "Birds", "query": "bird"},
+        {"subTitle": "Fish", "query": "fish"},
+        {"subTitle": "Arthropods", "query": "arthropod"},
+        {"subTitle": "Mollusks", "query": "mollusk"},
+        {"subTitle": "Cnidaria", "query": "cnidaria"},
+        {"subTitle": "Wormish", "query": "worm"},
+        {"subTitle": "The Rest", "query": "other_animals"},
+        {"subTitle": "Guides", "query": "Animals"}
       ],
-      "pageURL": "/mammals",
       "openList": false
     },
     {
       "menuTitle": "Plants",
-      "menuSubs": ["Trees and Shrubs", "Vines", "Wildflowers", "Water Masters", "Grassish", "The Rest", "Unplaced", "Guides"],
-      "pageURL": "/mammals",
+      "menuSubs": [{"subTitle": "Trees and Shrubs", "query": "tree_shrub"}, {"subTitle": "Vines", "query": "vine"}, {"subTitle": "Wildflowers", "query": "wildflower"}, {"subTitle": "Water Masters", "query": "water_master"}, {"subTitle": "Grassish", "query": "graminoid"}, {"subTitle": "The Rest", "query": "other_plants"}, {"subTitle": "Unplaced", "query": "uncategorized_plants"}, {"subTitle": "Guides", "query": "Plants"}],
       "openList": false
     },
     {
       "menuTitle": "Fungi",
-      "menuSubs": ["Gilled", "Non-Gilled", "Gasteroid", "The Rest", "Unplaced", "Guides"],
+      "menuSubs": ["Gilled", "Non-Gilled", "Gasteroid", "The_Rest", "Unplaced", "Guides"],
       "pageURL": "/mammals",
       "openList": false
     },
     {
-      "menuTitle": "The Rest",
+      "menuTitle": "The_Rest",
       "menuSubs": ["Bacteria", "Viruses", "Protozoa", "Chromista", "Archaea", "Algae", "Ciliates", "Guides"],
       "pageURL": "/mammals",
       "openList": false

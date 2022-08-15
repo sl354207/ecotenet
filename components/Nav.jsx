@@ -587,7 +587,7 @@ const Nav = ({ ecoFilter }) => {
                                   pathname: `/[region]/[category]`,
                                   query: {
                                     region: ecoFilter,
-                                    category: menuSub.replace("/", "_"),
+                                    category: menuSub.replaceAll("/", "_"),
                                     title: menuTitle,
                                   },
                                 });
@@ -921,8 +921,8 @@ const Nav = ({ ecoFilter }) => {
                                   pathname: `/[region]/[category]`,
                                   query: {
                                     region: ecoFilter,
-                                    category: menuSub.replace(" ", "_"),
-                                    title: menuTitle.replace(" ", "_"),
+                                    category: menuSub.replaceAll(" ", "_"),
+                                    title: menuTitle.replaceAll(" ", "_"),
                                   },
                                 });
                               }}
