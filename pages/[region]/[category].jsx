@@ -12,7 +12,7 @@ const categoryList = ({ category, title, id }) => {
   return (
     <>
       <Container>
-        <Header title={`Eco-${id} ${title.replaceAll("_", " ")}`} />
+        <Header title={`Eco-${id} ${title.replace("_", " ")}`} />
         {category.length === 0 ? (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             We currently do not have data on this category
@@ -38,9 +38,9 @@ export const getServerSideProps = async (context) => {
   const id = context.params.region;
   const categorySub = context.params.category;
   const categoryTitle = context.query.title;
-  // console.log(id);
-  // console.log(categorySub);
-  // console.log(categoryTitle);
+  console.log(id);
+  console.log(categorySub);
+  console.log(categoryTitle);
   let category;
 
   // const getCategory = async () => {
