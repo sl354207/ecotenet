@@ -38,9 +38,9 @@ export const getServerSideProps = async (context) => {
   const id = context.params.region;
   const categorySub = context.params.category;
   const categoryTitle = context.query.title;
-  console.log(id);
-  console.log(categorySub);
-  console.log(categoryTitle);
+  // console.log(id);
+  // console.log(categorySub);
+  // console.log(categoryTitle);
   let category;
 
   // const getCategory = async () => {
