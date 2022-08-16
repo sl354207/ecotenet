@@ -187,6 +187,7 @@ const StepForm = ({ post, user }) => {
                   </Button>
                   {details.title != "" &&
                   details.category != "" &&
+                  details.category != null &&
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
@@ -221,6 +222,7 @@ const StepForm = ({ post, user }) => {
                   </Button>
                   {details.title != "" &&
                   details.category != "" &&
+                  details.category != null &&
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
@@ -281,6 +283,7 @@ const StepForm = ({ post, user }) => {
                   </Button>
                   {details.title != "" &&
                   details.category != "" &&
+                  details.category != null &&
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
@@ -316,6 +319,7 @@ const StepForm = ({ post, user }) => {
 
                   {details.title != "" &&
                   details.category != "" &&
+                  details.category != null &&
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
@@ -369,6 +373,7 @@ const StepForm = ({ post, user }) => {
                   </Button>
                   {details.title != "" &&
                   details.category != "" &&
+                  details.category != null &&
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button
@@ -403,6 +408,7 @@ const StepForm = ({ post, user }) => {
                   </Button>
                   {details.title != "" &&
                   details.category != "" &&
+                  details.category != null &&
                   clickInfo.length > 0 &&
                   postValue.rows.length > 0 ? (
                     <Button

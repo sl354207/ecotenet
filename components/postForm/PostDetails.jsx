@@ -31,6 +31,10 @@ const PostDetails = ({
   setDetails,
   handleRemoveChip,
 }) => {
+  const categorySub = CategoriesAutoComplete.filter(
+    (autoCategory) => autoCategory["query"] === category
+  )[0];
+  // console.log(categorySub);
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -142,11 +146,11 @@ const PostDetails = ({
               onChange={(event, newValue) => {
                 setDetails((details) => ({
                   ...details,
-                  category: newValue,
+                  category: newValue && newValue.query,
                 }));
               }}
-              defaultValue={category || ""}
-              value={category}
+              defaultValue={categorySub || ""}
+              value={categorySub || ""}
               options={CategoriesAutoComplete}
               noOptionsText={
                 <Typography
@@ -208,7 +212,6 @@ const PostDetails = ({
               disableFocusListener
               disableHoverListener
               disableTouchListener
-              interactive
               title={
                 <>
                   <Typography color="inherit">

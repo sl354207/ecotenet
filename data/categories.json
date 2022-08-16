@@ -34,10 +34,10 @@
     {
       "menuTitle": "Hunt",
       "menuSubs": [
-        {"subTitle": "Tracking/Stalking", "query": "hunt_track_stalk"},
+        {"subTitle": "Tracking or Stalking", "query": "hunt_track_stalk"},
         {"subTitle": "Trapping", "query": "hunt_trap"},
         {"subTitle": "Fishing", "query": "hunt_fish"},
-        {"subTitle": "Strategies/Techniques", "query": "hunt_strategy_technique"},
+        {"subTitle": "Strategies or Techniques", "query": "hunt_strategy_technique"},
         {"subTitle": "Processing", "query": "hunt_process"},
         {"subTitle": "Tools", "query": "hunt_tools"}
       ],
@@ -61,15 +61,15 @@
     {
       "menuTitle": "Agriculture",
       "menuSubs": [
-        {"subTitle": "Planting/Harvesting", "query": "agriculture_plant_harvest"},
-        {"subTitle": "Maintenance/Management", "query": "agriculture_maintenance_management"},
-        {"subTitle": "Processing/Storage", "query": "agriculture_processing_storage"},
+        {"subTitle": "Planting or Harvesting", "query": "agriculture_plant_harvest"},
+        {"subTitle": "Maintenance or Management", "query": "agriculture_maintenance_management"},
+        {"subTitle": "Processing or Storage", "query": "agriculture_processing_storage"},
         {"subTitle": "Livestock", "query": "agriculture_livestock"},
         {"subTitle": "Soil Health", "query": "agriculture_soil"},
-        {"subTitle": "Propogation/Cultivation", "query": "agriculture_propogation_cultivation"},
+        {"subTitle": "Propogation or Cultivation", "query": "agriculture_propogation_cultivation"},
         {"subTitle": "Irrigation", "query": "agriculture_irrigation"},
-        {"subTitle": "Techniques/Systems", "query": "agriculture_technique_system"},
-        {"subTitle": "Start-To-Finish/Lifecycles", "query": "agriculture_lifecycle"}
+        {"subTitle": "Techniques or Systems", "query": "agriculture_technique_system"},
+        {"subTitle": "Start-To-Finish or Lifecycles", "query": "agriculture_lifecycle"}
       ],
       "openList": false
     },
@@ -82,16 +82,16 @@
         {"subTitle": "Roofs", "query": "build_roof"},
         {"subTitle": "Complete Structures", "query": "build_complete_structure"},
         {"subTitle": "Water Systems", "query": "build_water_system"},
-        {"subTitle": "Heating/Cooling", "query": "build_heat_cool"},
+        {"subTitle": "Heating or Cooling", "query": "build_heat_cool"},
         {"subTitle": "Sanitation", "query": "build_sanitation"},
-        {"subTitle": "Furniture/Utensils/Tools", "query": "build_tools"}
+        {"subTitle": "Furniture or Utensils or Tools", "query": "build_tools"}
       ],
       "openList": false
     },
     {
       "menuTitle": "Culture",
       "menuSubs": [
-        {"subTitle": "Cooking/Recipes", "query": "culture_cook_recipes"},
+        {"subTitle": "Cooking or Recipes", "query": "culture_cook_recipes"},
         {"subTitle": "Clothing", "query": "culture_clothing"},
         {"subTitle": "Art", "query": "culture_art"},
         {"subTitle": "Music", "query": "culture_music"},
