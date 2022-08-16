@@ -12,7 +12,7 @@ const SigninPage = ({ providers, isLoggedIn }) => {
   const { query } = useRouter();
   const { error } = query;
   // UPDATE
-  const callbackUrl = "http://localhost:3000";
+  // const callbackUrl = "http://localhost:3000";
 
   // PERHAPS USE ISLOGGEDIN TO HIDE PAGE
 
@@ -26,7 +26,7 @@ const SigninPage = ({ providers, isLoggedIn }) => {
     return (
       <Container>
         <Header title="Verification Code" />
-        <VerificationStep email={email} callbackUrl={callbackUrl} />
+        <VerificationStep email={email} callbackUrl={query.callbackUrl} />
       </Container>
     );
   }
