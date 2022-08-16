@@ -165,7 +165,7 @@ export const getServerSideProps = async (context) => {
 
       break;
 
-    case "trees_shrub":
+    case "tree_shrub":
       try {
         category = await getSpecies("tree_shrub", id);
       } catch (err) {
@@ -321,94 +321,8 @@ export const getServerSideProps = async (context) => {
         console.error(err);
       }
 
-    // case "Hunt":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-    // case "Gather":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-    // case "Travel":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-    // case "Survival":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-    // case "Agriculture":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-    // case "Building":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-    // case "Culture":
-    //   try {
-    //     // console.log("test");
-    //     category = await getPostsByCategoryAndRegion(
-    //       { title: categoryTitle, sub: categorySub },
-    //       id
-    //     );
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-
-    //   break;
-
     default:
       try {
-        // console.log("test");
         category = await getPostsByCategoryAndRegion(categoryQuery, id);
       } catch (err) {
         console.error(err);

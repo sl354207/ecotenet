@@ -22,7 +22,7 @@ const category = () => {
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           A guides category can be found under each of the main species
-          categories Animals, Plants, Fungi and Arthropods. This category is for
+          categories Animals, Plants, Fungi and The Rest. This category is for
           posts that may be more in depth and complete than the general info
           given for that species(id guides, lifecycles, etc.) or for posts that
           share information on several species within the main category e.g. a
@@ -270,6 +270,12 @@ const category = () => {
           Anything related to heating and cooling
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
+          Sanitation
+        </Typography>
+        <Typography sx={{ marginBottom: "10px" }} variant="body1">
+          Anything related to sanitation
+        </Typography>
+        <Typography sx={{ marginBottom: "10px" }} variant="h6">
           Furniture/Tools
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
@@ -320,13 +326,6 @@ const category = () => {
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           Storytelling
-        </Typography>
-        <Typography
-          sx={{ marginBottom: "10px" }}
-          variant="h5"
-          color="secondary"
-        >
-          NOT SURE IF SANITION SYSTEMS NEED A CATEGORY OR WHERE THAT MIGHT GO
         </Typography>
       </Container>
       <Footer />
