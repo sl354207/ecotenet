@@ -12,7 +12,7 @@ const categoryList = ({ category, title, id }) => {
   return (
     <>
       <Container>
-        <Header title={`Eco-${id} ${title.replace("_", " ")}`} />
+        <Header title={`Eco-${id} ${title}`} />
         {category.length === 0 ? (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             We currently do not have data on this category
@@ -36,7 +36,7 @@ const categoryList = ({ category, title, id }) => {
 // retrieve data at build time
 export const getServerSideProps = async (context) => {
   const id = context.params.region;
-  const categorySub = context.params.category;
+  const categoryQuery = context.params.category;
   const categoryTitle = context.query.title;
   // console.log(id);
   // console.log(categorySub);
@@ -45,10 +45,10 @@ export const getServerSideProps = async (context) => {
 
   // const getCategory = async () => {
   //   if (
-  //     categoryTitle == "Animals" ||
-  //     categoryTitle == "Plants" ||
-  //     categoryTitle == "Fungi" ||
-  //     categoryTitle == "Arthropods"
+  //     categoryQuery == "" ||
+  //     categoryQuery == "Plants" ||
+  //     categoryQuery == "Fungi" ||
+  //     categoryQuery == "Arthropods"
   //   ) {
   //     if (categorySub == "Guides") {
   //       try {
@@ -83,360 +83,337 @@ export const getServerSideProps = async (context) => {
 
   // const category = await getCategory();
 
-  switch (categoryTitle) {
-    case "Animals":
-      switch (categorySub) {
-        case "Mammals":
-          try {
-            category = await getSpecies("mammal", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Reptiles":
-          try {
-            category = await getSpecies("reptile", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Amphibians":
-          try {
-            category = await getSpecies("amphibian", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Birds":
-          try {
-            category = await getSpecies("bird", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Fish":
-          try {
-            category = await getSpecies("fish", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Arthropods":
-          try {
-            category = await getSpecies("arthropod", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Mollusks":
-          try {
-            category = await getSpecies("mollusk", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Cnidaria":
-          try {
-            category = await getSpecies("cnidaria", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Wormish":
-          try {
-            category = await getSpecies("worm", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "The_Rest":
-          try {
-            category = await getSpecies("other_animals", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        default:
-          break;
-      }
-
-      break;
-    case "Plants":
-      switch (categorySub) {
-        case "Trees_and_Shrubs":
-          try {
-            category = await getSpecies("tree_shrub", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Vines":
-          try {
-            category = await getSpecies("vine", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Wildflowers":
-          try {
-            category = await getSpecies("wildflower", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Water_Masters":
-          try {
-            category = await getSpecies("water_master", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Grassish":
-          try {
-            category = await getSpecies("graminoid", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "The_Rest":
-          try {
-            category = await getSpecies("other_plants", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        case "Unplaced":
-          try {
-            category = await getSpecies("uncategorized_plants", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        default:
-          break;
-      }
-
-      break;
-    case "Fungi":
-      switch (categorySub) {
-        case "Gilled":
-          try {
-            category = await getSpecies("gill_fungi", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Non-Gilled":
-          try {
-            category = await getSpecies("non_gilled_fungi", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Gasteroid":
-          try {
-            category = await getSpecies("gasteroid_fungi", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        case "The_Rest":
-          try {
-            category = await getSpecies("other_fungi", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        case "Unplaced":
-          try {
-            category = await getSpecies("uncategorized_fungi", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        default:
-          break;
-      }
-
-      break;
-    case "The_Rest":
-      switch (categorySub) {
-        case "Bacteria":
-          try {
-            category = await getSpecies("bacteria", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Viruses":
-          try {
-            category = await getSpecies("virus", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Protozoa":
-          try {
-            category = await getSpecies("protozoa", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Chromista":
-          try {
-            category = await getSpecies("chromista", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Archaea":
-          try {
-            category = await getSpecies("archaea", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Algae":
-          try {
-            category = await getSpecies("algae", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-        case "Ciliates":
-          try {
-            category = await getSpecies("ciliate", id);
-          } catch (err) {
-            console.error(err);
-          }
-
-          break;
-
-        default:
-          break;
-      }
-
-      break;
-    case "Hunt":
+  switch (categoryQuery) {
+    case "mammal":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("mammal", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "Gather":
+    case "reptile":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("reptile", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "Travel":
+    case "amphibian":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("amphibian", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "Survival":
+    case "bird":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("bird", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "Agriculture":
+    case "fish":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("fish", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "Building":
+    case "arthropod":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("arthropod", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "Culture":
+    case "mollusk":
       try {
-        // console.log("test");
-        category = await getPostsByCategoryAndRegion(
-          { title: categoryTitle, sub: categorySub },
-          id
-        );
+        category = await getSpecies("mollusk", id);
       } catch (err) {
         console.error(err);
       }
 
       break;
+    case "cnidaria":
+      try {
+        category = await getSpecies("cnidaria", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "worm":
+      try {
+        category = await getSpecies("worm", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "other_animals":
+      try {
+        category = await getSpecies("other_animals", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "trees_shrub":
+      try {
+        category = await getSpecies("tree_shrub", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "vine":
+      try {
+        category = await getSpecies("vine", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "wildflower":
+      try {
+        category = await getSpecies("wildflower", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "water_master":
+      try {
+        category = await getSpecies("water_master", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "graminoid":
+      try {
+        category = await getSpecies("graminoid", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "other_plants":
+      try {
+        category = await getSpecies("other_plants", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "uncategorized_plants":
+      try {
+        category = await getSpecies("uncategorized_plants", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "gill_fungi":
+      try {
+        category = await getSpecies("gill_fungi", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "non_gilled_fungi":
+      try {
+        category = await getSpecies("non_gilled_fungi", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "gasteroid_fungi":
+      try {
+        category = await getSpecies("gasteroid_fungi", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "other_fungi":
+      try {
+        category = await getSpecies("other_fungi", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "uncategorized_fungi":
+      try {
+        category = await getSpecies("uncategorized_fungi", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "bacteria":
+      try {
+        category = await getSpecies("bacteria", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "virus":
+      try {
+        category = await getSpecies("virus", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "protozoa":
+      try {
+        category = await getSpecies("protozoa", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "chromista":
+      try {
+        category = await getSpecies("chromista", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "archaea":
+      try {
+        category = await getSpecies("archaea", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "algae":
+      try {
+        category = await getSpecies("algae", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "ciliate":
+      try {
+        category = await getSpecies("ciliate", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+    // case "Hunt":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
+    // case "Gather":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
+    // case "Travel":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
+    // case "Survival":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
+    // case "Agriculture":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
+    // case "Building":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
+    // case "Culture":
+    //   try {
+    //     // console.log("test");
+    //     category = await getPostsByCategoryAndRegion(
+    //       { title: categoryTitle, sub: categorySub },
+    //       id
+    //     );
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+
+    //   break;
 
     default:
+      try {
+        // console.log("test");
+        category = await getPostsByCategoryAndRegion(categoryQuery, id);
+      } catch (err) {
+        console.error(err);
+      }
+
       break;
   }
 
@@ -446,7 +423,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       category: JSON.parse(JSON.stringify(category)),
-      title: categorySub,
+      title: categoryTitle,
       id: id,
     },
   };

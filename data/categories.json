@@ -12,99 +12,92 @@
         {"subTitle": "Cnidaria", "query": "cnidaria"},
         {"subTitle": "Wormish", "query": "worm"},
         {"subTitle": "The Rest", "query": "other_animals"},
-        {"subTitle": "Guides", "query": "Animals"}
+        {"subTitle": "Guides", "query": "animal_guide"}
       ],
       "openList": false
     },
     {
       "menuTitle": "Plants",
-      "menuSubs": [{"subTitle": "Trees and Shrubs", "query": "tree_shrub"}, {"subTitle": "Vines", "query": "vine"}, {"subTitle": "Wildflowers", "query": "wildflower"}, {"subTitle": "Water Masters", "query": "water_master"}, {"subTitle": "Grassish", "query": "graminoid"}, {"subTitle": "The Rest", "query": "other_plants"}, {"subTitle": "Unplaced", "query": "uncategorized_plants"}, {"subTitle": "Guides", "query": "Plants"}],
+      "menuSubs": [{"subTitle": "Trees and Shrubs", "query": "tree_shrub"}, {"subTitle": "Vines", "query": "vine"}, {"subTitle": "Wildflowers", "query": "wildflower"}, {"subTitle": "Water Masters", "query": "water_master"}, {"subTitle": "Grassish", "query": "graminoid"}, {"subTitle": "The Rest", "query": "other_plants"}, {"subTitle": "Unplaced", "query": "uncategorized_plants"}, {"subTitle": "Guides", "query": "plant_guide"}],
       "openList": false
     },
     {
       "menuTitle": "Fungi",
-      "menuSubs": ["Gilled", "Non-Gilled", "Gasteroid", "The_Rest", "Unplaced", "Guides"],
-      "pageURL": "/mammals",
+      "menuSubs": [{"subTitle": "Gilled", "query": "gill_fungi"}, {"subTitle": "Non-Gilled", "query": "non_gilled_fungi"}, {"subTitle": "Gasteroid", "query": "gasteroid_fungi"}, {"subTitle": "The Rest", "query": "other_fungi"}, {"subTitle": "Unplaced", "query": "uncategorized_fungi"}, {"subTitle": "Guides", "query": "fungi_guide"}],
       "openList": false
     },
     {
-      "menuTitle": "The_Rest",
-      "menuSubs": ["Bacteria", "Viruses", "Protozoa", "Chromista", "Archaea", "Algae", "Ciliates", "Guides"],
-      "pageURL": "/mammals",
+      "menuTitle": "The Rest",
+      "menuSubs": [{"subTitle": "Bacteria", "query": "bacteria"}, {"subTitle": "Viruses", "query": "virus"}, {"subTitle": "Protozoa", "query": "protozoa"}, {"subTitle": "Chromista", "query": "chromista"}, {"subTitle": "Archaea", "query": "archaea"}, {"subTitle": "Algae", "query": "algae"}, {"subTitle": "Ciliates", "query": "ciliate"}, {"subTitle": "Guides", "query": "the_rest_guide"}],      
       "openList": false
     },
     {
       "menuTitle": "Hunt",
       "menuSubs": [
-        "Tracking/Stalking",
-        "Trapping",
-        "Fishing",
-        "Strategies/Techniques",
-        "Processing",
-        "Tools"
+        {"subTitle": "Tracking/Stalking", "query": "hunt_track_stalk"},
+        {"subTitle": "Trapping", "query": "hunt_trap"},
+        {"subTitle": "Fishing", "query": "hunt_fish"},
+        {"subTitle": "Strategies/Techniques", "query": "hunt_strategy_technique"},
+        {"subTitle": "Processing", "query": "hunt_process"},
+        {"subTitle": "Tools", "query": "hunt_tools"}
       ],
-      "pageURL": "/posts/624340abf21e50781696754d",
       "openList": false
     },
     {
       "menuTitle": "Gather",
-      "menuSubs": ["Edible", "Medicinal"],
-      "pageURL": "/posts/624340abf21e50781696754d",
+      "menuSubs": [{"subTitle": "Edible", "query": "gather_edible"}, {"subTitle": "Medicinal", "query": "gather_medicinal"}],
      " openList": false
     },
     {
       "menuTitle": "Travel",
-      "menuSubs": ["Land", "Water"],
-      "pageURL": "/posts/624340abf21e50781696754d",
+      "menuSubs": [{"subTitle": "Land", "query": "travel_land"}, {"subTitle": "Water", "query": "travel_water"}],
       "openList": false
     },
     {
       "menuTitle": "Survival",
-      "menuSubs": ["Fire", "Water", "Basic Shelter", "Navigation", "Emergency"],
-     " pageURL": "/posts/624340abf21e50781696754d",
+      "menuSubs": [{"subTitle": "Fire", "query": "survival_fire"}, {"subTitle": "Water", "query": "survival_water"}, {"subTitle": "Basic Shelter", "query": "survival_shelter"}, {"subTitle": "Navigation", "query": "survival_navigation"}, {"subTitle": "Emergency", "query": "survival_emergency"}],
      " openList": false
     },
     {
       "menuTitle": "Agriculture",
       "menuSubs": [
-        "Planting/Harvesting",
-        "Maintenance/Management",
-        "Processing/Storage",
-        "Livestock",
-        "Soil Health",
-        "Propogation/Cultivation",
-        "Irrigation",
-        "Techniques/Systems",
-        "Start-To-Finish/Lifecycles"
+        {"subTitle": "Planting/Harvesting", "query": "agriculture_plant_harvest"},
+        {"subTitle": "Maintenance/Management", "query": "agriculture_maintenance_management"},
+        {"subTitle": "Processing/Storage", "query": "agriculture_processing_storage"},
+        {"subTitle": "Livestock", "query": "agriculture_livestock"},
+        {"subTitle": "Soil Health", "query": "agriculture_soil"},
+        {"subTitle": "Propogation/Cultivation", "query": "agriculture_propogation_cultivation"},
+        {"subTitle": "Irrigation", "query": "agriculture_irrigation"},
+        {"subTitle": "Techniques/Systems", "query": "agriculture_technique_system"},
+        {"subTitle": "Start-To-Finish/Lifecycles", "query": "agriculture_lifecycle"}
       ],
-      "pageURL":"/posts/624340abf21e50781696754d",
       "openList": false
     },
     {
       "menuTitle": "Building",
       "menuSubs": [
-        "Foundations/Floors",
-        "Walls",
-        "Roofs",
-        "Complete Structures",
-        "Water Systems",
-        "Heating/Cooling",
-        "Furniture/Utensils/Tools"
+        {"subTitle": "Foundations", "query": "build_foundation"},
+        {"subTitle": "Floors", "query": "build_floor"},
+        {"subTitle": "Walls", "query": "build_wall"},
+        {"subTitle": "Roofs", "query": "build_roof"},
+        {"subTitle": "Complete Structures", "query": "build_complete_structure"},
+        {"subTitle": "Water Systems", "query": "build_water_system"},
+        {"subTitle": "Heating/Cooling", "query": "build_heat_cool"},
+        {"subTitle": "Sanitation", "query": "build_sanitation"},
+        {"subTitle": "Furniture/Utensils/Tools", "query": "build_tools"}
       ],
-      "pageURL": "/posts/624340abf21e50781696754d",
       "openList": false
     },
     {
       "menuTitle": "Culture",
       "menuSubs": [
-        "Cooking/Recipes",
-        "Clothing",
-        "Art",
-        "Music",
-        "Rituals",
-        "Stories"
+        {"subTitle": "Cooking/Recipes", "query": "culture_cook_recipes"},
+        {"subTitle": "Clothing", "query": "culture_clothing"},
+        {"subTitle": "Art", "query": "culture_art"},
+        {"subTitle": "Music", "query": "culture_music"},
+        {"subTitle": "Rituals", "query": "culture_ritual"},
+        {"subTitle": "Stories", "query": "culture_story"}
       ],
-      "pageURL": "/posts/624340abf21e50781696754d",
       "openList": false
     }
   ]

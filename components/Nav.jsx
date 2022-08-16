@@ -579,7 +579,7 @@ const Nav = ({ ecoFilter }) => {
                           {menuSubs.map((menuSub) => (
                             <ListItem
                               button
-                              key={menuSub}
+                              key={menuSub.subTitle}
                               sx={{ paddingLeft: theme.spacing(4) }}
                               onClick={() => {
                                 handleDrawerClose(Event);
@@ -587,13 +587,13 @@ const Nav = ({ ecoFilter }) => {
                                   pathname: `/[region]/[category]`,
                                   query: {
                                     region: ecoFilter,
-                                    category: menuSub.replaceAll("/", "_"),
-                                    title: menuTitle,
+                                    category: menuSub.query,
+                                    title: menuSub.subTitle,
                                   },
                                 });
                               }}
                             >
-                              <ListItemText primary={menuSub} />
+                              <ListItemText primary={menuSub.subTitle} />
                             </ListItem>
                           ))}
                         </List>
@@ -913,7 +913,7 @@ const Nav = ({ ecoFilter }) => {
                           {menuSubs.map((menuSub) => (
                             <ListItem
                               button
-                              key={menuSub}
+                              key={menuSub.subTitle}
                               sx={{ paddingLeft: theme.spacing(4) }}
                               onClick={() => {
                                 handleDrawerClose(Event);
@@ -921,13 +921,13 @@ const Nav = ({ ecoFilter }) => {
                                   pathname: `/[region]/[category]`,
                                   query: {
                                     region: ecoFilter,
-                                    category: menuSub.replaceAll(" ", "_"),
-                                    title: menuTitle.replaceAll(" ", "_"),
+                                    category: menuSub.query,
+                                    title: menuSub.subTitle,
                                   },
                                 });
                               }}
                             >
-                              <ListItemText primary={menuSub} />
+                              <ListItemText primary={menuSub.subTitle} />
                             </ListItem>
                           ))}
                         </List>
