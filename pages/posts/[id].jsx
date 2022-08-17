@@ -1,4 +1,3 @@
-import CommentList from "@components/comments/CommentList";
 import ClientDialog from "@components/dialogs/ClientDialog";
 import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/EditorLayout";
@@ -30,17 +29,17 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { updatePost } from "@utils/api-helpers";
-import { getPostById, getPostComments, getPosts } from "@utils/mongodb/helpers";
+import { getPostById, getPosts } from "@utils/mongodb/helpers";
 import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useReducer, useState } from "react";
+import { useState } from "react";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
 // pass in post and comments as props and create page for each post with corresponding comments
-const post = ({ post, comments }) => {
+const post = ({ post }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -58,43 +57,43 @@ const post = ({ post, comments }) => {
 
   const [showForm, setShowForm] = useState(false);
 
-  comments.forEach((reply) => {
-    reply.open = false;
-  });
+  // comments.forEach((reply) => {
+  //   reply.open = false;
+  // });
 
-  const reducer = (comments, toggle) => {
-    if (toggle.type == "open") {
-      return comments.map((comment) => {
-        if (comment._id == toggle.payload) {
-          comment.open = true;
-        }
+  // const reducer = (comments, toggle) => {
+  //   if (toggle.type == "open") {
+  //     return comments.map((comment) => {
+  //       if (comment._id == toggle.payload) {
+  //         comment.open = true;
+  //       }
 
-        return comment;
-      });
-    }
-    if (toggle.type == "close") {
-      return comments.map((comment) => {
-        if (comment._id == toggle.payload) {
-          comment.open = false;
-        }
+  //       return comment;
+  //     });
+  //   }
+  //   if (toggle.type == "close") {
+  //     return comments.map((comment) => {
+  //       if (comment._id == toggle.payload) {
+  //         comment.open = false;
+  //       }
 
-        return comment;
-      });
-    }
-    if (toggle.type == "all") {
-      return comments.map((comment) => {
-        comment.open = false;
+  //       return comment;
+  //     });
+  //   }
+  //   if (toggle.type == "all") {
+  //     return comments.map((comment) => {
+  //       comment.open = false;
 
-        return comment;
-      });
-    }
-    // else {
-    // POTENTIALLY ADD ERROR MESSAGE
-    //   return menuItems;
-    // }
-  };
+  //       return comment;
+  //     });
+  //   }
+  //   // else {
+  //   // POTENTIALLY ADD ERROR MESSAGE
+  //   //   return menuItems;
+  //   // }
+  // };
 
-  const [state, dispatch] = useReducer(reducer, comments);
+  // const [state, dispatch] = useReducer(reducer, comments);
 
   const handleOpenDialog = (action, result) => {
     if (user.status == "unauthenticated" || user.status == "loading") {
@@ -310,7 +309,7 @@ const post = ({ post, comments }) => {
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           Comments:
         </Typography>
-        <CommentList
+        {/* <CommentList
           comments={state}
           post_id={post._id}
           handleOpenDialog={handleOpenDialog}
@@ -318,7 +317,7 @@ const post = ({ post, comments }) => {
           showForm={showForm}
           handleForm={toggleForm}
           handleReply={handleReply}
-        />
+        /> */}
       </Container>
 
       <ClientDialog
@@ -369,12 +368,12 @@ export const getStaticProps = async (context) => {
 
   const post = await getPostById(_id);
 
-  const comments = await getPostComments(post._id.toString());
+  // const comments = await getPostComments(post._id.toString());
 
   return {
     props: {
       post: JSON.parse(JSON.stringify(post)),
-      comments: JSON.parse(JSON.stringify(comments)),
+      // comments: JSON.parse(JSON.stringify(comments)),
     },
     revalidate: 60,
   };
