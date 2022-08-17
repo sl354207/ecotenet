@@ -1,3 +1,4 @@
+import CommentList from "@components/comments/CommentList";
 import ClientDialog from "@components/dialogs/ClientDialog";
 import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/EditorLayout";
@@ -28,24 +29,29 @@ import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { getFeatures, getPostById } from "@utils/mongodb/helpers";
 import theme from "@utils/theme";
+import useOnScreen from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
+import useSWR from "swr";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post }) => {
-  // const classes = useStyles();
   const router = useRouter();
   const { user } = useUserContext();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  // console.log(user);
+
+  const ref = useRef();
+  const isVisible = useOnScreen(ref);
+
   // set post as value of editor
   const [value, setValue] = useState(post);
 
-  //set count value for post
   const [count, setCount] = useState(post.count);
 
   const [dialog, setDialog] = useState(false);
@@ -55,43 +61,65 @@ const post = ({ post }) => {
 
   const [showForm, setShowForm] = useState(false);
 
-  // comments.forEach((reply) => {
-  //   reply.open = false;
-  // });
+  const [loadComments, setLoadComments] = useState(false);
 
-  // const reducer = (comments, toggle) => {
-  //   if (toggle.type == "open") {
-  //     return comments.map((comment) => {
-  //       if (comment._id == toggle.payload) {
-  //         comment.open = true;
-  //       }
+  const { data: comments, error } = useSWR(
+    loadComments ? `/api/comments/${post._id}` : null,
+    fetcher
+  );
 
-  //       return comment;
-  //     });
-  //   }
-  //   if (toggle.type == "close") {
-  //     return comments.map((comment) => {
-  //       if (comment._id == toggle.payload) {
-  //         comment.open = false;
-  //       }
+  const reducer = (comments, toggle) => {
+    // console.log(comments);
+    // console.log(toggle);
+    if (toggle.type == "load") {
+      return toggle.payload;
+    }
+    if (toggle.type == "open") {
+      return comments.map((comment) => {
+        if (comment._id == toggle.payload) {
+          comment.open = true;
+        }
 
-  //       return comment;
-  //     });
-  //   }
-  //   if (toggle.type == "all") {
-  //     return comments.map((comment) => {
-  //       comment.open = false;
+        return comment;
+      });
+    }
+    if (toggle.type == "close") {
+      return comments.map((comment) => {
+        if (comment._id == toggle.payload) {
+          comment.open = false;
+        }
 
-  //       return comment;
-  //     });
-  //   }
-  //   // else {
-  //   // POTENTIALLY ADD ERROR MESSAGE
-  //   //   return menuItems;
-  //   // }
-  // };
+        return comment;
+      });
+    }
+    if (toggle.type == "all") {
+      return comments.map((comment) => {
+        comment.open = false;
 
-  // const [state, dispatch] = useReducer(reducer, comments);
+        return comment;
+      });
+    }
+  };
+
+  const [state, dispatch] = useReducer(reducer, comments);
+
+  useEffect(() => {
+    // console.log(loadComments);
+    if (isVisible) {
+      setLoadComments(true);
+    }
+  }, [isVisible]);
+  useEffect(() => {
+    // console.log(comments);
+    if (loadComments && comments) {
+      comments.forEach((reply) => {
+        reply.open = false;
+        // console.log("loadComments");
+      });
+      dispatch({ type: "load", payload: comments });
+      // console.log(comments);
+    }
+  }, [comments]);
 
   const handleOpenDialog = (action, result) => {
     if (user.status == "unauthenticated" || user.status == "loading") {
@@ -266,15 +294,20 @@ const post = ({ post }) => {
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           Comments:
         </Typography>
-        {/* <CommentList
-          comments={state}
-          post_id={post._id}
-          handleOpenDialog={handleOpenDialog}
-          handleOpenFlag={handleOpenFlag}
-          showForm={showForm}
-          handleForm={toggleForm}
-          handleReply={handleReply}
-        /> */}
+        <div ref={ref}>
+          {!comments && !error && <Typography>loading...</Typography>}
+          {comments && (
+            <CommentList
+              comments={comments}
+              post_id={post._id}
+              handleOpenDialog={handleOpenDialog}
+              handleOpenFlag={handleOpenFlag}
+              showForm={showForm}
+              handleForm={toggleForm}
+              handleReply={handleReply}
+            />
+          )}
+        </div>
       </Container>
 
       <ClientDialog
