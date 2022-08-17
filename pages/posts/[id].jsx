@@ -11,6 +11,7 @@ import Vote from "@components/Vote";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
   Button,
+  CircularProgress,
   Container,
   Divider,
   IconButton,
@@ -71,6 +72,8 @@ const post = ({ post }) => {
     loadComments ? `/api/comments/${post._id}` : null,
     fetcher
   );
+
+  const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
 
   const reducer = (comments, toggle) => {
     // console.log(comments);
@@ -318,14 +321,18 @@ const post = ({ post }) => {
             </Typography>
           </div>
 
-          <Vote
-            post_count={post.count}
-            count={count}
-            setCount={setCount}
-            handleOpenDialog={handleOpenDialog}
-            name={user && user.name}
-            voters={post.voters}
-          />
+          {votes ? (
+            <Vote
+              post_count={votes && votes.count}
+              count={count}
+              setCount={setCount}
+              handleOpenDialog={handleOpenDialog}
+              name={user && user.name}
+              voters={votes && votes.voters}
+            />
+          ) : (
+            <CircularProgress size={19} />
+          )}
         </div>
         <EditorLayout>
           <Editor
@@ -363,6 +370,7 @@ const post = ({ post }) => {
         result={item}
         closeForm={closeForm}
         name={user && user.name}
+        mutate={mutate}
       />
       <Flag
         open={flag}

@@ -176,6 +176,20 @@ const getPostById = async (_id) => {
   return post;
 };
 
+// retrieve single post by id from database
+const getPostVotes = async (_id) => {
+  const db = await connectToDatabase();
+
+  const post = await db.collection("posts").findOne(
+    {
+      _id: ObjectId(_id),
+    },
+    { count: 1, voters: 1 }
+  );
+
+  return post;
+};
+
 // query database to get all drafts by user
 
 // UPDATE TO GETPOSTSBYUSER
@@ -793,6 +807,7 @@ module.exports = {
   getPostsByCategoryAndRegion,
   getFeatures,
   getFeatureCandidates,
+  getPostVotes,
   getDashboardPosts,
   getProfilePosts,
   getComments,

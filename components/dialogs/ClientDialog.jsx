@@ -93,7 +93,7 @@ const ClientDialog = ({
         severity: "success",
         message: `${contentType} submit successfully`,
       });
-      // router.reload();
+      mutate();
     }
 
     if (!updateResponse.ok) {
