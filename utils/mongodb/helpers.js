@@ -1,7 +1,7 @@
 import clientPromise from "@utils/mongodb/promise";
 import { ObjectId } from "mongodb";
 
-// const { MONGODB_URI, MONGODB_DB } = process.env;
+const { MONGODB_DB } = process.env;
 
 // if (!MONGODB_URI) {
 //   throw new Error(
@@ -50,7 +50,7 @@ import { ObjectId } from "mongodb";
 
 const connectToDatabase = async () => {
   const client = await clientPromise;
-  const db = client.db("eco_site");
+  const db = client.db(MONGODB_DB);
 
   return db;
 };
