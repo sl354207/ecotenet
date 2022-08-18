@@ -86,7 +86,7 @@ const DashboardComment = ({
               target="_blank"
               rel="noopener noreferrer"
               underline="hover"
-              sx={{ marginLeft: "8px" }}
+              style={{ marginLeft: "9px" }}
             >
               View
             </Link>
@@ -149,7 +149,7 @@ const DashboardComment = ({
               target="_blank"
               rel="noopener noreferrer"
               underline="hover"
-              sx={{ marginLeft: "15px" }}
+              style={{ marginLeft: "19px" }}
             >
               View Post
             </Link>
