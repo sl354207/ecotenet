@@ -27,10 +27,10 @@ const search = ({ ecoFilter }) => {
   const router = useRouter();
 
   const query = router.query.q;
-  const queryFilter = router.query.s;
+  const queryFilter = router.query.filter;
 
   const { data: results } = useSWR(
-    `/api/search?q=${query}&filter=${queryFilter}`,
+    `/api/search?q=${query}&filter=${queryFilter}&eco=${ecoFilter}`,
     fetcher
   );
 
@@ -84,7 +84,9 @@ const search = ({ ecoFilter }) => {
           autoHighlight
           disableClearable={true}
           onChange={(event, newValue) => {
-            router.push(`/search?q=${newValue.inputValue}&s=${newValue.path}`);
+            router.push(
+              `/search?q=${newValue.inputValue}&filter=${newValue.path}`
+            );
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);

@@ -437,7 +437,7 @@ const searchAllSpecies = async (query) => {
 
   return results;
 };
-const searchEcoPosts = async (query) => {
+const searchEcoPosts = async (query, eco) => {
   const db = await connectToDatabase();
 
   const results = await db
@@ -466,18 +466,18 @@ const searchEcoPosts = async (query) => {
                     },
                   },
                 },
-                // text: {
-                //   query: "313",
-                //   path: "ecoregions",
-                // },
+                text: {
+                  query: `${eco}`,
+                  path: "ecoregions",
+                },
               },
             ],
             filter: [
               {
-                text: {
-                  query: "313",
-                  path: "ecoregions",
-                },
+                // text: {
+                //   query: `${eco}`,
+                //   path: "ecoregions",
+                // },
                 text: {
                   query: "published",
                   path: "status",
@@ -497,7 +497,7 @@ const searchEcoPosts = async (query) => {
 
   return results;
 };
-const searchEcoSpecies = async (query) => {
+const searchEcoSpecies = async (query, eco) => {
   const db = await connectToDatabase();
 
   const results = await db
@@ -522,7 +522,7 @@ const searchEcoSpecies = async (query) => {
             filter: [
               {
                 text: {
-                  query: "313",
+                  query: `${eco}`,
                   path: "unique_id",
                 },
               },

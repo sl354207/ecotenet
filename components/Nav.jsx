@@ -252,7 +252,7 @@ const Nav = ({ ecoFilter }) => {
                   disableClearable={true}
                   onChange={(event, newValue) => {
                     router.push(
-                      `/search?q=${newValue.inputValue}&s=${newValue.path}`
+                      `/search?q=${newValue.inputValue}&filter=${newValue.path}`
                     );
                   }}
                   filterOptions={(options, params) => {
@@ -697,7 +697,7 @@ const Nav = ({ ecoFilter }) => {
                   disableClearable={true}
                   onChange={(event, newValue) => {
                     router.push(
-                      `/search?q=${newValue.inputValue}&s=${newValue.path}`
+                      `/search?q=${newValue.inputValue}&filter=${newValue.path}`
                     );
                   }}
                   filterOptions={(options, params) => {

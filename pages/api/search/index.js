@@ -12,6 +12,7 @@ export default async function handler(req, res) {
 
   const query = req.query.q;
   const filter = req.query.filter;
+  const eco = req.query.eco;
 
   switch (filter) {
     case "allPosts":
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
       break;
     case "ecoPosts":
       try {
-        const results = await searchEcoPosts(query);
+        const results = await searchEcoPosts(query, eco);
 
         return res.status(200).json(results);
       } catch (err) {
@@ -49,7 +50,7 @@ export default async function handler(req, res) {
       break;
     case "ecoSpecies":
       try {
-        const results = await searchEcoSpecies(query);
+        const results = await searchEcoSpecies(query, eco);
 
         return res.status(200).json(results);
       } catch (err) {
