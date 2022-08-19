@@ -30,7 +30,9 @@ const search = ({ ecoFilter }) => {
   const queryFilter = router.query.filter;
 
   const { data: results } = useSWR(
-    `/api/search?q=${query}&filter=${queryFilter}&eco=${ecoFilter}`,
+    query
+      ? `/api/search?q=${query}&filter=${queryFilter}&eco=${ecoFilter}`
+      : null,
     fetcher
   );
 
