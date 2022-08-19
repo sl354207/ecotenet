@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Toolbar,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -85,7 +84,7 @@ const SpeciesScroll = ({ category }) => {
           </>
         ))}
       </AppBar>
-      <Toolbar />
+      {/* <Toolbar /> */}
       <List>
         {uniqueFirst.map((entry) => {
           return (

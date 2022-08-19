@@ -74,7 +74,9 @@ const adminPeople = () => {
                   </Link>
 
                   <Typography>bio: {result.bio}</Typography>
-                  <Typography>email: {result.email}</Typography>
+                  <Typography sx={{ overflowWrap: "anywhere" }}>
+                    email: {result.email}
+                  </Typography>
                   <Typography>
                     website:{" "}
                     <Link

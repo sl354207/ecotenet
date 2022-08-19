@@ -1,5 +1,6 @@
 import Footer from "@components/Footer";
 import Header from "@components/Header";
+import Link from "@components/Link";
 import PostList from "@components/PostList";
 import SpeciesScroll from "@components/SpeciesScroll";
 import { Container, Typography } from "@mui/material";
@@ -8,11 +9,35 @@ import {
   getSpecies,
 } from "@utils/mongodb/helpers";
 
-const categoryList = ({ category, title, id }) => {
+const categoryList = ({ category, title, id, description }) => {
   return (
     <>
       <Container>
         <Header title={`Eco-${id} ${title}`} />
+        {description == "other" && (
+          <Typography align="center" sx={{ marginTop: "10px" }}>
+            These are species that either may not fit well into other categories
+            or occur in small numbers in our dataset so they have been grouped
+            together
+          </Typography>
+        )}
+        {description == "uncategorized" && (
+          <Typography align="center" sx={{ marginTop: "10px" }}>
+            These are species that we just haven't gotten to placing in their
+            proper category yet, but rather than leave them out we placed them
+            all here until they get categorized
+          </Typography>
+        )}
+        {description == "guide" && (
+          <Typography align="center" sx={{ marginTop: "10px" }}>
+            This category is for posts that may be more in depth and complete
+            than the general info given for that species(id guides, lifecycle
+            guides, etc.) or for posts that share information on several species
+            within the category e.g. a comparison of species of oak trees within
+            an ecoregion
+          </Typography>
+        )}
+
         {category.length === 0 ? (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             We currently do not have data on this category
@@ -20,9 +45,39 @@ const categoryList = ({ category, title, id }) => {
         ) : (
           <>
             {category[0].scientific_name ? (
-              <SpeciesScroll category={category} />
+              <>
+                <Typography
+                  variant="body1"
+                  align="center"
+                  sx={{ marginTop: "10px" }}
+                >
+                  These are the species currently present in this ecoregion
+                  category based on our{" "}
+                  <Link href="/data" underline="hover">
+                    dataset.
+                  </Link>
+                </Typography>
+                <Typography
+                  variant="body1"
+                  align="center"
+                  sx={{ marginTop: "20px" }}
+                >
+                  *Eco-{id} {title} current species count: {category.length}
+                </Typography>
+
+                <SpeciesScroll category={category} />
+                <Typography variant="subtitle2" align="left">
+                  *A species distribution often does not align perfectly with
+                  ecoregion boundaries, therefore a species may not be present
+                  throughout the entire ecoregion but only in specific areas. A
+                  species may also be widespread but in small numbers so rarely
+                  seen.
+                </Typography>
+              </>
             ) : (
-              <PostList posts={category} />
+              <>
+                <PostList posts={category} />
+              </>
             )}
           </>
         )}
@@ -42,6 +97,7 @@ export const getServerSideProps = async (context) => {
   // console.log(categorySub);
   // console.log(categoryTitle);
   let category;
+  let description;
 
   // const getCategory = async () => {
   //   if (
@@ -86,6 +142,7 @@ export const getServerSideProps = async (context) => {
   switch (categoryQuery) {
     case "mammal":
       try {
+        description = null;
         category = await getSpecies("mammal", id);
       } catch (err) {
         console.error(err);
@@ -94,6 +151,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "reptile":
       try {
+        description = null;
         category = await getSpecies("reptile", id);
       } catch (err) {
         console.error(err);
@@ -102,6 +160,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "amphibian":
       try {
+        description = null;
         category = await getSpecies("amphibian", id);
       } catch (err) {
         console.error(err);
@@ -110,6 +169,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "bird":
       try {
+        description = null;
         category = await getSpecies("bird", id);
       } catch (err) {
         console.error(err);
@@ -118,6 +178,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "fish":
       try {
+        description = null;
         category = await getSpecies("fish", id);
       } catch (err) {
         console.error(err);
@@ -126,6 +187,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "arthropod":
       try {
+        description = null;
         category = await getSpecies("arthropod", id);
       } catch (err) {
         console.error(err);
@@ -134,6 +196,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "mollusk":
       try {
+        description = null;
         category = await getSpecies("mollusk", id);
       } catch (err) {
         console.error(err);
@@ -142,6 +205,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "cnidaria":
       try {
+        description = null;
         category = await getSpecies("cnidaria", id);
       } catch (err) {
         console.error(err);
@@ -150,6 +214,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "worm":
       try {
+        description = null;
         category = await getSpecies("worm", id);
       } catch (err) {
         console.error(err);
@@ -158,7 +223,18 @@ export const getServerSideProps = async (context) => {
       break;
     case "other_animals":
       try {
+        description = "other";
         category = await getSpecies("other_animals", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "animal_guide":
+      try {
+        description = "guide";
+        category = await getPostsByCategoryAndRegion(categoryQuery, id);
       } catch (err) {
         console.error(err);
       }
@@ -167,6 +243,7 @@ export const getServerSideProps = async (context) => {
 
     case "tree_shrub":
       try {
+        description = null;
         category = await getSpecies("tree_shrub", id);
       } catch (err) {
         console.error(err);
@@ -175,6 +252,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "vine":
       try {
+        description = null;
         category = await getSpecies("vine", id);
       } catch (err) {
         console.error(err);
@@ -183,6 +261,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "wildflower":
       try {
+        description = null;
         category = await getSpecies("wildflower", id);
       } catch (err) {
         console.error(err);
@@ -191,6 +270,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "water_master":
       try {
+        description = null;
         category = await getSpecies("water_master", id);
       } catch (err) {
         console.error(err);
@@ -199,6 +279,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "graminoid":
       try {
+        description = null;
         category = await getSpecies("graminoid", id);
       } catch (err) {
         console.error(err);
@@ -207,6 +288,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "other_plants":
       try {
+        description = "other";
         category = await getSpecies("other_plants", id);
       } catch (err) {
         console.error(err);
@@ -216,7 +298,17 @@ export const getServerSideProps = async (context) => {
 
     case "uncategorized_plants":
       try {
+        description = "uncategorized";
         category = await getSpecies("uncategorized_plants", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+    case "plant_guide":
+      try {
+        description = "guide";
+        category = await getPostsByCategoryAndRegion(categoryQuery, id);
       } catch (err) {
         console.error(err);
       }
@@ -225,6 +317,7 @@ export const getServerSideProps = async (context) => {
 
     case "gill_fungi":
       try {
+        description = null;
         category = await getSpecies("gill_fungi", id);
       } catch (err) {
         console.error(err);
@@ -233,6 +326,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "non_gilled_fungi":
       try {
+        description = null;
         category = await getSpecies("non_gilled_fungi", id);
       } catch (err) {
         console.error(err);
@@ -241,6 +335,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "gasteroid_fungi":
       try {
+        description = null;
         category = await getSpecies("gasteroid_fungi", id);
       } catch (err) {
         console.error(err);
@@ -250,6 +345,7 @@ export const getServerSideProps = async (context) => {
 
     case "other_fungi":
       try {
+        description = "other";
         category = await getSpecies("other_fungi", id);
       } catch (err) {
         console.error(err);
@@ -259,7 +355,18 @@ export const getServerSideProps = async (context) => {
 
     case "uncategorized_fungi":
       try {
+        description = "uncategorized";
         category = await getSpecies("uncategorized_fungi", id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
+    case "fungi_guide":
+      try {
+        description = "guide";
+        category = await getPostsByCategoryAndRegion(categoryQuery, id);
       } catch (err) {
         console.error(err);
       }
@@ -268,6 +375,7 @@ export const getServerSideProps = async (context) => {
 
     case "bacteria":
       try {
+        description = null;
         category = await getSpecies("bacteria", id);
       } catch (err) {
         console.error(err);
@@ -276,6 +384,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "virus":
       try {
+        description = null;
         category = await getSpecies("virus", id);
       } catch (err) {
         console.error(err);
@@ -284,6 +393,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "protozoa":
       try {
+        description = null;
         category = await getSpecies("protozoa", id);
       } catch (err) {
         console.error(err);
@@ -292,6 +402,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "chromista":
       try {
+        description = null;
         category = await getSpecies("chromista", id);
       } catch (err) {
         console.error(err);
@@ -300,6 +411,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "archaea":
       try {
+        description = null;
         category = await getSpecies("archaea", id);
       } catch (err) {
         console.error(err);
@@ -308,6 +420,7 @@ export const getServerSideProps = async (context) => {
       break;
     case "algae":
       try {
+        description = null;
         category = await getSpecies("algae", id);
       } catch (err) {
         console.error(err);
@@ -316,13 +429,25 @@ export const getServerSideProps = async (context) => {
       break;
     case "ciliate":
       try {
+        description = null;
         category = await getSpecies("ciliate", id);
       } catch (err) {
         console.error(err);
       }
 
+    case "the_rest_guide":
+      try {
+        description = "guide";
+        category = await getPostsByCategoryAndRegion(categoryQuery, id);
+      } catch (err) {
+        console.error(err);
+      }
+
+      break;
+
     default:
       try {
+        description = null;
         category = await getPostsByCategoryAndRegion(categoryQuery, id);
       } catch (err) {
         console.error(err);
@@ -339,6 +464,7 @@ export const getServerSideProps = async (context) => {
       category: JSON.parse(JSON.stringify(category)),
       title: categoryTitle,
       id: id,
+      description: description,
     },
   };
 };

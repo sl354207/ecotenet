@@ -285,7 +285,7 @@ const post = ({ post }) => {
               voters={votes && votes.voters}
             />
           ) : (
-            <CircularProgress size={19} />
+            <CircularProgress size={19} color="secondary" />
           )}
         </div>
         <EditorLayout>

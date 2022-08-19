@@ -127,13 +127,10 @@ const person = () => {
   }
   return (
     <>
-      {/* <Link href="/admin/flags" underline="hover">
-        &#10229;Flags
-      </Link> */}
       <Link
         href="/admin/flags"
         underline="hover"
-        sx={{ display: "flex", alignItems: "center" }}
+        style={{ display: "flex", alignItems: "center" }}
       >
         <ArrowBackIcon fontSize="small" />
         Flags

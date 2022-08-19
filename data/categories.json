@@ -39,7 +39,7 @@
         {"subTitle": "Fishing", "query": "hunt_fish"},
         {"subTitle": "Strategies or Techniques", "query": "hunt_strategy_technique"},
         {"subTitle": "Processing", "query": "hunt_process"},
-        {"subTitle": "Tools", "query": "hunt_tools"}
+        {"subTitle": "Tools", "query": "hunt_tool"}
       ],
       "openList": false
     },

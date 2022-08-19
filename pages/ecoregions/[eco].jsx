@@ -263,7 +263,7 @@ const eco = ({ wiki, ecoName, id }) => {
           open={dialog}
           handleClose={() => handleCloseDialog()}
           contentType="ecoregion"
-          result={{ _id: "test" }}
+          result={{ _id: id }}
           name={user && user.name}
         />
       </Container>
