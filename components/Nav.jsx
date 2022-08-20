@@ -175,7 +175,7 @@ const Nav = ({ ecoFilter }) => {
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
-        <Toolbar>
+        <Toolbar sx={{ paddingLeft: "10px", paddingRight: "10px" }}>
           {isMobile ? (
             <>
               {ecoFilter && (
@@ -201,7 +201,7 @@ const Nav = ({ ecoFilter }) => {
               >
                 <Button
                   href="/"
-                  size="small"
+                  size="large"
                   color="inherit"
                   sx={{ minWidth: "auto" }}
                 >
@@ -219,7 +219,7 @@ const Nav = ({ ecoFilter }) => {
                   },
                   marginLeft: 0,
                   width: "auto",
-                  marginRight: "10px",
+                  marginRight: "5px",
                 }}
               >
                 <div
@@ -244,7 +244,7 @@ const Nav = ({ ecoFilter }) => {
                       transition: theme.transitions.create("width"),
                       width: "0ch",
                       "&:focus": {
-                        width: "20ch",
+                        width: "19ch",
                       },
                     },
                   }}
@@ -335,7 +335,7 @@ const Nav = ({ ecoFilter }) => {
                           transition: theme.transitions.create("width"),
                           width: "0ch",
                           "&:focus": {
-                            width: "20ch",
+                            width: "19ch",
                           },
                         },
                       }}
@@ -512,97 +512,6 @@ const Nav = ({ ecoFilter }) => {
                   </Grow>
                 )}
               </Popper>
-
-              <Drawer
-                sx={{
-                  width: drawerWidth,
-                  flexShrink: 0,
-                  "& .MuiDrawer-paper": {
-                    width: drawerWidth,
-                    backgroundColor: theme.palette.primary.light,
-                    margin: 0,
-                  },
-                }}
-                anchor="left"
-                open={drawerOpen}
-                onClose={handleDrawerClose}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: theme.spacing(0, 1),
-                    // necessary for content to be below app bar
-                    ...theme.mixins.toolbar,
-                  }}
-                >
-                  <Button
-                    sx={{
-                      flexGrow: 1,
-                      [theme.breakpoints.down("md")]: {
-                        flexGrow: 1,
-                      },
-                    }}
-                    onClick={() => {
-                      setDrawerOpen(false);
-                      router.push("/");
-                    }}
-                    variant="text"
-                    color="inherit"
-                  >
-                    ecotenet
-                  </Button>
-                  <IconButton onClick={handleDrawerClose} size="large">
-                    <ChevronLeftIcon />
-                  </IconButton>
-                </div>
-                <Divider />
-                {state.map((menuItem) => {
-                  const { menuTitle, menuSubs, openList } = menuItem;
-
-                  return (
-                    <List
-                      component="nav"
-                      aria-labelledby="nested-list"
-                      key="mainlist"
-                    >
-                      <ListItem
-                        button
-                        key={menuTitle}
-                        onClick={() => handleListClick(menuTitle)}
-                      >
-                        <ListItemText primary={menuTitle} />
-                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </ListItem>
-                      <Collapse in={openList} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding key="sublist">
-                          {menuSubs.map((menuSub) => (
-                            <ListItem
-                              button
-                              key={menuSub.subTitle}
-                              sx={{ paddingLeft: theme.spacing(4) }}
-                              onClick={() => {
-                                handleDrawerClose(Event);
-                                router.push({
-                                  pathname: `/[region]/[category]`,
-                                  query: {
-                                    region: ecoFilter,
-                                    category: menuSub.query,
-                                    title: menuSub.subTitle,
-                                  },
-                                });
-                              }}
-                            >
-                              <ListItemText primary={menuSub.subTitle} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Collapse>
-                      <Divider />
-                    </List>
-                  );
-                })}
-              </Drawer>
             </>
           ) : (
             <>
@@ -846,99 +755,98 @@ const Nav = ({ ecoFilter }) => {
               >
                 Donate
               </Button>
-
-              <Drawer
-                sx={{
-                  width: drawerWidth,
-                  flexShrink: 0,
-                  "& .MuiDrawer-paper": {
-                    width: drawerWidth,
-                    backgroundColor: theme.palette.primary.light,
-                    margin: 0,
-                  },
-                }}
-                anchor="left"
-                open={drawerOpen}
-                onClose={handleDrawerClose}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: theme.spacing(0, 1),
-                    // necessary for content to be below app bar
-                    ...theme.mixins.toolbar,
-                  }}
-                >
-                  <Button
-                    sx={{
-                      flexGrow: 1,
-                      [theme.breakpoints.down("md")]: {
-                        flexGrow: 1,
-                      },
-                    }}
-                    onClick={() => {
-                      setDrawerOpen(false);
-                      router.push("/");
-                    }}
-                    variant="text"
-                    color="inherit"
-                  >
-                    ecotenet
-                  </Button>
-                  <IconButton onClick={handleDrawerClose} size="large">
-                    <ChevronLeftIcon />
-                  </IconButton>
-                </div>
-                <Divider />
-                {state.map((menuItem) => {
-                  const { menuTitle, menuSubs, openList } = menuItem;
-
-                  return (
-                    <List
-                      component="nav"
-                      aria-labelledby="nested-list"
-                      key="mainlist"
-                    >
-                      <ListItem
-                        button
-                        key={menuTitle}
-                        onClick={() => handleListClick(menuTitle)}
-                      >
-                        <ListItemText primary={menuTitle} />
-                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </ListItem>
-                      <Collapse in={openList} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding key="sublist">
-                          {menuSubs.map((menuSub) => (
-                            <ListItem
-                              button
-                              key={menuSub.subTitle}
-                              sx={{ paddingLeft: theme.spacing(4) }}
-                              onClick={() => {
-                                handleDrawerClose(Event);
-                                router.push({
-                                  pathname: `/[region]/[category]`,
-                                  query: {
-                                    region: ecoFilter,
-                                    category: menuSub.query,
-                                    title: menuSub.subTitle,
-                                  },
-                                });
-                              }}
-                            >
-                              <ListItemText primary={menuSub.subTitle} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Collapse>
-                      <Divider />
-                    </List>
-                  );
-                })}
-              </Drawer>
             </>
           )}
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: drawerWidth,
+                backgroundColor: theme.palette.primary.light,
+                margin: 0,
+              },
+            }}
+            anchor="left"
+            open={drawerOpen}
+            onClose={handleDrawerClose}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: theme.spacing(0, 1),
+                // necessary for content to be below app bar
+                ...theme.mixins.toolbar,
+              }}
+            >
+              <Button
+                sx={{
+                  flexGrow: 1,
+                  [theme.breakpoints.down("md")]: {
+                    flexGrow: 1,
+                  },
+                }}
+                onClick={() => {
+                  setDrawerOpen(false);
+                  router.push(`/ecoregions/${ecoFilter}`);
+                }}
+                variant="text"
+                color="inherit"
+              >
+                ECO-{ecoFilter}
+              </Button>
+              <IconButton onClick={handleDrawerClose} size="large">
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+            <Divider />
+            {state.map((menuItem) => {
+              const { menuTitle, menuSubs, openList } = menuItem;
+
+              return (
+                <List
+                  component="nav"
+                  aria-labelledby="nested-list"
+                  key="mainlist"
+                >
+                  <ListItem
+                    button
+                    key={menuTitle}
+                    onClick={() => handleListClick(menuTitle)}
+                  >
+                    <ListItemText primary={menuTitle} />
+                    {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </ListItem>
+                  <Collapse in={openList} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding key="sublist">
+                      {menuSubs.map((menuSub) => (
+                        <ListItem
+                          button
+                          key={menuSub.subTitle}
+                          sx={{ paddingLeft: theme.spacing(4) }}
+                          onClick={() => {
+                            handleDrawerClose(Event);
+                            router.push({
+                              pathname: `/[region]/[category]`,
+                              query: {
+                                region: ecoFilter,
+                                category: menuSub.query,
+                                title: menuSub.subTitle,
+                              },
+                            });
+                          }}
+                        >
+                          <ListItemText primary={menuSub.subTitle} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                  <Divider />
+                </List>
+              );
+            })}
+          </Drawer>
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>
