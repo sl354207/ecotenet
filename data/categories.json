@@ -49,14 +49,14 @@
      " openList": false
     },
     {
-      "menuTitle": "Travel",
-      "menuSubs": [{"subTitle": "Land", "query": "travel_land"}, {"subTitle": "Water", "query": "travel_water"}],
-      "openList": false
-    },
-    {
       "menuTitle": "Survival",
       "menuSubs": [{"subTitle": "Fire", "query": "survival_fire"}, {"subTitle": "Water", "query": "survival_water"}, {"subTitle": "Basic Shelter", "query": "survival_shelter"}, {"subTitle": "Navigation", "query": "survival_navigation"}, {"subTitle": "Emergency", "query": "survival_emergency"}],
      " openList": false
+    },
+    {
+      "menuTitle": "Travel",
+      "menuSubs": [{"subTitle": "Land", "query": "travel_land"}, {"subTitle": "Water", "query": "travel_water"}],
+      "openList": false
     },
     {
       "menuTitle": "Agriculture",
@@ -84,7 +84,7 @@
         {"subTitle": "Water Systems", "query": "build_water_system"},
         {"subTitle": "Heating or Cooling", "query": "build_heat_cool"},
         {"subTitle": "Sanitation", "query": "build_sanitation"},
-        {"subTitle": "Furniture or Utensils or Tools", "query": "build_tools"}
+        {"subTitle": "Furniture or Utensils or Tools", "query": "build_tool"}
       ],
       "openList": false
     },

@@ -60,16 +60,6 @@
       "query": "gather_medicinal"
     },
     {
-      "title": "Travel",
-      "sub": "Land",
-      "query": "travel_land"
-    },
-    {
-      "title": "Travel",
-      "sub": "Water",
-      "query": "travel_water"
-    },
-    {
       "title": "Survival",
       "sub": "Fire",
       "query": "survival_fire"
@@ -93,6 +83,16 @@
       "title": "Survival",
       "sub": "Emergency",
       "query": "survival_emergency"
+    },
+    {
+      "title": "Travel",
+      "sub": "Land",
+      "query": "travel_land"
+    },
+    {
+      "title": "Travel",
+      "sub": "Water",
+      "query": "travel_water"
     },
     {
       "title": "Agriculture",
@@ -182,7 +182,7 @@
     {
       "title": "Building",
       "sub": "Furniture/Utensils/Tools",
-      "query": "build_tools"
+      "query": "build_tool"
     },
     {
       "title": "Culture",

@@ -1,5 +1,11 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import theme from "@utils/theme";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
@@ -7,6 +13,7 @@ import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 import Geocoder from "./Geocoder";
 
 const MapMain = () => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -112,13 +119,23 @@ const MapMain = () => {
       <div style={{ height: "91vh" }}>
         <Map
           style={{ width: "auto", height: "91vh" }}
-          initialViewState={{
-            latitude: 37.8,
-            longitude: -98,
-            zoom: 4,
-            bearing: 0,
-            pitch: 0,
-          }}
+          initialViewState={
+            isMobile
+              ? {
+                  latitude: 37.8,
+                  longitude: -98,
+                  zoom: 9,
+                  bearing: 0,
+                  pitch: 0,
+                }
+              : {
+                  latitude: 37.8,
+                  longitude: -98,
+                  zoom: 4,
+                  bearing: 0,
+                  pitch: 0,
+                }
+          }
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}

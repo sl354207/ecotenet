@@ -142,7 +142,7 @@ const category = () => {
           land
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
-          Posts ould range from mountaineering type skills to a review about
+          Posts could range from mountaineering type skills to a review about
           your favorite hiking spot to what type of gear you should use for the
           appalachian trail etc.
         </Typography>
@@ -179,13 +179,7 @@ const category = () => {
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           Posts about canning, smoking, root cellars, etc.
         </Typography>
-        <Typography sx={{ marginBottom: "10px" }} variant="h6">
-          Propogation/Cultivation
-        </Typography>
-        <Typography sx={{ marginBottom: "10px" }} variant="body1">
-          Posta about seed propogation, collection, and storage. Any tree
-          nursery stuff, etc.
-        </Typography>
+
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
           Livestock
         </Typography>
@@ -197,6 +191,13 @@ const category = () => {
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           Posts about composting techniques, soil building and maintenance, etc.
+        </Typography>
+        <Typography sx={{ marginBottom: "10px" }} variant="h6">
+          Propogation/Cultivation
+        </Typography>
+        <Typography sx={{ marginBottom: "10px" }} variant="body1">
+          Posts about seed propogation, collection, and storage. Any tree
+          nursery stuff, etc.
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
           Irrigation
@@ -226,7 +227,7 @@ const category = () => {
           Building:
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
-          Foundations/ floors
+          Foundations
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           Anything related to foundations
