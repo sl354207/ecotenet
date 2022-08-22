@@ -52,6 +52,7 @@ const SpeciesScroll = ({ category }) => {
           marginTop: "20px",
           border: "1px solid #94c9ff",
           borderRadius: "10px",
+          zIndex: 1000,
         }}
       >
         {uniqueFirst.map((item) => (
