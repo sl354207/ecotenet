@@ -1,18 +1,11 @@
 import Coords from "@data/eco_coord.json";
-import {
-  Button,
-  CircularProgress,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import theme from "@utils/theme";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-const MapSpecies = ({ clickInfo, state }) => {
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+const MapSpecies = ({ clickInfo, state, zoom }) => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -231,23 +224,13 @@ const MapSpecies = ({ clickInfo, state }) => {
             height: "80vh",
             margin: "0px 10px 0px 10px",
           }}
-          initialViewState={
-            isMobile
-              ? {
-                  latitude: 37.8,
-                  longitude: -98,
-                  zoom: 9,
-                  bearing: 0,
-                  pitch: 0,
-                }
-              : {
-                  latitude: 37.8,
-                  longitude: -98,
-                  zoom: 4,
-                  bearing: 0,
-                  pitch: 0,
-                }
-          }
+          initialViewState={{
+            latitude: 37.8,
+            longitude: -98,
+            zoom: zoom,
+            bearing: 0,
+            pitch: 0,
+          }}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}

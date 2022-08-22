@@ -1,19 +1,12 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import {
-  Button,
-  CircularProgress,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import theme from "@utils/theme";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 import Geocoder from "./Geocoder";
 
-const MapMain = () => {
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+const MapMain = ({ zoom }) => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -97,19 +90,7 @@ const MapMain = () => {
     [selectedRegion]
   );
 
-  // turn ecoregion name into proper slug
-  const slugify = (text) =>
-    text
-      .toString()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim()
-      .replace(/\s+/g, "_")
-      .replace(/[^\w-]+/g, "")
-      .replace(/--+/g, "_");
-
-  const handleClick = (ecoName, selectedRegion) => {
-    // const slug = slugify(ecoName);
+  const handleClick = (selectedRegion) => {
     setShowLoad(true);
     router.push(`/ecoregions/${selectedRegion}`);
   };
@@ -118,24 +99,15 @@ const MapMain = () => {
     <>
       <div style={{ height: "91vh" }}>
         <Map
+          reuseMaps
           style={{ width: "auto", height: "91vh" }}
-          initialViewState={
-            isMobile
-              ? {
-                  latitude: 37.8,
-                  longitude: -98,
-                  zoom: 9,
-                  bearing: 0,
-                  pitch: 0,
-                }
-              : {
-                  latitude: 37.8,
-                  longitude: -98,
-                  zoom: 4,
-                  bearing: 0,
-                  pitch: 0,
-                }
-          }
+          initialViewState={{
+            latitude: 37.8,
+            longitude: -98,
+            zoom: zoom,
+            bearing: 0,
+            pitch: 0,
+          }}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}
@@ -197,7 +169,7 @@ const MapMain = () => {
                       disableElevation={true}
                       size="small"
                       color="primary"
-                      onClick={() => handleClick(ecoName, selectedRegion)}
+                      onClick={() => handleClick(selectedRegion)}
                     >
                       Enter
                     </Button>

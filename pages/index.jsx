@@ -1,15 +1,19 @@
-import MapMain from "@components/maps/MapMain";
+// import MapMain from "@components/maps/MapMain";
+import { useMediaQuery } from "@mui/material";
+import theme from "@utils/theme";
+import dynamic from "next/dynamic";
 
 export default function MapPage() {
   // need to dynamically import to work with mapbox
-  // const MapMain = dynamic(() => import("../components/MapMain"), {
-  //   loading: () => "Loading...",
-  //   ssr: false,
-  // });
+  const MapMain = dynamic(() => import("@components/maps/MapMain"), {
+    ssr: false,
+  });
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <div id="map-main">
-      <MapMain />
+      <MapMain zoom={isMobile ? 3 : 4} />
     </div>
   );
 }

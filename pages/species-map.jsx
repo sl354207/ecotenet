@@ -1,7 +1,6 @@
 import Description from "@components/Description";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
-import MapSpecies from "@components/maps/MapSpecies";
 import {
   Autocomplete,
   Chip,
@@ -11,6 +10,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
+import dynamic from "next/dynamic";
 import { useReducer, useState } from "react";
 
 const speciesChips = [
@@ -120,6 +120,9 @@ const reducer = (speciesChips, action) => {
 };
 
 const speciesMap = () => {
+  const MapSpecies = dynamic(() => import("@components/maps/MapSpecies"), {
+    ssr: false,
+  });
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -453,7 +456,11 @@ const speciesMap = () => {
           </>
         )}
 
-        <MapSpecies clickInfo={clickInfo} state={state} />
+        <MapSpecies
+          clickInfo={clickInfo}
+          state={state}
+          zoom={isMobile ? 3 : 4}
+        />
         <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
           *A species distribution often does not align perfectly with ecoregion
           boundaries, therefore a species may not be present throughout the
