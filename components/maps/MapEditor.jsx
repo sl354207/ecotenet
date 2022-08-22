@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-const MapEditor = ({ clickInfo, state, handleDblClick, zoom }) => {
+const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   // base layer
@@ -217,7 +217,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick, zoom }) => {
           initialViewState={{
             latitude: 37.8,
             longitude: -98,
-            zoom: zoom,
+            zoom: 3,
             bearing: 0,
             pitch: 0,
           }}

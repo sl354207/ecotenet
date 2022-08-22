@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-const MapSpecies = ({ clickInfo, state, zoom }) => {
+const MapSpecies = ({ clickInfo, state }) => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -227,7 +227,7 @@ const MapSpecies = ({ clickInfo, state, zoom }) => {
           initialViewState={{
             latitude: 37.8,
             longitude: -98,
-            zoom: zoom,
+            zoom: 3,
             bearing: 0,
             pitch: 0,
           }}

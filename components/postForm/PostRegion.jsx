@@ -1,5 +1,6 @@
 import Description from "@components/Description";
 import Header from "@components/Header";
+import MapEditor from "@components/maps/MapEditor";
 import {
   Autocomplete,
   Chip,
@@ -119,9 +120,6 @@ const reducer = (speciesChips, action) => {
 
 //pass in and destructure props.
 const PostRegion = ({ clickInfo, setClickInfo }) => {
-  const MapEditor = dynamic(() => import("@components/maps/MapEditor"), {
-    ssr: false,
-  });
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -489,7 +487,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         clickInfo={clickInfo}
         handleDblClick={handleMapClick}
         state={state}
-        zoom={isMobile ? 3 : 4}
+        // zoom={isMobile ? 3 : 4}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
         *A species distribution often does not align perfectly with ecoregion
