@@ -10,16 +10,20 @@ import {
   Autocomplete,
   Box,
   Button,
+  ClickAwayListener,
   Collapse,
   Divider,
   Drawer,
+  Grow,
   IconButton,
   InputBase,
   List,
   ListItem,
   ListItemText,
-  Menu,
   MenuItem,
+  MenuList,
+  Paper,
+  Popper,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -28,11 +32,17 @@ import { alpha, useTheme } from "@mui/material/styles";
 
 import { useSnackbarContext } from "@components/SnackbarContext";
 import { createPost } from "@utils/api-helpers";
+import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
+import CreatePostButton from "./CreatePostButton";
 import { useUserContext } from "./UserContext";
 
 const drawerWidth = 240;
+
+const CustomPopper = function (props) {
+  return <Popper {...props} style={{ width: "400px" }} placement="bottom" />;
+};
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {
@@ -375,6 +385,7 @@ const Nav = ({ ecoFilter }) => {
                 <li {...props}>{option.title}</li>
               )}
               freeSolo
+              PopperComponent={CustomPopper}
               renderInput={(params) => (
                 <InputBase
                   {...params}
@@ -399,6 +410,173 @@ const Nav = ({ ecoFilter }) => {
           </div>
           <Box sx={{ display: { xs: "block", lg: "none" } }}>
             <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+              ref={anchorRef}
+              aria-controls={popper ? "menu-list-grow" : undefined}
+              aria-haspopup="true"
+              onClick={togglePopper}
+              size="large"
+              sx={{ marginRight: "10px" }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Popper
+              open={popper}
+              anchorEl={anchorRef.current}
+              role={undefined}
+              transition
+              disablePortal
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin:
+                      placement === "bottom" ? "center top" : "center bottom",
+                    minWidth: 210,
+                  }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={closePopper}>
+                      <MenuList
+                        autoFocusItem={popper}
+                        id="menu-list-grow"
+                        onKeyDown={handlePopperKeyDown}
+                      >
+                        <MenuItem
+                          onClick={() => {
+                            setPopper(false);
+                            router.push("/featured");
+                          }}
+                          sx={{ color: theme.palette.secondary.main }}
+                        >
+                          Featured Posts
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setPopper(false);
+                            router.push("/species-map");
+                          }}
+                          sx={{ color: theme.palette.secondary.main }}
+                        >
+                          Species Map
+                        </MenuItem>
+                        {status == "authenticated" && (
+                          <MenuItem
+                            onClick={
+                              status == "authenticated" &&
+                              user.name == undefined
+                                ? () => {
+                                    setPopper(false);
+                                    router.push("/auth/new-user");
+                                  }
+                                : () => {
+                                    setPopper(false);
+                                    router.push("/dashboard");
+                                  }
+                            }
+                            sx={{ color: theme.palette.secondary.main }}
+                          >
+                            Dashboard
+                          </MenuItem>
+                        )}
+                        {status == "authenticated" ? (
+                          <MenuItem
+                            onClick={
+                              status == "authenticated" &&
+                              user.name == undefined
+                                ? () => {
+                                    setPopper(false);
+                                    router.push("/auth/new-user");
+                                  }
+                                : () => {
+                                    setPopper(false);
+                                    startPost();
+                                  }
+                            }
+                            sx={{
+                              color: theme.palette.secondary.main,
+                              border: `1px solid ${theme.palette.secondary.main}`,
+                              borderRadius: "4px",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            Create Post
+                          </MenuItem>
+                        ) : (
+                          <MenuItem
+                            // onClick={() => {
+                            //   setPopper(false);
+                            //   signIn();
+                            // }}
+                            disabled
+                            sx={{
+                              color: theme.palette.secondary.main,
+                              border: `1px solid ${theme.palette.secondary.main}`,
+                              borderRadius: "4px",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            Create Post
+                          </MenuItem>
+                        )}
+
+                        <MenuItem
+                          disabled={status == "loading"}
+                          onClick={
+                            status == "authenticated"
+                              ? () => {
+                                  setPopper(false);
+                                  signOut({
+                                    callbackUrl: "http://localhost:3000",
+                                  });
+                                }
+                              : () => {
+                                  setPopper(false);
+                                  signIn();
+                                }
+                          }
+                          sx={{
+                            color: theme.palette.secondary.main,
+                            border: `1px solid ${theme.palette.secondary.main}`,
+                            borderRadius: "4px",
+                            marginBottom: "4px",
+                          }}
+                        >
+                          {status == "authenticated" ? (
+                            <>Sign Out</>
+                          ) : (
+                            <>Sign In</>
+                          )}
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setPopper(false);
+                            router.push("/donate");
+                          }}
+                          sx={{
+                            border: `1px solid ${theme.palette.secondary.main}`,
+                            borderRadius: "4px",
+                            backgroundColor: theme.palette.secondary.main,
+                            color: theme.palette.text.secondary,
+                            "&:hover": {
+                              backgroundColor: "#0071e4",
+                              border: "1px solid #0071e4",
+                              borderRadius: "4px",
+                            },
+                          }}
+                        >
+                          Donate
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
+            {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -559,7 +737,7 @@ const Nav = ({ ecoFilter }) => {
               >
                 Donate
               </MenuItem>
-            </Menu>
+            </Menu> */}
           </Box>
           <Box sx={{ display: { xs: "none", lg: "flex" } }}>
             {status == "authenticated" ? (
