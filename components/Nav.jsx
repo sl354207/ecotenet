@@ -75,7 +75,7 @@ const Nav = ({ ecoFilter }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"), { noSsr: true });
 
   const [popper, setPopper] = useState(false);
   const anchorRef = useRef(null);

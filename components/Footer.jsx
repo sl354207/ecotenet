@@ -54,7 +54,11 @@ const Footer = () => {
               Site Map
             </Link>
           </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}></Grid>
+          <Grid item xs={4} sx={{ textAlign: "center" }}>
+            <Link href="/data" underline="hover">
+              Species Data
+            </Link>
+          </Grid>
           <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Button href="/donate" variant="contained" color="secondary">
               Donate
