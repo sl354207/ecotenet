@@ -8,34 +8,28 @@ import SortIcon from "@mui/icons-material/Sort";
 import {
   AppBar,
   Autocomplete,
+  Box,
   Button,
-  ClickAwayListener,
   Collapse,
   Divider,
   Drawer,
-  Grow,
   IconButton,
   InputBase,
   List,
   ListItem,
   ListItemText,
+  Menu,
   MenuItem,
-  MenuList,
-  Paper,
-  Popper,
   Toolbar,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { alpha, useTheme } from "@mui/material/styles";
 
 import { useSnackbarContext } from "@components/SnackbarContext";
 import { createPost } from "@utils/api-helpers";
-import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
-import CreatePostButton from "./CreatePostButton";
 import { useUserContext } from "./UserContext";
 
 const drawerWidth = 240;
@@ -75,7 +69,16 @@ const Nav = ({ ecoFilter }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"), { noSsr: true });
+
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
   const [popper, setPopper] = useState(false);
   const anchorRef = useRef(null);
@@ -175,588 +178,449 @@ const Nav = ({ ecoFilter }) => {
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
-        <Toolbar sx={{ paddingLeft: "10px", paddingRight: "10px" }}>
-          {isMobile ? (
-            <>
-              {ecoFilter && (
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  aria-label="filter"
-                  size="small"
-                  onClick={handleDrawerOpen}
-                >
-                  <Typography>{ecoFilter}</Typography>
-                  <SortIcon sx={{ color: theme.palette.secondary.light }} />
-                </IconButton>
+        <Toolbar sx={{ paddingLeft: "10px", paddingRight: "0px" }}>
+          {ecoFilter && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="filter"
+              // size="small"
+              onClick={handleDrawerOpen}
+              sx={{
+                // display: "contents",
+                marginLeft: { xs: "1px", lg: "0px" },
+                padding: { xs: "5px", lg: "12px" },
+                fontSize: { xs: "18px", lg: "12px" },
+              }}
+            >
+              <Typography>{ecoFilter}</Typography>
+              <SortIcon sx={{ color: theme.palette.secondary.light }} />
+            </IconButton>
+          )}
+
+          <Button
+            href="/"
+            size="large"
+            color="inherit"
+            // sx={{ minWidth: "auto" }}
+            sx={{
+              minWidth: "auto",
+              // flexGrow: 1,
+              // marginRight: "auto",
+              display: { xs: "block", lg: "none" },
+            }}
+          >
+            et
+          </Button>
+          <Button
+            href="/"
+            // size="large"
+            color="inherit"
+            // sx={{ minWidth: "auto" }}
+            sx={{
+              // minWidth: "auto",
+              // flexGrow: 1,
+              // marginRight: "auto",
+              display: { xs: "none", lg: "block" },
+            }}
+          >
+            ecotenet
+          </Button>
+          <Button
+            href="/featured"
+            variant="text"
+            color="secondary"
+            sx={{
+              // minWidth: "auto",
+              // flexGrow: 1,
+              // marginRight: "auto",
+              display: { xs: "none", lg: "block" },
+            }}
+          >
+            Featured Posts
+          </Button>
+          <Button
+            href="/species-map"
+            variant="text"
+            color="secondary"
+            sx={{
+              // minWidth: "auto",
+              // flexGrow: 1,
+              // marginRight: "auto",
+              display: { xs: "none", lg: "block" },
+            }}
+          >
+            Species Map
+          </Button>
+          {status == "authenticated" && (
+            <Button
+              variant="text"
+              color="secondary"
+              onClick={
+                status == "authenticated" && user.name == undefined
+                  ? () => router.push("/auth/new-user")
+                  : () => router.push("/dashboard")
+              }
+              sx={{
+                // minWidth: "auto",
+                // flexGrow: 1,
+                // marginRight: "auto",
+                display: { xs: "none", lg: "block" },
+              }}
+            >
+              Dashboard
+            </Button>
+          )}
+          {/* </div> */}
+
+          <div
+            style={{
+              position: "relative",
+              borderRadius: theme.shape.borderRadius,
+              backgroundColor: alpha(theme.palette.common.white, 0.15),
+              "&:hover": {
+                backgroundColor: alpha(theme.palette.common.white, 0.25),
+              },
+              marginLeft: "auto",
+              width: "auto",
+              marginRight: "5px",
+            }}
+          >
+            <div
+              style={{
+                padding: theme.spacing(0, 2),
+                height: "100%",
+                position: "absolute",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <SearchIcon />
+            </div>
+
+            <Autocomplete
+              autoHighlight
+              disableClearable={true}
+              onChange={(event, newValue) => {
+                router.push(
+                  `/search?q=${newValue.inputValue}&filter=${newValue.path}`
+                );
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                if (!ecoFilter) {
+                  if (params.inputValue !== "") {
+                    filtered.push(
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all posts`,
+                        path: "allPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all species`,
+                        path: "allSpecies",
+                      }
+                    );
+                  }
+                } else {
+                  if (params.inputValue !== "") {
+                    filtered.push(
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in ecoregion posts`,
+                        path: "ecoPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in ecoregion species`,
+                        path: "ecoSpecies",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all posts`,
+                        path: "allPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all species`,
+                        path: "allSpecies",
+                      }
+                    );
+                  }
+                }
+
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              id="nav-auto"
+              options={tags}
+              getOptionLabel={(option) => {
+                // Value selected with enter, right from the input
+                // if (typeof option === "string") {
+                //   return option;
+                // }
+                // // Add "xxx" option created dynamically
+                // if (option.inputValue) {
+                //   return option.inputValue;
+                // }
+                // Regular option
+                return "";
+              }}
+              renderOption={(props, option) => (
+                <li {...props}>{option.title}</li>
               )}
-
-              <div
-                style={{
-                  flexGrow: 1,
-                  [theme.breakpoints.down("md")]: {
-                    flexGrow: 1,
-                  },
-                }}
-              >
-                <Button
-                  href="/"
-                  size="large"
-                  color="inherit"
-                  sx={{ minWidth: "auto" }}
-                >
-                  et
-                </Button>
-              </div>
-
-              <div
-                style={{
-                  position: "relative",
-                  borderRadius: theme.shape.borderRadius,
-                  backgroundColor: alpha(theme.palette.common.white, 0.15),
-                  "&:hover": {
-                    backgroundColor: alpha(theme.palette.common.white, 0.25),
-                  },
-                  marginLeft: 0,
-                  width: "auto",
-                  marginRight: "5px",
-                }}
-              >
-                <div
-                  style={{
-                    padding: theme.spacing(0, 2),
-                    height: "100%",
-                    position: "absolute",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <SearchIcon />
-                </div>
-
-                <Autocomplete
+              freeSolo
+              renderInput={(params) => (
+                <InputBase
+                  {...params}
+                  placeholder="Search Site…"
                   sx={{
-                    "&.MuiAutocomplete-input": {
+                    "& .MuiInputBase-input": {
                       padding: theme.spacing(1, 1, 1, 0),
                       // vertical padding + font size from searchIcon
                       paddingLeft: `calc(1em + ${theme.spacing(4)})`,
                       transition: theme.transitions.create("width"),
                       width: "0ch",
                       "&:focus": {
-                        width: "19ch",
+                        width: { xs: "13ch", md: "19ch" },
                       },
                     },
                   }}
-                  autoHighlight
-                  disableClearable={true}
-                  onChange={(event, newValue) => {
-                    router.push(
-                      `/search?q=${newValue.inputValue}&filter=${newValue.path}`
-                    );
-                  }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-
-                    if (!ecoFilter) {
-                      if (params.inputValue !== "") {
-                        filtered.push(
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all posts`,
-                            path: "allPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all species`,
-                            path: "allSpecies",
-                          }
-                        );
-                      }
-                    } else {
-                      if (params.inputValue !== "") {
-                        filtered.push(
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in ecoregion posts`,
-                            path: "ecoPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in ecoregion species`,
-                            path: "ecoSpecies",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all posts`,
-                            path: "allPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all species`,
-                            path: "allSpecies",
-                          }
-                        );
-                      }
-                    }
-
-                    return filtered;
-                  }}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="nav-auto"
-                  options={tags}
-                  getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
-                    // if (typeof option === "string") {
-                    //   return option;
-                    // }
-                    // // Add "xxx" option created dynamically
-                    // if (option.inputValue) {
-                    //   return option.inputValue;
-                    // }
-                    // Regular option
-                    return "";
-                  }}
-                  renderOption={(props, option) => (
-                    <li {...props}>{option.title}</li>
-                  )}
-                  freeSolo
-                  renderInput={(params) => (
-                    <InputBase
-                      {...params}
-                      placeholder="Search Site…"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          padding: theme.spacing(1, 1, 1, 0),
-                          // vertical padding + font size from searchIcon
-                          paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                          transition: theme.transitions.create("width"),
-                          width: "0ch",
-                          "&:focus": {
-                            width: "19ch",
-                          },
-                        },
-                      }}
-                      ref={params.InputProps.ref}
-                      inputProps={params.inputProps}
-                    />
-                  )}
+                  ref={params.InputProps.ref}
+                  inputProps={params.inputProps}
                 />
-              </div>
-
-              <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="menu"
-                ref={anchorRef}
-                aria-controls={popper ? "menu-list-grow" : undefined}
-                aria-haspopup="true"
-                onClick={togglePopper}
-                size="large"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Popper
-                open={popper}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                transition
-                disablePortal
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === "bottom" ? "center top" : "center bottom",
-                      minWidth: 210,
-                    }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={closePopper}>
-                        <MenuList
-                          autoFocusItem={popper}
-                          id="menu-list-grow"
-                          onKeyDown={handlePopperKeyDown}
-                        >
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/featured");
-                            }}
-                            sx={{ color: theme.palette.secondary.main }}
-                          >
-                            Featured Posts
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/species-map");
-                            }}
-                            sx={{ color: theme.palette.secondary.main }}
-                          >
-                            Species Map
-                          </MenuItem>
-                          {status == "authenticated" && (
-                            <MenuItem
-                              onClick={
-                                status == "authenticated" &&
-                                user.name == undefined
-                                  ? () => {
-                                      setPopper(false);
-                                      router.push("/auth/new-user");
-                                    }
-                                  : () => {
-                                      setPopper(false);
-                                      router.push("/dashboard");
-                                    }
-                              }
-                              sx={{ color: theme.palette.secondary.main }}
-                            >
-                              Dashboard
-                            </MenuItem>
-                          )}
-                          {status == "authenticated" ? (
-                            <MenuItem
-                              onClick={
-                                status == "authenticated" &&
-                                user.name == undefined
-                                  ? () => {
-                                      setPopper(false);
-                                      router.push("/auth/new-user");
-                                    }
-                                  : () => {
-                                      setPopper(false);
-                                      startPost();
-                                    }
-                              }
-                              sx={{
-                                color: theme.palette.secondary.main,
-                                border: `1px solid ${theme.palette.secondary.main}`,
-                                borderRadius: "4px",
-                                marginBottom: "4px",
-                              }}
-                            >
-                              Create Post
-                            </MenuItem>
-                          ) : (
-                            <MenuItem
-                              // onClick={() => {
-                              //   setPopper(false);
-                              //   signIn();
-                              // }}
-                              disabled
-                              sx={{
-                                color: theme.palette.secondary.main,
-                                border: `1px solid ${theme.palette.secondary.main}`,
-                                borderRadius: "4px",
-                                marginBottom: "4px",
-                              }}
-                            >
-                              Create Post
-                            </MenuItem>
-                          )}
-
-                          <MenuItem
-                            disabled={status == "loading"}
-                            onClick={
-                              status == "authenticated"
-                                ? () => {
-                                    setPopper(false);
-                                    signOut({
-                                      callbackUrl: "http://localhost:3000",
-                                    });
-                                  }
-                                : () => {
-                                    setPopper(false);
-                                    signIn();
-                                  }
-                            }
-                            sx={{
-                              color: theme.palette.secondary.main,
-                              border: `1px solid ${theme.palette.secondary.main}`,
-                              borderRadius: "4px",
-                              marginBottom: "4px",
-                            }}
-                          >
-                            {status == "authenticated" ? (
-                              <>Sign Out</>
-                            ) : (
-                              <>Sign In</>
-                            )}
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              setPopper(false);
-                              router.push("/donate");
-                            }}
-                            sx={{
-                              border: `1px solid ${theme.palette.secondary.main}`,
-                              borderRadius: "4px",
-                              backgroundColor: theme.palette.secondary.main,
-                              color: theme.palette.text.secondary,
-                              "&:hover": {
-                                backgroundColor: "#0071e4",
-                                border: "1px solid #0071e4",
-                                borderRadius: "4px",
-                              },
-                            }}
-                          >
-                            Donate
-                          </MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </>
-          ) : (
-            <>
-              {ecoFilter && (
-                <IconButton
-                  edge="start"
-                  sx={{ marginRight: theme.spacing(2) }}
-                  aria-label="filter"
-                  onClick={handleDrawerOpen}
-                  size="large"
-                >
-                  <Typography>{ecoFilter}</Typography>
-                  <SortIcon sx={{ color: theme.palette.secondary.light }} />
-                </IconButton>
               )}
+            />
+          </div>
+          <Box sx={{ display: { xs: "block", lg: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenUserMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
 
-              <div
-                style={{
-                  flexGrow: 1,
-                  [theme.breakpoints.down("md")]: {
-                    flexGrow: 1,
-                  },
+            <Menu
+              sx={{
+                // mt: "35px",
+                // mr: "0px",
+                display: { xs: "box", lg: "none" },
+                // padding: "20px",
+                // width: "400px",
+              }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleCloseUserMenu();
+
+                  router.push("/featured");
                 }}
+                sx={{ color: theme.palette.secondary.main, width: "250px" }}
               >
-                <Button href="/" variant="text" color="inherit">
-                  ecotenet
-                </Button>
+                Featured Posts
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleCloseUserMenu();
 
-                <div style={{ display: "inline-flex" }}>
-                  <Button href="/featured" variant="text" color="secondary">
-                    Featured Posts
-                  </Button>
-                  <Button href="/species-map" variant="text" color="secondary">
-                    Species Map
-                  </Button>
-                  {status == "authenticated" && (
-                    <Button
-                      variant="text"
-                      color="secondary"
-                      onClick={
-                        status == "authenticated" && user.name == undefined
-                          ? () => router.push("/auth/new-user")
-                          : () => router.push("/dashboard")
-                      }
-                    >
-                      Dashboard
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  position: "relative",
-                  borderRadius: theme.shape.borderRadius,
-                  backgroundColor: alpha(theme.palette.common.white, 0.15),
-                  "&:hover": {
-                    backgroundColor: alpha(theme.palette.common.white, 0.25),
-                  },
-                  marginLeft: 0,
-                  width: "auto",
-                  marginRight: "10px",
+                  router.push("/species-map");
                 }}
+                sx={{ color: theme.palette.secondary.main }}
               >
-                <div
-                  style={{
-                    padding: theme.spacing(0, 2),
-                    height: "100%",
-                    position: "absolute",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                Species Map
+              </MenuItem>
+              {status == "authenticated" && (
+                <MenuItem
+                  onClick={
+                    status == "authenticated" && user.name == undefined
+                      ? () => {
+                          handleCloseUserMenu();
+
+                          router.push("/auth/new-user");
+                        }
+                      : () => {
+                          handleCloseUserMenu();
+
+                          router.push("/dashboard");
+                        }
+                  }
+                  sx={{ color: theme.palette.secondary.main }}
                 >
-                  <SearchIcon />
-                </div>
-
-                <Autocomplete
-                  sx={{
-                    "&.MuiAutocomplete-input": {
-                      padding: theme.spacing(1, 1, 1, 0),
-                      // vertical padding + font size from searchIcon
-                      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                      transition: theme.transitions.create("width"),
-                      width: "0ch",
-                      "&:focus": {
-                        width: "20ch",
-                      },
-                    },
-                  }}
-                  autoHighlight
-                  disableClearable={true}
-                  onChange={(event, newValue) => {
-                    router.push(
-                      `/search?q=${newValue.inputValue}&filter=${newValue.path}`
-                    );
-                  }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-
-                    if (!ecoFilter) {
-                      if (params.inputValue !== "") {
-                        filtered.push(
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all posts`,
-                            path: "allPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all species`,
-                            path: "allSpecies",
-                          }
-                        );
-                      }
-                    } else {
-                      if (params.inputValue !== "") {
-                        filtered.push(
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in ecoregion posts`,
-                            path: "ecoPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in ecoregion species`,
-                            path: "ecoSpecies",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all posts`,
-                            path: "allPosts",
-                          },
-                          {
-                            inputValue: params.inputValue,
-                            title: `"${params.inputValue}" in all species`,
-                            path: "allSpecies",
-                          }
-                        );
-                      }
-                    }
-
-                    return filtered;
-                  }}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="nav-auto"
-                  options={tags}
-                  getOptionLabel={(option) => {
-                    // Value selected with enter, right from the input
-                    // if (typeof option === "string") {
-                    //   return option;
-                    // }
-                    // // Add "xxx" option created dynamically
-                    // if (option.inputValue) {
-                    //   return option.inputValue;
-                    // }
-                    // Regular option
-                    return "";
-                  }}
-                  renderOption={(props, option) => (
-                    <li {...props}>{option.title}</li>
-                  )}
-                  freeSolo
-                  renderInput={(params) => (
-                    <InputBase
-                      {...params}
-                      placeholder="Search Site…"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          padding: theme.spacing(1, 1, 1, 0),
-                          // vertical padding + font size from searchIcon
-                          paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                          transition: theme.transitions.create("width"),
-                          width: "0ch",
-                          "&:focus": {
-                            width: "20ch",
-                          },
-                        },
-                      }}
-                      ref={params.InputProps.ref}
-                      inputProps={params.inputProps}
-                    />
-                  )}
-                />
-              </div>
-
+                  Dashboard
+                </MenuItem>
+              )}
               {status == "authenticated" ? (
-                <>
-                  {user.name == undefined ? (
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() => router.push("/auth/new-user")}
-                    >
-                      Create Post
-                    </Button>
-                  ) : (
-                    <CreatePostButton
-                      name={user && user.name}
-                      snackbar={snackbar}
-                      setSnackbar={setSnackbar}
-                      nav={true}
-                    />
-                  )}
-                </>
-              ) : (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  // onClick={() => signIn()}
-                  disabled
+                <MenuItem
+                  onClick={
+                    status == "authenticated" && user.name == undefined
+                      ? () => {
+                          handleCloseUserMenu();
+
+                          router.push("/auth/new-user");
+                        }
+                      : () => {
+                          handleCloseUserMenu();
+
+                          startPost();
+                        }
+                  }
+                  sx={{
+                    color: theme.palette.secondary.main,
+                    border: `1px solid ${theme.palette.secondary.main}`,
+                    borderRadius: "4px",
+                    marginBottom: "4px",
+                  }}
                 >
                   Create Post
-                </Button>
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  // onClick={() => {
+                  //   setPopper(false);
+                  //   signIn();
+                  // }}
+                  disabled
+                  sx={{
+                    color: theme.palette.secondary.main,
+                    border: `1px solid ${theme.palette.secondary.main}`,
+                    borderRadius: "4px",
+                    marginBottom: "4px",
+                  }}
+                >
+                  Create Post
+                </MenuItem>
               )}
 
+              <MenuItem
+                disabled={status == "loading"}
+                onClick={
+                  status == "authenticated"
+                    ? () => {
+                        handleCloseUserMenu();
+
+                        signOut({
+                          callbackUrl: "http://localhost:3000",
+                        });
+                      }
+                    : () => {
+                        handleCloseUserMenu();
+
+                        signIn();
+                      }
+                }
+                sx={{
+                  color: theme.palette.secondary.main,
+                  border: `1px solid ${theme.palette.secondary.main}`,
+                  borderRadius: "4px",
+                  marginBottom: "4px",
+                }}
+              >
+                {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleCloseUserMenu();
+
+                  router.push("/donate");
+                }}
+                sx={{
+                  border: `1px solid ${theme.palette.secondary.main}`,
+                  borderRadius: "4px",
+                  backgroundColor: theme.palette.secondary.main,
+                  color: theme.palette.text.secondary,
+                  "&:hover": {
+                    backgroundColor: "#0071e4",
+                    border: "1px solid #0071e4",
+                    borderRadius: "4px",
+                  },
+                }}
+              >
+                Donate
+              </MenuItem>
+            </Menu>
+          </Box>
+          <Box sx={{ display: { xs: "none", lg: "flex" } }}>
+            {status == "authenticated" ? (
+              <>
+                {user.name == undefined ? (
+                  <Button
+                    sx={{ marginLeft: "10px" }}
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => router.push("/auth/new-user")}
+                  >
+                    Create Post
+                  </Button>
+                ) : (
+                  <CreatePostButton
+                    name={user && user.name}
+                    snackbar={snackbar}
+                    setSnackbar={setSnackbar}
+                    nav={true}
+                  />
+                )}
+              </>
+            ) : (
               <Button
                 variant="outlined"
                 color="secondary"
                 sx={{ marginLeft: "10px" }}
-                disabled={status == "loading"}
-                onClick={
-                  status == "authenticated"
-                    ? () =>
-                        signOut({
-                          callbackUrl: "http://localhost:3000",
-                        })
-                    : () => signIn()
-                }
+                // onClick={() => signIn()}
+                disabled
               >
-                {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+                Create Post
               </Button>
+            )}
 
-              <Button
-                href="/donate"
-                variant="contained"
-                color="secondary"
-                sx={{ marginLeft: "10px" }}
-              >
-                Donate
-              </Button>
-            </>
-          )}
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ marginLeft: "10px" }}
+              disabled={status == "loading"}
+              onClick={
+                status == "authenticated"
+                  ? () =>
+                      signOut({
+                        callbackUrl: "http://localhost:3000",
+                      })
+                  : () => signIn()
+              }
+            >
+              {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+            </Button>
+
+            <Button
+              href="/donate"
+              variant="contained"
+              color="secondary"
+              sx={{ marginLeft: "10px" }}
+            >
+              Donate
+            </Button>
+          </Box>
+
           <Drawer
             sx={{
               width: drawerWidth,

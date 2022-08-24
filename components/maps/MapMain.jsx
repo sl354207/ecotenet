@@ -124,7 +124,7 @@ const MapMain = ({ zoom }) => {
           <Geocoder
             mapboxAccessToken={mapBox}
             position="top-left"
-            placeholder="Search Map"
+            placeholder="Search Location"
             clearAndBlurOnEsc
             clearOnBlur
           />
