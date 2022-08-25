@@ -41,13 +41,7 @@ import { useUserContext } from "./UserContext";
 const drawerWidth = 240;
 
 const CustomPopper = function (props) {
-  return (
-    <Popper
-      {...props}
-      style={{ width: "400px", height: "min-content" }}
-      placement="bottom"
-    />
-  );
+  return <Popper {...props} style={{ width: "400px" }} placement="bottom" />;
 };
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
@@ -67,12 +61,9 @@ const reducer = (menuItems, action) => {
 };
 
 const Nav = ({ ecoFilter }) => {
-  // const { data: session, status } = useSession();
-  // console.log(session);
-  // console.log(status);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  // console.log(userName);
+
   let status;
   if (user == undefined) {
     status = "loading";
@@ -85,16 +76,6 @@ const Nav = ({ ecoFilter }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const theme = useTheme();
-
-  const [anchorElUser, setAnchorElUser] = useState(null);
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
 
   const [popper, setPopper] = useState(false);
   const anchorRef = useRef(null);
@@ -200,10 +181,8 @@ const Nav = ({ ecoFilter }) => {
               edge="start"
               color="inherit"
               aria-label="filter"
-              // size="small"
               onClick={handleDrawerOpen}
               sx={{
-                // display: "contents",
                 marginLeft: { xs: "1px", lg: "0px" },
                 padding: { xs: "5px", lg: "12px" },
                 fontSize: { xs: "18px", lg: "12px" },
@@ -218,11 +197,9 @@ const Nav = ({ ecoFilter }) => {
             href="/"
             size="large"
             color="inherit"
-            // sx={{ minWidth: "auto" }}
             sx={{
               minWidth: "auto",
-              // flexGrow: 1,
-              // marginRight: "auto",
+
               display: { xs: "block", lg: "none" },
             }}
           >
@@ -230,13 +207,8 @@ const Nav = ({ ecoFilter }) => {
           </Button>
           <Button
             href="/"
-            // size="large"
             color="inherit"
-            // sx={{ minWidth: "auto" }}
             sx={{
-              // minWidth: "auto",
-              // flexGrow: 1,
-              // marginRight: "auto",
               display: { xs: "none", lg: "block" },
             }}
           >
@@ -247,9 +219,6 @@ const Nav = ({ ecoFilter }) => {
             variant="text"
             color="secondary"
             sx={{
-              // minWidth: "auto",
-              // flexGrow: 1,
-              // marginRight: "auto",
               display: { xs: "none", lg: "block" },
             }}
           >
@@ -260,9 +229,6 @@ const Nav = ({ ecoFilter }) => {
             variant="text"
             color="secondary"
             sx={{
-              // minWidth: "auto",
-              // flexGrow: 1,
-              // marginRight: "auto",
               display: { xs: "none", lg: "block" },
             }}
           >
@@ -278,16 +244,12 @@ const Nav = ({ ecoFilter }) => {
                   : () => router.push("/dashboard")
               }
               sx={{
-                // minWidth: "auto",
-                // flexGrow: 1,
-                // marginRight: "auto",
                 display: { xs: "none", lg: "block" },
               }}
             >
               Dashboard
             </Button>
           )}
-          {/* </div> */}
 
           <div
             style={{
@@ -376,15 +338,6 @@ const Nav = ({ ecoFilter }) => {
               id="nav-auto"
               options={tags}
               getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                // if (typeof option === "string") {
-                //   return option;
-                // }
-                // // Add "xxx" option created dynamically
-                // if (option.inputValue) {
-                //   return option.inputValue;
-                // }
-                // Regular option
                 return "";
               }}
               renderOption={(props, option) => (
@@ -392,6 +345,14 @@ const Nav = ({ ecoFilter }) => {
               )}
               freeSolo
               PopperComponent={CustomPopper}
+              ListboxProps={{
+                sx: {
+                  minHeight: ecoFilter ? "220px" : "auto",
+                  "& .MuiAutocomplete-option": {
+                    minHeight: "48px",
+                  },
+                },
+              }}
               renderInput={(params) => (
                 <InputBase
                   {...params}
@@ -513,10 +474,6 @@ const Nav = ({ ecoFilter }) => {
                           </MenuItem>
                         ) : (
                           <MenuItem
-                            // onClick={() => {
-                            //   setPopper(false);
-                            //   signIn();
-                            // }}
                             disabled
                             sx={{
                               color: theme.palette.secondary.main,
@@ -582,168 +539,6 @@ const Nav = ({ ecoFilter }) => {
                 </Grow>
               )}
             </Popper>
-            {/* <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenUserMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-
-            <Menu
-              sx={{
-                // mt: "35px",
-                // mr: "0px",
-                display: { xs: "box", lg: "none" },
-                // padding: "20px",
-                // width: "400px",
-              }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-
-                  router.push("/featured");
-                }}
-                sx={{ color: theme.palette.secondary.main, width: "250px" }}
-              >
-                Featured Posts
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-
-                  router.push("/species-map");
-                }}
-                sx={{ color: theme.palette.secondary.main }}
-              >
-                Species Map
-              </MenuItem>
-              {status == "authenticated" && (
-                <MenuItem
-                  onClick={
-                    status == "authenticated" && user.name == undefined
-                      ? () => {
-                          handleCloseUserMenu();
-
-                          router.push("/auth/new-user");
-                        }
-                      : () => {
-                          handleCloseUserMenu();
-
-                          router.push("/dashboard");
-                        }
-                  }
-                  sx={{ color: theme.palette.secondary.main }}
-                >
-                  Dashboard
-                </MenuItem>
-              )}
-              {status == "authenticated" ? (
-                <MenuItem
-                  onClick={
-                    status == "authenticated" && user.name == undefined
-                      ? () => {
-                          handleCloseUserMenu();
-
-                          router.push("/auth/new-user");
-                        }
-                      : () => {
-                          handleCloseUserMenu();
-
-                          startPost();
-                        }
-                  }
-                  sx={{
-                    color: theme.palette.secondary.main,
-                    border: `1px solid ${theme.palette.secondary.main}`,
-                    borderRadius: "4px",
-                    marginBottom: "4px",
-                  }}
-                >
-                  Create Post
-                </MenuItem>
-              ) : (
-                <MenuItem
-                  // onClick={() => {
-                  //   setPopper(false);
-                  //   signIn();
-                  // }}
-                  disabled
-                  sx={{
-                    color: theme.palette.secondary.main,
-                    border: `1px solid ${theme.palette.secondary.main}`,
-                    borderRadius: "4px",
-                    marginBottom: "4px",
-                  }}
-                >
-                  Create Post
-                </MenuItem>
-              )}
-
-              <MenuItem
-                disabled={status == "loading"}
-                onClick={
-                  status == "authenticated"
-                    ? () => {
-                        handleCloseUserMenu();
-
-                        signOut({
-                          callbackUrl: "http://localhost:3000",
-                        });
-                      }
-                    : () => {
-                        handleCloseUserMenu();
-
-                        signIn();
-                      }
-                }
-                sx={{
-                  color: theme.palette.secondary.main,
-                  border: `1px solid ${theme.palette.secondary.main}`,
-                  borderRadius: "4px",
-                  marginBottom: "4px",
-                }}
-              >
-                {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-
-                  router.push("/donate");
-                }}
-                sx={{
-                  border: `1px solid ${theme.palette.secondary.main}`,
-                  borderRadius: "4px",
-                  backgroundColor: theme.palette.secondary.main,
-                  color: theme.palette.text.secondary,
-                  "&:hover": {
-                    backgroundColor: "#0071e4",
-                    border: "1px solid #0071e4",
-                    borderRadius: "4px",
-                  },
-                }}
-              >
-                Donate
-              </MenuItem>
-            </Menu> */}
           </Box>
           <Box sx={{ display: { xs: "none", lg: "flex" } }}>
             {status == "authenticated" ? (
@@ -771,7 +566,6 @@ const Nav = ({ ecoFilter }) => {
                 variant="outlined"
                 color="secondary"
                 sx={{ marginLeft: "10px" }}
-                // onClick={() => signIn()}
                 disabled
               >
                 Create Post
