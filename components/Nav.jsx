@@ -411,6 +411,7 @@ const Nav = ({ ecoFilter }) => {
                         autoFocusItem={popper}
                         id="menu-list-grow"
                         onKeyDown={handlePopperKeyDown}
+                        sx={{ marginRight: "2px" }}
                       >
                         <MenuItem
                           onClick={() => {
