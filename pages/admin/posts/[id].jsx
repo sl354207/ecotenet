@@ -96,7 +96,7 @@ const post = () => {
           <Link
             href="/admin/flags"
             underline="hover"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
           >
             <ArrowBackIcon fontSize="small" />
             Flags
@@ -105,7 +105,7 @@ const post = () => {
           <Link
             href="/admin/posts"
             underline="hover"
-            style={{ display: "flex", alignItems: "center" }}
+            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
           >
             <ArrowBackIcon fontSize="small" />
             Posts
