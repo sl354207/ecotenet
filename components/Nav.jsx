@@ -41,7 +41,13 @@ import { useUserContext } from "./UserContext";
 const drawerWidth = 240;
 
 const CustomPopper = function (props) {
-  return <Popper {...props} style={{ width: "400px" }} placement="bottom" />;
+  return (
+    <Popper
+      {...props}
+      style={{ width: "400px", height: "min-content" }}
+      placement="bottom"
+    />
+  );
 };
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
@@ -825,9 +831,7 @@ const Nav = ({ ecoFilter }) => {
               <Button
                 sx={{
                   flexGrow: 1,
-                  [theme.breakpoints.down("md")]: {
-                    flexGrow: 1,
-                  },
+                  //
                 }}
                 onClick={() => {
                   setDrawerOpen(false);

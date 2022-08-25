@@ -97,10 +97,10 @@ const MapMain = ({ zoom }) => {
 
   return (
     <>
-      <div style={{ height: "91vh" }}>
+      <div style={{ height: "89vh" }}>
         <Map
           reuseMaps
-          style={{ width: "auto", height: "91vh" }}
+          style={{ width: "auto", height: "89vh" }}
           initialViewState={{
             latitude: 37.8,
             longitude: -98,
