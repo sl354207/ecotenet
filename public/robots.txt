@@ -1,0 +1,25 @@
+
+User-agent: *
+User-agent: AdsBot-Google
+Disallow: /admin/
+Disallow: /auth/new-user
+Disallow: /dashboard/
+Disallow: /approved
+Disallow: /search
+
+# Use Allow to make exceptions to Disallow
+
+# Allow all crawlers
+# User-agent: *
+# Allow: /
+
+#UPDATE, double check which ones are necessary
+
+#Sitemap: https://ecotenet.com/sitemap.xml
+#Sitemap: https://www.ecotenet.com/sitemap.xml
+#Sitemap: http://ecotenet.com/sitemap.xml
+#Sitemap: http://www.ecotenet.com/sitemap.xml
+#Sitemap: https://ecotenet.org/sitemap.xml
+Sitemap: https://www.ecotenet.org/sitemap_index.xml
+#Sitemap: http://ecotenet.org/sitemap.xml
+#Sitemap: http://www.ecotenet.org/sitemap.xml
