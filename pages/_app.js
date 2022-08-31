@@ -59,7 +59,11 @@ export default function MyApp(props) {
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
             <Layout ecoFilter={ecoFilter}>
-              <Component ecoFilter={ecoFilter} {...pageProps} />
+              <Component
+                ecoFilter={ecoFilter}
+                setEcoFilter={setEcoFilter}
+                {...pageProps}
+              />
             </Layout>
           </ThemeProvider>
         </UserProvider>

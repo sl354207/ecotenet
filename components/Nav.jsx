@@ -172,6 +172,8 @@ const Nav = ({ ecoFilter }) => {
   // set tag options for autocomplete
   const tags = [];
 
+  // TEST
+
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
@@ -613,6 +615,8 @@ const Nav = ({ ecoFilter }) => {
             anchor="left"
             open={drawerOpen}
             onClose={handleDrawerClose}
+            // hideBackdrop
+            // variant="persistent"
           >
             <div
               style={{

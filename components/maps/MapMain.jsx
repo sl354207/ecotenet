@@ -1,12 +1,21 @@
+import EcoSummary from "@components/EcoSummary";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  SwipeableDrawer,
+  Typography,
+} from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
-import Geocoder from "./Geocoder";
+import useSWR from "swr";
 
-const MapMain = ({ zoom }) => {
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
+const MapMain = ({ zoom, setEcoFilter }) => {
   const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -61,10 +70,21 @@ const MapMain = ({ zoom }) => {
 
   const [showLoad, setShowLoad] = useState(false);
 
+  const [wiki, setWiki] = useState();
+
+  const drawerBleeding = 56;
+  const drawerWidth = 350;
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback(
-    (event) => {
+    async (event) => {
       setShowPopup(true);
+      setOpen(true);
 
       const region = event.features && event.features[0];
 
@@ -75,6 +95,64 @@ const MapMain = ({ zoom }) => {
           regionName: region && region.properties.name,
           regionNum: region && region.properties.unique_id,
         });
+        sessionStorage.setItem(
+          "ecoregion",
+          region && region.properties.unique_id
+        );
+        setEcoFilter(region && region.properties.unique_id);
+        console.log(region.properties.unique_id);
+
+        const res = await fetch(
+          `/api/ecoregions/${region.properties.unique_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        // console.log(res);
+
+        const data = await res.json();
+        switch (data.url) {
+          case undefined:
+            setWiki(
+              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${data.name.replace(
+                " ",
+                "_"
+              )}?redirect=true`,
+              {
+                method: "GET",
+
+                "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+              }
+            );
+
+            // wiki = await wikiRes.json();
+
+            break;
+          case "undefined":
+            setWiki(undefined);
+
+            break;
+
+          default:
+            setWiki(
+              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${data.url.replace(
+                " ",
+                "_"
+              )}?redirect=true`,
+              {
+                method: "GET",
+
+                "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+              }
+            );
+
+            // wiki = await wikiRes.json();
+
+            break;
+        }
       }
     },
     [hoverInfo]
@@ -94,6 +172,8 @@ const MapMain = ({ zoom }) => {
     setShowLoad(true);
     router.push(`/ecoregions/${selectedRegion}`);
   };
+
+  const { data: results } = useSWR(wiki ? wiki : null, fetcher);
 
   return (
     <>
@@ -121,13 +201,13 @@ const MapMain = ({ zoom }) => {
           onClick={onHover}
           attributionControl={false}
         >
-          <Geocoder
+          {/* <Geocoder
             mapboxAccessToken={mapBox}
             position="top-left"
             placeholder="Search Location"
             clearAndBlurOnEsc
             clearOnBlur
-          />
+          /> */}
           <Source
             id="ecomap"
             type="vector"
@@ -186,6 +266,84 @@ const MapMain = ({ zoom }) => {
           )}
         </Map>
       </div>
+      <SwipeableDrawer
+        anchor="right"
+        open={open}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+        swipeAreaWidth={drawerBleeding}
+        disableSwipeToOpen={false}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        hideBackdrop
+        variant="persistent"
+        sx={{
+          "&.MuiDrawer-root > .MuiPaper-root": {
+            // height: `calc(50% - ${drawerBleeding}px)`,
+            width: drawerWidth,
+            overflow: "visible",
+            top: 60,
+            // bottom: 100,
+          },
+          width: drawerWidth,
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            // top: drawerBleeding,
+            borderBottomLeftRadius: 8,
+            borderTopLeftRadius: 8,
+            visibility: "visible",
+            right: drawerWidth,
+            // left: 0,
+            backgroundColor: "#f5f5dc",
+          }}
+        >
+          {/* <Puller /> */}
+          <Box
+            sx={{
+              width: 6,
+              height: 30,
+              backgroundColor: "#000000",
+              borderRadius: 3,
+              position: "relative",
+              top: "25px",
+              // left: "calc(50% - 15px)",
+            }}
+          />
+          <Button
+            color="primary"
+            onClick={toggleDrawer(!open)}
+            sx={{
+              marginBottom: 3,
+              transform: "rotate(-90deg)",
+              mr: "-10px",
+            }}
+          >
+            Summary
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            px: 2,
+            pb: 2,
+            height: "100%",
+            overflow: "auto",
+            backgroundColor: "#808080",
+          }}
+        >
+          {/* <Skeleton variant="rectangular" height="100%" /> */}
+
+          <EcoSummary
+            wiki={wiki}
+            results={results && results}
+            ecoName={ecoName && ecoName}
+            id={selectedRegion && selectedRegion}
+          />
+        </Box>
+      </SwipeableDrawer>
     </>
   );
 };
