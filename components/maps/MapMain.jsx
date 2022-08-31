@@ -70,6 +70,8 @@ const MapMain = ({ zoom, setEcoFilter }) => {
 
   const [showLoad, setShowLoad] = useState(false);
 
+  const [click, setClick] = useState(true);
+
   const [wiki, setWiki] = useState();
 
   const drawerBleeding = 56;
@@ -84,7 +86,12 @@ const MapMain = ({ zoom, setEcoFilter }) => {
   const onHover = useCallback(
     async (event) => {
       setShowPopup(true);
-      setOpen(true);
+
+      setClick(false);
+
+      if (click) {
+        setOpen(true);
+      }
 
       const region = event.features && event.features[0];
 
