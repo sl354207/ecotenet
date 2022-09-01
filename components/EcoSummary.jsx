@@ -5,7 +5,7 @@ import DOMPurify from "isomorphic-dompurify";
 import Header from "./Header";
 import Link from "./Link";
 
-const EcoSummary = ({ wiki, results, ecoName, id }) => {
+const EcoSummary = ({ wiki, results, ecoName, ecoId }) => {
   const options = {
     replace: (domNode) => {
       // console.log(domNode);
@@ -149,16 +149,24 @@ const EcoSummary = ({ wiki, results, ecoName, id }) => {
         <CircularProgress />
       ) : (
         <> */}
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div
+      <div
+        style={{
+          // display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {/* <div
           style={{
             display: "flex",
             marginRight: "auto",
             visibility: "hidden",
             minWidth: 30,
           }}
-        ></div>
-        <Header title={`Eco-${id}: ${ecoName}`} sx={{ marginBottom: "40px" }} />
+        ></div> */}
+        <Header title={`Eco-${ecoId} `} sx={{ marginBottom: "40px" }} />
+        <Typography variant="h4" align="center">
+          {ecoName}
+        </Typography>
       </div>
 
       {!wiki ? (

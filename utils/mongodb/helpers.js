@@ -779,7 +779,7 @@ const getEcoregions = async () => {
   const response = await db
     .collection("ecoregions")
     .find({})
-    .project({ unique_id: 1, name: 1 })
+    .project({ unique_id: 1, name: 1, coordinates: 1, url: 1 })
     .toArray();
 
   // console.log(response);
