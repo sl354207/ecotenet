@@ -59,6 +59,7 @@ const reducer = (menuItems, action) => {
   //   return menuItems;
   // }
 };
+// const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const Nav = ({ ecoFilter }) => {
   const { user } = useUserContext();
@@ -173,6 +174,17 @@ const Nav = ({ ecoFilter }) => {
   const tags = [];
 
   // TEST
+  const [tester, setTester] = useState(false);
+  const [category, setCategory] = useState(null);
+
+  // console.log(ecoFilter);
+  // console.log(category);
+
+  // const { data } = useSWR(
+  //   category ? `/api/${ecoFilter}/${category}` : null,
+  //   fetcher
+  // );
+  console.log(category);
 
   return (
     <>
@@ -646,51 +658,74 @@ const Nav = ({ ecoFilter }) => {
               </IconButton>
             </div>
             <Divider />
-            {state.map((menuItem) => {
-              const { menuTitle, menuSubs, openList } = menuItem;
-
-              return (
-                <List
-                  component="nav"
-                  aria-labelledby="nested-list"
-                  key="mainlist"
+            {tester ? (
+              <>
+                <Button
+                  onClick={() => {
+                    setTester(false);
+                    setCategory(null);
+                  }}
+                  variant="outlined"
+                  color="secondary"
                 >
-                  <ListItem
-                    button
-                    key={menuTitle}
-                    onClick={() => handleListClick(menuTitle)}
-                  >
-                    <ListItemText primary={menuTitle} />
-                    {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                  </ListItem>
-                  <Collapse in={openList} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding key="sublist">
-                      {menuSubs.map((menuSub) => (
-                        <ListItem
-                          button
-                          key={menuSub.subTitle}
-                          sx={{ paddingLeft: theme.spacing(4) }}
-                          onClick={() => {
-                            handleDrawerClose(Event);
-                            router.push({
-                              pathname: `/[region]/[category]`,
-                              query: {
-                                region: ecoFilter,
-                                category: menuSub.query,
-                                title: menuSub.subTitle,
-                              },
-                            });
-                          }}
-                        >
-                          <ListItemText primary={menuSub.subTitle} />
-                        </ListItem>
-                      ))}
+                  back
+                </Button>
+                {/* {category && (
+                  <CategoryList category={category} id={ecoFilter} />
+                )} */}
+              </>
+            ) : (
+              <>
+                {state.map((menuItem) => {
+                  const { menuTitle, menuSubs, openList } = menuItem;
+
+                  return (
+                    <List
+                      component="nav"
+                      aria-labelledby="nested-list"
+                      key="mainlist"
+                    >
+                      <ListItem
+                        button
+                        key={menuTitle}
+                        onClick={() => handleListClick(menuTitle)}
+                      >
+                        <ListItemText primary={menuTitle} />
+                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                      </ListItem>
+                      <Collapse in={openList} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding key="sublist">
+                          {menuSubs.map((menuSub) => (
+                            <ListItem
+                              button
+                              key={menuSub.subTitle}
+                              sx={{ paddingLeft: theme.spacing(4) }}
+                              onClick={() => {
+                                // handleDrawerClose(Event);
+                                // router.push({
+                                //   pathname: `/[region]/[category]`,
+                                //   query: {
+                                //     region: ecoFilter,
+                                //     category: menuSub.query,
+                                //     title: menuSub.subTitle,
+                                //   },
+                                // });
+                                setTester(true);
+                                setCategory(menuSub.query);
+                                // console.log(category);
+                              }}
+                            >
+                              <ListItemText primary={menuSub.subTitle} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Collapse>
+                      <Divider />
                     </List>
-                  </Collapse>
-                  <Divider />
-                </List>
-              );
-            })}
+                  );
+                })}
+              </>
+            )}
           </Drawer>
         </Toolbar>
       </AppBar>
