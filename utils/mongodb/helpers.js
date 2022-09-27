@@ -127,7 +127,14 @@ const getPostsByCategoryAndRegion = async (category, ecoregion) => {
       category: category,
       ecoregions: ecoregion,
     })
-    .project({ title: 1, description: 1, name: 1, count: 1, approved: 1 })
+    .project({
+      title: 1,
+      description: 1,
+      name: 1,
+      count: 1,
+      approved: 1,
+      ecoregions: 1,
+    })
     .sort({ count: -1 })
     .toArray();
 
@@ -341,7 +348,7 @@ const getSpecies = async (speciesType, unique_id) => {
       species_type: speciesType,
       unique_id: unique_id,
     })
-    .project({ scientific_name: 1, common_name: 1 })
+    .project({ scientific_name: 1, common_name: 1, unique_id: 1 })
     .sort({ scientific_name: 1 })
     .toArray();
 

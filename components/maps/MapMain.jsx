@@ -335,6 +335,10 @@ const MapMain = ({
 
   const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
 
+  // const speciesRegions4 = state[4].regions;
+
+  // const speciesFilter4 = ["in", "unique_id", ...speciesRegions4];
+
   const mapRef = useRef();
 
   function usePrevious(value) {

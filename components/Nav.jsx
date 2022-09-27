@@ -35,6 +35,7 @@ import { createPost } from "@utils/api-helpers";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
+import CategoryList from "./CategoryList";
 import CreatePostButton from "./CreatePostButton";
 import { useUserContext } from "./UserContext";
 
@@ -61,7 +62,7 @@ const reducer = (menuItems, action) => {
 };
 // const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const Nav = ({ ecoFilter }) => {
+const Nav = ({ ecoFilter, state, dispatch }) => {
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -162,11 +163,11 @@ const Nav = ({ ecoFilter }) => {
 
   // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
   const handleListClick = (menuTitle) => {
-    dispatch({ type: "toggle", payload: menuTitle });
+    dispatchHook({ type: "toggle", payload: menuTitle });
   };
 
   // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
-  const [state, dispatch] = useReducer(reducer, menuItems);
+  const [drawerState, dispatchHook] = useReducer(reducer, menuItems);
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -184,7 +185,7 @@ const Nav = ({ ecoFilter }) => {
   //   category ? `/api/${ecoFilter}/${category}` : null,
   //   fetcher
   // );
-  console.log(category);
+  // console.log(category);
 
   return (
     <>
@@ -627,7 +628,7 @@ const Nav = ({ ecoFilter }) => {
             anchor="left"
             open={drawerOpen}
             onClose={handleDrawerClose}
-            // hideBackdrop
+            hideBackdrop
             // variant="persistent"
           >
             <div
@@ -659,7 +660,7 @@ const Nav = ({ ecoFilter }) => {
             </div>
             <Divider />
             {tester ? (
-              <>
+              <div>
                 <Button
                   onClick={() => {
                     setTester(false);
@@ -670,13 +671,18 @@ const Nav = ({ ecoFilter }) => {
                 >
                   back
                 </Button>
-                {/* {category && (
-                  <CategoryList category={category} id={ecoFilter} />
-                )} */}
-              </>
+                {/* <Typography>test</Typography> */}
+
+                <CategoryList
+                  category={category && category}
+                  id={ecoFilter}
+                  dispatch={dispatch}
+                  state={state}
+                />
+              </div>
             ) : (
               <>
-                {state.map((menuItem) => {
+                {drawerState.map((menuItem) => {
                   const { menuTitle, menuSubs, openList } = menuItem;
 
                   return (

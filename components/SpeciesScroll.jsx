@@ -12,7 +12,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { createRef } from "react";
 
-const SpeciesScroll = ({ category }) => {
+const SpeciesScroll = ({ category, dispatch, state }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
@@ -99,7 +99,13 @@ const SpeciesScroll = ({ category }) => {
               </ListItem>
               {category.map((item) => {
                 if (item.scientific_name[0] === entry) {
-                  return <SpeciesItem result={item} />;
+                  return (
+                    <SpeciesItem
+                      result={item}
+                      dispatch={dispatch}
+                      state={state}
+                    />
+                  );
                 }
               })}
               <Divider />

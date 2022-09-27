@@ -7,120 +7,120 @@ import EcoSummary from "@components/EcoSummary";
 import MapMain from "@components/maps/MapMain";
 import Coords from "@data/eco_coord.json";
 
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import { MapProvider } from "react-map-gl";
 import useSWR from "swr";
 
 const coords = Coords;
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
-const speciesChips = [
-  { count: 0 },
-  {
-    id: 1,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-  {
-    id: 2,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-  {
-    id: 3,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-];
+// const speciesChips = [
+//   { count: 0 },
+//   {
+//     id: 1,
+//     regions: [],
+//     common_name: "",
+//     scientific_name: "",
+//     open: false,
+//   },
+//   {
+//     id: 2,
+//     regions: [],
+//     common_name: "",
+//     scientific_name: "",
+//     open: false,
+//   },
+//   {
+//     id: 3,
+//     regions: [],
+//     common_name: "",
+//     scientific_name: "",
+//     open: false,
+//   },
+// ];
 
-// reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
-const reducer = (speciesChips, action) => {
-  if (action.type == "remove") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = speciesChips[2].open;
-        speciesChips[1].regions = speciesChips[2].regions;
-        speciesChips[1].scientific_name = speciesChips[2].scientific_name;
-        speciesChips[1].common_name = speciesChips[2].common_name;
+// // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
+// const reducer = (speciesChips, action) => {
+//   if (action.type == "remove") {
+//     switch (action.payload) {
+//       case 1:
+//         speciesChips[1].open = speciesChips[2].open;
+//         speciesChips[1].regions = speciesChips[2].regions;
+//         speciesChips[1].scientific_name = speciesChips[2].scientific_name;
+//         speciesChips[1].common_name = speciesChips[2].common_name;
 
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
+//         speciesChips[2].open = speciesChips[3].open;
+//         speciesChips[2].regions = speciesChips[3].regions;
+//         speciesChips[2].scientific_name = speciesChips[3].scientific_name;
+//         speciesChips[2].common_name = speciesChips[3].common_name;
 
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
+//         speciesChips[3].open = false;
+//         speciesChips[3].regions = action.value;
+//         speciesChips[3].scientific_name = action.s_name;
+//         speciesChips[3].common_name = action.c_name;
 
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
+//         speciesChips[0].count -= 1;
+//         return { ...speciesChips };
 
-      case 2:
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
+//       case 2:
+//         speciesChips[2].open = speciesChips[3].open;
+//         speciesChips[2].regions = speciesChips[3].regions;
+//         speciesChips[2].scientific_name = speciesChips[3].scientific_name;
+//         speciesChips[2].common_name = speciesChips[3].common_name;
 
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
+//         speciesChips[3].open = false;
+//         speciesChips[3].regions = action.value;
+//         speciesChips[3].scientific_name = action.s_name;
+//         speciesChips[3].common_name = action.c_name;
 
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
+//         speciesChips[0].count -= 1;
+//         return { ...speciesChips };
 
-      case 3:
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
+//       case 3:
+//         speciesChips[3].open = false;
+//         speciesChips[3].regions = action.value;
+//         speciesChips[3].scientific_name = action.s_name;
+//         speciesChips[3].common_name = action.c_name;
+//         speciesChips[0].count -= 1;
+//         return { ...speciesChips };
 
-      default:
-        throw new Error();
-    }
-  }
-  if (action.type == "add") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = true;
-        speciesChips[1].regions = action.value;
-        speciesChips[1].scientific_name = action.s_name;
-        speciesChips[1].common_name = action.c_name;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
+//       default:
+//         throw new Error();
+//     }
+//   }
+//   if (action.type == "add") {
+//     switch (action.payload) {
+//       case 1:
+//         speciesChips[1].open = true;
+//         speciesChips[1].regions = action.value;
+//         speciesChips[1].scientific_name = action.s_name;
+//         speciesChips[1].common_name = action.c_name;
+//         speciesChips[0].count += 1;
+//         return { ...speciesChips };
 
-      case 2:
-        speciesChips[2].open = true;
-        speciesChips[2].regions = action.value;
-        speciesChips[2].scientific_name = action.s_name;
-        speciesChips[2].common_name = action.c_name;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
+//       case 2:
+//         speciesChips[2].open = true;
+//         speciesChips[2].regions = action.value;
+//         speciesChips[2].scientific_name = action.s_name;
+//         speciesChips[2].common_name = action.c_name;
+//         speciesChips[0].count += 1;
+//         return { ...speciesChips };
 
-      case 3:
-        speciesChips[3].open = true;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
+//       case 3:
+//         speciesChips[3].open = true;
+//         speciesChips[3].regions = action.value;
+//         speciesChips[3].scientific_name = action.s_name;
+//         speciesChips[3].common_name = action.c_name;
+//         speciesChips[0].count += 1;
+//         return { ...speciesChips };
 
-      default:
-        throw new Error();
-    }
-  }
-};
+//       default:
+//         throw new Error();
+//     }
+//   }
+// };
 
-export default function MapPage({ setEcoFilter }) {
+export default function MapPage({ setEcoFilter, state, dispatch }) {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
@@ -174,7 +174,7 @@ export default function MapPage({ setEcoFilter }) {
   //   }
   // };
 
-  const [state, dispatch] = useReducer(reducer, speciesChips);
+  // const [state, dispatch] = useReducer(reducer, speciesChips);
 
   // const handleSubmit = (event, newValue) => {
   //   if (newValue != null) {

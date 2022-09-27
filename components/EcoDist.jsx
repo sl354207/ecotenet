@@ -173,7 +173,11 @@ const EcoDist = ({
       <div style={{ display: "inline-grid" }}>
         {Array.isArray(state[1].regions) && state[1].regions.length ? (
           <Chip
-            label={`${state[1].scientific_name} - ${state[1].common_name}`}
+            label={
+              state[1].scientific_name
+                ? `${state[1].scientific_name} - ${state[1].common_name}`
+                : "post"
+            }
             onDelete={() => handleRemoveChip(1)}
             variant="outlined"
             sx={{
@@ -200,7 +204,11 @@ const EcoDist = ({
         )}
         {Array.isArray(state[2].regions) && state[2].regions.length ? (
           <Chip
-            label={`${state[2].scientific_name} - ${state[2].common_name}`}
+            label={
+              state[2].scientific_name
+                ? `${state[2].scientific_name} - ${state[2].common_name}`
+                : "post"
+            }
             onDelete={() => handleRemoveChip(2)}
             variant="outlined"
             sx={{
@@ -227,7 +235,11 @@ const EcoDist = ({
         )}
         {Array.isArray(state[3].regions) && state[3].regions.length ? (
           <Chip
-            label={`${state[3].scientific_name} - ${state[3].common_name}`}
+            label={
+              state[3].scientific_name
+                ? `${state[3].scientific_name} - ${state[3].common_name}`
+                : "post"
+            }
             onDelete={() => handleRemoveChip(3)}
             variant="outlined"
             sx={{

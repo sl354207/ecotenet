@@ -1,8 +1,41 @@
 import { Button, ListItem, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
-const SpeciesItem = ({ result }) => {
-  const theme = useTheme();
+const SpeciesItem = ({ result, state, dispatch }) => {
+  // console.log(result);
+  const handleSubmit = () => {
+    switch (state[0].count) {
+      case 0:
+        dispatch({
+          type: "add",
+          payload: 1,
+          value: result.unique_id,
+          s_name: result.scientific_name,
+          c_name: result.common_name,
+        });
+        break;
+      case 1:
+        dispatch({
+          type: "add",
+          payload: 2,
+          value: result.unique_id,
+          s_name: result.scientific_name,
+          c_name: result.common_name,
+        });
+        break;
+      case 2:
+        dispatch({
+          type: "add",
+          payload: 3,
+          value: result.unique_id,
+          s_name: result.scientific_name,
+          c_name: result.common_name,
+        });
+        break;
+
+      default:
+      //   throw new Error();
+    }
+  };
 
   return (
     <ListItem key={result._id}>
@@ -15,7 +48,17 @@ const SpeciesItem = ({ result }) => {
           justifyContent: "start",
           textTransform: "none",
         }}
-        href={`/species/${result._id}`}
+        // href={`/species/${result._id}`}
+        onClick={() => {
+          // handleSubmit();
+          dispatch({
+            type: "add",
+            payload: 0,
+            value: result.unique_id,
+            s_name: result.scientific_name,
+            c_name: result.common_name,
+          });
+        }}
       >
         <Typography variant="h6" color="textPrimary" align="left">
           <i>{result.scientific_name}</i>
