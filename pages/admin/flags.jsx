@@ -1,5 +1,5 @@
-import AdminDrawer from "@components/AdminDrawer";
 import Resolve from "@components/dialogs/Resolve";
+import AdminDrawer from "@components/drawers/AdminDrawer";
 import Header from "@components/Header";
 import Link from "@components/Link";
 import {

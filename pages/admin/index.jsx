@@ -1,4 +1,4 @@
-import AdminDrawer from "@components/AdminDrawer";
+import AdminDrawer from "@components/drawers/AdminDrawer";
 import Header from "@components/Header";
 import Link from "@components/Link";
 import { useSnackbarContext } from "@components/SnackbarContext";

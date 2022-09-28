@@ -1,7 +1,3 @@
-import menuItems from "@data/categories.json";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import SortIcon from "@mui/icons-material/Sort";
@@ -11,15 +7,9 @@ import {
   Box,
   Button,
   ClickAwayListener,
-  Collapse,
-  Divider,
-  Drawer,
   Grow,
   IconButton,
   InputBase,
-  List,
-  ListItem,
-  ListItemText,
   MenuItem,
   MenuList,
   Paper,
@@ -34,33 +24,15 @@ import { useSnackbarContext } from "@components/SnackbarContext";
 import { createPost } from "@utils/api-helpers";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useReducer, useRef, useState } from "react";
-import CategoryList from "./CategoryList";
-import CreatePostButton from "./CreatePostButton";
-import { useUserContext } from "./UserContext";
+import { useEffect, useRef, useState } from "react";
 
-const drawerWidth = 240;
+import CreatePostButton from "./CreatePostButton";
+import FilterDrawer from "./drawers/FilterDrawer";
+import { useUserContext } from "./UserContext";
 
 const CustomPopper = function (props) {
   return <Popper {...props} style={{ width: "400px" }} placement="bottom" />;
 };
-
-// reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
-const reducer = (menuItems, action) => {
-  if (action.type == "toggle") {
-    return menuItems.map((menuItem) => {
-      if (menuItem.menuTitle == action.payload) {
-        menuItem.openList = !menuItem.openList;
-      }
-      return menuItem;
-    });
-  }
-  // else {
-  // POTENTIALLY ADD ERROR MESSAGE
-  //   return menuItems;
-  // }
-};
-// const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const Nav = ({ ecoFilter, state, dispatch }) => {
   const { user } = useUserContext();
@@ -161,31 +133,10 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
     setDrawerOpen(false);
   };
 
-  // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
-  const handleListClick = (menuTitle) => {
-    dispatchHook({ type: "toggle", payload: menuTitle });
-  };
-
-  // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
-  const [drawerState, dispatchHook] = useReducer(reducer, menuItems);
-
   // set filter for autocomplete options
   const filter = createFilterOptions();
   // set tag options for autocomplete
   const tags = [];
-
-  // TEST
-  const [tester, setTester] = useState(false);
-  const [category, setCategory] = useState(null);
-
-  // console.log(ecoFilter);
-  // console.log(category);
-
-  // const { data } = useSWR(
-  //   category ? `/api/${ecoFilter}/${category}` : null,
-  //   fetcher
-  // );
-  // console.log(category);
 
   return (
     <>
@@ -614,125 +565,14 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
               Donate
             </Button>
           </Box>
-
-          <Drawer
-            sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              "& .MuiDrawer-paper": {
-                width: drawerWidth,
-                backgroundColor: theme.palette.primary.light,
-                margin: 0,
-              },
-            }}
-            anchor="left"
-            open={drawerOpen}
-            onClose={handleDrawerClose}
-            hideBackdrop
-            // variant="persistent"
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: theme.spacing(0, 1),
-                // necessary for content to be below app bar
-                ...theme.mixins.toolbar,
-              }}
-            >
-              <Button
-                sx={{
-                  flexGrow: 1,
-                  //
-                }}
-                onClick={() => {
-                  setDrawerOpen(false);
-                  router.push(`/ecoregions/${ecoFilter}`);
-                }}
-                variant="text"
-                color="inherit"
-              >
-                ECO-{ecoFilter}
-              </Button>
-              <IconButton onClick={handleDrawerClose} size="large">
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            <Divider />
-            {tester ? (
-              <div>
-                <Button
-                  onClick={() => {
-                    setTester(false);
-                    setCategory(null);
-                  }}
-                  variant="outlined"
-                  color="secondary"
-                >
-                  back
-                </Button>
-                {/* <Typography>test</Typography> */}
-
-                <CategoryList
-                  category={category && category}
-                  id={ecoFilter}
-                  dispatch={dispatch}
-                  state={state}
-                />
-              </div>
-            ) : (
-              <>
-                {drawerState.map((menuItem) => {
-                  const { menuTitle, menuSubs, openList } = menuItem;
-
-                  return (
-                    <List
-                      component="nav"
-                      aria-labelledby="nested-list"
-                      key="mainlist"
-                    >
-                      <ListItem
-                        button
-                        key={menuTitle}
-                        onClick={() => handleListClick(menuTitle)}
-                      >
-                        <ListItemText primary={menuTitle} />
-                        {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                      </ListItem>
-                      <Collapse in={openList} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding key="sublist">
-                          {menuSubs.map((menuSub) => (
-                            <ListItem
-                              button
-                              key={menuSub.subTitle}
-                              sx={{ paddingLeft: theme.spacing(4) }}
-                              onClick={() => {
-                                // handleDrawerClose(Event);
-                                // router.push({
-                                //   pathname: `/[region]/[category]`,
-                                //   query: {
-                                //     region: ecoFilter,
-                                //     category: menuSub.query,
-                                //     title: menuSub.subTitle,
-                                //   },
-                                // });
-                                setTester(true);
-                                setCategory(menuSub.query);
-                                // console.log(category);
-                              }}
-                            >
-                              <ListItemText primary={menuSub.subTitle} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Collapse>
-                      <Divider />
-                    </List>
-                  );
-                })}
-              </>
-            )}
-          </Drawer>
+          <FilterDrawer
+            ecoFilter={ecoFilter}
+            state={state}
+            dispatch={dispatch}
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+            handleDrawerClose={handleDrawerClose}
+          />
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>

@@ -1,7 +1,13 @@
 import { Button, List, ListItem, Typography } from "@mui/material";
 
-// pass down posts from database to PostList as a prop
-const PostList = ({ posts, featured }) => {
+// pass down posts from database to CategoryPostList as a prop
+const CategoryPostList = ({
+  posts,
+  state,
+  dispatch,
+  setItemSelect,
+  setItem,
+}) => {
   return (
     <List>
       {posts.map((post) => {
@@ -16,7 +22,20 @@ const PostList = ({ posts, featured }) => {
                 justifyContent: "start",
                 textTransform: "none",
               }}
-              href={featured ? `/featured/${post._id}` : `/posts/${post._id}`}
+              // href={featured ? `/featured/${post._id}` : `/posts/${post._id}`}
+
+              onClick={() => {
+                // handleSubmit(post);
+                dispatch({
+                  type: "add",
+                  payload: 0,
+                  value: post.ecoregions,
+                  // s_name: result.scientific_name,
+                  // c_name: result.common_name,
+                });
+                setItemSelect(true);
+                setItem(post._id);
+              }}
             >
               <div style={{ flex: "auto", marginRight: "20px" }}>
                 <Typography
@@ -47,4 +66,4 @@ const PostList = ({ posts, featured }) => {
   );
 };
 
-export default PostList;
+export default CategoryPostList;

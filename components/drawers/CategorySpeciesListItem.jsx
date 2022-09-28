@@ -1,6 +1,12 @@
 import { Button, ListItem, Typography } from "@mui/material";
 
-const SpeciesItem = ({ result }) => {
+const CategorySpeciesListItem = ({
+  result,
+  state,
+  dispatch,
+  setItemSelect,
+  setItem,
+}) => {
   return (
     <ListItem key={result._id}>
       <Button
@@ -12,7 +18,19 @@ const SpeciesItem = ({ result }) => {
           justifyContent: "start",
           textTransform: "none",
         }}
-        href={`/species/${result._id}`}
+        // href={`/species/${result._id}`}
+        onClick={() => {
+          // handleSubmit();
+          dispatch({
+            type: "add",
+            payload: 0,
+            value: result.unique_id,
+            s_name: result.scientific_name,
+            c_name: result.common_name,
+          });
+          setItemSelect(true);
+          setItem(result.scientific_name);
+        }}
       >
         <Typography variant="h6" color="textPrimary" align="left">
           <i>{result.scientific_name}</i>
@@ -27,4 +45,4 @@ const SpeciesItem = ({ result }) => {
   );
 };
 
-export default SpeciesItem;
+export default CategorySpeciesListItem;
