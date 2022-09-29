@@ -93,9 +93,9 @@ const CategoryList = ({
                 {/* <Typography color="secondary">{title.toUpperCase()}</Typography> */}
               </Breadcrumbs>
               {state[1].scientific_name ? (
-                <DrawerSpecies item={item} />
+                <DrawerSpecies species={item} />
               ) : (
-                <DrawerPost item={item} />
+                <DrawerPost id={item} />
               )}
             </>
           ) : (

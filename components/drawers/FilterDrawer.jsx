@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 import CategoryList from "./CategoryList";
 
-const drawerWidth = 240;
+const drawerWidth = 350;
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {

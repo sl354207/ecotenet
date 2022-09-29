@@ -1,4 +1,3 @@
-// PUT IN UNIQUE_ID FOLDER EVENTUALLY
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";

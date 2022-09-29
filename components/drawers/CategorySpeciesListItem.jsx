@@ -29,7 +29,7 @@ const CategorySpeciesListItem = ({
             c_name: result.common_name,
           });
           setItemSelect(true);
-          setItem(result.scientific_name);
+          setItem(result);
         }}
       >
         <Typography variant="h6" color="textPrimary" align="left">
