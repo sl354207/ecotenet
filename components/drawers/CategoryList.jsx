@@ -6,6 +6,7 @@ import {
   Breadcrumbs,
   Button,
   CircularProgress,
+  Container,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -62,36 +63,52 @@ const CategoryList = ({
         <>
           {itemSelect ? (
             <>
-              <Breadcrumbs
-                aria-label="breadcrumb"
-                sx={{
-                  "& .MuiBreadcrumbs-separator": {
-                    color: "rgba(255, 255, 255, 1)",
-                  },
-                }}
-                separator={">"}
-              >
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    setCategory(null);
-                    setCategorySelect(false);
+              <Container sx={{ minHeight: "auto" }}>
+                <Breadcrumbs
+                  aria-label="breadcrumb"
+                  sx={{
+                    "& .MuiBreadcrumbs-separator": {
+                      color: "rgba(255, 255, 255, 1)",
+                    },
                   }}
+                  separator={">"}
                 >
-                  Filter
-                </Button>
-                <Button
-                  color="secondary"
-                  onClick={() => {
-                    setItem(null);
-                    setItemSelect(false);
-                  }}
-                >
-                  {title}
-                </Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setCategory(null);
+                      setCategorySelect(false);
+                    }}
+                    sx={{ paddingRight: "0px" }}
+                  >
+                    Filter
+                  </Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setItem(null);
+                      setItemSelect(false);
+                    }}
+                    sx={{ paddingRight: "0px", paddingLeft: "0px" }}
+                  >
+                    {title}
+                  </Button>
 
-                {/* <Typography color="secondary">{title.toUpperCase()}</Typography> */}
-              </Breadcrumbs>
+                  <Typography
+                    color="lightgray"
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "0.875rem",
+                      lineHeight: 1.75,
+                      letterSpacing: "0.02857em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {state[1].scientific_name ? "SPECIES" : "POST"}
+                  </Typography>
+                </Breadcrumbs>
+              </Container>
+
               {state[1].scientific_name ? (
                 <DrawerSpecies species={item} />
               ) : (
@@ -100,37 +117,50 @@ const CategoryList = ({
             </>
           ) : (
             <>
-              {/* <Breadcrumbs
-        aria-label="breadcrumb"
-        sx={{
-          "& .MuiBreadcrumbs-separator": {
-            color: "rgba(255, 255, 255, 1)",
-          },
-        }}
-        separator={">"}
-      > */}
-              <Button
-                color="secondary"
-                onClick={() => {
-                  setCategory(null);
-                  setCategorySelect(false);
-                }}
-              >
-                Back to Filter
-              </Button>
-              {/* <Button color="secondary">Filter</Button>
+              <Container sx={{ minHeight: "auto" }}>
+                <Breadcrumbs
+                  aria-label="breadcrumb"
+                  sx={{
+                    "& .MuiBreadcrumbs-separator": {
+                      color: "rgba(255, 255, 255, 1)",
+                    },
+                  }}
+                  separator={">"}
+                >
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setCategory(null);
+                      setCategorySelect(false);
+                    }}
+                    sx={{ paddingRight: "0px" }}
+                  >
+                    Filter
+                  </Button>
 
-        <Typography color="secondary">{title.toUpperCase()}</Typography>
-      </Breadcrumbs> */}
-              <Header title={title} />
-              {data && data.description && (
-                <Typography align="center" sx={{ marginTop: "10px" }}>
-                  {data.description}
-                </Typography>
-              )}
+                  <Typography
+                    color="lightgray"
+                    sx={{
+                      fontWeight: 500,
+                      fontSize: "0.875rem",
+                      lineHeight: 1.75,
+                      letterSpacing: "0.02857em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                </Breadcrumbs>
+                <Header title={title} />
+                {data && data.description && (
+                  <Typography align="center" sx={{ marginTop: "10px" }}>
+                    {data.description}
+                  </Typography>
+                )}
+              </Container>
 
               {data && data.category.length === 0 ? (
-                <>
+                <Container sx={{ minHeight: "auto" }}>
                   {data.tag == "species" ? (
                     <Typography
                       variant="h6"
@@ -149,19 +179,21 @@ const CategoryList = ({
                       create a post.
                     </Typography>
                   )}
-                </>
+                </Container>
               ) : (
                 <>
                   {data && data.category[0].scientific_name ? (
                     <>
-                      <Typography
-                        variant="body1"
-                        align="center"
-                        sx={{ marginTop: "20px" }}
-                      >
-                        *Eco-{id} {title} current species count:{" "}
-                        {data.category.length}
-                      </Typography>
+                      <Container sx={{ minHeight: "auto" }}>
+                        <Typography
+                          variant="body1"
+                          align="center"
+                          sx={{ marginTop: "20px" }}
+                        >
+                          *Eco-{id} {title} current species count:{" "}
+                          {data.category.length}
+                        </Typography>
+                      </Container>
 
                       <CategorySpeciesList
                         category={data && data.category}
@@ -170,18 +202,20 @@ const CategoryList = ({
                         setItemSelect={setItemSelect}
                         setItem={setItem}
                       />
-                      <Typography variant="subtitle2" align="left">
-                        *These are the species currently present in this
-                        ecoregion category based on our{" "}
-                        <Link href="/data" underline="hover">
-                          dataset.
-                        </Link>{" "}
-                        A species distribution often does not align perfectly
-                        with ecoregion boundaries, therefore a species may not
-                        be present throughout the entire ecoregion but only in
-                        specific areas. A species may also be widespread but in
-                        small numbers so rarely seen.
-                      </Typography>
+                      <Container sx={{ minHeight: "auto" }}>
+                        <Typography variant="subtitle2" align="left">
+                          *These are the species currently present in this
+                          ecoregion category based on our{" "}
+                          <Link href="/data" underline="hover">
+                            dataset.
+                          </Link>{" "}
+                          A species distribution often does not align perfectly
+                          with ecoregion boundaries, therefore a species may not
+                          be present throughout the entire ecoregion but only in
+                          specific areas. A species may also be widespread but
+                          in small numbers so rarely seen.
+                        </Typography>
+                      </Container>
                     </>
                   ) : (
                     <>

@@ -1,6 +1,5 @@
-import Header from "@components/Header";
 import Link from "@components/Link";
-import { CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -155,26 +154,30 @@ const DrawerSpecies = ({ species }) => {
   };
 
   return (
-    <>
+    <Container>
       {wiki ? (
         <>
-          {/* <div style={{ display: "flex", justifyContent: "center" }}> */}
-          {/* <div
-              style={{
-                display: "flex",
-                marginRight: "auto",
-                visibility: "hidden",
-                minWidth: 30,
-              }}
-            ></div> */}
-          <Header
-            title={`${species.scientific_name}: ${species.common_name}`}
-          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ marginBlock: "15px" }}
+              href={`/species/${species._id}`}
+            >
+              visit full summary
+            </Button>
+            <Typography
+              variant="h4"
+              align="center"
+              sx={{ marginBottom: "15px" }}
+            >
+              {species.scientific_name}: {species.common_name}
+            </Typography>
+          </div>
 
           <Typography
             variant="h6"
             sx={{
-              marginTop: "20px",
               marginBottom: "20px",
             }}
           >
@@ -194,7 +197,7 @@ const DrawerSpecies = ({ species }) => {
           <div
             style={{
               flexGrow: 1,
-              backgroundColor: theme.palette.background.paper,
+              backgroundColor: theme.palette.light,
               borderRadius: "10px",
             }}
           >
@@ -259,7 +262,7 @@ const DrawerSpecies = ({ species }) => {
           }}
         />
       )}
-    </>
+    </Container>
   );
 };
 

@@ -1,14 +1,14 @@
 import EditorLayout from "@components/EditorLayout";
-import Header from "@components/Header";
 import Link from "@components/Link";
 import {
+  Button,
   CircularProgress,
   Container,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import customImage from "@plugins/customImage";
-// import Frame from "react-frame-component";
+import Frame from "react-frame-component";
 // The editor core
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
@@ -41,130 +41,106 @@ const DrawerPost = ({ id }) => {
     <>
       {post ? (
         <>
-          <Container sx={{ backgroundColor: theme.palette.primary.main }}>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              {/* <div
-                style={{
-                  display: "flex",
-                  marginRight: "auto",
-                  visibility: "hidden",
-                  minWidth: "30px",
-                }}
-              ></div> */}
-              <Header title={post.title} />
-              {/* <div
-        style={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
-      >
-        {user && user.role === "admin" && (
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => handleAddFeature()}
-          >
-            Feature List
-          </Button>
-        )}
-
-        <IconButton
-          sx={{ marginLeft: 2 }}
-          color="inherit"
-          aria-label="flag"
-          size="small"
-          onClick={() => handleOpenFlag("post", post)}
-        >
-          <FlagIcon />
-        </IconButton>
-      </div> */}
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  flexDirection: "column",
-                  maxWidth: "800px",
-                  flexGrow: 1,
-                  marginLeft: "20px",
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <Typography align="center" variant="h6">
-                    <Link
-                      href={`/person/${post.name}`}
-                      color="secondary"
-                      underline="hover"
-                    >
-                      {post.name}
-                    </Link>
-                  </Typography>
-                  <Typography
-                    sx={{ marginLeft: "20px", fontStyle: "italic" }}
-                    align="left"
-                    variant="h6"
-                  >
-                    {isMobile
-                      ? new Date(post.date).toLocaleDateString()
-                      : new Date(post.date).toDateString()}
-                  </Typography>
-                </div>
-                <Typography variant="h6">
-                  Ecoregions:{" "}
-                  {post.ecoregions.map((ecoregion) => (
-                    <Link
-                      href={`/ecoregions/${ecoregion}`}
-                      color="secondary"
-                      underline="hover"
-                    >
-                      Eco-{ecoregion},{" "}
-                    </Link>
-                  ))}
+          <>
+            <Container sx={{ minHeight: "auto" }}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{ marginBlock: "15px" }}
+                  href={`/posts/${post._id}`}
+                >
+                  visit full post
+                </Button>
+                <Typography
+                  variant="h4"
+                  align="center"
+                  sx={{ marginBottom: "5px" }}
+                >
+                  {post.title}
                 </Typography>
               </div>
 
-              {/* {votes ? (
-        <Vote
-          post_count={votes && votes.count}
-          count={count}
-          setCount={setCount}
-          handleOpenDialog={handleOpenDialog}
-          name={user && user.name}
-          voters={votes && votes.voters}
-        />
-      ) : (
-        <CircularProgress size={19} color="secondary" />
-      )} */}
-            </div>
-            <EditorLayout>
-              <Editor
-                cellPlugins={cellPlugins}
-                value={post}
-                // onChange={setValue}
-                readOnly
-              />
-            </EditorLayout>
-            {/* <Divider />
-    <Typography variant="h6" sx={{ marginTop: "20px" }}>
-      Comments:
-    </Typography>
-    <div ref={ref}>
-      {!comments && !error && <Typography>loading...</Typography>}
-      {comments && (
-        <CommentList
-          comments={comments}
-          post_id={post._id}
-          handleOpenDialog={handleOpenDialog}
-          handleOpenFlag={handleOpenFlag}
-          showForm={showForm}
-          handleForm={toggleForm}
-          handleReply={handleReply}
-        />
-      )}
-    </div> */}
-          </Container>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    flexDirection: "column",
+                    maxWidth: "800px",
+                    flexGrow: 1,
+                    marginLeft: "20px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "start",
+                    }}
+                  >
+                    <Typography align="center" variant="h6">
+                      <Link
+                        href={`/person/${post.name}`}
+                        color="secondary"
+                        underline="hover"
+                      >
+                        {post.name}
+                      </Link>
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontStyle: "italic",
+                        fontWeight: 400,
+                        fontSize: "1.2rem",
+                      }}
+                      align="left"
+                      variant="h6"
+                    >
+                      {post.updated && "Updated:"}{" "}
+                      {new Date(post.date).toLocaleDateString()}
+                    </Typography>
+                  </div>
+                  <Typography variant="h6">Votes: {post.count}</Typography>
+                  <Typography variant="h6">
+                    Ecoregions:{" "}
+                    {post.ecoregions.map((ecoregion) => (
+                      <Link
+                        href={`/ecoregions/${ecoregion}`}
+                        color="secondary"
+                        underline="hover"
+                      >
+                        Eco-{ecoregion},{" "}
+                      </Link>
+                    ))}
+                  </Typography>
+                </div>
+              </div>
+            </Container>
+            <Frame
+              style={styles}
+              head={
+                <style>
+                  {
+                    "a {color: #c8fcff; text-decoration: none;overflow-wrap: anywhere;} a:hover {color: #c8fcff; text-decoration: underline; overflow-wrap: anywhere;} p {color:#ffffff; font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em; } h2 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h1 {color:#ffffff;line-height: 1.5; letter-spacing: 0.00938em;} h3 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h4 {color:#ffffff; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} h5 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h6 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} ul {color:#ffffff;  font-weight: 400;font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} ol {color:#ffffff;font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;}"
+                  }
+                </style>
+              }
+            >
+              <EditorLayout>
+                <Editor
+                  cellPlugins={cellPlugins}
+                  value={post}
+                  // onChange={setValue}
+                  readOnly
+                />
+              </EditorLayout>
+            </Frame>
+          </>
         </>
       ) : (
         <CircularProgress
