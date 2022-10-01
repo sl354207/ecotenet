@@ -1,4 +1,4 @@
-import { Box, Button, SwipeableDrawer, useMediaQuery } from "@mui/material";
+import { Box, SwipeableDrawer, Typography, useMediaQuery } from "@mui/material";
 import theme from "@utils/theme";
 // import dynamic from "next/dynamic";
 import EcoDist from "@components/EcoDist";
@@ -7,6 +7,9 @@ import EcoSummary from "@components/EcoSummary";
 import MapMain from "@components/maps/MapMain";
 import Coords from "@data/eco_coord.json";
 
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { MapProvider } from "react-map-gl";
 import useSWR from "swr";
@@ -120,6 +123,42 @@ const fetcher = (url) => fetch(url).then((r) => r.json());
 //   }
 // };
 
+// test
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `vertical-tab-${index}`,
+    "aria-controls": `vertical-tabpanel-${index}`,
+  };
+}
+
+// test
+
 export default function MapPage({ setEcoFilter, state, dispatch }) {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
@@ -158,6 +197,16 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
   };
 
   const [dist, setDist] = useState([]);
+
+  // test
+
+  const [tab, setTab] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setTab(newValue);
+  };
+
+  // test
 
   // const handleChange = async (e) => {
   //   console.log(e);
@@ -282,9 +331,10 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
               right: drawerWidth,
               // left: 0,
               backgroundColor: "#f5f5dc",
+              // height: "200px",
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 width: 6,
                 height: 30,
@@ -305,7 +355,100 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
               }}
             >
               ecoregions
-            </Button>
+            </Button> */}
+            <Tabs
+              orientation="vertical"
+              // variant="scrollable"
+              value={tab}
+              onChange={handleChange}
+              aria-label="Vertical tabs example"
+              sx={{
+                // borderRight: "1px solid #e8e8e8",
+                // height: "500px",
+                "& .MuiTabs-indicator": {
+                  backgroundColor: theme.palette.secondary.dark,
+                  width: "4px",
+                  left: 0,
+                },
+              }}
+            >
+              <Tab
+                label="Ecoregions"
+                {...a11yProps(0)}
+                sx={{
+                  // transform: "rotate(270deg)",
+                  // marginBlock: "10px",
+                  marginInline: "0px",
+                  paddingBlock: "20px",
+                  paddingInline: "5px",
+                  borderBottom: "2px solid #1890ff",
+                  "&:hover": {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark,
+                    opacity: 1,
+                  },
+                  "&.Mui-selected": {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark,
+                    fontWeight: theme.typography.fontWeightMedium,
+                  },
+                  "&.Mui-focusVisible": {
+                    backgroundColor: "#d1eaff",
+                  },
+                }}
+                onClick={() => setOpenEco(!openEco)}
+              />
+              <Tab
+                label="Summary"
+                {...a11yProps(1)}
+                sx={{
+                  // transform: "rotate(270deg)",
+                  // marginBlock: "10px",
+                  marginInline: "0px",
+                  paddingBlock: "20px",
+                  paddingInline: "5px",
+                  borderBottom: "2px solid #1890ff",
+                  "&:hover": {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark,
+                    opacity: 1,
+                  },
+                  "&.Mui-selected": {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark,
+                    fontWeight: theme.typography.fontWeightMedium,
+                  },
+                  "&.Mui-focusVisible": {
+                    backgroundColor: "#d1eaff",
+                  },
+                }}
+              />
+              <Tab
+                label="Distributions"
+                {...a11yProps(2)}
+                sx={{
+                  // transform: "rotate(270deg)",
+                  // marginBlock: "10px",
+                  marginInline: "0px",
+                  paddingBlock: "20px",
+                  paddingInline: "5px",
+                  // border: "1px solid #1890ff",
+                  "&:hover": {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark,
+                    opacity: 1,
+                  },
+                  "&.Mui-selected": {
+                    color: theme.palette.text.primary,
+                    backgroundColor: theme.palette.secondary.dark,
+                    fontWeight: theme.typography.fontWeightMedium,
+                  },
+                  "&.Mui-focusVisible": {
+                    backgroundColor: "#d1eaff",
+                  },
+                }}
+              />
+            </Tabs>
           </Box>
           <Box
             sx={{
@@ -317,20 +460,42 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
             }}
           >
             {ecoregions && (
-              <EcoRegions
-                ecoregions={ecoregions && ecoregions}
-                ecoMove={ecoMove}
-                setEcoMove={setEcoMove}
-                setEcoFilter={setEcoFilter}
-                setHoverInfo={setHoverInfo}
-                setWiki={setWiki}
-                setEcoName={setEcoName}
-                setEcoId={setEcoId}
-              />
+              <>
+                <TabPanel value={tab} index={0}>
+                  <EcoRegions
+                    ecoregions={ecoregions && ecoregions}
+                    ecoMove={ecoMove}
+                    setEcoMove={setEcoMove}
+                    setEcoFilter={setEcoFilter}
+                    setHoverInfo={setHoverInfo}
+                    setWiki={setWiki}
+                    setEcoName={setEcoName}
+                    setEcoId={setEcoId}
+                  />
+                </TabPanel>
+                <TabPanel value={tab} index={1}>
+                  <EcoSummary
+                    wiki={wiki}
+                    results={results && results}
+                    ecoName={ecoName && ecoName}
+                    ecoId={ecoId && ecoId}
+                  />
+                </TabPanel>
+                <TabPanel value={tab} index={2}>
+                  <EcoDist
+                    // handleSubmit={handleSubmit}
+                    // handleRemoveChip={handleRemoveChip}
+                    dist={dist}
+                    setDist={setDist}
+                    state={state}
+                    dispatch={dispatch}
+                  />
+                </TabPanel>
+              </>
             )}
           </Box>
         </SwipeableDrawer>
-        <SwipeableDrawer
+        {/* <SwipeableDrawer
           anchor="right"
           open={openSummary}
           onClose={toggleDrawerSummary(false)}
@@ -397,7 +562,7 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
               backgroundColor: "#808080",
             }}
           >
-            {/* <Skeleton variant="rectangular" height="100%" /> */}
+            <Skeleton variant="rectangular" height="100%" />
 
             <EcoSummary
               wiki={wiki}
@@ -474,7 +639,7 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
               backgroundColor: "#808080",
             }}
           >
-            {/* <Skeleton variant="rectangular" height="100%" /> */}
+            <Skeleton variant="rectangular" height="100%" />
             <EcoDist
               // handleSubmit={handleSubmit}
               // handleRemoveChip={handleRemoveChip}
@@ -484,7 +649,7 @@ export default function MapPage({ setEcoFilter, state, dispatch }) {
               dispatch={dispatch}
             />
           </Box>
-        </SwipeableDrawer>
+        </SwipeableDrawer> */}
       </MapProvider>
     </div>
   );
