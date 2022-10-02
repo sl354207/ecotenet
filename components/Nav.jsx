@@ -1,6 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import SortIcon from "@mui/icons-material/Sort";
+import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import {
   AppBar,
   Autocomplete,
@@ -15,7 +16,6 @@ import {
   Paper,
   Popper,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { alpha, useTheme } from "@mui/material/styles";
@@ -143,23 +143,31 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
         <Toolbar sx={{ paddingLeft: "10px", paddingRight: "0px" }}>
           {ecoFilter && (
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="filter"
+            // <IconButton
+            //   edge="start"
+            //   color="inherit"
+            //   aria-label="filter"
+            //   onClick={handleDrawerOpen}
+            //   sx={{
+            //     marginLeft: { xs: "1px", lg: "0px" },
+            //     padding: { xs: "5px", lg: "12px" },
+            //     fontSize: { xs: "18px", lg: "12px" },
+            //   }}
+            // >
+            //   <Typography>Eco-{ecoFilter}</Typography>
+            //   <SortIcon sx={{ color: theme.palette.secondary.light }} />
+            // </IconButton>
+            <Button
               onClick={handleDrawerOpen}
-              sx={{
-                marginLeft: { xs: "1px", lg: "0px" },
-                padding: { xs: "5px", lg: "12px" },
-                fontSize: { xs: "18px", lg: "12px" },
-              }}
+              endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
+              variant="contained"
+              color="secondary"
             >
-              <Typography>{ecoFilter}</Typography>
-              <SortIcon sx={{ color: theme.palette.secondary.light }} />
-            </IconButton>
+              Eco-{ecoFilter}
+            </Button>
           )}
 
-          <Button
+          {/* <Button
             href="/"
             size="large"
             color="inherit"
@@ -179,18 +187,19 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
             }}
           >
             ecotenet
-          </Button>
+          </Button> */}
           <Button
             href="/featured"
             variant="text"
             color="secondary"
             sx={{
               display: { xs: "none", lg: "block" },
+              marginLeft: "10px",
             }}
           >
             Featured Posts
           </Button>
-          <Button
+          {/* <Button
             href="/species-map"
             variant="text"
             color="secondary"
@@ -199,7 +208,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
             }}
           >
             Species Map
-          </Button>
+          </Button> */}
           {status == "authenticated" && (
             <Button
               variant="text"
@@ -216,6 +225,27 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
               Dashboard
             </Button>
           )}
+          <Button
+            color="secondary"
+            href="/"
+            sx={{
+              position: "absolute",
+              left: "0px",
+              right: "0px",
+              margin: "0px auto",
+              width: "fit-content",
+              "& .MuiButton-startIcon": { marginRight: "0px" },
+            }}
+            startIcon={
+              <TripOriginIcon
+                sx={{
+                  marginBottom: "2px",
+                }}
+              />
+            }
+          >
+            Ecotenet
+          </Button>
 
           <div
             style={{
@@ -388,7 +418,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                         >
                           Featured Posts
                         </MenuItem>
-                        <MenuItem
+                        {/* <MenuItem
                           onClick={() => {
                             setPopper(false);
                             router.push("/species-map");
@@ -396,7 +426,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                           sx={{ color: theme.palette.secondary.main }}
                         >
                           Species Map
-                        </MenuItem>
+                        </MenuItem> */}
                         {status == "authenticated" && (
                           <MenuItem
                             onClick={
@@ -416,7 +446,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                             Dashboard
                           </MenuItem>
                         )}
-                        {status == "authenticated" ? (
+                        {status == "authenticated" && (
                           <MenuItem
                             onClick={
                               status == "authenticated" &&
@@ -439,7 +469,8 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                           >
                             Create Post
                           </MenuItem>
-                        ) : (
+                        )}
+                        {/* ) : (
                           <MenuItem
                             disabled
                             sx={{
@@ -451,7 +482,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                           >
                             Create Post
                           </MenuItem>
-                        )}
+                        )} */}
 
                         <MenuItem
                           disabled={status == "loading"}
@@ -508,7 +539,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
             </Popper>
           </Box>
           <Box sx={{ display: { xs: "none", lg: "flex" } }}>
-            {status == "authenticated" ? (
+            {status == "authenticated" && (
               <>
                 {user.name == undefined ? (
                   <Button
@@ -528,7 +559,8 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                   />
                 )}
               </>
-            ) : (
+            )}
+            {/* ) : (
               <Button
                 variant="outlined"
                 color="secondary"
@@ -537,7 +569,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
               >
                 Create Post
               </Button>
-            )}
+            )} */}
 
             <Button
               variant="outlined"

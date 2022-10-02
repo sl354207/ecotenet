@@ -167,7 +167,7 @@ export default function MyApp(props) {
   }, [router.pathname]);
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
-  console.log(state);
+  // console.log(state);
 
   return (
     <CacheProvider value={emotionCache}>
