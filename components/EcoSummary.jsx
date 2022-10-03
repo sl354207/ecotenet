@@ -2,10 +2,52 @@ import { Typography } from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
+import useSWR from "swr";
 import Header from "./Header";
 import Link from "./Link";
 
-const EcoSummary = ({ wiki, results, ecoName, ecoId }) => {
+const fetcher = (url) => fetch(url).then((r) => r.json());
+
+const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
+  let wikiUrl;
+
+  if (ecoFilter && !wiki) {
+    const res = fetch(`/api/ecoregions/${ecoFilter}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setWiki(data));
+  }
+
+  if (wiki) {
+    switch (wiki.url) {
+      case undefined:
+        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.name.replace(
+          " ",
+          "_"
+        )}?redirect=true`;
+
+        break;
+
+      case "undefined":
+        wikiUrl = undefined;
+
+        break;
+
+      default:
+        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.url.replace(
+          " ",
+          "_"
+        )}?redirect=true`;
+        break;
+    }
+  }
+
+  const { data: results } = useSWR(wiki ? wikiUrl : null, fetcher);
+  // console.log(results);
   const options = {
     replace: (domNode) => {
       // console.log(domNode);
@@ -145,31 +187,19 @@ const EcoSummary = ({ wiki, results, ecoName, ecoId }) => {
   };
   return (
     <>
-      {/* {!results ? (
-        <CircularProgress />
-      ) : (
-        <> */}
       <div
         style={{
           // display: "flex",
           justifyContent: "center",
         }}
       >
-        {/* <div
-          style={{
-            display: "flex",
-            marginRight: "auto",
-            visibility: "hidden",
-            minWidth: 30,
-          }}
-        ></div> */}
-        <Header title={`Eco-${ecoId} `} sx={{ marginBottom: "40px" }} />
+        <Header title={`Eco-${ecoFilter} `} sx={{ marginBottom: "40px" }} />
         <Typography variant="h4" align="center">
-          {ecoName}
+          {wiki && wiki.name}
         </Typography>
       </div>
 
-      {!wiki ? (
+      {!wikiUrl || (results && results.title == "Not found.") ? (
         <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
           We currently don't have a summary of this ecoregion. If you want to
           help us out you can create a wikipedia page for the ecoregion.
@@ -179,7 +209,7 @@ const EcoSummary = ({ wiki, results, ecoName, ecoId }) => {
           <Typography variant="h5" sx={{ marginTop: "10px" }}>
             Source:{" "}
             <Link
-              href={`https://en.wikipedia.org/wiki/${ecoName.replace(
+              href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
                 " ",
                 "_"
               )}?redirect=true`}

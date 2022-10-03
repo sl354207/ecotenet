@@ -5,17 +5,32 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import theme from "@utils/theme";
 import Description from "./Description";
 import Header from "./Header";
 
-const EcoDist = ({
-  dist,
-  setDist,
+const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
+  borderWidth: 2,
+  color: theme.palette.text.primary,
+  height: 60,
+  margin: "0px 5px 10px 5px",
+  "& .MuiChip-deleteIcon": {
+    WebkitTapHighlightColor: "transparent",
+    color: theme.palette.secondary.main,
+    fontSize: 22,
+    cursor: "pointer",
+    margin: "0 5px 0 -6px",
+    "&:hover": {
+      color: alpha(theme.palette.secondary.main, 0.7),
+    },
+  },
+  "& .MuiChip-label": {
+    width: "100%",
+  },
+}));
 
-  state,
-  dispatch,
-}) => {
+const EcoDist = ({ dist, setDist, state, dispatch }) => {
   const handleChange = async (e) => {
     // console.log(e);
     if (e.target.value) {
@@ -45,6 +60,7 @@ const EcoDist = ({
                 value: result.unique_id,
                 s_name: result.scientific_name,
                 c_name: result.common_name,
+                _id: result._id,
               });
               break;
             case 1:
@@ -54,6 +70,7 @@ const EcoDist = ({
                 value: result.unique_id,
                 s_name: result.scientific_name,
                 c_name: result.common_name,
+                _id: result._id,
               });
               break;
             case 2:
@@ -63,6 +80,7 @@ const EcoDist = ({
                 value: result.unique_id,
                 s_name: result.scientific_name,
                 c_name: result.common_name,
+                _id: result._id,
               });
               break;
 
@@ -83,6 +101,7 @@ const EcoDist = ({
       value: [],
       s_name: "",
       c_name: "",
+      _id: "",
     });
   };
   return (
@@ -170,97 +189,106 @@ const EcoDist = ({
         )}
       />
 
-      <div style={{ display: "inline-grid" }}>
+      <div style={{ display: "inline-grid", width: "100%" }}>
         {Array.isArray(state[1].regions) && state[1].regions.length ? (
-          <Chip
+          <CustomChip
             label={
-              state[1].scientific_name
-                ? `${state[1].scientific_name} - ${state[1].common_name}`
-                : "post"
+              state[1].scientific_name ? (
+                <>
+                  <Typography>{state[1].scientific_name}</Typography>
+                  <Typography>{state[1].common_name}</Typography>
+                </>
+              ) : (
+                "post"
+              )
             }
+            onClick={() => {
+              state[1].scientific_name
+                ? window.open(
+                    `/species/${state[1]._id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                : window.open(
+                    `/posts/${state[1]._id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+            }}
             onDelete={() => handleRemoveChip(1)}
             variant="outlined"
             sx={{
-              borderWidth: 2,
-              color: theme.palette.text.primary,
-              height: 40,
-              margin: "0px 5px 10px 5px",
               borderColor: "#ff00ff",
-
-              "& .MuiChip-deleteIcon": {
-                WebkitTapHighlightColor: "transparent",
-                color: theme.palette.secondary.main,
-                fontSize: 22,
-                cursor: "pointer",
-                margin: "0 5px 0 -6px",
-                "&:hover": {
-                  color: alpha(theme.palette.secondary.main, 0.7),
-                },
-              },
             }}
-          ></Chip>
+          ></CustomChip>
         ) : (
-          <Chip sx={{ visibility: "hidden" }}></Chip>
+          <CustomChip sx={{ visibility: "hidden" }}></CustomChip>
         )}
         {Array.isArray(state[2].regions) && state[2].regions.length ? (
-          <Chip
+          <CustomChip
             label={
-              state[2].scientific_name
-                ? `${state[2].scientific_name} - ${state[2].common_name}`
-                : "post"
+              state[2].scientific_name ? (
+                <>
+                  <Typography>{state[2].scientific_name}</Typography>
+                  <Typography>{state[2].common_name}</Typography>
+                </>
+              ) : (
+                "post"
+              )
             }
+            onClick={() => {
+              state[2].scientific_name
+                ? window.open(
+                    `/species/${state[2]._id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                : window.open(
+                    `/posts/${state[2]._id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+            }}
             onDelete={() => handleRemoveChip(2)}
             variant="outlined"
             sx={{
-              borderWidth: 2,
-              color: theme.palette.text.primary,
-              height: 40,
-              margin: "0px 5px 10px 5px",
               borderColor: "#ffff00",
-
-              "& .MuiChip-deleteIcon": {
-                WebkitTapHighlightColor: "transparent",
-                color: theme.palette.secondary.main,
-                fontSize: 22,
-                cursor: "pointer",
-                margin: "0 5px 0 -6px",
-                "&:hover": {
-                  color: alpha(theme.palette.secondary.main, 0.7),
-                },
-              },
             }}
-          ></Chip>
+          ></CustomChip>
         ) : (
           <></>
         )}
         {Array.isArray(state[3].regions) && state[3].regions.length ? (
-          <Chip
+          <CustomChip
             label={
-              state[3].scientific_name
-                ? `${state[3].scientific_name} - ${state[3].common_name}`
-                : "post"
+              state[3].scientific_name ? (
+                <>
+                  <Typography>{state[3].scientific_name}</Typography>
+                  <Typography>{state[3].common_name}</Typography>
+                </>
+              ) : (
+                "post"
+              )
             }
+            onClick={() => {
+              state[3].scientific_name
+                ? window.open(
+                    `/species/${state[3]._id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                : window.open(
+                    `/posts/${state[3]._id}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+            }}
             onDelete={() => handleRemoveChip(3)}
             variant="outlined"
             sx={{
-              borderWidth: 2,
-              color: theme.palette.text.primary,
-              height: 40,
-              margin: "0px 5px 10px 5px",
               borderColor: "#00ffff",
-
-              "& .MuiChip-deleteIcon": {
-                WebkitTapHighlightColor: "transparent",
-                color: theme.palette.secondary.main,
-                fontSize: 22,
-                cursor: "pointer",
-                margin: "0 5px 0 -6px",
-                "&:hover": {
-                  color: alpha(theme.palette.secondary.main, 0.7),
-                },
-              },
             }}
-          ></Chip>
+          ></CustomChip>
         ) : (
           <></>
         )}

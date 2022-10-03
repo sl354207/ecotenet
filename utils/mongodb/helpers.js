@@ -202,7 +202,7 @@ const getPostVotes = async (_id) => {
     {
       _id: ObjectId(_id),
     },
-    { count: 1, voters: 1 }
+    { projection: { count: 1, voters: 1 } }
   );
 
   return post;
@@ -785,7 +785,7 @@ const checkPerson = async (name) => {
     {
       name: name,
     },
-    { name: 1, email: 1 }
+    { projection: { name: 1, email: 1 } }
   );
 
   return response;
@@ -812,7 +812,7 @@ const getEcoregionById = async (id) => {
     {
       unique_id: id,
     },
-    { unique_id: 1, name: 1, url: 1 }
+    { projection: { unique_id: 1, name: 1, url: 1 } }
   );
 
   return response;

@@ -30,6 +30,7 @@ const CategoryPostList = ({
                   type: "add",
                   payload: 0,
                   value: post.ecoregions,
+                  _id: post._id,
                   // s_name: result.scientific_name,
                   // c_name: result.common_name,
                 });

@@ -24,6 +24,7 @@ const speciesChips = [
   { count: 0 },
   {
     id: 1,
+    _id: "",
     regions: [],
     common_name: "",
     scientific_name: "",
@@ -31,6 +32,7 @@ const speciesChips = [
   },
   {
     id: 2,
+    _id: "",
     regions: [],
     common_name: "",
     scientific_name: "",
@@ -38,6 +40,7 @@ const speciesChips = [
   },
   {
     id: 3,
+    _id: "",
     regions: [],
     common_name: "",
     scientific_name: "",
@@ -54,16 +57,19 @@ const reducer = (speciesChips, action) => {
         speciesChips[1].regions = speciesChips[2].regions;
         speciesChips[1].scientific_name = speciesChips[2].scientific_name;
         speciesChips[1].common_name = speciesChips[2].common_name;
+        speciesChips[1]._id = speciesChips[2]._id;
 
         speciesChips[2].open = speciesChips[3].open;
         speciesChips[2].regions = speciesChips[3].regions;
         speciesChips[2].scientific_name = speciesChips[3].scientific_name;
         speciesChips[2].common_name = speciesChips[3].common_name;
+        speciesChips[2]._id = speciesChips[3]._id;
 
         speciesChips[3].open = false;
         speciesChips[3].regions = action.value;
         speciesChips[3].scientific_name = action.s_name;
         speciesChips[3].common_name = action.c_name;
+        speciesChips[3]._id = action._id;
 
         speciesChips[0].count -= 1;
         return { ...speciesChips };
@@ -73,11 +79,13 @@ const reducer = (speciesChips, action) => {
         speciesChips[2].regions = speciesChips[3].regions;
         speciesChips[2].scientific_name = speciesChips[3].scientific_name;
         speciesChips[2].common_name = speciesChips[3].common_name;
+        speciesChips[2]._id = speciesChips[3]._id;
 
         speciesChips[3].open = false;
         speciesChips[3].regions = action.value;
         speciesChips[3].scientific_name = action.s_name;
         speciesChips[3].common_name = action.c_name;
+        speciesChips[3]._id = action._id;
 
         speciesChips[0].count -= 1;
         return { ...speciesChips };
@@ -87,6 +95,7 @@ const reducer = (speciesChips, action) => {
         speciesChips[3].regions = action.value;
         speciesChips[3].scientific_name = action.s_name;
         speciesChips[3].common_name = action.c_name;
+        speciesChips[3]._id = action._id;
         speciesChips[0].count -= 1;
         return { ...speciesChips };
 
@@ -101,6 +110,7 @@ const reducer = (speciesChips, action) => {
         speciesChips[1].regions = action.value;
         speciesChips[1].scientific_name = action.s_name;
         speciesChips[1].common_name = action.c_name;
+        speciesChips[1]._id = action._id;
         if (speciesChips[0].count == 0) {
           speciesChips[0].count = 1;
         } else {
@@ -113,6 +123,7 @@ const reducer = (speciesChips, action) => {
         speciesChips[1].regions = action.value;
         speciesChips[1].scientific_name = action.s_name;
         speciesChips[1].common_name = action.c_name;
+        speciesChips[1]._id = action._id;
         speciesChips[0].count += 1;
         return { ...speciesChips };
 
@@ -121,6 +132,7 @@ const reducer = (speciesChips, action) => {
         speciesChips[2].regions = action.value;
         speciesChips[2].scientific_name = action.s_name;
         speciesChips[2].common_name = action.c_name;
+        speciesChips[2]._id = action._id;
         speciesChips[0].count += 1;
         return { ...speciesChips };
 
@@ -129,6 +141,7 @@ const reducer = (speciesChips, action) => {
         speciesChips[3].regions = action.value;
         speciesChips[3].scientific_name = action.s_name;
         speciesChips[3].common_name = action.c_name;
+        speciesChips[3]._id = action._id;
         speciesChips[0].count += 1;
         return { ...speciesChips };
 
@@ -152,7 +165,7 @@ export default function MyApp(props) {
   const router = useRouter();
   // console.log(router);
   // category filter logic. Revisit
-  const [ecoFilter, setEcoFilter] = useState("");
+  const [ecoFilter, setEcoFilter] = useState();
 
   // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
   useEffect(() => {

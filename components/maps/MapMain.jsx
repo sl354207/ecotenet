@@ -1,29 +1,21 @@
 // import Coords from "@data/eco_coord.json";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
-
-// const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const MapMain = ({
   zoom,
   setEcoFilter,
   setWiki,
-  setEcoName,
-  setEcoId,
   click,
   setClick,
-  setOpenSummary,
   state,
-  ecoMove,
   coords,
   hoverInfo,
   setHoverInfo,
 }) => {
-  const router = useRouter();
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   //  base layer
@@ -165,31 +157,7 @@ const MapMain = ({
     },
   };
 
-  // const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
-  // console.log(ecoregions);
-
-  // const [hoverInfo, setHoverInfo] = useState(null);
-
   const [showPopup, setShowPopup] = useState(true);
-
-  const [showLoad, setShowLoad] = useState(false);
-
-  // const [click, setClick] = useState(true);
-
-  // const [wiki, setWiki] = useState();
-
-  // const drawerBleeding = 56;
-  // const drawerWidth = 350;
-  // const [openSummary, setOpenSummary] = useState(false);
-  // const [openEco, setOpenEco] = useState(true);
-
-  // const toggleDrawerSummary = (newOpen) => () => {
-  //   setOpenSummary(newOpen);
-  // };
-
-  // const toggleDrawerEco = (newOpen) => () => {
-  //   setOpenEco(newOpen);
-  // };
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onHover = useCallback(
@@ -198,9 +166,9 @@ const MapMain = ({
 
       setClick(false);
 
-      if (click) {
-        setOpenSummary(true);
-      }
+      // if (click) {
+      //   setOpenSummary(true);
+      // }
 
       const region = event.features && event.features[0];
 
@@ -216,9 +184,6 @@ const MapMain = ({
           region && region.properties.unique_id
         );
         setEcoFilter(region && region.properties.unique_id);
-        setEcoName(region && region.properties.name);
-        setEcoId(region && region.properties.unique_id);
-        // console.log(region.properties.unique_id);
 
         const res = await fetch(
           `/api/ecoregions/${region.properties.unique_id}`,
@@ -229,80 +194,14 @@ const MapMain = ({
             },
           }
         );
-        // console.log(res);
 
         const data = await res.json();
-        switch (data.url) {
-          case undefined:
-            setWiki(
-              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${data.name.replace(
-                " ",
-                "_"
-              )}?redirect=true`,
-              {
-                method: "GET",
 
-                "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
-              }
-            );
-
-            // wiki = await wikiRes.json();
-
-            break;
-          case "undefined":
-            setWiki(undefined);
-
-            break;
-
-          default:
-            setWiki(
-              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${data.url.replace(
-                " ",
-                "_"
-              )}?redirect=true`,
-              {
-                method: "GET",
-
-                "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
-              }
-            );
-
-            // wiki = await wikiRes.json();
-
-            break;
-        }
+        setWiki(data);
       }
     },
     [hoverInfo]
   );
-
-  // const ecoClick = useCallback(() => {
-  //   setShowPopup(true);
-  //   const coord = Coords.filter((region) => region.unique_id == ecoMove);
-
-  //   // setClick(false);
-
-  //   // if (click) {
-  //   //   setOpenSummary(true);
-  //   // }
-
-  //   // const region = event.features && event.features[0];
-
-  //   // if (region.properties.unique_id != "<NA>") {
-  //   setHoverInfo({
-  //     longitude: coord[0].coordinates[0],
-  //     latitude: coord[0].coordinates[1],
-  //     regionName: ecoMove.name,
-  //     regionNum: ecoMove.id,
-  //   });
-
-  //   mapRef.current?.flyTo({
-  //     center: coord[0].coordinates,
-  //     duration: 2000,
-  //     zoom: 3.5,
-  //   });
-  //   // console.log(region.properties.unique_id);
-  // }, [ecoMove]);
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
 
@@ -313,13 +212,6 @@ const MapMain = ({
     () => ["in", "unique_id", selectedRegion],
     [selectedRegion]
   );
-
-  const handleClick = (selectedRegion) => {
-    setShowLoad(true);
-    router.push(`/ecoregions/${selectedRegion}`);
-  };
-
-  // const clickedRegions = clickInfo;
 
   const clickFilter = ["in", "unique_id", []];
 
@@ -334,10 +226,6 @@ const MapMain = ({
   const speciesRegions3 = state[3].regions;
 
   const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
-
-  // const speciesRegions4 = state[4].regions;
-
-  // const speciesFilter4 = ["in", "unique_id", ...speciesRegions4];
 
   const mapRef = useRef();
 
@@ -392,8 +280,6 @@ const MapMain = ({
     [speciesRegions1, speciesRegions2, speciesRegions3]
   );
 
-  // const { data: results } = useSWR(wiki ? wiki : null, fetcher);
-
   return (
     <>
       <div style={{ height: "89vh" }}>
@@ -435,9 +321,6 @@ const MapMain = ({
             type="vector"
             url="mapbox://sl354207.ecomap-tiles"
           >
-            {/* <Layer beforeId="waterway-label" {...ecoLine} />
-            <Layer beforeId="waterway-label" {...ecoFill} />
-            <Layer beforeId="waterway-label" {...ecoFill1} filter={filter} /> */}
             <Layer id="base" beforeId="waterway-label" {...ecoFill} />
 
             <Layer
@@ -489,186 +372,25 @@ const MapMain = ({
               maxWidth="500px"
             >
               <div style={{ display: "grid" }}>
-                {!showLoad ? (
-                  <>
-                    <Typography color="textSecondary" align="center">
-                      {ecoName}
-                    </Typography>
-                    <Typography color="textSecondary" align="center">
-                      Eco-{selectedRegion}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      disableElevation={true}
-                      size="small"
-                      color="primary"
-                      onClick={() => handleClick(selectedRegion)}
-                    >
-                      Enter
-                    </Button>
-                  </>
-                ) : (
-                  <CircularProgress
-                    color="primary"
-                    size={100}
-                    disableShrink={true}
-                  />
-                )}
+                <Typography
+                  color="textSecondary"
+                  align="center"
+                  sx={{ fontWeight: 500 }}
+                >
+                  {ecoName}
+                </Typography>
+                <Typography
+                  color="textSecondary"
+                  align="center"
+                  sx={{ fontWeight: 500 }}
+                >
+                  Eco-{selectedRegion}
+                </Typography>
               </div>
             </Popup>
           )}
         </Map>
       </div>
-      {/* <SwipeableDrawer
-        anchor="right"
-        open={openEco}
-        onClose={toggleDrawerEco(false)}
-        onOpen={toggleDrawerEco(true)}
-        swipeAreaWidth={drawerBleeding}
-        disableSwipeToOpen={false}
-        ModalProps={{
-          keepMounted: true,
-        }}
-        hideBackdrop
-        variant="persistent"
-        sx={{
-          "&.MuiDrawer-root > .MuiPaper-root": {
-            // height: `calc(50% - ${drawerBleeding}px)`,
-            width: drawerWidth,
-            overflow: "visible",
-            top: 60,
-            // bottom: 100,
-          },
-          width: drawerWidth,
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            // top: 100,
-            borderBottomLeftRadius: 8,
-            borderTopLeftRadius: 8,
-            visibility: "visible",
-            right: drawerWidth,
-            // left: 0,
-            backgroundColor: "#f5f5dc",
-          }}
-        >
-         
-          <Box
-            sx={{
-              width: 6,
-              height: 30,
-              backgroundColor: "#000000",
-              borderRadius: 3,
-              position: "relative",
-              top: "25px",
-              // left: "calc(50% - 15px)",
-            }}
-          />
-          <Button
-            color="primary"
-            onClick={toggleDrawerEco(!openEco)}
-            sx={{
-              marginBottom: 5,
-              transform: "rotate(-90deg)",
-              mr: "-25px",
-            }}
-          >
-            ecoregions
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            px: 2,
-            pb: 2,
-            height: "100%",
-            overflow: "auto",
-            backgroundColor: "#808080",
-          }}
-        >
-          
-          {ecoregions && <EcoRegions ecoregions={ecoregions && ecoregions} ecoClick={ecoClick}/>}
-        </Box>
-      </SwipeableDrawer>
-      <SwipeableDrawer
-        anchor="right"
-        open={openSummary}
-        onClose={toggleDrawerSummary(false)}
-        onOpen={toggleDrawerSummary(true)}
-        swipeAreaWidth={drawerBleeding}
-        disableSwipeToOpen={false}
-        ModalProps={{
-          keepMounted: true,
-        }}
-        hideBackdrop
-        variant="persistent"
-        sx={{
-          "&.MuiDrawer-root > .MuiPaper-root": {
-            // height: `calc(50% - ${drawerBleeding}px)`,
-            width: drawerWidth,
-            overflow: "visible",
-            top: 60,
-            // bottom: 100,
-          },
-          width: drawerWidth,
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: 120,
-            borderBottomLeftRadius: 8,
-            borderTopLeftRadius: 8,
-            visibility: "visible",
-            right: drawerWidth,
-            // left: 0,
-            backgroundColor: "#f5f5dc",
-          }}
-        >
-          
-          <Box
-            sx={{
-              width: 6,
-              height: 30,
-              backgroundColor: "#000000",
-              borderRadius: 3,
-              position: "relative",
-              top: "25px",
-              // left: "calc(50% - 15px)",
-            }}
-          />
-          <Button
-            color="primary"
-            onClick={toggleDrawerSummary(!openSummary)}
-            sx={{
-              marginBottom: 3,
-              transform: "rotate(-90deg)",
-              mr: "-10px",
-            }}
-          >
-            Summary
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            px: 2,
-            pb: 2,
-            height: "100%",
-            overflow: "auto",
-            backgroundColor: "#808080",
-          }}
-        >
-          
-
-          <EcoSummary
-            wiki={wiki}
-            results={results && results}
-            ecoName={ecoName && ecoName}
-            id={selectedRegion && selectedRegion}
-          />
-        </Box>
-      </SwipeableDrawer> */}
     </>
   );
 };

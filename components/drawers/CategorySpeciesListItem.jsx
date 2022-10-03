@@ -27,6 +27,7 @@ const CategorySpeciesListItem = ({
             value: result.unique_id,
             s_name: result.scientific_name,
             c_name: result.common_name,
+            _id: result._id,
           });
           setItemSelect(true);
           setItem(result);
