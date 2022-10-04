@@ -812,7 +812,7 @@ const getEcoregionById = async (id) => {
     {
       unique_id: id,
     },
-    { projection: { unique_id: 1, name: 1, url: 1 } }
+    { projection: { unique_id: 1, name: 1, url: 1, coordinates: 1 } }
   );
 
   return response;

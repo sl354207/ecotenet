@@ -31,7 +31,7 @@ const search = ({ ecoFilter }) => {
 
   const { data: results } = useSWR(
     query
-      ? `/api/search?q=${query}&filter=${queryFilter}&eco=${ecoFilter}`
+      ? `/api/search?q=${query}&filter=${queryFilter}&eco=${ecoFilter.unique_id}`
       : null,
     fetcher
   );

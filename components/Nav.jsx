@@ -35,6 +35,7 @@ const CustomPopper = function (props) {
 };
 
 const Nav = ({ ecoFilter, state, dispatch }) => {
+  // console.log(ecoFilter);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -143,51 +144,16 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
         <Toolbar sx={{ paddingLeft: "10px", paddingRight: "0px" }}>
           {ecoFilter && (
-            // <IconButton
-            //   edge="start"
-            //   color="inherit"
-            //   aria-label="filter"
-            //   onClick={handleDrawerOpen}
-            //   sx={{
-            //     marginLeft: { xs: "1px", lg: "0px" },
-            //     padding: { xs: "5px", lg: "12px" },
-            //     fontSize: { xs: "18px", lg: "12px" },
-            //   }}
-            // >
-            //   <Typography>Eco-{ecoFilter}</Typography>
-            //   <SortIcon sx={{ color: theme.palette.secondary.light }} />
-            // </IconButton>
             <Button
               onClick={handleDrawerOpen}
               endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
               variant="contained"
               color="secondary"
             >
-              Eco-{ecoFilter}
+              Eco-{ecoFilter.unique_id}
             </Button>
           )}
 
-          {/* <Button
-            href="/"
-            size="large"
-            color="inherit"
-            sx={{
-              minWidth: "auto",
-
-              display: { xs: "block", lg: "none" },
-            }}
-          >
-            et
-          </Button>
-          <Button
-            href="/"
-            color="inherit"
-            sx={{
-              display: { xs: "none", lg: "block" },
-            }}
-          >
-            ecotenet
-          </Button> */}
           <Button
             href="/featured"
             variant="text"
@@ -199,16 +165,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
           >
             Featured Posts
           </Button>
-          {/* <Button
-            href="/species-map"
-            variant="text"
-            color="secondary"
-            sx={{
-              display: { xs: "none", lg: "block" },
-            }}
-          >
-            Species Map
-          </Button> */}
+
           {status == "authenticated" && (
             <Button
               variant="text"
@@ -418,15 +375,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                         >
                           Featured Posts
                         </MenuItem>
-                        {/* <MenuItem
-                          onClick={() => {
-                            setPopper(false);
-                            router.push("/species-map");
-                          }}
-                          sx={{ color: theme.palette.secondary.main }}
-                        >
-                          Species Map
-                        </MenuItem> */}
+
                         {status == "authenticated" && (
                           <MenuItem
                             onClick={
@@ -470,19 +419,6 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                             Create Post
                           </MenuItem>
                         )}
-                        {/* ) : (
-                          <MenuItem
-                            disabled
-                            sx={{
-                              color: theme.palette.secondary.main,
-                              border: `1px solid ${theme.palette.secondary.main}`,
-                              borderRadius: "4px",
-                              marginBottom: "4px",
-                            }}
-                          >
-                            Create Post
-                          </MenuItem>
-                        )} */}
 
                         <MenuItem
                           disabled={status == "loading"}
@@ -560,16 +496,6 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
                 )}
               </>
             )}
-            {/* ) : (
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={{ marginLeft: "10px" }}
-                disabled
-              >
-                Create Post
-              </Button>
-            )} */}
 
             <Button
               variant="outlined"

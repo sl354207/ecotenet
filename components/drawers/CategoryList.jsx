@@ -19,7 +19,7 @@ import DrawerSpecies from "./DrawerSpecies";
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const CategoryList = ({
-  id,
+  ecoFilter,
   title,
   category,
   dispatch,
@@ -28,8 +28,11 @@ const CategoryList = ({
   setCategorySelect,
 }) => {
   // console.log(id);
-  console.log(state);
-  const { data } = useSWR(category ? `/api/${id}/${category}` : null, fetcher);
+  // console.log(state);
+  const { data } = useSWR(
+    category ? `/api/${ecoFilter.unique_id}/${category}` : null,
+    fetcher
+  );
 
   const [itemSelect, setItemSelect] = useState(false);
   const [item, setItem] = useState(null);
@@ -190,8 +193,8 @@ const CategoryList = ({
                           align="center"
                           sx={{ marginTop: "20px" }}
                         >
-                          *Eco-{id} {title} current species count:{" "}
-                          {data.category.length}
+                          *Eco-{ecoFilter.unique_id} {title} current species
+                          count: {data.category.length}
                         </Typography>
                       </Container>
 

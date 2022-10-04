@@ -166,18 +166,30 @@ export default function MyApp(props) {
   // console.log(router);
   // category filter logic. Revisit
   const [ecoFilter, setEcoFilter] = useState();
+  const [visited, setVisited] = useState();
 
   // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
   useEffect(() => {
     let ecoregion = sessionStorage.getItem("ecoregion");
 
-    if (router.pathname == "/ecoregions/[eco]") {
-      sessionStorage.setItem("ecoregion", router.query.eco);
-      setEcoFilter(router.query.eco);
-    } else {
-      setEcoFilter(ecoregion);
-    }
+    // if (router.pathname == "/ecoregions/[eco]") {
+    //   sessionStorage.setItem("ecoregion", router.query.eco);
+    //   setEcoFilter(router.query.eco);
+    // } else {
+    setEcoFilter(JSON.parse(ecoregion));
+    // }
   }, [router.pathname]);
+
+  useEffect(() => {
+    let visitedHome = localStorage.getItem("visited");
+
+    if (router.pathname == "/") {
+      localStorage.setItem("visited", true);
+      setVisited(visitedHome);
+    } else {
+      setVisited(visitedHome);
+    }
+  }, [router.pathname == "/"]);
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
   // console.log(state);
@@ -198,6 +210,7 @@ export default function MyApp(props) {
                 setEcoFilter={setEcoFilter}
                 state={state}
                 dispatch={dispatch}
+                visited={visited}
                 {...pageProps}
               />
             </Layout>

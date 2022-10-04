@@ -1,9 +1,8 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import useSWR from "swr";
-import Header from "./Header";
 import Link from "./Link";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -12,7 +11,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
   let wikiUrl;
 
   if (ecoFilter && !wiki) {
-    const res = fetch(`/api/ecoregions/${ecoFilter}`, {
+    const res = fetch(`/api/ecoregions/${ecoFilter.unique_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -187,67 +186,83 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
   };
   return (
     <>
-      <div
-        style={{
-          // display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Header title={`Eco-${ecoFilter} `} sx={{ marginBottom: "40px" }} />
-        <Typography variant="h4" align="center">
-          {wiki && wiki.name}
-        </Typography>
-      </div>
-
-      {!wikiUrl || (results && results.title == "Not found.") ? (
-        <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
-          We currently don't have a summary of this ecoregion. If you want to
-          help us out you can create a wikipedia page for the ecoregion.
-        </Typography>
-      ) : (
+      {ecoFilter ? (
         <>
-          <Typography variant="h5" sx={{ marginTop: "10px" }}>
-            Source:{" "}
-            <Link
-              href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
-                " ",
-                "_"
-              )}?redirect=true`}
-              target="_blank"
-              rel="noopener noreferrer"
-              underline="hover"
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ marginBlock: "15px" }}
+              href={`/ecoregions/${ecoFilter.unique_id}`}
             >
-              Wikipedia
-            </Link>
-          </Typography>
-          {parse(
-            DOMPurify.sanitize(results && results.lead.sections[0].text),
-            options
+              visit full summary
+            </Button>
+            <Typography variant="h4" align="center">
+              Eco-{ecoFilter.unique_id}
+            </Typography>
+            <Typography
+              variant="h4"
+              align="center"
+              sx={{ marginBottom: "15px" }}
+            >
+              {wiki && wiki.name}
+            </Typography>
+          </div>
+
+          {!wikiUrl || (results && results.title == "Not found.") ? (
+            <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
+              We currently don't have a summary of this ecoregion. If you want
+              to help us out you can create a wikipedia page for the ecoregion.
+            </Typography>
+          ) : (
+            <>
+              <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                Source:{" "}
+                <Link
+                  href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
+                    " ",
+                    "_"
+                  )}?redirect=true`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="hover"
+                >
+                  Wikipedia
+                </Link>
+              </Typography>
+              {parse(
+                DOMPurify.sanitize(results && results.lead.sections[0].text),
+                options
+              )}
+              {results &&
+                results.remaining.sections.map((section) => {
+                  if (section.anchor == "Gallery") {
+                    return <></>;
+                  } else if (section.toclevel == 2) {
+                    return (
+                      <>
+                        <h2>{section.line}</h2>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <h1>{section.line}</h1>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  }
+                })}
+            </>
           )}
-          {results &&
-            results.remaining.sections.map((section) => {
-              if (section.anchor == "Gallery") {
-                return <></>;
-              } else if (section.toclevel == 2) {
-                return (
-                  <>
-                    <h2>{section.line}</h2>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <h1>{section.line}</h1>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              }
-            })}
         </>
+      ) : (
+        <Typography variant="h5" align="center">
+          Please select an ecoregion from the map or ecoregions tab to view a
+          summary
+        </Typography>
       )}
-      {/* </>
-      )} */}
     </>
   );
 };

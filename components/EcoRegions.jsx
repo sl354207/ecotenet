@@ -1,7 +1,6 @@
-import { List, ListItem } from "@mui/material";
+import { List, ListItem, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useMap } from "react-map-gl";
-import Header from "./Header";
 
 const EcoRegions = ({
   ecoregions,
@@ -10,6 +9,11 @@ const EcoRegions = ({
   setEcoFilter,
   setWiki,
   setHoverInfo,
+  setShowPopup,
+  visitedHome,
+  setTab,
+  click,
+  setClick,
 }) => {
   //   console.log(ecoregions);
   const sorted = ecoregions.sort(function (a, b) {
@@ -23,6 +27,7 @@ const EcoRegions = ({
       // if (click) {
       //   setOpenSummary(true);
       // }
+      setShowPopup(true);
 
       setHoverInfo({
         longitude: ecoregion.coordinates[0],
@@ -30,7 +35,8 @@ const EcoRegions = ({
         regionName: ecoregion.name,
         regionNum: ecoregion.unique_id,
       });
-      setEcoFilter(ecoregion.unique_id);
+      sessionStorage.setItem("ecoregion", JSON.stringify(ecoregion));
+      setEcoFilter(ecoregion);
       setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });
 
       setWiki(ecoregion);
@@ -42,13 +48,26 @@ const EcoRegions = ({
         // speed: 0.2,
         // essential: true,
       });
+      if (!visitedHome && !click) {
+        setTab(2);
+      }
+      setClick(true);
     },
     [ecoMove]
   );
 
   return (
     <>
-      <Header title="Ecoregions" />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant="h4" align="center" sx={{ marginBottom: "15px" }}>
+          Ecoregions
+        </Typography>
+        <Typography variant="h6" align="center">
+          Select an ecoregion from the map or from the list below
+        </Typography>
+      </div>
+      {/* <Header title="Ecoregions" /> */}
+
       <List>
         {sorted.map((ecoregion) => {
           return (

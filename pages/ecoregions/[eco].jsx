@@ -1,4 +1,3 @@
-// UPDATE TO ECOREGION INDEX OR SOMETHING
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
@@ -12,9 +11,9 @@ import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const eco = ({ wiki, ecoName, id }) => {
+const eco = ({ wiki, eco, id, setEcoFilter }) => {
   const router = useRouter();
   const { user } = useUserContext();
   // console.log(userName);
@@ -24,6 +23,11 @@ const eco = ({ wiki, ecoName, id }) => {
   } else {
     status = user.status;
   }
+
+  useEffect(() => {
+    sessionStorage.setItem("ecoregion", JSON.stringify(eco));
+    setEcoFilter(eco);
+  }, []);
 
   const [dialog, setDialog] = useState(false);
 
@@ -195,7 +199,7 @@ const eco = ({ wiki, ecoName, id }) => {
             }}
           ></div>
           <Header
-            title={`Eco-${id}: ${ecoName}`}
+            title={`Eco-${id}: ${eco.name}`}
             sx={{ marginBottom: "40px" }}
           />
           <IconButton
@@ -224,7 +228,7 @@ const eco = ({ wiki, ecoName, id }) => {
             <Typography variant="h5" sx={{ marginTop: "10px" }}>
               Source:{" "}
               <Link
-                href={`https://en.wikipedia.org/wiki/${ecoName.replace(
+                href={`https://en.wikipedia.org/wiki/${eco.name.replace(
                   " ",
                   "_"
                 )}?redirect=true`}
@@ -279,6 +283,7 @@ export const getServerSideProps = async (context) => {
   // const id = context.query.id;
 
   const eco = await getEcoregionById(id);
+
   // const ecoName = eco.name
   const unSlug = eco.name.replace(" ", "_");
   // console.log(typeof eco.name);
@@ -354,7 +359,9 @@ export const getServerSideProps = async (context) => {
         wiki == undefined || wiki.title == "Not found."
           ? null
           : JSON.parse(JSON.stringify(wiki)),
-      ecoName: eco.name,
+
+      // ecoName: eco.name,
+      eco: JSON.parse(JSON.stringify(eco)),
       id: id,
     },
   };

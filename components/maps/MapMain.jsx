@@ -7,6 +7,7 @@ import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
 const MapMain = ({
   zoom,
+  ecoFilter,
   setEcoFilter,
   setWiki,
   click,
@@ -15,6 +16,10 @@ const MapMain = ({
   coords,
   hoverInfo,
   setHoverInfo,
+  showPopup,
+  setShowPopup,
+  visitedHome,
+  setTab,
 }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -157,20 +162,39 @@ const MapMain = ({
     },
   };
 
-  const [showPopup, setShowPopup] = useState(true);
+  const [viewState, setViewState] = useState({
+    latitude: 37.8,
+    longitude: -98,
+    zoom: 4,
+  });
+
+  useEffect(() => {
+    // console.log(ecoFilter);
+    if (ecoFilter && !click) {
+      setViewState({
+        // ...viewState,
+        latitude: ecoFilter.coordinates[1],
+        longitude: ecoFilter.coordinates[0],
+      });
+    }
+  }, [ecoFilter]);
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
+  // console.log(visitedHome);
   const onHover = useCallback(
     async (event) => {
       setShowPopup(true);
 
-      setClick(false);
+      if (!visitedHome && !click) {
+        setTab(2);
+      }
 
       // if (click) {
       //   setOpenSummary(true);
       // }
 
       const region = event.features && event.features[0];
+      console.log(region);
 
       if (region.properties.unique_id != "<NA>") {
         setHoverInfo({
@@ -179,11 +203,12 @@ const MapMain = ({
           regionName: region && region.properties.name,
           regionNum: region && region.properties.unique_id,
         });
-        sessionStorage.setItem(
-          "ecoregion",
-          region && region.properties.unique_id
-        );
-        setEcoFilter(region && region.properties.unique_id);
+
+        let eco = region.properties;
+        eco.coordinates = region.geometry.coordinates[0][0];
+        // console.log(eco);
+        sessionStorage.setItem("ecoregion", JSON.stringify(eco));
+        setEcoFilter(eco);
 
         const res = await fetch(
           `/api/ecoregions/${region.properties.unique_id}`,
@@ -198,6 +223,7 @@ const MapMain = ({
         const data = await res.json();
 
         setWiki(data);
+        setClick(true);
       }
     },
     [hoverInfo]
@@ -253,6 +279,10 @@ const MapMain = ({
           duration: 2000,
           zoom: 3.5,
         });
+        // setViewState({
+        //   latitude: coord[0].coordinates[0],
+        //   longitude: coord[0].coordinates[1],
+        // });
       }
       if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
         const coord = coords.filter(
@@ -287,13 +317,16 @@ const MapMain = ({
           id="mapA"
           reuseMaps
           style={{ width: "auto", height: "89vh" }}
-          initialViewState={{
-            latitude: 37.8,
-            longitude: -98,
-            zoom: zoom,
-            bearing: 0,
-            pitch: 0,
-          }}
+          {...viewState}
+          // initialViewState={{
+          //   // latitude: 37.8,
+          //   // longitude: -98,
+          //   latitude: 37.8,
+          //   longitude: -98,
+          //   zoom: zoom,
+          //   bearing: 0,
+          //   pitch: 0,
+          // }}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}
@@ -307,6 +340,7 @@ const MapMain = ({
           onClick={onHover}
           ref={mapRef}
           onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
+          onMove={(evt) => setViewState(evt.viewState)}
           attributionControl={false}
         >
           {/* <Geocoder

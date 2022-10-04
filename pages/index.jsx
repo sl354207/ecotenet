@@ -13,7 +13,7 @@ import { styled } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapProvider } from "react-map-gl";
 import useSWR from "swr";
 
@@ -76,11 +76,18 @@ const CustomTab = styled((props) => <Tab {...props} />)(({ theme }) => ({
 
 // test
 
-export default function MapPage({ ecoFilter, setEcoFilter, state, dispatch }) {
+export default function MapPage({
+  ecoFilter,
+  setEcoFilter,
+  state,
+  dispatch,
+  visited,
+}) {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
   // });
+  // console.log(visited);
 
   const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
   // console.log(ecoregions);
@@ -88,13 +95,26 @@ export default function MapPage({ ecoFilter, setEcoFilter, state, dispatch }) {
   const drawerBleeding = 56;
   const drawerWidth = 350;
 
-  const [openEco, setOpenEco] = useState(true);
+  const [openEco, setOpenEco] = useState(false);
+
+  const [visitedHome, setVisitedHome] = useState(false);
+
+  useEffect(() => {
+    if (visited == "true") {
+      setOpenEco(false);
+      setVisitedHome(true);
+    } else {
+      setOpenEco(true);
+      setVisitedHome(false);
+    }
+  }, [visited]);
 
   const [wiki, setWiki] = useState();
 
   const [ecoMove, setEcoMove] = useState();
-  const [click, setClick] = useState(true);
+  const [click, setClick] = useState(false);
   const [hoverInfo, setHoverInfo] = useState(null);
+  const [showPopup, setShowPopup] = useState(true);
 
   const toggleDrawerEco = (newOpen) => () => {
     setOpenEco(newOpen);
@@ -113,6 +133,7 @@ export default function MapPage({ ecoFilter, setEcoFilter, state, dispatch }) {
       <MapProvider>
         <MapMain
           zoom={4}
+          ecoFilter={ecoFilter}
           setEcoFilter={setEcoFilter}
           wiki={wiki}
           setWiki={setWiki}
@@ -122,6 +143,10 @@ export default function MapPage({ ecoFilter, setEcoFilter, state, dispatch }) {
           coords={coords}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
+          showPopup={showPopup}
+          setShowPopup={setShowPopup}
+          visitedHome={visitedHome}
+          setTab={setTab}
         />
         <SwipeableDrawer
           anchor="right"
@@ -235,6 +260,11 @@ export default function MapPage({ ecoFilter, setEcoFilter, state, dispatch }) {
                     setEcoFilter={setEcoFilter}
                     setHoverInfo={setHoverInfo}
                     setWiki={setWiki}
+                    setShowPopup={setShowPopup}
+                    visitedHome={visitedHome}
+                    setTab={setTab}
+                    click={click}
+                    setClick={setClick}
                   />
                 </TabPanel>
                 <TabPanel value={tab} index={2}>

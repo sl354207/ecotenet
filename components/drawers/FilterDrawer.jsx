@@ -89,12 +89,12 @@ const FilterDrawer = ({
           }}
           onClick={() => {
             setDrawerOpen(false);
-            router.push(`/ecoregions/${ecoFilter}`);
+            router.push(`/ecoregions/${ecoFilter.unique_id}`);
           }}
           variant="text"
           color="inherit"
         >
-          ECO-{ecoFilter}
+          ECO-{ecoFilter && ecoFilter.unique_id}
         </Button>
         <IconButton onClick={handleDrawerClose} size="large">
           <ChevronLeftIcon />
@@ -104,7 +104,7 @@ const FilterDrawer = ({
       {categorySelect ? (
         <CategoryList
           category={category && category}
-          id={ecoFilter}
+          ecoFilter={ecoFilter}
           title={title && title}
           dispatch={dispatch}
           state={state}
@@ -138,19 +138,9 @@ const FilterDrawer = ({
                         key={menuSub.subTitle}
                         sx={{ paddingLeft: theme.spacing(4) }}
                         onClick={() => {
-                          // handleDrawerClose(Event);
-                          // router.push({
-                          //   pathname: `/[region]/[category]`,
-                          //   query: {
-                          //     region: ecoFilter,
-                          //     category: menuSub.query,
-                          //     title: menuSub.subTitle,
-                          //   },
-                          // });
                           setCategorySelect(true);
                           setCategory(menuSub.query);
                           setTitle(menuSub.subTitle);
-                          // console.log(category);
                         }}
                       >
                         <ListItemText primary={menuSub.subTitle} />
