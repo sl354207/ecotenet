@@ -172,6 +172,7 @@ export default function MapPage({
           }}
           hideBackdrop
           variant="persistent"
+          // elevation={17}
           sx={{
             "&.MuiDrawer-root > .MuiPaper-root": {
               // height: `calc(50% - ${drawerBleeding}px)`,

@@ -34,6 +34,7 @@ const CategoryList = ({
 
   const [itemSelect, setItemSelect] = useState(false);
   const [item, setItem] = useState(null);
+  console.log(typeof item);
 
   return (
     <>
@@ -82,15 +83,15 @@ const CategoryList = ({
                       textTransform: "uppercase",
                     }}
                   >
-                    {state[1].scientific_name ? "SPECIES" : "POST"}
+                    {typeof item == "string" ? "POST" : "SPECIES"}
                   </Typography>
                 </Breadcrumbs>
               </Container>
 
-              {state[1].scientific_name ? (
-                <DrawerSpecies species={item} />
-              ) : (
+              {typeof item == "string" ? (
                 <DrawerPost id={item} />
+              ) : (
+                <DrawerSpecies species={item} />
               )}
             </>
           ) : (

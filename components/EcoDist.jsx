@@ -2,6 +2,8 @@ import {
   alpha,
   Autocomplete,
   Chip,
+  FormControl,
+  FormHelperText,
   TextField,
   Typography,
 } from "@mui/material";
@@ -114,80 +116,89 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
   same time"
         align="left"
       />
-      <Autocomplete
-        sx={{
-          position: "relative",
-          border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-          borderRadius: "4px",
-          backgroundColor: theme.palette.primary.light,
-          "&:focus-within": {
-            backgroundColor: theme.palette.primary.light,
-            border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
+      <FormControl>
+        {/* <InputLabel htmlFor="keywords">Keywords:</InputLabel> */}
+        <Autocomplete
+          sx={{
+            position: "relative",
+            border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
             borderRadius: "4px",
-          },
-          marginTop: 4,
-          marginBottom: 1,
-
-          width: "auto",
-        }}
-        autoHighlight
-        onChange={(event, newValue) => handleSubmit(event, newValue)}
-        selectOnFocus
-        clearOnBlur
-        blurOnSelect
-        handleHomeEndKeys
-        id="species-map-auto"
-        options={
-          dist
-            ? dist.map((obj) => {
-                if (obj.common_name) {
-                  return `${obj.scientific_name} - ${obj.common_name}`;
-                } else {
-                  return `${obj.scientific_name}`;
-                }
-              })
-            : []
-        }
-        filterOptions={(x) => x}
-        freeSolo
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder="Search…"
-            variant="outlined"
-            sx={{
-              color: theme.palette.text.primary,
+            backgroundColor: theme.palette.primary.light,
+            "&:focus-within": {
+              backgroundColor: theme.palette.primary.light,
+              border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
               borderRadius: "4px",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
+            },
+            marginTop: "10px",
+            marginBottom: "5px",
+
+            width: "auto",
+          }}
+          autoHighlight
+          onChange={(event, newValue) => handleSubmit(event, newValue)}
+          selectOnFocus
+          clearOnBlur
+          blurOnSelect
+          handleHomeEndKeys
+          id="species-map-auto"
+          options={
+            dist
+              ? dist.map((obj) => {
+                  if (obj.common_name) {
+                    return `${obj.scientific_name} - ${obj.common_name}`;
+                  } else {
+                    return `${obj.scientific_name}`;
+                  }
+                })
+              : []
+          }
+          filterOptions={(x) => x}
+          freeSolo
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              autoFocus
+              placeholder="Search…"
+              variant="outlined"
+              sx={{
+                color: theme.palette.text.primary,
+                borderRadius: "4px",
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: "4px",
+                  },
+                  "&:hover fieldset": {
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: "4px",
+                  },
+                  "&.Mui-focused fieldset": {
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      0.5
+                    )}`,
+                    borderRadius: "4px",
+                  },
                 },
-                "&:hover fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-                "&.Mui-focused fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-              },
-            }}
-            ref={params.InputProps.ref}
-            inputProps={params.inputProps}
-            onChange={(e) => handleChange(e)}
-          />
-        )}
-      />
+              }}
+              ref={params.InputProps.ref}
+              inputProps={params.inputProps}
+              onChange={(e) => handleChange(e)}
+            />
+          )}
+        />
+        <FormHelperText
+          sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
+        >
+          (Filter drawer must be closed to search)
+        </FormHelperText>
+      </FormControl>
 
       <div style={{ display: "inline-grid", width: "100%" }}>
         {Array.isArray(state[1].regions) && state[1].regions.length ? (
