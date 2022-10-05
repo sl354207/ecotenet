@@ -4,21 +4,18 @@ import SortIcon from "@mui/icons-material/Sort";
 import TripOriginIcon from "@mui/icons-material/TripOrigin";
 import {
   AppBar,
-  Autocomplete,
   Box,
   Button,
   ClickAwayListener,
   Grow,
   IconButton,
-  InputBase,
   MenuItem,
   MenuList,
   Paper,
   Popper,
   Toolbar,
 } from "@mui/material";
-import { createFilterOptions } from "@mui/material/Autocomplete";
-import { alpha, useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 
 import { useSnackbarContext } from "@components/SnackbarContext";
 import { createPost } from "@utils/api-helpers";
@@ -27,12 +24,9 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 import CreatePostButton from "./CreatePostButton";
+import SearchDialog from "./dialogs/SearchDialog";
 import FilterDrawer from "./drawers/FilterDrawer";
 import { useUserContext } from "./UserContext";
-
-const CustomPopper = function (props) {
-  return <Popper {...props} style={{ width: "400px" }} placement="bottom" />;
-};
 
 const Nav = ({ ecoFilter, state, dispatch }) => {
   // console.log(ecoFilter);
@@ -53,6 +47,13 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
   const theme = useTheme();
 
   const [popper, setPopper] = useState(false);
+
+  const [search, setSearch] = useState(false);
+
+  const handleClickSearch = () => {
+    setSearch(true);
+  };
+
   const anchorRef = useRef(null);
 
   const togglePopper = () => {
@@ -134,11 +135,6 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
     setDrawerOpen(false);
   };
 
-  // set filter for autocomplete options
-  const filter = createFilterOptions();
-  // set tag options for autocomplete
-  const tags = [];
-
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
@@ -204,130 +200,21 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
             Ecotenet
           </Button>
 
-          <div
-            style={{
-              position: "relative",
-              borderRadius: theme.shape.borderRadius,
-              backgroundColor: alpha(theme.palette.common.white, 0.15),
-              "&:hover": {
-                backgroundColor: alpha(theme.palette.common.white, 0.25),
-              },
-              marginLeft: "auto",
-              width: "auto",
-              marginRight: "5px",
-            }}
+          <IconButton
+            color="secondary"
+            size="large"
+            sx={{ marginLeft: "auto", marginRight: "5px" }}
+            onClick={handleClickSearch}
           >
-            <div
-              style={{
-                padding: theme.spacing(0, 2),
-                height: "100%",
-                position: "absolute",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <SearchIcon />
-            </div>
+            <SearchIcon sx={{ fontSize: "2rem" }} />
+          </IconButton>
 
-            <Autocomplete
-              autoHighlight
-              disableClearable={true}
-              onChange={(event, newValue) => {
-                router.push(
-                  `/search?q=${newValue.inputValue}&filter=${newValue.path}`
-                );
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+          <SearchDialog
+            search={search}
+            setSearch={setSearch}
+            ecoFilter={ecoFilter && ecoFilter}
+          />
 
-                if (!ecoFilter) {
-                  if (params.inputValue !== "") {
-                    filtered.push(
-                      {
-                        inputValue: params.inputValue,
-                        title: `"${params.inputValue}" in all posts`,
-                        path: "allPosts",
-                      },
-                      {
-                        inputValue: params.inputValue,
-                        title: `"${params.inputValue}" in all species`,
-                        path: "allSpecies",
-                      }
-                    );
-                  }
-                } else {
-                  if (params.inputValue !== "") {
-                    filtered.push(
-                      {
-                        inputValue: params.inputValue,
-                        title: `"${params.inputValue}" in ecoregion posts`,
-                        path: "ecoPosts",
-                      },
-                      {
-                        inputValue: params.inputValue,
-                        title: `"${params.inputValue}" in ecoregion species`,
-                        path: "ecoSpecies",
-                      },
-                      {
-                        inputValue: params.inputValue,
-                        title: `"${params.inputValue}" in all posts`,
-                        path: "allPosts",
-                      },
-                      {
-                        inputValue: params.inputValue,
-                        title: `"${params.inputValue}" in all species`,
-                        path: "allSpecies",
-                      }
-                    );
-                  }
-                }
-
-                return filtered;
-              }}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              id="nav-auto"
-              options={tags}
-              getOptionLabel={(option) => {
-                return "";
-              }}
-              renderOption={(props, option) => (
-                <li {...props}>{option.title}</li>
-              )}
-              freeSolo
-              PopperComponent={CustomPopper}
-              ListboxProps={{
-                sx: {
-                  minHeight: ecoFilter ? "220px" : "auto",
-                  "& .MuiAutocomplete-option": {
-                    minHeight: "48px",
-                  },
-                },
-              }}
-              renderInput={(params) => (
-                <InputBase
-                  {...params}
-                  placeholder="Search Site…"
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: theme.spacing(1, 1, 1, 0),
-                      // vertical padding + font size from searchIcon
-                      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                      transition: theme.transitions.create("width"),
-                      width: "0ch",
-                      "&:focus": {
-                        width: { xs: "13ch", md: "19ch" },
-                      },
-                    },
-                  }}
-                  ref={params.InputProps.ref}
-                  inputProps={params.inputProps}
-                />
-              )}
-            />
-          </div>
           <Box sx={{ display: { xs: "block", lg: "none" } }}>
             <IconButton
               edge="end"
