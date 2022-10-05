@@ -1,4 +1,3 @@
-// import Coords from "@data/eco_coord.json";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -6,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
 const MapMain = ({
-  zoom,
   ecoFilter,
   setEcoFilter,
   setWiki,
@@ -20,8 +18,11 @@ const MapMain = ({
   setShowPopup,
   visitedHome,
   setTab,
+  mapLoc,
+  setMapLoc,
 }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
+  setMapLoc(true);
 
   //  base layer
   // const ecoFill = {
@@ -168,17 +169,6 @@ const MapMain = ({
     zoom: 4,
   });
 
-  useEffect(() => {
-    // console.log(ecoFilter);
-    if (ecoFilter && !click) {
-      setViewState({
-        // ...viewState,
-        latitude: ecoFilter.coordinates[1],
-        longitude: ecoFilter.coordinates[0],
-      });
-    }
-  }, [ecoFilter]);
-
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   // console.log(visitedHome);
   const onHover = useCallback(
@@ -189,12 +179,7 @@ const MapMain = ({
         setTab(2);
       }
 
-      // if (click) {
-      //   setOpenSummary(true);
-      // }
-
       const region = event.features && event.features[0];
-      console.log(region);
 
       if (region.properties.unique_id != "<NA>") {
         setHoverInfo({
@@ -205,8 +190,13 @@ const MapMain = ({
         });
 
         let eco = region.properties;
-        eco.coordinates = region.geometry.coordinates[0][0];
-        // console.log(eco);
+
+        if (region.geometry.coordinates[0][0][0].length > 1) {
+          eco.coordinates = region.geometry.coordinates[0][0][0];
+        } else {
+          eco.coordinates = region.geometry.coordinates[0][0];
+        }
+
         sessionStorage.setItem("ecoregion", JSON.stringify(eco));
         setEcoFilter(eco);
 
@@ -228,6 +218,15 @@ const MapMain = ({
     },
     [hoverInfo]
   );
+
+  useEffect(() => {
+    if (ecoFilter && !click) {
+      setViewState({
+        longitude: ecoFilter.coordinates[0],
+        latitude: ecoFilter.coordinates[1],
+      });
+    }
+  }, [mapLoc]);
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
 
@@ -279,10 +278,6 @@ const MapMain = ({
           duration: 2000,
           zoom: 3.5,
         });
-        // setViewState({
-        //   latitude: coord[0].coordinates[0],
-        //   longitude: coord[0].coordinates[1],
-        // });
       }
       if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
         const coord = coords.filter(
@@ -318,22 +313,12 @@ const MapMain = ({
           reuseMaps
           style={{ width: "auto", height: "89vh" }}
           {...viewState}
-          // initialViewState={{
-          //   // latitude: 37.8,
-          //   // longitude: -98,
-          //   latitude: 37.8,
-          //   longitude: -98,
-          //   zoom: zoom,
-          //   bearing: 0,
-          //   pitch: 0,
-          // }}
           minZoom={2}
           maxZoom={9}
           doubleClickZoom={false}
           boxZoom={false}
           dragRotate={false}
           touchPitch={false}
-          // touchZoomRotate={false}
           mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
@@ -343,13 +328,6 @@ const MapMain = ({
           onMove={(evt) => setViewState(evt.viewState)}
           attributionControl={false}
         >
-          {/* <Geocoder
-            mapboxAccessToken={mapBox}
-            position="top-left"
-            placeholder="Search Location"
-            clearAndBlurOnEsc
-            clearOnBlur
-          /> */}
           <Source
             id="ecomap"
             type="vector"
@@ -404,6 +382,7 @@ const MapMain = ({
               closeOnClick={false}
               onClose={() => setShowPopup(false)}
               maxWidth="500px"
+              focusAfterOpen={false}
             >
               <div style={{ display: "grid" }}>
                 <Typography

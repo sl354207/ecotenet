@@ -163,8 +163,7 @@ export default function MyApp(props) {
   }, []);
 
   const router = useRouter();
-  // console.log(router);
-  // category filter logic. Revisit
+
   const [ecoFilter, setEcoFilter] = useState();
   const [visited, setVisited] = useState();
 
@@ -172,12 +171,7 @@ export default function MyApp(props) {
   useEffect(() => {
     let ecoregion = sessionStorage.getItem("ecoregion");
 
-    // if (router.pathname == "/ecoregions/[eco]") {
-    //   sessionStorage.setItem("ecoregion", router.query.eco);
-    //   setEcoFilter(router.query.eco);
-    // } else {
     setEcoFilter(JSON.parse(ecoregion));
-    // }
   }, [router.pathname]);
 
   useEffect(() => {
@@ -192,7 +186,6 @@ export default function MyApp(props) {
   }, [router.pathname == "/"]);
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
-  // console.log(state);
 
   return (
     <CacheProvider value={emotionCache}>

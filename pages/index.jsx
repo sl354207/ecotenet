@@ -74,8 +74,6 @@ const CustomTab = styled((props) => <Tab {...props} />)(({ theme }) => ({
   },
 }));
 
-// test
-
 export default function MapPage({
   ecoFilter,
   setEcoFilter,
@@ -90,7 +88,6 @@ export default function MapPage({
   // console.log(visited);
 
   const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
-  // console.log(ecoregions);
 
   const drawerBleeding = 56;
   const drawerWidth = 350;
@@ -114,7 +111,20 @@ export default function MapPage({
   const [ecoMove, setEcoMove] = useState();
   const [click, setClick] = useState(false);
   const [hoverInfo, setHoverInfo] = useState(null);
+
+  useEffect(() => {
+    if (ecoFilter && !click) {
+      setHoverInfo({
+        longitude: ecoFilter.coordinates[0],
+        latitude: ecoFilter.coordinates[1],
+        regionName: ecoFilter.name,
+        regionNum: ecoFilter.unique_id,
+      });
+    }
+  }, [ecoFilter]);
+
   const [showPopup, setShowPopup] = useState(true);
+  const [mapLoc, setMapLoc] = useState(false);
 
   const toggleDrawerEco = (newOpen) => () => {
     setOpenEco(newOpen);
@@ -147,6 +157,8 @@ export default function MapPage({
           setShowPopup={setShowPopup}
           visitedHome={visitedHome}
           setTab={setTab}
+          mapLoc={mapLoc}
+          setMapLoc={setMapLoc}
         />
         <SwipeableDrawer
           anchor="right"

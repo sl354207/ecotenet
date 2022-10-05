@@ -46,7 +46,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
   }
 
   const { data: results } = useSWR(wiki ? wikiUrl : null, fetcher);
-  // console.log(results);
+
   const options = {
     replace: (domNode) => {
       // console.log(domNode);

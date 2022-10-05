@@ -15,7 +15,6 @@ const EcoRegions = ({
   click,
   setClick,
 }) => {
-  //   console.log(ecoregions);
   const sorted = ecoregions.sort(function (a, b) {
     return a.unique_id - b.unique_id;
   });
@@ -24,9 +23,6 @@ const EcoRegions = ({
 
   const ecoClick = useCallback(
     (ecoregion) => {
-      // if (click) {
-      //   setOpenSummary(true);
-      // }
       setShowPopup(true);
 
       setHoverInfo({
@@ -66,7 +62,6 @@ const EcoRegions = ({
           Select an ecoregion from the map or from the list below
         </Typography>
       </div>
-      {/* <Header title="Ecoregions" /> */}
 
       <List>
         {sorted.map((ecoregion) => {

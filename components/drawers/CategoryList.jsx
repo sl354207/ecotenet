@@ -27,8 +27,6 @@ const CategoryList = ({
   setCategory,
   setCategorySelect,
 }) => {
-  // console.log(id);
-  // console.log(state);
   const { data } = useSWR(
     category ? `/api/${ecoFilter.unique_id}/${category}` : null,
     fetcher
@@ -36,32 +34,9 @@ const CategoryList = ({
 
   const [itemSelect, setItemSelect] = useState(false);
   const [item, setItem] = useState(null);
-  // console.log(data);
 
   return (
     <>
-      {/* <Breadcrumbs
-        aria-label="breadcrumb"
-        sx={{
-          "& .MuiBreadcrumbs-separator": {
-            color: "rgba(255, 255, 255, 1)",
-          },
-        }}
-        separator={">"}
-      > */}
-      {/* <Button
-        color="secondary"
-        onClick={() => {
-          setCategory(null);
-          setCategorySelect(false);
-        }}
-      >
-        Back to Filter
-      </Button> */}
-      {/* <Button color="secondary">Filter</Button>
-
-        <Typography color="secondary">{title.toUpperCase()}</Typography>
-      </Breadcrumbs> */}
       {data ? (
         <>
           {itemSelect ? (
