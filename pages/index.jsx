@@ -160,6 +160,7 @@ export default function MapPage({
           mapLoc={mapLoc}
           setMapLoc={setMapLoc}
         />
+
         <SwipeableDrawer
           anchor="right"
           open={openEco}
@@ -174,6 +175,7 @@ export default function MapPage({
           variant="persistent"
           // elevation={17}
           sx={{
+            display: { xs: "none", lg: "block" },
             "&.MuiDrawer-root > .MuiPaper-root": {
               // height: `calc(50% - ${drawerBleeding}px)`,
               width: drawerWidth,

@@ -39,7 +39,9 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
   };
   const { data: results } = useSWR(
     query
-      ? `/api/search?q=${query.q}&filter=${query.filter}&eco=${ecoFilter.unique_id}`
+      ? `/api/search?q=${query.q}&filter=${query.filter}&eco=${
+          ecoFilter && ecoFilter.unique_id
+        }`
       : null,
     fetcher
   );

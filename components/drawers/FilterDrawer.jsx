@@ -1,5 +1,5 @@
 import menuItems from "@data/categories.json";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import CloseIcon from "@mui/icons-material/Close";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -12,7 +12,8 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import theme from "@utils/theme";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useRouter } from "next/router";
 import { useReducer, useState } from "react";
 import CategoryList from "./CategoryList";
@@ -43,6 +44,8 @@ const FilterDrawer = ({
   setDrawerOpen,
   handleDrawerClose,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
 
   const [categorySelect, setCategorySelect] = useState(false);
@@ -59,15 +62,18 @@ const FilterDrawer = ({
   return (
     <Drawer
       sx={{
-        width: drawerWidth,
+        width: { xs: "100%", lg: drawerWidth },
         flexShrink: 0,
+        top: { xs: "calc(55%)", lg: "0px" },
         "& .MuiDrawer-paper": {
-          width: drawerWidth,
+          width: { xs: "100%", lg: drawerWidth },
           backgroundColor: theme.palette.primary.light,
           margin: 0,
+          // marginTop: { xs: "100px", lg: "0px" },
+          top: { xs: "calc(55%)", lg: "0px" },
         },
       }}
-      anchor="left"
+      anchor={isMobile ? "bottom" : "left"}
       open={drawerOpen}
       onClose={handleDrawerClose}
       hideBackdrop
@@ -97,7 +103,7 @@ const FilterDrawer = ({
           ECO-{ecoFilter && ecoFilter.unique_id}
         </Button>
         <IconButton onClick={handleDrawerClose} size="large">
-          <ChevronLeftIcon />
+          <CloseIcon />
         </IconButton>
       </div>
       <Divider />
