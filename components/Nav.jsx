@@ -17,6 +17,8 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 import { useSnackbarContext } from "@components/SnackbarContext";
 import { createPost } from "@utils/api-helpers";
 import { signIn, signOut } from "next-auth/react";
@@ -39,12 +41,15 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
   } else {
     status = user.status;
   }
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const router = useRouter();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const theme = useTheme();
+  const [top, setTop] = useState({ nav: "351px", drawer: "calc(55vh)" });
+  const [drawerHeight, setDrawerHeight] = useState(1);
 
   const [popper, setPopper] = useState(false);
 
@@ -133,6 +138,10 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
       return;
     }
     setDrawerOpen(false);
+    if (isMobile) {
+      setTop({ nav: "351px", drawer: "calc(55vh)" });
+      setDrawerHeight(1);
+    }
   };
 
   return (
@@ -417,6 +426,10 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}
             handleDrawerClose={handleDrawerClose}
+            top={top}
+            setTop={setTop}
+            drawerHeight={drawerHeight}
+            setDrawerHeight={setDrawerHeight}
           />
         </Toolbar>
       </AppBar>
