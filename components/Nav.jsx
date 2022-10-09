@@ -48,7 +48,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const [top, setTop] = useState({ nav: "351px", drawer: "calc(55vh)" });
+  const [top, setTop] = useState("65vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   const [popper, setPopper] = useState(false);
@@ -139,7 +139,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
     }
     setDrawerOpen(false);
     if (isMobile) {
-      setTop({ nav: "351px", drawer: "calc(55vh)" });
+      setTop("65vh");
       setDrawerHeight(1);
     }
   };

@@ -69,98 +69,102 @@ const FilterDrawer = ({
   const [drawerState, dispatchHook] = useReducer(reducer, menuItems);
   return (
     <>
-      <Box
+      <SwipeableDrawer
         sx={{
-          position: "absolute",
-          // top: "-1px",
-          top: { xs: top.nav, lg: "-1px" },
-
-          left: 0,
-          // borderTopLeftRadius: 8,
-          // borderTopRightRadius: 8,
-
-          // display: drawerOpen ? "block" : "none",
-          transform: {
-            xs: drawerOpen ? "none" : "translatey(400px)",
-            lg: drawerOpen ? "none" : "translateX(-350px)",
+          width: { xs: "100%", lg: drawerWidth },
+          flexShrink: 0,
+          top: { xs: top, lg: "56px" },
+          zIndex: 1100,
+          overflow: "visible",
+          "& .MuiDrawer-paper": {
+            width: { xs: "100%", lg: drawerWidth },
+            backgroundColor: theme.palette.primary.light,
+            margin: 0,
+            top: { xs: top, lg: "49px" },
+            overflow: "visible",
+            marginBottom: { xs: "55px", lg: "0px" },
           },
-          transition: "transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms",
-          visibility: "visible",
-          width: { xs: "100vw", lg: drawerWidth },
-          // right: 0,
-          // left: 0,
-          backgroundColor: theme.palette.primary.light,
         }}
+        // elevation={900}
+        anchor={isMobile ? "bottom" : "left"}
+        open={drawerOpen}
+        onClose={handleDrawerClose}
+        // swipeAreaWidth={drawerBleeding}
+        disableSwipeToOpen={true}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        hideBackdrop
+        // variant="persistent"
       >
-        <div
-          style={{
+        <Box
+          sx={{
+            position: "absolute",
+            top: { xs: "-68px", lg: "-48px" },
             display: "flex",
-            alignItems: "center",
-            padding: theme.spacing(0, 1),
-            // necessary for content to be below app bar
-            ...theme.mixins.toolbar,
+            visibility: drawerOpen ? "visible" : "hidden",
+            width: { xs: "100vw", lg: drawerWidth },
+            backgroundColor: theme.palette.primary.light,
           }}
         >
           {isMobile && (
-            <ButtonGroup
-              orientation="vertical"
-              aria-label="vertical outlined button group"
-              size="small"
-            >
-              <IconButton
-                variant="text"
-                color="inherit"
+            <>
+              <ButtonGroup
+                orientation="vertical"
+                aria-label="vertical outlined button group"
                 size="small"
-                onClick={() => {
-                  switch (drawerHeight) {
-                    case 0:
-                      setTop({ nav: "351px", drawer: "calc(55vh)" });
-                      setDrawerHeight(1);
-
-                      break;
-                    case 1:
-                      setTop({ nav: "0px", drawer: "69px" });
-                      setDrawerHeight(2);
-
-                      break;
-
-                    default:
-                      break;
-                  }
-                }}
               >
-                <KeyboardArrowUpIcon />
-              </IconButton>
-              <IconButton
-                variant="text"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  switch (drawerHeight) {
-                    case 1:
-                      setTop({
-                        nav: "calc(100vh - 129px)",
-                        drawer: "calc(100vh - 59px)",
-                      });
-                      setDrawerHeight(0);
+                <IconButton
+                  variant="text"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    switch (drawerHeight) {
+                      case 0:
+                        setTop("65vh");
+                        setDrawerHeight(1);
 
-                      break;
-                    case 2:
-                      setTop({ nav: "351px", drawer: "calc(55vh)" });
-                      setDrawerHeight(1);
+                        break;
+                      case 1:
+                        setTop("69px");
+                        setDrawerHeight(2);
 
-                      break;
+                        break;
 
-                    default:
-                      break;
-                  }
-                }}
-              >
-                <KeyboardArrowDownIcon />
-              </IconButton>
-            </ButtonGroup>
+                      default:
+                        break;
+                    }
+                  }}
+                >
+                  <KeyboardArrowUpIcon />
+                </IconButton>
+                <IconButton
+                  variant="text"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    switch (drawerHeight) {
+                      case 1:
+                        setTop("calc(100vh - 59px)");
+                        setDrawerHeight(0);
+
+                        break;
+                      case 2:
+                        setTop("65vh");
+                        setDrawerHeight(1);
+
+                        break;
+
+                      default:
+                        break;
+                    }
+                  }}
+                >
+                  <KeyboardArrowDownIcon />
+                </IconButton>
+              </ButtonGroup>
+            </>
           )}
-
           <Button
             sx={{
               flexGrow: 1,
@@ -178,94 +182,69 @@ const FilterDrawer = ({
           <IconButton onClick={handleDrawerClose} size="large">
             <CloseIcon />
           </IconButton>
-        </div>
+        </Box>
         <Divider />
-      </Box>
-      <SwipeableDrawer
-        sx={{
-          width: { xs: "100%", lg: drawerWidth },
-          flexShrink: 0,
-          top: { xs: top.drawer, lg: "56px" },
-          // zIndex: 900,
-          // display: "block",
-          // height: `calc(50% - 56px)`,
-          // overflow: "visible",
-          "& .MuiDrawer-paper": {
-            width: { xs: "100%", lg: drawerWidth },
-            backgroundColor: theme.palette.primary.light,
-            margin: 0,
-            // zIndex: 900,
-            // marginTop: { xs: "100px", lg: "0px" },
-            top: { xs: top.drawer, lg: "56px" },
-            // height: `calc(50% - 56px)`,
-            // overflow: "visible",
-          },
-        }}
-        // elevation={900}
-        anchor={isMobile ? "bottom" : "left"}
-        open={drawerOpen}
-        onClose={handleDrawerClose}
-        // swipeAreaWidth={drawerBleeding}
-        disableSwipeToOpen={true}
-        ModalProps={{
-          keepMounted: true,
-        }}
-        hideBackdrop
-        // variant="persistent"
-      >
-        {categorySelect ? (
-          <CategoryList
-            category={category && category}
-            ecoFilter={ecoFilter}
-            title={title && title}
-            dispatch={dispatch}
-            state={state}
-            setCategory={setCategory}
-            setCategorySelect={setCategorySelect}
-          />
-        ) : (
-          <>
-            {drawerState.map((menuItem) => {
-              const { menuTitle, menuSubs, openList } = menuItem;
+        <Box
+          sx={{
+            marginTop: "10px",
+            height: "100%",
+            overflow: "auto",
+          }}
+        >
+          {categorySelect ? (
+            <CategoryList
+              category={category && category}
+              ecoFilter={ecoFilter}
+              title={title && title}
+              dispatch={dispatch}
+              state={state}
+              setCategory={setCategory}
+              setCategorySelect={setCategorySelect}
+            />
+          ) : (
+            <>
+              {drawerState.map((menuItem) => {
+                const { menuTitle, menuSubs, openList } = menuItem;
 
-              return (
-                <List
-                  component="nav"
-                  aria-labelledby="nested-list"
-                  key="mainlist"
-                >
-                  <ListItem
-                    button
-                    key={menuTitle}
-                    onClick={() => handleListClick(menuTitle)}
+                return (
+                  <List
+                    component="nav"
+                    aria-labelledby="nested-list"
+                    key="mainlist"
                   >
-                    <ListItemText primary={menuTitle} />
-                    {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                  </ListItem>
-                  <Collapse in={openList} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding key="sublist">
-                      {menuSubs.map((menuSub) => (
-                        <ListItem
-                          button
-                          key={menuSub.subTitle}
-                          sx={{ paddingLeft: theme.spacing(4) }}
-                          onClick={() => {
-                            setCategorySelect(true);
-                            setCategory(menuSub.query);
-                            setTitle(menuSub.subTitle);
-                          }}
-                        >
-                          <ListItemText primary={menuSub.subTitle} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Collapse>
-                  <Divider />
-                </List>
-              );
-            })}
-          </>
-        )}
+                    <ListItem
+                      button
+                      key={menuTitle}
+                      onClick={() => handleListClick(menuTitle)}
+                    >
+                      <ListItemText primary={menuTitle} />
+                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </ListItem>
+                    <Collapse in={openList} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding key="sublist">
+                        {menuSubs.map((menuSub) => (
+                          <ListItem
+                            button
+                            key={menuSub.subTitle}
+                            sx={{ paddingLeft: theme.spacing(4) }}
+                            onClick={() => {
+                              setCategorySelect(true);
+                              setCategory(menuSub.query);
+                              setTitle(menuSub.subTitle);
+                            }}
+                          >
+                            <ListItemText primary={menuSub.subTitle} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                    <Divider />
+                  </List>
+                );
+              })}
+            </>
+          )}
+        </Box>
       </SwipeableDrawer>
     </>
   );

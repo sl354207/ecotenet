@@ -10,7 +10,6 @@ import {
 import { styled } from "@mui/material/styles";
 import theme from "@utils/theme";
 import Description from "./Description";
-import Header from "./Header";
 
 const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   borderWidth: 2,
@@ -108,7 +107,9 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
   };
   return (
     <>
-      <Header title="Species Map" />
+      <Typography variant="h4" align="center" sx={{ marginBottom: "15px" }}>
+        Species Map
+      </Typography>
 
       <Description
         description=" Search for a species by common or scientific name to display their
@@ -116,7 +117,7 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
   same time"
         align="left"
       />
-      <FormControl>
+      <FormControl sx={{ display: "flex" }}>
         {/* <InputLabel htmlFor="keywords">Keywords:</InputLabel> */}
         <Autocomplete
           sx={{
@@ -141,6 +142,7 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
           blurOnSelect
           handleHomeEndKeys
           id="species-map-auto"
+          fullWidth
           options={
             dist
               ? dist.map((obj) => {
@@ -160,6 +162,7 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
               autoFocus
               placeholder="Search…"
               variant="outlined"
+              fullWidth
               sx={{
                 color: theme.palette.text.primary,
                 borderRadius: "4px",

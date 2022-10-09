@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   ButtonGroup,
+  Divider,
   IconButton,
   SwipeableDrawer,
   Toolbar,
@@ -138,8 +139,22 @@ export default function MapPage({
   const [showPopup, setShowPopup] = useState(true);
   const [mapLoc, setMapLoc] = useState(false);
 
-  const toggleDrawerEco = (newOpen) => () => {
-    setOpenEco(newOpen);
+  const handleDrawerOpen = () => {
+    setOpenEco(true);
+  };
+
+  const handleDrawerClose = (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setOpenEco(false);
+    if (isMobile) {
+      setTop("65vh");
+      setDrawerHeight(1);
+    }
   };
 
   const [dist, setDist] = useState([]);
@@ -150,7 +165,7 @@ export default function MapPage({
     setTab(newValue);
   };
 
-  const [top, setTop] = useState({ nav: "356px", drawer: "calc(55vh)" });
+  const [top, setTop] = useState("65vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   return (
@@ -180,7 +195,7 @@ export default function MapPage({
             <AppBar
               position="fixed"
               color="primary"
-              sx={{ top: "auto", bottom: 0 }}
+              sx={{ top: "auto", bottom: 0, zIndex: 1200, marginBottom: "0px" }}
             >
               <Toolbar sx={{ display: "grid" }}>
                 <Tabs
@@ -201,7 +216,7 @@ export default function MapPage({
                         opacity: 1,
                       },
                     }}
-                    onClick={() => setOpenEco(true)}
+                    onClick={handleDrawerOpen}
                   />
                   <Tab
                     label="Summary"
@@ -212,7 +227,7 @@ export default function MapPage({
                         opacity: 1,
                       },
                     }}
-                    onClick={() => setOpenEco(true)}
+                    onClick={handleDrawerOpen}
                   />
                   <Tab
                     label="Distributions"
@@ -223,153 +238,124 @@ export default function MapPage({
                         opacity: 1,
                       },
                     }}
-                    onClick={() => setOpenEco(true)}
+                    onClick={handleDrawerOpen}
                   />
                 </Tabs>
               </Toolbar>
             </AppBar>
-            <Box
-              sx={{
-                position: "absolute",
-                // top: "-1px",
-                top: top.nav,
-                zIndex: 1300,
 
-                // left: 0,
-                // borderTopLeftRadius: 8,
-                // borderTopRightRadius: 8,
-
-                // display: drawerOpen ? "block" : "none",
-                transform: openEco ? "none" : "translatey(300px)",
-
-                transition: "transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms",
-                visibility: openEco ? "visible" : "hidden",
-                width: "100vw",
-                // right: 0,
-                // left: 0,
-                backgroundColor: theme.palette.primary.light,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: theme.spacing(0, 1),
-                  // necessary for content to be below app bar
-                  ...theme.mixins.toolbar,
-                }}
-              >
-                {isMobile && (
-                  <ButtonGroup
-                    orientation="vertical"
-                    aria-label="vertical outlined button group"
-                    size="small"
-                    sx={{ marginRight: "auto" }}
-                  >
-                    <IconButton
-                      variant="text"
-                      color="inherit"
-                      size="small"
-                      onClick={() => {
-                        switch (drawerHeight) {
-                          case 0:
-                            setTop({ nav: "356px", drawer: "calc(55vh)" });
-                            setDrawerHeight(1);
-
-                            break;
-                          case 1:
-                            setTop({ nav: "0px", drawer: "65px" });
-                            setDrawerHeight(2);
-
-                            break;
-
-                          default:
-                            break;
-                        }
-                      }}
-                    >
-                      <KeyboardArrowUpIcon />
-                    </IconButton>
-                    <IconButton
-                      variant="text"
-                      color="inherit"
-                      size="small"
-                      onClick={() => {
-                        switch (drawerHeight) {
-                          case 1:
-                            setTop({
-                              nav: "calc(100vh - 127px)",
-                              drawer: "calc(100vh - 62px)",
-                            });
-                            setDrawerHeight(0);
-
-                            break;
-                          case 2:
-                            setTop({ nav: "356px", drawer: "calc(55vh)" });
-                            setDrawerHeight(1);
-
-                            break;
-
-                          default:
-                            break;
-                        }
-                      }}
-                    >
-                      <KeyboardArrowDownIcon />
-                    </IconButton>
-                  </ButtonGroup>
-                )}
-
-                <IconButton
-                  size="large"
-                  onClick={() => {
-                    setOpenEco(false);
-                    setTop({ nav: "356px", drawer: "calc(55vh)" });
-                    setDrawerHeight(1);
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </div>
-              {/* <Divider /> */}
-            </Box>
             <SwipeableDrawer
               anchor="bottom"
               open={openEco}
-              onClose={toggleDrawerEco(false)}
-              onOpen={toggleDrawerEco(true)}
+              onClose={handleDrawerClose}
+              onOpen={handleDrawerOpen}
               // swipeAreaWidth={drawerBleeding}
               disableSwipeToOpen={true}
               ModalProps={{
                 keepMounted: true,
               }}
               hideBackdrop
-              variant="persistent"
+              // variant="persistent"
               // elevation={10}
               sx={{
-                display: { xs: "block", lg: "none" },
-                top: top.drawer,
-                "&.MuiDrawer-root > .MuiPaper-root": {
-                  // height: `calc(50% - ${drawerBleeding}px)`,
-                  width: "100%",
-                  overflow: "visible",
-                  top: top.drawer,
-                  // zIndex: 900,
-                  // top: 60,
-                  // bottom: 100,
-                },
                 width: "100%",
-                // zIndex: 900,
+                flexShrink: 0,
+                top: top,
+                overflow: "visible",
+                zIndex: 1100,
+                "& .MuiDrawer-paper": {
+                  width: "100%",
+                  backgroundColor: theme.palette.primary.light,
+                  margin: 0,
+                  top: top,
+                  overflow: "visible",
+                  marginBottom: "55px",
+                },
               }}
             >
               <Box
                 sx={{
-                  px: 2,
-                  pb: 2,
+                  position: "absolute",
+                  top: "-68px",
+                  display: "flex",
+                  visibility: openEco ? "visible" : "hidden",
+                  width: "100vw",
+                  backgroundColor: theme.palette.primary.light,
+                }}
+              >
+                {isMobile && (
+                  <>
+                    <ButtonGroup
+                      orientation="vertical"
+                      aria-label="vertical outlined button group"
+                      size="small"
+                    >
+                      <IconButton
+                        variant="text"
+                        color="inherit"
+                        size="small"
+                        onClick={() => {
+                          switch (drawerHeight) {
+                            case 0:
+                              setTop("65vh");
+                              setDrawerHeight(1);
+
+                              break;
+                            case 1:
+                              setTop("69px");
+                              setDrawerHeight(2);
+
+                              break;
+
+                            default:
+                              break;
+                          }
+                        }}
+                      >
+                        <KeyboardArrowUpIcon />
+                      </IconButton>
+                      <IconButton
+                        variant="text"
+                        color="inherit"
+                        size="small"
+                        onClick={() => {
+                          switch (drawerHeight) {
+                            case 1:
+                              setTop("calc(100vh - 59px)");
+                              setDrawerHeight(0);
+
+                              break;
+                            case 2:
+                              setTop("65vh");
+                              setDrawerHeight(1);
+
+                              break;
+
+                            default:
+                              break;
+                          }
+                        }}
+                      >
+                        <KeyboardArrowDownIcon />
+                      </IconButton>
+                    </ButtonGroup>
+                  </>
+                )}
+
+                <IconButton
+                  onClick={handleDrawerClose}
+                  size="large"
+                  sx={{ marginLeft: "auto" }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+              <Divider />
+              <Box
+                sx={{
+                  marginTop: "10px",
                   height: "100%",
                   overflow: "auto",
-
-                  backgroundColor: theme.palette.primary.light,
                 }}
               >
                 {ecoregions && (
@@ -414,8 +400,8 @@ export default function MapPage({
             <SwipeableDrawer
               anchor="right"
               open={openEco}
-              onClose={toggleDrawerEco(false)}
-              onOpen={toggleDrawerEco(true)}
+              onClose={handleDrawerClose}
+              onOpen={handleDrawerOpen}
               // swipeAreaWidth={drawerBleeding}
               disableSwipeToOpen={true}
               ModalProps={{
@@ -427,11 +413,9 @@ export default function MapPage({
               sx={{
                 display: { xs: "none", lg: "block" },
                 "&.MuiDrawer-root > .MuiPaper-root": {
-                  // height: `calc(50% - ${drawerBleeding}px)`,
                   width: drawerWidth,
                   overflow: "visible",
                   top: 60,
-                  // bottom: 100,
                 },
                 width: drawerWidth,
               }}
@@ -439,12 +423,10 @@ export default function MapPage({
               <Box
                 sx={{
                   position: "absolute",
-                  // top: 100,
                   borderBottomLeftRadius: 8,
                   borderTopLeftRadius: 8,
                   visibility: "visible",
                   right: drawerWidth,
-                  // left: 0,
                   backgroundColor: "#f5f5dc",
                 }}
               >
@@ -457,7 +439,6 @@ export default function MapPage({
                     "& .MuiTabs-indicator": {
                       backgroundColor: theme.palette.secondary.dark,
                       width: "0px",
-
                       left: 0,
                     },
                   }}
@@ -511,7 +492,6 @@ export default function MapPage({
                   pb: 2,
                   height: "100%",
                   overflow: "auto",
-
                   backgroundColor: theme.palette.primary.light,
                 }}
               >

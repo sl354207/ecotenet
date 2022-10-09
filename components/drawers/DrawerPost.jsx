@@ -121,16 +121,8 @@ const DrawerPost = ({ id }) => {
                 </div>
               </div>
             </Container>
-            <Frame
-              style={styles}
-              head={
-                <style>
-                  {
-                    "a {color: #c8fcff; text-decoration: none;overflow-wrap: anywhere;} a:hover {color: #c8fcff; text-decoration: underline; overflow-wrap: anywhere;} p {color:#ffffff; font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em; } h2 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h1 {color:#ffffff;line-height: 1.5; letter-spacing: 0.00938em;} h3 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h4 {color:#ffffff; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} h5 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h6 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} ul {color:#ffffff;  font-weight: 400;font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} ol {color:#ffffff;font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;}"
-                  }
-                </style>
-              }
-            >
+
+            {isMobile ? (
               <EditorLayout>
                 <Editor
                   cellPlugins={cellPlugins}
@@ -139,7 +131,27 @@ const DrawerPost = ({ id }) => {
                   readOnly
                 />
               </EditorLayout>
-            </Frame>
+            ) : (
+              <Frame
+                style={styles}
+                head={
+                  <style>
+                    {
+                      "a {color: #c8fcff; text-decoration: none;overflow-wrap: anywhere;} a:hover {color: #c8fcff; text-decoration: underline; overflow-wrap: anywhere;} p {color:#ffffff; font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em; } h2 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h1 {color:#ffffff;line-height: 1.5; letter-spacing: 0.00938em;} h3 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h4 {color:#ffffff; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} h5 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h6 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} ul {color:#ffffff;  font-weight: 400;font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} ol {color:#ffffff;font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;}"
+                    }
+                  </style>
+                }
+              >
+                <EditorLayout>
+                  <Editor
+                    cellPlugins={cellPlugins}
+                    value={post}
+                    // onChange={setValue}
+                    readOnly
+                  />
+                </EditorLayout>
+              </Frame>
+            )}
           </>
         </>
       ) : (

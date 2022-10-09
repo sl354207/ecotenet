@@ -1,6 +1,5 @@
 // import Header from "./Header";
 
-import Header from "@components/Header";
 import Link from "@components/Link";
 import {
   Breadcrumbs,
@@ -130,7 +129,13 @@ const CategoryList = ({
                     {title}
                   </Typography>
                 </Breadcrumbs>
-                <Header title={title} />
+                <Typography
+                  variant="h4"
+                  align="center"
+                  // sx={{ marginBottom: "15px" }}
+                >
+                  {title}
+                </Typography>
                 {data && data.description && (
                   <Typography align="center" sx={{ marginTop: "10px" }}>
                     {data.description}

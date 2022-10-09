@@ -192,7 +192,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
             <Button
               variant="contained"
               color="secondary"
-              sx={{ marginBlock: "15px" }}
+              sx={{ marginBottom: "15px" }}
               href={`/ecoregions/${ecoFilter.unique_id}`}
             >
               visit full summary
