@@ -52,6 +52,7 @@ const FilterDrawer = ({
   drawerHeight,
   setDrawerHeight,
   setTab,
+  openEco,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

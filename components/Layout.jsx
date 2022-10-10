@@ -4,7 +4,17 @@ import Nav from "./Nav";
 import { SnackbarProvider } from "./SnackbarContext";
 
 // pass in children as a prop so any components in Layout tag in _app.js get rendered inside Layout
-const Layout = ({ children, ecoFilter, state, dispatch, setTab }) => {
+const Layout = ({
+  children,
+  ecoFilter,
+  state,
+  dispatch,
+  setTab,
+  drawerOpen,
+  setDrawerOpen,
+  openEco,
+  setOpenEco,
+}) => {
   // UPDATE
   const router = useRouter();
   // console.log(router);
@@ -19,6 +29,10 @@ const Layout = ({ children, ecoFilter, state, dispatch, setTab }) => {
             state={state}
             dispatch={dispatch}
             setTab={setTab}
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+            openEco={openEco}
+            setOpenEco={setOpenEco}
           />
         )}
         <div>

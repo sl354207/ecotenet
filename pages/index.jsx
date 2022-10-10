@@ -93,6 +93,10 @@ export default function MapPage({
   visited,
   tab,
   setTab,
+  drawerOpen,
+  setDrawerOpen,
+  openEco,
+  setOpenEco,
 }) {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
@@ -107,7 +111,7 @@ export default function MapPage({
   const drawerBleeding = 56;
   const drawerWidth = 350;
 
-  const [openEco, setOpenEco] = useState(false);
+  // const [openEco, setOpenEco] = useState(false);
 
   const [visitedHome, setVisitedHome] = useState(false);
 
@@ -143,6 +147,9 @@ export default function MapPage({
 
   const handleDrawerOpen = () => {
     setOpenEco(true);
+    if (isMobile) {
+      setDrawerOpen(false);
+    }
   };
 
   const handleDrawerClose = (event) => {

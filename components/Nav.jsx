@@ -30,7 +30,16 @@ import SearchDialog from "./dialogs/SearchDialog";
 import FilterDrawer from "./drawers/FilterDrawer";
 import { useUserContext } from "./UserContext";
 
-const Nav = ({ ecoFilter, state, dispatch, setTab }) => {
+const Nav = ({
+  ecoFilter,
+  state,
+  dispatch,
+  setTab,
+  drawerOpen,
+  setDrawerOpen,
+  openEco,
+  setOpenEco,
+}) => {
   // console.log(ecoFilter);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -46,7 +55,7 @@ const Nav = ({ ecoFilter, state, dispatch, setTab }) => {
 
   const router = useRouter();
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [top, setTop] = useState("65vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
@@ -128,6 +137,9 @@ const Nav = ({ ecoFilter, state, dispatch, setTab }) => {
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
+    if (isMobile) {
+      setOpenEco(false);
+    }
   };
 
   const handleDrawerClose = (event) => {
@@ -431,6 +443,7 @@ const Nav = ({ ecoFilter, state, dispatch, setTab }) => {
             drawerHeight={drawerHeight}
             setDrawerHeight={setDrawerHeight}
             setTab={setTab}
+            openEco={openEco}
           />
         </Toolbar>
       </AppBar>

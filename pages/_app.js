@@ -168,6 +168,10 @@ export default function MyApp(props) {
   const [visited, setVisited] = useState();
   const [tab, setTab] = useState(1);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const [openEco, setOpenEco] = useState(false);
+
   // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.
   useEffect(() => {
     let ecoregion = sessionStorage.getItem("ecoregion");
@@ -188,8 +192,6 @@ export default function MyApp(props) {
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
 
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -205,6 +207,10 @@ export default function MyApp(props) {
               state={state}
               dispatch={dispatch}
               setTab={setTab}
+              drawerOpen={drawerOpen}
+              setDrawerOpen={setDrawerOpen}
+              openEco={openEco}
+              setOpenEco={setOpenEco}
             >
               <Component
                 ecoFilter={ecoFilter}
@@ -214,6 +220,10 @@ export default function MyApp(props) {
                 visited={visited}
                 tab={tab}
                 setTab={setTab}
+                drawerOpen={drawerOpen}
+                setDrawerOpen={setDrawerOpen}
+                openEco={openEco}
+                setOpenEco={setOpenEco}
                 {...pageProps}
               />
             </Layout>
