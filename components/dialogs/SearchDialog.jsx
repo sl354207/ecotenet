@@ -145,7 +145,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             width: "auto",
           }}
           autoHighlight
-          disableClearable={true}
+          disableClearable
           onChange={(event, newValue) => {
             setQuery({ q: newValue.inputValue, filter: newValue.path });
           }}
@@ -197,7 +197,9 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             return filtered;
           }}
           selectOnFocus
-          clearOnBlur
+          // clearOnBlur
+
+          blurOnSelect
           handleHomeEndKeys
           id="nav-auto"
           options={tags}
