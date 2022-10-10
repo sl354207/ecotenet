@@ -166,7 +166,7 @@ export default function MyApp(props) {
 
   const [ecoFilter, setEcoFilter] = useState();
   const [visited, setVisited] = useState();
-  const [tab, setTab] = useState(1);
+  const [tab, setTab] = useState(0);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
