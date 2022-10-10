@@ -188,7 +188,7 @@ const FilterDrawer = ({
         <Box
           sx={{
             marginTop: "10px",
-            height: "100%",
+            height: "91vh",
             overflow: "auto",
           }}
         >

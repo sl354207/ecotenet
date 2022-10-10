@@ -45,7 +45,7 @@ const EcoRegions = ({
         // essential: true,
       });
       if (!visitedHome && !click) {
-        setTab(2);
+        setTab(1);
       }
       setClick(true);
     },
@@ -59,7 +59,7 @@ const EcoRegions = ({
           Ecoregions
         </Typography>
         <Typography variant="h6" align="center">
-          Select an ecoregion from the map or from the list below
+          Select an ecoregion on the map or from the list below
         </Typography>
       </div>
 
