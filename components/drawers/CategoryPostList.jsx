@@ -7,6 +7,7 @@ const CategoryPostList = ({
   dispatch,
   setItemSelect,
   setItem,
+  setTab,
 }) => {
   return (
     <List>
@@ -36,6 +37,7 @@ const CategoryPostList = ({
                 });
                 setItemSelect(true);
                 setItem(post._id);
+                setTab(2);
               }}
             >
               <div style={{ flex: "auto", marginRight: "20px" }}>

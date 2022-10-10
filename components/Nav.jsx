@@ -30,7 +30,7 @@ import SearchDialog from "./dialogs/SearchDialog";
 import FilterDrawer from "./drawers/FilterDrawer";
 import { useUserContext } from "./UserContext";
 
-const Nav = ({ ecoFilter, state, dispatch }) => {
+const Nav = ({ ecoFilter, state, dispatch, setTab }) => {
   // console.log(ecoFilter);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -430,6 +430,7 @@ const Nav = ({ ecoFilter, state, dispatch }) => {
             setTop={setTop}
             drawerHeight={drawerHeight}
             setDrawerHeight={setDrawerHeight}
+            setTab={setTab}
           />
         </Toolbar>
       </AppBar>

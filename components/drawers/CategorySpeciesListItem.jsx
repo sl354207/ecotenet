@@ -6,6 +6,7 @@ const CategorySpeciesListItem = ({
   dispatch,
   setItemSelect,
   setItem,
+  setTab,
 }) => {
   return (
     <ListItem key={result._id}>
@@ -31,6 +32,7 @@ const CategorySpeciesListItem = ({
           });
           setItemSelect(true);
           setItem(result);
+          setTab(2);
         }}
       >
         <Typography variant="h6" color="textPrimary" align="left">

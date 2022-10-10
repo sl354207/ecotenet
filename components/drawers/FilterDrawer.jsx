@@ -51,6 +51,7 @@ const FilterDrawer = ({
   setTop,
   drawerHeight,
   setDrawerHeight,
+  setTab,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -200,6 +201,7 @@ const FilterDrawer = ({
               state={state}
               setCategory={setCategory}
               setCategorySelect={setCategorySelect}
+              setTab={setTab}
             />
           ) : (
             <>

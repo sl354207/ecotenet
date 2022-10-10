@@ -91,6 +91,8 @@ export default function MapPage({
   state,
   dispatch,
   visited,
+  tab,
+  setTab,
 }) {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
@@ -158,8 +160,6 @@ export default function MapPage({
   };
 
   const [dist, setDist] = useState([]);
-
-  const [tab, setTab] = useState(1);
 
   const handleChange = (event, newValue) => {
     setTab(newValue);
@@ -430,6 +430,22 @@ export default function MapPage({
                   backgroundColor: "#f5f5dc",
                 }}
               >
+                <IconButton
+                  color="primary"
+                  sx={{
+                    borderRadius: 0,
+                    justifyContent: "start",
+                    paddingLeft: "10px",
+                    paddingRight: "100%",
+                    "&:hover": {
+                      borderRadius: 0,
+                      backgroundColor: "rgba(0, 30, 60, 0.3)",
+                    },
+                  }}
+                  onClick={() => setOpenEco(!openEco)}
+                >
+                  {openEco ? <ArrowForwardIosIcon /> : <ArrowBackIosIcon />}
+                </IconButton>
                 <Tabs
                   orientation="vertical"
                   value={tab}
@@ -443,25 +459,9 @@ export default function MapPage({
                     },
                   }}
                 >
-                  <IconButton
-                    color="primary"
-                    sx={{
-                      borderRadius: 0,
-                      justifyContent: "start",
-                      paddingLeft: "10px",
-                      "&:hover": {
-                        borderRadius: 0,
-                        backgroundColor: "rgba(0, 30, 60, 0.3)",
-                      },
-                    }}
-                    {...a11yProps(0)}
-                    onClick={() => setOpenEco(!openEco)}
-                  >
-                    {openEco ? <ArrowForwardIosIcon /> : <ArrowBackIosIcon />}
-                  </IconButton>
                   <CustomTab
                     label="Ecoregions"
-                    {...a11yProps(1)}
+                    {...a11yProps(0)}
                     sx={{
                       borderBottom: "2px solid #1890ff",
                       borderTop: "2px solid #1890ff",
@@ -469,12 +469,12 @@ export default function MapPage({
                   />
                   <CustomTab
                     label="Summary"
-                    {...a11yProps(2)}
+                    {...a11yProps(1)}
                     sx={{ borderBottom: "2px solid #1890ff" }}
                   />
                   <CustomTab
                     label="Distributions"
-                    {...a11yProps(3)}
+                    {...a11yProps(2)}
                     sx={{
                       "&.Mui-selected": {
                         color: theme.palette.text.primary,
@@ -497,7 +497,7 @@ export default function MapPage({
               >
                 {ecoregions && (
                   <>
-                    <TabPanel value={tab} index={1}>
+                    <TabPanel value={tab} index={0}>
                       <EcoRegions
                         ecoregions={ecoregions && ecoregions}
                         ecoMove={ecoMove}
@@ -512,14 +512,14 @@ export default function MapPage({
                         setClick={setClick}
                       />
                     </TabPanel>
-                    <TabPanel value={tab} index={2}>
+                    <TabPanel value={tab} index={1}>
                       <EcoSummary
                         wiki={wiki && wiki}
                         setWiki={setWiki}
                         ecoFilter={ecoFilter && ecoFilter}
                       />
                     </TabPanel>
-                    <TabPanel value={tab} index={3}>
+                    <TabPanel value={tab} index={2}>
                       <EcoDist
                         dist={dist}
                         setDist={setDist}

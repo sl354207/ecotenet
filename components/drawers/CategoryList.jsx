@@ -25,6 +25,7 @@ const CategoryList = ({
   state,
   setCategory,
   setCategorySelect,
+  setTab,
 }) => {
   const { data } = useSWR(
     category ? `/api/${ecoFilter.unique_id}/${category}` : null,
@@ -185,6 +186,7 @@ const CategoryList = ({
                         state={state}
                         setItemSelect={setItemSelect}
                         setItem={setItem}
+                        setTab={setTab}
                       />
                       <Container sx={{ minHeight: "auto" }}>
                         <Typography variant="subtitle2" align="left">
@@ -209,6 +211,7 @@ const CategoryList = ({
                         state={state}
                         setItemSelect={setItemSelect}
                         setItem={setItem}
+                        setTab={setTab}
                       />
                     </>
                   )}

@@ -14,6 +14,7 @@ const CategorySpeciesList = ({
   state,
   setItemSelect,
   setItem,
+  setTab,
 }) => {
   const uniqueFirst = [
     ...new Set(category.map((item) => item.scientific_name[0])),
@@ -49,6 +50,7 @@ const CategorySpeciesList = ({
                       state={state}
                       setItemSelect={setItemSelect}
                       setItem={setItem}
+                      setTab={setTab}
                     />
                   );
                 }
