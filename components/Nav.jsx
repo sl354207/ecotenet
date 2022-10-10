@@ -37,7 +37,6 @@ const Nav = ({
   setTab,
   drawerOpen,
   setDrawerOpen,
-  openEco,
   setOpenEco,
 }) => {
   // console.log(ecoFilter);
@@ -443,7 +442,6 @@ const Nav = ({
             drawerHeight={drawerHeight}
             setDrawerHeight={setDrawerHeight}
             setTab={setTab}
-            openEco={openEco}
           />
         </Toolbar>
       </AppBar>

@@ -93,7 +93,6 @@ export default function MapPage({
   visited,
   tab,
   setTab,
-  drawerOpen,
   setDrawerOpen,
   openEco,
   setOpenEco,
@@ -104,7 +103,7 @@ export default function MapPage({
   // });
   // console.log(visited);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
 
@@ -179,7 +178,7 @@ export default function MapPage({
     <div id="map-main">
       <MapProvider>
         <MapMain
-          zoom={4}
+          isMobile={isMobile}
           ecoFilter={ecoFilter}
           setEcoFilter={setEcoFilter}
           wiki={wiki}
@@ -418,7 +417,7 @@ export default function MapPage({
               variant="persistent"
               // elevation={17}
               sx={{
-                display: { xs: "none", lg: "block" },
+                display: { xs: "none", md: "block" },
                 "&.MuiDrawer-root > .MuiPaper-root": {
                   width: drawerWidth,
                   overflow: "visible",

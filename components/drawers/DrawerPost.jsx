@@ -28,7 +28,7 @@ const cellPlugins = [slate(), customImage, video, spacer, divider];
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 const DrawerPost = ({ id }) => {
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { data: post } = useSWR(id ? `/api/posts/${id}` : null, fetcher);
   // let date = new Date(post.date);
 

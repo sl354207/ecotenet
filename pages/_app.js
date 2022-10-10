@@ -209,7 +209,6 @@ export default function MyApp(props) {
               setTab={setTab}
               drawerOpen={drawerOpen}
               setDrawerOpen={setDrawerOpen}
-              openEco={openEco}
               setOpenEco={setOpenEco}
             >
               <Component
@@ -220,7 +219,6 @@ export default function MyApp(props) {
                 visited={visited}
                 tab={tab}
                 setTab={setTab}
-                drawerOpen={drawerOpen}
                 setDrawerOpen={setDrawerOpen}
                 openEco={openEco}
                 setOpenEco={setOpenEco}

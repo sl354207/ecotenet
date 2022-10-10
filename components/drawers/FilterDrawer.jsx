@@ -52,10 +52,9 @@ const FilterDrawer = ({
   drawerHeight,
   setDrawerHeight,
   setTab,
-  openEco,
 }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
 
   const [categorySelect, setCategorySelect] = useState(false);
@@ -73,18 +72,18 @@ const FilterDrawer = ({
     <>
       <SwipeableDrawer
         sx={{
-          width: { xs: "100%", lg: drawerWidth },
+          width: { xs: "100%", md: drawerWidth },
           flexShrink: 0,
-          top: { xs: top, lg: "56px" },
+          top: { xs: top, md: "56px" },
           zIndex: 1100,
           overflow: "visible",
           "& .MuiDrawer-paper": {
-            width: { xs: "100%", lg: drawerWidth },
+            width: { xs: "100%", md: drawerWidth },
             backgroundColor: theme.palette.primary.light,
             margin: 0,
-            top: { xs: top, lg: "49px" },
+            top: { xs: top, md: "49px" },
             overflow: "visible",
-            marginBottom: { xs: "55px", lg: "0px" },
+            marginBottom: { xs: "55px", md: "0px" },
           },
         }}
         // elevation={900}
@@ -102,10 +101,10 @@ const FilterDrawer = ({
         <Box
           sx={{
             position: "absolute",
-            top: { xs: "-68px", lg: "-48px" },
+            top: { xs: "-68px", md: "-48px" },
             display: "flex",
             visibility: drawerOpen ? "visible" : "hidden",
-            width: { xs: "100vw", lg: drawerWidth },
+            width: { xs: "100vw", md: drawerWidth },
             backgroundColor: theme.palette.primary.light,
           }}
         >

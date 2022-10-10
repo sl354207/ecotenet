@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
 const MapMain = ({
+  isMobile,
   ecoFilter,
   setEcoFilter,
   setWiki,
@@ -307,103 +308,97 @@ const MapMain = ({
 
   return (
     <>
-      <div style={{ height: "89vh" }}>
-        <Map
-          id="mapA"
-          reuseMaps
-          style={{ width: "auto", height: "89vh" }}
-          {...viewState}
-          minZoom={2}
-          maxZoom={9}
-          doubleClickZoom={false}
-          boxZoom={false}
-          dragRotate={false}
-          touchPitch={false}
-          mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
-          mapboxAccessToken={mapBox}
-          interactiveLayerIds={["eco-fill"]}
-          onClick={onHover}
-          ref={mapRef}
-          onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
-          onMove={(evt) => setViewState(evt.viewState)}
-          attributionControl={false}
-        >
-          <Source
-            id="ecomap"
-            type="vector"
-            url="mapbox://sl354207.ecomap-tiles"
-          >
-            <Layer id="base" beforeId="waterway-label" {...ecoFill} />
+      <Map
+        id="mapA"
+        reuseMaps
+        style={{ width: "auto", height: isMobile ? "85vh" : "90vh" }}
+        {...viewState}
+        minZoom={2}
+        maxZoom={9}
+        doubleClickZoom={false}
+        boxZoom={false}
+        dragRotate={false}
+        touchPitch={false}
+        mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
+        mapboxAccessToken={mapBox}
+        interactiveLayerIds={["eco-fill"]}
+        onClick={onHover}
+        ref={mapRef}
+        onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
+        onMove={(evt) => setViewState(evt.viewState)}
+        attributionControl={false}
+      >
+        <Source id="ecomap" type="vector" url="mapbox://sl354207.ecomap-tiles">
+          <Layer id="base" beforeId="waterway-label" {...ecoFill} />
 
-            <Layer
-              beforeId="waterway-label"
-              {...ecoFill5}
-              filter={speciesFilter3}
-            />
-            <Layer
-              beforeId="waterway-label"
-              {...ecoFill4}
-              filter={speciesFilter2}
-            />
-            <Layer
-              id="species1"
-              beforeId="waterway-label"
-              {...ecoFill3}
-              filter={speciesFilter1}
-            />
-            <Layer
-              id="click"
-              beforeId="waterway-label"
-              {...ecoFill2}
-              filter={clickFilter}
-            />
-            <Layer
-              id="hover"
-              beforeId="waterway-label"
-              {...ecoFill1}
-              filter={filter}
-            />
-            <Layer beforeId="waterway-label" {...ecoLine} />
-          </Source>
-          <AttributionControl
-            compact={true}
-            customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
+          <Layer
+            beforeId="waterway-label"
+            {...ecoFill5}
+            filter={speciesFilter3}
+          />
+          <Layer
+            beforeId="waterway-label"
+            {...ecoFill4}
+            filter={speciesFilter2}
+          />
+          <Layer
+            id="species1"
+            beforeId="waterway-label"
+            {...ecoFill3}
+            filter={speciesFilter1}
+          />
+          <Layer
+            id="click"
+            beforeId="waterway-label"
+            {...ecoFill2}
+            filter={clickFilter}
+          />
+          <Layer
+            id="hover"
+            beforeId="waterway-label"
+            {...ecoFill1}
+            filter={filter}
+          />
+          <Layer beforeId="waterway-label" {...ecoLine} />
+        </Source>
+        <AttributionControl
+          compact={true}
+          customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
             World. GIS layers developed by The Nature Conservancy with multiple partners,
             combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK):
             The Nature Conservancy. DOIs: 10.1641/B570707;
             10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-
             wcmc.org/datasets/38"
-            style={{ color: "black" }}
-          />
-          {selectedRegion && showPopup && (
-            <Popup
-              longitude={hoverInfo.longitude}
-              latitude={hoverInfo.latitude}
-              closeOnClick={false}
-              onClose={() => setShowPopup(false)}
-              maxWidth="500px"
-              focusAfterOpen={false}
-            >
-              <div style={{ display: "grid" }}>
-                <Typography
-                  color="textSecondary"
-                  align="center"
-                  sx={{ fontWeight: 500 }}
-                >
-                  {ecoName}
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  align="center"
-                  sx={{ fontWeight: 500 }}
-                >
-                  Eco-{selectedRegion}
-                </Typography>
-              </div>
-            </Popup>
-          )}
-        </Map>
-      </div>
+          style={{ color: "black" }}
+        />
+        {selectedRegion && showPopup && (
+          <Popup
+            longitude={hoverInfo.longitude}
+            latitude={hoverInfo.latitude}
+            closeOnClick={false}
+            onClose={() => setShowPopup(false)}
+            maxWidth="500px"
+            focusAfterOpen={false}
+          >
+            <div style={{ display: "grid" }}>
+              <Typography
+                color="textSecondary"
+                align="center"
+                sx={{ fontWeight: 500 }}
+              >
+                {ecoName}
+              </Typography>
+              <Typography
+                color="textSecondary"
+                align="center"
+                sx={{ fontWeight: 500 }}
+              >
+                Eco-{selectedRegion}
+              </Typography>
+            </div>
+          </Popup>
+        )}
+      </Map>
     </>
   );
 };

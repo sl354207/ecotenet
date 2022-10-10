@@ -12,7 +12,6 @@ const Layout = ({
   setTab,
   drawerOpen,
   setDrawerOpen,
-  openEco,
   setOpenEco,
 }) => {
   // UPDATE
@@ -31,7 +30,6 @@ const Layout = ({
             setTab={setTab}
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}
-            openEco={openEco}
             setOpenEco={setOpenEco}
           />
         )}
