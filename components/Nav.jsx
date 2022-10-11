@@ -181,6 +181,17 @@ const Nav = ({
           >
             Featured Posts
           </Button>
+          <Button
+            href="/about"
+            variant="text"
+            color="secondary"
+            sx={{
+              display: { xs: "none", lg: "block" },
+              marginLeft: "10px",
+            }}
+          >
+            About
+          </Button>
 
           {status == "authenticated" && (
             <Button
@@ -281,6 +292,15 @@ const Nav = ({
                           sx={{ color: theme.palette.secondary.main }}
                         >
                           Featured Posts
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setPopper(false);
+                            router.push("/about");
+                          }}
+                          sx={{ color: theme.palette.secondary.main }}
+                        >
+                          About
                         </MenuItem>
 
                         {status == "authenticated" && (

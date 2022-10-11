@@ -30,10 +30,15 @@ const Footer = () => {
             </Link>
           </Grid>
           <Grid item xs={4} sx={{ textAlign: "center" }}>
+            <Link href="/data" underline="hover">
+              Species Data
+            </Link>
+          </Grid>
+          {/* <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Link href="/featured" underline="hover">
               Featured Posts
             </Link>
-          </Grid>
+          </Grid> */}
           <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Link href="/terms" underline="hover">
               Terms of Use
@@ -44,21 +49,17 @@ const Footer = () => {
               About Us
             </Link>
           </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          {/* <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Link href="/species" underline="hover">
               Species Map
             </Link>
-          </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          </Grid> */}
+          {/* <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Link href="/sitemap" underline="hover">
               Site Map
             </Link>
-          </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
-            <Link href="/data" underline="hover">
-              Species Data
-            </Link>
-          </Grid>
+          </Grid> */}
+
           <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Button href="/donate" variant="contained" color="secondary">
               Donate

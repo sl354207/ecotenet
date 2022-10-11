@@ -283,10 +283,10 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
             >
               <div style={{ display: "grid" }}>
                 <Typography color="textSecondary" align="center">
-                  {ecoName}
+                  Eco-{selectedRegion}
                 </Typography>
                 <Typography color="textSecondary" align="center">
-                  Eco-{selectedRegion}
+                  {ecoName}
                 </Typography>
               </div>
             </Popup>
