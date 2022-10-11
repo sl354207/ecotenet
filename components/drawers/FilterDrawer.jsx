@@ -10,11 +10,11 @@ import {
   ButtonGroup,
   Collapse,
   Divider,
+  Drawer,
   IconButton,
   List,
   ListItem,
   ListItemText,
-  SwipeableDrawer,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -70,18 +70,18 @@ const FilterDrawer = ({
   const [drawerState, dispatchHook] = useReducer(reducer, menuItems);
   return (
     <>
-      <SwipeableDrawer
+      <Drawer
         sx={{
           width: { xs: "100%", md: drawerWidth },
           flexShrink: 0,
-          top: { xs: top, md: "56px" },
+          top: { xs: top, md: "60px" },
           zIndex: 1100,
           overflow: "visible",
           "& .MuiDrawer-paper": {
             width: { xs: "100%", md: drawerWidth },
             backgroundColor: theme.palette.primary.light,
             margin: 0,
-            top: { xs: top, md: "49px" },
+            top: { xs: top, md: "60px" },
             overflow: "visible",
             marginBottom: { xs: "55px", md: "0px" },
           },
@@ -91,17 +91,18 @@ const FilterDrawer = ({
         open={drawerOpen}
         onClose={handleDrawerClose}
         // swipeAreaWidth={drawerBleeding}
-        disableSwipeToOpen={true}
-        ModalProps={{
-          keepMounted: true,
-        }}
+        // disableSwipeToOpen={true}
+        // ModalProps={{
+        //   keepMounted: true,
+        // }}
         hideBackdrop
         // variant="persistent"
       >
         <Box
           sx={{
             position: "absolute",
-            top: { xs: "-68px", md: "-48px" },
+            top: { xs: "-80px", md: "-60px" },
+            paddingBlock: { xs: "0px", md: "10px" },
             display: "flex",
             visibility: drawerOpen ? "visible" : "hidden",
             width: { xs: "100vw", md: drawerWidth },
@@ -113,12 +114,13 @@ const FilterDrawer = ({
               <ButtonGroup
                 orientation="vertical"
                 aria-label="vertical outlined button group"
-                size="small"
+                // size="small"
+                sx={{ marginLeft: "10px" }}
               >
                 <IconButton
                   variant="text"
                   color="inherit"
-                  size="small"
+                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 0:
@@ -127,7 +129,7 @@ const FilterDrawer = ({
 
                         break;
                       case 1:
-                        setTop("69px");
+                        setTop("80px");
                         setDrawerHeight(2);
 
                         break;
@@ -142,7 +144,7 @@ const FilterDrawer = ({
                 <IconButton
                   variant="text"
                   color="inherit"
-                  size="small"
+                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 1:
@@ -169,7 +171,7 @@ const FilterDrawer = ({
           <Button
             sx={{
               flexGrow: 1,
-              //
+              marginInline: "10px",
             }}
             onClick={() => {
               setDrawerOpen(false);
@@ -180,7 +182,7 @@ const FilterDrawer = ({
           >
             ECO-{ecoFilter && ecoFilter.unique_id}
           </Button>
-          <IconButton onClick={handleDrawerClose} size="large">
+          <IconButton onClick={handleDrawerClose} sx={{ marginRight: "10px" }}>
             <CloseIcon />
           </IconButton>
         </Box>
@@ -247,7 +249,7 @@ const FilterDrawer = ({
             </>
           )}
         </Box>
-      </SwipeableDrawer>
+      </Drawer>
     </>
   );
 };

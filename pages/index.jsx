@@ -3,8 +3,8 @@ import {
   Box,
   ButtonGroup,
   Divider,
+  Drawer,
   IconButton,
-  SwipeableDrawer,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -250,16 +250,16 @@ export default function MapPage({
               </Toolbar>
             </AppBar>
 
-            <SwipeableDrawer
+            <Drawer
               anchor="bottom"
               open={openEco}
               onClose={handleDrawerClose}
               onOpen={handleDrawerOpen}
               // swipeAreaWidth={drawerBleeding}
-              disableSwipeToOpen={true}
-              ModalProps={{
-                keepMounted: true,
-              }}
+              // disableSwipeToOpen={true}
+              // ModalProps={{
+              //   keepMounted: true,
+              // }}
               hideBackdrop
               // variant="persistent"
               // elevation={10}
@@ -282,7 +282,7 @@ export default function MapPage({
               <Box
                 sx={{
                   position: "absolute",
-                  top: "-68px",
+                  top: "-80px",
                   display: "flex",
                   visibility: openEco ? "visible" : "hidden",
                   width: "100vw",
@@ -294,12 +294,11 @@ export default function MapPage({
                     <ButtonGroup
                       orientation="vertical"
                       aria-label="vertical outlined button group"
-                      size="small"
+                      sx={{ marginLeft: "10px" }}
                     >
                       <IconButton
                         variant="text"
                         color="inherit"
-                        size="small"
                         onClick={() => {
                           switch (drawerHeight) {
                             case 0:
@@ -308,7 +307,7 @@ export default function MapPage({
 
                               break;
                             case 1:
-                              setTop("69px");
+                              setTop("80px");
                               setDrawerHeight(2);
 
                               break;
@@ -323,7 +322,6 @@ export default function MapPage({
                       <IconButton
                         variant="text"
                         color="inherit"
-                        size="small"
                         onClick={() => {
                           switch (drawerHeight) {
                             case 1:
@@ -350,8 +348,7 @@ export default function MapPage({
 
                 <IconButton
                   onClick={handleDrawerClose}
-                  size="large"
-                  sx={{ marginLeft: "auto" }}
+                  sx={{ marginLeft: "auto", marginRight: "10px" }}
                 >
                   <CloseIcon />
                 </IconButton>
@@ -399,20 +396,20 @@ export default function MapPage({
                   </>
                 )}
               </Box>
-            </SwipeableDrawer>
+            </Drawer>
           </>
         ) : (
           <>
-            <SwipeableDrawer
+            <Drawer
               anchor="right"
               open={openEco}
               onClose={handleDrawerClose}
               onOpen={handleDrawerOpen}
               // swipeAreaWidth={drawerBleeding}
-              disableSwipeToOpen={true}
-              ModalProps={{
-                keepMounted: true,
-              }}
+              // disableSwipeToOpen={true}
+              // ModalProps={{
+              //   keepMounted: true,
+              // }}
               hideBackdrop
               variant="persistent"
               // elevation={17}
@@ -442,7 +439,7 @@ export default function MapPage({
                     borderRadius: 0,
                     justifyContent: "start",
                     paddingLeft: "10px",
-                    paddingRight: "100%",
+                    paddingRight: "72%",
                     "&:hover": {
                       borderRadius: 0,
                       backgroundColor: "rgba(0, 30, 60, 0.3)",
@@ -496,7 +493,7 @@ export default function MapPage({
                 sx={{
                   px: 2,
                   pb: 2,
-                  height: "100%",
+                  height: "92vh",
                   overflow: "auto",
                   backgroundColor: theme.palette.primary.light,
                 }}
@@ -536,7 +533,7 @@ export default function MapPage({
                   </>
                 )}
               </Box>
-            </SwipeableDrawer>
+            </Drawer>
           </>
         )}
       </MapProvider>
