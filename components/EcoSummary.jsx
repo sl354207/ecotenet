@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -7,7 +7,7 @@ import Link from "./Link";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
-const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
+const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   let wikiUrl;
 
   if (ecoFilter && !wiki) {
@@ -192,16 +192,16 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
             <Button
               variant="contained"
               color="secondary"
-              sx={{ marginBottom: "15px" }}
+              sx={{ marginBottom: "15px", marginTop: isMobile ? 0 : 3 }}
               href={`/ecoregions/${ecoFilter.unique_id}`}
             >
               visit full summary
             </Button>
-            <Typography variant="h4" align="center">
+            <Typography variant={isMobile ? "h5" : "h4"} align="center">
               Eco-{ecoFilter.unique_id}
             </Typography>
             <Typography
-              variant="h4"
+              variant={isMobile ? "h5" : "h4"}
               align="center"
               sx={{ marginBottom: "15px" }}
             >
@@ -216,44 +216,64 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter }) => {
             </Typography>
           ) : (
             <>
-              <Typography variant="h5" sx={{ marginTop: "10px" }}>
-                Source:{" "}
-                <Link
-                  href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
-                    " ",
-                    "_"
-                  )}?redirect=true`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Wikipedia
-                </Link>
-              </Typography>
-              {parse(
-                DOMPurify.sanitize(results && results.lead.sections[0].text),
-                options
+              {results ? (
+                <>
+                  <Typography
+                    variant={isMobile ? "h6" : "h5"}
+                    sx={{ marginTop: "10px" }}
+                  >
+                    Source:{" "}
+                    <Link
+                      href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
+                        " ",
+                        "_"
+                      )}?redirect=true`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover"
+                    >
+                      Wikipedia
+                    </Link>
+                  </Typography>
+                  {parse(
+                    DOMPurify.sanitize(
+                      results && results.lead.sections[0].text
+                    ),
+                    options
+                  )}
+                  {results &&
+                    results.remaining.sections.map((section) => {
+                      if (section.anchor == "Gallery") {
+                        return <></>;
+                      } else if (section.toclevel == 2) {
+                        return (
+                          <>
+                            <h2>{section.line}</h2>
+                            {parse(DOMPurify.sanitize(section.text), options)}
+                          </>
+                        );
+                      } else {
+                        return (
+                          <>
+                            <h1>{section.line}</h1>
+                            {parse(DOMPurify.sanitize(section.text), options)}
+                          </>
+                        );
+                      }
+                    })}
+                </>
+              ) : (
+                <CircularProgress
+                  color="secondary"
+                  size={50}
+                  disableShrink={true}
+                  sx={{
+                    margin: "10px auto",
+                    display: "flex",
+                    justifySelf: "center",
+                  }}
+                />
               )}
-              {results &&
-                results.remaining.sections.map((section) => {
-                  if (section.anchor == "Gallery") {
-                    return <></>;
-                  } else if (section.toclevel == 2) {
-                    return (
-                      <>
-                        <h2>{section.line}</h2>
-                        {parse(DOMPurify.sanitize(section.text), options)}
-                      </>
-                    );
-                  } else {
-                    return (
-                      <>
-                        <h1>{section.line}</h1>
-                        {parse(DOMPurify.sanitize(section.text), options)}
-                      </>
-                    );
-                  }
-                })}
             </>
           )}
         </>

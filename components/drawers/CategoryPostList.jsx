@@ -37,7 +37,7 @@ const CategoryPostList = ({
                 });
                 setItemSelect(true);
                 setItem(post._id);
-                setTab(2);
+                setTab({ id: 2, label: "Distributions" });
               }}
             >
               <div style={{ flex: "auto", marginRight: "20px" }}>

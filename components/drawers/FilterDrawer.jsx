@@ -101,7 +101,7 @@ const FilterDrawer = ({
         <Box
           sx={{
             position: "absolute",
-            top: { xs: "-80px", md: "-60px" },
+            top: { xs: "-40px", md: "-60px" },
             paddingBlock: { xs: "0px", md: "10px" },
             display: "flex",
             visibility: drawerOpen ? "visible" : "hidden",
@@ -112,7 +112,7 @@ const FilterDrawer = ({
           {isMobile && (
             <>
               <ButtonGroup
-                orientation="vertical"
+                // orientation="vertical"
                 aria-label="vertical outlined button group"
                 // size="small"
                 sx={{ marginLeft: "10px" }}
@@ -124,12 +124,12 @@ const FilterDrawer = ({
                   onClick={() => {
                     switch (drawerHeight) {
                       case 0:
-                        setTop("65vh");
+                        setTop("50vh");
                         setDrawerHeight(1);
 
                         break;
                       case 1:
-                        setTop("80px");
+                        setTop("40px");
                         setDrawerHeight(2);
 
                         break;
@@ -148,12 +148,12 @@ const FilterDrawer = ({
                   onClick={() => {
                     switch (drawerHeight) {
                       case 1:
-                        setTop("calc(100vh - 59px)");
+                        setTop("calc(85vh - 59px)");
                         setDrawerHeight(0);
 
                         break;
                       case 2:
-                        setTop("65vh");
+                        setTop("50vh");
                         setDrawerHeight(1);
 
                         break;

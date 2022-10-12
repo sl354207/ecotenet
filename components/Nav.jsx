@@ -56,7 +56,7 @@ const Nav = ({
 
   // const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const [top, setTop] = useState("65vh");
+  const [top, setTop] = useState("50vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   const [popper, setPopper] = useState(false);

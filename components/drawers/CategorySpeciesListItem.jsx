@@ -32,7 +32,7 @@ const CategorySpeciesListItem = ({
           });
           setItemSelect(true);
           setItem(result);
-          setTab(2);
+          setTab({ id: 2, label: "Distributions" });
         }}
       >
         <Typography variant="h6" color="textPrimary" align="left">

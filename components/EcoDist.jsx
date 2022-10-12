@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import theme from "@utils/theme";
-import Description from "./Description";
 
 const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   borderWidth: 2,
@@ -31,7 +30,7 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const EcoDist = ({ dist, setDist, state, dispatch }) => {
+const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
   const handleChange = async (e) => {
     // console.log(e);
     if (e.target.value) {
@@ -107,16 +106,27 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
   };
   return (
     <>
-      <Typography variant="h4" align="center" sx={{ marginBottom: "15px" }}>
-        Species Map
-      </Typography>
+      {!isMobile && (
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{ marginBottom: "15px", paddingTop: 3 }}
+        >
+          Species Map
+        </Typography>
+      )}
 
-      <Description
+      {/* <Description
         description=" Search for a species by common or scientific name to display their
   distribution on the map. A maximum of three species can be mapped at the
   same time"
         align="left"
-      />
+      /> */}
+      <Typography variant="body1" align="left">
+        Search for a species by common or scientific name to display their
+        distribution on the map. A maximum of three species can be mapped at the
+        same time
+      </Typography>
       <FormControl sx={{ display: "flex" }}>
         {/* <InputLabel htmlFor="keywords">Keywords:</InputLabel> */}
         <Autocomplete
@@ -159,7 +169,7 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
           renderInput={(params) => (
             <TextField
               {...params}
-              autoFocus
+              autoFocus={!isMobile}
               placeholder="Search…"
               variant="outlined"
               fullWidth
@@ -196,11 +206,13 @@ const EcoDist = ({ dist, setDist, state, dispatch }) => {
             />
           )}
         />
-        <FormHelperText
-          sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
-        >
-          (Filter drawer must be closed to search)
-        </FormHelperText>
+        {!isMobile && (
+          <FormHelperText
+            sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
+          >
+            (Filter drawer must be closed to search)
+          </FormHelperText>
+        )}
       </FormControl>
 
       <div style={{ display: "inline-grid", width: "100%" }}>

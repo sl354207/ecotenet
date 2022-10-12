@@ -166,7 +166,7 @@ export default function MyApp(props) {
 
   const [ecoFilter, setEcoFilter] = useState();
   const [visited, setVisited] = useState();
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState({ id: 0, label: "Ecoregions" });
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 

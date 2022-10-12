@@ -45,7 +45,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ paddingInline: 3 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -160,7 +160,7 @@ export default function MapPage({
     }
     setOpenEco(false);
     if (isMobile) {
-      setTop("65vh");
+      setTop("50vh");
       setDrawerHeight(1);
     }
   };
@@ -168,10 +168,25 @@ export default function MapPage({
   const [dist, setDist] = useState([]);
 
   const handleChange = (event, newValue) => {
-    setTab(newValue);
+    switch (newValue) {
+      case 0:
+        setTab({ id: newValue, label: "Ecoregions" });
+
+        break;
+      case 1:
+        setTab({ id: newValue, label: "Summary" });
+
+        break;
+      case 2:
+        setTab({ id: newValue, label: "Distributions" });
+        break;
+
+      default:
+        break;
+    }
   };
 
-  const [top, setTop] = useState("65vh");
+  const [top, setTop] = useState("50vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   return (
@@ -206,7 +221,7 @@ export default function MapPage({
               <Toolbar sx={{ display: "grid" }}>
                 <Tabs
                   // orientation="vertical"
-                  value={tab}
+                  value={tab.id}
                   onChange={handleChange}
                   aria-label="Vertical tabs example"
                   textColor="inherit"
@@ -282,7 +297,7 @@ export default function MapPage({
               <Box
                 sx={{
                   position: "absolute",
-                  top: "-80px",
+                  top: "-40px",
                   display: "flex",
                   visibility: openEco ? "visible" : "hidden",
                   width: "100vw",
@@ -292,7 +307,7 @@ export default function MapPage({
                 {isMobile && (
                   <>
                     <ButtonGroup
-                      orientation="vertical"
+                      // orientation="vertical"
                       aria-label="vertical outlined button group"
                       sx={{ marginLeft: "10px" }}
                     >
@@ -302,12 +317,12 @@ export default function MapPage({
                         onClick={() => {
                           switch (drawerHeight) {
                             case 0:
-                              setTop("65vh");
+                              setTop("50vh");
                               setDrawerHeight(1);
 
                               break;
                             case 1:
-                              setTop("80px");
+                              setTop("40px");
                               setDrawerHeight(2);
 
                               break;
@@ -325,12 +340,12 @@ export default function MapPage({
                         onClick={() => {
                           switch (drawerHeight) {
                             case 1:
-                              setTop("calc(100vh - 59px)");
+                              setTop("calc(85vh - 59px)");
                               setDrawerHeight(0);
 
                               break;
                             case 2:
-                              setTop("65vh");
+                              setTop("50vh");
                               setDrawerHeight(1);
 
                               break;
@@ -343,6 +358,21 @@ export default function MapPage({
                         <KeyboardArrowDownIcon />
                       </IconButton>
                     </ButtonGroup>
+                    <Typography
+                      align="center"
+                      variant="h5"
+                      disab
+                      sx={{
+                        position: "absolute",
+                        left: "0px",
+                        right: "0px",
+                        marginInline: "auto",
+                        marginTop: "3px",
+                        width: "fit-content",
+                      }}
+                    >
+                      {tab.label}
+                    </Typography>
                   </>
                 )}
 
@@ -363,7 +393,7 @@ export default function MapPage({
               >
                 {ecoregions && (
                   <>
-                    <TabPanel value={tab} index={0}>
+                    <TabPanel value={tab.id} index={0}>
                       <EcoRegions
                         ecoregions={ecoregions && ecoregions}
                         ecoMove={ecoMove}
@@ -376,21 +406,24 @@ export default function MapPage({
                         setTab={setTab}
                         click={click}
                         setClick={setClick}
+                        isMobile={isMobile}
                       />
                     </TabPanel>
-                    <TabPanel value={tab} index={1}>
+                    <TabPanel value={tab.id} index={1}>
                       <EcoSummary
                         wiki={wiki && wiki}
                         setWiki={setWiki}
                         ecoFilter={ecoFilter && ecoFilter}
+                        isMobile={isMobile}
                       />
                     </TabPanel>
-                    <TabPanel value={tab} index={2}>
+                    <TabPanel value={tab.id} index={2}>
                       <EcoDist
                         dist={dist}
                         setDist={setDist}
                         state={state}
                         dispatch={dispatch}
+                        isMobile={isMobile}
                       />
                     </TabPanel>
                   </>
@@ -451,7 +484,7 @@ export default function MapPage({
                 </IconButton>
                 <Tabs
                   orientation="vertical"
-                  value={tab}
+                  value={tab.id}
                   onChange={handleChange}
                   aria-label="Vertical tabs example"
                   sx={{
@@ -500,7 +533,7 @@ export default function MapPage({
               >
                 {ecoregions && (
                   <>
-                    <TabPanel value={tab} index={0}>
+                    <TabPanel value={tab.id} index={0}>
                       <EcoRegions
                         ecoregions={ecoregions && ecoregions}
                         ecoMove={ecoMove}
@@ -515,14 +548,14 @@ export default function MapPage({
                         setClick={setClick}
                       />
                     </TabPanel>
-                    <TabPanel value={tab} index={1}>
+                    <TabPanel value={tab.id} index={1}>
                       <EcoSummary
                         wiki={wiki && wiki}
                         setWiki={setWiki}
                         ecoFilter={ecoFilter && ecoFilter}
                       />
                     </TabPanel>
-                    <TabPanel value={tab} index={2}>
+                    <TabPanel value={tab.id} index={2}>
                       <EcoDist
                         dist={dist}
                         setDist={setDist}

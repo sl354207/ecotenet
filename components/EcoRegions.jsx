@@ -14,6 +14,7 @@ const EcoRegions = ({
   setTab,
   click,
   setClick,
+  isMobile,
 }) => {
   const sorted = ecoregions.sort(function (a, b) {
     return a.unique_id - b.unique_id;
@@ -45,7 +46,7 @@ const EcoRegions = ({
         // essential: true,
       });
       if (!visitedHome && !click) {
-        setTab(1);
+        setTab({ id: 1, label: "Summary" });
       }
       setClick(true);
     },
@@ -55,14 +56,22 @@ const EcoRegions = ({
   return (
     <>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant="h4" align="center" sx={{ marginBottom: "15px" }}>
-          Ecoregions
-        </Typography>
+        {!isMobile && (
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{ marginBottom: "15px", paddingTop: 3 }}
+          >
+            Ecoregions
+          </Typography>
+        )}
+
         <Typography variant="h6" align="center">
           Select an ecoregion on the map or from the list below
         </Typography>
       </div>
 
+      {/* {ecoregions ? ( */}
       <List>
         {sorted.map((ecoregion) => {
           return (
@@ -72,6 +81,18 @@ const EcoRegions = ({
           );
         })}
       </List>
+      {/* ) : (
+        <CircularProgress
+          color="secondary"
+          size={50}
+          disableShrink={true}
+          sx={{
+            margin: "100px auto",
+            display: "flex",
+            justifySelf: "center",
+          }}
+        />
+      )} */}
     </>
   );
 };

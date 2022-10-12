@@ -177,7 +177,7 @@ const MapMain = ({
       setShowPopup(true);
 
       if (!visitedHome && !click) {
-        setTab(1);
+        setTab({ id: 1, label: "Summary" });
       }
 
       const region = event.features && event.features[0];
