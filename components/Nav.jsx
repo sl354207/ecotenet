@@ -150,7 +150,7 @@ const Nav = ({
     }
     setDrawerOpen(false);
     if (isMobile) {
-      setTop("65vh");
+      setTop("50vh");
       setDrawerHeight(1);
     }
   };
