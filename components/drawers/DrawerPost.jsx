@@ -35,7 +35,7 @@ const DrawerPost = ({ id }) => {
   let styles = {
     border: "none",
     width: "100%",
-    height: "50vh",
+    height: "48vh",
   };
   return (
     <>

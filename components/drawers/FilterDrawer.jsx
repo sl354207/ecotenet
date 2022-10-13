@@ -170,8 +170,13 @@ const FilterDrawer = ({
           )}
           <Button
             sx={{
-              flexGrow: 1,
-              marginInline: "10px",
+              flexGrow: { xs: 0, md: 1 },
+              marginInline: { xs: "auto", md: "10px" },
+              position: { xs: "absolute", md: "relative" },
+              left: "0px",
+              right: "0px",
+
+              width: { xs: "55vw", md: "auto" },
             }}
             onClick={() => {
               setDrawerOpen(false);
@@ -182,7 +187,10 @@ const FilterDrawer = ({
           >
             ECO-{ecoFilter && ecoFilter.unique_id}
           </Button>
-          <IconButton onClick={handleDrawerClose} sx={{ marginRight: "10px" }}>
+          <IconButton
+            onClick={handleDrawerClose}
+            sx={{ marginLeft: "auto", marginRight: "10px" }}
+          >
             <CloseIcon />
           </IconButton>
         </Box>

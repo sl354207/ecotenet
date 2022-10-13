@@ -304,7 +304,16 @@ const post = ({ post }) => {
                 align="left"
                 variant="h6"
               >
-                {isMobile ? date.toLocaleDateString() : date.toDateString()}
+                {isMobile ? (
+                  <>
+                    {" "}
+                    {post.updated && "Updated:"} {date.toLocaleDateString()}
+                  </>
+                ) : (
+                  <>
+                    {post.updated && "Updated:"} {date.toDateString()}
+                  </>
+                )}
               </Typography>
             </div>
             <Typography variant="h6">

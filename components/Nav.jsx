@@ -160,14 +160,27 @@ const Nav = ({
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
         <Toolbar sx={{ paddingLeft: "10px", paddingRight: "0px" }}>
           {ecoFilter && (
-            <Button
-              onClick={handleDrawerOpen}
-              endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
-              variant="contained"
-              color="secondary"
-            >
-              Eco-{ecoFilter.unique_id}
-            </Button>
+            <>
+              {isMobile ? (
+                <Button
+                  onClick={handleDrawerOpen}
+                  endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Eco-{ecoFilter.unique_id}
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleDrawerOpen}
+                  // endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Eco-{ecoFilter.unique_id} Filter
+                </Button>
+              )}
+            </>
           )}
 
           <Button
