@@ -484,6 +484,8 @@ const searchEcoPosts = async (query, eco) => {
                     },
                   },
                 },
+              },
+              {
                 text: {
                   query: `${eco}`,
                   path: "ecoregions",

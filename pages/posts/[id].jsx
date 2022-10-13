@@ -397,24 +397,7 @@ const post = ({ post }) => {
 // UPDATE!!! POSSIBLY ONLY STATIC FOR USER TESTING UNTIL UPGRADE ACCOUNT
 
 // fetch post data at build time
-export const getServerSideProps = async (context) => {
-  // context allows us to fetch specific data points from data such as id
-  const _id = context.params.id;
-
-  const post = await getPostById(_id);
-
-  // const comments = await getPostComments(post._id.toString());
-
-  return {
-    props: {
-      post: JSON.parse(JSON.stringify(post)),
-      // comments: JSON.parse(JSON.stringify(comments)),
-    },
-  };
-};
-
-// fetch post data at build time
-// export const getStaticProps = async (context) => {
+// export const getServerSideProps = async (context) => {
 //   // context allows us to fetch specific data points from data such as id
 //   const _id = context.params.id;
 
@@ -427,24 +410,41 @@ export const getServerSideProps = async (context) => {
 //       post: JSON.parse(JSON.stringify(post)),
 //       // comments: JSON.parse(JSON.stringify(comments)),
 //     },
-//     revalidate: 60,
 //   };
 // };
 
-// // build routing paths for each post at build time
-// export const getStaticPaths = async () => {
-//   const posts = await getPosts("published", "true");
+// fetch post data at build time
+export const getStaticProps = async (context) => {
+  // context allows us to fetch specific data points from data such as id
+  const _id = context.params.id;
 
-//   // create array of ids of each post in posts
-//   const ids = posts.map((post) => post._id);
+  const post = await getPostById(_id);
 
-//   // create paths array with objects that follow structure given
-//   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
+  // const comments = await getPostComments(post._id.toString());
 
-//   return {
-//     paths,
-//     fallback: "blocking",
-//   };
-// };
+  return {
+    props: {
+      post: JSON.parse(JSON.stringify(post)),
+      // comments: JSON.parse(JSON.stringify(comments)),
+    },
+    revalidate: 60,
+  };
+};
+
+// build routing paths for each post at build time
+export const getStaticPaths = async () => {
+  const posts = await getPosts("published", "true");
+
+  // create array of ids of each post in posts
+  const ids = posts.map((post) => post._id);
+
+  // create paths array with objects that follow structure given
+  const paths = ids.map((id) => ({ params: { id: id.toString() } }));
+
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
 
 export default post;
