@@ -31,7 +31,7 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { updatePost } from "@utils/api-helpers";
-import { getPostById } from "@utils/mongodb/helpers";
+import { getPostById, getPosts } from "@utils/mongodb/helpers";
 import theme from "@utils/theme";
 import useOnScreen from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
