@@ -12,7 +12,7 @@ const featured = ({ featured }) => {
         <Header title="Featured Posts" />
 
         <Description
-          description="These are currently our favorite posts picked from the entire site"
+          description="These are currently our favorite posts that people have shared on the site"
           align="center"
         />
         <PostList posts={featured} featured={true} />

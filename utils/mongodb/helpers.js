@@ -148,6 +148,7 @@ const getFeatures = async () => {
     .collection("posts")
     .find({ feature: "true" })
     .project({ title: 1, description: 1, name: 1, count: 1, approved: 1 })
+    .sort({ count: -1 })
     .toArray();
 
   return features;
