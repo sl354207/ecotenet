@@ -167,7 +167,7 @@ const MapMain = ({
   const [viewState, setViewState] = useState({
     latitude: 37.8,
     longitude: -98,
-    zoom: 4,
+    zoom: 3,
   });
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
