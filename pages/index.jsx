@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 // import dynamic from "next/dynamic";
+import WelcomeDialog from "@components/dialogs/WelcomeDialog";
 import EcoDist from "@components/EcoDist";
 import EcoRegions from "@components/EcoRegions";
 import EcoSummary from "@components/EcoSummary";
@@ -570,6 +571,7 @@ export default function MapPage({
           </>
         )}
       </MapProvider>
+      {!visited && <WelcomeDialog />}
     </div>
   );
 }

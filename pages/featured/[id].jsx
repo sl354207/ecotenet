@@ -9,6 +9,7 @@ import { useUserContext } from "@components/UserContext";
 import Vote from "@components/Vote";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
+  Box,
   CircularProgress,
   Container,
   Divider,
@@ -244,7 +245,13 @@ const post = ({ post }) => {
               marginLeft: "20px",
             }}
           >
-            <div style={{ display: "flex" }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                alignItems: "start",
+              }}
+            >
               <Typography align="center" variant="h6">
                 <Link
                   href={`/person/${post.name}`}
@@ -255,7 +262,10 @@ const post = ({ post }) => {
                 </Link>
               </Typography>
               <Typography
-                sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                sx={{
+                  marginLeft: { xs: "0px", md: "20px" },
+                  fontStyle: "italic",
+                }}
                 align="left"
                 variant="h6"
               >
@@ -270,7 +280,7 @@ const post = ({ post }) => {
                   </>
                 )}
               </Typography>
-            </div>
+            </Box>
             <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (

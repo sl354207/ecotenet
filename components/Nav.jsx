@@ -51,6 +51,7 @@ const Nav = ({
   }
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(theme.breakpoints.down("lg"));
 
   const router = useRouter();
 
@@ -161,12 +162,13 @@ const Nav = ({
         <Toolbar sx={{ paddingLeft: "10px", paddingRight: "0px" }}>
           {ecoFilter && (
             <>
-              {isMobile ? (
+              {isTab ? (
                 <Button
                   onClick={handleDrawerOpen}
                   endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
                   variant="contained"
                   color="secondary"
+                  size={isTab ? "small" : "medium"}
                 >
                   Eco-{ecoFilter.unique_id}
                 </Button>
@@ -187,19 +189,21 @@ const Nav = ({
             href="/featured"
             variant="text"
             color="secondary"
+            size={isTab ? "small" : "medium"}
             sx={{
-              display: { xs: "none", lg: "block" },
+              display: { xs: "none", md: "block" },
               marginLeft: "10px",
             }}
           >
-            Featured Posts
+            {isTab ? "Featured" : "Featured Posts"}
           </Button>
           <Button
             href="/about"
             variant="text"
             color="secondary"
+            size={isTab ? "small" : "medium"}
             sx={{
-              display: { xs: "none", lg: "block" },
+              display: { xs: "none", md: "block" },
               marginLeft: "10px",
             }}
           >
@@ -210,13 +214,14 @@ const Nav = ({
             <Button
               variant="text"
               color="secondary"
+              size={isTab ? "small" : "medium"}
               onClick={
                 status == "authenticated" && user.name == undefined
                   ? () => router.push("/auth/new-user")
                   : () => router.push("/dashboard")
               }
               sx={{
-                display: { xs: "none", lg: "block" },
+                display: { xs: "none", md: "block" },
               }}
             >
               Dashboard
@@ -224,6 +229,7 @@ const Nav = ({
           )}
           <Button
             color="secondary"
+            size={isTab ? "small" : "medium"}
             href="/"
             sx={{
               position: "absolute",
@@ -246,6 +252,7 @@ const Nav = ({
 
           <IconButton
             color="secondary"
+            // size={isTab ? "small" : "large"}
             size="large"
             sx={{ marginLeft: "auto", marginRight: "5px" }}
             onClick={handleClickSearch}
@@ -259,7 +266,7 @@ const Nav = ({
             ecoFilter={ecoFilter && ecoFilter}
           />
 
-          <Box sx={{ display: { xs: "block", lg: "none" } }}>
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
             <IconButton
               edge="end"
               color="inherit"
@@ -414,7 +421,7 @@ const Nav = ({
               )}
             </Popper>
           </Box>
-          <Box sx={{ display: { xs: "none", lg: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {status == "authenticated" && (
               <>
                 {user.name == undefined ? (
@@ -422,6 +429,7 @@ const Nav = ({
                     sx={{ marginLeft: "10px" }}
                     variant="outlined"
                     color="secondary"
+                    size={isTab ? "small" : "medium"}
                     onClick={() => router.push("/auth/new-user")}
                   >
                     Create Post
@@ -440,6 +448,7 @@ const Nav = ({
             <Button
               variant="outlined"
               color="secondary"
+              size={isTab ? "small" : "medium"}
               sx={{ marginLeft: "10px" }}
               disabled={status == "loading"}
               onClick={
@@ -458,6 +467,7 @@ const Nav = ({
               href="/donate"
               variant="contained"
               color="secondary"
+              size={isTab ? "small" : "medium"}
               sx={{ marginLeft: "10px" }}
             >
               Donate
