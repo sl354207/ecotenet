@@ -257,7 +257,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       <Header title="Select Ecoregions" />
 
       <Description
-        description="Choose which ecoregions apply to your post. You may add or delete
+        description="To help determine which ecoregions your post applies to you can add single or multiple species distributions to the map. These distributions may help you determine relevant ecoregions for your post. You may add or delete
         ecoregions by double clicking on the map. A single click highlights the
         ecoregion and displays the Eco-ID and ecoregion name"
         align="left"

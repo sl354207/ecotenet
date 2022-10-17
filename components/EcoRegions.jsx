@@ -67,7 +67,8 @@ const EcoRegions = ({
         )}
 
         <Typography variant="h6" align="center">
-          Select an ecoregion on the map or from the list below
+          Select an ecoregion on the map, or from the list below, to view a
+          summary and filter an ecoregion by category
         </Typography>
       </div>
 
