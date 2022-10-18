@@ -1,6 +1,6 @@
-import Description from "@components/Description";
-import EditorLayout from "@components/EditorLayout";
-import Header from "@components/Header";
+import Description from "@components/layouts/Description";
+import EditorLayout from "@components/layouts/EditorLayout";
+import Header from "@components/layouts/Header";
 import { Container, createTheme } from "@mui/material";
 import customImage from "@plugins/customImage";
 import Editor, { defaultThemeOptions } from "@react-page/editor";

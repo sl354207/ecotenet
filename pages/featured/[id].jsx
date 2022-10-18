@@ -1,12 +1,12 @@
 import CommentList from "@components/comments/CommentList";
+import { useUserContext } from "@components/context/UserContext";
 import ClientDialog from "@components/dialogs/ClientDialog";
 import Flag from "@components/dialogs/Flag";
-import EditorLayout from "@components/EditorLayout";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import { useUserContext } from "@components/UserContext";
-import Vote from "@components/Vote";
+import EditorLayout from "@components/layouts/EditorLayout";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
+import Vote from "@components/layouts/Vote";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
   Box,

@@ -1,4 +1,4 @@
-import Link from "@components/Link";
+import Link from "@components/layouts/Link";
 import { Typography } from "@mui/material";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";

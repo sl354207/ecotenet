@@ -1,5 +1,5 @@
-import StepForm from "@components/postForm/StepForm";
-import { useUserContext } from "@components/UserContext";
+import { useUserContext } from "@components/context/UserContext";
+import StepForm from "@components/forms/StepForm";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import useSWR from "swr";

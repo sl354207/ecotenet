@@ -1,7 +1,7 @@
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import PostList from "@components/PostList";
-import SpeciesList from "@components/SpeciesList";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import PostList from "@components/layouts/PostList";
+import SpeciesList from "@components/layouts/SpeciesList";
 import {
   Autocomplete,
   CircularProgress,

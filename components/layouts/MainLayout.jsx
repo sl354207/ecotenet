@@ -1,10 +1,10 @@
+import { SnackbarProvider } from "@components/context/SnackbarContext";
+import Meta from "@components/layouts/Meta";
+import Nav from "@components/layouts/Nav";
 import { useRouter } from "next/router";
-import Meta from "./Meta";
-import Nav from "./Nav";
-import { SnackbarProvider } from "./SnackbarContext";
 
 // pass in children as a prop so any components in Layout tag in _app.js get rendered inside Layout
-const Layout = ({
+const MainLayout = ({
   children,
   ecoFilter,
   state,
@@ -41,4 +41,4 @@ const Layout = ({
   );
 };
 
-export default Layout;
+export default MainLayout;

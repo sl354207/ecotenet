@@ -1,5 +1,5 @@
+import Link from "@components/layouts/Link";
 import { Button, Container, Divider, Grid, Typography } from "@mui/material";
-import Link from "./Link";
 
 const Footer = () => {
   return (

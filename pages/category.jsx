@@ -1,6 +1,6 @@
-import Description from "@components/Description";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
+import Description from "@components/layouts/Description";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
 
 const category = () => {

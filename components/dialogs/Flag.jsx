@@ -1,5 +1,5 @@
-import { useSnackbarContext } from "@components/SnackbarContext";
-import TextBox from "@components/TextBox";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import TextBox from "@components/inputFields/TextBox";
 import {
   Button,
   Dialog,

@@ -1,7 +1,7 @@
 import AdminDialog from "@components/dialogs/AdminDialog";
 import Resolve from "@components/dialogs/Resolve";
-import Header from "@components/Header";
-import Link from "@components/Link";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import { useRouter } from "next/router";

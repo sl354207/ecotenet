@@ -1,5 +1,5 @@
-import PostList from "@components/PostList";
-import SpeciesList from "@components/SpeciesList";
+import PostList from "@components/layouts/PostList";
+import SpeciesList from "@components/layouts/SpeciesList";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   alpha,

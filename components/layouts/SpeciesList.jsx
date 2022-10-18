@@ -1,5 +1,5 @@
+import SpeciesItem from "@components/layouts/SpeciesItem";
 import { List } from "@mui/material";
-import SpeciesItem from "./SpeciesItem";
 
 // pass in post as prop from PostList
 const SpeciesList = ({ results }) => {

@@ -1,7 +1,7 @@
+import { useSnackbarContext } from "@components/context/SnackbarContext";
 import AdminDrawer from "@components/drawers/AdminDrawer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import { useSnackbarContext } from "@components/SnackbarContext";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import {

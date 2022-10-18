@@ -1,4 +1,4 @@
-import SpeciesItem from "@components/SpeciesItem";
+import SpeciesItem from "@components/layouts/SpeciesItem";
 import {
   AppBar,
   Button,

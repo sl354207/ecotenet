@@ -1,7 +1,7 @@
-import Description from "@components/Description";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import PostList from "@components/PostList";
+import Description from "@components/layouts/Description";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import PostList from "@components/layouts/PostList";
 import { Container } from "@mui/material";
 import { getFeatures } from "@utils/mongodb/helpers";
 

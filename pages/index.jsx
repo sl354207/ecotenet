@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 // import dynamic from "next/dynamic";
 import WelcomeDialog from "@components/dialogs/WelcomeDialog";
-import EcoDist from "@components/EcoDist";
-import EcoRegions from "@components/EcoRegions";
-import EcoSummary from "@components/EcoSummary";
+import EcoDist from "@components/drawers/EcoDist";
+import EcoRegions from "@components/drawers/EcoRegions";
+import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
 import Coords from "@data/eco_coord.json";
 

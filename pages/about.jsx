@@ -1,6 +1,6 @@
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import { Container, Typography } from "@mui/material";
 
 const about = () => {

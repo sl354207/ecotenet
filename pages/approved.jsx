@@ -1,4 +1,4 @@
-import Header from "@components/Header";
+import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
 import { fetchGetJSON } from "@utils/stripe/api-helpers";
 import { useRouter } from "next/router";

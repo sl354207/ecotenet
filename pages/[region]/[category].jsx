@@ -1,8 +1,8 @@
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import PostList from "@components/PostList";
-import SpeciesScroll from "@components/SpeciesScroll";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
+import PostList from "@components/layouts/PostList";
+import SpeciesScroll from "@components/layouts/SpeciesScroll";
 import { Container, Typography } from "@mui/material";
 import {
   getPostsByCategoryAndRegion,

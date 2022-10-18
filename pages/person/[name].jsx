@@ -1,9 +1,9 @@
+import { useUserContext } from "@components/context/UserContext";
 import Flag from "@components/dialogs/Flag";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import PostList from "@components/PostList";
-import { useUserContext } from "@components/UserContext";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
+import PostList from "@components/layouts/PostList";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
 import { getPerson, getProfilePosts } from "@utils/mongodb/helpers";

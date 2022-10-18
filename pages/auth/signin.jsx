@@ -1,7 +1,7 @@
-import Description from "@components/Description";
-import EmailInput from "@components/EmailInput";
-import Header from "@components/Header";
-import VerificationStep from "@components/VerificationStep";
+import EmailInput from "@components/inputFields/EmailInput";
+import VerificationStep from "@components/inputFields/VerificationStep";
+import Description from "@components/layouts/Description";
+import Header from "@components/layouts/Header";
 import { Container } from "@mui/material";
 import { getProviders, getSession } from "next-auth/react";
 

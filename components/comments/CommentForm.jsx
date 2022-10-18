@@ -1,4 +1,4 @@
-import TextBox from "@components/TextBox";
+import TextBox from "@components/inputFields/TextBox";
 import { Button, FormControl, InputLabel, Portal } from "@mui/material";
 import { useRef, useState } from "react";
 

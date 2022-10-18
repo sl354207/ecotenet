@@ -1,5 +1,5 @@
-import EditorLayout from "@components/EditorLayout";
-import Link from "@components/Link";
+import EditorLayout from "@components/layouts/EditorLayout";
+import Link from "@components/layouts/Link";
 import {
   Button,
   CircularProgress,

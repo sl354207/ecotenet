@@ -1,5 +1,5 @@
-import { useSnackbarContext } from "@components/SnackbarContext";
-import TextBox from "@components/TextBox";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import TextBox from "@components/inputFields/TextBox";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {

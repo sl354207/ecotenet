@@ -1,5 +1,4 @@
-import Layout from "@components/Layout";
-import { UserProvider } from "@components/UserContext";
+import { UserProvider } from "@components/context/UserContext";
 
 import "@styles/globals.css";
 
@@ -9,6 +8,7 @@ import { useRouter } from "next/router";
 
 import { useEffect, useReducer, useState } from "react";
 
+import MainLayout from "@components/layouts/MainLayout";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
@@ -202,7 +202,7 @@ export default function MyApp(props) {
           <ThemeProvider theme={theme}>
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
-            <Layout
+            <MainLayout
               ecoFilter={ecoFilter}
               state={state}
               dispatch={dispatch}
@@ -224,7 +224,7 @@ export default function MyApp(props) {
                 setOpenEco={setOpenEco}
                 {...pageProps}
               />
-            </Layout>
+            </MainLayout>
           </ThemeProvider>
         </UserProvider>
       </SessionProvider>

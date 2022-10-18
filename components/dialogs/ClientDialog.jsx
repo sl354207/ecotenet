@@ -1,4 +1,4 @@
-import { useSnackbarContext } from "@components/SnackbarContext";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
 import {
   Button,
   Dialog,

@@ -1,6 +1,6 @@
+import { useSnackbarContext } from "@components/context/SnackbarContext";
 import DashboardDialog from "@components/dialogs/DashboardDialog";
-import Link from "@components/Link";
-import { useSnackbarContext } from "@components/SnackbarContext";
+import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";

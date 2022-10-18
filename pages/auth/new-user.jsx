@@ -1,8 +1,8 @@
-import Description from "@components/Description";
-import Header from "@components/Header";
-import { useSnackbarContext } from "@components/SnackbarContext";
-import TextBox from "@components/TextBox";
-import { useUserContext } from "@components/UserContext";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import { useUserContext } from "@components/context/UserContext";
+import TextBox from "@components/inputFields/TextBox";
+import Description from "@components/layouts/Description";
+import Header from "@components/layouts/Header";
 import { Button, Container } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
