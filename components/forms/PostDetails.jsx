@@ -252,7 +252,7 @@ const PostDetails = ({
               autoHighlight
               disabled={tags.length > 2 ? true : false}
               disableClearable={true}
-              value={tags}
+              value={[]}
               onChange={(event, newValue) => {
                 setDetails((details) => ({
                   ...details,

@@ -33,15 +33,30 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     },
   };
   // click layer
+  // const ecoFill2 = {
+  //   id: "eco-fill2",
+  //   type: "fill-extrusion",
+  //   // source: "eco-fill",
+  //   "source-layer": "ecomap-tiles",
+  //   paint: {
+  //     // "fill-extrusion-outline-color": "rgba(255,255,255,1)",
+  //     "fill-extrusion-color": "#dddddd",
+  //     "fill-extrusion-opacity": 0.8,
+  //     "fill-extrusion-height": 200000,
+  //     "fill-extrusion-base": 0,
+  //   },
+  // };
   const ecoFill2 = {
     id: "eco-fill2",
     type: "fill",
     // source: "eco-fill",
     "source-layer": "ecomap-tiles",
     paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
+      "fill-outline-color": "rgba(255,255,255,1)",
       "fill-color": "#dddddd",
-      "fill-opacity": 1,
+      "fill-opacity": 0.8,
+      // "fill-extrusion-height": 200000,
+      // "fill-extrusion-base": 0,
     },
   };
   // selected layer
@@ -259,19 +274,21 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
               {...ecoFill3}
               filter={speciesFilter1}
             />
-            <Layer
-              id="click"
-              beforeId="waterway-label"
-              {...ecoFill2}
-              filter={clickFilter}
-            />
+
             <Layer
               id="hover"
               beforeId="waterway-label"
               {...ecoFill1}
               filter={filter}
             />
+
             <Layer beforeId="waterway-label" {...ecoLine} />
+            <Layer
+              id="click"
+              beforeId="waterway-label"
+              {...ecoFill2}
+              filter={clickFilter}
+            />
           </Source>
           {selectedRegion && showPopup && (
             <Popup

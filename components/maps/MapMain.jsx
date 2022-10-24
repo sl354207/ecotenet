@@ -1,4 +1,4 @@
-import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+// import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
