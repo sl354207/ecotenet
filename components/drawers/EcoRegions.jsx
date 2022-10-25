@@ -21,11 +21,11 @@ const EcoRegions = ({
   });
 
   const { mapA } = useMap();
-  console.log(`initial ${mapA}`);
+  // console.log(`initial ${mapA}`);
 
   const ecoClick = useCallback(
     (ecoregion) => {
-      console.log(`initial click ${mapA}`);
+      // console.log(`initial click ${mapA}`);
       setShowPopup(true);
 
       setHoverInfo({
@@ -51,9 +51,9 @@ const EcoRegions = ({
         setTab({ id: 1, label: "Summary" });
       }
       setClick(true);
-      console.log(`final ${mapA}`);
+      // console.log(`final ${mapA}`);
     },
-    [ecoMove, mapA]
+    [mapA, ecoMove]
   );
 
   return (
