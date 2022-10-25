@@ -45,11 +45,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ paddingInline: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ paddingInline: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -270,7 +266,7 @@ export default function MapPage({
               anchor="bottom"
               open={openEco}
               onClose={handleDrawerClose}
-              onOpen={handleDrawerOpen}
+              // onOpen={handleDrawerOpen}
               // swipeAreaWidth={drawerBleeding}
               // disableSwipeToOpen={true}
               // ModalProps={{
@@ -438,7 +434,7 @@ export default function MapPage({
               anchor="right"
               open={openEco}
               onClose={handleDrawerClose}
-              onOpen={handleDrawerOpen}
+              // onOpen={handleDrawerOpen}
               // swipeAreaWidth={drawerBleeding}
               // disableSwipeToOpen={true}
               // ModalProps={{

@@ -76,7 +76,11 @@ const EcoRegions = ({
       <List>
         {sorted.map((ecoregion) => {
           return (
-            <ListItem button onClick={() => ecoClick(ecoregion)}>
+            <ListItem
+              button
+              onClick={() => ecoClick(ecoregion)}
+              key={ecoregion.unique_id}
+            >
               Eco-{ecoregion.unique_id}: {ecoregion.name}
             </ListItem>
           );
