@@ -6,7 +6,7 @@ import customImage from "@plugins/customImage";
 import Editor, { defaultThemeOptions } from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
-import "@react-page/plugins-image/lib/index.css";
+import "@react-page/plugins-divider/lib/index.css";
 import slate from "@react-page/plugins-slate";
 import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";

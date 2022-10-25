@@ -64,7 +64,9 @@ const ImageRender = ({ data, preview }) => {
                   }}
                 >
                   {data.caption && (
-                    <Typography variant="caption">{data.caption}.</Typography>
+                    <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                      {data.caption}.
+                    </Typography>
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}</Typography>
@@ -175,7 +177,9 @@ const ImageRender = ({ data, preview }) => {
                   }}
                 >
                   {data.caption && (
-                    <Typography variant="caption">{data.caption}.</Typography>
+                    <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                      {data.caption}.
+                    </Typography>
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}</Typography>
