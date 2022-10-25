@@ -104,10 +104,7 @@ export default function MapPage({
 
   const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
 
-  const drawerBleeding = 56;
   const drawerWidth = 350;
-
-  // const [openEco, setOpenEco] = useState(false);
 
   const [visitedHome, setVisitedHome] = useState(false);
 
@@ -266,15 +263,7 @@ export default function MapPage({
               anchor="bottom"
               open={openEco}
               onClose={handleDrawerClose}
-              // onOpen={handleDrawerOpen}
-              // swipeAreaWidth={drawerBleeding}
-              // disableSwipeToOpen={true}
-              // ModalProps={{
-              //   keepMounted: true,
-              // }}
               hideBackdrop
-              // variant="persistent"
-              // elevation={10}
               sx={{
                 width: "100%",
                 flexShrink: 0,
@@ -434,15 +423,8 @@ export default function MapPage({
               anchor="right"
               open={openEco}
               onClose={handleDrawerClose}
-              // onOpen={handleDrawerOpen}
-              // swipeAreaWidth={drawerBleeding}
-              // disableSwipeToOpen={true}
-              // ModalProps={{
-              //   keepMounted: true,
-              // }}
               hideBackdrop
               variant="persistent"
-              // elevation={17}
               sx={{
                 display: { xs: "none", md: "block" },
                 "&.MuiDrawer-root > .MuiPaper-root": {
