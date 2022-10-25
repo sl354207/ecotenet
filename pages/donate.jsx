@@ -1,5 +1,5 @@
-import DonateForm from "@components/DonateForm";
-import Header from "@components/Header";
+import DonateForm from "@components/forms/DonateForm";
+import Header from "@components/layouts/Header";
 import { Container } from "@mui/material";
 
 const donate = () => {

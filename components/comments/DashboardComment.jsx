@@ -1,5 +1,5 @@
-import Link from "@components/Link";
-import TextBox from "@components/TextBox";
+import TextBox from "@components/inputFields/TextBox";
+import Link from "@components/layouts/Link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,

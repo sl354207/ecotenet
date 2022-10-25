@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 // import dynamic from "next/dynamic";
 import WelcomeDialog from "@components/dialogs/WelcomeDialog";
-import EcoDist from "@components/EcoDist";
-import EcoRegions from "@components/EcoRegions";
-import EcoSummary from "@components/EcoSummary";
+import EcoDist from "@components/drawers/EcoDist";
+import EcoRegions from "@components/drawers/EcoRegions";
+import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
 import Coords from "@data/eco_coord.json";
 
@@ -45,11 +45,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ paddingInline: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ paddingInline: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -108,10 +104,7 @@ export default function MapPage({
 
   const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
 
-  const drawerBleeding = 56;
   const drawerWidth = 350;
-
-  // const [openEco, setOpenEco] = useState(false);
 
   const [visitedHome, setVisitedHome] = useState(false);
 
@@ -270,15 +263,7 @@ export default function MapPage({
               anchor="bottom"
               open={openEco}
               onClose={handleDrawerClose}
-              onOpen={handleDrawerOpen}
-              // swipeAreaWidth={drawerBleeding}
-              // disableSwipeToOpen={true}
-              // ModalProps={{
-              //   keepMounted: true,
-              // }}
               hideBackdrop
-              // variant="persistent"
-              // elevation={10}
               sx={{
                 width: "100%",
                 flexShrink: 0,
@@ -438,15 +423,8 @@ export default function MapPage({
               anchor="right"
               open={openEco}
               onClose={handleDrawerClose}
-              onOpen={handleDrawerOpen}
-              // swipeAreaWidth={drawerBleeding}
-              // disableSwipeToOpen={true}
-              // ModalProps={{
-              //   keepMounted: true,
-              // }}
               hideBackdrop
               variant="persistent"
-              // elevation={17}
               sx={{
                 display: { xs: "none", md: "block" },
                 "&.MuiDrawer-root > .MuiPaper-root": {

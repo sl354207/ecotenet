@@ -1,9 +1,9 @@
 import AdminCommentList from "@components/comments/AdminCommentList";
 import AdminDialog from "@components/dialogs/AdminDialog";
 import Resolve from "@components/dialogs/Resolve";
-import EditorLayout from "@components/EditorLayout";
-import Header from "@components/Header";
-import Link from "@components/Link";
+import EditorLayout from "@components/layouts/EditorLayout";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Button,

@@ -1,4 +1,4 @@
-import Link from "@components/Link";
+import Link from "@components/layouts/Link";
 import { Typography } from "@mui/material";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/image";
@@ -64,7 +64,9 @@ const ImageRender = ({ data, preview }) => {
                   }}
                 >
                   {data.caption && (
-                    <Typography variant="caption">{data.caption}.</Typography>
+                    <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                      {data.caption}.
+                    </Typography>
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}</Typography>
@@ -175,7 +177,9 @@ const ImageRender = ({ data, preview }) => {
                   }}
                 >
                   {data.caption && (
-                    <Typography variant="caption">{data.caption}.</Typography>
+                    <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                      {data.caption}.
+                    </Typography>
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}</Typography>

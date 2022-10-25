@@ -1,4 +1,4 @@
-import Link from "@components/Link";
+import Link from "@components/layouts/Link";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FlagIcon from "@mui/icons-material/Flag";

@@ -1,6 +1,6 @@
 // import Header from "./Header";
 
-import Link from "@components/Link";
+import Link from "@components/layouts/Link";
 import {
   Breadcrumbs,
   Button,

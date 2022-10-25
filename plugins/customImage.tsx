@@ -32,6 +32,7 @@ const customImage: CellPlugin<Data> = {
     width: undefined,
     height: undefined
   }),
+  isInlineable: true,
   
    // the Renderer displays the output of the plugin.
   Renderer: ({ data, isPreviewMode }) => (

@@ -1,4 +1,4 @@
-import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+// import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -23,52 +23,9 @@ const MapMain = ({
   setMapLoc,
 }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  setMapLoc(true);
-
-  //  base layer
-  // const ecoFill = {
-  //   id: "eco-fill",
-  //   type: "fill",
-  //   // source: "eco-data",
-  //   "source-layer": "ecomap-tiles",
-  //   paint: {
-  //     "fill-outline-color": "rgba(0,0,0,1)",
-  //     "fill-color": "#627BC1",
-  //     "fill-opacity": 0,
-  //   },
-  // };
-
-  // // hover layer
-  // const ecoFill1 = {
-  //   id: "eco-fill1",
-  //   type: "fill",
-  //   // source: "eco-fill",
-  //   "source-layer": "ecomap-tiles",
-  //   paint: {
-  //     "fill-outline-color": "rgba(0,0,0,1)",
-  //     // "fill-color": "#627BC1",
-  //     "fill-color": "#94c9ff",
-  //     "fill-opacity": 0.5,
-  //   },
-  // };
-
-  // // outline layer
-  // const ecoLine = {
-  //   id: "eco-line",
-  //   type: "line",
-  //   // source: "eco-fill",
-  //   "source-layer": "ecomap-tiles",
-  //   layout: {},
-  //   paint: {
-  //     "line-color": [
-  //       "case",
-  //       ["==", ["get", "TYPE"], "TEOW"],
-  //       "rgb(5, 11, 15)",
-  //       "rgb(62, 136, 185)",
-  //     ],
-  //     "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
-  //   },
-  // };
+  useEffect(() => {
+    setMapLoc(true);
+  }, []);
 
   const ecoFill = {
     id: "eco-fill",
@@ -94,18 +51,7 @@ const MapMain = ({
       "fill-opacity": 0.5,
     },
   };
-  // click layer
-  const ecoFill2 = {
-    id: "eco-fill2",
-    type: "fill",
-    // source: "eco-fill",
-    "source-layer": "ecomap-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#dddddd",
-      "fill-opacity": 1,
-    },
-  };
+
   // selected layer
   const ecoFill3 = {
     id: "eco-fill3",
@@ -239,8 +185,6 @@ const MapMain = ({
     [selectedRegion]
   );
 
-  const clickFilter = ["in", "unique_id", []];
-
   const speciesRegions1 = state[1].regions;
 
   const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
@@ -347,12 +291,7 @@ const MapMain = ({
             {...ecoFill3}
             filter={speciesFilter1}
           />
-          <Layer
-            id="click"
-            beforeId="waterway-label"
-            {...ecoFill2}
-            filter={clickFilter}
-          />
+
           <Layer
             id="hover"
             beforeId="waterway-label"

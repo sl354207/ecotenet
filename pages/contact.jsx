@@ -1,4 +1,4 @@
-import Header from "@components/Header";
+import Header from "@components/layouts/Header";
 import { Container } from "@mui/material";
 
 const contact = () => {

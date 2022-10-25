@@ -21,9 +21,11 @@ const EcoRegions = ({
   });
 
   const { mapA } = useMap();
+  // console.log(`initial ${mapA}`);
 
   const ecoClick = useCallback(
     (ecoregion) => {
+      // console.log(`initial click ${mapA}`);
       setShowPopup(true);
 
       setHoverInfo({
@@ -49,8 +51,9 @@ const EcoRegions = ({
         setTab({ id: 1, label: "Summary" });
       }
       setClick(true);
+      // console.log(`final ${mapA}`);
     },
-    [ecoMove]
+    [mapA, ecoMove]
   );
 
   return (
@@ -76,7 +79,11 @@ const EcoRegions = ({
       <List>
         {sorted.map((ecoregion) => {
           return (
-            <ListItem button onClick={() => ecoClick(ecoregion)}>
+            <ListItem
+              button
+              onClick={() => ecoClick(ecoregion)}
+              key={ecoregion.unique_id}
+            >
               Eco-{ecoregion.unique_id}: {ecoregion.name}
             </ListItem>
           );

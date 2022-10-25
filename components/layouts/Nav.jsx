@@ -19,16 +19,15 @@ import { useTheme } from "@mui/material/styles";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { useSnackbarContext } from "@components/SnackbarContext";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import { useUserContext } from "@components/context/UserContext";
+import SearchDialog from "@components/dialogs/SearchDialog";
+import FilterDrawer from "@components/drawers/FilterDrawer";
+import CreatePostButton from "@components/layouts/CreatePostButton";
 import { createPost } from "@utils/api-helpers";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-
-import CreatePostButton from "./CreatePostButton";
-import SearchDialog from "./dialogs/SearchDialog";
-import FilterDrawer from "./drawers/FilterDrawer";
-import { useUserContext } from "./UserContext";
 
 const Nav = ({
   ecoFilter,

@@ -1,7 +1,7 @@
-import Description from "@components/Description";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import TextBox from "@components/TextBox";
+import TextBox from "@components/inputFields/TextBox";
+import Description from "@components/layouts/Description";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import InfoIcon from "@mui/icons-material/Info";
 import {
@@ -252,7 +252,7 @@ const PostDetails = ({
               autoHighlight
               disabled={tags.length > 2 ? true : false}
               disableClearable={true}
-              value={tags}
+              value={[]}
               onChange={(event, newValue) => {
                 setDetails((details) => ({
                   ...details,

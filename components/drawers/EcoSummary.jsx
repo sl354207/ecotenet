@@ -1,9 +1,9 @@
+import Link from "@components/layouts/Link";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import useSWR from "swr";
-import Link from "./Link";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 

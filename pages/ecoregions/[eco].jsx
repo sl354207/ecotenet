@@ -1,8 +1,8 @@
+import { useUserContext } from "@components/context/UserContext";
 import Flag from "@components/dialogs/Flag";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import { useUserContext } from "@components/UserContext";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
 import { getEcoregionById } from "@utils/mongodb/helpers";

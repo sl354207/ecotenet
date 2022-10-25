@@ -1,5 +1,5 @@
-import Description from "@components/Description";
-import Header from "@components/Header";
+import Description from "@components/layouts/Description";
+import Header from "@components/layouts/Header";
 import MapEditor from "@components/maps/MapEditor";
 import {
   Autocomplete,

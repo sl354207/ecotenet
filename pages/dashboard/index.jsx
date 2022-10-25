@@ -1,10 +1,10 @@
 import DashboardComment from "@components/comments/DashboardComment";
-import CreatePostButton from "@components/CreatePostButton";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import { useUserContext } from "@components/context/UserContext";
 import DashboardDialog from "@components/dialogs/DashboardDialog";
-import Header from "@components/Header";
-import { useSnackbarContext } from "@components/SnackbarContext";
-import TextBox from "@components/TextBox";
-import { useUserContext } from "@components/UserContext";
+import TextBox from "@components/inputFields/TextBox";
+import CreatePostButton from "@components/layouts/CreatePostButton";
+import Header from "@components/layouts/Header";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";

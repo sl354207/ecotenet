@@ -1,4 +1,4 @@
-import Link from "@components/Link";
+import Link from "@components/layouts/Link";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
