@@ -25,33 +25,35 @@ const EcoRegions = ({
 
   const ecoClick = useCallback(
     (ecoregion) => {
-      // console.log(`initial click ${mapA}`);
-      setShowPopup(true);
+      if (mapA) {
+        // console.log(`initial click ${mapA}`);
+        setShowPopup(true);
 
-      setHoverInfo({
-        longitude: ecoregion.coordinates[0],
-        latitude: ecoregion.coordinates[1],
-        regionName: ecoregion.name,
-        regionNum: ecoregion.unique_id,
-      });
-      sessionStorage.setItem("ecoregion", JSON.stringify(ecoregion));
-      setEcoFilter(ecoregion);
-      setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });
+        setHoverInfo({
+          longitude: ecoregion.coordinates[0],
+          latitude: ecoregion.coordinates[1],
+          regionName: ecoregion.name,
+          regionNum: ecoregion.unique_id,
+        });
+        sessionStorage.setItem("ecoregion", JSON.stringify(ecoregion));
+        setEcoFilter(ecoregion);
+        setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });
 
-      setWiki(ecoregion);
+        setWiki(ecoregion);
 
-      mapA.easeTo({
-        center: ecoregion.coordinates,
-        duration: 3000,
-        zoom: 3.5,
-        // speed: 0.2,
-        // essential: true,
-      });
-      if (!visitedHome && !click) {
-        setTab({ id: 1, label: "Summary" });
+        mapA.easeTo({
+          center: ecoregion.coordinates,
+          duration: 3000,
+          zoom: 3.5,
+          // speed: 0.2,
+          // essential: true,
+        });
+        if (!visitedHome && !click) {
+          setTab({ id: 1, label: "Summary" });
+        }
+        setClick(true);
+        // console.log(`final ${mapA}`);
       }
-      setClick(true);
-      // console.log(`final ${mapA}`);
     },
     [mapA, ecoMove]
   );
