@@ -114,10 +114,6 @@ const about = () => {
           ></iframe>
         </Box>
 
-        {/* <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
-       
-        </Typography> */}
-
         <Divider />
         <Header title="Our Data" />
         <Typography variant="h6" align="left" sx={{ marginTop: "10px" }}>
@@ -146,6 +142,15 @@ const about = () => {
             rel="noopener noreferrer"
           >
             iNaturalist
+          </Link>
+          ,{" "}
+          <Link
+            href="https://plants.sc.egov.usda.gov/home"
+            underline="hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            USDA
           </Link>
           , and the{" "}
           <Link
