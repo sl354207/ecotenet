@@ -51,6 +51,7 @@ const CategorySpeciesList = ({
                       setItemSelect={setItemSelect}
                       setItem={setItem}
                       setTab={setTab}
+                      key={item._id}
                     />
                   );
                 }

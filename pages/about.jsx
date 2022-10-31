@@ -29,8 +29,8 @@ const about = () => {
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           In our minds, the perfect way to connect that knowledge is through
           place. That is where ecoregions come in, instead of categorizing the
-          information on political boundaries that aren't connected to the
-          environment, let's categorize it on ecological boundaries.
+          information on political boundaries that aren&apos;t connected to the
+          environment, let&apos;s categorize it on ecological boundaries.
         </Typography>
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           We not only want to help you learn and share knowledge about the
@@ -44,14 +44,15 @@ const about = () => {
         <Header title="Ecoregions" />
 
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
-          "Biodiversity is not spread evenly across the Earth but follows
+          &quot;Biodiversity is not spread evenly across the Earth but follows
           complex patterns determined by climate, geology and the evolutionary
-          history of the planet. These patterns are called 'ecoregions'.
+          history of the planet. These patterns are called
+          &apos;ecoregions&apos;.
         </Typography>
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           WWF defines an ecoregion as a large unit of land or water containing a
           geographically distinct assemblage of species, natural communities,
-          and environmental conditions". -{" "}
+          and environmental conditions&quot;. -{" "}
           <Link
             href="https://www.worldwildlife.org/biomes"
             underline="hover"
@@ -119,7 +120,7 @@ const about = () => {
         <Typography variant="h6" align="left" sx={{ marginTop: "10px" }}>
           Post Data: {"  "}Posts are uploaded by anybody who wants to share
           their knowledge about the environment. And without people like you
-          sharing this site wouldn't exist. So thank you.
+          sharing this site wouldn&apos;t exist. So thank you.
         </Typography>
         <Typography variant="h6" align="left" sx={{ marginTop: "10px" }}>
           Species Data: Species distribution data is collected from a variety of

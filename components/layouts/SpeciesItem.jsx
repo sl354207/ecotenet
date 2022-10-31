@@ -1,8 +1,8 @@
 import { Button, ListItem, Typography } from "@mui/material";
 
-const SpeciesItem = ({ result }) => {
+const SpeciesItem = ({ result, key }) => {
   return (
-    <ListItem key={result._id}>
+    <ListItem key={key}>
       <Button
         variant="outlined"
         color="secondary"

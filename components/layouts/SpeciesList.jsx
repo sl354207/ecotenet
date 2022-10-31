@@ -6,7 +6,7 @@ const SpeciesList = ({ results }) => {
   return (
     <List>
       {results.map((result) => {
-        return <SpeciesItem result={result} />;
+        return <SpeciesItem result={result} key={result._id} />;
       })}
     </List>
   );

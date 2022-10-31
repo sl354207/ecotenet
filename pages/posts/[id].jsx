@@ -333,6 +333,7 @@ const post = ({ post }) => {
                   href={`/ecoregions/${ecoregion}`}
                   color="secondary"
                   underline="hover"
+                  key={ecoregion}
                 >
                   Eco-{ecoregion},{" "}
                 </Link>

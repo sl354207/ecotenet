@@ -216,8 +216,8 @@ const category = () => {
           Start-to-finish/Lifecycles
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
-          Deep dives on one specific crop or species all the way through it's
-          entire lifecycle.
+          Deep dives on one specific crop or species all the way through
+          it&apos;s entire lifecycle.
         </Typography>
         <Typography
           sx={{ marginBottom: "10px" }}
@@ -308,7 +308,8 @@ const category = () => {
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           Anything art related. Not sure if there is a better word that
-          basically covers all art that isn't music (sculpting, painting, etc.)
+          basically covers all art that isn&apos;t music (sculpting, painting,
+          etc.)
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
           Music

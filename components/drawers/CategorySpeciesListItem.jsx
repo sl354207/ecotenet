@@ -7,9 +7,10 @@ const CategorySpeciesListItem = ({
   setItemSelect,
   setItem,
   setTab,
+  key,
 }) => {
   return (
-    <ListItem key={result._id}>
+    <ListItem key={key}>
       <Button
         variant="outlined"
         color="secondary"

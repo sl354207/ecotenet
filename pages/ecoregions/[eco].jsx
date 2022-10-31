@@ -220,8 +220,9 @@ const eco = ({ wiki, eco, id, setEcoFilter }) => {
 
         {!wiki ? (
           <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
-            We currently don't have a summary of this ecoregion. If you want to
-            help us out you can create a wikipedia page for the ecoregion.
+            We currently don&apos;t have a summary of this ecoregion. If you
+            want to help us out you can create a wikipedia page for the
+            ecoregion.
           </Typography>
         ) : (
           <>

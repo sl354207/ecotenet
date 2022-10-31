@@ -15,7 +15,7 @@ const ecoregions = ({ ecoregions }) => {
       <List>
         {sorted.map((ecoregion) => {
           return (
-            <ListItem>
+            <ListItem key={ecoregion}>
               Eco-{ecoregion.unique_id}:{" "}
               <Link
                 sx={{ marginLeft: "5px" }}

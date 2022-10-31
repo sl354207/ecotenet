@@ -567,6 +567,7 @@ export default function Dashboard() {
                         },
                       }}
                       onDelete={() => handleRemoveChip(profile.socials, social)}
+                      key={social}
                     ></Chip>
                   ))}
               </div>
