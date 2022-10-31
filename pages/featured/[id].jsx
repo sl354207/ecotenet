@@ -29,7 +29,7 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
-import { getFeatures, getPostById } from "@utils/mongodb/helpers";
+import { getFeatures, getPostById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import useOnScreen from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";

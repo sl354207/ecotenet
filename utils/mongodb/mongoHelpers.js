@@ -1,4 +1,4 @@
-import clientPromise from "@utils/mongodb/promise";
+import clientPromise from "@utils/mongodb/mongoPromise";
 import { ObjectId } from "mongodb";
 
 const { MONGODB_DB } = process.env;

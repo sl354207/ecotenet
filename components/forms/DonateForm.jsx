@@ -10,9 +10,9 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import { fetchPostJSON } from "@utils/stripe/api-helpers";
-import getStripe from "@utils/stripe/get-stripe";
-import { formatAmountForDisplay } from "@utils/stripe/stripe-helpers";
+import getStripe from "@utils/stripe/getStripe";
+import { fetchPostJSON } from "@utils/stripe/stripeApiHelpers";
+import { formatAmountForDisplay } from "@utils/stripe/stripeHelpers";
 import theme from "@utils/theme";
 import PropTypes from "prop-types";
 import { useState } from "react";

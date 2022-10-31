@@ -2,7 +2,7 @@ import {
   checkPerson,
   createComment,
   getDashboardComments,
-} from "@utils/mongodb/helpers";
+} from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {

@@ -5,7 +5,7 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import { getEcoregionById } from "@utils/mongodb/helpers";
+import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";

@@ -1,4 +1,8 @@
-import { deletePerson, getPerson, updatePerson } from "@utils/mongodb/helpers";
+import {
+  deletePerson,
+  getPerson,
+  updatePerson,
+} from "@utils/mongodb/mongoHelpers";
 
 export default async function handler(req, res) {
   const method = req.method;

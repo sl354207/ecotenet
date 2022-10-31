@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { createComment, updatePost } from "@utils/api-helpers";
+import { createComment, updatePost } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const ClientDialog = ({

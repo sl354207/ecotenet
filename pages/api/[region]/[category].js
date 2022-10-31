@@ -1,7 +1,7 @@
 import {
   getPostsByCategoryAndRegion,
   getSpecies,
-} from "@utils/mongodb/helpers";
+} from "@utils/mongodb/mongoHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

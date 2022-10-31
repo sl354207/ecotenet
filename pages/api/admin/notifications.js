@@ -1,4 +1,4 @@
-import { createNotification } from "@utils/mongodb/helpers";
+import { createNotification } from "@utils/mongodb/mongoHelpers";
 
 // api endpoint to post a comment to the database
 export default async function handler(req, res) {

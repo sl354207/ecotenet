@@ -24,7 +24,7 @@ import { useUserContext } from "@components/context/UserContext";
 import SearchDialog from "@components/dialogs/SearchDialog";
 import FilterDrawer from "@components/drawers/FilterDrawer";
 import CreatePostButton from "@components/layouts/CreatePostButton";
-import { createPost } from "@utils/api-helpers";
+import { createPost } from "@utils/apiHelpers";
 import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";

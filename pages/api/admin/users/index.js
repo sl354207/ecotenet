@@ -1,4 +1,4 @@
-import { getPeople } from "@utils/mongodb/helpers";
+import { getPeople } from "@utils/mongodb/mongoHelpers";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {

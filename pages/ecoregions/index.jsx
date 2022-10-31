@@ -1,7 +1,7 @@
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { Container, List, ListItem } from "@mui/material";
-import { getEcoregions } from "@utils/mongodb/helpers";
+import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 const ecoregions = ({ ecoregions }) => {
   const sorted = ecoregions.sort(function (a, b) {
