@@ -83,7 +83,10 @@ const FilterDrawer = ({
             margin: 0,
             top: { xs: top, md: "60px" },
             overflow: "visible",
-            marginBottom: { xs: "55px", md: "0px" },
+            marginBottom: {
+              xs: router.pathname == "/" ? "55px" : "0px",
+              md: "0px",
+            },
           },
         }}
         // elevation={900}
