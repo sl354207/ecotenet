@@ -147,7 +147,14 @@ const getFeatures = async () => {
   const features = await db
     .collection("posts")
     .find({ feature: "true" })
-    .project({ title: 1, description: 1, name: 1, count: 1, approved: 1 })
+    .project({
+      title: 1,
+      description: 1,
+      name: 1,
+      count: 1,
+      approved: 1,
+      ecoregions: 1,
+    })
     .sort({ count: -1 })
     .toArray();
 
@@ -425,7 +432,15 @@ const searchAllPosts = async (query) => {
           },
         },
       },
-      { $project: { title: 1, description: 1, name: 1, count: 1 } },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          name: 1,
+          count: 1,
+          ecoregions: 1,
+        },
+      },
     ])
     .toArray();
 
@@ -450,7 +465,7 @@ const searchAllSpecies = async (query) => {
           },
         },
       },
-      { $project: { scientific_name: 1, common_name: 1 } },
+      { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
     ])
     .toArray();
 
@@ -512,7 +527,15 @@ const searchEcoPosts = async (query, eco) => {
           },
         },
       },
-      { $project: { title: 1, description: 1, name: 1, count: 1 } },
+      {
+        $project: {
+          title: 1,
+          description: 1,
+          name: 1,
+          count: 1,
+          ecoregions: 1,
+        },
+      },
     ])
     .toArray();
 
@@ -551,7 +574,7 @@ const searchEcoSpecies = async (query, eco) => {
           },
         },
       },
-      { $project: { scientific_name: 1, common_name: 1 } },
+      { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
     ])
     .toArray();
 

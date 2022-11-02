@@ -1,13 +1,8 @@
+import { useHomepageContext } from "@components/context/HomepageContext";
 import { Button, ListItem, Typography } from "@mui/material";
 
-const CategorySpeciesListItem = ({
-  result,
-  state,
-  dispatch,
-  setItemSelect,
-  setItem,
-  setTab,
-}) => {
+const CategorySpeciesListItem = ({ result, setItemSelect, setItem }) => {
+  const { distributionDispatch, setTab } = useHomepageContext();
   return (
     <ListItem key={result._id}>
       <Button
@@ -22,7 +17,7 @@ const CategorySpeciesListItem = ({
         // href={`/species/${result._id}`}
         onClick={() => {
           // handleSubmit();
-          dispatch({
+          distributionDispatch({
             type: "add",
             payload: 0,
             value: result.unique_id,

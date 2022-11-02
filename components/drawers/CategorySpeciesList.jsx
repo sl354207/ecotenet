@@ -8,14 +8,7 @@ import {
 import { createRef } from "react";
 import CategorySpeciesListItem from "./CategorySpeciesListItem";
 
-const CategorySpeciesList = ({
-  category,
-  dispatch,
-  state,
-  setItemSelect,
-  setItem,
-  setTab,
-}) => {
+const CategorySpeciesList = ({ category, setItemSelect, setItem }) => {
   const uniqueFirst = [
     ...new Set(category.map((item) => item.scientific_name[0])),
   ];
@@ -46,11 +39,8 @@ const CategorySpeciesList = ({
                   return (
                     <CategorySpeciesListItem
                       result={item}
-                      dispatch={dispatch}
-                      state={state}
                       setItemSelect={setItemSelect}
                       setItem={setItem}
-                      setTab={setTab}
                     />
                   );
                 }

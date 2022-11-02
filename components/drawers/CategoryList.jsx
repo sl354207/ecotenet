@@ -21,11 +21,8 @@ const CategoryList = ({
   ecoFilter,
   title,
   category,
-  dispatch,
-  state,
   setCategory,
   setCategorySelect,
-  setTab,
 }) => {
   const { data } = useSWR(
     category ? `/api/${ecoFilter.unique_id}/${category}` : null,
@@ -34,7 +31,7 @@ const CategoryList = ({
 
   const [itemSelect, setItemSelect] = useState(false);
   const [item, setItem] = useState(null);
-  console.log(typeof item);
+  // console.log(typeof item);
 
   return (
     <>
@@ -182,11 +179,8 @@ const CategoryList = ({
 
                       <CategorySpeciesList
                         category={data && data.category}
-                        dispatch={dispatch}
-                        state={state}
                         setItemSelect={setItemSelect}
                         setItem={setItem}
-                        setTab={setTab}
                       />
                       <Container sx={{ minHeight: "auto" }}>
                         <Typography variant="subtitle2" align="left">
@@ -207,11 +201,8 @@ const CategoryList = ({
                     <>
                       <CategoryPostList
                         posts={data && data.category}
-                        dispatch={dispatch}
-                        state={state}
                         setItemSelect={setItemSelect}
                         setItem={setItem}
-                        setTab={setTab}
                       />
                     </>
                   )}

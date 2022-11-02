@@ -16,6 +16,8 @@ import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
 import Coords from "@data/eco_coord.json";
 
+import { useHomepageContext } from "@components/context/HomepageContext";
+import FeatureAndSearchDrawer from "@components/drawers/FeatureAndSearchDrawer";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
@@ -82,18 +84,7 @@ const CustomTab = styled((props) => <Tab {...props} />)(({ theme }) => ({
   },
 }));
 
-export default function MapPage({
-  ecoFilter,
-  setEcoFilter,
-  state,
-  dispatch,
-  visited,
-  tab,
-  setTab,
-  setDrawerOpen,
-  openEco,
-  setOpenEco,
-}) {
+export default function MapPage() {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
@@ -101,6 +92,22 @@ export default function MapPage({
   // console.log(visited);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const {
+    ecoFilter,
+    setEcoFilter,
+    visited,
+    ecoOpen,
+    setEcoOpen,
+    setFilterOpen,
+    FS,
+    FSOpen,
+    setFSOpen,
+    tab,
+    setTab,
+    distributionState,
+    distributionDispatch,
+  } = useHomepageContext();
 
   const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
 
@@ -110,10 +117,10 @@ export default function MapPage({
 
   useEffect(() => {
     if (visited == "true") {
-      setOpenEco(false);
+      setEcoOpen(false);
       setVisitedHome(true);
     } else {
-      setOpenEco(true);
+      setEcoOpen(true);
       setVisitedHome(false);
     }
   }, [visited]);
@@ -138,21 +145,34 @@ export default function MapPage({
   const [showPopup, setShowPopup] = useState(true);
   const [mapLoc, setMapLoc] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpenEco(true);
+  const handleEcoOpen = () => {
+    setEcoOpen(true);
     if (isMobile) {
-      setDrawerOpen(false);
+      setFilterOpen(false);
     }
   };
 
-  const handleDrawerClose = (event) => {
+  const handleEcoClose = (event) => {
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
-    setOpenEco(false);
+    setEcoOpen(false);
+    if (isMobile) {
+      setTop("50vh");
+      setDrawerHeight(1);
+    }
+  };
+  const handleFSClose = (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setFSOpen(false);
     if (isMobile) {
       setTop("50vh");
       setDrawerHeight(1);
@@ -194,7 +214,7 @@ export default function MapPage({
           setWiki={setWiki}
           click={click}
           setClick={setClick}
-          state={state}
+          distributionState={distributionState}
           coords={coords}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
@@ -231,7 +251,7 @@ export default function MapPage({
                         opacity: 1,
                       },
                     }}
-                    onClick={handleDrawerOpen}
+                    onClick={handleEcoOpen}
                   />
                   <Tab
                     label="Summary"
@@ -242,7 +262,7 @@ export default function MapPage({
                         opacity: 1,
                       },
                     }}
-                    onClick={handleDrawerOpen}
+                    onClick={handleEcoOpen}
                   />
                   <Tab
                     label="Distributions"
@@ -253,7 +273,7 @@ export default function MapPage({
                         opacity: 1,
                       },
                     }}
-                    onClick={handleDrawerOpen}
+                    onClick={handleEcoOpen}
                   />
                 </Tabs>
               </Toolbar>
@@ -261,8 +281,8 @@ export default function MapPage({
 
             <Drawer
               anchor="bottom"
-              open={openEco}
-              onClose={handleDrawerClose}
+              open={ecoOpen}
+              onClose={handleEcoClose}
               hideBackdrop
               sx={{
                 width: "100%",
@@ -285,7 +305,7 @@ export default function MapPage({
                   position: "absolute",
                   top: "-40px",
                   display: "flex",
-                  visibility: openEco ? "visible" : "hidden",
+                  visibility: ecoOpen ? "visible" : "hidden",
                   width: "100vw",
                   backgroundColor: theme.palette.primary.light,
                 }}
@@ -347,7 +367,6 @@ export default function MapPage({
                     <Typography
                       align="center"
                       variant="h5"
-                      disab
                       sx={{
                         position: "absolute",
                         left: "0px",
@@ -363,7 +382,7 @@ export default function MapPage({
                 )}
 
                 <IconButton
-                  onClick={handleDrawerClose}
+                  onClick={handleEcoClose}
                   sx={{ marginLeft: "auto", marginRight: "10px" }}
                 >
                   <CloseIcon />
@@ -407,8 +426,8 @@ export default function MapPage({
                       <EcoDist
                         dist={dist}
                         setDist={setDist}
-                        state={state}
-                        dispatch={dispatch}
+                        distributionState={distributionState}
+                        distributionDispatch={distributionDispatch}
                         isMobile={isMobile}
                       />
                     </TabPanel>
@@ -416,13 +435,23 @@ export default function MapPage({
                 )}
               </Box>
             </Drawer>
+            <FeatureAndSearchDrawer
+              handleFSClose={handleFSClose}
+              top={top}
+              setTop={setTop}
+              drawerHeight={drawerHeight}
+              setDrawerHeight={setDrawerHeight}
+              anchor="bottom"
+              FS={FS}
+              FSOpen={FSOpen}
+            />
           </>
         ) : (
           <>
             <Drawer
               anchor="right"
-              open={openEco}
-              onClose={handleDrawerClose}
+              open={ecoOpen}
+              onClose={handleEcoClose}
               hideBackdrop
               variant="persistent"
               sx={{
@@ -457,9 +486,9 @@ export default function MapPage({
                       backgroundColor: "rgba(0, 30, 60, 0.3)",
                     },
                   }}
-                  onClick={() => setOpenEco(!openEco)}
+                  onClick={() => setEcoOpen(!ecoOpen)}
                 >
-                  {openEco ? <ArrowForwardIosIcon /> : <ArrowBackIosIcon />}
+                  {ecoOpen ? <ArrowForwardIosIcon /> : <ArrowBackIosIcon />}
                 </IconButton>
                 <Tabs
                   orientation="vertical"
@@ -538,14 +567,24 @@ export default function MapPage({
                       <EcoDist
                         dist={dist}
                         setDist={setDist}
-                        state={state}
-                        dispatch={dispatch}
+                        distributionState={distributionState}
+                        distributionDispatch={distributionDispatch}
                       />
                     </TabPanel>
                   </>
                 )}
               </Box>
             </Drawer>
+            <FeatureAndSearchDrawer
+              handleFSClose={handleFSClose}
+              top={top}
+              setTop={setTop}
+              drawerHeight={drawerHeight}
+              setDrawerHeight={setDrawerHeight}
+              anchor="left"
+              FS={FS}
+              FSOpen={FSOpen}
+            />
           </>
         )}
       </MapProvider>

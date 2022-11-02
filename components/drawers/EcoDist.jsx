@@ -30,7 +30,13 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
+const EcoDist = ({
+  dist,
+  setDist,
+  distributionState,
+  distributionDispatch,
+  isMobile,
+}) => {
   const handleChange = async (e) => {
     // console.log(e);
     if (e.target.value) {
@@ -52,9 +58,9 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
       const name = newValue.slice(0, dash - 1);
       for (const result of dist) {
         if (result.scientific_name == name) {
-          switch (state[0].count) {
+          switch (distributionState[0].count) {
             case 0:
-              dispatch({
+              distributionDispatch({
                 type: "add",
                 payload: 1,
                 value: result.unique_id,
@@ -64,7 +70,7 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
               });
               break;
             case 1:
-              dispatch({
+              distributionDispatch({
                 type: "add",
                 payload: 2,
                 value: result.unique_id,
@@ -74,7 +80,7 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
               });
               break;
             case 2:
-              dispatch({
+              distributionDispatch({
                 type: "add",
                 payload: 3,
                 value: result.unique_id,
@@ -95,7 +101,7 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
   };
 
   const handleRemoveChip = (id) => {
-    dispatch({
+    distributionDispatch({
       type: "remove",
       payload: id,
       value: [],
@@ -216,27 +222,30 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
       </FormControl>
 
       <div style={{ display: "inline-grid", width: "100%" }}>
-        {Array.isArray(state[1].regions) && state[1].regions.length ? (
+        {Array.isArray(distributionState[1].regions) &&
+        distributionState[1].regions.length ? (
           <CustomChip
             label={
-              state[1].scientific_name ? (
+              distributionState[1].scientific_name ? (
                 <>
-                  <Typography>{state[1].scientific_name}</Typography>
-                  <Typography>{state[1].common_name}</Typography>
+                  <Typography>
+                    {distributionState[1].scientific_name}
+                  </Typography>
+                  <Typography>{distributionState[1].common_name}</Typography>
                 </>
               ) : (
                 "post"
               )
             }
             onClick={() => {
-              state[1].scientific_name
+              distributionState[1].scientific_name
                 ? window.open(
-                    `/species/${state[1]._id}`,
+                    `/species/${distributionState[1]._id}`,
                     "_blank",
                     "noopener,noreferrer"
                   )
                 : window.open(
-                    `/posts/${state[1]._id}`,
+                    `/posts/${distributionState[1]._id}`,
                     "_blank",
                     "noopener,noreferrer"
                   );
@@ -250,27 +259,30 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
         ) : (
           <CustomChip sx={{ visibility: "hidden" }}></CustomChip>
         )}
-        {Array.isArray(state[2].regions) && state[2].regions.length ? (
+        {Array.isArray(distributionState[2].regions) &&
+        distributionState[2].regions.length ? (
           <CustomChip
             label={
-              state[2].scientific_name ? (
+              distributionState[2].scientific_name ? (
                 <>
-                  <Typography>{state[2].scientific_name}</Typography>
-                  <Typography>{state[2].common_name}</Typography>
+                  <Typography>
+                    {distributionState[2].scientific_name}
+                  </Typography>
+                  <Typography>{distributionState[2].common_name}</Typography>
                 </>
               ) : (
                 "post"
               )
             }
             onClick={() => {
-              state[2].scientific_name
+              distributionState[2].scientific_name
                 ? window.open(
-                    `/species/${state[2]._id}`,
+                    `/species/${distributionState[2]._id}`,
                     "_blank",
                     "noopener,noreferrer"
                   )
                 : window.open(
-                    `/posts/${state[2]._id}`,
+                    `/posts/${distributionState[2]._id}`,
                     "_blank",
                     "noopener,noreferrer"
                   );
@@ -284,27 +296,30 @@ const EcoDist = ({ dist, setDist, state, dispatch, isMobile }) => {
         ) : (
           <></>
         )}
-        {Array.isArray(state[3].regions) && state[3].regions.length ? (
+        {Array.isArray(distributionState[3].regions) &&
+        distributionState[3].regions.length ? (
           <CustomChip
             label={
-              state[3].scientific_name ? (
+              distributionState[3].scientific_name ? (
                 <>
-                  <Typography>{state[3].scientific_name}</Typography>
-                  <Typography>{state[3].common_name}</Typography>
+                  <Typography>
+                    {distributionState[3].scientific_name}
+                  </Typography>
+                  <Typography>{distributionState[3].common_name}</Typography>
                 </>
               ) : (
                 "post"
               )
             }
             onClick={() => {
-              state[3].scientific_name
+              distributionState[3].scientific_name
                 ? window.open(
-                    `/species/${state[3]._id}`,
+                    `/species/${distributionState[3]._id}`,
                     "_blank",
                     "noopener,noreferrer"
                   )
                 : window.open(
-                    `/posts/${state[3]._id}`,
+                    `/posts/${distributionState[3]._id}`,
                     "_blank",
                     "noopener,noreferrer"
                   );

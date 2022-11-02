@@ -12,24 +12,6 @@ export const UserProvider = ({ children }) => {
   // console.log(session);
 
   const [user, setUser] = useState();
-  // status == "authenticated"
-  //   ? {
-  //       email: session.user.email,
-  //       name: session.user.name,
-  //       role: session.user.role,
-  //       status: status,
-  //     }
-  //   : {
-  //       email: "",
-  //       name: "",
-  //       role: "user",
-  //       status: "",
-  //     }
-
-  //   const value = useMemo(
-  //     () => ({ userName, setUserName }),
-  //     [userName]
-  //   );
 
   useEffect(() => {
     if (status == "unauthenticated" || status == "loading") {
@@ -63,21 +45,6 @@ export const UserProvider = ({ children }) => {
       }
       // console.log(userName);
     }
-    // status == "authenticated"
-    //   ? setUser({
-    //       email: session.user.email,
-    //       name: session.user.name,
-    //       role: session.user.role,
-    //       status: status,
-    //     })
-    //   : setUser({
-    //       email: "",
-    //       name: "",
-    //       role: "user",
-    //       status: status,
-    //     });
-
-    // return { userName, setUserName };
   }, [router.pathname, status]);
 
   // console.log(user);

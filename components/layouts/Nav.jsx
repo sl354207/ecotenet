@@ -19,8 +19,10 @@ import { useTheme } from "@mui/material/styles";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+import { useHomepageContext } from "@components/context/HomepageContext";
 import { useSnackbarContext } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
+import FeatureDialog from "@components/dialogs/FeatureDialog";
 import SearchDialog from "@components/dialogs/SearchDialog";
 import FilterDrawer from "@components/drawers/FilterDrawer";
 import CreatePostButton from "@components/layouts/CreatePostButton";
@@ -29,18 +31,12 @@ import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-const Nav = ({
-  ecoFilter,
-  state,
-  dispatch,
-  setTab,
-  drawerOpen,
-  setDrawerOpen,
-  setOpenEco,
-}) => {
+const Nav = () => {
   // console.log(ecoFilter);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
+  const { ecoFilter, filterOpen, setFilterOpen, setEcoOpen, setFSOpen } =
+    useHomepageContext();
 
   let status;
   if (user == undefined) {
@@ -54,14 +50,13 @@ const Nav = ({
 
   const router = useRouter();
 
-  // const [drawerOpen, setDrawerOpen] = useState(false);
-
   const [top, setTop] = useState("50vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   const [popper, setPopper] = useState(false);
 
   const [search, setSearch] = useState(false);
+  const [feature, setFeature] = useState(false);
 
   const handleClickSearch = () => {
     setSearch(true);
@@ -134,21 +129,29 @@ const Nav = ({
     prevOpen.current = popper;
   }, [popper]);
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
+  const handleFilterOpen = () => {
+    setFSOpen(false);
+    setFilterOpen(true);
     if (isMobile) {
-      setOpenEco(false);
+      setEcoOpen(false);
     }
   };
+  // const handleFSOpen = () => {
+  //   setFSOpen(true);
+  //   setFilterOpen(false);
+  //   if (isMobile) {
+  //     setEcoOpen(false);
+  //   }
+  // };
 
-  const handleDrawerClose = (event) => {
+  const handleFilterClose = (event) => {
     if (
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
     ) {
       return;
     }
-    setDrawerOpen(false);
+    setFilterOpen(false);
     if (isMobile) {
       setTop("50vh");
       setDrawerHeight(1);
@@ -163,7 +166,7 @@ const Nav = ({
             <>
               {isTab ? (
                 <Button
-                  onClick={handleDrawerOpen}
+                  onClick={handleFilterOpen}
                   endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
                   variant="contained"
                   color="secondary"
@@ -173,7 +176,7 @@ const Nav = ({
                 </Button>
               ) : (
                 <Button
-                  onClick={handleDrawerOpen}
+                  onClick={handleFilterOpen}
                   // endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
                   variant="contained"
                   color="secondary"
@@ -185,7 +188,15 @@ const Nav = ({
           )}
 
           <Button
-            href="/featured"
+            // href="/featured"
+            onClick={() => {
+              if (router.pathname == "/") {
+                setFilterOpen(false);
+                setFeature(true);
+              } else {
+                router.push("/featured");
+              }
+            }}
             variant="text"
             color="secondary"
             size={isTab ? "small" : "medium"}
@@ -264,6 +275,9 @@ const Nav = ({
             setSearch={setSearch}
             ecoFilter={ecoFilter && ecoFilter}
           />
+          {router.pathname == "/" && (
+            <FeatureDialog feature={feature} setFeature={setFeature} />
+          )}
 
           <Box sx={{ display: { xs: "block", md: "none" } }}>
             <IconButton
@@ -306,7 +320,13 @@ const Nav = ({
                         <MenuItem
                           onClick={() => {
                             setPopper(false);
-                            router.push("/featured");
+                            if (router.pathname == "/") {
+                              setFilterOpen(false);
+                              setEcoOpen(false);
+                              setFeature(true);
+                            } else {
+                              router.push("/featured");
+                            }
                           }}
                           sx={{ color: theme.palette.secondary.main }}
                         >
@@ -474,16 +494,13 @@ const Nav = ({
           </Box>
           <FilterDrawer
             ecoFilter={ecoFilter}
-            state={state}
-            dispatch={dispatch}
-            drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
-            handleDrawerClose={handleDrawerClose}
+            filterOpen={filterOpen}
+            setFilterOpen={setFilterOpen}
+            handleFilterClose={handleFilterClose}
             top={top}
             setTop={setTop}
             drawerHeight={drawerHeight}
             setDrawerHeight={setDrawerHeight}
-            setTab={setTab}
           />
         </Toolbar>
       </AppBar>

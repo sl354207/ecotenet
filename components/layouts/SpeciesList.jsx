@@ -2,11 +2,11 @@ import SpeciesItem from "@components/layouts/SpeciesItem";
 import { List } from "@mui/material";
 
 // pass in post as prop from PostList
-const SpeciesList = ({ results }) => {
+const SpeciesList = ({ results, handleClose }) => {
   return (
     <List>
       {results.map((result) => {
-        return <SpeciesItem result={result} />;
+        return <SpeciesItem result={result} handleClose={handleClose} />;
       })}
     </List>
   );

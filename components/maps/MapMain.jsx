@@ -11,7 +11,7 @@ const MapMain = ({
   setWiki,
   click,
   setClick,
-  state,
+  distributionState,
   coords,
   hoverInfo,
   setHoverInfo,
@@ -185,15 +185,15 @@ const MapMain = ({
     [selectedRegion]
   );
 
-  const speciesRegions1 = state[1].regions;
+  const speciesRegions1 = distributionState[1].regions;
 
   const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
 
-  const speciesRegions2 = state[2].regions;
+  const speciesRegions2 = distributionState[2].regions;
 
   const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
 
-  const speciesRegions3 = state[3].regions;
+  const speciesRegions3 = distributionState[3].regions;
 
   const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
 

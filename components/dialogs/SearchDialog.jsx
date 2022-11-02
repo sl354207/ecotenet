@@ -68,9 +68,9 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
       </Typography>
     );
   } else if (results && results.length > 0 && results[0].title !== undefined) {
-    list = <PostList posts={results} />;
+    list = <PostList posts={results} handleClose={handleCloseSearch} />;
   } else {
-    list = <SpeciesList results={results} />;
+    list = <SpeciesList results={results} handleClose={handleCloseSearch} />;
   }
   // set filter for autocomplete options
   const filter = createFilterOptions();
