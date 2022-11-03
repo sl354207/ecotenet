@@ -6,7 +6,13 @@ const SpeciesList = ({ results, handleClose }) => {
   return (
     <List>
       {results.map((result) => {
-        return <SpeciesItem result={result} handleClose={handleClose} />;
+        return (
+          <SpeciesItem
+            result={result}
+            handleClose={handleClose}
+            key={result._id}
+          />
+        );
       })}
     </List>
   );

@@ -3,7 +3,7 @@ import { Button, ListItem, Typography, useMediaQuery } from "@mui/material";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 
-const SpeciesItem = ({ result, handleClose }) => {
+const SpeciesItem = ({ result, key, handleClose }) => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -16,7 +16,7 @@ const SpeciesItem = ({ result, handleClose }) => {
     setTab,
   } = useHomepageContext();
   return (
-    <ListItem key={result._id}>
+    <ListItem key={key}>
       <Button
         variant="outlined"
         color="secondary"
