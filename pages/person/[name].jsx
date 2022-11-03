@@ -6,7 +6,7 @@ import Link from "@components/layouts/Link";
 import PostList from "@components/layouts/PostList";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import { getPerson, getProfilePosts } from "@utils/mongodb/helpers";
+import { getPerson, getProfilePosts } from "@utils/mongodb/mongoHelpers";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -84,6 +84,7 @@ const person = ({ person, posts }) => {
                     rel="noopener noreferrer"
                     href={`${social}`}
                     underline="hover"
+                    key={social}
                   >
                     {social}
                   </Link>

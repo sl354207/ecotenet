@@ -188,6 +188,7 @@ const DrawerSpecies = ({ species }) => {
                 href={`/ecoregions/${id}`}
                 color="secondary"
                 underline="hover"
+                key={id}
               >
                 Eco-{id}
                 {", "}
@@ -208,8 +209,9 @@ const DrawerSpecies = ({ species }) => {
                 align="justify"
                 sx={{ marginTop: "20px" }}
               >
-                We currently don't have a summary of this species. If you want
-                to help us out you can create a wikipedia page for the species.
+                We currently don&apos;t have a summary of this species. If you
+                want to help us out you can create a wikipedia page for the
+                species.
               </Typography>
             ) : (
               <>

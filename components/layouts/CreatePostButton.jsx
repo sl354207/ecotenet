@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { createPost } from "@utils/api-helpers";
+import { createPost } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const CreatePostButton = ({ name, snackbar, setSnackbar, nav }) => {

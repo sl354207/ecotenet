@@ -1,4 +1,4 @@
-import { getEcoregions } from "@utils/mongodb/helpers";
+import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

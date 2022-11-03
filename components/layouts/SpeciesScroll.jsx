@@ -99,7 +99,7 @@ const SpeciesScroll = ({ category }) => {
               </ListItem>
               {category.map((item) => {
                 if (item.scientific_name[0] === entry) {
-                  return <SpeciesItem result={item} />;
+                  return <SpeciesItem result={item} key={item._id} />;
                 }
               })}
               <Divider />

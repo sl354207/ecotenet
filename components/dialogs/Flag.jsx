@@ -8,7 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { createFlag } from "@utils/api-helpers";
+import { createFlag } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import { useState } from "react";
 

@@ -41,6 +41,7 @@ const CategorySpeciesList = ({ category, setItemSelect, setItem }) => {
                       result={item}
                       setItemSelect={setItemSelect}
                       setItem={setItem}
+                      key={item._id}
                     />
                   );
                 }

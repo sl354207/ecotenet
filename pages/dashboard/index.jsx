@@ -31,7 +31,7 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
-import { updateNotification, updateUser } from "@utils/api-helpers";
+import { updateNotification, updateUser } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -567,6 +567,7 @@ export default function Dashboard() {
                         },
                       }}
                       onDelete={() => handleRemoveChip(profile.socials, social)}
+                      key={social}
                     ></Chip>
                   ))}
               </div>

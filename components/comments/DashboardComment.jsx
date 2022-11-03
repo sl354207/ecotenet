@@ -8,7 +8,7 @@ import {
   InputLabel,
   useMediaQuery,
 } from "@mui/material";
-import { updateComment } from "@utils/api-helpers";
+import { updateComment } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import { useState } from "react";
 

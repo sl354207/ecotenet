@@ -1,4 +1,4 @@
-import { formatAmountForStripe } from "@utils/stripe/stripe-helpers";
+import { formatAmountForStripe } from "@utils/stripe/stripeHelpers";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

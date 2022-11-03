@@ -14,7 +14,7 @@ import {
   deleteUser,
   deleteUserMedia,
   updatePost,
-} from "@utils/api-helpers";
+} from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const DashboardDialog = ({

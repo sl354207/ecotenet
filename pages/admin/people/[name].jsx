@@ -114,6 +114,7 @@ const person = () => {
                   rel="noopener noreferrer"
                   href={social}
                   underline="hover"
+                  key={social}
                 >
                   {social}
                 </Link>
