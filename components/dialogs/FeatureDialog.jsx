@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Typography,
 } from "@mui/material";
 import useSWR from "swr";
 
@@ -71,7 +72,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginBottom: "20px",
+          // marginBottom: "20px",
         }}
       >
         <DialogTitle
@@ -92,7 +93,13 @@ const FeatureDialog = ({ feature, setFeature }) => {
       </div>
       {/* <Divider /> */}
 
-      <DialogContent>{list}</DialogContent>
+      <DialogContent>
+        <Typography variant="body1" align="center">
+          These are currently our favorite posts that people have shared on the
+          site
+        </Typography>
+        {list}
+      </DialogContent>
     </Dialog>
   );
 };

@@ -39,13 +39,13 @@ const WelcomeDialog = () => {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginBottom: "20px",
+          marginBottom: "40px",
         }}
       >
         <DialogTitle
           color="textPrimary"
           align="center"
-          sx={{ paddingBottom: "0px", position: "fixed" }}
+          sx={{ paddingBottom: "20px", position: "fixed", marginBlock: "20px" }}
           variant="h4"
         >
           Welcome to Ecotenet!
@@ -60,7 +60,7 @@ const WelcomeDialog = () => {
       </div>
       {/* <Divider /> */}
 
-      <DialogContent>
+      <DialogContent sx={{ marginTop: { xs: "20px", sm: "0px" } }}>
         <Typography variant="h6" align="center">
           Explore the world through ecoregions by learning about all of the
           different species and how we as people interact with the environment
