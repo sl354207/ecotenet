@@ -149,6 +149,7 @@ export default function MapPage() {
     setEcoOpen(true);
     if (isMobile) {
       setFilterOpen(false);
+      setFSOpen(false);
     }
   };
 

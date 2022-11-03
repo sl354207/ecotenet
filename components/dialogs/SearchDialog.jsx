@@ -68,7 +68,9 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
       </Typography>
     );
   } else if (results && results.length > 0 && results[0].title !== undefined) {
-    list = <PostList posts={results} handleClose={handleCloseSearch} />;
+    list = (
+      <PostList posts={results} search={true} handleClose={handleCloseSearch} />
+    );
   } else {
     list = <SpeciesList results={results} handleClose={handleCloseSearch} />;
   }

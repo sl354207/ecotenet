@@ -66,6 +66,9 @@ const Nav = () => {
 
   const togglePopper = () => {
     setPopper((prevOpen) => !prevOpen);
+    setEcoOpen(false);
+    setFSOpen(false);
+    setFilterOpen(false);
   };
 
   const closePopper = (event) => {
@@ -191,7 +194,7 @@ const Nav = () => {
             // href="/featured"
             onClick={() => {
               if (router.pathname == "/") {
-                setFilterOpen(false);
+                // setFilterOpen(false);
                 setFeature(true);
               } else {
                 router.push("/featured");
@@ -321,8 +324,8 @@ const Nav = () => {
                           onClick={() => {
                             setPopper(false);
                             if (router.pathname == "/") {
-                              setFilterOpen(false);
-                              setEcoOpen(false);
+                              // setFilterOpen(false);
+                              // setEcoOpen(false);
                               setFeature(true);
                             } else {
                               router.push("/featured");

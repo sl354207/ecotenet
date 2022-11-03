@@ -1,12 +1,20 @@
 import { useHomepageContext } from "@components/context/HomepageContext";
-import { Button, ListItem, Typography } from "@mui/material";
+import { Button, ListItem, Typography, useMediaQuery } from "@mui/material";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 
 const SpeciesItem = ({ result, handleClose }) => {
   const router = useRouter();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { setFS, setFSOpen, distributionDispatch, setTab } =
-    useHomepageContext();
+  const {
+    setFS,
+    setFSOpen,
+    setEcoOpen,
+    setFilterOpen,
+    distributionDispatch,
+    setTab,
+  } = useHomepageContext();
   return (
     <ListItem key={result._id}>
       <Button
@@ -23,6 +31,10 @@ const SpeciesItem = ({ result, handleClose }) => {
           if (router.pathname == "/") {
             setFS(result);
             handleClose();
+            setFilterOpen(false);
+            if (isMobile) {
+              setEcoOpen(false);
+            }
             setFSOpen(true);
             distributionDispatch({
               type: "add",

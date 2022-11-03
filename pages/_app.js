@@ -13,6 +13,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import createEmotionCache from "@utils/createEmotionCache";
 import theme from "@utils/theme";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -29,6 +30,8 @@ export default function MyApp(props) {
     }
   }, []);
 
+  const router = useRouter();
+
   return (
     <CacheProvider value={emotionCache}>
       <Head>
@@ -40,7 +43,7 @@ export default function MyApp(props) {
             {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
             <CssBaseline />
             <MainLayout>
-              <Component {...pageProps} />
+              <Component key={router.asPath} {...pageProps} />
             </MainLayout>
           </ThemeProvider>
         </UserProvider>
