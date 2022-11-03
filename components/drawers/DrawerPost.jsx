@@ -27,7 +27,7 @@ import useSWR from "swr";
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
-const DrawerPost = ({ id }) => {
+const DrawerPost = ({ id, FSOpen }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { data: post } = useSWR(id ? `/api/posts/${id}` : null, fetcher);
   // let date = new Date(post.date);
@@ -35,7 +35,7 @@ const DrawerPost = ({ id }) => {
   let styles = {
     border: "none",
     width: "100%",
-    height: "48vh",
+    height: FSOpen ? "56vh" : "51vh",
   };
   return (
     <>

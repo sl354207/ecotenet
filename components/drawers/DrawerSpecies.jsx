@@ -7,6 +7,7 @@ import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 const DrawerSpecies = ({ species }) => {
+  // console.log(species);
   const { data: wiki } = useSWR(
     species
       ? `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${

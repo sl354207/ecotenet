@@ -44,9 +44,9 @@ const FilterDrawer = ({
   ecoFilter,
   state,
   dispatch,
-  drawerOpen,
-  setDrawerOpen,
-  handleDrawerClose,
+  filterOpen,
+  setFilterOpen,
+  handleFilterClose,
   top,
   setTop,
   drawerHeight,
@@ -63,11 +63,11 @@ const FilterDrawer = ({
 
   // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
   const handleListClick = (menuTitle) => {
-    dispatchHook({ type: "toggle", payload: menuTitle });
+    drawerDispatch({ type: "toggle", payload: menuTitle });
   };
 
   // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
-  const [drawerState, dispatchHook] = useReducer(reducer, menuItems);
+  const [drawerState, drawerDispatch] = useReducer(reducer, menuItems);
   return (
     <>
       <Drawer
@@ -91,8 +91,8 @@ const FilterDrawer = ({
         }}
         // elevation={900}
         anchor={isMobile ? "bottom" : "left"}
-        open={drawerOpen}
-        onClose={handleDrawerClose}
+        open={filterOpen}
+        onClose={handleFilterClose}
         // swipeAreaWidth={drawerBleeding}
         // disableSwipeToOpen={true}
         // ModalProps={{
@@ -107,7 +107,7 @@ const FilterDrawer = ({
             top: { xs: "-40px", md: "-60px" },
             paddingBlock: { xs: "0px", md: "10px" },
             display: "flex",
-            visibility: drawerOpen ? "visible" : "hidden",
+            visibility: filterOpen ? "visible" : "hidden",
             width: { xs: "100vw", md: drawerWidth },
             backgroundColor: theme.palette.primary.light,
           }}
@@ -182,7 +182,7 @@ const FilterDrawer = ({
               width: { xs: "55vw", md: "auto" },
             }}
             onClick={() => {
-              setDrawerOpen(false);
+              setFilterOpen(false);
               router.push(`/ecoregions/${ecoFilter.unique_id}`);
             }}
             variant="text"
@@ -191,7 +191,7 @@ const FilterDrawer = ({
             ECO-{ecoFilter && ecoFilter.unique_id}
           </Button>
           <IconButton
-            onClick={handleDrawerClose}
+            onClick={handleFilterClose}
             sx={{ marginLeft: "auto", marginRight: "10px" }}
           >
             <CloseIcon />
@@ -210,11 +210,8 @@ const FilterDrawer = ({
               category={category && category}
               ecoFilter={ecoFilter}
               title={title && title}
-              dispatch={dispatch}
-              state={state}
               setCategory={setCategory}
               setCategorySelect={setCategorySelect}
-              setTab={setTab}
             />
           ) : (
             <>
