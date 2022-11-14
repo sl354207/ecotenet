@@ -55,7 +55,7 @@ const Comment = ({
                   {comment.updated ? (
                     //
                     <>
-                      Updated on{" "}
+                      Updated:{" "}
                       {isMobile
                         ? comment.date.toLocaleDateString()
                         : comment.date.toDateString()}

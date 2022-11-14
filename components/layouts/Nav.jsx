@@ -139,13 +139,6 @@ const Nav = () => {
       setEcoOpen(false);
     }
   };
-  // const handleFSOpen = () => {
-  //   setFSOpen(true);
-  //   setFilterOpen(false);
-  //   if (isMobile) {
-  //     setEcoOpen(false);
-  //   }
-  // };
 
   const handleFilterClose = (event) => {
     if (
@@ -164,7 +157,9 @@ const Nav = () => {
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
-        <Toolbar sx={{ paddingLeft: "10px", paddingRight: "0px" }}>
+        <Toolbar
+          sx={{ paddingLeft: "10px!important", paddingRight: "10px!important" }}
+        >
           {ecoFilter && (
             <>
               {isTab ? (
@@ -205,7 +200,7 @@ const Nav = () => {
             size={isTab ? "small" : "medium"}
             sx={{
               display: { xs: "none", md: "block" },
-              marginLeft: "10px",
+              marginLeft: "5px",
             }}
           >
             {isTab ? "Featured" : "Featured Posts"}
@@ -217,10 +212,23 @@ const Nav = () => {
             size={isTab ? "small" : "medium"}
             sx={{
               display: { xs: "none", md: "block" },
-              marginLeft: "10px",
+              // marginLeft: "5px",
+              textAlign: "center",
             }}
           >
             About
+          </Button>
+          <Button
+            sx={{
+              display: { xs: "none", md: "block" },
+              // marginLeft: "5px",
+            }}
+            variant="text"
+            color="secondary"
+            size={isTab ? "small" : "medium"}
+            onClick={() => router.push("http://147.182.209.91:4567/")}
+          >
+            Forum
           </Button>
 
           {status == "authenticated" && (
@@ -237,9 +245,10 @@ const Nav = () => {
                 display: { xs: "none", md: "block" },
               }}
             >
-              Dashboard
+              {isTab ? "Dash" : "Dashboard"}
             </Button>
           )}
+
           <Button
             color="secondary"
             size={isTab ? "small" : "medium"}
@@ -265,12 +274,12 @@ const Nav = () => {
 
           <IconButton
             color="secondary"
-            // size={isTab ? "small" : "large"}
-            size="large"
+            size={isTab ? "small" : "large"}
+            // size="large"
             sx={{ marginLeft: "auto", marginRight: "5px" }}
             onClick={handleClickSearch}
           >
-            <SearchIcon sx={{ fontSize: "2rem" }} />
+            <SearchIcon sx={{ fontSize: isTab ? "1.8rem" : "2rem" }} />
           </IconButton>
 
           <SearchDialog
@@ -343,6 +352,15 @@ const Nav = () => {
                           sx={{ color: theme.palette.secondary.main }}
                         >
                           About
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setPopper(false);
+                            router.push("http://147.182.209.91:4567/");
+                          }}
+                          sx={{ color: theme.palette.secondary.main }}
+                        >
+                          Forum
                         </MenuItem>
 
                         {status == "authenticated" && (
@@ -462,6 +480,7 @@ const Nav = () => {
                     snackbar={snackbar}
                     setSnackbar={setSnackbar}
                     nav={true}
+                    isTab={isTab}
                   />
                 )}
               </>

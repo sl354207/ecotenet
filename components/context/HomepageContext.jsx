@@ -152,7 +152,7 @@ export const HomepageProvider = ({ children }) => {
 
   const [ecoOpen, setEcoOpen] = useState(false);
 
-  const [FS, setFS] = useState(null);
+  const [FS, setFS] = useState({ state: undefined, item: undefined });
   const [FSOpen, setFSOpen] = useState(false);
 
   // use useEffect to interact with (external sources)  session storage in browser. Set session storage variable to ecoregion whenever an ecoregion is visited. Keep this variable in storage until another ecoregion is visited and reset. Set this variable to state so that categories can be filtered to specific ecoregion. Filter will only be shown if ecoregion is visited and session storage variable is set.

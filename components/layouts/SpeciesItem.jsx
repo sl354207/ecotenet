@@ -29,7 +29,7 @@ const SpeciesItem = ({ result, key, handleClose }) => {
         // href={`/species/${result._id}`}
         onClick={() => {
           if (router.pathname == "/") {
-            setFS(result);
+            setFS({ state: "Search Result", item: result });
             handleClose();
             setFilterOpen(false);
             if (isMobile) {

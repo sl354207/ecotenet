@@ -39,7 +39,10 @@ const PostList = ({ posts, featured, search, handleClose }) => {
               // href={featured ? `/featured/${post._id}` : `/posts/${post._id}`}
               onClick={() => {
                 if (router.pathname == "/") {
-                  setFS(post._id);
+                  setFS({
+                    state: search ? "Search Result" : "Feature",
+                    item: post._id,
+                  });
                   handleClose();
                   setFilterOpen(false);
                   if (isMobile) {

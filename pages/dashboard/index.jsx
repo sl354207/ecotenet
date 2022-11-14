@@ -617,6 +617,8 @@ export default function Dashboard() {
             name={user && user.name}
             snackbar={snackbar}
             setSnackbar={setSnackbar}
+            nav={false}
+            isTab={false}
           />
           {!results ? (
             <CircularProgress
@@ -734,6 +736,8 @@ export default function Dashboard() {
             name={user && user.name}
             snackbar={snackbar}
             setSnackbar={setSnackbar}
+            nav={false}
+            isTab={false}
           />
           {!results ? (
             <CircularProgress

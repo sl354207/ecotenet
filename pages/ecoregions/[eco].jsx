@@ -1,3 +1,4 @@
+import { useHomepageContext } from "@components/context/HomepageContext";
 import { useUserContext } from "@components/context/UserContext";
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/layouts/Footer";
@@ -13,7 +14,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const eco = ({ wiki, eco, id, setEcoFilter }) => {
+const eco = ({ wiki, eco, id }) => {
   const router = useRouter();
   const { user } = useUserContext();
   // console.log(userName);
@@ -23,6 +24,8 @@ const eco = ({ wiki, eco, id, setEcoFilter }) => {
   } else {
     status = user.status;
   }
+
+  const { setEcoFilter } = useHomepageContext();
 
   useEffect(() => {
     sessionStorage.setItem("ecoregion", JSON.stringify(eco));
