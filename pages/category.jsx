@@ -308,15 +308,9 @@ const category = () => {
         </Typography>
         <Typography sx={{ marginBottom: "10px" }} variant="body1">
           Anything art related. Not sure if there is a better word that
-          basically covers all art that isn&apos;t music (sculpting, painting,
-          etc.)
+          basically covers all art (music, sculpting, painting, etc.)
         </Typography>
-        <Typography sx={{ marginBottom: "10px" }} variant="h6">
-          Music
-        </Typography>
-        <Typography sx={{ marginBottom: "10px" }} variant="body1">
-          Songs perhaps but also posts about how to make and use instruments
-        </Typography>
+
         <Typography sx={{ marginBottom: "10px" }} variant="h6">
           Rituals
         </Typography>

@@ -201,11 +201,6 @@
     },
     {
       "title": "Culture",
-      "sub": "Music",
-      "query": "culture_music"
-    },
-    {
-      "title": "Culture",
       "sub": "Rituals",
       "query": "culture_ritual"
     },

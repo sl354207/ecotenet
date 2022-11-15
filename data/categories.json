@@ -94,7 +94,6 @@
         {"subTitle": "Cooking or Recipes", "query": "culture_cook_recipes"},
         {"subTitle": "Clothing", "query": "culture_clothing"},
         {"subTitle": "Art", "query": "culture_art"},
-        {"subTitle": "Music", "query": "culture_music"},
         {"subTitle": "Rituals", "query": "culture_ritual"},
         {"subTitle": "Stories", "query": "culture_story"}
       ],
