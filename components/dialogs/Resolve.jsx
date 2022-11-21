@@ -13,7 +13,7 @@ import {
   InputLabel,
   Portal,
 } from "@mui/material";
-import { createNotification, updateFlag } from "@utils/api-helpers";
+import { createNotification, updateFlag } from "@utils/apiHelpers";
 import { useRef, useState } from "react";
 
 const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {

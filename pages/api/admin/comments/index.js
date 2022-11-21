@@ -1,4 +1,4 @@
-import { getComments } from "@utils/mongodb/helpers";
+import { getComments } from "@utils/mongodb/mongoHelpers";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {

@@ -27,7 +27,7 @@ import {
   updateComment,
   updatePost,
   updateUser,
-} from "@utils/api-helpers";
+} from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import { useRef, useState } from "react";
 

@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
-import { createPost } from "@utils/api-helpers";
+import { createPost } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
-const CreatePostButton = ({ name, snackbar, setSnackbar, nav }) => {
+const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
   const router = useRouter();
 
   const startPost = async () => {
@@ -43,10 +43,11 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav }) => {
   return (
     <Button
       // href="/dashboard/editor"
+      // sx={{ marginLeft: nav ? "10px" : "0px" }}
       onClick={() => startPost()}
       variant={nav ? "outlined" : "contained"}
       color="secondary"
-      size={nav ? "medium" : "large"}
+      size={nav ? (isTab ? "small" : "medium") : "large"}
     >
       {nav ? "Create Post" : "Create New Post"}
     </Button>

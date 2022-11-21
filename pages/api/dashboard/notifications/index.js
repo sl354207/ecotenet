@@ -1,4 +1,4 @@
-import { checkPerson, getNotifications } from "@utils/mongodb/helpers";
+import { checkPerson, getNotifications } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 
 // api endpoint to get all posts by user from database

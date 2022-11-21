@@ -1,7 +1,7 @@
 import {
   getPostsByCategoryAndRegion,
   getSpecies,
-} from "@utils/mongodb/helpers";
+} from "@utils/mongodb/mongoHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -733,24 +733,14 @@ export default async function handler(req, res) {
       try {
         tag = "post";
         description =
-          "Posts related to art that isn't music (sculpting, painting, etc.)";
+          "Posts related to art that (music, sculpting, painting, etc.)";
         category = await getPostsByCategoryAndRegion(categoryQuery, id);
       } catch (err) {
         console.error(err);
       }
 
       break;
-    case "culture_music":
-      try {
-        tag = "post";
-        description =
-          "Songs perhaps but also posts about how to make and use instruments";
-        category = await getPostsByCategoryAndRegion(categoryQuery, id);
-      } catch (err) {
-        console.error(err);
-      }
 
-      break;
     case "culture_ritual":
       try {
         tag = "post";

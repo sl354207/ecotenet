@@ -1,4 +1,4 @@
-import { getApprovedPostById } from "@utils/mongodb/helpers";
+import { getApprovedPostById } from "@utils/mongodb/mongoHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {

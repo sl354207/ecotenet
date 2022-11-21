@@ -175,7 +175,8 @@ function ImageUploadField({ onChange, value }) {
         onChange({ url: url, saved: true, file: img });
       });
       setImage({ url: "blob", saved: true, file: img });
-      setTimeout(() => setState({ ...state, isUploading: false }), 4000);
+      // setTimeout(() => setState({ ...state, isUploading: false }), 4000);
+      setState({ ...state, isUploading: false });
     } catch (error) {
       setState({ ...state, isUploading: false });
       console.error(error);
@@ -193,7 +194,8 @@ function ImageUploadField({ onChange, value }) {
           onChange({ url: url, saved: false, file: {} });
         });
         setImage({ url: undefined, saved: false, file: {} });
-        setTimeout(() => setState({ ...state, isDeleting: false }), 4000);
+        // setTimeout(() => setState({ ...state, isDeleting: false }), 4000);
+        setState({ ...state, isDeleting: false });
       } catch (error) {
         setState({ ...state, isDeleting: false });
         console.error(error);

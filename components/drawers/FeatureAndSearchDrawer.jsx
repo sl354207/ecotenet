@@ -1,7 +1,14 @@
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Box, ButtonGroup, Divider, Drawer, IconButton } from "@mui/material";
+import {
+  Box,
+  ButtonGroup,
+  Divider,
+  Drawer,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useRouter } from "next/router";
@@ -131,8 +138,37 @@ const FeatureAndSearchDrawer = ({
                   <KeyboardArrowDownIcon />
                 </IconButton>
               </ButtonGroup>
+              <Typography
+                align="center"
+                variant="h5"
+                sx={{
+                  position: "absolute",
+                  left: "0px",
+                  right: "0px",
+                  marginInline: "auto",
+                  marginTop: "3px",
+                  width: "fit-content",
+                }}
+              >
+                {FS.state}
+              </Typography>
             </>
           )}
+          <Typography
+            align="center"
+            variant="h5"
+            sx={{
+              position: "absolute",
+              left: "0px",
+              right: "0px",
+              marginInline: "auto",
+              marginTop: "3px",
+              width: "fit-content",
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            {FS.state}
+          </Typography>
 
           <IconButton
             onClick={handleFSClose}
@@ -149,10 +185,10 @@ const FeatureAndSearchDrawer = ({
             overflow: "auto",
           }}
         >
-          {typeof FS == "string" ? (
-            <DrawerPost id={FS} FSOpen={FSOpen} />
+          {typeof FS.item == "string" ? (
+            <DrawerPost id={FS.item} FSOpen={FSOpen} />
           ) : (
-            <DrawerSpecies species={FS} />
+            <DrawerSpecies species={FS.item} />
           )}
         </Box>
       </Drawer>

@@ -4,7 +4,7 @@ import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
-import { updatePost } from "@utils/api-helpers";
+import { updatePost } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";

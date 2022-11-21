@@ -8,6 +8,7 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import Vote from "@components/layouts/Vote";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
   Box,
@@ -31,8 +32,8 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
-import { updatePost } from "@utils/api-helpers";
-import { getPostById, getPosts } from "@utils/mongodb/helpers";
+import { updatePost } from "@utils/apiHelpers";
+import { getPostById, getPosts } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import useOnScreen from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
@@ -293,39 +294,56 @@ const post = ({ post }) => {
             <Box
               sx={{
                 display: "flex",
-                flexDirection: { xs: "column", md: "row" },
+                flexDirection: "column",
                 alignItems: "start",
               }}
             >
-              <Typography align="center" variant="h6">
-                <Link
-                  href={`/person/${post.name}`}
+              <div style={{ display: "flex" }}>
+                <Typography align="center" variant="h6">
+                  <Link
+                    href={`/person/${post.name}`}
+                    color="secondary"
+                    underline="hover"
+                  >
+                    {post.name}
+                  </Link>
+                </Typography>
+                <Button
+                  href={`/tip?q=${post.name}`}
                   color="secondary"
-                  underline="hover"
+                  variant="outlined"
+                  sx={{
+                    marginLeft: "10px",
+                    "& .MuiButton-startIcon": {
+                      marginRight: "0px",
+                    },
+                  }}
+                  size="small"
+                  startIcon={<AttachMoneyIcon />}
                 >
-                  {post.name}
-                </Link>
-              </Typography>
-              <Typography
-                sx={{
-                  marginLeft: { xs: "0px", md: "20px" },
-                  fontStyle: "italic",
-                }}
-                align="left"
-                variant="h6"
-              >
-                {isMobile ? (
-                  <>
-                    {" "}
-                    {post.updated && "Updated:"} {date.toLocaleDateString()}
-                  </>
-                ) : (
-                  <>
-                    {post.updated && "Updated:"} {date.toDateString()}
-                  </>
-                )}
-              </Typography>
+                  tip
+                </Button>
+              </div>
             </Box>
+            <Typography
+              sx={{
+                // marginLeft: { xs: "0px", md: "20px" },
+                fontStyle: "italic",
+              }}
+              align="left"
+              variant="h6"
+            >
+              {isMobile ? (
+                <>
+                  {" "}
+                  {post.updated && "Updated:"} {date.toLocaleDateString()}
+                </>
+              ) : (
+                <>
+                  {post.updated && "Updated:"} {date.toDateString()}
+                </>
+              )}
+            </Typography>
             <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (
@@ -333,6 +351,7 @@ const post = ({ post }) => {
                   href={`/ecoregions/${ecoregion}`}
                   color="secondary"
                   underline="hover"
+                  key={ecoregion}
                 >
                   Eco-{ecoregion},{" "}
                 </Link>

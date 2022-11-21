@@ -4,9 +4,10 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import PostList from "@components/layouts/PostList";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Container, IconButton, Typography } from "@mui/material";
-import { getPerson, getProfilePosts } from "@utils/mongodb/helpers";
+import { Button, Container, IconButton, Typography } from "@mui/material";
+import { getPerson, getProfilePosts } from "@utils/mongodb/mongoHelpers";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -58,25 +59,49 @@ const person = ({ person, posts }) => {
             <FlagIcon />
           </IconButton>
         </div>
+        <Button
+          href={`/tip?q=${person.name}`}
+          color="secondary"
+          variant="outlined"
+          sx={{
+            display: "flex",
+            marginInline: "auto",
+            marginTop: "10px",
+            maxWidth: "fit-content",
+            "& .MuiButton-startIcon": {
+              marginRight: "0px",
+            },
+          }}
+          size="medium"
+          startIcon={<AttachMoneyIcon />}
+        >
+          tip
+        </Button>
 
         {person.approved == "true" && (
           <div style={{ margin: "16px" }}>
             {person.bio !== "" && (
               <>
-                <Typography gutterBottom>Bio:</Typography>
+                <Typography variant="h6">Bio:</Typography>
                 <Typography gutterBottom variant="body1">
                   {person.bio}
                 </Typography>
               </>
             )}
             {person.website !== "" && (
-              <Typography gutterBottom>
+              <Typography variant="h6">
                 Personal Website:{" "}
-                <Link underline="hover">{person.website}</Link>
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${person.website}`}
+                >
+                  {person.website}
+                </Link>
               </Typography>
             )}
             {Array.isArray(person.socials) && person.socials.length > 0 && (
-              <Typography sx={{ display: "grid" }} gutterBottom>
+              <Typography sx={{ display: "grid" }} variant="h6">
                 Socials:{" "}
                 {person.socials.map((social) => (
                   <Link
@@ -84,6 +109,7 @@ const person = ({ person, posts }) => {
                     rel="noopener noreferrer"
                     href={`${social}`}
                     underline="hover"
+                    key={social}
                   >
                     {social}
                   </Link>
@@ -92,6 +118,9 @@ const person = ({ person, posts }) => {
             )}
           </div>
         )}
+        <Typography variant="h6" sx={{ marginLeft: "16px" }}>
+          Posts:
+        </Typography>
 
         <PostList posts={posts} />
         <Flag

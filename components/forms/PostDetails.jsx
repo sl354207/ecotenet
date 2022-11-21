@@ -324,6 +324,7 @@ const PostDetails = ({
                   },
                 }}
                 onDelete={() => handleRemoveChip(tags, tag)}
+                key={tag}
               ></Chip>
             ))}
           </div>

@@ -42,8 +42,6 @@ const reducer = (menuItems, action) => {
 
 const FilterDrawer = ({
   ecoFilter,
-  state,
-  dispatch,
   filterOpen,
   setFilterOpen,
   handleFilterClose,
@@ -51,7 +49,6 @@ const FilterDrawer = ({
   setTop,
   drawerHeight,
   setDrawerHeight,
-  setTab,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));

@@ -1,5 +1,6 @@
 import EditorLayout from "@components/layouts/EditorLayout";
 import Link from "@components/layouts/Link";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import {
   Button,
   CircularProgress,
@@ -83,15 +84,33 @@ const DrawerPost = ({ id, FSOpen }) => {
                       alignItems: "start",
                     }}
                   >
-                    <Typography align="center" variant="h6">
-                      <Link
-                        href={`/person/${post.name}`}
+                    <div style={{ display: "flex" }}>
+                      <Typography align="center" variant="h6">
+                        <Link
+                          href={`/person/${post.name}`}
+                          color="secondary"
+                          underline="hover"
+                        >
+                          {post.name}
+                        </Link>
+                      </Typography>
+                      <Button
+                        href={`/tip?q=${post.name}`}
                         color="secondary"
-                        underline="hover"
+                        variant="outlined"
+                        sx={{
+                          marginLeft: "10px",
+                          "& .MuiButton-startIcon": {
+                            marginRight: "0px",
+                          },
+                        }}
+                        size="small"
+                        startIcon={<AttachMoneyIcon />}
                       >
-                        {post.name}
-                      </Link>
-                    </Typography>
+                        tip
+                      </Button>
+                    </div>
+
                     <Typography
                       sx={{
                         fontStyle: "italic",
@@ -113,6 +132,7 @@ const DrawerPost = ({ id, FSOpen }) => {
                         href={`/ecoregions/${ecoregion}`}
                         color="secondary"
                         underline="hover"
+                        key={ecoregion}
                       >
                         Eco-{ecoregion},{" "}
                       </Link>

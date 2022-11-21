@@ -1,3 +1,4 @@
+import { useHomepageContext } from "@components/context/HomepageContext";
 import { useUserContext } from "@components/context/UserContext";
 import Flag from "@components/dialogs/Flag";
 import Footer from "@components/layouts/Footer";
@@ -5,7 +6,7 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import { getEcoregionById } from "@utils/mongodb/helpers";
+import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -13,7 +14,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const eco = ({ wiki, eco, id, setEcoFilter }) => {
+const eco = ({ wiki, eco, id }) => {
   const router = useRouter();
   const { user } = useUserContext();
   // console.log(userName);
@@ -23,6 +24,8 @@ const eco = ({ wiki, eco, id, setEcoFilter }) => {
   } else {
     status = user.status;
   }
+
+  const { setEcoFilter } = useHomepageContext();
 
   useEffect(() => {
     sessionStorage.setItem("ecoregion", JSON.stringify(eco));
@@ -220,8 +223,9 @@ const eco = ({ wiki, eco, id, setEcoFilter }) => {
 
         {!wiki ? (
           <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
-            We currently don't have a summary of this ecoregion. If you want to
-            help us out you can create a wikipedia page for the ecoregion.
+            We currently don&apos;t have a summary of this ecoregion. If you
+            want to help us out you can create a wikipedia page for the
+            ecoregion.
           </Typography>
         ) : (
           <>

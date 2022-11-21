@@ -1,6 +1,6 @@
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
-import { fetchGetJSON } from "@utils/stripe/api-helpers";
+import { fetchGetJSON } from "@utils/stripe/stripeApiHelpers";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 

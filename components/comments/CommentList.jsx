@@ -57,6 +57,7 @@ const CommentList = ({
           handleOpenDialog={handleOpenDialog}
           handleOpenFlag={handleOpenFlag}
           handleReply={handleReply}
+          key={comment._id}
         />
       ))}
     </List>

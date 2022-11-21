@@ -1,4 +1,4 @@
-import { checkPerson, createFlag } from "@utils/mongodb/helpers";
+import { checkPerson, createFlag } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 
 // api endpoint to get all posts from database
