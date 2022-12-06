@@ -13,7 +13,6 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
       tags: [],
       ecoregions: [],
       id: "",
-      status: "",
       name: name,
       status: "draft",
       approved: "false",

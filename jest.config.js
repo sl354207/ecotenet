@@ -17,10 +17,14 @@ const customJestConfig = {
     "^@/styles/(.*)$": "<rootDir>/styles/$1",
     "^@/plugins/(.*)$": "<rootDir>/plugins/$1",
   },
+  // COMMENT OUT NEXT TWO LINES WHEN RUNNING NON MONGODB TESTS
+  preset: "@shelf/jest-mongodb",
+  watchPathIgnorePatterns: ["globalConfig"],
   // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
   moduleDirectories: ["node_modules", "<rootDir>/"],
 
-  testEnvironment: "jest-environment-jsdom",
+  // UNCOMMENT WHEN RUNNING NON MONGODB TESTS
+  // testEnvironment: "jest-environment-jsdom",
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
