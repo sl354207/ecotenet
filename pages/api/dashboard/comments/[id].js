@@ -5,15 +5,24 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 
+import commentSchema from "@schema/comment.json";
+import Ajv from "ajv";
+
+const ajv = new Ajv({ allErrors: true }); // options can be passed, e.g. {allErrors: true}
+
+const validate = ajv.compile(commentSchema);
+
 export default async function handler(req, res) {
   const session = await getSession({ req });
   if (session) {
     const method = req.method;
     switch (method) {
       case "PUT":
-        const { id, name, ...data } = req.body;
+        const { id, ...data } = req.body;
 
-        if (session.user.name && session.user.name == name) {
+        const valid = validate(data);
+
+        if (valid && session.user.name && session.user.name == data.name) {
           try {
             const updatedComment = await updateComment(id, data);
             return res.status(200).json(updatedComment);
@@ -22,7 +31,7 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else if (!session.user.name) {
-          const person = await checkPerson(name);
+          const person = await checkPerson(data.name);
 
           if (person && person.email == session.user.email) {
             // try get request, if successful return response, otherwise return error message
@@ -37,6 +46,7 @@ export default async function handler(req, res) {
             res.status(401);
           }
         } else {
+          console.log(validate.errors);
           res.status(401);
         }
 

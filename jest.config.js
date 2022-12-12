@@ -16,6 +16,7 @@ const customJestConfig = {
     "^@/utils/(.*)$": "<rootDir>/utils/$1",
     "^@/styles/(.*)$": "<rootDir>/styles/$1",
     "^@/plugins/(.*)$": "<rootDir>/plugins/$1",
+    "^@/schema/(.*)$": "<rootDir>/schema/$1",
   },
   // COMMENT OUT NEXT TWO LINES WHEN RUNNING NON MONGODB TESTS
   preset: "@shelf/jest-mongodb",
