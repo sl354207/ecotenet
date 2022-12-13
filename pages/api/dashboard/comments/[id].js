@@ -5,16 +5,12 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 
-import commentSchema from "@schema/comment.json";
-import Ajv from "ajv";
-
-const ajv = new Ajv({ allErrors: true }); // options can be passed, e.g. {allErrors: true}
-
-const validate = ajv.compile(commentSchema);
+import { ajv } from "@schema/validation";
 
 export default async function handler(req, res) {
   const session = await getSession({ req });
   if (session) {
+    const validate = ajv.getSchema("comment");
     const method = req.method;
     switch (method) {
       case "PUT":
@@ -22,7 +18,12 @@ export default async function handler(req, res) {
 
         const valid = validate(data);
 
-        if (valid && session.user.name && session.user.name == data.name) {
+        if (
+          id.length == 24 &&
+          valid &&
+          session.user.name &&
+          session.user.name == data.name
+        ) {
           try {
             const updatedComment = await updateComment(id, data);
             return res.status(200).json(updatedComment);
@@ -58,7 +59,11 @@ export default async function handler(req, res) {
         // try delete request, if successful return response, otherwise return error message
 
         // console.log(req.body);
-        if (session.user.name && session.user.name == deleteName) {
+        if (
+          deleteId.length == 24 &&
+          session.user.name &&
+          session.user.name == deleteName
+        ) {
           try {
             const deleted = await deleteComment(deleteId);
             return res.status(200).json(deleted);
