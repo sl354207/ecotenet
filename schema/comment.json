@@ -10,10 +10,12 @@
       "properties": {
         "post_id": {
           "type": "string",
+          "maxLength": 24,
           "description": "must be a string"
         },
         "comment_ref": {
           "type": "string",
+          "maxLength": 24,
           "description": "must be a string"
         },
         "date": {

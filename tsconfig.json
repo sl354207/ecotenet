@@ -8,6 +8,7 @@
       "@styles/*": ["styles/*"],
       "@plugins/*": ["plugins/*"],
       "@schema/*": ["schema/*"],
+      "@pages/*": ["pages/*"],
 
     },
     "target": "es5",
