@@ -18,6 +18,10 @@ jest.mock("next-auth/react");
 // jest.mock("deleteComment");
 // jest.mock("checkPerson");
 // jest.mock("getSession");
+// beforeEach(() => {
+//   // Clear all instances and calls to constructor and all methods:
+//   getSession.mockClear();
+// });
 
 describe("dashboard comment api", () => {
   //   console.log(updateComment);
@@ -33,12 +37,12 @@ describe("dashboard comment api", () => {
       },
     };
     // getSession = jest.fn();
-    getSession.mockReturnValue([
+    getSession.mockReturnValueOnce([
       {
         expires: new Date(Date.now() + 2 * 86400).toISOString(),
         user: { username: "test" },
       },
-      "unauthenticated",
+      "authenticated",
     ]);
     const deleteComment = jest.fn();
     const updateComment = jest.fn();
@@ -62,8 +66,16 @@ describe("dashboard comment api", () => {
       setHeader,
     };
 
-    // const thing = await handler(req, res);
-    //
-    console.log(handler(req, res));
+    // expect.assertions(1);
+    // try {
+    //   // const thing = await handler(req, res);
+    await handler(req, res);
+    console.log(res.status.mock);
+    // } catch (e) {
+    //   expect(e).toMatch("error");
+    // }
+
+    expect(getSession).toHaveBeenCalledTimes(1);
+    // getSession.mockClear();
   });
 });
