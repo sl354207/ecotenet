@@ -10,13 +10,23 @@
       "properties": {
         "post_id": {
           "type": "string",
+          "minLength": 24,
           "maxLength": 24,
           "description": "must be a string"
         },
         "comment_ref": {
-          "type": "string",
-          "maxLength": 24,
-          "description": "must be a string"
+          "oneOf": [
+            {"type": "string",
+            "minLength": 24,
+            "maxLength": 24,
+            "description": "must be a string"
+            },
+            {"type": "string",
+            "const": "",
+            "description": "must be an empty string"
+            }
+          ]
+          
         },
         "date": {
           "type": "string",

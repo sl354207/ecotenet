@@ -341,6 +341,7 @@ const updateComment = async (_id, data) => {
     },
     { $set: data }
   );
+  console.log(response);
 
   return response;
 };

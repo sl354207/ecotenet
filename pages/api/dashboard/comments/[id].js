@@ -9,6 +9,7 @@ import { ajv } from "@schema/validation";
 
 export default async function handler(req, res) {
   const session = await getSession({ req });
+  // console.log(session);
   if (session) {
     const validate = ajv.getSchema("comment");
     const method = req.method;
@@ -17,25 +18,8 @@ export default async function handler(req, res) {
         const { id, ...data } = req.body;
 
         const valid = validate(data);
-
-        if (
-          id.length == 24 &&
-          valid &&
-          session.user.name &&
-          session.user.name == data.name
-        ) {
-          try {
-            const updatedComment = await updateComment(id, data);
-            return res.status(200).json(updatedComment);
-          } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name) {
-          const person = await checkPerson(data.name);
-
-          if (person && person.email == session.user.email) {
-            // try get request, if successful return response, otherwise return error message
+        if (id.length == 24 && valid) {
+          if (session.user.name && session.user.name == data.name) {
             try {
               const updatedComment = await updateComment(id, data);
               return res.status(200).json(updatedComment);
@@ -43,12 +27,27 @@ export default async function handler(req, res) {
               console.error(err);
               res.status(500).json({ msg: "Something went wrong." });
             }
+          } else if (!session.user.name) {
+            const person = await checkPerson(data.name);
+
+            if (person && person.email == session.user.email) {
+              // try get request, if successful return response, otherwise return error message
+              try {
+                const updatedComment = await updateComment(id, data);
+                return res.status(200).json(updatedComment);
+              } catch (err) {
+                console.error(err);
+                res.status(500).json({ msg: "Something went wrong." });
+              }
+            } else {
+              res.status(401);
+            }
           } else {
             res.status(401);
           }
         } else {
-          console.log(validate.errors);
-          res.status(401);
+          // console.log(validate.errors);
+          res.status(403);
         }
 
         break;
