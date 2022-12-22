@@ -3,48 +3,14 @@
  */
 
 import handler from "@pages/api/dashboard/comments/[id]";
-import {
-  checkPerson,
-  deleteComment,
-  updateComment,
-} from "@utils/mongodb/mongoHelpers";
+import { updateComment } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 jest.mock("@utils/mongodb/mongoHelpers");
 jest.mock("next-auth/react");
 
-// jest.mock("next-auth/react", () => {
-//   const originalModule = jest.requireActual("next-auth/react");
-//   const mockSession = {
-//     user: { name: 'test', email: 'test@gmail.com', role: 'user' },
-//     expires: new Date(Date.now() + 2 * 86400).toISOString(),
-//   };
-
-// RETURN VALUE OF SUCCESSFUL GETSESSION
-// {
-//   user: { name: 'Muskrat', email: 'stefanslombard@gmail.com', role: 'admin' },
-//   expires: '2023-01-20T20:08:14.617Z'
-// }
-// {
-//   acknowledged: true,
-//   modifiedCount: 1,
-//   upsertedId: null,
-//   upsertedCount: 0,
-//   matchedCount: 1
-// }
-
-//   return {
-//     __esModule: true,
-//     ...originalModule,
-//     getSession: jest.fn(() => {
-//       return { data: mockSession, status: "unauthenticated" }; // return type is [] in v3 but changed to {} in v4
-//     }),
-//   };
-// });
-
 describe("dashboard comment api", () => {
   beforeEach(() => {
-    getSession.mockClear();
-    // updateComment.mockClear();
+    jest.resetAllMocks();
   });
   describe("authorization", () => {
     describe("unauthorized", () => {
@@ -72,26 +38,14 @@ describe("dashboard comment api", () => {
           setHeader,
         };
 
-        getSession.mockReturnValueOnce(null);
-        // getSession.mockReturnValueOnce([
-        //   {
-        //     expires: new Date(Date.now() + 2 * 86400).toISOString(),
-        //     user: { username: "test" },
-        //   },
-        //   false,
-        // ]);
-        // console.log(status.mock);
+        getSession.mockResolvedValueOnce(null);
 
         await handler(req, res);
 
         expect(getSession).toHaveBeenCalledTimes(1);
         expect(res.status.mock.calls[0][0]).toBe(401);
-        json.mockClear();
-        end.mockClear();
-        setHeader.mockClear();
-        status.mockClear();
-        // console.log(status.mock);
-        updateComment.mockClear();
+
+        console.log(getSession.mock.results[0].value);
       });
     });
     describe("authorized", () => {
@@ -120,35 +74,24 @@ describe("dashboard comment api", () => {
             setHeader,
           };
 
-          getSession.mockReturnValueOnce({
-            user: { name: "test", email: "test@gmail.com", role: "user" },
+          getSession.mockResolvedValueOnce({
+            user: { name: "test 1", email: "test@gmail.com", role: "user" },
             expires: new Date(Date.now() + 2 * 86400).toISOString(),
           });
 
-          deleteComment.mockReturnValueOnce("test");
-          updateComment.mockReturnValueOnce("test");
-          checkPerson.mockReturnValueOnce("test");
+          updateComment.mockResolvedValueOnce("test method not allowed");
 
           await handler(req, res);
           // console.log(status.mock);
 
           expect(getSession).toHaveBeenCalledTimes(1);
           expect(res.status.mock.calls[0][0]).toBe(405);
-          json.mockClear();
-          end.mockClear();
-          setHeader.mockClear();
-          status.mockClear();
-          // console.log(status.mock);
-          updateComment.mockClear();
-          // updateComment.mockClear();
+          console.log(updateComment.mock.results);
+          console.log(getSession.mock.results[0].value);
         });
       });
       describe("request method allowed", () => {
         describe("PUT", () => {
-          // beforeEach(() => {
-          //   getSession.mockClear();
-          //   updateComment.mockClear();
-          // });
           describe("invalid data", () => {
             it("should deny missing required data", async () => {
               const req = {
@@ -182,14 +125,10 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockReturnValueOnce({
-                user: { name: "test", email: "test@gmail.com", role: "user" },
+              getSession.mockResolvedValueOnce({
+                user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
-
-              // deleteComment.mockReturnValueOnce("test");
-              // updateComment.mockReturnValueOnce("tnt");
-              // checkPerson.mockReturnValueOnce("test");
 
               await handler(req, res);
               // console.log(status.mock);
@@ -197,19 +136,11 @@ describe("dashboard comment api", () => {
               expect(getSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
-              json.mockClear();
-              end.mockClear();
-              setHeader.mockClear();
-              status.mockClear();
-              // console.log(status.mock);
-              updateComment.mockClear();
+              // console.log(updateComment.mock.results);
+              console.log(getSession.mock.results[0].value);
             });
           });
           describe("valid data", () => {
-            // beforeEach(() => {
-            //   getSession.mockClear();
-            //   updateComment.mockClear();
-            // });
             it("data is updated", async () => {
               const req = {
                 method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
@@ -218,7 +149,7 @@ describe("dashboard comment api", () => {
                 },
                 body: {
                   id: "32fa81eb88f30d14e512d872",
-                  name: "test",
+                  name: "test 3",
                   date: new Date().toUTCString(),
                   text: "test",
                   approved: "pending",
@@ -242,14 +173,12 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockReturnValueOnce({
-                user: { name: "test", email: "test@gmail.com", role: "user" },
+              getSession.mockResolvedValueOnce({
+                user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              // deleteComment.mockReturnValueOnce("test");
-              updateComment.mockReturnValueOnce("tst");
-              // checkPerson.mockReturnValueOnce("test");
+              updateComment.mockResolvedValueOnce("test valid data update");
 
               await handler(req, res);
               // console.log(res.status.mock.results[0].value.json.mock);
@@ -258,16 +187,10 @@ describe("dashboard comment api", () => {
               expect(getSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
-              // expect(
-              //   res.status.mock.results[0].value.json.mock.calls[0][0]
-              // ).toMatch(/row/);
-              json.mockClear();
-              end.mockClear();
-              setHeader.mockClear();
-              status.mockClear();
-              // console.log(status.mock);
-              updateComment.mockClear();
-              console.log(updateComment.mock);
+              console.log(updateComment.mock.results);
+              console.log(getSession.mock.results[0].value);
+
+              // updateComment.mockReset();
             });
             it("database error", async () => {
               const req = {
@@ -277,7 +200,7 @@ describe("dashboard comment api", () => {
                 },
                 body: {
                   id: "32fa81eb88f30d14e512d872",
-                  name: "test",
+                  name: "test 4",
                   date: new Date().toUTCString(),
                   text: "test",
                   approved: "pending",
@@ -300,38 +223,31 @@ describe("dashboard comment api", () => {
                 end,
                 setHeader,
               };
-              updateComment.mockClear();
+              // updateComment.mockReset();
 
-              getSession.mockReturnValueOnce({
-                user: { name: "test", email: "test@gmail.com", role: "user" },
+              getSession.mockResolvedValueOnce({
+                user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              // deleteComment.mockReturnValueOnce("test");
-              updateComment.mockReturnValueOnce(Error("test"));
-              // updateComment.mockImplementation(() => {
-              //   throw new Error("test");
-              // });
+              // await updateComment.mockResolvedValueOnce(Error("test"));
+              updateComment.mockImplementation(() => {
+                throw new Error("test database error");
+              });
               // updateComment.mockRejectedValue(new Error("test"));
-              // checkPerson.mockReturnValueOnce("test");
 
               await handler(req, res);
               // console.log(
               //   res.status.mock.results[0].value.json.mock.calls[0][0]
               // );
-              console.log(updateComment.mock);
+              // console.log(updateComment.mock);
 
               expect(getSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(1);
               // expect(() => updateComment).toThrow(Error);
               expect(res.status.mock.calls[0][0]).toBe(500);
-              // expect(
-              //   res.status.mock.results[0].value.json.mock.calls[0][0]
-              // ).toMatch(/row/);
-              json.mockClear();
-              end.mockClear();
-              setHeader.mockClear();
-              status.mockClear();
+              console.log(updateComment.mock.results);
+              console.log(getSession.mock.results[0].value);
             });
           });
         });

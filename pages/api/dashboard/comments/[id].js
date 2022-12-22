@@ -24,7 +24,8 @@ export default async function handler(req, res) {
               const updatedComment = await updateComment(id, data);
               return res.status(200).json(updatedComment);
             } catch (err) {
-              console.error(err);
+              // console.error(err);
+              // console.log(err);
               res.status(500).json({ msg: "Something went wrong." });
             }
           } else if (!session.user.name) {
