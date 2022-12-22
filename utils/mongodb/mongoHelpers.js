@@ -51,6 +51,7 @@ const { MONGODB_DB } = process.env;
 const connectToDatabase = async () => {
   const client = await clientPromise;
   const db = client.db(MONGODB_DB);
+  // console.log(db);
 
   return db;
 };
@@ -334,6 +335,7 @@ const getComments = async (approved) => {
 
 const updateComment = async (_id, data) => {
   const db = await connectToDatabase();
+  // console.log(db);
 
   const response = await db.collection("comments").updateOne(
     {
@@ -341,7 +343,7 @@ const updateComment = async (_id, data) => {
     },
     { $set: data }
   );
-  console.log(response);
+  // console.log(response);
 
   return response;
 };

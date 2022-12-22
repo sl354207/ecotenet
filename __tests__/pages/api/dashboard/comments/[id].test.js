@@ -5,6 +5,7 @@
 import handler from "@pages/api/dashboard/comments/[id]";
 import { updateComment } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
+// jest.mock("@utils/mongodb/mongoPromise");
 jest.mock("@utils/mongodb/mongoHelpers");
 jest.mock("next-auth/react");
 
@@ -45,7 +46,7 @@ describe("dashboard comment api", () => {
         expect(getSession).toHaveBeenCalledTimes(1);
         expect(res.status.mock.calls[0][0]).toBe(401);
 
-        console.log(getSession.mock.results[0].value);
+        // console.log(getSession.mock.results[0].value);
       });
     });
     describe("authorized", () => {
@@ -86,8 +87,8 @@ describe("dashboard comment api", () => {
 
           expect(getSession).toHaveBeenCalledTimes(1);
           expect(res.status.mock.calls[0][0]).toBe(405);
-          console.log(updateComment.mock.results);
-          console.log(getSession.mock.results[0].value);
+          // console.log(updateComment.mock.results);
+          // console.log(getSession.mock.results[0].value);
         });
       });
       describe("request method allowed", () => {
@@ -137,7 +138,7 @@ describe("dashboard comment api", () => {
               expect(updateComment).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
               // console.log(updateComment.mock.results);
-              console.log(getSession.mock.results[0].value);
+              // console.log(getSession.mock.results[0].value);
             });
           });
           describe("valid data", () => {
@@ -182,13 +183,16 @@ describe("dashboard comment api", () => {
 
               await handler(req, res);
               // console.log(res.status.mock.results[0].value.json.mock);
-              // console.log(status.mock);
+              // console.log(
+              //   updateComment.mock.instances[0].connectToDatabase.mock
+              // );
+              // console.log(clientPromise());
 
               expect(getSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
-              console.log(updateComment.mock.results);
-              console.log(getSession.mock.results[0].value);
+              // console.log(updateComment.mock.results);
+              // console.log(getSession.mock.results[0].value);
 
               // updateComment.mockReset();
             });
@@ -246,8 +250,8 @@ describe("dashboard comment api", () => {
               expect(updateComment).toHaveBeenCalledTimes(1);
               // expect(() => updateComment).toThrow(Error);
               expect(res.status.mock.calls[0][0]).toBe(500);
-              console.log(updateComment.mock.results);
-              console.log(getSession.mock.results[0].value);
+              // console.log(updateComment.mock.results);
+              // console.log(getSession.mock.results[0].value);
             });
           });
         });
