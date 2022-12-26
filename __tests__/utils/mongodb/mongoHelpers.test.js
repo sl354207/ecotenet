@@ -16,7 +16,8 @@ describe("insert", () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    // console.log(connection);
+
+    // console.log(globalThis.__MONGO_URI__);
     // const client = await clientPromise;
     // db = await connectToDatabase();
     // db = await connection.db(globalThis.__MONGO_DB_NAME__);
@@ -26,6 +27,33 @@ describe("insert", () => {
     });
 
     await connectToDatabase();
+
+    await db.createCollection("students", {
+      validator: {
+        $jsonSchema: {
+          bsonType: "object",
+          title: "Student Object Validation",
+          required: ["address", "major", "name", "year"],
+          properties: {
+            name: {
+              bsonType: "string",
+              description: "'name' must be a string and is required",
+            },
+            year: {
+              bsonType: "int",
+              minimum: 2017,
+              maximum: 3017,
+              description:
+                "'year' must be an integer in [ 2017, 3017 ] and is required",
+            },
+            gpa: {
+              bsonType: ["double"],
+              description: "'gpa' must be a double if the field exists",
+            },
+          },
+        },
+      },
+    });
 
     // connectToDatabase = jest.fn();
     // connectToDatabase.mockResolvedValue("test");
@@ -40,7 +68,7 @@ describe("insert", () => {
 
   it("should insert a doc into collection", async () => {
     // console.log(db);
-    // const users = db.collection("users");
+    const students = db.collection("students");
     const comments = db.collection("comments");
     // const mockUser = { _id: "some-user-id", name: "John" };
     const mockComment = {
@@ -68,11 +96,28 @@ describe("insert", () => {
     try {
       // await users.insertOne(mockUser);
       await createComment(mockComment);
+
       // await createComment(mockComment);
       // console.log(createComment.mock.results[0]);
       // await users.insertOne(mockUser); // duplicate key error
     } catch (error) {
       throw new Error(error);
+    }
+
+    try {
+      await students.insertOne({
+        name: "Alice",
+        year: 3030,
+        major: "History",
+        gpa: 2.3,
+        address: {
+          city: "NYC",
+          street: "33rd Street",
+        },
+      });
+      // db.students.findOne({});
+    } catch (error) {
+      console.log(error);
     }
 
     const insertedComment = await comments.findOne({ _id: "test comment id" });

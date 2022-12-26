@@ -49,44 +49,11 @@ export default async function handler(req, res) {
 
         break;
       case "POST":
-        const {
-          title,
-          name,
-          description,
-          category,
-          tags,
-          ecoregions,
-          id,
-          version,
-          rows,
-
-          status,
-          approved,
-          updated,
-          featured,
-          date,
-          feature,
-        } = req.body;
+        const data = req.body;
         // console.log(req.body);
-        if (session.user.name && session.user.name == name) {
+        if (session.user.name && session.user.name == data.name) {
           try {
-            const createdPost = await createPost(
-              title,
-              name,
-              description,
-              category,
-              tags,
-              ecoregions,
-              id,
-              version,
-              rows,
-              status,
-              approved,
-              updated,
-              featured,
-              date,
-              feature
-            );
+            const createdPost = await createPost(data);
 
             return res.status(200).json(createdPost);
           } catch (err) {
@@ -95,28 +62,12 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else if (!session.user.name) {
-          const person = await checkPerson(name);
+          const person = await checkPerson(data.name);
 
           if (person && person.email == session.user.email) {
             // try get request, if successful return response, otherwise return error message
             try {
-              const createdPost = await createPost(
-                title,
-                name,
-                description,
-                category,
-                tags,
-                ecoregions,
-                id,
-                version,
-                rows,
-                status,
-                approved,
-                updated,
-                featured,
-                date,
-                feature
-              );
+              const createdPost = await createPost(data);
 
               return res.status(200).json(createdPost);
             } catch (err) {

@@ -10,21 +10,11 @@ export default async function handler(req, res) {
     if (req.method !== "POST") {
       return res.status(405).json({ msg: "Method not allowed" });
     }
-    const { name, flagged, type, text, content_id, ref, status, date } =
-      req.body;
+    const data = req.body;
 
-    if (session.user.name && session.user.name == name) {
+    if (session.user.name && session.user.name == data.name) {
       try {
-        const createdFlag = await createFlag(
-          name,
-          flagged,
-          type,
-          text,
-          content_id,
-          ref,
-          status,
-          date
-        );
+        const createdFlag = await createFlag(data);
 
         return res.status(200).json(createdFlag);
       } catch (err) {
@@ -33,19 +23,10 @@ export default async function handler(req, res) {
         res.status(500).json({ msg: "Something went wrong." });
       }
     } else if (!session.user.name) {
-      const person = await checkPerson(name);
+      const person = await checkPerson(data.name);
       if (person && person.email == session.user.email) {
         try {
-          const createdFlag = await createFlag(
-            name,
-            flagged,
-            type,
-            text,
-            content_id,
-            ref,
-            status,
-            date
-          );
+          const createdFlag = await createFlag(data);
 
           return res.status(200).json(createdFlag);
         } catch (err) {

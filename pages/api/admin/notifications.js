@@ -3,7 +3,7 @@ import { createNotification } from "@utils/mongodb/mongoHelpers";
 // api endpoint to post a comment to the database
 export default async function handler(req, res) {
   // body must be in same format as database query
-  const { name, reason, text, add_info, ref, date, viewed } = req.body;
+  const data = req.body;
 
   // only allow post method
   if (req.method !== "POST") {
@@ -11,15 +11,7 @@ export default async function handler(req, res) {
   }
   // try post request, if successful return response, otherwise return error message.
   try {
-    const createdNotification = await createNotification(
-      name,
-      reason,
-      text,
-      add_info,
-      ref,
-      date,
-      viewed
-    );
+    const createdNotification = await createNotification(data);
 
     return res.status(200).json(createdNotification);
   } catch (err) {

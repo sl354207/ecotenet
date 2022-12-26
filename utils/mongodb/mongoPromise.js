@@ -18,15 +18,24 @@ if (process.env.NODE_ENV === "development") {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
+    try {
+      client = new MongoClient(uri, options);
+      global._mongoClientPromise = client.connect();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
   clientPromise = global._mongoClientPromise;
   // console.log(clientPromise);
 } else {
   // In production mode, it's best to not use a global variable.
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+  try {
+    client = new MongoClient(uri, options);
+    clientPromise = client.connect();
+  } catch (error) {
+    throw new Error(error);
+  }
+
   // console.log(clientPromise);
 }
 
