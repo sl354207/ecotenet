@@ -7,9 +7,6 @@ export default async function handler(req, res) {
     return res.status(405);
   }
 
-  //   const { q } = req.query;
-  // console.log(name);
-  // try get request, if successful return response, otherwise return error message
   try {
     const comments = await getComments("pending");
 

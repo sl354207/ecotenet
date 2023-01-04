@@ -11,14 +11,13 @@ export default async function handler(req, res) {
   const session = await getSession({ req });
   // console.log(session);
   if (session) {
-    const validate = ajv.getSchema("comment");
     const method = req.method;
     switch (method) {
       case "PUT":
         const { id, ...data } = req.body;
-
+        const validate = ajv.getSchema("comment");
         const valid = validate(data);
-        if (id.length == 24 && valid) {
+        if (typeof id == "string" && id.length == 24 && valid) {
           if (session.user.name && session.user.name == data.name) {
             try {
               const updatedComment = await updateComment(id, data);
@@ -60,22 +59,11 @@ export default async function handler(req, res) {
 
         // console.log(req.body);
         if (
+          typeof deleteId == "string" &&
           deleteId.length == 24 &&
-          session.user.name &&
-          session.user.name == deleteName
+          typeof deleteName == "string"
         ) {
-          try {
-            const deleted = await deleteComment(deleteId);
-            return res.status(200).json(deleted);
-          } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name) {
-          const person = await checkPerson(deleteName);
-
-          if (person && person.email == session.user.email) {
-            // try get request, if successful return response, otherwise return error message
+          if (session.user.name && session.user.name == deleteName) {
             try {
               const deleted = await deleteComment(deleteId);
               return res.status(200).json(deleted);
@@ -83,11 +71,26 @@ export default async function handler(req, res) {
               console.error(err);
               res.status(500).json({ msg: "Something went wrong." });
             }
+          } else if (!session.user.name) {
+            const person = await checkPerson(deleteName);
+
+            if (person && person.email == session.user.email) {
+              // try get request, if successful return response, otherwise return error message
+              try {
+                const deleted = await deleteComment(deleteId);
+                return res.status(200).json(deleted);
+              } catch (err) {
+                console.error(err);
+                res.status(500).json({ msg: "Something went wrong." });
+              }
+            } else {
+              res.status(401);
+            }
           } else {
             res.status(401);
           }
         } else {
-          res.status(401);
+          res.status(403);
         }
 
         break;
