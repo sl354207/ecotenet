@@ -2,17 +2,18 @@
  * @jest-environment node
  */
 
-import handler from "@pages/api/dashboard/comments/index";
+import handler from "@pages/api/dashboard/users/[name]";
 import {
-  createComment,
-  getDashboardComments,
+  deletePerson,
+  getPerson,
+  updatePerson,
 } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
-
+// jest.mock("@utils/mongodb/mongoPromise");
 jest.mock("@utils/mongodb/mongoHelpers");
 jest.mock("next-auth/react");
 
-describe("dashboard comments api", () => {
+describe("dashboard name api", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -52,9 +53,9 @@ describe("dashboard comments api", () => {
     });
     describe("authorized", () => {
       describe("request method not allowed", () => {
-        it("should deny PUT request", async () => {
+        it("should deny GET request", async () => {
           const req = {
-            method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
+            method: "POST", // GET, POST, PUT, DELETE, OPTIONS, etc.
             headers: {
               "content-type": "application/json",
             },
@@ -81,30 +82,26 @@ describe("dashboard comments api", () => {
             expires: new Date(Date.now() + 2 * 86400).toISOString(),
           });
 
-          createComment.mockResolvedValueOnce("test method not allowed");
+          updatePerson.mockResolvedValueOnce("test method not allowed");
 
           await handler(req, res);
 
           expect(getSession).toHaveBeenCalledTimes(1);
+          expect(updatePerson).toHaveBeenCalledTimes(0);
           expect(res.status.mock.calls[0][0]).toBe(405);
         });
       });
       describe("request method allowed", () => {
-        describe("POST", () => {
+        describe("PUT", () => {
           describe("invalid data", () => {
             it("should deny missing required data", async () => {
               const req = {
-                method: "POST", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
                   "content-type": "application/json",
                 },
                 body: {
-                  id: "62fa81eb88f30d14e512d873",
-                  // name: 'test',
-                  date: new Date().toUTCString(),
-                  text: "test",
-                  approved: "pending",
-                  updated: true,
+                  name: "test",
                 },
               };
               const json = jest.fn();
@@ -132,22 +129,18 @@ describe("dashboard comments api", () => {
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(createComment).toHaveBeenCalledTimes(0);
+              expect(updatePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
             it("should deny invalid data", async () => {
               const req = {
-                method: "POST", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
                   "content-type": "application/json",
                 },
                 body: {
-                  id: "62fa81eb88f30d14e512d87",
+                  email: "62fa81eb88f30d14e512d87",
                   name: "test",
-                  date: new Date().toUTCString(),
-                  text: "test",
-                  approved: "pending",
-                  updated: true,
                 },
               };
               const json = jest.fn();
@@ -175,22 +168,18 @@ describe("dashboard comments api", () => {
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getDashboardComments).toHaveBeenCalledTimes(0);
+              expect(updatePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
             it("should deny additional fields", async () => {
               const req = {
-                method: "POST", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
                   "content-type": "application/json",
                 },
                 body: {
-                  id: "62fa81eb88f30d14e512d87",
+                  email: "test@test.com",
                   name: "test",
-                  date: new Date().toUTCString(),
-                  text: "test",
-                  approved: "pending",
-                  updated: true,
                   test_field: "test",
                 },
               };
@@ -219,25 +208,27 @@ describe("dashboard comments api", () => {
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(createComment).toHaveBeenCalledTimes(0);
+              expect(updatePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
           });
           describe("valid data", () => {
-            it("comment is created", async () => {
+            it("data is updated", async () => {
               const req = {
-                method: "POST", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
                   "content-type": "application/json",
                 },
                 body: {
-                  post_id: "32fa81eb88f30d14e512d872",
-                  comment_ref: "",
+                  email: "test@gmail.com",
                   name: "test 3",
-                  date: new Date().toUTCString(),
-                  text: "test",
+                  emailVerified: "2022-08-16T19:06:55.405+00:00",
+                  bio: "test",
                   approved: "pending",
-                  updated: true,
+                  website: "test",
+                  socials: [],
+                  denials: 0,
+                  role: "user",
                 },
               };
               const json = jest.fn();
@@ -262,29 +253,31 @@ describe("dashboard comments api", () => {
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              createComment.mockResolvedValueOnce("test valid data update");
+              updatePerson.mockResolvedValueOnce("test valid data update");
 
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(createComment).toHaveBeenCalledTimes(1);
+              //   expect(updatePerson).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
 
             it("database error", async () => {
               const req = {
-                method: "POST", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                method: "PUT", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
                   "content-type": "application/json",
                 },
                 body: {
-                  post_id: "32fa81eb88f30d14e512d872",
-                  comment_ref: "",
+                  email: "test@gmail.com",
                   name: "test 4",
-                  date: new Date().toUTCString(),
-                  text: "test",
+                  emailVerified: "2022-08-16T19:06:55.405+00:00",
+                  bio: "test",
                   approved: "pending",
-                  updated: true,
+                  website: "test",
+                  socials: [],
+                  denials: 0,
+                  role: "user",
                 },
               };
               const json = jest.fn();
@@ -309,14 +302,136 @@ describe("dashboard comments api", () => {
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              createComment.mockImplementation(() => {
+              updatePerson.mockImplementation(() => {
                 throw new Error("test database error");
               });
 
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(createComment).toHaveBeenCalledTimes(1);
+              expect(updatePerson).toHaveBeenCalledTimes(1);
+
+              expect(res.status.mock.calls[0][0]).toBe(500);
+            });
+          });
+        });
+        describe("DELETE", () => {
+          describe("invalid data", () => {
+            it("should deny invalid data", async () => {
+              const req = {
+                method: "DELETE", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: {},
+              };
+              const json = jest.fn();
+              const end = jest.fn();
+              const setHeader = jest.fn();
+
+              const status = jest.fn(() => {
+                return {
+                  json,
+                  end,
+                };
+              });
+
+              const res = {
+                status,
+                end,
+                setHeader,
+              };
+
+              getSession.mockResolvedValueOnce({
+                user: { name: "test 2", email: "test@gmail.com", role: "user" },
+                expires: new Date(Date.now() + 2 * 86400).toISOString(),
+              });
+
+              await handler(req, res);
+
+              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(deletePerson).toHaveBeenCalledTimes(0);
+              expect(res.status.mock.calls[0][0]).toBe(403);
+            });
+          });
+          describe("valid data", () => {
+            it("data is deleted", async () => {
+              const req = {
+                method: "DELETE", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: "test 3",
+              };
+              const json = jest.fn();
+              const end = jest.fn();
+              const setHeader = jest.fn();
+
+              const status = jest.fn(() => {
+                return {
+                  json,
+                  end,
+                };
+              });
+
+              const res = {
+                status,
+                end,
+                setHeader,
+              };
+
+              getSession.mockResolvedValueOnce({
+                user: { name: "test 3", email: "test@gmail.com", role: "user" },
+                expires: new Date(Date.now() + 2 * 86400).toISOString(),
+              });
+
+              deletePerson.mockResolvedValueOnce("test valid data update");
+
+              await handler(req, res);
+
+              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(deletePerson).toHaveBeenCalledTimes(1);
+              expect(res.status.mock.calls[0][0]).toBe(200);
+            });
+
+            it("database error", async () => {
+              const req = {
+                method: "DELETE", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: "test 4",
+              };
+              const json = jest.fn();
+              const end = jest.fn();
+              const setHeader = jest.fn();
+
+              const status = jest.fn(() => {
+                return {
+                  json,
+                  end,
+                };
+              });
+
+              const res = {
+                status,
+                end,
+                setHeader,
+              };
+
+              getSession.mockResolvedValueOnce({
+                user: { name: "test 4", email: "test@gmail.com", role: "user" },
+                expires: new Date(Date.now() + 2 * 86400).toISOString(),
+              });
+
+              deletePerson.mockImplementation(() => {
+                throw new Error("test database error");
+              });
+
+              await handler(req, res);
+
+              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(deletePerson).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
             });
@@ -359,7 +474,7 @@ describe("dashboard comments api", () => {
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getDashboardComments).toHaveBeenCalledTimes(0);
+              expect(getPerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
           });
@@ -396,14 +511,12 @@ describe("dashboard comments api", () => {
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              getDashboardComments.mockResolvedValueOnce(
-                "test valid data update"
-              );
+              getPerson.mockResolvedValueOnce("test valid data update");
 
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getDashboardComments).toHaveBeenCalledTimes(1);
+              expect(getPerson).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
 
@@ -439,14 +552,14 @@ describe("dashboard comments api", () => {
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              getDashboardComments.mockImplementation(() => {
+              getPerson.mockImplementation(() => {
                 throw new Error("test database error");
               });
 
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getDashboardComments).toHaveBeenCalledTimes(1);
+              expect(getPerson).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
             });

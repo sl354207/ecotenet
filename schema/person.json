@@ -29,7 +29,7 @@
         }
       },
       "denials": {
-        "type": "int",
+        "type": "integer",
         "description": "must be an integer"
       },
       "approved": {
@@ -43,7 +43,7 @@
       },
       "emailVerified": {
         "type": "string",
-        "format": "date",
+        "format": "date-time",
         "description": "must be a date"
       },
       "role": {

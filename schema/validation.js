@@ -3,8 +3,8 @@ import personSchema from "@schema/person.json";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 
-// remove allErrors in production?
-export const ajv = new Ajv({ allErrors: true });
+// remove allErrors and verbose in production?
+export const ajv = new Ajv({ allErrors: true, verbose: true });
 addFormats(ajv);
 ajv.addSchema(commentSchema, "comment");
 ajv.addSchema(personSchema, "person");
