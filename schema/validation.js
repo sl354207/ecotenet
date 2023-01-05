@@ -1,5 +1,6 @@
 import commentSchema from "@schema/comment.json";
 import personSchema from "@schema/person.json";
+import postSchema from "@schema/post.json";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
 
@@ -8,3 +9,4 @@ export const ajv = new Ajv({ allErrors: true, verbose: true });
 addFormats(ajv);
 ajv.addSchema(commentSchema, "comment");
 ajv.addSchema(personSchema, "person");
+ajv.addSchema(postSchema, "post");

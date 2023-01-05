@@ -1,0 +1,103 @@
+{
+    "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "must be a string"
+        },
+        "title": {
+          "type": "string",
+          "description": "must be a string"
+        },
+        "description": {
+          "type": "string",
+          "description": "must be a string"
+        },
+        "category": {
+          "type": "string",
+          "description": "must be a string"
+        },
+        "tags": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "approved": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false",
+            "pending"
+          ],
+          "description": "must be a string"
+        },
+        "updated": {
+          "type": "boolean",
+          "description": "must be a boolean"
+        },
+        "name": {
+          "type": "string",
+          "description": "must be a string"
+        },
+        "ecoregions": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4
+          }
+        },
+        "id": {
+          "type": "string",
+          "description": "must be a string"
+        },
+        "version": {
+          "type": "integer",
+          "description": "must be an int"
+        },
+        "rows": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "description": "must be an int"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "published",
+            "draft"
+          ],
+          "description": "must be a string"
+        },
+        "feature": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false",
+            "pending"
+          ],
+          "description": "must be a string"
+        },
+        "featured": {
+          "type": "boolean",
+          "description": "must be a boolean"
+        },
+        "voters": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    
+}
