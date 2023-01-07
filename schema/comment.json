@@ -26,7 +26,6 @@
             "description": "must be an empty string"
             }
           ]
-          
         },
         "date": {
           "type": "string",
