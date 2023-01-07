@@ -677,10 +677,14 @@ const getPeople = async () => {
 const getPerson = async (name) => {
   try {
     const db = await connectToDatabase();
+    // DON'T RETURN EMAIL
 
-    const person = await db.collection("users").findOne({
-      name: name,
-    });
+    const person = await db.collection("users").findOne(
+      {
+        name: name,
+      },
+      { projection: { email: 0 } }
+    );
 
     return person;
   } catch (error) {
