@@ -857,9 +857,12 @@ const checkName = async (name) => {
   try {
     const db = await connectToDatabase();
 
-    const response = await db.collection("users").findOne({
-      name: { $regex: new RegExp("^" + name + "$", "i") },
-    });
+    const response = await db.collection("users").findOne(
+      {
+        name: { $regex: new RegExp("^" + name + "$", "i") },
+      },
+      { projection: { name: 1 } }
+    );
 
     return response;
   } catch (error) {

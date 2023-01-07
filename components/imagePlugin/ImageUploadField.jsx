@@ -117,7 +117,7 @@ function ImageUploadField({ onChange, value }) {
     try {
       // // get secure url from our server
       const url = await fetch(
-        `/api/dashboard/media?name=${user.name}&post_id=${postId}&type=${photo.type}`
+        `/api/dashboard/media?name=${user.name}&post_id=${postId}&ext=${photo.type}`
       ).then((res) => res.json());
       // console.log(url)
 
