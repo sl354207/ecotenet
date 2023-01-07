@@ -1,5 +1,6 @@
 import commentSchema from "@schema/comment.json";
 import flagSchema from "@schema/flag.json";
+import notificationSchema from "@schema/notification.json";
 import personSchema from "@schema/person.json";
 import postSchema from "@schema/post.json";
 import Ajv from "ajv";
@@ -12,3 +13,4 @@ ajv.addSchema(commentSchema, "comment");
 ajv.addSchema(personSchema, "person");
 ajv.addSchema(postSchema, "post");
 ajv.addSchema(flagSchema, "flag");
+ajv.addSchema(notificationSchema, "notification");

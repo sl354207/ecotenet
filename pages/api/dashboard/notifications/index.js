@@ -12,20 +12,8 @@ export default async function handler(req, res) {
     }
     const { name } = req.query;
     // console.log(name);
-    if (session.user.name && session.user.name == name) {
-      try {
-        const notifications = await getNotifications(name);
-
-        return res.status(200).json(notifications);
-      } catch (err) {
-        console.error(err);
-
-        res.status(500).json({ msg: "Something went wrong." });
-      }
-    } else if (!session.user.name) {
-      const person = await checkPerson(name);
-
-      if (person && person.email == session.user.email) {
+    if (typeof name == "string") {
+      if (session.user.name && session.user.name == name) {
         try {
           const notifications = await getNotifications(name);
 
@@ -35,11 +23,27 @@ export default async function handler(req, res) {
 
           res.status(500).json({ msg: "Something went wrong." });
         }
+      } else if (!session.user.name) {
+        const person = await checkPerson(name);
+
+        if (person && person.email == session.user.email) {
+          try {
+            const notifications = await getNotifications(name);
+
+            return res.status(200).json(notifications);
+          } catch (err) {
+            console.error(err);
+
+            res.status(500).json({ msg: "Something went wrong." });
+          }
+        } else {
+          res.status(401);
+        }
       } else {
         res.status(401);
       }
     } else {
-      res.status(401);
+      res.status(403);
     }
   } else {
     // Not Signed in
