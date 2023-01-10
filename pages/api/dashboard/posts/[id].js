@@ -24,6 +24,8 @@ export default async function handler(req, res) {
             // try get request, if successful return response, otherwise return error message
             try {
               const post = await getPostById(id);
+              // don't send voters
+              post.voters = [];
 
               return res.status(200).json(post);
             } catch (err) {
@@ -38,6 +40,8 @@ export default async function handler(req, res) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const post = await getPostById(id);
+                // don't send voters
+                post.voters = [];
 
                 return res.status(200).json(post);
               } catch (err) {

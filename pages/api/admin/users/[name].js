@@ -1,7 +1,7 @@
 import { ajv } from "@schema/validation";
 import {
   deletePerson,
-  getPerson,
+  getPersonAdmin,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
 
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
       if (typeof getName == "string") {
         try {
-          const person = await getPerson(getName);
+          const person = await getPersonAdmin(getName);
 
           return res.status(200).json(person);
         } catch (err) {

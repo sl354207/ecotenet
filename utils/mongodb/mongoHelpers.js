@@ -69,7 +69,6 @@ const getPostsByCategoryAndRegion = async (category, ecoregion) => {
         description: 1,
         name: 1,
         count: 1,
-        approved: 1,
         ecoregions: 1,
       })
       .sort({ count: -1 })
@@ -93,7 +92,6 @@ const getFeatures = async () => {
         description: 1,
         name: 1,
         count: 1,
-        approved: 1,
         ecoregions: 1,
       })
       .sort({ count: -1 })
@@ -146,6 +144,7 @@ const getPostById = async (_id) => {
 const getApprovedPostById = async (_id) => {
   try {
     const db = await connectToDatabase();
+    // POTENTIALLY UPDATE RETURNING VOTERS
 
     const post = await db.collection("posts").findOne({
       _id: ObjectId(_id),
@@ -183,7 +182,7 @@ const getDashboardPosts = async (name, status) => {
     const posts = await db
       .collection("posts")
       .find({ name: name, status: status })
-      .project({ title: 1, description: 1, name: 1, count: 1, approved: 1 })
+      .project({ title: 1, description: 1, name: 1, count: 1, category: 1 })
       .sort({ count: 1 })
       .toArray();
 
@@ -200,7 +199,7 @@ const getProfilePosts = async (name) => {
     const posts = await db
       .collection("posts")
       .find({ name: name, status: "published", approved: "true" })
-      .project({ title: 1, description: 1, name: 1, count: 1 })
+      .project({ title: 1, description: 1, name: 1, count: 1, category: 1 })
       .sort({ count: -1 })
       .toArray();
 
@@ -220,6 +219,23 @@ const updatePost = async (_id, data) => {
         _id: ObjectId(_id),
       },
       { $set: data }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const updateVote = async (data) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("posts").updateOne(
+      {
+        _id: ObjectId(data._id),
+      },
+      { $set: data.count },
+      { $push: { voters: data.name } }
     );
 
     return response;
@@ -276,6 +292,7 @@ const getPostComments = async (id) => {
         post_id: id,
         approved: "true",
       })
+      .project({ approved: 0 })
       .toArray();
 
     return comments;
@@ -436,6 +453,7 @@ const searchAllPosts = async (query) => {
             name: 1,
             count: 1,
             ecoregions: 1,
+            category: 1,
           },
         },
       ])
@@ -539,6 +557,7 @@ const searchEcoPosts = async (query, eco) => {
             name: 1,
             count: 1,
             ecoregions: 1,
+            category: 1,
           },
         },
       ])
@@ -677,13 +696,43 @@ const getPeople = async () => {
 const getPerson = async (name) => {
   try {
     const db = await connectToDatabase();
-    // DON'T RETURN EMAIL
 
     const person = await db.collection("users").findOne(
       {
         name: name,
       },
-      { projection: { email: 0 } }
+      {
+        projection: { email: 0, _id: 0, denials: 0, emailVerified: 0, role: 0 },
+      }
+    );
+
+    return person;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getPersonAdmin = async (name) => {
+  try {
+    const db = await connectToDatabase();
+
+    const person = await db.collection("users").findOne({
+      name: name,
+    });
+
+    return person;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getPersonDash = async (name) => {
+  try {
+    const db = await connectToDatabase();
+
+    const person = await db.collection("users").findOne(
+      {
+        name: name,
+      },
+      { projection: { _id: 0, denials: 0, emailVerified: 0, role: 0 } }
     );
 
     return person;
@@ -861,7 +910,7 @@ const checkName = async (name) => {
       {
         name: { $regex: new RegExp("^" + name + "$", "i") },
       },
-      { projection: { name: 1 } }
+      { projection: { name: 1, _id: 0 } }
     );
 
     return response;
@@ -878,7 +927,7 @@ const checkPerson = async (name) => {
       {
         name: name,
       },
-      { projection: { name: 1, email: 1 } }
+      { projection: { name: 1, email: 1, _id: 0 } }
     );
 
     return response;
@@ -934,6 +983,7 @@ module.exports = {
   getPostById,
   getApprovedPostById,
   updatePost,
+  updateVote,
   deletePost,
   createComment,
   getPostComments,
@@ -950,6 +1000,8 @@ module.exports = {
   getStats,
   getPeople,
   getPerson,
+  getPersonDash,
+  getPersonAdmin,
   updatePerson,
   updateDenials,
   deletePerson,

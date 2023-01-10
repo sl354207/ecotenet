@@ -72,7 +72,10 @@ const post = ({ post }) => {
     fetcher
   );
 
-  const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
+  const { data: votes, mutate } = useSWR(
+    `/api/votes/${post._id}?name=${user.name}`,
+    fetcher
+  );
 
   const reducer = (comments, toggle) => {
     // console.log(comments);

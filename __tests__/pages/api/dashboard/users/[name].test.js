@@ -5,7 +5,7 @@
 import handler from "@pages/api/dashboard/users/[name]";
 import {
   deletePerson,
-  getPerson,
+  getPersonDash,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
@@ -474,7 +474,7 @@ describe("dashboard name api", () => {
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getPerson).toHaveBeenCalledTimes(0);
+              expect(getPersonDash).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
           });
@@ -511,12 +511,12 @@ describe("dashboard name api", () => {
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              getPerson.mockResolvedValueOnce("test valid data update");
+              getPersonDash.mockResolvedValueOnce("test valid data update");
 
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getPerson).toHaveBeenCalledTimes(1);
+              expect(getPersonDash).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
 
@@ -552,14 +552,14 @@ describe("dashboard name api", () => {
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
-              getPerson.mockImplementation(() => {
+              getPersonDash.mockImplementation(() => {
                 throw new Error("test database error");
               });
 
               await handler(req, res);
 
               expect(getSession).toHaveBeenCalledTimes(1);
-              expect(getPerson).toHaveBeenCalledTimes(1);
+              expect(getPersonDash).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
             });

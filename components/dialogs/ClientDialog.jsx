@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { createComment, updatePost } from "@utils/apiHelpers";
+import { createComment, updateVote } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const ClientDialog = ({
@@ -81,9 +81,8 @@ const ClientDialog = ({
       _id: post_id,
       name: name,
       count: result.count,
-      voters: [...result.voters, name],
     };
-    const updateResponse = await updatePost(submission, "dashboard");
+    const updateResponse = await updateVote(submission);
 
     if (updateResponse.ok) {
       handleClose();

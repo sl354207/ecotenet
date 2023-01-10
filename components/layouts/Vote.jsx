@@ -45,7 +45,7 @@ const Vote = ({
             onClick={handleCountUp}
             color="secondary"
             size="large"
-            disabled={voters.includes(name)}
+            disabled={!voters}
           >
             <ArrowDropUp fontSize="large" />
           </IconButton>
@@ -54,7 +54,7 @@ const Vote = ({
             onClick={handleCountDown}
             color="secondary"
             size="large"
-            disabled={voters.includes(name)}
+            disabled={!voters}
           >
             <ArrowDropDown fontSize="large" />
           </IconButton>
@@ -64,9 +64,7 @@ const Vote = ({
         <Button
           variant="contained"
           color="secondary"
-          onClick={() =>
-            handleOpenDialog("Vote", { count: count, voters: voters })
-          }
+          onClick={() => handleOpenDialog("Vote", { count: count })}
         >
           Vote
         </Button>

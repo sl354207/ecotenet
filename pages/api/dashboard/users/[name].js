@@ -2,7 +2,7 @@ import { ajv } from "@schema/validation";
 import {
   checkPerson,
   deletePerson,
-  getPerson,
+  getPersonDash,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
           if (session.user.name && session.user.name == getName) {
             // try get request, if successful return response, otherwise return error message
             try {
-              const person = await getPerson(getName);
+              const person = await getPersonDash(getName);
 
               return res.status(200).json(person);
             } catch (err) {
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
             if (person && person.email == session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
-                const person = await getPerson(getName);
+                const person = await getPersonDash(getName);
 
                 return res.status(200).json(person);
               } catch (err) {
