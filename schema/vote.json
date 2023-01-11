@@ -3,7 +3,7 @@
     "required": [
         "_id",
       "name",
-      "count"
+      "vote"
     ],
     "properties": {
       "_id": {
@@ -16,7 +16,7 @@
         "type": "string",
         "description": "must be a string"
       },
-      "count": {
+      "vote": {
         "type": "string",
         "enum": [
           "add",

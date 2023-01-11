@@ -234,8 +234,10 @@ const updateVote = async (data) => {
       {
         _id: ObjectId(data._id),
       },
-      { $set: data.count },
-      { $push: { voters: data.name } }
+      {
+        $push: { voters: data.name },
+        $inc: { count: data.vote },
+      }
     );
 
     return response;

@@ -74,6 +74,7 @@ const post = ({ post }) => {
     loadComments ? `/api/comments/${post._id}` : null,
     fetcher
   );
+  // console.log(user);
 
   const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
 

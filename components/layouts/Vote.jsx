@@ -12,6 +12,7 @@ const Vote = ({
 }) => {
   //set limit for count
   const [limit, setLimit] = useState(0);
+  const [vote, setVote] = useState(0);
 
   const handleCountUp = () => {
     if (limit == 1) {
@@ -20,11 +21,12 @@ const Vote = ({
     } else {
       setLimit(limit + 1);
       setCount(count + 1);
+      setVote("add");
     }
   };
 
   const handleCountDown = () => {
-    if (count == 0) {
+    if (count == 0 && limit == 0) {
       setLimit(0);
       setCount(count);
     } else if (limit == -1) {
@@ -33,6 +35,7 @@ const Vote = ({
     } else {
       setLimit(limit - 1);
       setCount(count - 1);
+      setVote("subtract");
     }
   };
   return (
@@ -64,7 +67,7 @@ const Vote = ({
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => handleOpenDialog("Vote", { count: count })}
+          onClick={() => handleOpenDialog("Vote", { vote: vote })}
         >
           Vote
         </Button>
