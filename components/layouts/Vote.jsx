@@ -68,11 +68,12 @@ const Vote = ({
           variant="contained"
           color="secondary"
           onClick={() => handleOpenDialog("Vote", { vote: vote })}
+          size="small"
         >
           Vote
         </Button>
       ) : (
-        <Button variant="contained" color="secondary" disabled>
+        <Button variant="contained" color="secondary" size="small" disabled>
           Vote
         </Button>
       )}

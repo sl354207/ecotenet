@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import DrawerPost from "./DrawerPost";
 import DrawerSpecies from "./DrawerSpecies";
 
-const drawerWidth = 350;
+const drawerWidth = 370;
 
 const FeatureAndSearchDrawer = ({
   FS,
