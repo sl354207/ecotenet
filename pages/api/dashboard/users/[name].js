@@ -59,6 +59,7 @@ export default async function handler(req, res) {
         if (valid) {
           if (session.user.email == email) {
             try {
+              data.approved = "pending";
               const update = await updatePerson(
                 email,
                 Object.keys(data).length ? data : { name: name }

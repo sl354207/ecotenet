@@ -20,6 +20,9 @@ export default async function handler(req, res) {
         if (typeof id == "string" && id.length == 24 && valid) {
           if (session.user.name && session.user.name == data.name) {
             try {
+              data.date = new Date().toUTCString();
+              data.approved = "pending";
+              data.updated = true;
               const updatedComment = await updateComment(id, data);
               return res.status(200).json(updatedComment);
             } catch (err) {
@@ -33,6 +36,9 @@ export default async function handler(req, res) {
             if (person && person.email == session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
+                data.date = new Date().toUTCString();
+                data.approved = "pending";
+                data.updated = true;
                 const updatedComment = await updateComment(id, data);
                 return res.status(200).json(updatedComment);
               } catch (err) {

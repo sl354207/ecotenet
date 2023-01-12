@@ -56,6 +56,9 @@ export default async function handler(req, res) {
         if (valid) {
           if (session.user.name && session.user.name == data.name) {
             try {
+              data.date = new Date().toUTCString();
+              data.approved = "pending";
+              data.updated = false;
               const createdComment = await createComment(data);
 
               return res.status(200).json(createdComment);
@@ -70,6 +73,9 @@ export default async function handler(req, res) {
             if (person && person.email == session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
+                data.date = new Date().toUTCString();
+                data.approved = "pending";
+                data.updated = false;
                 const createdComment = await createComment(data);
 
                 return res.status(200).json(createdComment);

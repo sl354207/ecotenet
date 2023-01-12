@@ -68,6 +68,9 @@ export default async function handler(req, res) {
         if (typeof _id == "string" && _id.length == 24 && valid) {
           if (session.user.name && session.user.name == data.name) {
             try {
+              data.approved = "pending";
+              data.date = new Date().toUTCString();
+              data.feature = "false";
               const update = await updatePost(_id, data);
 
               // console.log(update);
@@ -82,6 +85,9 @@ export default async function handler(req, res) {
             if (person && person.email == session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
+                data.approved = "pending";
+                data.date = new Date().toUTCString();
+                data.feature = "false";
                 const update = await updatePost(_id, data);
 
                 // console.log(update);

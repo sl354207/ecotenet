@@ -31,8 +31,6 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       text: value,
       content_id: result._id,
       ref: result.post_id ? result.post_id : "",
-      status: "pending",
-      date: new Date().toUTCString(),
     };
 
     const flagResponse = await createFlag(flag);

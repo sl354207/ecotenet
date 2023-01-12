@@ -63,6 +63,11 @@ export default async function handler(req, res) {
         if (valid) {
           if (session.user.name && session.user.name == data.name) {
             try {
+              data.updated = false;
+              data.featured = false;
+              data.feature = "false";
+              data.date = new Date().toUTCString();
+              data.approved = "pending";
               const createdPost = await createPost(data);
 
               return res.status(200).json(createdPost);
@@ -77,6 +82,11 @@ export default async function handler(req, res) {
             if (person && person.email == session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
+                data.updated = false;
+                data.featured = false;
+                data.feature = "false";
+                data.date = new Date().toUTCString();
+                data.approved = "pending";
                 const createdPost = await createPost(data);
 
                 return res.status(200).json(createdPost);

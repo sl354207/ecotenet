@@ -15,11 +15,6 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
       id: "",
       name: name,
       status: "draft",
-      approved: "false",
-      updated: false,
-      featured: false,
-      feature: "false",
-      date: "",
       version: 1,
       rows: [],
     };

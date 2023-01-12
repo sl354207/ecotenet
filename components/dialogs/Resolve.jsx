@@ -46,8 +46,6 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           text: `a flag you submitted was resolved`,
           add_info: addInfo,
           ref: ID,
-          date: new Date().toUTCString(),
-          viewed: false,
         };
 
         const notifyResponse = await createNotification(notify);

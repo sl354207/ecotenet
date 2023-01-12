@@ -111,11 +111,8 @@ const StepForm = ({ post, user }) => {
     const silentObject = {
       _id: post._id,
       status: "draft",
-      approved: "false",
       updated: false,
       featured: false,
-      feature: "false",
-      date: "",
       name: user.name,
     };
 

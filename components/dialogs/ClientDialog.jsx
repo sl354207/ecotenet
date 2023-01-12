@@ -44,10 +44,7 @@ const ClientDialog = ({
       name: name,
       post_id: post_id,
       comment_ref: result.comment_ref,
-      date: new Date().toUTCString(),
       text: result.text,
-      approved: "pending",
-      updated: false,
     };
 
     const createResponse = await createComment(submission);

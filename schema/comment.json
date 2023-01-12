@@ -2,10 +2,7 @@
       "type": "object",
       "required": [
         "name",
-        "date",
-        "text",
-        "approved",
-        "updated"
+        "text"
       ],
       "properties": {
         "post_id": {

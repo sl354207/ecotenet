@@ -17,6 +17,8 @@ export default async function handler(req, res) {
     if (valid) {
       if (session.user.name && session.user.name == data.name) {
         try {
+          data.status = "pending";
+          data.date = new Date().toUTCString();
           const createdFlag = await createFlag(data);
 
           return res.status(200).json(createdFlag);
@@ -29,6 +31,8 @@ export default async function handler(req, res) {
         const person = await checkPerson(data.name);
         if (person && person.email == session.user.email) {
           try {
+            data.status = "pending";
+            data.date = new Date().toUTCString();
             const createdFlag = await createFlag(data);
 
             return res.status(200).json(createdFlag);

@@ -197,7 +197,6 @@ export default function Dashboard() {
       bio: profile.bio,
       website: profile.website,
       socials: profile.socials,
-      approved: "pending",
     };
 
     const profileUpdate = await updateUser(value, "dashboard");

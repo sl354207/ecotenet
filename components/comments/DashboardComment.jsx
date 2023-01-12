@@ -37,10 +37,7 @@ const DashboardComment = ({
     const comment = {
       id: result._id,
       name: name,
-      date: new Date().toUTCString(),
       text: commentValue,
-      approved: "pending",
-      updated: true,
     };
 
     const updateResponse = await updateComment(comment, "dashboard");
