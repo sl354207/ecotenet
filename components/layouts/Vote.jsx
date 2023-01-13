@@ -1,15 +1,11 @@
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import { Button, IconButton, Typography } from "@mui/material";
+import { alpha, Button, IconButton, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { useState } from "react";
 
-const Vote = ({
-  post_count,
-  count,
-  setCount,
-  handleOpenDialog,
-  voters,
-  name,
-}) => {
+const Vote = ({ post_count, handleOpenDialog, voters }) => {
+  //set count value for post
+  const [count, setCount] = useState(post_count);
   //set limit for count
   const [limit, setLimit] = useState(0);
   const [vote, setVote] = useState(0);
@@ -39,45 +35,63 @@ const Vote = ({
     }
   };
   return (
-    <>
-      <div style={{ marginLeft: "20px" }}>
-        <div
-          style={{ display: "flex", flexDirection: "column", maxWidth: "50px" }}
+    <div
+      style={{
+        display: "flex",
+        border: `2px solid ${alpha(theme.palette.secondary.main, 1)}`,
+        borderRadius: "4px",
+        padding: "10px",
+      }}
+    >
+      <div style={{ display: "flex" }}>
+        <IconButton
+          onClick={handleCountUp}
+          color="secondary"
+          size="small"
+          disabled={!voters}
+          sx={{ border: "1px solid", marginInline: "5px" }}
         >
-          <IconButton
-            onClick={handleCountUp}
-            color="secondary"
-            size="large"
-            disabled={!voters}
-          >
-            <ArrowDropUp fontSize="large" />
-          </IconButton>
-          <Typography align="center">{count}</Typography>
-          <IconButton
-            onClick={handleCountDown}
-            color="secondary"
-            size="large"
-            disabled={!voters}
-          >
-            <ArrowDropDown fontSize="large" />
-          </IconButton>
-        </div>
+          <ArrowDropUp fontSize="large" />
+        </IconButton>
+        <Typography
+          align="center"
+          sx={{ marginBlock: "auto", marginInline: "10px" }}
+        >
+          {count}
+        </Typography>
+        <IconButton
+          onClick={handleCountDown}
+          color="secondary"
+          size="small"
+          disabled={!voters}
+          sx={{ border: "1px solid", marginInline: "5px" }}
+        >
+          <ArrowDropDown fontSize="large" />
+        </IconButton>
       </div>
+
       {count !== post_count ? (
         <Button
           variant="contained"
           color="secondary"
           onClick={() => handleOpenDialog("Vote", { vote: vote })}
           size="small"
+          sx={{ marginBlock: "auto" }}
         >
           Vote
         </Button>
       ) : (
-        <Button variant="contained" color="secondary" size="small" disabled>
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          sx={{ marginBlock: "auto" }}
+          disabled
+        >
           Vote
         </Button>
       )}
-    </>
+    </div>
   );
 };
 

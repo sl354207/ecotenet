@@ -58,9 +58,6 @@ const post = ({ post }) => {
   // set post as value of editor
   const [value, setValue] = useState(post);
 
-  //set count value for post
-  const [count, setCount] = useState(post.count);
-
   const [dialog, setDialog] = useState(false);
   const [flag, setFlag] = useState(false);
   const [action, setAction] = useState("");
@@ -345,6 +342,7 @@ const post = ({ post }) => {
                 </>
               )}
             </Typography>
+            <Typography variant="h6">Category: {post.category}</Typography>
             <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (
@@ -359,20 +357,44 @@ const post = ({ post }) => {
               ))}
             </Typography>
           </div>
-
-          {votes ? (
-            <Vote
-              post_count={votes && votes.count}
-              count={count}
-              setCount={setCount}
-              handleOpenDialog={handleOpenDialog}
-              name={user && user.name}
-              voters={votes && votes.voters}
-            />
-          ) : (
-            <CircularProgress size={19} color="secondary" />
+          {!isMobile && (
+            <>
+              {votes ? (
+                <Vote
+                  post_count={votes && votes.count}
+                  handleOpenDialog={handleOpenDialog}
+                  name={user && user.name}
+                  voters={votes && votes.voters}
+                />
+              ) : (
+                <CircularProgress size={19} color="secondary" />
+              )}{" "}
+            </>
           )}
         </div>
+        {isMobile && (
+          <>
+            <Divider sx={{ marginTop: "10px" }} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBlock: "10px",
+              }}
+            >
+              {votes ? (
+                <Vote
+                  post_count={votes && votes.count}
+                  handleOpenDialog={handleOpenDialog}
+                  name={user && user.name}
+                  voters={votes && votes.voters}
+                />
+              ) : (
+                <CircularProgress size={19} color="secondary" />
+              )}
+            </div>
+          </>
+        )}
         <EditorLayout>
           <Editor
             cellPlugins={cellPlugins}

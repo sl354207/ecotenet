@@ -61,9 +61,7 @@ const DrawerPost = ({ id, FSOpen }) => {
   const isVisible = useOnScreen(ref);
   // set post as value of editor
   const [value, setValue] = useState(post);
-
-  //set count value for post
-  const [count, setCount] = useState(post.count);
+  // console.log(post);
 
   const [dialog, setDialog] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -80,7 +78,7 @@ const DrawerPost = ({ id, FSOpen }) => {
   );
   // console.log(user);
 
-  const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
+  const { data: votes, mutate } = useSWR(`/api/votes/${id}`, fetcher);
 
   const reducer = (comments, toggle) => {
     // console.log(comments);
@@ -167,33 +165,6 @@ const DrawerPost = ({ id, FSOpen }) => {
     }
   };
 
-  const handleAddFeature = async () => {
-    const submission = {
-      _id: post._id,
-      feature: "pending",
-    };
-
-    const res = await updatePost(submission, "admin");
-
-    if (res.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: "Added to feature list",
-      });
-    }
-    if (!res.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "error",
-        message:
-          "There was a problem submitting feature. Please try again later",
-      });
-    }
-  };
-
   const toggleForm = () => {
     if (user.status == "unauthenticated" || user.status == "loading") {
       signIn();
@@ -242,7 +213,7 @@ const DrawerPost = ({ id, FSOpen }) => {
     }
   };
 
-  const date = new Date(post.date);
+  // const date = new Date(post.date);
   return (
     <>
       {post ? (
@@ -367,14 +338,14 @@ const DrawerPost = ({ id, FSOpen }) => {
         //           </style>
         //         }
         //       > */}
-        //     {/* <EditorLayout>
-        //           <Editor
-        //             cellPlugins={cellPlugins}
-        //             value={post}
-        //             // onChange={setValue}
-        //             readOnly
-        //           />
-        //         </EditorLayout> */}
+        // {/* <EditorLayout>
+        //       <Editor
+        //         cellPlugins={cellPlugins}
+        //         value={post}
+        //         // onChange={setValue}
+        //         readOnly
+        //       />
+        //     </EditorLayout> */}
         //     {/* </Frame> */}
         //     {/* )} */}
         //   </>
@@ -469,46 +440,37 @@ const DrawerPost = ({ id, FSOpen }) => {
             >
               <>
                 {" "}
-                {post.updated && "Updated:"} {date.toLocaleDateString()}
+                {post.updated && "Updated:"}{" "}
+                {new Date(post.date).toLocaleDateString()}
               </>
             </Typography>
             <Typography variant="h6">Category: {post.category}</Typography>
+            <Typography variant="h6">
+              Ecoregions:{" "}
+              {post.ecoregions.map((ecoregion) => (
+                <Link
+                  href={`/ecoregions/${ecoregion}`}
+                  color="secondary"
+                  underline="hover"
+                  key={ecoregion}
+                >
+                  Eco-{ecoregion},{" "}
+                </Link>
+              ))}
+            </Typography>
+            <Divider />
 
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
+                marginTop: "20px",
                 // alignItems: "center",
               }}
             >
-              <div
-                style={{
-                  flexDirection: "column",
-                  maxWidth: "800px",
-                  flexGrow: 1,
-                  // marginLeft: "20px",
-                }}
-              >
-                <Typography variant="h6">
-                  Ecoregions:{" "}
-                  {post.ecoregions.map((ecoregion) => (
-                    <Link
-                      href={`/ecoregions/${ecoregion}`}
-                      color="secondary"
-                      underline="hover"
-                      key={ecoregion}
-                    >
-                      Eco-{ecoregion},{" "}
-                    </Link>
-                  ))}
-                </Typography>
-              </div>
-
               {votes ? (
                 <Vote
                   post_count={votes && votes.count}
-                  count={count}
-                  setCount={setCount}
                   handleOpenDialog={handleOpenDialog}
                   name={user && user.name}
                   voters={votes && votes.voters}
@@ -518,10 +480,10 @@ const DrawerPost = ({ id, FSOpen }) => {
               )}
             </div>
           </Container>
-          <EditorLayout>
+          <EditorLayout mobile={true}>
             <Editor
               cellPlugins={cellPlugins}
-              value={value}
+              value={post}
               onChange={setValue}
               readOnly
             />
@@ -542,6 +504,7 @@ const DrawerPost = ({ id, FSOpen }) => {
                   showForm={showForm}
                   handleForm={toggleForm}
                   handleReply={handleReply}
+                  drawer={true}
                 />
               )}
             </div>

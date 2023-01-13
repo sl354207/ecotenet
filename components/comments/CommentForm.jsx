@@ -20,7 +20,7 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
           <FormControl
             sx={
               comment_ref !== ""
-                ? { flexGrow: 1, marginBottom: "10px", marginLeft: "60px" }
+                ? { flexGrow: 1, marginBottom: "10px", marginLeft: "25px" }
                 : { flexGrow: 1, marginBottom: "10px" }
             }
           >

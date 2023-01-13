@@ -21,6 +21,7 @@ const Comment = ({
   handleOpenFlag,
   handleReply,
   key,
+  drawer,
 }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
@@ -56,14 +57,14 @@ const Comment = ({
                     //
                     <>
                       Updated:{" "}
-                      {isMobile
+                      {isMobile || drawer
                         ? comment.date.toLocaleDateString()
                         : comment.date.toDateString()}
                     </>
                   ) : (
                     //
                     <>
-                      {isMobile
+                      {isMobile || drawer
                         ? comment.date.toLocaleDateString()
                         : comment.date.toDateString()}
                     </>
@@ -71,14 +72,12 @@ const Comment = ({
                 </Typography>
               </div>
               <Typography variant="h6">{comment.text}</Typography>
-            </div>
-
-            {/* display reply button and comment form with comment ref to original comment*/}
-            {comment.comment_ref === comment._id && (
-              <>
+              {(isMobile || drawer) && (
                 <Button
                   variant="outlined"
                   color="secondary"
+                  size="small"
+                  sx={{ marginTop: "5px" }}
                   onClick={
                     comment.open
                       ? () => handleReply("close", comment._id)
@@ -90,8 +89,27 @@ const Comment = ({
                 >
                   reply
                 </Button>
-              </>
+              )}
+            </div>
+
+            {/* display reply button and comment form with comment ref to original comment*/}
+            {/* {comment.comment_ref === comment._id && ( */}
+            {!isMobile && !drawer && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={
+                  comment.open
+                    ? () => handleReply("close", comment._id)
+                    : () => handleReply("open", comment._id)
+                }
+                endIcon={comment.open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              >
+                reply
+              </Button>
             )}
+
+            {/* )} */}
             <IconButton
               sx={{ marginLeft: "10px" }}
               color="inherit"
@@ -117,7 +135,7 @@ const Comment = ({
         sx={{
           border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
           borderRadius: "4px",
-          marginLeft: "60px",
+          marginLeft: "25px",
           width: "auto",
           marginBottom: "10px",
         }}
@@ -143,14 +161,14 @@ const Comment = ({
                   //
                   <>
                     Updated on{" "}
-                    {isMobile
+                    {isMobile || drawer
                       ? comment.date.toLocaleDateString()
                       : comment.date.toDateString()}
                   </>
                 ) : (
                   //
                   <>
-                    {isMobile
+                    {isMobile || drawer
                       ? comment.date.toLocaleDateString()
                       : comment.date.toDateString()}
                   </>

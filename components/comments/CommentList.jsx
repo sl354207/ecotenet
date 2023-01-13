@@ -14,6 +14,7 @@ const CommentList = ({
   handleOpenDialog,
   handleOpenFlag,
   handleReply,
+  drawer,
 }) => {
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -34,7 +35,13 @@ const CommentList = ({
   });
 
   return (
-    <List sx={{ backgroundColor: theme.palette.primary.main }}>
+    <List
+      sx={{
+        backgroundColor: drawer
+          ? theme.palette.primary.light
+          : theme.palette.primary.main,
+      }}
+    >
       <Button
         variant="outlined"
         color="secondary"
@@ -58,6 +65,7 @@ const CommentList = ({
           handleOpenFlag={handleOpenFlag}
           handleReply={handleReply}
           key={comment._id}
+          drawer={drawer}
         />
       ))}
     </List>

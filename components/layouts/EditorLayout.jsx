@@ -1,6 +1,6 @@
 import theme from "@utils/theme";
 
-const EditorLayout = ({ children }) => {
+const EditorLayout = ({ children, mobile }) => {
   return (
     <div
       style={{
@@ -13,6 +13,7 @@ const EditorLayout = ({ children }) => {
         style={{
           flexGrow: 1,
           padding: theme.spacing(4),
+          paddingTop: mobile ? "0px" : theme.spacing(4),
           backgroundColor: theme.palette.primary.light,
           maxWidth: "1280px",
           margin: "auto",

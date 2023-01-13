@@ -56,8 +56,6 @@ const post = ({ post }) => {
   // set post as value of editor
   const [value, setValue] = useState(post);
 
-  const [count, setCount] = useState(post.count);
-
   const [dialog, setDialog] = useState(false);
   const [flag, setFlag] = useState(false);
   const [action, setAction] = useState("");
@@ -317,8 +315,6 @@ const post = ({ post }) => {
           {votes ? (
             <Vote
               post_count={votes && votes.count}
-              count={count}
-              setCount={setCount}
               handleOpenDialog={handleOpenDialog}
               name={user && user.name}
               voters={votes && votes.voters}
