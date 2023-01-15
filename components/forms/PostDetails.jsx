@@ -2,7 +2,8 @@ import TextBox from "@components/inputFields/TextBox";
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
-import CategoriesAutoComplete from "@data/categories_autocomplete.json";
+import Categories from "@data/categories.json";
+// import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Autocomplete,
@@ -31,10 +32,14 @@ const PostDetails = ({
   setDetails,
   handleRemoveChip,
 }) => {
-  const categorySub = CategoriesAutoComplete.filter(
-    (autoCategory) => autoCategory["query"] === category
-  )[0];
-  // console.log(categorySub);
+  const categoryTitles = Categories.map(
+    (autoCategory) => autoCategory.menuTitle
+  );
+  const categorySub = Categories.map((autoCategory) => {
+    autoCategory.menuSubs.map((sub) => sub.subTitle);
+  });
+  console.log(categoryTitles);
+  console.log(categorySub);
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -144,14 +149,17 @@ const PostDetails = ({
               id="category"
               name="category"
               onChange={(event, newValue) => {
-                setDetails((details) => ({
-                  ...details,
-                  category: newValue && newValue.query,
-                }));
+                // setDetails((details) => ({
+                //   ...details,
+                //   category: newValue && {
+                //     title: newValue.title,
+                //     sub: newValue["sub"],
+                //   },
+                // }));
               }}
-              defaultValue={categorySub || ""}
-              value={categorySub || ""}
-              options={CategoriesAutoComplete}
+              defaultValue={category["sub"] || ""}
+              value={category["sub"] || ""}
+              options={Categories}
               noOptionsText={
                 <Typography
                   sx={{ color: alpha(theme.palette.text.primary, 0.6) }}
@@ -159,11 +167,15 @@ const PostDetails = ({
                   no options
                 </Typography>
               }
-              groupBy={(option) => option.title}
+              groupBy={() => {
+                console.log(categoryTitles);
+                return categoryTitles;
+              }}
               getOptionLabel={(option) => {
-                // console.log(option);
-                if (option && option.sub) {
-                  return option.sub;
+                console.log(option);
+
+                if (option && option) {
+                  return option;
                 } else {
                   return "";
                 }

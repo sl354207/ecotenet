@@ -1,212 +1,212 @@
 [
     {
       "title": "Animals",
-      "sub": "Guides",
-      "query": "animal_guide"
+      "sub": "Guides"
+     
     },
     {
       "title": "Plants",
-      "sub": "Guides",
-      "query": "plant_guide"
+      "sub": "Guides"
+      
     },
     {
       "title": "Fungi",
-      "sub": "Guides",
-      "query": "fungi_guide"
+      "sub": "Guides"
+      
     },
     {
       "title": "The Rest",
-      "sub": "Guides",
-      "query": "the_rest_guide"
+      "sub": "Guides"
+      
     },
     {
       "title": "Hunt",
-      "sub": "Tracking/Stalking",
-      "query": "hunt_track_stalk"
+      "sub": "Tracking/Stalking"
+      
     },
     {
       "title": "Hunt",
-      "sub": "Trapping",
-      "query": "hunt_trap"
+      "sub": "Trapping"
+     
     },
     {
       "title": "Hunt",
-      "sub": "Fishing",
-      "query": "hunt_fish"
+      "sub": "Fishing"
+      
     },
     {
       "title": "Hunt",
-      "sub": "Strategies/Techniques",
-      "query": "hunt_strategy_technique"
+      "sub": "Strategies/Techniques"
+     
     },
     {
       "title": "Hunt",
-      "sub": "Processing",
-      "query": "hunt_process"
+      "sub": "Processing"
+     
     },
     {
       "title": "Hunt",
-      "sub": "Tools",
-      "query": "hunt_tool"
+      "sub": "Tools"
+     
     },
     {
       "title": "Gather",
-      "sub": "Edible",
-      "query": "gather_edible"
+      "sub": "Edible"
+     
     },
     {
       "title": "Gather",
-      "sub": "Medicinal",
-      "query": "gather_medicinal"
+      "sub": "Medicinal"
+  
     },
     {
       "title": "Survival",
-      "sub": "Fire",
-      "query": "survival_fire"
+      "sub": "Fire"
+     
     },
     {
       "title": "Survival",
-      "sub": "Water",
-      "query": "survival_water"
+      "sub": "Water"
+     
     },
     {
       "title": "Survival",
-      "sub": "Basic Shelter",
-      "query": "survival_shelter"
+      "sub": "Basic Shelter"
+     
     },
     {
       "title": "Survival",
-      "sub": "Navigation",
-      "query": "survival_navigation"
+      "sub": "Navigation"
+     
     },
     {
       "title": "Survival",
-      "sub": "Emergency",
-      "query": "survival_emergency"
+      "sub": "Emergency"
+     
     },
     {
       "title": "Travel",
-      "sub": "Land",
-      "query": "travel_land"
+      "sub": "Land"
+      
     },
     {
       "title": "Travel",
-      "sub": "Water",
-      "query": "travel_water"
+      "sub": "Water"
+     
     },
     {
       "title": "Agriculture",
-      "sub": "Planting/Harvesting",
-      "query": "agriculture_plant_harvest"
+      "sub": "Planting/Harvesting"
+      
     },
     {
       "title": "Agriculture",
-      "sub": "Maintenance/Management",
-      "query": "agriculture_maintenance_management"
+      "sub": "Maintenance/Management"
+      
     },
     {
       "title": "Agriculture",
-      "sub": "Processing/Storage",
-      "query": "agriculture_processing_storage"
+      "sub": "Processing/Storage"
+      
     },
     {
       "title": "Agriculture",
-      "sub": "Livestock",
-      "query": "agriculture_livestock"
+      "sub": "Livestock"
+   
     },
     {
       "title": "Agriculture",
-      "sub": "Soil Health",
-      "query": "agriculture_soil"
+      "sub": "Soil Health"
+     
     },
     {
       "title": "Agriculture",
-      "sub": "Propogation/Cultivation",
-      "query": "agriculture_propogation_cultivation"
+      "sub": "Propogation/Cultivation"
+      
     },
     {
       "title": "Agriculture",
-      "sub": "Irrigation",
-      "query": "agriculture_irrigation"
+      "sub": "Irrigation"
+    
     },
     {
       "title": "Agriculture",
-      "sub": "Techniques/Systems",
-      "query": "agriculture_technique_system"
+      "sub": "Techniques/Systems"
+      
     },
     {
       "title": "Agriculture",
-      "sub": "Start-To-Finish/Lifecycles",
-      "query": "agriculture_lifecycle"
+      "sub": "Start-To-Finish/Lifecycles"
+      
     },
     {
       "title": "Building",
-      "sub": "Foundations",
-      "query": "build_foundation"
+      "sub": "Foundations"
+      
     },
     {
       "title": "Building",
-      "sub": "Floors",
-      "query": "build_floor"
+      "sub": "Floors"
+      
     },
     {
       "title": "Building",
-      "sub": "Walls",
-      "query": "build_wall"
+      "sub": "Walls"
+      
     },
     {
       "title": "Building",
-      "sub": "Roofs",
-      "query": "build_roof"
+      "sub": "Roofs"
+      
     },
     {
       "title": "Building",
-      "sub": "Complete Structures",
-      "query": "build_complete_structure"
+      "sub": "Complete Structures"
+     
     },
     {
       "title": "Building",
-      "sub": "Water Systems",
-      "query": "build_water_system"
+      "sub": "Water Systems"
+      
     },
     {
       "title": "Building",
-      "sub": "Heating/Cooling",
-      "query": "build_heat_cool"
+      "sub": "Heating/Cooling"
+     
     },
     {
       "title": "Building",
-      "sub": "Sanitation",
-      "query": "build_sanitation"
+      "sub": "Sanitation"
+      
     },
     {
       "title": "Building",
-      "sub": "Furniture/Utensils/Tools",
-      "query": "build_tool"
+      "sub": "Furniture/Utensils/Tools"
+     
     },
     {
       "title": "Culture",
-      "sub": "Cooking/Recipes",
-      "query": "culture_cook_recipes"
+      "sub": "Cooking/Recipes"
+      
     },
     {
       "title": "Culture",
-      "sub": "Clothing",
-      "query": "culture_clothing"
+      "sub": "Clothing"
+      
     },
     {
       "title": "Culture",
-      "sub": "Art",
-      "query": "culture_art"
+      "sub": "Art"
+      
     },
     {
       "title": "Culture",
-      "sub": "Rituals",
-      "query": "culture_ritual"
+      "sub": "Rituals"
+      
     },
     {
       "title": "Culture",
-      "sub": "Stories",
-      "query": "culture_story"
+      "sub": "Stories"
+    
     }
   ]
