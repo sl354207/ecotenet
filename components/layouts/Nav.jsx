@@ -90,7 +90,7 @@ const Nav = () => {
     const value = {
       title: "",
       description: "",
-      category: "",
+      category: { title: "", sub: "" },
       tags: [],
       ecoregions: [],
       id: "",

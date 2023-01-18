@@ -14,8 +14,12 @@
           "description": "must be a string"
         },
         "category": {
-          "type": "string",
-          "description": "must be a string"
+            "type": "object",
+            "properties": {
+              "title": {"type": "string"},
+              "sub": {"type": "string"}
+            },
+            "additionalProperties": false
         },
         "tags": {
           "type": "array",

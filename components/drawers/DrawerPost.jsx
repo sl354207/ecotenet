@@ -33,9 +33,9 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import theme from "@utils/theme";
-import useOnScreen from "@utils/useOnScreen";
+import { useOnScreenClient } from "@utils/useOnScreen";
 import { useRouter } from "next/router";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import useSWR from "swr";
 
 // Define which plugins we want to use.
@@ -55,10 +55,11 @@ const DrawerPost = ({ id, FSOpen }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const ref = useRef();
-  const isVisible = useOnScreen(ref);
+  const [ref, entry] = useOnScreenClient({
+    threshold: 1,
+  });
+
   // set post as value of editor
   const [value, setValue] = useState(post);
   // console.log(post);
@@ -117,10 +118,10 @@ const DrawerPost = ({ id, FSOpen }) => {
 
   useEffect(() => {
     // console.log(loadComments);
-    if (isVisible) {
+    if (entry.isIntersecting) {
       setLoadComments(true);
     }
-  }, [isVisible]);
+  }, [entry]);
   useEffect(() => {
     // console.log(comments);
     if (loadComments && comments) {
@@ -215,7 +216,7 @@ const DrawerPost = ({ id, FSOpen }) => {
 
   // const date = new Date(post.date);
   return (
-    <>
+    <div id="ref1">
       {post ? (
         // <>
         //   <>
@@ -540,7 +541,7 @@ const DrawerPost = ({ id, FSOpen }) => {
           }}
         />
       )}
-    </>
+    </div>
   );
 };
 

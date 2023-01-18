@@ -2,8 +2,7 @@ import TextBox from "@components/inputFields/TextBox";
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
-import Categories from "@data/categories.json";
-// import CategoriesAutoComplete from "@data/categories_autocomplete.json";
+import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Autocomplete,
@@ -32,14 +31,15 @@ const PostDetails = ({
   setDetails,
   handleRemoveChip,
 }) => {
-  const categoryTitles = Categories.map(
-    (autoCategory) => autoCategory.menuTitle
-  );
-  const categorySub = Categories.map((autoCategory) => {
-    autoCategory.menuSubs.map((sub) => sub.subTitle);
-  });
-  console.log(categoryTitles);
-  console.log(categorySub);
+  const categorySub = CategoriesAutoComplete.filter((autoCategory) => {
+    if (category) {
+      return (
+        autoCategory["title"] === category["title"] &&
+        autoCategory["sub"] === category["sub"]
+      );
+    }
+  })[0];
+
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -149,17 +149,18 @@ const PostDetails = ({
               id="category"
               name="category"
               onChange={(event, newValue) => {
-                // setDetails((details) => ({
-                //   ...details,
-                //   category: newValue && {
-                //     title: newValue.title,
-                //     sub: newValue["sub"],
-                //   },
-                // }));
+                console.log(newValue);
+                setDetails((details) => ({
+                  ...details,
+                  category: newValue && {
+                    title: newValue.title,
+                    sub: newValue["sub"],
+                  },
+                }));
               }}
-              defaultValue={category["sub"] || ""}
-              value={category["sub"] || ""}
-              options={Categories}
+              defaultValue={categorySub || ""}
+              value={categorySub || ""}
+              options={CategoriesAutoComplete}
               noOptionsText={
                 <Typography
                   sx={{ color: alpha(theme.palette.text.primary, 0.6) }}
@@ -167,15 +168,12 @@ const PostDetails = ({
                   no options
                 </Typography>
               }
-              groupBy={() => {
-                console.log(categoryTitles);
-                return categoryTitles;
-              }}
+              groupBy={(option) => option.title}
               getOptionLabel={(option) => {
-                console.log(option);
-
-                if (option && option) {
-                  return option;
+                // console.log(option);
+                if (option && option["sub"]) {
+                  // console.log(option["sub"]);
+                  return option["sub"];
                 } else {
                   return "";
                 }

@@ -9,7 +9,7 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
     const value = {
       title: "",
       description: "",
-      category: "",
+      category: { title: "", sub: "" },
       tags: [],
       ecoregions: [],
       id: "",

@@ -243,7 +243,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           dragRotate={false}
           touchPitch={false}
           // touchZoomRotate={false}
-          mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs/draft"
+          mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs"
           mapboxAccessToken={mapBox}
           interactiveLayerIds={["eco-fill"]}
           onClick={onHover}
