@@ -186,6 +186,7 @@ const StepForm = ({ post, user }) => {
                   details.category != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -221,6 +222,7 @@ const StepForm = ({ post, user }) => {
                   details.category != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -282,6 +284,7 @@ const StepForm = ({ post, user }) => {
                   details.category != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -318,6 +321,7 @@ const StepForm = ({ post, user }) => {
                   details.category != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -372,6 +376,7 @@ const StepForm = ({ post, user }) => {
                   details.category != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -407,6 +412,7 @@ const StepForm = ({ post, user }) => {
                   details.category != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>

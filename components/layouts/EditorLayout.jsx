@@ -13,7 +13,7 @@ const EditorLayout = ({ children, mobile }) => {
         style={{
           flexGrow: 1,
           padding: theme.spacing(4),
-          paddingTop: mobile ? "0px" : theme.spacing(4),
+          paddingTop: mobile ? "10px" : theme.spacing(4),
           backgroundColor: theme.palette.primary.light,
           maxWidth: "1280px",
           margin: "auto",

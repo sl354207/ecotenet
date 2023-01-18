@@ -1,15 +1,17 @@
 import { deleteComment, updateComment } from "@utils/mongodb/mongoHelpers";
 
-import { ajv } from "@schema/validation";
-
 export default async function handler(req, res) {
   const method = req.method;
   switch (method) {
     case "PUT":
       const { id, ...data } = req.body;
-      const validate = ajv.getSchema("comment");
-      const valid = validate(data);
-      if (typeof id == "string" && id.length == 24 && valid) {
+
+      if (
+        typeof id == "string" &&
+        id.length == 24 &&
+        typeof data.approved == "string" &&
+        (data.approved == "true" || data.approved == "false")
+      ) {
         try {
           const updatedComment = await updateComment(id, data);
           return res.status(200).json(updatedComment);

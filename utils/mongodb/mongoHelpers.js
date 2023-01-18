@@ -182,7 +182,14 @@ const getDashboardPosts = async (name, status) => {
     const posts = await db
       .collection("posts")
       .find({ name: name, status: status })
-      .project({ title: 1, description: 1, name: 1, count: 1, category: 1 })
+      .project({
+        title: 1,
+        description: 1,
+        name: 1,
+        count: 1,
+        category: 1,
+        approved: 1,
+      })
       .sort({ count: 1 })
       .toArray();
 

@@ -1,12 +1,44 @@
+import { useUserContext } from "@components/context/UserContext";
+import Flag from "@components/dialogs/Flag";
 import Link from "@components/layouts/Link";
-import { Button, CircularProgress, Container, Typography } from "@mui/material";
+import FlagIcon from "@mui/icons-material/Flag";
+import {
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 const DrawerSpecies = ({ species }) => {
+  const router = useRouter();
+  const { user } = useUserContext();
+
+  const [dialog, setDialog] = useState(false);
+
+  const handleOpenDialog = () => {
+    if (user.status == "unauthenticated" || user.status == "loading") {
+      signIn();
+    }
+    if (user.status == "authenticated") {
+      if (user.name == null || user.name == "" || user.name == undefined) {
+        router.push("/auth/new-user");
+      } else {
+        setDialog(true);
+      }
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setDialog(false);
+  };
   // console.log(species);
   const { data: wiki } = useSWR(
     species
@@ -165,15 +197,43 @@ const DrawerSpecies = ({ species }) => {
               sx={{ marginBlock: "15px" }}
               href={`/species/${species._id}`}
             >
-              visit full summary
+              view full page
             </Button>
-            <Typography
+            {/* <Typography
               variant="h4"
               align="center"
               sx={{ marginBottom: "15px" }}
             >
               {species.scientific_name}: {species.common_name}
-            </Typography>
+            </Typography> */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  marginRight: "auto",
+                  visibility: "hidden",
+                  minWidth: "30px",
+                }}
+              ></div>
+              <Typography
+                variant="h4"
+                align="center"
+                sx={{ marginBottom: "5px" }}
+              >
+                {species.scientific_name}: {species.common_name}
+              </Typography>
+              <div>
+                <IconButton
+                  sx={{ marginLeft: 2 }}
+                  color="inherit"
+                  aria-label="flag"
+                  size="small"
+                  onClick={() => handleOpenDialog()}
+                >
+                  <FlagIcon />
+                </IconButton>
+              </div>
+            </div>
           </div>
 
           <Typography
@@ -252,6 +312,13 @@ const DrawerSpecies = ({ species }) => {
               </>
             )}
           </div>
+          <Flag
+            open={dialog}
+            handleClose={() => handleCloseDialog()}
+            contentType="species"
+            result={species}
+            name={user && user.name}
+          />
         </>
       ) : (
         <CircularProgress

@@ -1,5 +1,4 @@
 import CommentList from "@components/comments/CommentList";
-import { useSnackbarContext } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
 import ClientDialog from "@components/dialogs/ClientDialog";
 import Flag from "@components/dialogs/Flag";
@@ -17,7 +16,6 @@ import {
   Divider,
   IconButton,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import customImage from "@plugins/customImage";
 // import Frame from "react-frame-component";
@@ -32,7 +30,6 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
-import theme from "@utils/theme";
 import { useOnScreenClient } from "@utils/useOnScreen";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react";
@@ -43,18 +40,10 @@ const cellPlugins = [slate(), customImage, video, spacer, divider];
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 const DrawerPost = ({ id, FSOpen }) => {
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { data: post } = useSWR(id ? `/api/posts/${id}` : null, fetcher);
-  // let date = new Date(post.date);
 
-  let styles = {
-    border: "none",
-    width: "100%",
-    height: FSOpen ? "56vh" : "51vh",
-  };
   const router = useRouter();
   const { user } = useUserContext();
-  const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [ref, entry] = useOnScreenClient({
     threshold: 1,
@@ -214,143 +203,9 @@ const DrawerPost = ({ id, FSOpen }) => {
     }
   };
 
-  // const date = new Date(post.date);
   return (
-    <div id="ref1">
+    <>
       {post ? (
-        // <>
-        //   <>
-        //     <Container sx={{ minHeight: "auto" }}>
-        // <div style={{ display: "flex", flexDirection: "column" }}>
-        //   <Button
-        //     variant="contained"
-        //     color="secondary"
-        //     sx={{ marginBlock: "15px" }}
-        //     href={`/posts/${post._id}`}
-        //   >
-        //     visit full post
-        //   </Button>
-        //   <Typography
-        //     variant="h4"
-        //     align="center"
-        //     sx={{ marginBottom: "5px" }}
-        //   >
-        //     {post.title}
-        //   </Typography>
-        // </div>
-
-        //       <div
-        //         style={{
-        //           display: "flex",
-        //           justifyContent: "center",
-        //           alignItems: "center",
-        //         }}
-        //       >
-        //         <div
-        //           style={{
-        //             flexDirection: "column",
-        //             maxWidth: "800px",
-        //             flexGrow: 1,
-        //             marginLeft: "20px",
-        //           }}
-        //         >
-        //           <div
-        //             style={{
-        //               display: "flex",
-        //               flexDirection: "column",
-        //               alignItems: "start",
-        //             }}
-        //           >
-        //             <div style={{ display: "flex" }}>
-        //               <Typography align="center" variant="h6">
-        //                 <Link
-        //                   href={`/person/${post.name}`}
-        //                   color="secondary"
-        //                   underline="hover"
-        //                 >
-        //                   {post.name}
-        //                 </Link>
-        //               </Typography>
-        //               <Button
-        //                 href={`/tip?q=${post.name}`}
-        //                 color="secondary"
-        //                 variant="outlined"
-        //                 sx={{
-        //                   marginLeft: "10px",
-        //                   "& .MuiButton-startIcon": {
-        //                     marginRight: "0px",
-        //                   },
-        //                 }}
-        //                 size="small"
-        //                 startIcon={<AttachMoneyIcon />}
-        //               >
-        //                 tip
-        //               </Button>
-        //             </div>
-
-        //             <Typography
-        //               sx={{
-        //                 fontStyle: "italic",
-        //                 fontWeight: 400,
-        //                 fontSize: "1.2rem",
-        //               }}
-        //               align="left"
-        //               variant="h6"
-        //             >
-        //               {post.updated && "Updated:"}{" "}
-        //               {new Date(post.date).toLocaleDateString()}
-        //             </Typography>
-        //           </div>
-        //           <Typography variant="h6">Votes: {post.count}</Typography>
-        //           <Typography variant="h6">
-        //             Ecoregions:{" "}
-        //             {post.ecoregions.map((ecoregion) => (
-        //               <Link
-        //                 href={`/ecoregions/${ecoregion}`}
-        //                 color="secondary"
-        //                 underline="hover"
-        //                 key={ecoregion}
-        //               >
-        //                 Eco-{ecoregion},{" "}
-        //               </Link>
-        //             ))}
-        //           </Typography>
-        //         </div>
-        //       </div>
-        //     </Container>
-
-        //     {/* {isMobile ? ( */}
-        //     <EditorLayout>
-        //       <Editor
-        //         cellPlugins={cellPlugins}
-        //         value={post}
-        //         // onChange={setValue}
-        //         readOnly
-        //       />
-        //     </EditorLayout>
-        //     {/* ) : ( */}
-        //     {/* <Frame
-        //         style={styles}
-        //         head={
-        //           <style>
-        //             {
-        //               "a {color: #c8fcff; text-decoration: none;overflow-wrap: anywhere;} a:hover {color: #c8fcff; text-decoration: underline; overflow-wrap: anywhere;} p {color:#ffffff; font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em; } h2 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h1 {color:#ffffff;line-height: 1.5; letter-spacing: 0.00938em;} h3 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h4 {color:#ffffff; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} h5 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} h6 {color:#ffffff; line-height: 1.5; letter-spacing: 0.00938em;} ul {color:#ffffff;  font-weight: 400;font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;} ol {color:#ffffff;font-weight: 400; font-size: 1.1rem; line-height: 1.5; letter-spacing: 0.00938em;}"
-        //             }
-        //           </style>
-        //         }
-        //       > */}
-        // {/* <EditorLayout>
-        //       <Editor
-        //         cellPlugins={cellPlugins}
-        //         value={post}
-        //         // onChange={setValue}
-        //         readOnly
-        //       />
-        //     </EditorLayout> */}
-        //     {/* </Frame> */}
-        //     {/* )} */}
-        //   </>
-        // </>
         <>
           <Container sx={{ minHeight: "auto" }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -360,7 +215,7 @@ const DrawerPost = ({ id, FSOpen }) => {
                 sx={{ marginBlock: "15px" }}
                 href={`/posts/${post._id}`}
               >
-                visit full post
+                view full page
               </Button>
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
@@ -378,13 +233,7 @@ const DrawerPost = ({ id, FSOpen }) => {
                 >
                   {post.title}
                 </Typography>
-                <div
-                // style={{
-                //   display: "flex",
-                //   marginLeft: "auto",
-                //   marginTop: "auto",
-                // }}
-                >
+                <div>
                   <IconButton
                     sx={{ marginLeft: 2 }}
                     color="inherit"
@@ -433,7 +282,6 @@ const DrawerPost = ({ id, FSOpen }) => {
             </Box>
             <Typography
               sx={{
-                // marginLeft: { xs: "0px", md: "20px" },
                 fontStyle: "italic",
               }}
               align="left"
@@ -466,7 +314,6 @@ const DrawerPost = ({ id, FSOpen }) => {
                 display: "flex",
                 justifyContent: "center",
                 marginTop: "20px",
-                // alignItems: "center",
               }}
             >
               {votes ? (
@@ -541,7 +388,7 @@ const DrawerPost = ({ id, FSOpen }) => {
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 
