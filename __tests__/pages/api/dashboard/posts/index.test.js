@@ -182,7 +182,7 @@ describe("dashboard posts api", () => {
                 body: {
                   title: "",
                   description: "",
-                  category: "",
+                  category: { title: "", sub: "" },
                   tags: [],
                   ecoregions: [],
                   id: "",
@@ -237,7 +237,7 @@ describe("dashboard posts api", () => {
                 body: {
                   title: "",
                   description: "",
-                  category: "",
+                  category: { title: "", sub: "" },
                   tags: [],
                   ecoregions: [],
                   id: "",

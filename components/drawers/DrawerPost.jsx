@@ -31,6 +31,7 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { useOnScreenClient } from "@utils/useOnScreen";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react";
 import useSWR from "swr";
