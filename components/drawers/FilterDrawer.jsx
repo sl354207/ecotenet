@@ -57,6 +57,7 @@ const FilterDrawer = ({
   const [categorySelect, setCategorySelect] = useState(false);
   const [category, setCategory] = useState(null);
   const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
 
   // takes in the menuTitle of the button clicked as key to toggle correct dropdown in reducer function
   const handleListClick = (menuTitle) => {
@@ -86,17 +87,10 @@ const FilterDrawer = ({
             },
           },
         }}
-        // elevation={900}
         anchor={isMobile ? "bottom" : "left"}
         open={filterOpen}
         onClose={handleFilterClose}
-        // swipeAreaWidth={drawerBleeding}
-        // disableSwipeToOpen={true}
-        // ModalProps={{
-        //   keepMounted: true,
-        // }}
         hideBackdrop
-        // variant="persistent"
       >
         <Box
           sx={{
@@ -112,15 +106,12 @@ const FilterDrawer = ({
           {isMobile && (
             <>
               <ButtonGroup
-                // orientation="vertical"
                 aria-label="vertical outlined button group"
-                // size="small"
                 sx={{ marginLeft: "10px" }}
               >
                 <IconButton
                   variant="text"
                   color="inherit"
-                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 0:
@@ -144,7 +135,6 @@ const FilterDrawer = ({
                 <IconButton
                   variant="text"
                   color="inherit"
-                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 1:
@@ -207,6 +197,7 @@ const FilterDrawer = ({
               category={category && category}
               ecoFilter={ecoFilter}
               title={title && title}
+              description={description && description}
               setCategory={setCategory}
               setCategorySelect={setCategorySelect}
             />
@@ -237,9 +228,23 @@ const FilterDrawer = ({
                             key={menuSub.subTitle}
                             sx={{ paddingLeft: theme.spacing(4) }}
                             onClick={() => {
-                              setCategorySelect(true);
-                              setCategory(menuSub.query);
-                              setTitle(menuSub.subTitle);
+                              if (menuSub.query.title) {
+                                const title = encodeURIComponent(
+                                  menuSub.query.title
+                                );
+                                const sub = encodeURIComponent(
+                                  menuSub.query.sub
+                                );
+                                setCategorySelect(true);
+                                setCategory({ title: title, sub: sub });
+                                setTitle(menuSub.subTitle);
+                                setDescription(menuSub.description);
+                              } else {
+                                setCategorySelect(true);
+                                setCategory(menuSub.query);
+                                setTitle(menuSub.subTitle);
+                                setDescription(menuSub.description);
+                              }
                             }}
                           >
                             <ListItemText primary={menuSub.subTitle} />

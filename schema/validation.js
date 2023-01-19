@@ -1,3 +1,4 @@
+import categorySchema from "@schema/category.json";
 import commentSchema from "@schema/comment.json";
 import flagSchema from "@schema/flag.json";
 import notificationSchema from "@schema/notification.json";
@@ -16,3 +17,4 @@ ajv.addSchema(postSchema, "post");
 ajv.addSchema(flagSchema, "flag");
 ajv.addSchema(notificationSchema, "notification");
 ajv.addSchema(voteSchema, "vote");
+ajv.addSchema(categorySchema, "category");
