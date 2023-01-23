@@ -195,7 +195,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
               sx={{ marginBottom: "15px", marginTop: isMobile ? 0 : 3 }}
               href={`/ecoregions/${ecoFilter.unique_id}`}
             >
-              visit full summary
+              view full page
             </Button>
             <Typography variant={isMobile ? "h5" : "h4"} align="center">
               Eco-{ecoFilter.unique_id}

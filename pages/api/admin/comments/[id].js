@@ -5,12 +5,22 @@ export default async function handler(req, res) {
   switch (method) {
     case "PUT":
       const { id, ...data } = req.body;
-      try {
-        const updatedComment = await updateComment(id, data);
-        return res.status(200).json(updatedComment);
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: "Something went wrong." });
+
+      if (
+        typeof id == "string" &&
+        id.length == 24 &&
+        typeof data.approved == "string" &&
+        (data.approved == "true" || data.approved == "false")
+      ) {
+        try {
+          const updatedComment = await updateComment(id, data);
+          return res.status(200).json(updatedComment);
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ msg: "Something went wrong." });
+        }
+      } else {
+        res.status(403);
       }
 
       break;
@@ -18,15 +28,19 @@ export default async function handler(req, res) {
     case "DELETE":
       // set id based on request body
       const deleteId = req.body.id;
+      if (typeof deleteId == "string" && deleteId.length == 24) {
+        try {
+          const deleted = await deleteComment(deleteId);
+          return res.status(200).json(deleted);
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ msg: "Something went wrong." });
+        }
+      } else {
+        res.status(403);
+      }
 
       // try delete request, if successful return response, otherwise return error message
-      try {
-        const deleted = await deleteComment(deleteId);
-        return res.status(200).json(deleted);
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: "Something went wrong." });
-      }
 
       break;
 

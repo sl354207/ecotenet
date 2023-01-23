@@ -7,13 +7,20 @@ export default async function handler(req, res) {
 
   const id = req.query.id;
 
-  try {
-    const results = await getPostVotes(id);
+  if (typeof id == "string" && id.length == 24) {
+    try {
+      const results = await getPostVotes(id);
 
-    return res.status(200).json(results);
-  } catch (err) {
-    console.error(err);
+      // hide voters from client
+      results.voters = true;
 
-    res.status(500).json({ msg: "Something went wrong." });
+      return res.status(200).json(results);
+    } catch (err) {
+      console.error(err);
+
+      res.status(500).json({ msg: "Something went wrong." });
+    }
+  } else {
+    res.status(403);
   }
 }

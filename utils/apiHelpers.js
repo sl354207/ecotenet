@@ -70,6 +70,17 @@ export async function updatePost(post, endpoint) {
 
   return res;
 }
+export async function updateVote(post) {
+  const res = await fetch(`/api/dashboard/votes/${post._id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  });
+
+  return res;
+}
 export async function deletePost(post, endpoint) {
   const res = await fetch(`/api/${endpoint}/posts/${post._id}`, {
     method: "DELETE",

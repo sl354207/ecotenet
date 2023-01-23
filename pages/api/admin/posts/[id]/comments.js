@@ -8,16 +8,18 @@ export default async function handler(req, res) {
   }
 
   const { id } = req.query;
-  //   console.log(q);
-  // try get request, if successful return response, otherwise return error message
-  try {
-    const comments = await getPostComments(id);
 
-    return res.status(200).json(comments);
-  } catch (err) {
-    console.error(err);
+  if (typeof id == "string" && id.length == 24) {
+    try {
+      const comments = await getPostComments(id);
 
-    res.status(500).json({ msg: "Something went wrong." });
+      return res.status(200).json(comments);
+    } catch (err) {
+      console.error(err);
+
+      res.status(500).json({ msg: "Something went wrong." });
+    }
+  } else {
+    res.status(403);
   }
-  //   res.end();
 }

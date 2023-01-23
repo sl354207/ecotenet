@@ -23,9 +23,14 @@ const CategoryList = ({
   category,
   setCategory,
   setCategorySelect,
+  description,
 }) => {
   const { data } = useSWR(
-    category ? `/api/${ecoFilter.unique_id}/${category}` : null,
+    category
+      ? category.title
+        ? `/api/${ecoFilter.unique_id}/${category.title}?sub=${category.sub}`
+        : `/api/${ecoFilter.unique_id}/${category}`
+      : null,
     fetcher
   );
 
@@ -45,6 +50,7 @@ const CategoryList = ({
                   sx={{
                     "& .MuiBreadcrumbs-separator": {
                       color: "rgba(255, 255, 255, 1)",
+                      paddingBottom: "4px",
                     },
                   }}
                   separator={">"}
@@ -99,6 +105,7 @@ const CategoryList = ({
                   sx={{
                     "& .MuiBreadcrumbs-separator": {
                       color: "rgba(255, 255, 255, 1)",
+                      paddingBottom: "4px",
                     },
                   }}
                   separator={">"}
@@ -134,9 +141,9 @@ const CategoryList = ({
                 >
                   {title}
                 </Typography>
-                {data && data.description && (
+                {description && (
                   <Typography align="center" sx={{ marginTop: "10px" }}>
-                    {data.description}
+                    {description}
                   </Typography>
                 )}
               </Container>

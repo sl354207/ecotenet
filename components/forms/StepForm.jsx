@@ -111,11 +111,8 @@ const StepForm = ({ post, user }) => {
     const silentObject = {
       _id: post._id,
       status: "draft",
-      approved: "false",
       updated: false,
       featured: false,
-      feature: "false",
-      date: "",
       name: user.name,
     };
 
@@ -186,9 +183,10 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -221,9 +219,10 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -282,9 +281,10 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -318,9 +318,10 @@ const StepForm = ({ post, user }) => {
                   </Button>
 
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -372,9 +373,10 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>
@@ -407,9 +409,10 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
+                  postValue &&
                   postValue.rows.length > 0 ? (
                     <Button
                       onClick={() =>

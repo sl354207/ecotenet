@@ -184,11 +184,8 @@ const DashboardDialog = ({
       version: result.version,
       rows: result.rows,
       status: "published",
-      approved: "pending",
       updated: true,
       featured: result.featured,
-      date: new Date().toUTCString(),
-      feature: "false",
     };
 
     const postResponse = await updatePost(submission, "dashboard");
@@ -226,11 +223,8 @@ const DashboardDialog = ({
       version: result.version,
       rows: result.rows,
       status: "published",
-      approved: "pending",
       updated: false,
       featured: false,
-      date: new Date().toUTCString(),
-      feature: "false",
     };
 
     const postResponse = await updatePost(submission, "dashboard");
@@ -266,11 +260,6 @@ const DashboardDialog = ({
       version: result.version,
       rows: result.rows,
       status: "published",
-      approved: "pending",
-      updated: false,
-      featured: false,
-      date: new Date().toUTCString(),
-      feature: "false",
     };
 
     const postResponse = await createPost(submission);

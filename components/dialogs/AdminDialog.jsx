@@ -84,8 +84,6 @@ const AdminDialog = ({
       text: `a ${type} of yours was ${action} for a ${reason} violation`,
       add_info: addInfo,
       ref: result._id,
-      date: new Date().toUTCString(),
-      viewed: false,
     };
 
     const notifyResponse = await createNotification(notify);

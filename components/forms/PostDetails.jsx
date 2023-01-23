@@ -31,10 +31,15 @@ const PostDetails = ({
   setDetails,
   handleRemoveChip,
 }) => {
-  const categorySub = CategoriesAutoComplete.filter(
-    (autoCategory) => autoCategory["query"] === category
-  )[0];
-  // console.log(categorySub);
+  const categorySub = CategoriesAutoComplete.filter((autoCategory) => {
+    if (category) {
+      return (
+        autoCategory["title"] === category["title"] &&
+        autoCategory["sub"] === category["sub"]
+      );
+    }
+  })[0];
+
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -144,9 +149,13 @@ const PostDetails = ({
               id="category"
               name="category"
               onChange={(event, newValue) => {
+                console.log(newValue);
                 setDetails((details) => ({
                   ...details,
-                  category: newValue && newValue.query,
+                  category: newValue && {
+                    title: newValue.title,
+                    sub: newValue["sub"],
+                  },
                 }));
               }}
               defaultValue={categorySub || ""}
@@ -162,8 +171,9 @@ const PostDetails = ({
               groupBy={(option) => option.title}
               getOptionLabel={(option) => {
                 // console.log(option);
-                if (option && option.sub) {
-                  return option.sub;
+                if (option && option["sub"]) {
+                  // console.log(option["sub"]);
+                  return option["sub"];
                 } else {
                   return "";
                 }

@@ -33,7 +33,7 @@ import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { getFeatures, getPostById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
-import useOnScreen from "@utils/useOnScreen";
+import { useOnScreenServer } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
@@ -51,12 +51,10 @@ const post = ({ post }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ref = useRef();
-  const isVisible = useOnScreen(ref);
+  const isVisible = useOnScreenServer(ref);
 
   // set post as value of editor
   const [value, setValue] = useState(post);
-
-  const [count, setCount] = useState(post.count);
 
   const [dialog, setDialog] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -301,6 +299,11 @@ const post = ({ post }) => {
               )}
             </Typography>
             <Typography variant="h6">
+              Category: {post.category.title}
+              {" >> "}
+              {post.category.sub}
+            </Typography>
+            <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (
                 <Link
@@ -317,8 +320,6 @@ const post = ({ post }) => {
           {votes ? (
             <Vote
               post_count={votes && votes.count}
-              count={count}
-              setCount={setCount}
               handleOpenDialog={handleOpenDialog}
               name={user && user.name}
               voters={votes && votes.voters}

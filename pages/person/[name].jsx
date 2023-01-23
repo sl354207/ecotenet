@@ -142,7 +142,11 @@ export const getServerSideProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const name = context.params.name;
 
-  const person = await getPerson(name);
+  let person = await getPerson(name);
+  if (person.approved !== "true") {
+    person = { name: person.name };
+  }
+  // console.log(person);
 
   const posts = await getProfilePosts(name);
 

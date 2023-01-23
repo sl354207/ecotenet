@@ -35,7 +35,7 @@ import "@react-page/plugins-video/lib/index.css";
 import { updatePost } from "@utils/apiHelpers";
 import { getPostById, getPosts } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
-import useOnScreen from "@utils/useOnScreen";
+import { useOnScreenServer } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
@@ -54,12 +54,10 @@ const post = ({ post }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ref = useRef();
-  const isVisible = useOnScreen(ref);
+  const isVisible = useOnScreenServer(ref);
+  // console.log(`isvisible: ${isVisible}`);
   // set post as value of editor
   const [value, setValue] = useState(post);
-
-  //set count value for post
-  const [count, setCount] = useState(post.count);
 
   const [dialog, setDialog] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -74,6 +72,7 @@ const post = ({ post }) => {
     loadComments ? `/api/comments/${post._id}` : null,
     fetcher
   );
+  // console.log(user);
 
   const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
 
@@ -345,6 +344,11 @@ const post = ({ post }) => {
               )}
             </Typography>
             <Typography variant="h6">
+              Category: {post.category.title}
+              {" >> "}
+              {post.category.sub}
+            </Typography>
+            <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (
                 <Link
@@ -358,20 +362,44 @@ const post = ({ post }) => {
               ))}
             </Typography>
           </div>
-
-          {votes ? (
-            <Vote
-              post_count={votes && votes.count}
-              count={count}
-              setCount={setCount}
-              handleOpenDialog={handleOpenDialog}
-              name={user && user.name}
-              voters={votes && votes.voters}
-            />
-          ) : (
-            <CircularProgress size={19} color="secondary" />
+          {!isMobile && (
+            <>
+              {votes ? (
+                <Vote
+                  post_count={votes && votes.count}
+                  handleOpenDialog={handleOpenDialog}
+                  name={user && user.name}
+                  voters={votes && votes.voters}
+                />
+              ) : (
+                <CircularProgress size={19} color="secondary" />
+              )}{" "}
+            </>
           )}
         </div>
+        {isMobile && (
+          <>
+            <Divider sx={{ marginTop: "10px" }} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBlock: "10px",
+              }}
+            >
+              {votes ? (
+                <Vote
+                  post_count={votes && votes.count}
+                  handleOpenDialog={handleOpenDialog}
+                  name={user && user.name}
+                  voters={votes && votes.voters}
+                />
+              ) : (
+                <CircularProgress size={19} color="secondary" />
+              )}
+            </div>
+          </>
+        )}
         <EditorLayout>
           <Editor
             cellPlugins={cellPlugins}

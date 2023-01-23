@@ -23,43 +23,8 @@ export default async function handler(req, res) {
     // // const postId = "62c9c684a38cd3357c7e28f3";
     // // const key = "b36580f51a71b20d5f166a9807d98650.jpeg";
 
-    if (session.user.name && session.user.name == name) {
-      if (!postId && !key) {
-        try {
-          const paths = await deleteDirectoryPromise(`${name}/`);
-
-          return res.status(200).json(paths);
-        } catch (err) {
-          console.error(err);
-
-          res.status(500).json({ msg: "Something went wrong." });
-        }
-      } else if (!key) {
-        try {
-          const paths = await deleteRecursive(`${name}/${postId}/`);
-
-          return res.status(200).json(paths);
-        } catch (err) {
-          console.error(err);
-
-          res.status(500).json({ msg: "Something went wrong." });
-        }
-      } else {
-        try {
-          const url = await generateDeleteURL(name, postId, key);
-          // await console.log(res.json(url))
-          return res.status(200).json(url);
-        } catch (err) {
-          console.error(err);
-
-          res.status(500).json({ msg: "Something went wrong." });
-        }
-      }
-    } else if (!session.user.name) {
-      const person = await checkPerson(name);
-
-      if (person && person.email == session.user.email) {
-        // try get request, if successful return response, otherwise return error message
+    if (typeof name == "string") {
+      if (session.user.name && session.user.name == name) {
         if (!postId && !key) {
           try {
             const paths = await deleteDirectoryPromise(`${name}/`);
@@ -71,31 +36,96 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else if (!key) {
-          try {
-            const paths = await deleteRecursive(`${name}/${postId}/`);
+          if (typeof postId == "string" && postId.length == 24) {
+            try {
+              const paths = await deleteRecursive(`${name}/${postId}/`);
 
-            return res.status(200).json(paths);
-          } catch (err) {
-            console.error(err);
+              return res.status(200).json(paths);
+            } catch (err) {
+              console.error(err);
 
-            res.status(500).json({ msg: "Something went wrong." });
+              res.status(500).json({ msg: "Something went wrong." });
+            }
+          } else {
+            res.status(403);
           }
         } else {
-          try {
-            const url = await generateDeleteURL(name, postId, key);
-            // await console.log(res.json(url))
-            return res.status(200).json(url);
-          } catch (err) {
-            console.error(err);
+          if (
+            typeof postId == "string" &&
+            postId.length == 24 &&
+            typeof key == "string" &&
+            key.substring(0, key.indexOf(".")).length == 32
+          ) {
+            try {
+              const url = await generateDeleteURL(name, postId, key);
+              // await console.log(res.json(url))
+              return res.status(200).json(url);
+            } catch (err) {
+              console.error(err);
 
-            res.status(500).json({ msg: "Something went wrong." });
+              res.status(500).json({ msg: "Something went wrong." });
+            }
+          } else {
+            res.status(403);
           }
+        }
+      } else if (!session.user.name) {
+        const person = await checkPerson(name);
+
+        if (person && person.email == session.user.email) {
+          // try get request, if successful return response, otherwise return error message
+          if (!postId && !key) {
+            try {
+              const paths = await deleteDirectoryPromise(`${name}/`);
+
+              return res.status(200).json(paths);
+            } catch (err) {
+              console.error(err);
+
+              res.status(500).json({ msg: "Something went wrong." });
+            }
+          } else if (!key) {
+            if (typeof postId == "string" && postId.length == 24) {
+              try {
+                const paths = await deleteRecursive(`${name}/${postId}/`);
+
+                return res.status(200).json(paths);
+              } catch (err) {
+                console.error(err);
+
+                res.status(500).json({ msg: "Something went wrong." });
+              }
+            } else {
+              res.status(403);
+            }
+          } else {
+            if (
+              typeof postId == "string" &&
+              postId.length == 24 &&
+              typeof key == "string" &&
+              key.substring(0, key.indexOf(".")).length == 32
+            ) {
+              try {
+                const url = await generateDeleteURL(name, postId, key);
+                // await console.log(res.json(url))
+                return res.status(200).json(url);
+              } catch (err) {
+                console.error(err);
+
+                res.status(500).json({ msg: "Something went wrong." });
+              }
+            } else {
+              res.status(403);
+            }
+          }
+        } else {
+          res.status(401);
         }
       } else {
         res.status(401);
       }
     } else {
-      res.status(401);
+      res.status(403);
     }
   } else {
     // Not Signed in

@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { createComment, updatePost } from "@utils/apiHelpers";
+import { createComment, updateVote } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const ClientDialog = ({
@@ -44,10 +44,7 @@ const ClientDialog = ({
       name: name,
       post_id: post_id,
       comment_ref: result.comment_ref,
-      date: new Date().toUTCString(),
       text: result.text,
-      approved: "pending",
-      updated: false,
     };
 
     const createResponse = await createComment(submission);
@@ -80,10 +77,9 @@ const ClientDialog = ({
     const submission = {
       _id: post_id,
       name: name,
-      count: result.count,
-      voters: [...result.voters, name],
+      vote: result.vote,
     };
-    const updateResponse = await updatePost(submission, "dashboard");
+    const updateResponse = await updateVote(submission);
 
     if (updateResponse.ok) {
       handleClose();
@@ -91,12 +87,17 @@ const ClientDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: `${contentType} submit successfully`,
+        message: `${contentType} submitted successfully`,
       });
       mutate();
-    }
-
-    if (!updateResponse.ok) {
+    } else if (updateResponse.status == 406) {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        severity: "error",
+        message: `You have already voted on this post.`,
+      });
+    } else {
       setSnackbar({
         ...snackbar,
         open: true,
