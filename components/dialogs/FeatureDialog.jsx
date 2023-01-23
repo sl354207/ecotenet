@@ -1,18 +1,25 @@
 import PostList from "@components/layouts/PostList";
 import CloseIcon from "@mui/icons-material/Close";
 import {
+  alpha,
   CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
   IconButton,
+  List,
+  ListItem,
+  ListItemText,
   Typography,
 } from "@mui/material";
+import theme from "@utils/theme";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const FeatureDialog = ({ feature, setFeature }) => {
+  const router = useRouter();
   const handleCloseFeature = () => {
     setFeature(false);
   };
@@ -94,6 +101,45 @@ const FeatureDialog = ({ feature, setFeature }) => {
       {/* <Divider /> */}
 
       <DialogContent>
+        <Typography variant="body1" align="center">
+          Pinned
+        </Typography>
+        <List sx={{ display: "flex" }}>
+          <ListItem
+            button
+            variant="outlined"
+            color="secondary"
+            onClick={() => {
+              setFeature(false);
+              router.push("/ideas");
+            }}
+            sx={{
+              border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+              borderRadius: "4px",
+              marginBottom: "10px",
+              marginRight: "5px",
+            }}
+          >
+            <ListItemText align="center">Ideas Behind Ecotenet</ListItemText>
+          </ListItem>
+          <ListItem
+            button
+            variant="outlined"
+            color="secondary"
+            onClick={() => {
+              setFeature(false);
+              router.push("/how");
+            }}
+            sx={{
+              border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
+              borderRadius: "4px",
+              marginBottom: "10px",
+              marginLeft: "5px",
+            }}
+          >
+            <ListItemText align="center">How to Create a Post</ListItemText>
+          </ListItem>
+        </List>
         <Typography variant="body1" align="center">
           These are currently our favorite posts that people have shared on the
           site
