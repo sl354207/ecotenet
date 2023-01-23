@@ -343,7 +343,11 @@ const post = ({ post }) => {
                 </>
               )}
             </Typography>
-            <Typography variant="h6">Category: {post.category}</Typography>
+            <Typography variant="h6">
+              Category: {post.category.title}
+              {" >> "}
+              {post.category.sub}
+            </Typography>
             <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (

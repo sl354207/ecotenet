@@ -183,7 +183,7 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -219,7 +219,7 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -281,7 +281,7 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -318,7 +318,7 @@ const StepForm = ({ post, user }) => {
                   </Button>
 
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -373,7 +373,7 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -409,7 +409,7 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category != "" &&
+                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&

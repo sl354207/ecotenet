@@ -82,6 +82,10 @@ const PostList = ({ posts, featured, search, handleClose }) => {
                 <Typography gutterBottom color="textPrimary" align="left">
                   {post.description}
                 </Typography>
+                <Typography gutterBottom color="textPrimary" align="left">
+                  <b>Category:</b> {post.category.title} {" >> "}
+                  {post.category.sub}
+                </Typography>
                 <Typography gutterBottom color="secondary" align="left">
                   {post.name}
                 </Typography>

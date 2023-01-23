@@ -90,6 +90,7 @@ const getFeatures = async () => {
       .project({
         title: 1,
         description: 1,
+        category: 1,
         name: 1,
         count: 1,
         ecoregions: 1,

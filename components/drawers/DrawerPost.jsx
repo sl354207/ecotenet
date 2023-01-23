@@ -294,7 +294,10 @@ const DrawerPost = ({ id, FSOpen }) => {
                 {new Date(post.date).toLocaleDateString()}
               </>
             </Typography>
-            {/* <Typography variant="h6">Category: {post.category.title} {' >> '}{post.category.sub}</Typography> */}
+            <Typography variant="h6">
+              Category: {post.category.title} {" >> "}
+              {post.category.sub}
+            </Typography>
             <Typography variant="h6">
               Ecoregions:{" "}
               {post.ecoregions.map((ecoregion) => (
