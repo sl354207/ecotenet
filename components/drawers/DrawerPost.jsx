@@ -2,7 +2,6 @@ import CommentList from "@components/comments/CommentList";
 import { useUserContext } from "@components/context/UserContext";
 import ClientDialog from "@components/dialogs/ClientDialog";
 import Flag from "@components/dialogs/Flag";
-import EditorLayout from "@components/layouts/EditorLayout";
 import Link from "@components/layouts/Link";
 import Vote from "@components/layouts/Vote";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -21,7 +20,7 @@ import customImage from "@plugins/customImage";
 // import Frame from "react-frame-component";
 // The editor core
 import Editor from "@react-page/editor";
-import "@react-page/editor/lib/index.css";
+// import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
 import "@react-page/plugins-image/lib/index.css";
 import slate from "@react-page/plugins-slate";
@@ -332,19 +331,16 @@ const DrawerPost = ({ id, FSOpen }) => {
               )}
             </div>
           </Container>
-          <EditorLayout mobile={true}>
-            <Editor
-              cellPlugins={cellPlugins}
-              value={post}
-              onChange={setValue}
-              readOnly
-            />
-          </EditorLayout>
+          <div style={{ marginInline: "10px" }}>
+            <Editor cellPlugins={cellPlugins} value={post} readOnly />
+          </div>
           <Container>
             <Divider />
+
             <Typography variant="h6" sx={{ marginTop: "20px" }}>
               Comments:
             </Typography>
+
             <div ref={ref}>
               {!comments && !error && <Typography>loading...</Typography>}
               {comments && (
