@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   ButtonGroup,
+  CircularProgress,
   Divider,
   Drawer,
   IconButton,
@@ -397,7 +398,7 @@ export default function MapPage() {
                   overflow: "auto",
                 }}
               >
-                {ecoregions && (
+                {ecoregions ? (
                   <>
                     <TabPanel value={tab.id} index={0}>
                       <EcoRegions
@@ -433,6 +434,17 @@ export default function MapPage() {
                       />
                     </TabPanel>
                   </>
+                ) : (
+                  <CircularProgress
+                    color="secondary"
+                    size={50}
+                    disableShrink={true}
+                    sx={{
+                      margin: "100px auto",
+                      display: "flex",
+                      justifySelf: "center",
+                    }}
+                  />
                 )}
               </Box>
             </Drawer>
@@ -540,7 +552,7 @@ export default function MapPage() {
                   backgroundColor: theme.palette.primary.light,
                 }}
               >
-                {ecoregions && (
+                {ecoregions ? (
                   <>
                     <TabPanel value={tab.id} index={0}>
                       <EcoRegions
@@ -573,6 +585,17 @@ export default function MapPage() {
                       />
                     </TabPanel>
                   </>
+                ) : (
+                  <CircularProgress
+                    color="secondary"
+                    size={50}
+                    disableShrink={true}
+                    sx={{
+                      margin: "100px auto",
+                      display: "flex",
+                      justifySelf: "center",
+                    }}
+                  />
                 )}
               </Box>
             </Drawer>
