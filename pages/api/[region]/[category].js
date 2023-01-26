@@ -1,6 +1,6 @@
 import {
   getPostsByCategoryAndRegion,
-  getSpecies,
+  getSpecies
 } from "@utils/mongodb/mongoHelpers";
 
 import { ajv } from "@schema/validation";
@@ -52,7 +52,7 @@ export default async function handler(req, res) {
       }
     }
   } else {
-    console.log(validate.errors);
+    // console.log(validate.errors);
     res.status(403);
   }
 }

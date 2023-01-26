@@ -27,7 +27,7 @@ import {
   Tab,
   Tabs,
   Typography,
-  useMediaQuery,
+  useMediaQuery
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
@@ -80,19 +80,22 @@ export default function Dashboard() {
   const [value, setValue] = useState(0);
 
   const [fetchApi, setFetchApi] = useState();
+  // console.log(fetchApi);
   useEffect(() => {
-    if (user) {
+    if (user && user.status == 'authenticated') {
       setFetchApi(`/api/dashboard/users/${user.name}`);
     }
+
   }, [user]);
   // console.log(fetchApi);
+  // console.log(user)
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
 
-  const { data: results, mutate } = useSWR(user ? fetchApi : null, fetcher);
-  // console.log(results);
+  const { data: results, mutate } = useSWR(user && user.status == 'authenticated' ? fetchApi : null, fetcher);
+  
 
   const [profile, setProfile] = useState({
     bio: "",
@@ -182,12 +185,6 @@ export default function Dashboard() {
       [id]: value,
     }));
 
-    // set errors
-    // const error = formValidation(name, value, fieldsValidation) || ""
-
-    // setFormErrors({
-    //   [name]: error
-    // })
   };
 
   const handleProfileSubmit = async () => {
@@ -228,7 +225,17 @@ export default function Dashboard() {
   const handleEmailUpdate = async () => {
     let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
     if (!regex.test(email)) {
-      setError({ on: true, message: "Invalid Email Address" });
+      const value = {
+        name: user.name,
+        email: email,
+      };
+
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        severity: "error",
+        message: "Invalid Email",
+      });
     } else {
       const value = {
         name: user.name,
@@ -437,7 +444,7 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="bio">Bio:</InputLabel>
+                <InputLabel htmlFor="bio"><b>Bio:</b></InputLabel>
 
                 <TextBox
                   defaultValue={results.bio}
@@ -451,7 +458,7 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="website">Personal Website:</InputLabel>
+                <InputLabel htmlFor="website"><b>Personal Website:</b></InputLabel>
 
                 <TextBox
                   defaultValue={results.website}
@@ -466,7 +473,7 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="socials">Socials:</InputLabel>
+                <InputLabel htmlFor="socials"><b>Socials:</b></InputLabel>
                 <Autocomplete
                   sx={{
                     position: "relative",
@@ -570,15 +577,16 @@ export default function Dashboard() {
                     ></Chip>
                   ))}
               </div>
-              <Typography variant="h5" gutterBottom>
+              {/* <Typography variant="h5" gutterBottom>
                 Private Settings:
               </Typography>
               <div style={{ display: "flex" }}>
                 <FormControl
                   sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+                  
                 >
-                  <InputLabel htmlFor="email">Email:</InputLabel>
-                  {/* <div style={{ display: "flex", flexGrow: 1 }}> */}
+                  <InputLabel htmlFor="email" >Email:</InputLabel>
+                  
                   <TextBox
                     defaultValue={results.email}
                     placeHolder="email@site.com"
@@ -588,9 +596,10 @@ export default function Dashboard() {
                     rows={1}
                     multiline={false}
                     inputProps={{ type: "email" }}
+                    
                   />
 
-                  {/* </div> */}
+                  
                 </FormControl>
                 <Button
                   variant="outlined"
@@ -607,7 +616,7 @@ export default function Dashboard() {
                 >
                   Update Email
                 </Button>
-              </div>
+              </div> */}
             </>
           )}
         </TabPanel>

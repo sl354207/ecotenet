@@ -44,7 +44,7 @@ const TextBox = ({
       sx={{ display: "flex" }}
       inputProps={inputProps}
       onKeyPress={onKeyPress}
-      error
+      
     />
   );
 };

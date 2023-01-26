@@ -3,7 +3,7 @@ import {
   checkPerson,
   deletePerson,
   getPersonDash,
-  updatePerson,
+  updatePerson
 } from "@utils/mongodb/mongoHelpers";
 import { getSession } from "next-auth/react";
 
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
               data.approved = "pending";
               const update = await updatePerson(
                 email,
-                Object.keys(data).length ? data : { name: name }
+                Object.keys(data).length == 1 ? data : { name: name }
               );
 
               // console.log(update);
