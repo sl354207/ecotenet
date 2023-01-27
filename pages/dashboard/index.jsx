@@ -27,7 +27,7 @@ import {
   Tab,
   Tabs,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
@@ -82,10 +82,9 @@ export default function Dashboard() {
   const [fetchApi, setFetchApi] = useState();
   // console.log(fetchApi);
   useEffect(() => {
-    if (user && user.status == 'authenticated') {
+    if (user && user.status == "authenticated") {
       setFetchApi(`/api/dashboard/users/${user.name}`);
     }
-
   }, [user]);
   // console.log(fetchApi);
   // console.log(user)
@@ -94,8 +93,10 @@ export default function Dashboard() {
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
 
-  const { data: results, mutate } = useSWR(user && user.status == 'authenticated' ? fetchApi : null, fetcher);
-  
+  const { data: results, mutate } = useSWR(
+    user && user.status == "authenticated" ? fetchApi : null,
+    fetcher
+  );
 
   const [profile, setProfile] = useState({
     bio: "",
@@ -184,7 +185,6 @@ export default function Dashboard() {
       ...profile,
       [id]: value,
     }));
-
   };
 
   const handleProfileSubmit = async () => {
@@ -225,11 +225,6 @@ export default function Dashboard() {
   const handleEmailUpdate = async () => {
     let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
     if (!regex.test(email)) {
-      const value = {
-        name: user.name,
-        email: email,
-      };
-
       setSnackbar({
         ...snackbar,
         open: true,
@@ -444,7 +439,9 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="bio"><b>Bio:</b></InputLabel>
+                <InputLabel htmlFor="bio">
+                  <b>Bio:</b>
+                </InputLabel>
 
                 <TextBox
                   defaultValue={results.bio}
@@ -458,7 +455,9 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="website"><b>Personal Website:</b></InputLabel>
+                <InputLabel htmlFor="website">
+                  <b>Personal Website:</b>
+                </InputLabel>
 
                 <TextBox
                   defaultValue={results.website}
@@ -473,7 +472,9 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="socials"><b>Socials:</b></InputLabel>
+                <InputLabel htmlFor="socials">
+                  <b>Socials:</b>
+                </InputLabel>
                 <Autocomplete
                   sx={{
                     position: "relative",
