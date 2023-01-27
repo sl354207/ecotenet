@@ -4,7 +4,7 @@ const EditorLayout = ({ children }) => {
   return (
     <div
       style={{
-        display: "flex",
+        // display: "flex",
         flexGrow: 1,
         backgroundColor: theme.palette.primary.light,
       }}

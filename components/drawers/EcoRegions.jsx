@@ -77,7 +77,6 @@ const EcoRegions = ({
         </Typography>
       </div>
 
-      {/* {ecoregions ? ( */}
       <List>
         {sorted.map((ecoregion) => {
           return (
@@ -91,18 +90,6 @@ const EcoRegions = ({
           );
         })}
       </List>
-      {/* ) : (
-        <CircularProgress
-          color="secondary"
-          size={50}
-          disableShrink={true}
-          sx={{
-            margin: "100px auto",
-            display: "flex",
-            justifySelf: "center",
-          }}
-        />
-      )} */}
     </>
   );
 };

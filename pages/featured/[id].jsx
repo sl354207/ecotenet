@@ -317,17 +317,44 @@ const post = ({ post }) => {
               ))}
             </Typography>
           </div>
-          {votes ? (
-            <Vote
-              post_count={votes && votes.count}
-              handleOpenDialog={handleOpenDialog}
-              name={user && user.name}
-              voters={votes && votes.voters}
-            />
-          ) : (
-            <CircularProgress size={19} color="secondary" />
+          {!isMobile && (
+            <>
+              {votes ? (
+                <Vote
+                  post_count={votes && votes.count}
+                  handleOpenDialog={handleOpenDialog}
+                  name={user && user.name}
+                  voters={votes && votes.voters}
+                />
+              ) : (
+                <CircularProgress size={19} color="secondary" />
+              )}{" "}
+            </>
           )}
         </div>
+        {isMobile && (
+          <>
+            <Divider sx={{ marginTop: "10px" }} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBlock: "10px",
+              }}
+            >
+              {votes ? (
+                <Vote
+                  post_count={votes && votes.count}
+                  handleOpenDialog={handleOpenDialog}
+                  name={user && user.name}
+                  voters={votes && votes.voters}
+                />
+              ) : (
+                <CircularProgress size={19} color="secondary" />
+              )}
+            </div>
+          </>
+        )}
         <EditorLayout>
           <Editor
             cellPlugins={cellPlugins}

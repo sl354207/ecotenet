@@ -7,7 +7,7 @@ import {
   Divider,
   Drawer,
   IconButton,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -31,18 +31,7 @@ const FeatureAndSearchDrawer = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
 
-  //  if features clicked from home page
-  //      load list of features useswr
-  //      if feature clicked from list
-  //          display post useswr
-  //          switch tab and show distribution
-  //  if features not clicked from home page
-  //      go to features list page
-  //  if post or species selected from search from home page
-  //      display post or species useswr
-  //      switch tab and show distribution
-  //  if post or species not selected from home page
-  //      go to post or species
+
 
   return (
     <>
