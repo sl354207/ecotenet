@@ -2,7 +2,6 @@ import {
   AppBar,
   Box,
   ButtonGroup,
-  CircularProgress,
   Divider,
   Drawer,
   IconButton,
@@ -16,6 +15,7 @@ import EcoRegions from "@components/drawers/EcoRegions";
 import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
 import Coords from "@data/eco_coord.json";
+import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 import { useHomepageContext } from "@components/context/HomepageContext";
 import FeatureAndSearchDrawer from "@components/drawers/FeatureAndSearchDrawer";
@@ -31,7 +31,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { MapProvider } from "react-map-gl";
-import useSWR from "swr";
+// import useSWR from "swr";
 
 const coords = Coords;
 
@@ -85,7 +85,7 @@ const CustomTab = styled((props) => <Tab {...props} />)(({ theme }) => ({
   },
 }));
 
-export default function MapPage() {
+const MapPage = ({ ecoregions }) => {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
@@ -110,7 +110,7 @@ export default function MapPage() {
     distributionDispatch,
   } = useHomepageContext();
 
-  const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
+  // const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
 
   const drawerWidth = 350;
 
@@ -398,54 +398,41 @@ export default function MapPage() {
                   overflow: "auto",
                 }}
               >
-                {ecoregions ? (
-                  <>
-                    <TabPanel value={tab.id} index={0}>
-                      <EcoRegions
-                        ecoregions={ecoregions && ecoregions}
-                        ecoMove={ecoMove}
-                        setEcoMove={setEcoMove}
-                        setEcoFilter={setEcoFilter}
-                        setHoverInfo={setHoverInfo}
-                        setWiki={setWiki}
-                        setShowPopup={setShowPopup}
-                        visitedHome={visitedHome}
-                        setTab={setTab}
-                        click={click}
-                        setClick={setClick}
-                        isMobile={isMobile}
-                      />
-                    </TabPanel>
-                    <TabPanel value={tab.id} index={1}>
-                      <EcoSummary
-                        wiki={wiki && wiki}
-                        setWiki={setWiki}
-                        ecoFilter={ecoFilter && ecoFilter}
-                        isMobile={isMobile}
-                      />
-                    </TabPanel>
-                    <TabPanel value={tab.id} index={2}>
-                      <EcoDist
-                        dist={dist}
-                        setDist={setDist}
-                        distributionState={distributionState}
-                        distributionDispatch={distributionDispatch}
-                        isMobile={isMobile}
-                      />
-                    </TabPanel>
-                  </>
-                ) : (
-                  <CircularProgress
-                    color="secondary"
-                    size={50}
-                    disableShrink={true}
-                    sx={{
-                      margin: "100px auto",
-                      display: "flex",
-                      justifySelf: "center",
-                    }}
-                  />
-                )}
+                <>
+                  <TabPanel value={tab.id} index={0}>
+                    <EcoRegions
+                      ecoregions={ecoregions}
+                      ecoMove={ecoMove}
+                      setEcoMove={setEcoMove}
+                      setEcoFilter={setEcoFilter}
+                      setHoverInfo={setHoverInfo}
+                      setWiki={setWiki}
+                      setShowPopup={setShowPopup}
+                      visitedHome={visitedHome}
+                      setTab={setTab}
+                      click={click}
+                      setClick={setClick}
+                      isMobile={isMobile}
+                    />
+                  </TabPanel>
+                  <TabPanel value={tab.id} index={1}>
+                    <EcoSummary
+                      wiki={wiki && wiki}
+                      setWiki={setWiki}
+                      ecoFilter={ecoFilter && ecoFilter}
+                      isMobile={isMobile}
+                    />
+                  </TabPanel>
+                  <TabPanel value={tab.id} index={2}>
+                    <EcoDist
+                      dist={dist}
+                      setDist={setDist}
+                      distributionState={distributionState}
+                      distributionDispatch={distributionDispatch}
+                      isMobile={isMobile}
+                    />
+                  </TabPanel>
+                </>
               </Box>
             </Drawer>
             <FeatureAndSearchDrawer
@@ -552,51 +539,38 @@ export default function MapPage() {
                   backgroundColor: theme.palette.primary.light,
                 }}
               >
-                {ecoregions ? (
-                  <>
-                    <TabPanel value={tab.id} index={0}>
-                      <EcoRegions
-                        ecoregions={ecoregions && ecoregions}
-                        ecoMove={ecoMove}
-                        setEcoMove={setEcoMove}
-                        setEcoFilter={setEcoFilter}
-                        setHoverInfo={setHoverInfo}
-                        setWiki={setWiki}
-                        setShowPopup={setShowPopup}
-                        visitedHome={visitedHome}
-                        setTab={setTab}
-                        click={click}
-                        setClick={setClick}
-                      />
-                    </TabPanel>
-                    <TabPanel value={tab.id} index={1}>
-                      <EcoSummary
-                        wiki={wiki && wiki}
-                        setWiki={setWiki}
-                        ecoFilter={ecoFilter && ecoFilter}
-                      />
-                    </TabPanel>
-                    <TabPanel value={tab.id} index={2}>
-                      <EcoDist
-                        dist={dist}
-                        setDist={setDist}
-                        distributionState={distributionState}
-                        distributionDispatch={distributionDispatch}
-                      />
-                    </TabPanel>
-                  </>
-                ) : (
-                  <CircularProgress
-                    color="secondary"
-                    size={50}
-                    disableShrink={true}
-                    sx={{
-                      margin: "100px auto",
-                      display: "flex",
-                      justifySelf: "center",
-                    }}
-                  />
-                )}
+                <>
+                  <TabPanel value={tab.id} index={0}>
+                    <EcoRegions
+                      ecoregions={ecoregions}
+                      ecoMove={ecoMove}
+                      setEcoMove={setEcoMove}
+                      setEcoFilter={setEcoFilter}
+                      setHoverInfo={setHoverInfo}
+                      setWiki={setWiki}
+                      setShowPopup={setShowPopup}
+                      visitedHome={visitedHome}
+                      setTab={setTab}
+                      click={click}
+                      setClick={setClick}
+                    />
+                  </TabPanel>
+                  <TabPanel value={tab.id} index={1}>
+                    <EcoSummary
+                      wiki={wiki && wiki}
+                      setWiki={setWiki}
+                      ecoFilter={ecoFilter && ecoFilter}
+                    />
+                  </TabPanel>
+                  <TabPanel value={tab.id} index={2}>
+                    <EcoDist
+                      dist={dist}
+                      setDist={setDist}
+                      distributionState={distributionState}
+                      distributionDispatch={distributionDispatch}
+                    />
+                  </TabPanel>
+                </>
               </Box>
             </Drawer>
             <FeatureAndSearchDrawer
@@ -615,4 +589,18 @@ export default function MapPage() {
       {!visited && <WelcomeDialog />}
     </div>
   );
-}
+};
+
+export const getStaticProps = async () => {
+  const ecoregions = await getEcoregions();
+  //   console.log(ecoregions);
+
+  return {
+    props: {
+      ecoregions: JSON.parse(JSON.stringify(ecoregions)),
+    },
+    revalidate: 60,
+  };
+};
+
+export default MapPage;
