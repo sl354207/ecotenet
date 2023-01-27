@@ -398,7 +398,6 @@ const MapPage = ({ ecoregions }) => {
                   overflow: "auto",
                 }}
               >
-                {/* {ecoregions ? ( */}
                 <>
                   <TabPanel value={tab.id} index={0}>
                     <EcoRegions
@@ -434,18 +433,6 @@ const MapPage = ({ ecoregions }) => {
                     />
                   </TabPanel>
                 </>
-                {/* ) : (
-                  <CircularProgress
-                    color="secondary"
-                    size={50}
-                    disableShrink={true}
-                    sx={{
-                      margin: "100px auto",
-                      display: "flex",
-                      justifySelf: "center",
-                    }}
-                  />
-                )} */}
               </Box>
             </Drawer>
             <FeatureAndSearchDrawer
@@ -552,7 +539,6 @@ const MapPage = ({ ecoregions }) => {
                   backgroundColor: theme.palette.primary.light,
                 }}
               >
-                {/* {ecoregions ? ( */}
                 <>
                   <TabPanel value={tab.id} index={0}>
                     <EcoRegions
@@ -585,18 +571,6 @@ const MapPage = ({ ecoregions }) => {
                     />
                   </TabPanel>
                 </>
-                {/* ) : (
-                  <CircularProgress
-                    color="secondary"
-                    size={50}
-                    disableShrink={true}
-                    sx={{
-                      margin: "100px auto",
-                      display: "flex",
-                      justifySelf: "center",
-                    }}
-                  />
-                )} */}
               </Box>
             </Drawer>
             <FeatureAndSearchDrawer
