@@ -4,16 +4,17 @@ import "@styles/globals.css";
 
 import { SessionProvider } from "next-auth/react";
 
-import { useEffect } from "react";
-
 import MainLayout from "@components/layouts/MainLayout";
+
+import createEmotionCache from "@utils/createEmotionCache";
+import theme from "@utils/theme";
+
+import { useRouter } from "next/router";
+
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import createEmotionCache from "@utils/createEmotionCache";
-import theme from "@utils/theme";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -21,14 +22,6 @@ const clientSideEmotionCache = createEmotionCache();
 
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector("#jss-server-side");
-    if (jssStyles) {
-      jssStyles?.parentElement?.removeChild(jssStyles);
-    }
-  }, []);
 
   const router = useRouter();
 

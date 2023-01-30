@@ -1,13 +1,14 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import {
   deleteDirectoryPromise,
   deleteRecursive,
   generateDeleteURL,
 } from "@utils/aws";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (session) {
     if (req.method !== "GET") {
       return res.status(405);

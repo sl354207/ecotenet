@@ -1,14 +1,15 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
 import {
   checkPerson,
   deletePerson,
   getPersonDash,
-  updatePerson
+  updatePerson,
 } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (session) {
     const method = req.method;
     switch (method) {

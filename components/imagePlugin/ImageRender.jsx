@@ -1,7 +1,7 @@
 import Link from "@components/layouts/Link";
 import { Typography } from "@mui/material";
 import { lazyLoad } from "@react-page/editor";
-import Image from "next/image";
+import Image from "next/legacy/image";
 const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
 // ImageRender takes in data as prop passed down from testPlugin

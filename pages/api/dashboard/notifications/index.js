@@ -1,9 +1,10 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { checkPerson, getNotifications } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   // console.log(session);
   if (session) {
