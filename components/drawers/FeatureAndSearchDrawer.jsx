@@ -7,7 +7,7 @@ import {
   Divider,
   Drawer,
   IconButton,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -30,8 +30,6 @@ const FeatureAndSearchDrawer = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
-
-
 
   return (
     <>
@@ -175,7 +173,7 @@ const FeatureAndSearchDrawer = ({
           }}
         >
           {typeof FS.item == "string" ? (
-            <DrawerPost id={FS.item} FSOpen={FSOpen} />
+            <DrawerPost id={FS.item} />
           ) : (
             <DrawerSpecies species={FS.item} />
           )}

@@ -12,11 +12,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const FeatureDialog = ({ feature, setFeature }) => {
   const router = useRouter();

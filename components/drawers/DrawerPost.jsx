@@ -1,7 +1,5 @@
 import CommentList from "@components/comments/CommentList";
 import { useUserContext } from "@components/context/UserContext";
-import ClientDialog from "@components/dialogs/ClientDialog";
-import Flag from "@components/dialogs/Flag";
 import Link from "@components/layouts/Link";
 import Vote from "@components/layouts/Vote";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
@@ -29,8 +27,10 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
+import fetcher from "@utils/fetcher";
 import { useOnScreenClient } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react";
 import useSWR from "swr";
@@ -38,8 +38,11 @@ import useSWR from "swr";
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-const DrawerPost = ({ id, FSOpen }) => {
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
+const DynamicClientDialog = dynamic(() =>
+  import("@components/dialogs/ClientDialog")
+);
+const DrawerPost = ({ id }) => {
   const { data: post } = useSWR(id ? `/api/posts/${id}` : null, fetcher);
 
   const router = useRouter();
@@ -48,10 +51,6 @@ const DrawerPost = ({ id, FSOpen }) => {
   const [ref, entry] = useOnScreenClient({
     threshold: 1,
   });
-
-  // set post as value of editor
-  const [value, setValue] = useState(post);
-  // console.log(post);
 
   const [dialog, setDialog] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -358,23 +357,28 @@ const DrawerPost = ({ id, FSOpen }) => {
             </div>
           </Container>
 
-          <ClientDialog
-            contentType={action}
-            open={dialog}
-            handleClose={handleCloseDialog}
-            post_id={post._id}
-            result={item}
-            closeForm={closeForm}
-            name={user && user.name}
-            mutate={mutate}
-          />
-          <Flag
-            open={flag}
-            handleClose={handleCloseFlag}
-            contentType={action}
-            result={item}
-            name={user && user.name}
-          />
+          {dialog && (
+            <DynamicClientDialog
+              contentType={action}
+              open={dialog}
+              handleClose={handleCloseDialog}
+              post_id={post._id}
+              result={item}
+              closeForm={closeForm}
+              name={user && user.name}
+              mutate={mutate}
+            />
+          )}
+
+          {flag && (
+            <DynamicFlag
+              open={flag}
+              handleClose={handleCloseFlag}
+              contentType={action}
+              result={item}
+              name={user && user.name}
+            />
+          )}
         </>
       ) : (
         <CircularProgress

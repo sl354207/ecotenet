@@ -9,11 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminPosts = () => {
   const router = useRouter();

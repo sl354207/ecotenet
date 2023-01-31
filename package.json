@@ -17,7 +17,6 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.6",
     "@next-auth/mongodb-adapter": "^1.1.1",
-    "@next/font": "^13.1.6",
     "@react-page/editor": "^5.3.11",
     "@react-page/plugins-divider": "^5.3.11",
     "@react-page/plugins-image": "^5.3.11",

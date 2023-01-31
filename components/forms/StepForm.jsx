@@ -1,16 +1,20 @@
 import { useSnackbarContext } from "@components/context/SnackbarContext";
-import DashboardDialog from "@components/dialogs/DashboardDialog";
 import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { updatePost } from "@utils/apiHelpers";
 import theme from "@utils/theme";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
+
+const DynamicDashboardDialog = dynamic(() =>
+  import("@components/dialogs/DashboardDialog")
+);
 
 // pass in post and url path as props
 const StepForm = ({ post, user }) => {
@@ -539,16 +543,18 @@ const StepForm = ({ post, user }) => {
           </StepButton>
         </Step>
       </Stepper>
-      <DashboardDialog
-        contentType={action.type}
-        action={action.action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        result={item}
-        snackbar={snackbar}
-        setSnackbar={setSnackbar}
-        name={user && user.name}
-      />
+      {dialog && (
+        <DynamicDashboardDialog
+          contentType={action.type}
+          action={action.action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          result={item}
+          snackbar={snackbar}
+          setSnackbar={setSnackbar}
+          name={user && user.name}
+        />
+      )}
 
       {handleSteps(activeStep)}
     </>

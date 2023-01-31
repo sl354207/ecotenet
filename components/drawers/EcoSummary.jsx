@@ -1,11 +1,10 @@
 import Link from "@components/layouts/Link";
 import { Button, CircularProgress, Typography } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   let wikiUrl;

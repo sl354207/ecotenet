@@ -1,6 +1,5 @@
 import { useHomepageContext } from "@components/context/HomepageContext";
 import { useUserContext } from "@components/context/UserContext";
-import Flag from "@components/dialogs/Flag";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
@@ -11,8 +10,11 @@ import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
 
 const eco = ({ wiki, eco, id }) => {
   const router = useRouter();
@@ -267,13 +269,15 @@ const eco = ({ wiki, eco, id }) => {
         )}
 
         {/* UPDATE */}
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="ecoregion"
-          result={{ _id: id }}
-          name={user && user.name}
-        />
+        {dialog && (
+          <DynamicFlag
+            open={dialog}
+            handleClose={() => handleCloseDialog()}
+            contentType="ecoregion"
+            result={{ _id: id }}
+            name={user && user.name}
+          />
+        )}
       </Container>
       <Footer />
     </>

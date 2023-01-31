@@ -12,10 +12,9 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
+import fetcher from "@utils/fetcher";
 import { useState } from "react";
 import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const adminComments = () => {
   const theme = useTheme();

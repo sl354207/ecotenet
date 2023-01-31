@@ -1,7 +1,6 @@
 import DashboardComment from "@components/comments/DashboardComment";
 import { useSnackbarContext } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
-import DashboardDialog from "@components/dialogs/DashboardDialog";
 import TextBox from "@components/inputFields/TextBox";
 import CreatePostButton from "@components/layouts/CreatePostButton";
 import Header from "@components/layouts/Header";
@@ -32,7 +31,9 @@ import {
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import { updateNotification, updateUser } from "@utils/apiHelpers";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
+import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -67,7 +68,9 @@ function a11yProps(index) {
   };
 }
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
+const DynamicDashboardDialog = dynamic(() =>
+  import("@components/dialogs/DashboardDialog")
+);
 
 export default function Dashboard() {
   const { user } = useUserContext();
@@ -992,17 +995,19 @@ export default function Dashboard() {
         </TabPanel>
       </div>
 
-      <DashboardDialog
-        contentType={action.type}
-        action={action.action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        result={item}
-        snackbar={snackbar}
-        setSnackbar={setSnackbar}
-        mutate={mutate}
-        name={user && user.name}
-      />
+      {dialog && (
+        <DynamicDashboardDialog
+          contentType={action.type}
+          action={action.action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          result={item}
+          snackbar={snackbar}
+          setSnackbar={setSnackbar}
+          mutate={mutate}
+          name={user && user.name}
+        />
+      )}
     </Container>
   );
 }

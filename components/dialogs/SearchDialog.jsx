@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useState } from "react";
 import useSWR from "swr";
@@ -27,8 +28,6 @@ const CustomPopper = function (props) {
     />
   );
 };
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const SearchDialog = ({ search, setSearch, ecoFilter }) => {
   const [query, setQuery] = useState();

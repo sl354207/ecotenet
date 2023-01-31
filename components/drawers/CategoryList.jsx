@@ -8,14 +8,13 @@ import {
   Container,
   Typography,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import { useState } from "react";
 import useSWR from "swr";
 import CategoryPostList from "./CategoryPostList";
 import CategorySpeciesList from "./CategorySpeciesList";
 import DrawerPost from "./DrawerPost";
 import DrawerSpecies from "./DrawerSpecies";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const CategoryList = ({
   ecoFilter,

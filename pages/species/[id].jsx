@@ -1,5 +1,4 @@
 import { useUserContext } from "@components/context/UserContext";
-import Flag from "@components/dialogs/Flag";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
@@ -20,6 +19,7 @@ import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -53,6 +53,8 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
+
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
 
 const species = ({ species, wiki }) => {
   const router = useRouter();
@@ -425,13 +427,15 @@ const species = ({ species, wiki }) => {
             </List>
           </TabPanel>
         </div>
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="species"
-          result={species}
-          name={user && user.name}
-        />
+        {dialog && (
+          <DynamicFlag
+            open={dialog}
+            handleClose={() => handleCloseDialog()}
+            contentType="species"
+            result={species}
+            name={user && user.name}
+          />
+        )}
       </Container>
       <Footer />
     </>

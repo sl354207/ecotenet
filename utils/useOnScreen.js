@@ -37,7 +37,7 @@ export function useOnScreenClient({ root = null, rootMargin, threshold = 0 }) {
     currentObserver.disconnect();
 
     if (node) {
-      console.log("test");
+      // console.log("test");
 
       return currentObserver.observe(node);
     }

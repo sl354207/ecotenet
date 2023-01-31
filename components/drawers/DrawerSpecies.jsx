@@ -1,5 +1,4 @@
 import { useUserContext } from "@components/context/UserContext";
-import Flag from "@components/dialogs/Flag";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
@@ -9,15 +8,17 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
 const DrawerSpecies = ({ species }) => {
   const router = useRouter();
   const { user } = useUserContext();
@@ -200,13 +201,7 @@ const DrawerSpecies = ({ species }) => {
             >
               view full page
             </Button>
-            {/* <Typography
-              variant="h4"
-              align="center"
-              sx={{ marginBottom: "15px" }}
-            >
-              {species.scientific_name}: {species.common_name}
-            </Typography> */}
+
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div
                 style={{
@@ -313,13 +308,15 @@ const DrawerSpecies = ({ species }) => {
               </>
             )}
           </div>
-          <Flag
-            open={dialog}
-            handleClose={() => handleCloseDialog()}
-            contentType="species"
-            result={species}
-            name={user && user.name}
-          />
+          {dialog && (
+            <DynamicFlag
+              open={dialog}
+              handleClose={() => handleCloseDialog()}
+              contentType="species"
+              result={species}
+              name={user && user.name}
+            />
+          )}
         </>
       ) : (
         <CircularProgress

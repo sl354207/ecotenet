@@ -4,11 +4,11 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = () => {
   const router = useRouter();

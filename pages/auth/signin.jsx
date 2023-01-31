@@ -3,7 +3,8 @@ import VerificationStep from "@components/inputFields/VerificationStep";
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
 import { Container } from "@mui/material";
-import { getProviders, getServerSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { getProviders } from "next-auth/react";
 
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 

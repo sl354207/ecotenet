@@ -1,8 +1,6 @@
 import CommentList from "@components/comments/CommentList";
 import { useSnackbarContext } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
-import ClientDialog from "@components/dialogs/ClientDialog";
-import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/layouts/EditorLayout";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
@@ -33,10 +31,12 @@ import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import { updatePost } from "@utils/apiHelpers";
+import fetcher from "@utils/fetcher";
 import { getPostById, getPosts } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
 import useSWR from "swr";
@@ -44,8 +44,10 @@ import useSWR from "swr";
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
+const DynamicClientDialog = dynamic(() =>
+  import("@components/dialogs/ClientDialog")
+);
 // pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post }) => {
   const router = useRouter();
@@ -428,23 +430,28 @@ const post = ({ post }) => {
         </div>
       </Container>
 
-      <ClientDialog
-        contentType={action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        post_id={post._id}
-        result={item}
-        closeForm={closeForm}
-        name={user && user.name}
-        mutate={mutate}
-      />
-      <Flag
-        open={flag}
-        handleClose={handleCloseFlag}
-        contentType={action}
-        result={item}
-        name={user && user.name}
-      />
+      {dialog && (
+        <DynamicClientDialog
+          contentType={action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          post_id={post._id}
+          result={item}
+          closeForm={closeForm}
+          name={user && user.name}
+          mutate={mutate}
+        />
+      )}
+
+      {flag && (
+        <DynamicFlag
+          open={flag}
+          handleClose={handleCloseFlag}
+          contentType={action}
+          result={item}
+          name={user && user.name}
+        />
+      )}
 
       <Footer />
     </>

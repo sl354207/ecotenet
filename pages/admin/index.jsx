@@ -13,10 +13,9 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 const admin = () => {
   const { snackbar, setSnackbar } = useSnackbarContext();

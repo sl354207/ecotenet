@@ -22,14 +22,22 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useHomepageContext } from "@components/context/HomepageContext";
 import { useSnackbarContext } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
-import FeatureDialog from "@components/dialogs/FeatureDialog";
-import SearchDialog from "@components/dialogs/SearchDialog";
-import FilterDrawer from "@components/drawers/FilterDrawer";
 import CreatePostButton from "@components/layouts/CreatePostButton";
 import { createPost } from "@utils/apiHelpers";
 import { signIn, signOut } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+
+const DynamicFilterDrawer = dynamic(() =>
+  import("@components/drawers/FilterDrawer")
+);
+const DynamicSearchDialog = dynamic(() =>
+  import("@components/dialogs/SearchDialog")
+);
+const DynamicFeatureDialog = dynamic(() =>
+  import("@components/dialogs/FeatureDialog")
+);
 
 const Nav = () => {
   // console.log(ecoFilter);
@@ -281,14 +289,23 @@ const Nav = () => {
           >
             <SearchIcon sx={{ fontSize: isTab ? "1.8rem" : "2rem" }} />
           </IconButton>
+          {search && (
+            <DynamicSearchDialog
+              search={search}
+              setSearch={setSearch}
+              ecoFilter={ecoFilter && ecoFilter}
+            />
+          )}
 
-          <SearchDialog
-            search={search}
-            setSearch={setSearch}
-            ecoFilter={ecoFilter && ecoFilter}
-          />
           {router.pathname == "/" && (
-            <FeatureDialog feature={feature} setFeature={setFeature} />
+            <>
+              {feature && (
+                <DynamicFeatureDialog
+                  feature={feature}
+                  setFeature={setFeature}
+                />
+              )}
+            </>
           )}
 
           <Box sx={{ display: { xs: "block", md: "none" } }}>
@@ -514,16 +531,18 @@ const Nav = () => {
               Donate
             </Button>
           </Box>
-          <FilterDrawer
-            ecoFilter={ecoFilter}
-            filterOpen={filterOpen}
-            setFilterOpen={setFilterOpen}
-            handleFilterClose={handleFilterClose}
-            top={top}
-            setTop={setTop}
-            drawerHeight={drawerHeight}
-            setDrawerHeight={setDrawerHeight}
-          />
+          {ecoFilter && (
+            <DynamicFilterDrawer
+              ecoFilter={ecoFilter}
+              filterOpen={filterOpen}
+              setFilterOpen={setFilterOpen}
+              handleFilterClose={handleFilterClose}
+              top={top}
+              setTop={setTop}
+              drawerHeight={drawerHeight}
+              setDrawerHeight={setDrawerHeight}
+            />
+          )}
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>

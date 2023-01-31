@@ -1,10 +1,9 @@
 import { useUserContext } from "@components/context/UserContext";
 import StepForm from "@components/forms/StepForm";
 import { CircularProgress } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 export default function DraftByUser() {
   // set id to id in url query

@@ -1,5 +1,4 @@
 import { useUserContext } from "@components/context/UserContext";
-import Flag from "@components/dialogs/Flag";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
@@ -9,8 +8,11 @@ import FlagIcon from "@mui/icons-material/Flag";
 import { Button, Container, IconButton, Typography } from "@mui/material";
 import { getPerson, getProfilePosts } from "@utils/mongodb/mongoHelpers";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
 
 // pass in post and comments as props and create page for each post with corresponding comments
 const person = ({ person, posts }) => {
@@ -123,13 +125,15 @@ const person = ({ person, posts }) => {
         </Typography>
 
         <PostList posts={posts} />
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="profile"
-          result={person}
-          name={user && user.name}
-        />
+        {dialog && (
+          <DynamicFlag
+            open={dialog}
+            handleClose={() => handleCloseDialog()}
+            contentType="profile"
+            result={person}
+            name={user && user.name}
+          />
+        )}
       </Container>
       <Footer />
     </>
