@@ -33,7 +33,7 @@ export default async function handler(req, res) {
         if (voterNames.voters.includes(data.name)) {
           res.status(406).json({ msg: "You have already voted on this post." });
         } else {
-          if (data.vote == "add") {
+          if (data.vote === "add") {
             data.vote = 1;
             try {
               const response = await updateVote(data);
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
               .status(406)
               .json({ msg: "You have already voted on this post." });
           } else {
-            if (data.vote == "add") {
+            if (data.vote === "add") {
               data.vote = 1;
               try {
                 const response = await updateVote(data);

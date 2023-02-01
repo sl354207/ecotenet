@@ -307,6 +307,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         filterOptions={(x) => x}
         freeSolo
         renderInput={(params) => (
+          // ...params is causing error check dashboard index on how to log params
           <TextField
             {...params}
             placeholder="Search…"

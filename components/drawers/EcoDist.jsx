@@ -173,6 +173,7 @@ const EcoDist = ({
           filterOptions={(x) => x}
           freeSolo
           renderInput={(params) => (
+            // ...params is causing error check dashboard index on how to log params
             <TextField
               {...params}
               autoFocus={!isMobile}

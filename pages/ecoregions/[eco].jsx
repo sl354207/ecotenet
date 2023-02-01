@@ -21,7 +21,7 @@ const eco = ({ wiki, eco, id }) => {
   const { user } = useUserContext();
   // console.log(userName);
   let status;
-  if (user == undefined) {
+  if (user === undefined) {
     status = "loading";
   } else {
     status = user.status;
@@ -37,11 +37,11 @@ const eco = ({ wiki, eco, id }) => {
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);

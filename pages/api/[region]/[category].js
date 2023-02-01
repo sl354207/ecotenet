@@ -1,6 +1,6 @@
 import {
   getPostsByCategoryAndRegion,
-  getSpecies
+  getSpecies,
 } from "@utils/mongodb/mongoHelpers";
 
 import { ajv } from "@schema/validation";

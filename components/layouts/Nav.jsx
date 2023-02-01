@@ -239,13 +239,13 @@ const Nav = () => {
             Forum
           </Button>
 
-          {status == "authenticated" && (
+          {status === "authenticated" && (
             <Button
               variant="text"
               color="secondary"
               size={isTab ? "small" : "medium"}
               onClick={
-                status == "authenticated" && user.name == undefined
+                status === "authenticated" && user.name === undefined
                   ? () => router.push("/auth/new-user")
                   : () => router.push("/dashboard")
               }
@@ -380,11 +380,11 @@ const Nav = () => {
                           Forum
                         </MenuItem>
 
-                        {status == "authenticated" && (
+                        {status === "authenticated" && (
                           <MenuItem
                             onClick={
-                              status == "authenticated" &&
-                              user.name == undefined
+                              status === "authenticated" &&
+                              user.name === undefined
                                 ? () => {
                                     setPopper(false);
                                     router.push("/auth/new-user");
@@ -399,11 +399,11 @@ const Nav = () => {
                             Dashboard
                           </MenuItem>
                         )}
-                        {status == "authenticated" && (
+                        {status === "authenticated" && (
                           <MenuItem
                             onClick={
-                              status == "authenticated" &&
-                              user.name == undefined
+                              status === "authenticated" &&
+                              user.name === undefined
                                 ? () => {
                                     setPopper(false);
                                     router.push("/auth/new-user");
@@ -427,7 +427,7 @@ const Nav = () => {
                         <MenuItem
                           disabled={status == "loading"}
                           onClick={
-                            status == "authenticated"
+                            status === "authenticated"
                               ? () => {
                                   setPopper(false);
                                   signOut({
@@ -446,7 +446,7 @@ const Nav = () => {
                             marginBottom: "4px",
                           }}
                         >
-                          {status == "authenticated" ? (
+                          {status === "authenticated" ? (
                             <>Sign Out</>
                           ) : (
                             <>Sign In</>
@@ -479,9 +479,9 @@ const Nav = () => {
             </Popper>
           </Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {status == "authenticated" && (
+            {status === "authenticated" && (
               <>
-                {user.name == undefined ? (
+                {user.name === undefined ? (
                   <Button
                     sx={{ marginLeft: "10px" }}
                     variant="outlined"
@@ -510,7 +510,7 @@ const Nav = () => {
               sx={{ marginLeft: "10px" }}
               disabled={status == "loading"}
               onClick={
-                status == "authenticated"
+                status === "authenticated"
                   ? () =>
                       signOut({
                         callbackUrl: "http://localhost:3000",
@@ -518,7 +518,7 @@ const Nav = () => {
                   : () => signIn()
               }
             >
-              {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+              {status === "authenticated" ? <>Sign Out</> : <>Sign In</>}
             </Button>
 
             <Button

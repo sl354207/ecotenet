@@ -85,7 +85,7 @@ export default function Dashboard() {
   const [fetchApi, setFetchApi] = useState();
   // console.log(fetchApi);
   useEffect(() => {
-    if (user && user.status == "authenticated") {
+    if (user && user.status === "authenticated") {
       setFetchApi(`/api/dashboard/users/${user.name}`);
     }
   }, [user]);
@@ -97,7 +97,7 @@ export default function Dashboard() {
   const [item, setItem] = useState("");
 
   const { data: results, mutate } = useSWR(
-    user && user.status == "authenticated" ? fetchApi : null,
+    user && user.status === "authenticated" ? fetchApi : null,
     fetcher
   );
 
@@ -532,21 +532,28 @@ export default function Dashboard() {
                   renderOption={(props, option) => (
                     <li {...props}>{option.title}</li>
                   )}
+                  getOptionLabel={(option) => option.title || ""}
                   freeSolo
                   filterSelectedOptions={false}
-                  renderInput={(params) => (
-                    <InputBase
-                      {...params}
-                      placeholder="example.com"
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          padding: "20px 10px 20px 10px",
-                        },
-                      }}
-                      ref={params.InputProps.ref}
-                      inputProps={params.inputProps}
-                    />
-                  )}
+                  renderInput={(params) => {
+                    // ...params is causing error
+                    // console.log(params);
+                    return (
+                      <>
+                        <InputBase
+                          {...params}
+                          placeholder="example.com"
+                          sx={{
+                            "& .MuiInputBase-input": {
+                              padding: "20px 10px 20px 10px",
+                            },
+                          }}
+                          ref={params.InputProps.ref}
+                          inputProps={params.inputProps}
+                        />
+                      </>
+                    );
+                  }}
                 />
                 <FormHelperText sx={{ color: theme.palette.text.primary }}>
                   Add social media links (3 max)

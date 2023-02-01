@@ -9,8 +9,7 @@ export default async function handler(req, res) {
       if (
         typeof id == "string" &&
         id.length == 24 &&
-        typeof data.approved == "string" &&
-        (data.approved == "true" || data.approved == "false")
+        (data.approved === "true" || data.approved === "false")
       ) {
         try {
           const updatedComment = await updateComment(id, data);

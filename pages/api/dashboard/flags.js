@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const validate = ajv.getSchema("flag");
     const valid = validate(data);
     if (valid) {
-      if (session.user.name && session.user.name == data.name) {
+      if (session.user.name && session.user.name === data.name) {
         try {
           data.status = "pending";
           data.date = new Date().toUTCString();
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         }
       } else if (!session.user.name) {
         const person = await checkPerson(data.name);
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           try {
             data.status = "pending";
             data.date = new Date().toUTCString();

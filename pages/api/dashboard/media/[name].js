@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     // // const key = "b36580f51a71b20d5f166a9807d98650.jpeg";
 
     if (typeof name == "string") {
-      if (session.user.name && session.user.name == name) {
+      if (session.user.name && session.user.name === name) {
         if (!postId && !key) {
           try {
             const paths = await deleteDirectoryPromise(`${name}/`);
@@ -73,7 +73,7 @@ export default async function handler(req, res) {
       } else if (!session.user.name) {
         const person = await checkPerson(name);
 
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           // try get request, if successful return response, otherwise return error message
           if (!postId && !key) {
             try {

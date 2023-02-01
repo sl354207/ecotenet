@@ -22,36 +22,34 @@ const CategorySpeciesList = ({ category, setItemSelect, setItem }) => {
 
   //   };
   return (
-    <>
-      <List>
-        {uniqueFirst.map((entry) => {
-          return (
-            <>
-              <ListItem key={entry} ref={refs[entry]}>
-                <ListItemText>
-                  <Typography variant="h5" color="secondary">
-                    {entry}
-                  </Typography>
-                </ListItemText>
-              </ListItem>
-              {category.map((item) => {
-                if (item.scientific_name[0] === entry) {
-                  return (
-                    <CategorySpeciesListItem
-                      result={item}
-                      setItemSelect={setItemSelect}
-                      setItem={setItem}
-                      key={item._id}
-                    />
-                  );
-                }
-              })}
-              <Divider />
-            </>
-          );
-        })}
-      </List>
-    </>
+    <List>
+      {uniqueFirst.map((entry) => {
+        return (
+          <>
+            <ListItem key={entry} ref={refs[entry]}>
+              <ListItemText>
+                <Typography variant="h5" color="secondary">
+                  {entry}
+                </Typography>
+              </ListItemText>
+            </ListItem>
+            {category.map((item) => {
+              if (item.scientific_name[0] === entry) {
+                return (
+                  <CategorySpeciesListItem
+                    result={item}
+                    setItemSelect={setItemSelect}
+                    setItem={setItem}
+                    key={item._id}
+                  />
+                );
+              }
+            })}
+            <Divider />
+          </>
+        );
+      })}
+    </List>
   );
 };
 

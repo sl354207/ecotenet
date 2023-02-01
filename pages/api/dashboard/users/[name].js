@@ -17,7 +17,7 @@ export default async function handler(req, res) {
         const getName = req.query.name;
         // console.log(getName);
         if (typeof getName == "string") {
-          if (session.user.name && session.user.name == getName) {
+          if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
             try {
               const person = await getPersonDash(getName);
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(getName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const person = await getPersonDash(getName);
@@ -58,12 +58,12 @@ export default async function handler(req, res) {
         const validate = ajv.getSchema("person");
         const valid = validate(req.body);
         if (valid) {
-          if (session.user.email == email) {
+          if (session.user.email === email) {
             try {
               data.approved = "pending";
               const update = await updatePerson(
                 email,
-                Object.keys(data).length == 1 ? data : { name: name }
+                Object.keys(data).length === 1 ? data : { name: name }
               );
 
               // console.log(update);
@@ -85,7 +85,7 @@ export default async function handler(req, res) {
         // set id based on request body
         const deleteName = req.body;
         if (typeof deleteName == "string") {
-          if (session.user.name && session.user.name == deleteName) {
+          if (session.user.name && session.user.name === deleteName) {
             // try get request, if successful return response, otherwise return error message
             try {
               const deleted = await deletePerson(deleteName);
@@ -97,7 +97,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(deleteName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const deleted = await deletePerson(deleteName);

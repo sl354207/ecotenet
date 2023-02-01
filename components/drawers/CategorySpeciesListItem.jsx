@@ -4,7 +4,7 @@ import { Button, ListItem, Typography } from "@mui/material";
 const CategorySpeciesListItem = ({ result, setItemSelect, setItem }) => {
   const { distributionDispatch, setTab } = useHomepageContext();
   return (
-    <ListItem key={result._id}>
+    <ListItem>
       <Button
         variant="outlined"
         color="secondary"

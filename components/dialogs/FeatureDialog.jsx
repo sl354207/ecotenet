@@ -8,7 +8,7 @@ import {
   DialogTitle,
   IconButton,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Typography,
 } from "@mui/material";
@@ -104,8 +104,8 @@ const FeatureDialog = ({ feature, setFeature }) => {
           Pinned
         </Typography>
         <List sx={{ display: "flex" }}>
-          <ListItem
-            button
+          <ListItemButton
+            key={"ideas"}
             variant="outlined"
             color="secondary"
             onClick={() => {
@@ -120,9 +120,9 @@ const FeatureDialog = ({ feature, setFeature }) => {
             }}
           >
             <ListItemText align="center">Ideas Behind Ecotenet</ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
+            key={"how"}
             variant="outlined"
             color="secondary"
             onClick={() => {
@@ -137,7 +137,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
             }}
           >
             <ListItemText align="center">How to Create a Post</ListItemText>
-          </ListItem>
+          </ListItemButton>
         </List>
         <Typography variant="body1" align="center">
           These are currently our favorite posts that people have shared on the

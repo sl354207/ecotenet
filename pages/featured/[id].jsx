@@ -129,11 +129,11 @@ const post = ({ post }) => {
   }, [comments]);
 
   const handleOpenDialog = (action, result) => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setItem(result);
@@ -161,11 +161,11 @@ const post = ({ post }) => {
   };
 
   const toggleForm = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setShowForm(!showForm);
@@ -177,11 +177,11 @@ const post = ({ post }) => {
   };
 
   const handleOpenFlag = (action, result) => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setItem(result);
@@ -196,11 +196,11 @@ const post = ({ post }) => {
   };
 
   const handleReply = (toggle, ID) => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         dispatch({ type: toggle, payload: ID });

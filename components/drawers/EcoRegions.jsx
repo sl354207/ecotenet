@@ -1,4 +1,4 @@
-import { List, ListItem, Typography } from "@mui/material";
+import { List, ListItemButton, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useMap } from "react-map-gl";
 
@@ -80,13 +80,12 @@ const EcoRegions = ({
       <List>
         {sorted.map((ecoregion) => {
           return (
-            <ListItem
-              button
+            <ListItemButton
               onClick={() => ecoClick(ecoregion)}
               key={ecoregion.unique_id}
             >
               Eco-{ecoregion.unique_id}: {ecoregion.name}
-            </ListItem>
+            </ListItemButton>
           );
         })}
       </List>

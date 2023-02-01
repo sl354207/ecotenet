@@ -17,12 +17,8 @@ export default async function handler(req, res) {
         const getStatus = req.query.status;
         // console.log(req.body);
         // try get request, if successful return response, otherwise return error message
-        if (
-          typeof getName == "string" &&
-          typeof getStatus == "string" &&
-          (getStatus == "published" || getStatus == "draft")
-        ) {
-          if (session.user.name && session.user.name == getName) {
+        if (getStatus === "published" || getStatus === "draft") {
+          if (session.user.name && session.user.name === getName) {
             try {
               const posts = await getDashboardPosts(getName, getStatus);
 
@@ -35,7 +31,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(getName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const posts = await getDashboardPosts(getName, getStatus);
@@ -62,7 +58,7 @@ export default async function handler(req, res) {
         const validate = ajv.getSchema("post");
         const valid = validate(data);
         if (valid) {
-          if (session.user.name && session.user.name == data.name) {
+          if (session.user.name && session.user.name === data.name) {
             try {
               data.updated = false;
               data.featured = false;
@@ -80,7 +76,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(data.name);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 data.updated = false;

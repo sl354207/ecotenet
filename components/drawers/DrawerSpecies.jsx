@@ -26,11 +26,11 @@ const DrawerSpecies = ({ species }) => {
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);
@@ -286,20 +286,20 @@ const DrawerSpecies = ({ species }) => {
                   </Link>
                 </Typography>
                 {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-                {wiki.remaining.sections.map((section) => {
+                {wiki.remaining.sections.map((section, index) => {
                   if (section.anchor == "Gallery") {
                     return <></>;
                   } else if (section.toclevel == 2) {
                     return (
                       <>
-                        <h2>{section.line}</h2>
+                        <h2 key={index}>{section.line}</h2>
                         {parse(DOMPurify.sanitize(section.text), options)}
                       </>
                     );
                   } else {
                     return (
                       <>
-                        <h1>{section.line}</h1>
+                        <h1 key={index}>{section.line}</h1>
                         {parse(DOMPurify.sanitize(section.text), options)}
                       </>
                     );

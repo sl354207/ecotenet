@@ -21,7 +21,7 @@ export default async function handler(req, res) {
           typeof id == "string" &&
           id.length == 24
         ) {
-          if (session.user.name && session.user.name == getName) {
+          if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
             try {
               const post = await getPostById(id);
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(getName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const post = await getPostById(id);
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         const validate = ajv.getSchema("post");
         const valid = validate(data);
         if (typeof _id == "string" && _id.length == 24 && valid) {
-          if (session.user.name && session.user.name == data.name) {
+          if (session.user.name && session.user.name === data.name) {
             try {
               data.approved = "pending";
               data.date = new Date().toUTCString();
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(data.name);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 data.approved = "pending";
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
           deleteId.length == 24 &&
           typeof deleteName == "string"
         ) {
-          if (session.user.name && session.user.name == deleteName) {
+          if (session.user.name && session.user.name === deleteName) {
             try {
               const deleted = await deletePost(deleteId);
               return res.status(200).json(deleted);
@@ -133,7 +133,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(deleteName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const deleted = await deletePost(deleteId);

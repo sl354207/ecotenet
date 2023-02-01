@@ -20,7 +20,7 @@ const Comment = ({
   handleOpenDialog,
   handleOpenFlag,
   handleReply,
-  key,
+
   drawer,
 }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -34,7 +34,6 @@ const Comment = ({
             borderRadius: "4px",
             marginBottom: "10px",
           }}
-          key={key}
         >
           <div style={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
             <div style={{ flexGrow: 1 }}>

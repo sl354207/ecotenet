@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const { name } = req.query;
     // console.log(name);
     if (typeof name == "string") {
-      if (session.user.name && session.user.name == name) {
+      if (session.user.name && session.user.name === name) {
         try {
           const notifications = await getNotifications(name);
 
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       } else if (!session.user.name) {
         const person = await checkPerson(name);
 
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           try {
             const notifications = await getNotifications(name);
 

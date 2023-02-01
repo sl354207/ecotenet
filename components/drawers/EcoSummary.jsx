@@ -242,20 +242,20 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                     options
                   )}
                   {results &&
-                    results.remaining.sections.map((section) => {
+                    results.remaining.sections.map((section, index) => {
                       if (section.anchor == "Gallery") {
                         return <></>;
                       } else if (section.toclevel == 2) {
                         return (
                           <>
-                            <h2>{section.line}</h2>
+                            <h2 key={index}>{section.line}</h2>
                             {parse(DOMPurify.sanitize(section.text), options)}
                           </>
                         );
                       } else {
                         return (
                           <>
-                            <h1>{section.line}</h1>
+                            <h1 key={index}>{section.line}</h1>
                             {parse(DOMPurify.sanitize(section.text), options)}
                           </>
                         );

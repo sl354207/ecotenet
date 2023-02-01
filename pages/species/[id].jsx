@@ -65,11 +65,11 @@ const species = ({ species, wiki }) => {
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);
@@ -378,7 +378,7 @@ const species = ({ species, wiki }) => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <List>
-              <ListItem>
+              <ListItem key={"inat"}>
                 <Link
                   variant="h6"
                   href={`https://www.inaturalist.org/search?q=${
@@ -392,7 +392,7 @@ const species = ({ species, wiki }) => {
                   iNaturalist
                 </Link>
               </ListItem>
-              <ListItem>
+              <ListItem key={"wiki"}>
                 <Link
                   variant="h6"
                   href={`https://commons.wikimedia.org/w/index.php?search=${
@@ -408,7 +408,7 @@ const species = ({ species, wiki }) => {
                   Wikimedia Commons
                 </Link>
               </ListItem>
-              <ListItem>
+              <ListItem key={"iucn"}>
                 <Link
                   variant="h6"
                   href={`https://www.iucnredlist.org/search?query=${

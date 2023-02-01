@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       typeof ext == "string" &&
       (ext == "jpg" || ext == "jpeg" || ext == "png")
     ) {
-      if (session.user.name && session.user.name == name) {
+      if (session.user.name && session.user.name === name) {
         try {
           const url = await generateUploadURL(name, postId, ext);
           // await console.log(res.json(url))
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
       } else if (!session.user.name) {
         const person = await checkPerson(name);
 
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           // try get request, if successful return response, otherwise return error message
           try {
             const url = await generateUploadURL(name, postId, ext);

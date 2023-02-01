@@ -149,7 +149,7 @@ const PostDetails = ({
               id="category"
               name="category"
               onChange={(event, newValue) => {
-                console.log(newValue);
+                // console.log(newValue);
                 setDetails((details) => ({
                   ...details,
                   category: newValue && {
@@ -179,6 +179,7 @@ const PostDetails = ({
                 }
               }}
               renderInput={(params) => (
+                // ...params is causing error check dashboard index on how to log params
                 <TextField
                   {...params}
                   placeholder="Select category"
@@ -291,9 +292,11 @@ const PostDetails = ({
               renderOption={(props, option) => (
                 <li {...props}>{option.title}</li>
               )}
+              getOptionLabel={(option) => option.title || ""}
               freeSolo
               filterSelectedOptions={false}
               renderInput={(params) => (
+                // ...params is causing error check dashboard index on how to log params
                 <InputBase
                   {...params}
                   placeholder="Add keywords"

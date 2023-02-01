@@ -207,7 +207,11 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
           getOptionLabel={(option) => {
             return "";
           }}
-          renderOption={(props, option) => <li {...props}>{option.title}</li>}
+          renderOption={(props, option) => (
+            <li {...props} key={option.title}>
+              {option.title}
+            </li>
+          )}
           freeSolo
           PopperComponent={CustomPopper}
           ListboxProps={{
@@ -219,6 +223,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             },
           }}
           renderInput={(params) => (
+            // ...params is causing error check dashboard index on how to log params
             <TextField
               {...params}
               autoFocus

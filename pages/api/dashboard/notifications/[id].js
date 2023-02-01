@@ -16,10 +16,9 @@ export default async function handler(req, res) {
       typeof name == "string" &&
       typeof id == "string" &&
       id.length == 24 &&
-      typeof viewed == "boolean" &&
-      viewed == true
+      viewed === true
     ) {
-      if (session.user.name && session.user.name == name) {
+      if (session.user.name && session.user.name === name) {
         try {
           const updatedNotification = await updateNotification(id, viewed);
           return res.status(200).json(updatedNotification);
@@ -30,7 +29,7 @@ export default async function handler(req, res) {
       } else if (!session.user.name) {
         const person = await checkPerson(name);
 
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           try {
             const updatedNotification = await updateNotification(_id, viewed);
             return res.status(200).json(updatedNotification);

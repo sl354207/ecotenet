@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       case "GET":
         const getName = req.query.name;
         if (typeof getName == "string") {
-          if (session.user.name && session.user.name == getName) {
+          if (session.user.name && session.user.name === getName) {
             try {
               const comments = await getDashboardComments(getName);
 
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(getName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const comments = await getDashboardComments(getName);
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
         const validate = ajv.getSchema("comment");
         const valid = validate(data);
         if (valid) {
-          if (session.user.name && session.user.name == data.name) {
+          if (session.user.name && session.user.name === data.name) {
             try {
               data.date = new Date().toUTCString();
               data.approved = "pending";
@@ -71,7 +71,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(data.name);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 data.date = new Date().toUTCString();

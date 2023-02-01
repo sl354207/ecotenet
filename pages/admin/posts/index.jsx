@@ -4,7 +4,7 @@ import Link from "@components/layouts/Link";
 import {
   CircularProgress,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Typography,
 } from "@mui/material";
@@ -45,7 +45,7 @@ const adminPosts = () => {
         {results.map((result) => {
           return (
             <>
-              <ListItem
+              <ListItemButton
                 key={result._id}
                 sx={{
                   display: "flex",
@@ -55,7 +55,6 @@ const adminPosts = () => {
                   margin: "20px auto",
                   borderRadius: "10px",
                 }}
-                button
                 onClick={() => router.push(`/admin/posts/${result._id}`)}
               >
                 <div style={{ display: "flow-root", flexGrow: 1 }}>
@@ -69,7 +68,7 @@ const adminPosts = () => {
                 <Link href={`/admin/posts/${result._id}`} underline="hover">
                   View Post
                 </Link>
-              </ListItem>
+              </ListItemButton>
             </>
           );
         })}
