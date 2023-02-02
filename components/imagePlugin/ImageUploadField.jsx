@@ -119,7 +119,7 @@ function ImageUploadField({ onChange, value }) {
       const url = await fetch(
         `/api/dashboard/media?name=${user.name}&post_id=${postId}&ext=${photo.type}`
       ).then((res) => res.json());
-      // console.log(url)
+      // console.log(`upload url: ${url}`);
 
       // // post the image directly to the s3 bucket
       await fetch(url, {
@@ -143,11 +143,12 @@ function ImageUploadField({ onChange, value }) {
   const deleteFile = async (photo, callback) => {
     try {
       const key = photo.substring(photo.lastIndexOf("/") + 1);
+
       // // get secure url from our server
       const url = await fetch(
         `/api/dashboard/media/${user.name}?post_id=${postId}&key=${key}`
       ).then((res) => res.json());
-      // console.log(url)
+      // console.log(`delete url: ${url}`);
 
       // // post the image directly to the s3 bucket
       await fetch(url, {

@@ -60,7 +60,7 @@ export default async function handler(req, res) {
             try {
               const url = await generateDeleteURL(name, postId, key);
               // await console.log(res.json(url))
-              return res.status(200).json(url);
+              return res.status(200).json(url.substring(1, url.length - 1));
             } catch (err) {
               console.error(err);
 
@@ -109,7 +109,7 @@ export default async function handler(req, res) {
               try {
                 const url = await generateDeleteURL(name, postId, key);
                 // await console.log(res.json(url))
-                return res.status(200).json(url);
+                return res.status(200).json(url.substring(1, url.length - 1));
               } catch (err) {
                 console.error(err);
 

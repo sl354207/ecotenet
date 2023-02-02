@@ -94,7 +94,7 @@ const MapPage = ({ ecoregions }) => {
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
   // });
-  // console.log(visited);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 

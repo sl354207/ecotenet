@@ -461,14 +461,15 @@ const StepForm = ({ post, user }) => {
 
   return (
     <>
-      {/* <Link href="/dashboard" underline="hover">
-        &#10229;Dashboard
-      </Link> */}
-
       <Link
         href="/dashboard"
         underline="hover"
-        style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginTop: "10px",
+          maxWidth: "fit-content",
+        }}
       >
         <ArrowBackIcon fontSize="small" />
         Dashboard
@@ -477,9 +478,13 @@ const StepForm = ({ post, user }) => {
         alternativeLabel
         nonLinear
         activeStep={activeStep}
-        sx={{ backgroundColor: theme.palette.primary.dark, padding: "24px" }}
+        sx={{
+          backgroundColor: theme.palette.primary.dark,
+          padding: "24px",
+          justifyContent: "space-around",
+        }}
       >
-        <Step>
+        <Step sx={{ display: "flex", justifyContent: "center" }}>
           <StepButton
             onClick={handleStep(0)}
             sx={{
@@ -495,12 +500,13 @@ const StepForm = ({ post, user }) => {
               "& .MuiStepIcon-root": {
                 color: alpha(theme.palette.secondary.dark, 0.4),
               },
+              maxWidth: "fit-content",
             }}
           >
             details
           </StepButton>
         </Step>
-        <Step>
+        <Step sx={{ display: "flex", justifyContent: "center" }}>
           <StepButton
             onClick={handleStep(1)}
             sx={{
@@ -516,12 +522,13 @@ const StepForm = ({ post, user }) => {
               "& .MuiStepIcon-root": {
                 color: alpha(theme.palette.secondary.dark, 0.4),
               },
+              maxWidth: "fit-content",
             }}
           >
             body
           </StepButton>
         </Step>
-        <Step>
+        <Step sx={{ display: "flex", justifyContent: "center" }}>
           <StepButton
             onClick={handleStep(2)}
             sx={{
@@ -537,6 +544,7 @@ const StepForm = ({ post, user }) => {
               "& .MuiStepIcon-root": {
                 color: alpha(theme.palette.secondary.dark, 0.4),
               },
+              maxWidth: "fit-content",
             }}
           >
             map

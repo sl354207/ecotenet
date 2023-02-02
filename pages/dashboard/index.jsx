@@ -550,6 +550,7 @@ export default function Dashboard() {
                           }}
                           ref={params.InputProps.ref}
                           inputProps={params.inputProps}
+                          error={true}
                         />
                       </>
                     );

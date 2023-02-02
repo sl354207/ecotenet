@@ -17,14 +17,13 @@ export default async function handler(req, res) {
       typeof name == "string" &&
       typeof postId == "string" &&
       postId.length == 24 &&
-      typeof ext == "string" &&
-      (ext == "jpg" || ext == "jpeg" || ext == "png")
+      (ext === "image/jpg" || ext === "image/jpeg" || ext === "image/png")
     ) {
       if (session.user.name && session.user.name === name) {
         try {
           const url = await generateUploadURL(name, postId, ext);
-          // await console.log(res.json(url))
-          return res.status(200).json(url);
+          // console.log(res.json(url));
+          return res.status(200).json(url.substring(1, url.length - 1));
         } catch (err) {
           console.error(err);
 
@@ -38,7 +37,7 @@ export default async function handler(req, res) {
           try {
             const url = await generateUploadURL(name, postId, ext);
             // await console.log(res.json(url))
-            return res.status(200).json(url);
+            return res.status(200).json(url.substring(1, url.length - 1));
           } catch (err) {
             console.error(err);
 

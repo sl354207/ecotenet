@@ -22,7 +22,7 @@ const DashboardDialog = ({
   handleClose,
   contentType,
   action,
-  className,
+
   result,
   name,
   snackbar,

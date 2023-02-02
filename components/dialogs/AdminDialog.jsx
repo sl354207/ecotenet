@@ -36,7 +36,7 @@ const AdminDialog = ({
   handleClose,
   contentType,
   action,
-  className,
+
   result,
   mutate,
 }) => {

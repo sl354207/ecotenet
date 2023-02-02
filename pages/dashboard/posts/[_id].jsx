@@ -14,7 +14,9 @@ export default function DraftByUser() {
 
   // retrieve drafts from drafts api. convert swr data to name posts.
   const { data: post } = useSWR(
-    id ? `/api/dashboard/posts/${id}?name=${user.name}` : null,
+    id && user && user.name
+      ? `/api/dashboard/posts/${id}?name=${user.name}`
+      : null,
     fetcher
   );
 

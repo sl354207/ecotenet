@@ -31,11 +31,6 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
               id="commentform"
               autoFocus={true}
               handleChange={handleChange}
-              // className={
-              //   comment_ref != ""
-              //     ? { marginLeft: "60px", padding: "0px 0px 10px 0px" }
-              //     : { padding: "5px 0px 10px 0px" }
-              // }
             />
           </FormControl>
           <Button

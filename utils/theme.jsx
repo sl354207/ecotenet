@@ -81,6 +81,31 @@ const theme = createTheme({
         },
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          // backgroundColor: "#F9FAFE",
+          "&.Mui-focused": {
+            backgroundColor: "transparent",
+          },
+          "& fieldset": {
+            borderColor: "#94c9ff",
+          },
+          "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+            borderColor: "inherit",
+          },
+          "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "inherit",
+          },
+          ":hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#94c9ff",
+          },
+          "&.Mui-focused fieldset": {
+            borderWidth: "1px",
+          },
+        },
+      },
+    },
   },
 });
 
