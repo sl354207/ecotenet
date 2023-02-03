@@ -25,7 +25,6 @@ const TextBox = ({
       inputProps={inputProps}
       onKeyPress={onKeyPress}
       color="secondary"
-      error={true}
     />
   );
 };

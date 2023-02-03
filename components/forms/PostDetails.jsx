@@ -13,7 +13,6 @@ import {
   FormHelperText,
   Grid,
   IconButton,
-  InputBase,
   InputLabel,
   TextField,
   Tooltip,
@@ -117,17 +116,29 @@ const PostDetails = ({
 
             <Autocomplete
               sx={{
-                position: "relative",
-                border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-                borderRadius: "4px",
-                backgroundColor: theme.palette.primary.main,
-                "&:focus-within": {
-                  backgroundColor: theme.palette.primary.main,
-                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-                  borderRadius: "4px",
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
                 },
-
-                width: "auto",
               }}
               ListboxProps={{
                 sx: {
@@ -184,28 +195,6 @@ const PostDetails = ({
                   {...params}
                   placeholder="Select category"
                   variant="outlined"
-                  sx={{
-                    color: theme.palette.text.primary,
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    "& .MuiOutlinedInput-root": {
-                      "&:hover fieldset": {
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          0.5
-                        )}`,
-                        border: "none",
-                      },
-                      "& .Mui-focused fieldset": {
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          0.5
-                        )}`,
-                      },
-                    },
-                  }}
                   ref={params.InputProps.ref}
                   inputProps={params.inputProps}
                 />
@@ -248,17 +237,29 @@ const PostDetails = ({
             <InputLabel htmlFor="keywords">Keywords:</InputLabel>
             <Autocomplete
               sx={{
-                position: "relative",
-                border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-                borderRadius: "4px",
-                backgroundColor: theme.palette.primary.main,
-                "&:focus-within": {
-                  backgroundColor: theme.palette.primary.main,
-                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-                  borderRadius: "4px",
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
                 },
-
-                width: "auto",
               }}
               autoHighlight
               disabled={tags.length > 2 ? true : false}
@@ -297,14 +298,9 @@ const PostDetails = ({
               filterSelectedOptions={false}
               renderInput={(params) => (
                 // ...params is causing error check dashboard index on how to log params
-                <InputBase
+                <TextField
                   {...params}
                   placeholder="Add keywords"
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "18px 9px 17px 9px",
-                    },
-                  }}
                   ref={params.InputProps.ref}
                   inputProps={params.inputProps}
                 />

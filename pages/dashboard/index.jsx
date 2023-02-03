@@ -19,12 +19,12 @@ import {
   FormControl,
   FormHelperText,
   IconButton,
-  InputBase,
   InputLabel,
   List,
   ListItem,
   Tab,
   Tabs,
+  TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -480,23 +480,29 @@ export default function Dashboard() {
                 </InputLabel>
                 <Autocomplete
                   sx={{
-                    position: "relative",
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                    backgroundColor: theme.palette.primary.main,
-                    "&:focus-within": {
-                      backgroundColor: theme.palette.primary.main,
-                      border: `1px solid ${alpha(
-                        theme.palette.secondary.main,
-                        1
-                      )}`,
-                      borderRadius: "4px",
+                    "& .MuiAutocomplete-inputRoot": {
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: alpha("#94c9ff", 0.8),
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: alpha("#94c9ff", 0.8),
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#94c9ff",
+                      },
+                      "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                        borderColor: alpha("#94c9ff", 0.3),
+                      },
+                      "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: alpha("#94c9ff", 0.3),
+                      },
+                      "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#e57373",
+                      },
+                      "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#e57373",
+                      },
                     },
-
-                    width: "auto",
                   }}
                   autoHighlight
                   disabled={
@@ -534,23 +540,22 @@ export default function Dashboard() {
                   )}
                   getOptionLabel={(option) => option.title || ""}
                   freeSolo
+                  error={true}
                   filterSelectedOptions={false}
                   renderInput={(params) => {
                     // ...params is causing error
                     // console.log(params);
                     return (
                       <>
-                        <InputBase
+                        <TextField
                           {...params}
                           placeholder="example.com"
-                          sx={{
-                            "& .MuiInputBase-input": {
-                              padding: "20px 10px 20px 10px",
-                            },
-                          }}
-                          ref={params.InputProps.ref}
-                          inputProps={params.inputProps}
-                          error={true}
+                          variant="outlined"
+                          fullWidth
+                          // error={true}
+
+                          // ref={params.InputProps.ref}
+                          // inputProps={params.inputProps}
                         />
                       </>
                     );

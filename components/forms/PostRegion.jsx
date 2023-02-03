@@ -273,19 +273,29 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       </Typography>
       <Autocomplete
         sx={{
-          position: "relative",
-          border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-          borderRadius: "4px",
-          backgroundColor: theme.palette.primary.light,
-          "&:focus-within": {
-            backgroundColor: theme.palette.primary.light,
-            border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-            borderRadius: "4px",
+          "& .MuiAutocomplete-inputRoot": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.8),
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.8),
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#94c9ff",
+            },
+            "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.3),
+            },
+            "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.3),
+            },
+            "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e57373",
+            },
+            "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e57373",
+            },
           },
-          marginTop: 2,
-          marginBottom: 1,
-
-          width: "auto",
         }}
         autoHighlight
         onChange={(event, newValue) => handleSubmit(event, newValue)}
@@ -312,33 +322,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             {...params}
             placeholder="Search…"
             variant="outlined"
-            sx={{
-              color: theme.palette.text.primary,
-              borderRadius: "4px",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-                "&:hover fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-                "&.Mui-focused fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-              },
-            }}
             ref={params.InputProps.ref}
             inputProps={params.inputProps}
             onChange={(e) => handleChange(e)}
