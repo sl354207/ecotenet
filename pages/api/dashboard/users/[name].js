@@ -10,12 +10,13 @@ import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
+  // console.log(session);
   if (session) {
     const method = req.method;
     switch (method) {
       case "GET":
         const getName = req.query.name;
-        // console.log(getName);
+
         if (typeof getName == "string") {
           if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
             }
           } else if (!session.user.name) {
             const person = await checkPerson(getName);
+            // console.log(person);
 
             if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
@@ -43,6 +45,7 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
+              // console.log("test1");
               res.status(401);
             }
           } else {
@@ -61,12 +64,15 @@ export default async function handler(req, res) {
           if (session.user.email === email) {
             try {
               data.approved = "pending";
+              console.log(`data: ${data}`);
+              console.log(`name: ${name}`);
+              console.log(`length: ${Object.keys(data).length}`);
               const update = await updatePerson(
                 email,
-                Object.keys(data).length === 1 ? data : { name: name }
+                Object.keys(data).length === 1 ? { name: name } : data
               );
 
-              // console.log(update);
+              console.log(update);
               return res.status(200).json(update);
             } catch (err) {
               console.error(err);

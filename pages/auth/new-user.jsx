@@ -40,7 +40,7 @@ const newUser = () => {
     if (res.ok) {
       const check = await res.text();
       // console.log(check);
-      if (!check.length) {
+      if (check === "null") {
         // const test = JSON.parse(check);
         const res1 = await fetch(`/api/dashboard/users/${name}`, {
           method: "PUT",
