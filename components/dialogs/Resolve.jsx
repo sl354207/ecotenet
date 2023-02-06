@@ -97,15 +97,15 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="resolve-title" color="textPrimary" align="center">
         Resolve
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="resolve-text" color="textPrimary">
           Are you sure you want to resolve flag?
         </DialogContentText>
         <Button
@@ -121,15 +121,14 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           {showForm ? (
             <Portal container={container.current}>
               <FormControl sx={{ flexGrow: 1, marginTop: "10px" }}>
-                <InputLabel shrink htmlFor="commentform"></InputLabel>
+                <InputLabel shrink htmlFor="resolve"></InputLabel>
                 <TextBox
-                  id="info"
+                  id="resolve"
                   handleChange={handleInfoChange}
                   defaultValue=""
                   placeHolder="additional comment on notification"
-                  rows={1}
                   autoFocus={false}
-                  name="info"
+                  inputProps={{ type: "text", maxLength: 200 }}
                 />
               </FormControl>
             </Portal>

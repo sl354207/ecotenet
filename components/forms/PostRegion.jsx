@@ -302,7 +302,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
-        id="free-solo-with-text-demo"
+        id="region-auto"
         options={
           results
             ? results.map((obj) => {
@@ -320,11 +320,13 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           // ...params is causing error check dashboard index on how to log params
           <TextField
             {...params}
+            id="region"
             placeholder="Search…"
             variant="outlined"
             ref={params.InputProps.ref}
-            inputProps={params.inputProps}
+            inputProps={{ ...params.inputProps, type: "text", maxLength: 100 }}
             onChange={(e) => handleChange(e)}
+            InputLabelProps={{ shrink: true }}
           />
         )}
       />

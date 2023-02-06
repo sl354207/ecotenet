@@ -389,6 +389,7 @@ function ImageUploadField({ onChange, value }) {
           placeholder="http://example.com/image.png"
           label="Existing image URL"
           name="url"
+          id="url"
           sx={{
             display: "flex",
             flexGrow: 1,
@@ -412,6 +413,7 @@ function ImageUploadField({ onChange, value }) {
               ? ""
               : value.url || ""
           }
+          inputProps={{ type: "url", maxLength: 100 }}
           // UPDATE DISABLED
           disabled={
             (value.url && value.url.startsWith("blob:")) ||
@@ -422,6 +424,7 @@ function ImageUploadField({ onChange, value }) {
             setImage({ url: imageUrl, saved: false, file: {} });
             onChange({ url: imageUrl, saved: false, file: {} });
           }}
+          InputLabelProps={{ shrink: true }}
         />
       </div>
       <div style={{ display: "flex" }}>

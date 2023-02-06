@@ -80,7 +80,7 @@ export default function Dashboard() {
   // set filter for autocomplete options
   const filter = createFilterOptions();
 
-  const [value, setValue] = useState(0);
+  const [tabValue, setTabValue] = useState(0);
 
   const [fetchApi, setFetchApi] = useState();
   // console.log(fetchApi);
@@ -93,8 +93,9 @@ export default function Dashboard() {
   // console.log(user)
 
   const [dialog, setDialog] = useState(false);
-  const [action, setAction] = useState({ action: "", type: "" });
-  const [item, setItem] = useState("");
+  const [dialogAction, setDialogAction] = useState({ action: "", type: "" });
+  const [dialogItem, setDialogItem] = useState("");
+  const [error, setError] = useState({ website: false, social: false });
 
   const { data: results, mutate } = useSWR(
     user && user.status === "authenticated" ? fetchApi : null,
@@ -121,8 +122,8 @@ export default function Dashboard() {
     }
   }, [results]);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
     switch (newValue) {
       case 0:
         setFetchApi(`/api/dashboard/users/${user.name}`);
@@ -262,8 +263,8 @@ export default function Dashboard() {
   };
 
   const handleOpenDialog = (action, type, result) => {
-    setItem(result);
-    setAction({ action: action, type: type });
+    setDialogItem(result);
+    setDialogAction({ action: action, type: type });
 
     setDialog(true);
   };
@@ -292,8 +293,8 @@ export default function Dashboard() {
           }}
         >
           <Tabs
-            value={value}
-            onChange={handleChange}
+            value={tabValue}
+            onChange={handleTabChange}
             aria-label="simple tabs example"
             centered
             indicatorColor="secondary"
@@ -401,7 +402,7 @@ export default function Dashboard() {
           </Tabs>
         </AppBar>
 
-        <TabPanel value={value} index={0}>
+        <TabPanel value={tabValue} index={0}>
           {!results ? (
             <CircularProgress
               color="secondary"
@@ -442,7 +443,7 @@ export default function Dashboard() {
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
               >
-                <InputLabel htmlFor="bio">
+                <InputLabel htmlFor="bio" shrink>
                   <b>Bio:</b>
                 </InputLabel>
 
@@ -452,13 +453,15 @@ export default function Dashboard() {
                   id="bio"
                   autoFocus={false}
                   handleChange={handleProfileChange}
-                  rows={10}
+                  multiline={true}
+                  inputProps={{ type: "text", maxLength: 5000 }}
                 />
               </FormControl>
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+                error={error.website}
               >
-                <InputLabel htmlFor="website">
+                <InputLabel htmlFor="website" shrink>
                   <b>Personal Website:</b>
                 </InputLabel>
 
@@ -468,14 +471,19 @@ export default function Dashboard() {
                   id="website"
                   autoFocus={false}
                   handleChange={handleProfileChange}
-                  rows={1}
-                  inputProps={{ type: "url" }}
+                  multiline={false}
+                  inputProps={{ type: "url", maxLength: 100 }}
+                  error={error.website}
                 />
+                <FormHelperText sx={{ color: theme.palette.text.primary }}>
+                  {error.website ? "Invalid URL" : <></>}
+                </FormHelperText>
               </FormControl>
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+                error={error.social}
               >
-                <InputLabel htmlFor="socials">
+                <InputLabel htmlFor="socials" shrink>
                   <b>Socials:</b>
                 </InputLabel>
                 <Autocomplete
@@ -532,7 +540,7 @@ export default function Dashboard() {
                   selectOnFocus
                   clearOnBlur
                   handleHomeEndKeys
-                  id="socials"
+                  id="socials-auto"
                   name="socials"
                   options={[]}
                   renderOption={(props, option) => (
@@ -540,7 +548,6 @@ export default function Dashboard() {
                   )}
                   getOptionLabel={(option) => option.title || ""}
                   freeSolo
-                  error={true}
                   filterSelectedOptions={false}
                   renderInput={(params) => {
                     // ...params is causing error
@@ -549,20 +556,27 @@ export default function Dashboard() {
                       <>
                         <TextField
                           {...params}
+                          id="socials"
                           placeholder="example.com"
                           variant="outlined"
                           fullWidth
-                          // error={true}
-
-                          // ref={params.InputProps.ref}
-                          // inputProps={params.inputProps}
+                          InputLabelProps={{ shrink: true }}
+                          error={error.social}
+                          ref={params.InputProps.ref}
+                          inputProps={{
+                            ...params.inputProps,
+                            type: "url",
+                            maxLength: 100,
+                          }}
                         />
                       </>
                     );
                   }}
                 />
                 <FormHelperText sx={{ color: theme.palette.text.primary }}>
-                  Add social media links (3 max)
+                  {error.social
+                    ? "Invalid URL"
+                    : "Add social media links (3 max)"}
                 </FormHelperText>
               </FormControl>
               <div>
@@ -637,7 +651,7 @@ export default function Dashboard() {
             </>
           )}
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={tabValue} index={1}>
           <CreatePostButton
             name={user && user.name}
             snackbar={snackbar}
@@ -756,7 +770,7 @@ export default function Dashboard() {
             </>
           )}
         </TabPanel>
-        <TabPanel value={value} index={2}>
+        <TabPanel value={tabValue} index={2}>
           <CreatePostButton
             name={user && user.name}
             snackbar={snackbar}
@@ -873,7 +887,7 @@ export default function Dashboard() {
             </>
           )}
         </TabPanel>
-        <TabPanel value={value} index={3}>
+        <TabPanel value={tabValue} index={3}>
           {!results ? (
             <CircularProgress
               color="secondary"
@@ -923,7 +937,7 @@ export default function Dashboard() {
             </>
           )}
         </TabPanel>
-        <TabPanel value={value} index={4}>
+        <TabPanel value={tabValue} index={4}>
           {!results ? (
             <CircularProgress
               color="secondary"
@@ -1010,11 +1024,11 @@ export default function Dashboard() {
 
       {dialog && (
         <DynamicDashboardDialog
-          contentType={action.type}
-          action={action.action}
+          contentType={dialogAction.type}
+          action={dialogAction.action}
           open={dialog}
           handleClose={handleCloseDialog}
-          result={item}
+          result={dialogItem}
           snackbar={snackbar}
           setSnackbar={setSnackbar}
           mutate={mutate}

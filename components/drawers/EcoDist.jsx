@@ -134,7 +134,6 @@ const EcoDist = ({
         same time
       </Typography>
       <FormControl sx={{ display: "flex" }}>
-        {/* <InputLabel htmlFor="keywords">Keywords:</InputLabel> */}
         <Autocomplete
           sx={{
             "& .MuiAutocomplete-inputRoot": {
@@ -167,7 +166,7 @@ const EcoDist = ({
           clearOnBlur
           blurOnSelect
           handleHomeEndKeys
-          id="species-map-auto"
+          id="dist-auto"
           fullWidth
           options={
             dist
@@ -186,13 +185,19 @@ const EcoDist = ({
             // ...params is causing error check dashboard index on how to log params
             <TextField
               {...params}
+              id="dist"
               autoFocus={!isMobile}
               placeholder="Search…"
               variant="outlined"
               fullWidth
               ref={params.InputProps.ref}
-              inputProps={params.inputProps}
+              inputProps={{
+                ...params.inputProps,
+                type: "text",
+                maxLength: 100,
+              }}
               onChange={(e) => handleChange(e)}
+              InputLabelProps={{ shrink: true }}
             />
           )}
         />

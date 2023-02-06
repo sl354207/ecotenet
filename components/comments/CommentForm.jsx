@@ -24,13 +24,15 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
                 : { flexGrow: 1, marginBottom: "10px" }
             }
           >
-            <InputLabel shrink htmlFor="commentform"></InputLabel>
+            <InputLabel shrink htmlFor="comment-form"></InputLabel>
             <TextBox
               defaultValue={null}
               placeHolder={null}
-              id="commentform"
+              id="comment-form"
               autoFocus={true}
               handleChange={handleChange}
+              multiline={true}
+              inputProps={{ type: "text", maxLength: 5000 }}
             />
           </FormControl>
           <Button

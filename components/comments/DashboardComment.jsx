@@ -67,13 +67,15 @@ const DashboardComment = ({
       Approved: {result.approved}
       <div style={{ display: "flex", flexGrow: 1 }}>
         <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
-          <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
+          <InputLabel shrink htmlFor="dashboard-comment"></InputLabel>
           <TextBox
             defaultValue={result.text}
             placeHolder={null}
-            id="dashboardcomment"
+            id="dashboard-comment"
             handleChange={handleCommentChange}
             autoFocus={false}
+            multiline={true}
+            inputProps={{ type: "text", maxLength: 5000 }}
           />
         </FormControl>
         {isMobile ? (

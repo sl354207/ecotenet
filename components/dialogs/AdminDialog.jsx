@@ -547,15 +547,15 @@ const AdminDialog = ({
             {showForm ? (
               <Portal container={container.current}>
                 <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
-                  <InputLabel shrink htmlFor="commentform"></InputLabel>
+                  <InputLabel shrink htmlFor="dialog"></InputLabel>
                   <TextBox
-                    id="info"
+                    id="dialog"
                     handleChange={handleInfoChange}
                     defaultValue=""
                     placeHolder="additional comment on notification"
-                    rows={1}
                     autoFocus={false}
-                    name="info"
+                    name="dialog"
+                    inputProps={{ type: "text", maxLength: 200 }}
                   />
                 </FormControl>
               </Portal>

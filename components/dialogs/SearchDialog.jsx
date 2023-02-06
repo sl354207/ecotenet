@@ -9,6 +9,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
   Popper,
   TextField,
@@ -128,6 +129,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
       {/* <Divider /> */}
 
       <DialogContent>
+        <FormControl></FormControl>
         <Autocomplete
           sx={{
             "& .MuiAutocomplete-inputRoot": {
@@ -207,11 +209,9 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             return filtered;
           }}
           selectOnFocus
-          // clearOnBlur
-
           blurOnSelect
           handleHomeEndKeys
-          id="nav-auto"
+          id="search-auto"
           options={tags}
           getOptionLabel={(option) => {
             return "";
@@ -234,15 +234,19 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
           renderInput={(params) => (
             // ...params is causing error check dashboard index on how to log params
             <TextField
+              id="search"
               fullWidth
-              // error={true}
               {...params}
-              autoFocus
+              autoFocus={true}
               placeholder="Search site for species, posts, or authors"
               variant="outlined"
               ref={params.InputProps.ref}
-              inputProps={params.inputProps}
-              // onChange={(e) => handleChange(e)}
+              inputProps={{
+                ...params.inputProps,
+                type: "text",
+                maxLength: 100,
+              }}
+              InputLabelProps={{ shrink: true }}
             />
           )}
         />

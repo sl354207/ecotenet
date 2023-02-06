@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText } from "@mui/material";
+import { Button, FormControl, FormHelperText, InputLabel } from "@mui/material";
 import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
@@ -62,13 +62,14 @@ const VerificationStep = ({ email, callbackUrl }) => {
         sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
         error={error.on}
       >
+        <InputLabel htmlFor="verify" shrink></InputLabel>
         <TextBox
           defaultValue={""}
           autoFocus={true}
           handleChange={handleChange}
-          rows={1}
-          multiline={false}
+          id="verify"
           onKeyPress={onKeyPress}
+          inputProps={{ type: "text", maxLength: 100 }}
         />
         <FormHelperText
           sx={{ color: theme.palette.text.primary, fontSize: 16 }}

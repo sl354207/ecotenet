@@ -11,6 +11,7 @@ const TextBox = ({
   inputProps,
   name,
   onKeyPress,
+  error,
 }) => {
   return (
     <OutlinedInput
@@ -25,6 +26,7 @@ const TextBox = ({
       inputProps={inputProps}
       onKeyPress={onKeyPress}
       color="secondary"
+      error={error}
     />
   );
 };
