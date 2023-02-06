@@ -35,7 +35,7 @@ function ImageDescription({ onChange, value }) {
         const description = e.target.value;
         onChange(description);
       }}
-      InputLabelProps={{ shrink: true }}
+      // InputLabelProps={{ shrink: true }}
     />
   );
 }

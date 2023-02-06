@@ -35,7 +35,7 @@ function ImageCitation({ onChange, value }) {
         const citation = e.target.value;
         onChange(citation);
       }}
-      InputLabelProps={{ shrink: true }}
+      // InputLabelProps={{ shrink: true }}
     />
   );
 }

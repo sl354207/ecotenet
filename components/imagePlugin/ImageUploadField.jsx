@@ -424,7 +424,7 @@ function ImageUploadField({ onChange, value }) {
             setImage({ url: imageUrl, saved: false, file: {} });
             onChange({ url: imageUrl, saved: false, file: {} });
           }}
-          InputLabelProps={{ shrink: true }}
+          // InputLabelProps={{ shrink: true }}
         />
       </div>
       <div style={{ display: "flex" }}>

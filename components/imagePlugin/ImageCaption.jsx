@@ -35,7 +35,7 @@ function ImageCaption({ onChange, value }) {
         const caption = e.target.value;
         onChange(caption);
       }}
-      InputLabelProps={{ shrink: true }}
+      // InputLabelProps={{ shrink: true }}
     />
   );
 }

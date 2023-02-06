@@ -31,7 +31,7 @@ function ImageWidth({ onChange, value }) {
           const width = Number(e.target.value);
           onChange(width);
         }}
-        InputLabelProps={{ shrink: true }}
+        // InputLabelProps={{ shrink: true }}
       />
     </>
   );

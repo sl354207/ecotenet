@@ -32,7 +32,7 @@ function ImageHeight({ onChange, value }) {
         const height = Number(e.target.value);
         onChange(height);
       }}
-      InputLabelProps={{ shrink: true }}
+      // InputLabelProps={{ shrink: true }}
     />
   );
 }
