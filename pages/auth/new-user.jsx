@@ -101,7 +101,7 @@ const newUser = () => {
           id="name"
           autoFocus={true}
           handleChange={handleChange}
-          inputProps={{ type: "text", maxLength: 60 }}
+          inputProps={{ type: "text", maxLength: 100 }}
           onKeyPress={onKeyPress}
         />
         <Button

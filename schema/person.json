@@ -6,26 +6,31 @@
     "properties": {
       "name": {
         "type": "string",
+        "maxLength": 100,
         "description": "must be a string"
         },
       "email": {
         "type": "string",
         "format": "email",
+        "maxLength": 100,
         "description": "must be an email"
       },
       "bio": {
         "type": "string",
+        "maxLength": 5000,
         "description": "must be a string"
       },
       "website": {
         "type": "string",
+        "maxLength": 100,
         "description": "must be a string"
       },
       "socials": {
         "type": "array",
         "description": "must be an array",
         "items": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 100
         }
       },
       "denials": {
