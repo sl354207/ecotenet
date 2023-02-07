@@ -14,6 +14,7 @@ export default async function handler(req, res) {
     const { name, id, viewed } = req.body;
     if (
       typeof name == "string" &&
+      name.length <= 100 &&
       typeof id == "string" &&
       id.length == 24 &&
       viewed === true

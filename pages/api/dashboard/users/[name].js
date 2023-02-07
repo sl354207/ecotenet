@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       case "GET":
         const getName = req.query.name;
 
-        if (typeof getName == "string") {
+        if (typeof getName == "string" && getName.length <= 100) {
           if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
             try {
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
       case "DELETE":
         // set id based on request body
         const deleteName = req.body;
-        if (typeof deleteName == "string") {
+        if (typeof deleteName == "string" && deleteName.length <= 100) {
           if (session.user.name && session.user.name === deleteName) {
             // try get request, if successful return response, otherwise return error message
             try {

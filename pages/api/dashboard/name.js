@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     }
 
     const name = req.query.name;
-    if (typeof name == "string") {
+    if (typeof name == "string" && name.length <= 100) {
       try {
         const nameResponse = await checkName(name);
 

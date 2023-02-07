@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     // // const postId = "62c9c684a38cd3357c7e28f3";
     // // const key = "b36580f51a71b20d5f166a9807d98650.jpeg";
 
-    if (typeof name == "string") {
+    if (typeof name == "string" && name.length <= 100) {
       if (session.user.name && session.user.name === name) {
         if (!postId && !key) {
           try {

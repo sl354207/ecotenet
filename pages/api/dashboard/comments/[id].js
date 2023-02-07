@@ -68,7 +68,8 @@ export default async function handler(req, res) {
         if (
           typeof deleteId == "string" &&
           deleteId.length == 24 &&
-          typeof deleteName == "string"
+          typeof deleteName == "string" &&
+          deleteName.length <= 100
         ) {
           if (session.user.name && session.user.name === deleteName) {
             try {

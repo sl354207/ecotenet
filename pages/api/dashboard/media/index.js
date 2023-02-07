@@ -15,6 +15,7 @@ export default async function handler(req, res) {
     const ext = req.query.ext;
     if (
       typeof name == "string" &&
+      name.length <= 100 &&
       typeof postId == "string" &&
       postId.length == 24 &&
       (ext === "image/jpg" || ext === "image/jpeg" || ext === "image/png")
