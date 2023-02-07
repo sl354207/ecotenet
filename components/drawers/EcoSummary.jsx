@@ -48,7 +48,6 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
 
   const options = {
     replace: (domNode) => {
-      // console.log(domNode);
       if (domNode.attribs && domNode.children && domNode.name === "a") {
         const props = attributesToProps(domNode.attribs);
         return (

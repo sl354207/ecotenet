@@ -32,7 +32,6 @@ import useSWR from "swr";
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-// pass in post and comments as props and create page for each post with corresponding comments
 const post = () => {
   const router = useRouter();
 

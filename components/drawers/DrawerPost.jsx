@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import customImage from "@plugins/customImage";
-// import Frame from "react-frame-component";
+
 // The editor core
 import Editor from "@react-page/editor";
 // import "@react-page/editor/lib/index.css";
@@ -65,13 +65,10 @@ const DrawerPost = ({ id }) => {
     loadComments ? `/api/comments/${post._id}` : null,
     fetcher
   );
-  // console.log(user);
 
   const { data: votes, mutate } = useSWR(`/api/votes/${id}`, fetcher);
 
   const reducer = (comments, toggle) => {
-    // console.log(comments);
-    // console.log(toggle);
     if (toggle.type == "load") {
       return toggle.payload;
     }
@@ -105,20 +102,16 @@ const DrawerPost = ({ id }) => {
   const [state, dispatch] = useReducer(reducer, comments);
 
   useEffect(() => {
-    // console.log(loadComments);
     if (entry.isIntersecting) {
       setLoadComments(true);
     }
   }, [entry]);
   useEffect(() => {
-    // console.log(comments);
     if (loadComments && comments) {
       comments.forEach((reply) => {
         reply.open = false;
-        // console.log("loadComments");
       });
       dispatch({ type: "load", payload: comments });
-      // console.log(comments);
     }
   }, [comments]);
 
@@ -134,8 +127,7 @@ const DrawerPost = ({ id }) => {
         setAction(action);
 
         setDialog(true);
-        // console.log(action);
-        // console.log(result);
+
         if (action == "Comment") {
           dispatch({ type: "open", payload: result.comment_ref });
         }

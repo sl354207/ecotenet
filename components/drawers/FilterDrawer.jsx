@@ -52,7 +52,7 @@ const FilterDrawer = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
 
-  const [categorySelect, setCategorySelect] = useState(false);
+  const [categorySelected, setCategorySelected] = useState(false);
   const [category, setCategory] = useState(null);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
@@ -190,14 +190,14 @@ const FilterDrawer = ({
             overflow: "auto",
           }}
         >
-          {categorySelect ? (
+          {categorySelected ? (
             <CategoryList
               category={category && category}
               ecoFilter={ecoFilter}
               title={title && title}
               description={description && description}
               setCategory={setCategory}
-              setCategorySelect={setCategorySelect}
+              setCategorySelected={setCategorySelected}
             />
           ) : (
             <>
@@ -231,12 +231,12 @@ const FilterDrawer = ({
                                 const sub = encodeURIComponent(
                                   menuSub.query.sub
                                 );
-                                setCategorySelect(true);
+                                setCategorySelected(true);
                                 setCategory({ title: title, sub: sub });
                                 setTitle(menuSub.subTitle);
                                 setDescription(menuSub.description);
                               } else {
-                                setCategorySelect(true);
+                                setCategorySelected(true);
                                 setCategory(menuSub.query);
                                 setTitle(menuSub.subTitle);
                                 setDescription(menuSub.description);

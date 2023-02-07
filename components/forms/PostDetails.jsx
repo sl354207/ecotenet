@@ -185,9 +185,7 @@ const PostDetails = ({
               }
               groupBy={(option) => option.title}
               getOptionLabel={(option) => {
-                // console.log(option);
                 if (option && option["sub"]) {
-                  // console.log(option["sub"]);
                   return option["sub"];
                 } else {
                   return "";

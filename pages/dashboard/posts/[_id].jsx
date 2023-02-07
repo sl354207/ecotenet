@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 
 export default function DraftByUser() {
-  // set id to id in url query
   const router = useRouter();
   const id = router.query._id;
 

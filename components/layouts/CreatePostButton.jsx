@@ -36,8 +36,6 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
   };
   return (
     <Button
-      // href="/dashboard/editor"
-      // sx={{ marginLeft: nav ? "10px" : "0px" }}
       onClick={() => startPost()}
       variant={nav ? "outlined" : "contained"}
       color="secondary"

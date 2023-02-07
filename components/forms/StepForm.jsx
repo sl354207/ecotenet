@@ -91,13 +91,6 @@ const StepForm = ({ post, user }) => {
       ...details,
       [name]: value,
     }));
-
-    // set errors
-    // const error = formValidation(name, value, fieldsValidation) || ""
-
-    // setFormErrors({
-    //   [name]: error
-    // })
   };
 
   // function to create a new draft. Takes in form values and editor value.
@@ -163,7 +156,6 @@ const StepForm = ({ post, user }) => {
     switch (step) {
       case 0:
         return (
-          // add back in when ready  formErrors={formErrors}
           <>
             <div
               style={{
@@ -264,7 +256,6 @@ const StepForm = ({ post, user }) => {
         );
       case 1:
         return (
-          // add back in when ready  formErrors={formErrors}
           <>
             <div
               style={{
@@ -447,7 +438,7 @@ const StepForm = ({ post, user }) => {
             <PostRegion clickInfo={clickInfo} setClickInfo={setClickInfo} />
           </>
         );
-      // add back in when ready  formErrors={formErrors}
+
       default:
         break;
     }

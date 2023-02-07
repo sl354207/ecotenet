@@ -38,7 +38,6 @@ const EcoDist = ({
   isMobile,
 }) => {
   const handleChange = async (e) => {
-    // console.log(e);
     if (e.target.value) {
       const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
         method: "GET",
@@ -122,12 +121,6 @@ const EcoDist = ({
         </Typography>
       )}
 
-      {/* <Description
-        description=" Search for a species by common or scientific name to display their
-  distribution on the map. A maximum of three species can be mapped at the
-  same time"
-        align="left"
-      /> */}
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
         distribution on the map. A maximum of three species can be mapped at the

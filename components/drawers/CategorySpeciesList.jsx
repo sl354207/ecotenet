@@ -8,13 +8,13 @@ import {
 import { createRef } from "react";
 import CategorySpeciesListItem from "./CategorySpeciesListItem";
 
-const CategorySpeciesList = ({ category, setItemSelect, setItem }) => {
-  const uniqueFirst = [
+const CategorySpeciesList = ({ category, setItemSelected, setItem }) => {
+  const uniqueFirstLetter = [
     ...new Set(category.map((item) => item.scientific_name[0])),
   ];
 
-  // create object where keys equal uniqueFirst value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
-  const refs = uniqueFirst.reduce((acc, value) => {
+  // create object where keys equal uniqueFirstLetter value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
+  const refs = uniqueFirstLetter.reduce((acc, value) => {
     acc[value] = createRef();
     // console.log(acc);
     return acc;
@@ -23,7 +23,7 @@ const CategorySpeciesList = ({ category, setItemSelect, setItem }) => {
   //   };
   return (
     <List>
-      {uniqueFirst.map((entry) => {
+      {uniqueFirstLetter.map((entry) => {
         return (
           <>
             <ListItem key={entry} ref={refs[entry]}>
@@ -38,7 +38,7 @@ const CategorySpeciesList = ({ category, setItemSelect, setItem }) => {
                 return (
                   <CategorySpeciesListItem
                     result={item}
-                    setItemSelect={setItemSelect}
+                    setItemSelected={setItemSelected}
                     setItem={setItem}
                     key={item._id}
                   />

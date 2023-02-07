@@ -10,8 +10,8 @@ import { useState } from "react";
 const newUser = () => {
   const router = useRouter();
 
-  const { user, setUser } = useUserContext();
-  const { snackbar, setSnackbar } = useSnackbarContext();
+  const { user } = useUserContext();
+  const { setSnackbar } = useSnackbarContext();
 
   const [name, setName] = useState("");
 
@@ -41,7 +41,6 @@ const newUser = () => {
       const check = await res.text();
       // console.log(check);
       if (check === "null") {
-        // const test = JSON.parse(check);
         const res1 = await fetch(`/api/dashboard/users/${name}`, {
           method: "PUT",
           headers: {
@@ -84,8 +83,6 @@ const newUser = () => {
       });
     }
   };
-
-  //
 
   return (
     <Container>

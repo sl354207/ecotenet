@@ -41,7 +41,7 @@ const DrawerSpecies = ({ species }) => {
   const handleCloseDialog = () => {
     setDialog(false);
   };
-  // console.log(species);
+
   const { data: wiki } = useSWR(
     species
       ? `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${

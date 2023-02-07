@@ -71,15 +71,12 @@ const FeatureAndSearchDrawer = ({
           {isMobile && (
             <>
               <ButtonGroup
-                // orientation="vertical"
                 aria-label="vertical outlined button group"
-                // size="small"
                 sx={{ marginLeft: "10px" }}
               >
                 <IconButton
                   variant="text"
                   color="inherit"
-                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 0:
@@ -103,7 +100,6 @@ const FeatureAndSearchDrawer = ({
                 <IconButton
                   variant="text"
                   color="inherit"
-                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 1:

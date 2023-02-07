@@ -6,13 +6,7 @@ import { Box, Container, Divider, Typography } from "@mui/material";
 const about = () => {
   return (
     <>
-      <Container
-      // sx={{
-      //   backgroundColor: theme.palette.primary.main,
-      //   // paddingTop: "40px",
-      //   // marginTop: "0px",
-      // }}
-      >
+      <Container>
         <Header title="Ecotenet Mission" />
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           Our goal at Ecotenet is to help people learn and share nature-based

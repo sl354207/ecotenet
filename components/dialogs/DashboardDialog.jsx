@@ -22,7 +22,6 @@ const DashboardDialog = ({
   handleClose,
   contentType,
   action,
-
   result,
   name,
   snackbar,
@@ -31,6 +30,7 @@ const DashboardDialog = ({
 }) => {
   const router = useRouter();
 
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -328,15 +328,19 @@ const DashboardDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle
+        id="dashboard-dialog-title"
+        color="textPrimary"
+        align="center"
+      >
         {action == "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="dashboard-dialog-text" color="textPrimary">
           Are you sure you want to {action} {item}?
         </DialogContentText>
       </DialogContent>

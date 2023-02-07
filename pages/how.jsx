@@ -42,7 +42,6 @@ const how = () => {
             usb 'none';	
             vibrate 'none';"
             allowFullScreen
-            // sandbox=""
             loading="lazy"
           ></iframe>
         </Box>

@@ -26,7 +26,6 @@ const SpeciesItem = ({ result, handleClose }) => {
           justifyContent: "start",
           textTransform: "none",
         }}
-        // href={`/species/${result._id}`}
         onClick={() => {
           if (router.pathname == "/") {
             setFS({ state: "Search Result", item: result });

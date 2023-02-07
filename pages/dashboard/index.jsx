@@ -84,14 +84,12 @@ export default function Dashboard() {
   const [tabValue, setTabValue] = useState(0);
 
   const [fetchApi, setFetchApi] = useState();
-  // console.log(fetchApi);
+
   useEffect(() => {
     if (user && user.status === "authenticated") {
       setFetchApi(`/api/dashboard/users/${user.name}`);
     }
   }, [user]);
-  // console.log(fetchApi);
-  // console.log(user)
 
   const [dialog, setDialog] = useState(false);
   const [dialogAction, setDialogAction] = useState({ action: "", type: "" });

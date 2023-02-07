@@ -85,7 +85,6 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
       maxWidth="md"
       scroll="paper"
       disableScrollLock
-      // hideBackdrop
       sx={{
         "&.MuiModal-root": {
           top: "30px",
@@ -99,7 +98,6 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
         },
         "&.MuiDialog-root": {
           top: "30px",
-          // bottom: 0,
         },
       }}
     >
@@ -126,7 +124,6 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
           <CloseIcon />
         </IconButton>
       </div>
-      {/* <Divider /> */}
 
       <DialogContent>
         <FormControl></FormControl>

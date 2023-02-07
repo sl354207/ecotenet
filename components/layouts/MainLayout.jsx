@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 const MainLayout = ({ children }) => {
   // UPDATE
   const router = useRouter();
-  // console.log(router);
+
   return (
     <>
       <Meta />

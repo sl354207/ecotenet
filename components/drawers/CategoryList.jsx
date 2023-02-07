@@ -1,5 +1,3 @@
-// import Header from "./Header";
-
 import Link from "@components/layouts/Link";
 import {
   Breadcrumbs,
@@ -21,7 +19,7 @@ const CategoryList = ({
   title,
   category,
   setCategory,
-  setCategorySelect,
+  setCategorySelected,
   description,
 }) => {
   const { data } = useSWR(
@@ -33,15 +31,14 @@ const CategoryList = ({
     fetcher
   );
 
-  const [itemSelect, setItemSelect] = useState(false);
+  const [itemSelected, setItemSelected] = useState(false);
   const [item, setItem] = useState(null);
-  // console.log(typeof item);
 
   return (
     <>
       {data ? (
         <>
-          {itemSelect ? (
+          {itemSelected ? (
             <>
               <Container sx={{ minHeight: "auto" }}>
                 <Breadcrumbs
@@ -58,7 +55,7 @@ const CategoryList = ({
                     color="secondary"
                     onClick={() => {
                       setCategory(null);
-                      setCategorySelect(false);
+                      setCategorySelected(false);
                     }}
                     sx={{ paddingRight: "0px" }}
                   >
@@ -68,7 +65,7 @@ const CategoryList = ({
                     color="secondary"
                     onClick={() => {
                       setItem(null);
-                      setItemSelect(false);
+                      setItemSelected(false);
                     }}
                     sx={{ paddingRight: "0px", paddingLeft: "0px" }}
                   >
@@ -113,7 +110,7 @@ const CategoryList = ({
                     color="secondary"
                     onClick={() => {
                       setCategory(null);
-                      setCategorySelect(false);
+                      setCategorySelected(false);
                     }}
                     sx={{ paddingRight: "0px" }}
                   >
@@ -133,11 +130,7 @@ const CategoryList = ({
                     {title}
                   </Typography>
                 </Breadcrumbs>
-                <Typography
-                  variant="h4"
-                  align="center"
-                  // sx={{ marginBottom: "15px" }}
-                >
+                <Typography variant="h4" align="center">
                   {title}
                 </Typography>
                 {description && (
@@ -185,7 +178,7 @@ const CategoryList = ({
 
                       <CategorySpeciesList
                         category={data && data.category}
-                        setItemSelect={setItemSelect}
+                        setItemSelected={setItemSelected}
                         setItem={setItem}
                       />
                       <Container sx={{ minHeight: "auto" }}>
@@ -207,7 +200,7 @@ const CategoryList = ({
                     <>
                       <CategoryPostList
                         posts={data && data.category}
-                        setItemSelect={setItemSelect}
+                        setItemSelected={setItemSelected}
                         setItem={setItem}
                       />
                     </>

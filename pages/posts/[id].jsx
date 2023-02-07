@@ -48,7 +48,7 @@ const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
 const DynamicClientDialog = dynamic(() =>
   import("@components/dialogs/ClientDialog")
 );
-// pass in post and comments as props and create page for each post with corresponding comments
+
 const post = ({ post }) => {
   const router = useRouter();
   const { user } = useUserContext();
@@ -57,7 +57,7 @@ const post = ({ post }) => {
 
   const ref = useRef();
   const isVisible = useOnScreenServer(ref);
-  // console.log(`isvisible: ${isVisible}`);
+
   // set post as value of editor
   const [value, setValue] = useState(post);
 
@@ -74,13 +74,10 @@ const post = ({ post }) => {
     loadComments ? `/api/comments/${post._id}` : null,
     fetcher
   );
-  // console.log(user);
 
   const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
 
   const reducer = (comments, toggle) => {
-    // console.log(comments);
-    // console.log(toggle);
     if (toggle.type == "load") {
       return toggle.payload;
     }
@@ -114,20 +111,16 @@ const post = ({ post }) => {
   const [state, dispatch] = useReducer(reducer, comments);
 
   useEffect(() => {
-    // console.log(loadComments);
     if (isVisible) {
       setLoadComments(true);
     }
   }, [isVisible]);
   useEffect(() => {
-    // console.log(comments);
     if (loadComments && comments) {
       comments.forEach((reply) => {
         reply.open = false;
-        // console.log("loadComments");
       });
       dispatch({ type: "load", payload: comments });
-      // console.log(comments);
     }
   }, [comments]);
 
@@ -143,8 +136,7 @@ const post = ({ post }) => {
         setAction(action);
 
         setDialog(true);
-        // console.log(action);
-        // console.log(result);
+
         if (action == "Comment") {
           dispatch({ type: "open", payload: result.comment_ref });
         }
@@ -328,7 +320,6 @@ const post = ({ post }) => {
             </Box>
             <Typography
               sx={{
-                // marginLeft: { xs: "0px", md: "20px" },
                 fontStyle: "italic",
               }}
               align="left"
@@ -484,12 +475,9 @@ export const getStaticProps = async (context) => {
 
   const post = await getPostById(_id);
 
-  // const comments = await getPostComments(post._id.toString());
-
   return {
     props: {
       post: JSON.parse(JSON.stringify(post)),
-      // comments: JSON.parse(JSON.stringify(comments)),
     },
     revalidate: 60,
   };

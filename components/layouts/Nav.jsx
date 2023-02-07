@@ -40,7 +40,6 @@ const DynamicFeatureDialog = dynamic(() =>
 );
 
 const Nav = () => {
-  // console.log(ecoFilter);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
   const { ecoFilter, filterOpen, setFilterOpen, setEcoOpen, setFSOpen } =
@@ -183,7 +182,6 @@ const Nav = () => {
               ) : (
                 <Button
                   onClick={handleFilterOpen}
-                  // endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
                   variant="contained"
                   color="secondary"
                 >
@@ -194,10 +192,8 @@ const Nav = () => {
           )}
 
           <Button
-            // href="/featured"
             onClick={() => {
               if (router.pathname == "/") {
-                // setFilterOpen(false);
                 setFeature(true);
               } else {
                 router.push("/featured");
@@ -220,7 +216,7 @@ const Nav = () => {
             size={isTab ? "small" : "medium"}
             sx={{
               display: { xs: "none", md: "block" },
-              // marginLeft: "5px",
+
               textAlign: "center",
             }}
           >
@@ -229,7 +225,6 @@ const Nav = () => {
           <Button
             sx={{
               display: { xs: "none", md: "block" },
-              // marginLeft: "5px",
             }}
             variant="text"
             color="secondary"
@@ -283,7 +278,6 @@ const Nav = () => {
           <IconButton
             color="secondary"
             size={isTab ? "small" : "large"}
-            // size="large"
             sx={{ marginLeft: "auto", marginRight: "5px" }}
             onClick={handleClickSearch}
           >
@@ -350,8 +344,6 @@ const Nav = () => {
                           onClick={() => {
                             setPopper(false);
                             if (router.pathname == "/") {
-                              // setFilterOpen(false);
-                              // setEcoOpen(false);
                               setFeature(true);
                             } else {
                               router.push("/featured");

@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
 
-// pass in post and comments as props and create page for each post with corresponding comments
 const person = () => {
   const router = useRouter();
 
@@ -87,7 +86,7 @@ const person = () => {
         >
           Delete
         </Button>
-        {/* {results.approved == "true" && ( */}
+
         <div style={{ margin: "16px" }}>
           {results.bio !== "" && (
             <>
@@ -122,7 +121,6 @@ const person = () => {
             </Typography>
           )}
         </div>
-        {/* )} */}
       </>
     );
   }

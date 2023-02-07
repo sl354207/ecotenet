@@ -57,7 +57,6 @@ const FeatureDialog = ({ feature, setFeature }) => {
       maxWidth="md"
       scroll="paper"
       disableScrollLock
-      // hideBackdrop
       sx={{
         "&.MuiModal-root": {
           top: "30px",
@@ -78,7 +77,6 @@ const FeatureDialog = ({ feature, setFeature }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          // marginBottom: "20px",
         }}
       >
         <DialogTitle
@@ -97,7 +95,6 @@ const FeatureDialog = ({ feature, setFeature }) => {
           <CloseIcon />
         </IconButton>
       </div>
-      {/* <Divider /> */}
 
       <DialogContent>
         <Typography variant="body1" align="center">

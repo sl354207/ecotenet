@@ -119,18 +119,6 @@ const DashboardComment = ({
               </Button>
             )}
 
-            {/* <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                margin: "4px 0px",
-                minWidth: "fit-content",
-                justifyContent: "start",
-              }}
-              startIcon={<DeleteIcon />}
-              size="small"
-              onClick={handleDeleteOpen}
-            ></Button> */}
             <IconButton
               edge="start"
               color="inherit"

@@ -37,7 +37,6 @@ const DynamicWelcomeDialog = dynamic(() =>
 const DynamicFeatureAndSearchDrawer = dynamic(() =>
   import("@components/drawers/FeatureAndSearchDrawer")
 );
-// import useSWR from "swr";
 
 const coords = Coords;
 
@@ -241,7 +240,6 @@ const MapPage = ({ ecoregions }) => {
             >
               <Toolbar sx={{ display: "grid" }}>
                 <Tabs
-                  // orientation="vertical"
                   value={tab.id}
                   onChange={handleChange}
                   aria-label="Vertical tabs example"
@@ -598,7 +596,6 @@ const MapPage = ({ ecoregions }) => {
 
 export const getStaticProps = async () => {
   const ecoregions = await getEcoregions();
-  //   console.log(ecoregions);
 
   return {
     props: {

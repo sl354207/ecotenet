@@ -20,13 +20,12 @@ const EcoRegions = ({
     return a.unique_id - b.unique_id;
   });
 
+  // for map context provider
   const { mapA } = useMap();
-  // console.log(`initial ${mapA}`);
 
   const ecoClick = useCallback(
     (ecoregion) => {
       if (mapA) {
-        // console.log(`initial click ${mapA}`);
         setShowPopup(true);
 
         setHoverInfo({
@@ -45,14 +44,11 @@ const EcoRegions = ({
           center: ecoregion.coordinates,
           duration: 3000,
           zoom: 3.5,
-          // speed: 0.2,
-          // essential: true,
         });
         if (!visitedHome && !click) {
           setTab({ id: 1, label: "Summary" });
         }
         setClick(true);
-        // console.log(`final ${mapA}`);
       }
     },
     [mapA, ecoMove]

@@ -14,7 +14,6 @@ import { useState } from "react";
 
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
 
-// pass in post and comments as props and create page for each post with corresponding comments
 const person = ({ person, posts }) => {
   const router = useRouter();
   const { user } = useUserContext();
@@ -140,8 +139,6 @@ const person = ({ person, posts }) => {
   );
 };
 
-// UPDATE
-// fetch post data at build time
 export const getServerSideProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const name = context.params.name;
@@ -150,7 +147,6 @@ export const getServerSideProps = async (context) => {
   if (person.approved !== "true") {
     person = { name: person.name };
   }
-  // console.log(person);
 
   const posts = await getProfilePosts(name);
 

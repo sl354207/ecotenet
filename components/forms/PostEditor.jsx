@@ -22,7 +22,6 @@ const darkTheme = createTheme({
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-// take in handleNext to change form step, and editor state values.
 const PostEditor = ({ value, setPostValue }) => {
   return (
     <Container>

@@ -9,7 +9,6 @@ export const useUserContext = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  // console.log(session);
 
   const [user, setUser] = useState();
 
@@ -43,11 +42,8 @@ export const UserProvider = ({ children }) => {
           status: status,
         });
       }
-      // console.log(userName);
     }
   }, [router.pathname, status]);
-
-  // console.log(user);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

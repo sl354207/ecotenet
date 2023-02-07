@@ -36,12 +36,12 @@ const AdminDialog = ({
   handleClose,
   contentType,
   action,
-
   result,
   mutate,
 }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
 
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -471,15 +471,15 @@ const AdminDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="admin-dialog-title" color="textPrimary" align="center">
         {action}
       </DialogTitle>
       {action == "Approve" ? (
         <DialogContent>
-          <DialogContentText id="update" color="textPrimary">
+          <DialogContentText id="admin-dialog-text" color="textPrimary">
             Are you sure you want to approve {item}?
           </DialogContentText>
         </DialogContent>
@@ -547,14 +547,14 @@ const AdminDialog = ({
             {showForm ? (
               <Portal container={container.current}>
                 <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
-                  <InputLabel shrink htmlFor="dialog"></InputLabel>
+                  <InputLabel shrink htmlFor="admin-dialog"></InputLabel>
                   <TextBox
-                    id="dialog"
+                    id="admin-dialog"
                     handleChange={handleInfoChange}
                     defaultValue=""
                     placeHolder="additional comment on notification"
                     autoFocus={false}
-                    name="dialog"
+                    name="admin-dialog"
                     inputProps={{ type: "text", maxLength: 200 }}
                   />
                 </FormControl>

@@ -1,7 +1,7 @@
 import { useHomepageContext } from "@components/context/HomepageContext";
 import { Button, ListItem, Typography } from "@mui/material";
 
-const CategorySpeciesListItem = ({ result, setItemSelect, setItem }) => {
+const CategorySpeciesListItem = ({ result, setItemSelected, setItem }) => {
   const { distributionDispatch, setTab } = useHomepageContext();
   return (
     <ListItem>
@@ -14,9 +14,7 @@ const CategorySpeciesListItem = ({ result, setItemSelect, setItem }) => {
           justifyContent: "start",
           textTransform: "none",
         }}
-        // href={`/species/${result._id}`}
         onClick={() => {
-          // handleSubmit();
           distributionDispatch({
             type: "add",
             payload: 0,
@@ -25,7 +23,7 @@ const CategorySpeciesListItem = ({ result, setItemSelect, setItem }) => {
             c_name: result.common_name,
             _id: result._id,
           });
-          setItemSelect(true);
+          setItemSelected(true);
           setItem(result);
           setTab({ id: 2, label: "Distributions" });
         }}
