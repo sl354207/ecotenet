@@ -37,6 +37,7 @@ import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import URISanity from "urisanity";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -95,7 +96,7 @@ export default function Dashboard() {
   const [dialog, setDialog] = useState(false);
   const [dialogAction, setDialogAction] = useState({ action: "", type: "" });
   const [dialogItem, setDialogItem] = useState("");
-  const [error, setError] = useState({ website: false, social: false });
+  const [error, setError] = useState({ website: false, socials: false });
 
   const { data: results, mutate } = useSWR(
     user && user.status === "authenticated" ? fetchApi : null,
@@ -192,32 +193,42 @@ export default function Dashboard() {
   };
 
   const handleProfileSubmit = async () => {
-    const value = {
-      name: user.name,
-      email: user.email,
-      bio: profile.bio,
-      website: profile.website,
-      socials: profile.socials,
-    };
+    if (
+      profile.website !== "" &&
+      URISanity.vet(profile.website, {
+        allowWebTransportURI: true,
+      }) === "about:blank"
+    ) {
+      setError({ website: true, socials: error.socials });
+    } else {
+      setError({ website: false, socials: error.socials });
+      const value = {
+        name: user.name,
+        email: user.email,
+        bio: profile.bio,
+        website: profile.website,
+        socials: profile.socials,
+      };
 
-    const profileUpdate = await updateUser(value, "dashboard");
+      const profileUpdate = await updateUser(value, "dashboard");
 
-    if (profileUpdate.ok) {
-      mutate();
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: "Profile saved successfully",
-      });
-    }
-    if (!profileUpdate.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "error",
-        message: "There was a problem saving profile. Please try again later",
-      });
+      if (profileUpdate.ok) {
+        mutate();
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "success",
+          message: "Profile saved successfully",
+        });
+      }
+      if (!profileUpdate.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          severity: "error",
+          message: "There was a problem saving profile. Please try again later",
+        });
+      }
     }
   };
 
@@ -481,7 +492,7 @@ export default function Dashboard() {
               </FormControl>
               <FormControl
                 sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-                error={error.social}
+                error={error.socials}
               >
                 <InputLabel htmlFor="socials" shrink>
                   <b>Socials:</b>
@@ -519,10 +530,19 @@ export default function Dashboard() {
                   disableClearable={true}
                   value={[]}
                   onChange={(event, newValue) => {
-                    setProfile((profile) => ({
-                      ...profile,
-                      socials: [...profile.socials, newValue.inputValue],
-                    }));
+                    if (
+                      URISanity.vet(newValue.inputValue, {
+                        allowWebTransportURI: true,
+                      }) === "about:blank"
+                    ) {
+                      setError({ website: error.website, socials: true });
+                    } else {
+                      setError({ website: error.website, socials: false });
+                      setProfile((profile) => ({
+                        ...profile,
+                        socials: [...profile.socials, newValue.inputValue],
+                      }));
+                    }
                   }}
                   filterOptions={(options, params) => {
                     const filtered = filter(options, params);
@@ -561,7 +581,7 @@ export default function Dashboard() {
                           variant="outlined"
                           fullWidth
                           InputLabelProps={{ shrink: true }}
-                          error={error.social}
+                          error={error.socials}
                           ref={params.InputProps.ref}
                           inputProps={{
                             ...params.inputProps,
@@ -574,7 +594,7 @@ export default function Dashboard() {
                   }}
                 />
                 <FormHelperText sx={{ color: theme.palette.text.primary }}>
-                  {error.social
+                  {error.socials
                     ? "Invalid URL"
                     : "Add social media links (3 max)"}
                 </FormHelperText>

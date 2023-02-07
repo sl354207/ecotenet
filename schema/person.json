@@ -28,6 +28,7 @@
       "socials": {
         "type": "array",
         "description": "must be an array",
+        "maxItems": 3,
         "items": {
             "type": "string",
             "maxLength": 100

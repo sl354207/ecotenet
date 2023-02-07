@@ -462,7 +462,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         // zoom={isMobile ? 3 : 4}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
-        *A species distribution often does not align perfectly with ecoregion
+        A species distribution often does not align perfectly with ecoregion
         boundaries, therefore a species may not be present throughout the entire
         ecoregion but only in specific areas. A species may also be widespread
         but in small numbers so rarely seen.

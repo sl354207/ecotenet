@@ -10,7 +10,7 @@ import TextBox from "./TextBox";
 const VerificationStep = ({ email, callbackUrl }) => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState({ on: false });
+  const [error, setError] = useState(false);
   const [resend, setResend] = useState(false);
 
   const handleChange = (e) => {
@@ -26,10 +26,7 @@ const VerificationStep = ({ email, callbackUrl }) => {
     setLoading(false);
 
     if (res?.error) {
-      setError({
-        on: true,
-        message: "There a was a problem sending email. Please try again later",
-      });
+      setError(true);
 
       // UPDATE. FIND OUT IF NECESSARY
       if (res?.url) {
@@ -60,7 +57,7 @@ const VerificationStep = ({ email, callbackUrl }) => {
     <div style={{ display: "grid" }}>
       <FormControl
         sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-        error={error.on}
+        error={error}
       >
         <InputLabel htmlFor="verify" shrink></InputLabel>
         <TextBox
@@ -70,13 +67,14 @@ const VerificationStep = ({ email, callbackUrl }) => {
           id="verify"
           onKeyPress={onKeyPress}
           inputProps={{ type: "text", maxLength: 100 }}
+          error={error}
         />
         <FormHelperText
           sx={{ color: theme.palette.text.primary, fontSize: 16 }}
           id="component-error-text"
         >
-          {error && error.message ? (
-            <>{error.message}</>
+          {error ? (
+            "There a was a problem sending email. Please try again later"
           ) : (
             <>
               {!resend ? (
@@ -86,15 +84,13 @@ const VerificationStep = ({ email, callbackUrl }) => {
                     onClick={handleResend}
                     variant="text"
                     color="secondary"
+                    disabled={loading}
                   >
                     Resend
                   </Button>
                 </>
               ) : (
-                <>
-                  We have sent another email. Please try restarting the sign in
-                  process or contact us if you are not receiving an email
-                </>
+                "We have sent another email. Please try restarting the sign in process or contact us if you are not receiving an email"
               )}
             </>
           )}
@@ -104,7 +100,7 @@ const VerificationStep = ({ email, callbackUrl }) => {
         variant="contained"
         color="secondary"
         onClick={onReady}
-        disabled={code.length < 8}
+        disabled={code.length < 8 || loading}
       >
         Submit
       </Button>

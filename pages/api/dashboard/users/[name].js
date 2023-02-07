@@ -4,9 +4,9 @@ import {
   checkPerson,
   deletePerson,
   getPersonDash,
-  updatePerson,
 } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
+import URISanity from "urisanity";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -58,21 +58,47 @@ export default async function handler(req, res) {
         break;
       case "PUT":
         const { email, name, ...data } = req.body;
+
         const validate = ajv.getSchema("person");
         const valid = validate(req.body);
-        if (valid) {
+
+        const validWebsite = URISanity.vet(data.website, {
+          allowWebTransportURI: true,
+        });
+
+        let validSocials = true;
+
+        if (data.socials.length > 0) {
+          let i = 0;
+          while (i < data.socials.length) {
+            if (
+              URISanity.vet(data.socials[i], {
+                allowWebTransportURI: true,
+              }) === "about:blank"
+            ) {
+              validSocials = false;
+
+              break;
+            }
+            i++;
+          }
+        }
+
+        if (
+          valid &&
+          validSocials &&
+          (validWebsite !== "about:blank" || test.website === "")
+        ) {
           if (session.user.email === email) {
             try {
               data.approved = "pending";
-              console.log(`data: ${data}`);
-              console.log(`name: ${name}`);
-              console.log(`length: ${Object.keys(data).length}`);
+
               const update = await updatePerson(
                 email,
                 Object.keys(data).length === 1 ? { name: name } : data
               );
 
-              console.log(update);
+              // console.log(update);
               return res.status(200).json(update);
             } catch (err) {
               console.error(err);

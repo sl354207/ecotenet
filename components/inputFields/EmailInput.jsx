@@ -9,12 +9,18 @@ const EmailInput = ({ provider, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+  // let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+  // sourced from https://github.com/ajv-validator/ajv-formats/blob/master/src/formats.ts
+  let regex = new RegExp(
+    "/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,"
+  );
 
   const handleSignin = useCallback(async () => {
     if (!regex.test(email)) {
       setError(true);
     } else {
+      setError(false);
+
       setLoading(true);
       const res = await signIn("email", {
         email: email,
