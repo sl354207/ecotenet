@@ -1,4 +1,3 @@
-import Link from "@components/layouts/Link";
 import { Typography } from "@mui/material";
 import { lazyLoad } from "@react-page/editor";
 import Image from "next/legacy/image";
@@ -18,9 +17,11 @@ const ImageRender = ({ data, preview }) => {
       //     string
       //   )
       // );
-      return /^https?:\/\/.+\.(jpeg|jpg|JPG|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-        string
-      );
+      // const regex =
+      //   /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/i;
+      const regex =
+        /^http[^\?]*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)(\?(.*))?$/gim;
+      return regex.test(string);
     }
   };
 
@@ -183,15 +184,6 @@ const ImageRender = ({ data, preview }) => {
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}. </Typography>
-                  )}
-                  {!data.image.url.startsWith("blob:") && (
-                    <Link
-                      href={data.image.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Link
-                    </Link>
                   )}
                 </figcaption>
               </figure>

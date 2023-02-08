@@ -30,7 +30,7 @@ function ImageCitation({ onChange, value }) {
         },
       }}
       value={value || ""}
-      inputProps={{ type: "text", maxLength: 100 }}
+      inputProps={{ type: "text", maxLength: 200 }}
       onChange={(e) => {
         const citation = e.target.value;
         onChange(citation);

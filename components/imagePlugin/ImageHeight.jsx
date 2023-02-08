@@ -6,7 +6,6 @@ function ImageHeight({ onChange, value }) {
   return (
     <TextField
       placeholder="default height is set to 500"
-      // defaultValue={500}
       label="Height"
       name="height"
       id="height"
@@ -25,14 +24,14 @@ function ImageHeight({ onChange, value }) {
           marginBottom: "5px",
         },
       }}
-      type="number"
-      // inputProps={{ max: "1200" }}
+      // type="number"
+      inputProps={{ type: "number", max: 1000, min: 1 }}
+      // inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
       value={value || ""}
       onChange={(e) => {
         const height = Number(e.target.value);
         onChange(height);
       }}
-      // InputLabelProps={{ shrink: true }}
     />
   );
 }

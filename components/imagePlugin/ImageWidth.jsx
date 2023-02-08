@@ -10,7 +10,9 @@ function ImageWidth({ onChange, value }) {
         label="Width"
         name="width"
         id="width"
-        type="number"
+        // type="number"
+        inputProps={{ type: "number", max: 1000, min: 1 }}
+        // inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
         sx={{
           display: "flex",
           flexGrow: 1,
