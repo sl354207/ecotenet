@@ -89,7 +89,7 @@ const post = () => {
     }
   );
 
-  let date;
+  // let date;
 
   let list;
 
@@ -122,7 +122,7 @@ const post = () => {
         </div>
       );
     } else {
-      date = new Date(post.date);
+      // date = new Date(post.date);
       list = (
         <>
           {post && (
@@ -187,8 +187,8 @@ const post = () => {
                         variant="h6"
                       >
                         {isMobile
-                          ? date.toLocaleDateString()
-                          : date.toDateString()}
+                          ? new Date(post.date).toLocaleDateString()
+                          : new Date(post.date).toDateString()}
                       </Typography>
                     </div>
                     <Typography variant="h6">
@@ -353,12 +353,16 @@ const post = () => {
         );
       } else {
         commentList = (
-          <AdminCommentList
-            comments={comments}
-            comment_query={comment_query}
-            handleOpenDialog={handleOpenDialog}
-            handleOpenResolve={handleOpenResolve}
-          />
+          <>
+            {comments && (
+              <AdminCommentList
+                comments={comments}
+                comment_query={comment_query}
+                handleOpenDialog={handleOpenDialog}
+                handleOpenResolve={handleOpenResolve}
+              />
+            )}
+          </>
         );
       }
     }
