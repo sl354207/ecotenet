@@ -16,7 +16,7 @@ import {
 import { createNotification, updateFlag } from "@utils/apiHelpers";
 import { useRef, useState } from "react";
 
-const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
+const Resolve = ({ open, handleClose, name, ID, mutate }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [addInfo, setAddInfo] = useState("");
@@ -51,9 +51,9 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
         const notifyResponse = await createNotification(notify);
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
+          // if (mutate) {
+          //   mutate();
+          // }
 
           setSnackbar({
             ...snackbar,
@@ -71,9 +71,9 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           });
         }
       } else {
-        if (mutate) {
-          mutate();
-        }
+        // if (mutate) {
+        //   mutate();
+        // }
 
         setSnackbar({
           ...snackbar,

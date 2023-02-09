@@ -27,6 +27,7 @@ const DashboardDialog = ({
   snackbar,
   setSnackbar,
   mutate,
+  fetchApi,
 }) => {
   const router = useRouter();
 
@@ -68,7 +69,7 @@ const DashboardDialog = ({
 
       if (postResponse.ok) {
         if (mutate) {
-          mutate();
+          mutate(fetchApi);
         }
 
         handleClose();
@@ -108,7 +109,7 @@ const DashboardDialog = ({
 
     if (commentResponse.ok) {
       if (mutate) {
-        mutate();
+        mutate(fetchApi);
       }
 
       handleClose();
@@ -141,7 +142,7 @@ const DashboardDialog = ({
 
       if (userResponse.ok) {
         if (mutate) {
-          mutate();
+          mutate(fetchApi);
         }
 
         handleClose();

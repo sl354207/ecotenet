@@ -107,10 +107,6 @@ const AdminDialog = ({
       if (postResponse.ok) {
         const notifyResponse = await handleNotify("post", "deleted");
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -158,9 +154,9 @@ const AdminDialog = ({
       const notifyResponse = await handleNotify("comment", "deleted");
 
       if (notifyResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
+        // if (mutate) {
+        //   mutate("/api/admin/comments");
+        // }
 
         handleClose();
         setSnackbar({
@@ -197,9 +193,9 @@ const AdminDialog = ({
       const userResponse = await deleteUser(deletion, "admin");
 
       if (userResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
+        // if (mutate) {
+        //   mutate();
+        // }
 
         handleClose();
         setSnackbar({
@@ -242,9 +238,9 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("post", "denied");
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
+          // if (mutate) {
+          //   mutate();
+          // }
 
           handleClose();
           setSnackbar({
@@ -273,9 +269,9 @@ const AdminDialog = ({
       }
     } else {
       if (postResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
+        // if (mutate) {
+        //   mutate();
+        // }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -307,9 +303,9 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("comment", "denied");
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
+          // if (mutate) {
+          //   mutate("/api/admin/comments");
+          // }
 
           handleClose();
           setSnackbar({
@@ -338,9 +334,9 @@ const AdminDialog = ({
       }
     } else {
       if (commentResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
+        // if (mutate) {
+        //   mutate("/api/admin/comments");
+        // }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -374,9 +370,9 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("profile item", "denied");
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
+          // if (mutate) {
+          //   mutate();
+          // }
 
           handleClose();
           setSnackbar({
@@ -405,9 +401,9 @@ const AdminDialog = ({
       }
     } else {
       if (userResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
+        // if (mutate) {
+        //   mutate();
+        // }
         handleClose();
         setSnackbar({
           ...snackbar,

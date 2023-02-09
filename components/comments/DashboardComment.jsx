@@ -42,7 +42,7 @@ const DashboardComment = ({
 
     const updateResponse = await updateComment(comment, "dashboard");
     if (updateResponse.ok) {
-      mutate();
+      mutate(`/api/dashboard/comments?name=${name}`);
       setSnackbar({
         ...snackbar,
         open: true,

@@ -36,7 +36,7 @@ import theme from "@utils/theme";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import URISanity from "urisanity";
 
 // taken directly from material ui tabs example
@@ -77,6 +77,7 @@ export default function Dashboard() {
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { mutate } = useSWRConfig();
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -96,9 +97,16 @@ export default function Dashboard() {
   const [dialogItem, setDialogItem] = useState("");
   const [error, setError] = useState({ website: false, socials: false });
 
-  const { data: results, mutate } = useSWR(
+  const {
+    data: results,
+    isLoading,
+    error: resultError,
+  } = useSWR(
     user && user.status === "authenticated" ? fetchApi : null,
-    fetcher
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
   const [profile, setProfile] = useState({
@@ -159,7 +167,7 @@ export default function Dashboard() {
     const notifyResponse = await updateNotification(notify);
 
     if (notifyResponse.ok) {
-      mutate();
+      mutate(fetchApi);
     }
     if (!notifyResponse.ok) {
       setSnackbar({
@@ -211,7 +219,7 @@ export default function Dashboard() {
       const profileUpdate = await updateUser(value, "dashboard");
 
       if (profileUpdate.ok) {
-        mutate();
+        mutate(fetchApi);
         setSnackbar({
           ...snackbar,
           open: true,
@@ -252,7 +260,7 @@ export default function Dashboard() {
       const emailUpdate = await updateUser(value, "dashboard");
 
       if (emailUpdate.ok) {
-        mutate();
+        mutate(fetchApi);
         setSnackbar({
           ...snackbar,
           open: true,
@@ -412,7 +420,7 @@ export default function Dashboard() {
         </AppBar>
 
         <TabPanel value={tabValue} index={0}>
-          {!results ? (
+          {isLoading ? (
             <CircularProgress
               color="secondary"
               size={100}
@@ -425,208 +433,273 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h5" gutterBottom>
-                  Public Profile: optional
-                </Typography>
-                {results.bio == profile.bio &&
-                results.website == profile.website &&
-                results.socials == profile.socials ? (
-                  <Button variant="contained" color="secondary" disabled>
-                    Save Changes
-                  </Button>
-                ) : (
+              {resultError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
                   <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleProfileSubmit()}
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(fetchApi)}
                   >
-                    Save Changes
+                    Error Loading. Retry
                   </Button>
-                )}
-              </div>
+                </div>
+              ) : (
+                <>
+                  {results && (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography variant="h5" gutterBottom>
+                          Public Profile: optional
+                        </Typography>
+                        {results.bio == profile.bio &&
+                        results.website == profile.website &&
+                        results.socials == profile.socials ? (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            disabled
+                          >
+                            Save Changes
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => handleProfileSubmit()}
+                          >
+                            Save Changes
+                          </Button>
+                        )}
+                      </div>
 
-              <Typography variant="body1" gutterBottom>
-                Approved: {results.approved}
-              </Typography>
-              <FormControl
-                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-              >
-                <InputLabel htmlFor="bio" shrink>
-                  <b>Bio:</b>
-                </InputLabel>
+                      <Typography variant="body1" gutterBottom>
+                        Approved: {results.approved}
+                      </Typography>
+                      <FormControl
+                        sx={{
+                          display: "flex",
+                          flexGrow: 1,
+                          margin: "10px 0 10px 0",
+                        }}
+                      >
+                        <InputLabel htmlFor="bio" shrink>
+                          <b>Bio:</b>
+                        </InputLabel>
 
-                <TextBox
-                  defaultValue={results.bio}
-                  placeHolder="Tell us about yourself..."
-                  id="bio"
-                  autoFocus={false}
-                  handleChange={handleProfileChange}
-                  multiline={true}
-                  inputProps={{ type: "text", maxLength: 5000 }}
-                />
-              </FormControl>
-              <FormControl
-                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-                error={error.website}
-              >
-                <InputLabel htmlFor="website" shrink>
-                  <b>Personal Website:</b>
-                </InputLabel>
+                        <TextBox
+                          defaultValue={results.bio}
+                          placeHolder="Tell us about yourself..."
+                          id="bio"
+                          autoFocus={false}
+                          handleChange={handleProfileChange}
+                          multiline={true}
+                          inputProps={{ type: "text", maxLength: 5000 }}
+                        />
+                      </FormControl>
+                      <FormControl
+                        sx={{
+                          display: "flex",
+                          flexGrow: 1,
+                          margin: "10px 0 10px 0",
+                        }}
+                        error={error.website}
+                      >
+                        <InputLabel htmlFor="website" shrink>
+                          <b>Personal Website:</b>
+                        </InputLabel>
 
-                <TextBox
-                  defaultValue={results.website}
-                  placeHolder="Share your personal website (example.com)"
-                  id="website"
-                  autoFocus={false}
-                  handleChange={handleProfileChange}
-                  multiline={false}
-                  inputProps={{ type: "url", maxLength: 100 }}
-                  error={error.website}
-                />
-                <FormHelperText sx={{ color: theme.palette.text.primary }}>
-                  {error.website ? "Invalid URL" : <></>}
-                </FormHelperText>
-              </FormControl>
-              <FormControl
-                sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-                error={error.socials}
-              >
-                <InputLabel htmlFor="socials" shrink>
-                  <b>Socials:</b>
-                </InputLabel>
-                <Autocomplete
-                  sx={{
-                    "& .MuiAutocomplete-inputRoot": {
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha("#94c9ff", 0.8),
-                      },
-                      "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha("#94c9ff", 0.8),
-                      },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#94c9ff",
-                      },
-                      "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha("#94c9ff", 0.3),
-                      },
-                      "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: alpha("#94c9ff", 0.3),
-                      },
-                      "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#e57373",
-                      },
-                      "&.Mui-error .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#e57373",
-                      },
-                    },
-                  }}
-                  autoHighlight
-                  disabled={
-                    profile.socials && profile.socials.length > 2 ? true : false
-                  }
-                  disableClearable={true}
-                  value={[]}
-                  onChange={(event, newValue) => {
-                    if (
-                      URISanity.vet(newValue.inputValue, {
-                        allowWebTransportURI: true,
-                      }) === "about:blank"
-                    ) {
-                      setError({ website: error.website, socials: true });
-                    } else {
-                      setError({ website: error.website, socials: false });
-                      setProfile((profile) => ({
-                        ...profile,
-                        socials: [...profile.socials, newValue.inputValue],
-                      }));
-                    }
-                  }}
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
+                        <TextBox
+                          defaultValue={results.website}
+                          placeHolder="Share your personal website (example.com)"
+                          id="website"
+                          autoFocus={false}
+                          handleChange={handleProfileChange}
+                          multiline={false}
+                          inputProps={{ type: "url", maxLength: 100 }}
+                          error={error.website}
+                        />
+                        <FormHelperText
+                          sx={{ color: theme.palette.text.primary }}
+                        >
+                          {error.website ? "Invalid URL" : <></>}
+                        </FormHelperText>
+                      </FormControl>
+                      <FormControl
+                        sx={{
+                          display: "flex",
+                          flexGrow: 1,
+                          margin: "10px 0 10px 0",
+                        }}
+                        error={error.socials}
+                      >
+                        <InputLabel htmlFor="socials" shrink>
+                          <b>Socials:</b>
+                        </InputLabel>
+                        <Autocomplete
+                          sx={{
+                            "& .MuiAutocomplete-inputRoot": {
+                              "& .MuiOutlinedInput-notchedOutline": {
+                                borderColor: alpha("#94c9ff", 0.8),
+                              },
+                              "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: alpha("#94c9ff", 0.8),
+                              },
+                              "&.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: "#94c9ff",
+                                },
+                              "&.Mui-disabled .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: alpha("#94c9ff", 0.3),
+                                },
+                              "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: alpha("#94c9ff", 0.3),
+                                },
+                              "&.Mui-error:hover .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: "#e57373",
+                                },
+                              "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#e57373",
+                              },
+                            },
+                          }}
+                          autoHighlight
+                          disabled={
+                            profile.socials && profile.socials.length > 2
+                              ? true
+                              : false
+                          }
+                          disableClearable={true}
+                          value={[]}
+                          onChange={(event, newValue) => {
+                            if (
+                              URISanity.vet(newValue.inputValue, {
+                                allowWebTransportURI: true,
+                              }) === "about:blank"
+                            ) {
+                              setError({
+                                website: error.website,
+                                socials: true,
+                              });
+                            } else {
+                              setError({
+                                website: error.website,
+                                socials: false,
+                              });
+                              setProfile((profile) => ({
+                                ...profile,
+                                socials: [
+                                  ...profile.socials,
+                                  newValue.inputValue,
+                                ],
+                              }));
+                            }
+                          }}
+                          filterOptions={(options, params) => {
+                            const filtered = filter(options, params);
 
-                    // Suggest the creation of a new value
-                    if (params.inputValue !== "") {
-                      filtered.push({
-                        inputValue: params.inputValue,
-                        title: `Add "${params.inputValue}"`,
-                      });
-                    }
+                            // Suggest the creation of a new value
+                            if (params.inputValue !== "") {
+                              filtered.push({
+                                inputValue: params.inputValue,
+                                title: `Add "${params.inputValue}"`,
+                              });
+                            }
 
-                    return filtered;
-                  }}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="socials-auto"
-                  name="socials"
-                  options={[]}
-                  renderOption={(props, option) => (
-                    <li {...props}>{option.title}</li>
-                  )}
-                  getOptionLabel={(option) => option.title || ""}
-                  freeSolo
-                  filterSelectedOptions={false}
-                  renderInput={(params) => {
-                    // ...params is causing error
-                    // console.log(params);
-                    return (
-                      <>
-                        <TextField
-                          {...params}
-                          id="socials"
-                          placeholder="example.com"
-                          variant="outlined"
-                          fullWidth
-                          InputLabelProps={{ shrink: true }}
-                          error={error.socials}
-                          ref={params.InputProps.ref}
-                          inputProps={{
-                            ...params.inputProps,
-                            type: "url",
-                            maxLength: 100,
+                            return filtered;
+                          }}
+                          selectOnFocus
+                          clearOnBlur
+                          handleHomeEndKeys
+                          id="socials-auto"
+                          name="socials"
+                          options={[]}
+                          renderOption={(props, option) => (
+                            <li {...props}>{option.title}</li>
+                          )}
+                          getOptionLabel={(option) => option.title || ""}
+                          freeSolo
+                          filterSelectedOptions={false}
+                          renderInput={(params) => {
+                            // ...params is causing error
+                            // console.log(params);
+                            return (
+                              <>
+                                <TextField
+                                  {...params}
+                                  id="socials"
+                                  placeholder="example.com"
+                                  variant="outlined"
+                                  fullWidth
+                                  InputLabelProps={{ shrink: true }}
+                                  error={error.socials}
+                                  ref={params.InputProps.ref}
+                                  inputProps={{
+                                    ...params.inputProps,
+                                    type: "url",
+                                    maxLength: 100,
+                                  }}
+                                />
+                              </>
+                            );
                           }}
                         />
-                      </>
-                    );
-                  }}
-                />
-                <FormHelperText sx={{ color: theme.palette.text.primary }}>
-                  {error.socials
-                    ? "Invalid URL"
-                    : "Add social media links (3 max)"}
-                </FormHelperText>
-              </FormControl>
-              <div>
-                {profile.socials &&
-                  profile.socials.map((social) => (
-                    <Chip
-                      label={social}
-                      variant="outlined"
-                      sx={{
-                        borderColor: theme.palette.secondary.main,
-                        borderWidth: 2,
-                        color: theme.palette.text.primary,
-                        height: 40,
-                        margin: "0px 5px 10px 5px",
+                        <FormHelperText
+                          sx={{ color: theme.palette.text.primary }}
+                        >
+                          {error.socials
+                            ? "Invalid URL"
+                            : "Add social media links (3 max)"}
+                        </FormHelperText>
+                      </FormControl>
+                      <div>
+                        {profile.socials &&
+                          profile.socials.map((social) => (
+                            <Chip
+                              label={social}
+                              variant="outlined"
+                              sx={{
+                                borderColor: theme.palette.secondary.main,
+                                borderWidth: 2,
+                                color: theme.palette.text.primary,
+                                height: 40,
+                                margin: "0px 5px 10px 5px",
 
-                        "& .MuiChip-deleteIcon": {
-                          WebkitTapHighlightColor: "transparent",
-                          color: theme.palette.secondary.main,
-                          fontSize: 22,
-                          cursor: "pointer",
-                          margin: "0 5px 0 -6px",
-                          "&:hover": {
-                            color: alpha(theme.palette.secondary.main, 0.7),
-                          },
-                        },
-                      }}
-                      onDelete={() => handleRemoveChip(profile.socials, social)}
-                      key={social}
-                    ></Chip>
-                  ))}
-              </div>
-              {/* <Typography variant="h5" gutterBottom>
+                                "& .MuiChip-deleteIcon": {
+                                  WebkitTapHighlightColor: "transparent",
+                                  color: theme.palette.secondary.main,
+                                  fontSize: 22,
+                                  cursor: "pointer",
+                                  margin: "0 5px 0 -6px",
+                                  "&:hover": {
+                                    color: alpha(
+                                      theme.palette.secondary.main,
+                                      0.7
+                                    ),
+                                  },
+                                },
+                              }}
+                              onDelete={() =>
+                                handleRemoveChip(profile.socials, social)
+                              }
+                              key={social}
+                            ></Chip>
+                          ))}
+                      </div>
+                      {/* <Typography variant="h5" gutterBottom>
                 Private Settings:
               </Typography>
               <div style={{ display: "flex" }}>
@@ -666,6 +739,10 @@ export default function Dashboard() {
                   Update Email
                 </Button>
               </div> */}
+                    </>
+                  )}
+                </>
+              )}
             </>
           )}
         </TabPanel>
@@ -677,7 +754,7 @@ export default function Dashboard() {
             nav={false}
             isTab={false}
           />
-          {!results ? (
+          {isLoading ? (
             <CircularProgress
               color="secondary"
               size={100}
@@ -690,100 +767,126 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              {results.length > 0 && (
-                <List>
-                  {results.map((result) => {
-                    return (
-                      <ListItem
-                        key={result._id}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "start",
-                          textTransform: "none",
-                          border: `1px solid ${alpha(
-                            theme.palette.secondary.main,
-                            0.5
-                          )}`,
-                          margin: "20px auto",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        <div style={{ flex: "auto", marginRight: "20px" }}>
-                          <Typography
-                            gutterBottom
-                            color="textPrimary"
-                            align="left"
-                            variant="body2"
-                          >
-                            Approved: {result.approved}
-                          </Typography>
+              {resultError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(fetchApi)}
+                  >
+                    Error Loading. Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {results && (
+                    <>
+                      {results.length > 0 && (
+                        <List>
+                          {results.map((result) => {
+                            return (
+                              <ListItem
+                                key={result._id}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  textTransform: "none",
+                                  border: `1px solid ${alpha(
+                                    theme.palette.secondary.main,
+                                    0.5
+                                  )}`,
+                                  margin: "20px auto",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                <div
+                                  style={{ flex: "auto", marginRight: "20px" }}
+                                >
+                                  <Typography
+                                    gutterBottom
+                                    color="textPrimary"
+                                    align="left"
+                                    variant="body2"
+                                  >
+                                    Approved: {result.approved}
+                                  </Typography>
 
-                          <Typography
-                            gutterBottom
-                            variant="h5"
-                            color="textPrimary"
-                            align="left"
-                          >
-                            {result.title}
-                          </Typography>
-                          <Typography
-                            gutterBottom
-                            color="textPrimary"
-                            align="left"
-                          >
-                            {result.description}
-                          </Typography>
-                        </div>
-                        <div>
-                          <Typography
-                            variant="h6"
-                            color="secondary"
-                            align="right"
-                          >
-                            {result.count}
-                          </Typography>
-                        </div>
-                        <div
-                          style={{
-                            display: "grid",
-                            margin: "auto 0px auto 20px",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            sx={{
-                              margin: "4px 0px",
-                              minWidth: "fit-content",
-                              justifyContent: "start",
-                            }}
-                            startIcon={<EditIcon />}
-                            size="small"
-                            href={`/dashboard/posts/${result._id}`}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            sx={{
-                              margin: "4px 0px",
-                              minWidth: "fit-content",
-                              justifyContent: "start",
-                            }}
-                            startIcon={<DeleteIcon />}
-                            size="small"
-                            onClick={() =>
-                              handleOpenDialog("delete", "Post", result)
-                            }
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </ListItem>
-                    );
-                  })}
-                </List>
+                                  <Typography
+                                    gutterBottom
+                                    variant="h5"
+                                    color="textPrimary"
+                                    align="left"
+                                  >
+                                    {result.title}
+                                  </Typography>
+                                  <Typography
+                                    gutterBottom
+                                    color="textPrimary"
+                                    align="left"
+                                  >
+                                    {result.description}
+                                  </Typography>
+                                </div>
+                                <div>
+                                  <Typography
+                                    variant="h6"
+                                    color="secondary"
+                                    align="right"
+                                  >
+                                    {result.count}
+                                  </Typography>
+                                </div>
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    margin: "auto 0px auto 20px",
+                                  }}
+                                >
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{
+                                      margin: "4px 0px",
+                                      minWidth: "fit-content",
+                                      justifyContent: "start",
+                                    }}
+                                    startIcon={<EditIcon />}
+                                    size="small"
+                                    href={`/dashboard/posts/${result._id}`}
+                                  >
+                                    Edit
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{
+                                      margin: "4px 0px",
+                                      minWidth: "fit-content",
+                                      justifyContent: "start",
+                                    }}
+                                    startIcon={<DeleteIcon />}
+                                    size="small"
+                                    onClick={() =>
+                                      handleOpenDialog("delete", "Post", result)
+                                    }
+                                  >
+                                    Delete
+                                  </Button>
+                                </div>
+                              </ListItem>
+                            );
+                          })}
+                        </List>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </>
           )}
@@ -796,7 +899,7 @@ export default function Dashboard() {
             nav={false}
             isTab={false}
           />
-          {!results ? (
+          {isLoading ? (
             <CircularProgress
               color="secondary"
               size={100}
@@ -809,104 +912,130 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              {results.length > 0 && (
-                <List>
-                  {results.map((result) => {
-                    return (
-                      <ListItem
-                        key={result._id}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "start",
-                          textTransform: "none",
-                          border: `1px solid ${alpha(
-                            theme.palette.secondary.main,
-                            0.5
-                          )}`,
-                          margin: "20px auto",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        <div style={{ flex: "auto", marginRight: "20px" }}>
-                          <Typography
-                            gutterBottom
-                            variant="h5"
-                            color="textPrimary"
-                            align="left"
-                          >
-                            {result.title}
-                          </Typography>
-                          <Typography
-                            gutterBottom
-                            color="textPrimary"
-                            align="left"
-                          >
-                            {result.description}
-                          </Typography>
-                          <Typography
-                            gutterBottom
-                            color="secondary"
-                            align="left"
-                          >
-                            {result.author}
-                          </Typography>
-                        </div>
-                        <div>
-                          <Typography
-                            variant="h6"
-                            color="secondary"
-                            align="right"
-                          >
-                            {result.count}
-                          </Typography>
-                        </div>
-                        <div
-                          style={{
-                            display: "grid",
-                            margin: "auto 0px auto 20px",
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            sx={{
-                              margin: "4px 0px",
-                              minWidth: "fit-content",
-                              justifyContent: "start",
-                            }}
-                            startIcon={<EditIcon />}
-                            size="small"
-                            href={`/dashboard/posts/${result._id}`}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            sx={{
-                              margin: "4px 0px",
-                              minWidth: "fit-content",
-                              justifyContent: "start",
-                            }}
-                            startIcon={<DeleteIcon />}
-                            size="small"
-                            onClick={() =>
-                              handleOpenDialog("delete", "Post", result)
-                            }
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </ListItem>
-                    );
-                  })}
-                </List>
+              {resultError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(fetchApi)}
+                  >
+                    Error Loading. Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {results && (
+                    <>
+                      {results.length > 0 && (
+                        <List>
+                          {results.map((result) => {
+                            return (
+                              <ListItem
+                                key={result._id}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  textTransform: "none",
+                                  border: `1px solid ${alpha(
+                                    theme.palette.secondary.main,
+                                    0.5
+                                  )}`,
+                                  margin: "20px auto",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                <div
+                                  style={{ flex: "auto", marginRight: "20px" }}
+                                >
+                                  <Typography
+                                    gutterBottom
+                                    variant="h5"
+                                    color="textPrimary"
+                                    align="left"
+                                  >
+                                    {result.title}
+                                  </Typography>
+                                  <Typography
+                                    gutterBottom
+                                    color="textPrimary"
+                                    align="left"
+                                  >
+                                    {result.description}
+                                  </Typography>
+                                  <Typography
+                                    gutterBottom
+                                    color="secondary"
+                                    align="left"
+                                  >
+                                    {result.author}
+                                  </Typography>
+                                </div>
+                                <div>
+                                  <Typography
+                                    variant="h6"
+                                    color="secondary"
+                                    align="right"
+                                  >
+                                    {result.count}
+                                  </Typography>
+                                </div>
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    margin: "auto 0px auto 20px",
+                                  }}
+                                >
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{
+                                      margin: "4px 0px",
+                                      minWidth: "fit-content",
+                                      justifyContent: "start",
+                                    }}
+                                    startIcon={<EditIcon />}
+                                    size="small"
+                                    href={`/dashboard/posts/${result._id}`}
+                                  >
+                                    Edit
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    sx={{
+                                      margin: "4px 0px",
+                                      minWidth: "fit-content",
+                                      justifyContent: "start",
+                                    }}
+                                    startIcon={<DeleteIcon />}
+                                    size="small"
+                                    onClick={() =>
+                                      handleOpenDialog("delete", "Post", result)
+                                    }
+                                  >
+                                    Delete
+                                  </Button>
+                                </div>
+                              </ListItem>
+                            );
+                          })}
+                        </List>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </>
           )}
         </TabPanel>
         <TabPanel value={tabValue} index={3}>
-          {!results ? (
+          {isLoading ? (
             <CircularProgress
               color="secondary"
               size={100}
@@ -919,44 +1048,72 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              {results.length > 0 && (
-                <List>
-                  {results.map((result) => {
-                    return (
-                      <ListItem
-                        key={result._id}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "start",
-                          textTransform: "none",
-                          border: `1px solid ${alpha(
-                            theme.palette.secondary.main,
-                            0.5
-                          )}`,
-                          margin: "20px auto",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        <DashboardComment
-                          result={result}
-                          handleDeleteOpen={() =>
-                            handleOpenDialog("delete", "Comment", result)
-                          }
-                          snackbar={snackbar}
-                          setSnackbar={setSnackbar}
-                          mutate={mutate}
-                          name={user && user.name}
-                        />
-                      </ListItem>
-                    );
-                  })}
-                </List>
+              {resultError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(fetchApi)}
+                  >
+                    Error Loading. Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {results && (
+                    <>
+                      {results.length > 0 && (
+                        <List>
+                          {results.map((result) => {
+                            return (
+                              <ListItem
+                                key={result._id}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  textTransform: "none",
+                                  border: `1px solid ${alpha(
+                                    theme.palette.secondary.main,
+                                    0.5
+                                  )}`,
+                                  margin: "20px auto",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                <DashboardComment
+                                  result={result}
+                                  handleDeleteOpen={() =>
+                                    handleOpenDialog(
+                                      "delete",
+                                      "Comment",
+                                      result
+                                    )
+                                  }
+                                  snackbar={snackbar}
+                                  setSnackbar={setSnackbar}
+                                  mutate={mutate}
+                                  name={user && user.name}
+                                />
+                              </ListItem>
+                            );
+                          })}
+                        </List>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </>
           )}
         </TabPanel>
         <TabPanel value={tabValue} index={4}>
-          {!results ? (
+          {isLoading ? (
             <CircularProgress
               color="secondary"
               size={100}
@@ -969,71 +1126,99 @@ export default function Dashboard() {
             />
           ) : (
             <>
-              {results.length > 0 && (
-                <List>
-                  {results.map((result) => {
-                    result.date = new Date(result.date);
-                    return (
-                      <ListItem
-                        key={result._id}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "start",
-                          textTransform: "none",
-                          border: `1px solid ${alpha(
-                            theme.palette.secondary.main,
-                            0.5
-                          )}`,
-                          margin: "20px auto",
-                          borderRadius: "10px",
-                        }}
-                      >
-                        <div style={{ flex: "auto", marginRight: "20px" }}>
-                          <Typography
-                            gutterBottom
-                            color="textPrimary"
-                            align="left"
-                            variant="body2"
-                          >
-                            {isMobile
-                              ? result.date.toLocaleDateString()
-                              : result.date.toDateString()}
-                          </Typography>
-                          <Typography
-                            variant="h6"
-                            align="left"
-                            color="textPrimary"
-                          >
-                            {result.text}
-                          </Typography>
-                          {result.add_info && (
-                            <Typography
-                              variant="body1"
-                              align="left"
-                              color="textPrimary"
-                            >
-                              additional info: {result.add_info}
-                            </Typography>
-                          )}
-                        </div>
+              {resultError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(fetchApi)}
+                  >
+                    Error Loading. Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {results && (
+                    <>
+                      {results.length > 0 && (
+                        <List>
+                          {results.map((result) => {
+                            result.date = new Date(result.date);
+                            return (
+                              <ListItem
+                                key={result._id}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  textTransform: "none",
+                                  border: `1px solid ${alpha(
+                                    theme.palette.secondary.main,
+                                    0.5
+                                  )}`,
+                                  margin: "20px auto",
+                                  borderRadius: "10px",
+                                }}
+                              >
+                                <div
+                                  style={{ flex: "auto", marginRight: "20px" }}
+                                >
+                                  <Typography
+                                    gutterBottom
+                                    color="textPrimary"
+                                    align="left"
+                                    variant="body2"
+                                  >
+                                    {isMobile
+                                      ? result.date.toLocaleDateString()
+                                      : result.date.toDateString()}
+                                  </Typography>
+                                  <Typography
+                                    variant="h6"
+                                    align="left"
+                                    color="textPrimary"
+                                  >
+                                    {result.text}
+                                  </Typography>
+                                  {result.add_info && (
+                                    <Typography
+                                      variant="body1"
+                                      align="left"
+                                      color="textPrimary"
+                                    >
+                                      additional info: {result.add_info}
+                                    </Typography>
+                                  )}
+                                </div>
 
-                        <div
-                          style={{
-                            display: "grid",
-                            margin: "auto 0px auto 20px",
-                          }}
-                        >
-                          <IconButton
-                            onClick={() => handleUpdateNotify(result._id)}
-                            size="large"
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        </div>
-                      </ListItem>
-                    );
-                  })}
-                </List>
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    margin: "auto 0px auto 20px",
+                                  }}
+                                >
+                                  <IconButton
+                                    onClick={() =>
+                                      handleUpdateNotify(result._id)
+                                    }
+                                    size="large"
+                                  >
+                                    <CloseIcon />
+                                  </IconButton>
+                                </div>
+                              </ListItem>
+                            );
+                          })}
+                        </List>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </>
           )}
@@ -1051,6 +1236,7 @@ export default function Dashboard() {
           setSnackbar={setSnackbar}
           mutate={mutate}
           name={user && user.name}
+          fetchApi={fetchApi}
         />
       )}
     </Container>

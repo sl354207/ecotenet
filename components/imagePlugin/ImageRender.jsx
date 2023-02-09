@@ -12,13 +12,6 @@ const ImageRender = ({ data, preview }) => {
       // console.log("true blob");
       return true;
     } else {
-      // console.log(
-      //   /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-      //     string
-      //   )
-      // );
-      // const regex =
-      //   /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/i;
       const regex =
         /^http[^\?]*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)(\?(.*))?$/gim;
       return regex.test(string);

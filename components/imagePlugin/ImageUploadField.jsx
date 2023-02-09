@@ -444,7 +444,9 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.hasError ? "error" : "warning"}
           fullWidth
-          sx={{ marginRight: "5px" }}
+          sx={{
+            marginRight: "5px",
+          }}
           disabled={
             state.hasError ||
             state.isUploading ||

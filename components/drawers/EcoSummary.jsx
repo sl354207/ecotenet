@@ -4,10 +4,11 @@ import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   let wikiUrl;
+  const { mutate } = useSWRConfig();
 
   if (ecoFilter && !wiki) {
     const res = fetch(`/api/ecoregions/${ecoFilter.unique_id}`, {
@@ -44,7 +45,13 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
     }
   }
 
-  const { data: results } = useSWR(wiki ? wikiUrl : null, fetcher);
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR(wiki ? wikiUrl : null, fetcher, {
+    shouldRetryOnError: false,
+  });
 
   const options = {
     replace: (domNode) => {
@@ -215,53 +222,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
             </Typography>
           ) : (
             <>
-              {results ? (
-                <>
-                  <Typography
-                    variant={isMobile ? "h6" : "h5"}
-                    sx={{ marginTop: "10px" }}
-                  >
-                    Source:{" "}
-                    <Link
-                      href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
-                        " ",
-                        "_"
-                      )}?redirect=true`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      underline="hover"
-                    >
-                      Wikipedia
-                    </Link>
-                  </Typography>
-                  {parse(
-                    DOMPurify.sanitize(
-                      results && results.lead.sections[0].text
-                    ),
-                    options
-                  )}
-                  {results &&
-                    results.remaining.sections.map((section, index) => {
-                      if (section.anchor == "Gallery") {
-                        return <></>;
-                      } else if (section.toclevel == 2) {
-                        return (
-                          <>
-                            <h2 key={index}>{section.line}</h2>
-                            {parse(DOMPurify.sanitize(section.text), options)}
-                          </>
-                        );
-                      } else {
-                        return (
-                          <>
-                            <h1 key={index}>{section.line}</h1>
-                            {parse(DOMPurify.sanitize(section.text), options)}
-                          </>
-                        );
-                      }
-                    })}
-                </>
-              ) : (
+              {isLoading ? (
                 <CircularProgress
                   color="secondary"
                   size={50}
@@ -272,6 +233,82 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                     justifySelf: "center",
                   }}
                 />
+              ) : (
+                <>
+                  {error ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => mutate(wikiUrl)}
+                      >
+                        Error Loading. Retry
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {results && (
+                        <>
+                          <Typography
+                            variant={isMobile ? "h6" : "h5"}
+                            sx={{ marginTop: "10px" }}
+                          >
+                            Source:{" "}
+                            <Link
+                              href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
+                                " ",
+                                "_"
+                              )}?redirect=true`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              underline="hover"
+                            >
+                              Wikipedia
+                            </Link>
+                          </Typography>
+                          {parse(
+                            DOMPurify.sanitize(
+                              results && results.lead.sections[0].text
+                            ),
+                            options
+                          )}
+                          {results &&
+                            results.remaining.sections.map((section, index) => {
+                              if (section.anchor == "Gallery") {
+                                return <></>;
+                              } else if (section.toclevel == 2) {
+                                return (
+                                  <>
+                                    <h2 key={index}>{section.line}</h2>
+                                    {parse(
+                                      DOMPurify.sanitize(section.text),
+                                      options
+                                    )}
+                                  </>
+                                );
+                              } else {
+                                return (
+                                  <>
+                                    <h1 key={index}>{section.line}</h1>
+                                    {parse(
+                                      DOMPurify.sanitize(section.text),
+                                      options
+                                    )}
+                                  </>
+                                );
+                              }
+                            })}
+                        </>
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </>
           )}

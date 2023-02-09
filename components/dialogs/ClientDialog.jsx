@@ -88,7 +88,7 @@ const ClientDialog = ({
         severity: "success",
         message: `${contentType} submitted successfully`,
       });
-      mutate();
+      mutate(`/api/votes/${post_id}`);
     } else if (updateResponse.status == 406) {
       setSnackbar({
         ...snackbar,

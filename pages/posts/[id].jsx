@@ -39,7 +39,7 @@ import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
@@ -70,12 +70,23 @@ const post = ({ post }) => {
 
   const [loadComments, setLoadComments] = useState(false);
 
-  const { data: comments, error } = useSWR(
-    loadComments ? `/api/comments/${post._id}` : null,
-    fetcher
-  );
+  const { mutate } = useSWRConfig();
 
-  const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
+  const {
+    data: comments,
+    isLoading: commentLoading,
+    error: commentError,
+  } = useSWR(loadComments ? `/api/comments/${post._id}` : null, fetcher, {
+    shouldRetryOnError: false,
+  });
+
+  const {
+    data: votes,
+    isLoading: voteLoading,
+    error: voteError,
+  } = useSWR(`/api/votes/${post._id}`, fetcher, {
+    shouldRetryOnError: false,
+  });
 
   const reducer = (comments, toggle) => {
     if (toggle.type == "load") {
@@ -357,16 +368,40 @@ const post = ({ post }) => {
           </div>
           {!isMobile && (
             <>
-              {votes ? (
-                <Vote
-                  post_count={votes && votes.count}
-                  handleOpenDialog={handleOpenDialog}
-                  name={user && user.name}
-                  voters={votes && votes.voters}
-                />
-              ) : (
+              {voteLoading ? (
                 <CircularProgress size={19} color="secondary" />
-              )}{" "}
+              ) : (
+                <>
+                  {voteError ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => mutate(`/api/votes/${post._id}`)}
+                      >
+                        Error Loading. Retry
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {votes && (
+                        <Vote
+                          post_count={votes && votes.count}
+                          handleOpenDialog={handleOpenDialog}
+                          name={user && user.name}
+                          voters={votes && votes.voters}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </>
           )}
         </div>
@@ -380,15 +415,39 @@ const post = ({ post }) => {
                 marginBlock: "10px",
               }}
             >
-              {votes ? (
-                <Vote
-                  post_count={votes && votes.count}
-                  handleOpenDialog={handleOpenDialog}
-                  name={user && user.name}
-                  voters={votes && votes.voters}
-                />
-              ) : (
+              {voteLoading ? (
                 <CircularProgress size={19} color="secondary" />
+              ) : (
+                <>
+                  {voteError ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => mutate(`/api/votes/${post._id}`)}
+                      >
+                        Error Loading. Retry
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {votes && (
+                        <Vote
+                          post_count={votes && votes.count}
+                          handleOpenDialog={handleOpenDialog}
+                          name={user && user.name}
+                          voters={votes && votes.voters}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </div>
           </>
@@ -406,17 +465,42 @@ const post = ({ post }) => {
           Comments:
         </Typography>
         <div ref={ref}>
-          {!comments && !error && <Typography>loading...</Typography>}
-          {comments && (
-            <CommentList
-              comments={comments}
-              post_id={post._id}
-              handleOpenDialog={handleOpenDialog}
-              handleOpenFlag={handleOpenFlag}
-              showForm={showForm}
-              handleForm={toggleForm}
-              handleReply={handleReply}
-            />
+          {commentLoading ? (
+            <Typography>loading...</Typography>
+          ) : (
+            <>
+              {commentError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(`/api/comments/${post._id}`)}
+                  >
+                    Error Loading. Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {comments && (
+                    <CommentList
+                      comments={comments}
+                      post_id={post._id}
+                      handleOpenDialog={handleOpenDialog}
+                      handleOpenFlag={handleOpenFlag}
+                      showForm={showForm}
+                      handleForm={toggleForm}
+                      handleReply={handleReply}
+                    />
+                  )}
+                </>
+              )}
+            </>
           )}
         </div>
       </Container>

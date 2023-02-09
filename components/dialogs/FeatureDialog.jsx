@@ -2,6 +2,7 @@ import PostList from "@components/layouts/PostList";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   alpha,
+  Button,
   CircularProgress,
   Dialog,
   DialogContent,
@@ -15,18 +16,25 @@ import {
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 const FeatureDialog = ({ feature, setFeature }) => {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
   const handleCloseFeature = () => {
     setFeature(false);
   };
-  const { data: results } = useSWR("/api/features", fetcher);
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR("/api/features", fetcher, {
+    shouldRetryOnError: false,
+  });
 
   let list;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -40,13 +48,33 @@ const FeatureDialog = ({ feature, setFeature }) => {
       />
     );
   } else {
-    list = (
-      <PostList
-        posts={results}
-        featured={true}
-        handleClose={handleCloseFeature}
-      />
-    );
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate("/api/features")}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      list = (
+        <PostList
+          posts={results}
+          featured={true}
+          handleClose={handleCloseFeature}
+        />
+      );
+    }
   }
 
   return (

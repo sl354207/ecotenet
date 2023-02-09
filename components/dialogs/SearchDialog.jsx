@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   alpha,
   Autocomplete,
+  Button,
   CircularProgress,
   createFilterOptions,
   Dialog,
@@ -17,7 +18,7 @@ import {
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 const CustomPopper = function (props) {
   return (
@@ -31,23 +32,31 @@ const CustomPopper = function (props) {
 
 const SearchDialog = ({ search, setSearch, ecoFilter }) => {
   const [query, setQuery] = useState();
+  const { mutate } = useSWRConfig();
 
   const handleCloseSearch = () => {
     setSearch(false);
     setQuery(undefined);
   };
-  const { data: results } = useSWR(
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR(
     query
       ? `/api/search?q=${query.q}&filter=${query.filter}&eco=${
           ecoFilter && ecoFilter.unique_id
         }`
       : null,
-    fetcher
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
   let list;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -60,19 +69,58 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
         }}
       />
     );
-  } else if (Array.isArray(results) && results.length == 0) {
-    list = (
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        no results
-      </Typography>
-    );
-  } else if (results && results.length > 0 && results[0].title !== undefined) {
-    list = (
-      <PostList posts={results} search={true} handleClose={handleCloseSearch} />
-    );
   } else {
-    list = <SpeciesList results={results} handleClose={handleCloseSearch} />;
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() =>
+              mutate(
+                `/api/search?q=${query.q}&filter=${query.filter}&eco=${
+                  ecoFilter && ecoFilter.unique_id
+                }`
+              )
+            }
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(results) && results.length == 0) {
+        list = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else if (
+        results &&
+        results.length > 0 &&
+        results[0].title !== undefined
+      ) {
+        list = (
+          <PostList
+            posts={results}
+            search={true}
+            handleClose={handleCloseSearch}
+          />
+        );
+      } else {
+        list = (
+          <SpeciesList results={results} handleClose={handleCloseSearch} />
+        );
+      }
+    }
   }
+
   // set filter for autocomplete options
   const filter = createFilterOptions();
   // set tag options for autocomplete

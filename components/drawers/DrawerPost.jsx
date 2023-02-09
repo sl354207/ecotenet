@@ -33,7 +33,7 @@ import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
@@ -43,7 +43,14 @@ const DynamicClientDialog = dynamic(() =>
   import("@components/dialogs/ClientDialog")
 );
 const DrawerPost = ({ id }) => {
-  const { data: post } = useSWR(id ? `/api/posts/${id}` : null, fetcher);
+  const { mutate } = useSWRConfig();
+  const {
+    data: post,
+    isLoading: postLoading,
+    error: postError,
+  } = useSWR(id ? `/api/posts/${id}` : null, fetcher, {
+    shouldRetryOnError: false,
+  });
 
   const router = useRouter();
   const { user } = useUserContext();
@@ -61,12 +68,21 @@ const DrawerPost = ({ id }) => {
 
   const [loadComments, setLoadComments] = useState(false);
 
-  const { data: comments, error } = useSWR(
-    loadComments ? `/api/comments/${post._id}` : null,
-    fetcher
-  );
+  const {
+    data: comments,
+    isLoading: commentLoading,
+    error: commentError,
+  } = useSWR(loadComments ? `/api/comments/${post._id}` : null, fetcher, {
+    shouldRetryOnError: false,
+  });
 
-  const { data: votes, mutate } = useSWR(`/api/votes/${id}`, fetcher);
+  const {
+    data: votes,
+    isLoading: voteLoading,
+    error: voteError,
+  } = useSWR(`/api/votes/${id}`, fetcher, {
+    shouldRetryOnError: false,
+  });
 
   const reducer = (comments, toggle) => {
     if (toggle.type == "load") {
@@ -196,183 +212,7 @@ const DrawerPost = ({ id }) => {
 
   return (
     <>
-      {post ? (
-        <>
-          <Container sx={{ minHeight: "auto" }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ marginBlock: "15px" }}
-                href={`/posts/${post._id}`}
-              >
-                view full page
-              </Button>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    marginRight: "auto",
-                    visibility: "hidden",
-                    minWidth: "30px",
-                  }}
-                ></div>
-                <Typography
-                  variant="h4"
-                  align="center"
-                  sx={{ marginBottom: "5px" }}
-                >
-                  {post.title}
-                </Typography>
-                <div>
-                  <IconButton
-                    sx={{ marginLeft: 2 }}
-                    color="inherit"
-                    aria-label="flag"
-                    size="small"
-                    onClick={() => handleOpenFlag("post", post)}
-                  >
-                    <FlagIcon />
-                  </IconButton>
-                </div>
-              </div>
-            </div>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "start",
-              }}
-            >
-              <div style={{ display: "flex" }}>
-                <Typography align="center" variant="h6">
-                  <Link
-                    href={`/person/${post.name}`}
-                    color="secondary"
-                    underline="hover"
-                  >
-                    {post.name}
-                  </Link>
-                </Typography>
-                <Button
-                  href={`/tip?q=${post.name}`}
-                  color="secondary"
-                  variant="outlined"
-                  sx={{
-                    marginLeft: "10px",
-                    "& .MuiButton-startIcon": {
-                      marginRight: "0px",
-                    },
-                  }}
-                  size="small"
-                  startIcon={<AttachMoneyIcon />}
-                >
-                  tip
-                </Button>
-              </div>
-            </Box>
-            <Typography
-              sx={{
-                fontStyle: "italic",
-              }}
-              align="left"
-              variant="h6"
-            >
-              <>
-                {" "}
-                {post.updated && "Updated:"}{" "}
-                {new Date(post.date).toLocaleDateString()}
-              </>
-            </Typography>
-            <Typography variant="h6">
-              Category: {post.category.title} {" >> "}
-              {post.category.sub}
-            </Typography>
-            <Typography variant="h6">
-              Ecoregions:{" "}
-              {post.ecoregions.map((ecoregion) => (
-                <Link
-                  href={`/ecoregions/${ecoregion}`}
-                  color="secondary"
-                  underline="hover"
-                  key={ecoregion}
-                >
-                  Eco-{ecoregion},{" "}
-                </Link>
-              ))}
-            </Typography>
-            <Divider />
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              {votes ? (
-                <Vote
-                  post_count={votes && votes.count}
-                  handleOpenDialog={handleOpenDialog}
-                  name={user && user.name}
-                  voters={votes && votes.voters}
-                />
-              ) : (
-                <CircularProgress size={19} color="secondary" />
-              )}
-            </div>
-          </Container>
-          <div style={{ marginInline: "10px" }}>
-            <Editor cellPlugins={cellPlugins} value={post} readOnly />
-          </div>
-          <Container>
-            <Divider />
-
-            <Typography variant="h6" sx={{ marginTop: "20px" }}>
-              Comments:
-            </Typography>
-
-            <div ref={ref}>
-              {!comments && !error && <Typography>loading...</Typography>}
-              {comments && (
-                <CommentList
-                  comments={comments}
-                  post_id={post._id}
-                  handleOpenDialog={handleOpenDialog}
-                  handleOpenFlag={handleOpenFlag}
-                  showForm={showForm}
-                  handleForm={toggleForm}
-                  handleReply={handleReply}
-                  drawer={true}
-                />
-              )}
-            </div>
-          </Container>
-
-          {dialog && (
-            <DynamicClientDialog
-              contentType={action}
-              open={dialog}
-              handleClose={handleCloseDialog}
-              post_id={post._id}
-              result={item}
-              closeForm={closeForm}
-              name={user && user.name}
-              mutate={mutate}
-            />
-          )}
-
-          {flag && (
-            <DynamicFlag
-              open={flag}
-              handleClose={handleCloseFlag}
-              contentType={action}
-              result={item}
-              name={user && user.name}
-            />
-          )}
-        </>
-      ) : (
+      {postLoading ? (
         <CircularProgress
           color="secondary"
           size={50}
@@ -383,6 +223,259 @@ const DrawerPost = ({ id }) => {
             justifySelf: "center",
           }}
         />
+      ) : (
+        <>
+          {postError ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => mutate(`/api/posts/${id}`)}
+              >
+                Error Loading. Retry
+              </Button>
+            </div>
+          ) : (
+            <>
+              {post && (
+                <>
+                  <Container sx={{ minHeight: "auto" }}>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        sx={{ marginBlock: "15px" }}
+                        href={`/posts/${post._id}`}
+                      >
+                        view full page
+                      </Button>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            marginRight: "auto",
+                            visibility: "hidden",
+                            minWidth: "30px",
+                          }}
+                        ></div>
+                        <Typography
+                          variant="h4"
+                          align="center"
+                          sx={{ marginBottom: "5px" }}
+                        >
+                          {post.title}
+                        </Typography>
+                        <div>
+                          <IconButton
+                            sx={{ marginLeft: 2 }}
+                            color="inherit"
+                            aria-label="flag"
+                            size="small"
+                            onClick={() => handleOpenFlag("post", post)}
+                          >
+                            <FlagIcon />
+                          </IconButton>
+                        </div>
+                      </div>
+                    </div>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "start",
+                      }}
+                    >
+                      <div style={{ display: "flex" }}>
+                        <Typography align="center" variant="h6">
+                          <Link
+                            href={`/person/${post.name}`}
+                            color="secondary"
+                            underline="hover"
+                          >
+                            {post.name}
+                          </Link>
+                        </Typography>
+                        <Button
+                          href={`/tip?q=${post.name}`}
+                          color="secondary"
+                          variant="outlined"
+                          sx={{
+                            marginLeft: "10px",
+                            "& .MuiButton-startIcon": {
+                              marginRight: "0px",
+                            },
+                          }}
+                          size="small"
+                          startIcon={<AttachMoneyIcon />}
+                        >
+                          tip
+                        </Button>
+                      </div>
+                    </Box>
+                    <Typography
+                      sx={{
+                        fontStyle: "italic",
+                      }}
+                      align="left"
+                      variant="h6"
+                    >
+                      <>
+                        {" "}
+                        {post.updated && "Updated:"}{" "}
+                        {new Date(post.date).toLocaleDateString()}
+                      </>
+                    </Typography>
+                    <Typography variant="h6">
+                      Category: {post.category.title} {" >> "}
+                      {post.category.sub}
+                    </Typography>
+                    <Typography variant="h6">
+                      Ecoregions:{" "}
+                      {post.ecoregions.map((ecoregion) => (
+                        <Link
+                          href={`/ecoregions/${ecoregion}`}
+                          color="secondary"
+                          underline="hover"
+                          key={ecoregion}
+                        >
+                          Eco-{ecoregion},{" "}
+                        </Link>
+                      ))}
+                    </Typography>
+                    <Divider />
+
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "20px",
+                      }}
+                    >
+                      {voteLoading ? (
+                        <CircularProgress size={19} color="secondary" />
+                      ) : (
+                        <>
+                          {voteError ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "20px",
+                              }}
+                            >
+                              <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() => mutate(`/api/votes/${id}`)}
+                              >
+                                Error Loading. Retry
+                              </Button>
+                            </div>
+                          ) : (
+                            <>
+                              {votes && (
+                                <Vote
+                                  post_count={votes && votes.count}
+                                  handleOpenDialog={handleOpenDialog}
+                                  name={user && user.name}
+                                  voters={votes && votes.voters}
+                                />
+                              )}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </Container>
+                  <div style={{ marginInline: "10px" }}>
+                    <Editor cellPlugins={cellPlugins} value={post} readOnly />
+                  </div>
+                  <Container>
+                    <Divider />
+
+                    <Typography variant="h6" sx={{ marginTop: "20px" }}>
+                      Comments:
+                    </Typography>
+
+                    <div ref={ref}>
+                      {commentLoading ? (
+                        <Typography>loading...</Typography>
+                      ) : (
+                        <>
+                          {commentError ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "20px",
+                              }}
+                            >
+                              <Button
+                                variant="outlined"
+                                color="error"
+                                onClick={() =>
+                                  mutate(`/api/comments/${post._id}`)
+                                }
+                              >
+                                Error Loading. Retry
+                              </Button>
+                            </div>
+                          ) : (
+                            <>
+                              {comments && (
+                                <CommentList
+                                  comments={comments}
+                                  post_id={post._id}
+                                  handleOpenDialog={handleOpenDialog}
+                                  handleOpenFlag={handleOpenFlag}
+                                  showForm={showForm}
+                                  handleForm={toggleForm}
+                                  handleReply={handleReply}
+                                  drawer={true}
+                                />
+                              )}
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </Container>
+
+                  {dialog && (
+                    <DynamicClientDialog
+                      contentType={action}
+                      open={dialog}
+                      handleClose={handleCloseDialog}
+                      post_id={post._id}
+                      result={item}
+                      closeForm={closeForm}
+                      name={user && user.name}
+                      mutate={mutate}
+                    />
+                  )}
+
+                  {flag && (
+                    <DynamicFlag
+                      open={flag}
+                      handleClose={handleCloseFlag}
+                      contentType={action}
+                      result={item}
+                      name={user && user.name}
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </>
       )}
     </>
   );
