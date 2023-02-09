@@ -84,66 +84,75 @@ const person = () => {
     } else {
       person = (
         <>
-          <Header title={results.name} />
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => handleOpenResolve()}
-          >
-            Resolve
-          </Button>
+          {results && (
+            <>
+              <Header title={results.name} />
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleOpenResolve()}
+              >
+                Resolve
+              </Button>
 
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ marginLeft: "4px" }}
-            onClick={() => handleOpenDialog("Deny", "Person", results)}
-          >
-            Deny
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ marginLeft: "4px", color: "#fc7ebf", borderColor: "#fc7ebf" }}
-            onClick={() => handleOpenDialog("Delete", "Person", results)}
-          >
-            Delete
-          </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ marginLeft: "4px" }}
+                onClick={() => handleOpenDialog("Deny", "Person", results)}
+              >
+                Deny
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{
+                  marginLeft: "4px",
+                  color: "#fc7ebf",
+                  borderColor: "#fc7ebf",
+                }}
+                onClick={() => handleOpenDialog("Delete", "Person", results)}
+              >
+                Delete
+              </Button>
 
-          <div style={{ margin: "16px" }}>
-            {results.bio !== "" && (
-              <>
-                <Typography gutterBottom>Bio:</Typography>
-                <Typography gutterBottom variant="body1">
-                  {results.bio}
-                </Typography>
-              </>
-            )}
-            {results.website !== "" && (
-              <Typography gutterBottom>
-                Personal Website:{" "}
-                <Link href={results.website} underline="hover">
-                  {results.website}
-                </Link>
-              </Typography>
-            )}
-            {Array.isArray(results.socials) && results.socials.length > 0 && (
-              <Typography sx={{ display: "grid" }} gutterBottom>
-                Socials:{" "}
-                {results.socials.map((social) => (
-                  <Link
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={social}
-                    underline="hover"
-                    key={social}
-                  >
-                    {social}
-                  </Link>
-                ))}
-              </Typography>
-            )}
-          </div>
+              <div style={{ margin: "16px" }}>
+                {results.bio !== "" && (
+                  <>
+                    <Typography gutterBottom>Bio:</Typography>
+                    <Typography gutterBottom variant="body1">
+                      {results.bio}
+                    </Typography>
+                  </>
+                )}
+                {results.website !== "" && (
+                  <Typography gutterBottom>
+                    Personal Website:{" "}
+                    <Link href={results.website} underline="hover">
+                      {results.website}
+                    </Link>
+                  </Typography>
+                )}
+                {Array.isArray(results.socials) &&
+                  results.socials.length > 0 && (
+                    <Typography sx={{ display: "grid" }} gutterBottom>
+                      Socials:{" "}
+                      {results.socials.map((social) => (
+                        <Link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={social}
+                          underline="hover"
+                          key={social}
+                        >
+                          {social}
+                        </Link>
+                      ))}
+                    </Typography>
+                  )}
+              </div>
+            </>
+          )}
         </>
       );
     }

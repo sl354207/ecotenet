@@ -125,166 +125,189 @@ const post = () => {
       date = new Date(post.date);
       list = (
         <>
-          {comment_query ? (
-            <Link
-              href="/admin/flags"
-              underline="hover"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <ArrowBackIcon fontSize="small" />
-              Flags
-            </Link>
-          ) : (
-            <Link
-              href="/admin/posts"
-              underline="hover"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "10px",
-              }}
-            >
-              <ArrowBackIcon fontSize="small" />
-              Posts
-            </Link>
-          )}
+          {post && (
+            <>
+              {comment_query ? (
+                <Link
+                  href="/admin/flags"
+                  underline="hover"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <ArrowBackIcon fontSize="small" />
+                  Flags
+                </Link>
+              ) : (
+                <Link
+                  href="/admin/posts"
+                  underline="hover"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <ArrowBackIcon fontSize="small" />
+                  Posts
+                </Link>
+              )}
 
-          <Container sx={{ backgroundColor: theme.palette.primary.main }}>
-            <Header title={post.title} />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div
-                style={{
-                  flexDirection: "column",
-                  maxWidth: "800px",
-                  flexGrow: 1,
-                  marginLeft: "20px",
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <Typography align="center" variant="h6">
-                    <Link href={`/admin/people/${post.name}`} underline="hover">
-                      {post.name}
-                    </Link>
-                  </Typography>
-                  <Typography
-                    sx={{ marginLeft: "20px", fontStyle: "italic" }}
-                    align="left"
-                    variant="h6"
+              <Container sx={{ backgroundColor: theme.palette.primary.main }}>
+                <Header title={post.title} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      flexDirection: "column",
+                      maxWidth: "800px",
+                      flexGrow: 1,
+                      marginLeft: "20px",
+                    }}
                   >
-                    {isMobile ? date.toLocaleDateString() : date.toDateString()}
-                  </Typography>
-                </div>
-                <Typography variant="h6">
-                  Ecoregions:{" "}
-                  {post.ecoregions.map((ecoregion) => (
-                    <Link
-                      href={`/ecoregions/${ecoregion}`}
-                      color="secondary"
-                      underline="hover"
-                      key={ecoregion}
+                    <div style={{ display: "flex" }}>
+                      <Typography align="center" variant="h6">
+                        <Link
+                          href={`/admin/people/${post.name}`}
+                          underline="hover"
+                        >
+                          {post.name}
+                        </Link>
+                      </Typography>
+                      <Typography
+                        sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                        align="left"
+                        variant="h6"
+                      >
+                        {isMobile
+                          ? date.toLocaleDateString()
+                          : date.toDateString()}
+                      </Typography>
+                    </div>
+                    <Typography variant="h6">
+                      Ecoregions:{" "}
+                      {post.ecoregions.map((ecoregion) => (
+                        <Link
+                          href={`/ecoregions/${ecoregion}`}
+                          color="secondary"
+                          underline="hover"
+                          key={ecoregion}
+                        >
+                          Eco-{ecoregion},{" "}
+                        </Link>
+                      ))}
+                    </Typography>
+                  </div>
+                  {!comment_query && (
+                    <div
+                      style={
+                        isMobile ? { display: "grid" } : { display: "flex" }
+                      }
                     >
-                      Eco-{ecoregion},{" "}
-                    </Link>
-                  ))}
-                </Typography>
-              </div>
-              {!comment_query && (
-                <div
-                  style={isMobile ? { display: "grid" } : { display: "flex" }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleOpenDialog("Approve", "Post", post)}
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={isMobile ? { marginTop: "4px" } : { marginLeft: "4px" }}
-                    onClick={() => handleOpenDialog("Deny", "Post", post)}
-                  >
-                    Deny
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={
-                      isMobile
-                        ? {
-                            marginTop: "4px",
-                            color: "#fc7ebf",
-                            borderColor: "#fc7ebf",
-                          }
-                        : {
-                            marginLeft: "4px",
-                            color: "#fc7ebf",
-                            borderColor: "#fc7ebf",
-                          }
-                    }
-                    onClick={() => handleOpenDialog("Delete", "Post", post)}
-                  >
-                    Delete
-                  </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() =>
+                          handleOpenDialog("Approve", "Post", post)
+                        }
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? { marginTop: "4px" }
+                            : { marginLeft: "4px" }
+                        }
+                        onClick={() => handleOpenDialog("Deny", "Post", post)}
+                      >
+                        Deny
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? {
+                                marginTop: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                            : {
+                                marginLeft: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                        }
+                        onClick={() => handleOpenDialog("Delete", "Post", post)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                  {comment_query == "flag" && (
+                    <div
+                      style={
+                        isMobile ? { display: "grid" } : { display: "flex" }
+                      }
+                    >
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => handleOpenResolve()}
+                      >
+                        Resolve
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? { marginTop: "4px" }
+                            : { marginLeft: "4px" }
+                        }
+                        onClick={() => handleOpenDialog("Deny", "Post", post)}
+                      >
+                        Deny
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? {
+                                marginTop: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                            : {
+                                marginLeft: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                        }
+                        onClick={() => handleOpenDialog("Delete", "Post", post)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
                 </div>
-              )}
-              {comment_query == "flag" && (
-                <div
-                  style={isMobile ? { display: "grid" } : { display: "flex" }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleOpenResolve()}
-                  >
-                    Resolve
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={isMobile ? { marginTop: "4px" } : { marginLeft: "4px" }}
-                    onClick={() => handleOpenDialog("Deny", "Post", post)}
-                  >
-                    Deny
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={
-                      isMobile
-                        ? {
-                            marginTop: "4px",
-                            color: "#fc7ebf",
-                            borderColor: "#fc7ebf",
-                          }
-                        : {
-                            marginLeft: "4px",
-                            color: "#fc7ebf",
-                            borderColor: "#fc7ebf",
-                          }
-                    }
-                    onClick={() => handleOpenDialog("Delete", "Post", post)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
-            </div>
-            <EditorLayout>
-              <Editor cellPlugins={cellPlugins} value={post} readOnly />
-            </EditorLayout>
-          </Container>
+                <EditorLayout>
+                  <Editor cellPlugins={cellPlugins} value={post} readOnly />
+                </EditorLayout>
+              </Container>
+            </>
+          )}
         </>
       );
     }
