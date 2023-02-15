@@ -387,6 +387,7 @@ const post = () => {
         name={flagee}
         ID={flag}
         mutate={mutate}
+        route="post"
       />
     </>
   );

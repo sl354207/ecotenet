@@ -14,10 +14,13 @@ import {
   Portal,
 } from "@mui/material";
 import { createNotification, updateFlag } from "@utils/apiHelpers";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
-const Resolve = ({ open, handleClose, name, ID, mutate }) => {
+const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
+
+  const router = useRouter();
 
   const [addInfo, setAddInfo] = useState("");
 
@@ -51,16 +54,17 @@ const Resolve = ({ open, handleClose, name, ID, mutate }) => {
         const notifyResponse = await createNotification(notify);
 
         if (notifyResponse.ok) {
-          // if (mutate) {
-          //   mutate();
-          // }
-
           setSnackbar({
             ...snackbar,
             open: true,
             severity: "success",
             message: `Flag resolved successfully`,
           });
+          if (route === "flag") {
+            mutate("/api/admin/flags");
+          } else {
+            router.push("/admin/flags");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -71,16 +75,17 @@ const Resolve = ({ open, handleClose, name, ID, mutate }) => {
           });
         }
       } else {
-        // if (mutate) {
-        //   mutate();
-        // }
-
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "success",
           message: `Flag resolved successfully`,
         });
+        if (route === "flag") {
+          mutate("/api/admin/flags");
+        } else {
+          router.push("/admin/flags");
+        }
       }
     }
     if (!flagResponse.ok) {

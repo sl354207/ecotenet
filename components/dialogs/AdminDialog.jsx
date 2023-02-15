@@ -29,6 +29,7 @@ import {
   updateUser,
 } from "@utils/apiHelpers";
 import theme from "@utils/theme";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
 const AdminDialog = ({
@@ -40,6 +41,7 @@ const AdminDialog = ({
   mutate,
 }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
+  const router = useRouter();
 
   // used to display proper text in dialog
   let item;
@@ -114,6 +116,12 @@ const AdminDialog = ({
             severity: "success",
             message: `Post deleted successfully`,
           });
+
+          if (router.query.flag) {
+            router.push("/admin/flags");
+          } else {
+            router.push("/admin/posts");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -154,10 +162,6 @@ const AdminDialog = ({
       const notifyResponse = await handleNotify("comment", "deleted");
 
       if (notifyResponse.ok) {
-        // if (mutate) {
-        //   mutate("/api/admin/comments");
-        // }
-
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -165,6 +169,7 @@ const AdminDialog = ({
           severity: "success",
           message: `Comment deleted successfully`,
         });
+        mutate("/api/admin/comments");
       }
       if (!notifyResponse.ok) {
         setSnackbar({
@@ -193,10 +198,6 @@ const AdminDialog = ({
       const userResponse = await deleteUser(deletion, "admin");
 
       if (userResponse.ok) {
-        // if (mutate) {
-        //   mutate();
-        // }
-
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -204,6 +205,11 @@ const AdminDialog = ({
           severity: "success",
           message: `Person deleted successfully`,
         });
+        if (router.query.flag) {
+          router.push("/admin/flags");
+        } else {
+          mutate("/api/admin/users");
+        }
       }
       if (!userResponse.ok) {
         setSnackbar({
@@ -238,10 +244,6 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("post", "denied");
 
         if (notifyResponse.ok) {
-          // if (mutate) {
-          //   mutate();
-          // }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -249,6 +251,12 @@ const AdminDialog = ({
             severity: "success",
             message: `Post denied successfully`,
           });
+
+          if (router.query.flag) {
+            router.push("/admin/flags");
+          } else {
+            router.push("/admin/posts");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -269,9 +277,6 @@ const AdminDialog = ({
       }
     } else {
       if (postResponse.ok) {
-        // if (mutate) {
-        //   mutate();
-        // }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -279,6 +284,11 @@ const AdminDialog = ({
           severity: "success",
           message: `Post approved successfully`,
         });
+        if (router.query.flag) {
+          router.push("/admin/flags");
+        } else {
+          router.push("/admin/posts");
+        }
       }
       if (!postResponse.ok) {
         setSnackbar({
@@ -303,10 +313,6 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("comment", "denied");
 
         if (notifyResponse.ok) {
-          // if (mutate) {
-          //   mutate("/api/admin/comments");
-          // }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -314,6 +320,7 @@ const AdminDialog = ({
             severity: "success",
             message: `Comment denied successfully`,
           });
+          mutate("/api/admin/comments");
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -334,9 +341,6 @@ const AdminDialog = ({
       }
     } else {
       if (commentResponse.ok) {
-        // if (mutate) {
-        //   mutate("/api/admin/comments");
-        // }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -344,6 +348,7 @@ const AdminDialog = ({
           severity: "success",
           message: `Comment approved successfully`,
         });
+        mutate("/api/admin/comments");
       }
       if (!commentResponse.ok) {
         setSnackbar({
@@ -370,10 +375,6 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("profile item", "denied");
 
         if (notifyResponse.ok) {
-          // if (mutate) {
-          //   mutate();
-          // }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -381,6 +382,11 @@ const AdminDialog = ({
             severity: "success",
             message: `Profile denied successfully`,
           });
+          if (router.query.flag) {
+            router.push("/admin/flags");
+          } else {
+            mutate("/api/admin/users");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -401,9 +407,6 @@ const AdminDialog = ({
       }
     } else {
       if (userResponse.ok) {
-        // if (mutate) {
-        //   mutate();
-        // }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -411,6 +414,11 @@ const AdminDialog = ({
           severity: "success",
           message: `Profile approved successfully`,
         });
+        if (router.query.flag) {
+          router.push("/admin/flags");
+        } else {
+          mutate("/api/admin/users");
+        }
       }
       if (!userResponse.ok) {
         setSnackbar({

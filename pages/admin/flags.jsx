@@ -215,6 +215,7 @@ const adminFlags = () => {
           name={action.name}
           ID={action.ID}
           mutate={mutate}
+          route="flag"
         />
       </div>
     </div>

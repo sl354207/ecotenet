@@ -181,6 +181,7 @@ const person = () => {
           handleClose={handleCloseResolve}
           name={flagee}
           ID={flag}
+          route="name"
         />
       </Container>
     </>
