@@ -11,7 +11,7 @@ module.exports = {
   //     ],
   //   },
   // },
-  reactStrictMode: true,
+  // reactStrictMode: true,
   images: {
     domains: [
       "eco-media-bucket.s3.us-east-2.amazonaws.com",

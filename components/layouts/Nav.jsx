@@ -14,6 +14,8 @@ import {
   Paper,
   Popper,
   Toolbar,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -42,8 +44,14 @@ const DynamicFeatureDialog = dynamic(() =>
 const Nav = () => {
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  const { ecoFilter, filterOpen, setFilterOpen, setEcoOpen, setFSOpen } =
-    useHomepageContext();
+  const {
+    ecoFilter,
+    filterOpen,
+    setFilterOpen,
+    setEcoOpen,
+    setFSOpen,
+    visited,
+  } = useHomepageContext();
 
   let status;
   if (user == undefined) {
@@ -161,6 +169,21 @@ const Nav = () => {
     }
   };
 
+  const [toolTip, setToolTip] = useState(true);
+  useEffect(() => {
+    if (visited === null) {
+      setToolTip(true);
+    } else if (visited === undefined) {
+      setToolTip(false);
+    } else {
+      setToolTip(false);
+    }
+  }, [visited]);
+
+  const handleTooltipClose = () => {
+    setToolTip(false);
+  };
+
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
@@ -170,6 +193,108 @@ const Nav = () => {
           {ecoFilter && (
             <>
               {isTab ? (
+                <ClickAwayListener onClickAway={handleTooltipClose}>
+                  <div>
+                    <Tooltip
+                      PopperProps={{
+                        disablePortal: true,
+                        sx: {
+                          "& .MuiTooltip-tooltip": {
+                            border: "solid skyblue 1px",
+                            color: "deepskyblue",
+                          },
+                        },
+                      }}
+                      onClose={handleTooltipClose}
+                      open={true}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      // sx={{ border: "2px solid" }}
+
+                      title={
+                        <>
+                          <Typography color="inherit">
+                            If you need help deciding check out our explantion
+                            for each{" "}
+                          </Typography>
+                        </>
+                      }
+                      arrow
+                    >
+                      <Button
+                        onClick={handleFilterOpen}
+                        endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
+                        variant="contained"
+                        color="secondary"
+                        size={isTab ? "small" : "medium"}
+                      >
+                        Eco-{ecoFilter.unique_id}
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </ClickAwayListener>
+              ) : (
+                <ClickAwayListener onClickAway={handleTooltipClose}>
+                  <div>
+                    <Tooltip
+                      PopperProps={{
+                        disablePortal: true,
+                        sx: {
+                          "& .MuiTooltip-tooltip": {
+                            border: `solid  3px ${theme.palette.secondary.main}`,
+                            color: theme.palette.text.primary,
+                            backgroundColor: theme.palette.primary.dark,
+                          },
+                          "& .MuiTooltip-arrow": {
+                            // border: "solid skyblue 1px",
+                            top: "-9px!important",
+                            width: "2em",
+                            height: "1.42em",
+                            color: theme.palette.secondary.main,
+                          },
+                        },
+                      }}
+                      onClose={handleTooltipClose}
+                      open={toolTip}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      sx={{ border: "2px solid" }}
+                      title={
+                        <div style={{ display: "grid" }}>
+                          <Typography
+                            color="inherit"
+                            sx={{ marginBottom: "2px" }}
+                          >
+                            Explore posts and species for the selected ecoregion
+                            by different categories
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            sx={{ marginBottom: "2px" }}
+                            onClick={() => handleTooltipClose()}
+                          >
+                            Got it!
+                          </Button>
+                        </div>
+                      }
+                      arrow
+                    >
+                      <Button
+                        onClick={handleFilterOpen}
+                        variant="contained"
+                        color="secondary"
+                      >
+                        Eco-{ecoFilter.unique_id} Filter
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </ClickAwayListener>
+              )}
+              {/* {isTab ? (
                 <Button
                   onClick={handleFilterOpen}
                   endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
@@ -187,7 +312,7 @@ const Nav = () => {
                 >
                   Eco-{ecoFilter.unique_id} Filter
                 </Button>
-              )}
+              )} */}
             </>
           )}
 

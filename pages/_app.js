@@ -11,6 +11,7 @@ import theme from "@utils/theme";
 
 import { useRouter } from "next/router";
 
+import ErrorBoundary from "@components/layouts/ErrorBoundary";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
@@ -26,22 +27,24 @@ export default function MyApp(props) {
   const router = useRouter();
 
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <SessionProvider session={pageProps.session} refetchInterval={0}>
-        <UserProvider>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <MainLayout>
-              <Component key={router.asPath} {...pageProps} />
-            </MainLayout>
-          </ThemeProvider>
-        </UserProvider>
-      </SessionProvider>
-    </CacheProvider>
+    <ErrorBoundary>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <SessionProvider session={pageProps.session} refetchInterval={0}>
+          <UserProvider>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              <MainLayout>
+                <Component key={router.asPath} {...pageProps} />
+              </MainLayout>
+            </ThemeProvider>
+          </UserProvider>
+        </SessionProvider>
+      </CacheProvider>
+    </ErrorBoundary>
   );
 }
 
