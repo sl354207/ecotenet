@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
@@ -314,9 +314,10 @@ const MapMain = ({
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
             closeOnClick={false}
-            onClose={() => setShowPopup(false)}
+            // onClose={() => setShowPopup(false)}
             maxWidth="500px"
             focusAfterOpen={false}
+            closeButton={false}
           >
             <div style={{ display: "grid" }}>
               <Typography
@@ -334,6 +335,20 @@ const MapMain = ({
                 {ecoName}
               </Typography>
             </div>
+            <Button
+              size="small"
+              sx={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                display: "flex",
+                justifyContent: "end",
+                paddingRight: "10px",
+              }}
+              onClick={() => setShowPopup(false)}
+            >
+              x
+            </Button>
           </Popup>
         )}
       </Map>

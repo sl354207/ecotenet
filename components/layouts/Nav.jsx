@@ -170,15 +170,20 @@ const Nav = () => {
   };
 
   const [toolTip, setToolTip] = useState(true);
+  const [ecoCounter, setEcoCounter] = useState(false);
   useEffect(() => {
     if (visited === null) {
-      setToolTip(true);
+      // setToolTip(true);
+      if (ecoFilter && !ecoCounter) {
+        setTimeout(() => setToolTip(true), 8000);
+        setEcoCounter(true);
+      }
     } else if (visited === undefined) {
       setToolTip(false);
     } else {
       setToolTip(false);
     }
-  }, [visited]);
+  }, [visited, ecoFilter]);
 
   const handleTooltipClose = () => {
     setToolTip(false);

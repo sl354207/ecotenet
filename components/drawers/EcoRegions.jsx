@@ -39,16 +39,16 @@ const EcoRegions = ({
         setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });
 
         setWiki(ecoregion);
+        if (!visitedHome && !click) {
+          setTab({ id: 1, label: "Summary" });
+        }
+        setClick(true);
 
         mapA.easeTo({
           center: ecoregion.coordinates,
           duration: 3000,
           zoom: 3.5,
         });
-        if (!visitedHome && !click) {
-          setTab({ id: 1, label: "Summary" });
-        }
-        setClick(true);
       }
     },
     [mapA, ecoMove]
