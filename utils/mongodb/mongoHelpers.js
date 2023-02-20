@@ -359,13 +359,29 @@ const updateComment = async (_id, data) => {
 };
 
 //delete a comment
+// const deleteComment = async (_id) => {
+//   try {
+//     const db = await connectToDatabase();
+
+//     const deleted = await db
+//       .collection("comments")
+//       .deleteMany({ $or: [{ _id: ObjectId(_id) }, { comment_ref: _id }] });
+
+//     return deleted;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 const deleteComment = async (_id) => {
   try {
     const db = await connectToDatabase();
 
-    const deleted = await db
-      .collection("comments")
-      .deleteMany({ $or: [{ _id: ObjectId(_id) }, { comment_ref: _id }] });
+    const deleted = await db.collection("comments").updateOne(
+      {
+        _id: ObjectId(_id),
+      },
+      { $set: { text: "Comment deleted", name: "" } }
+    );
 
     return deleted;
   } catch (error) {

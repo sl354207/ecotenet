@@ -205,25 +205,44 @@ const Nav = () => {
                         disablePortal: true,
                         sx: {
                           "& .MuiTooltip-tooltip": {
-                            border: "solid skyblue 1px",
-                            color: "deepskyblue",
+                            border: `solid  3px ${theme.palette.secondary.main}`,
+                            color: theme.palette.text.primary,
+                            backgroundColor: theme.palette.primary.dark,
+                          },
+                          "& .MuiTooltip-arrow": {
+                            // border: "solid skyblue 1px",
+                            top: "-9px!important",
+                            width: "2em",
+                            height: "1.42em",
+                            color: theme.palette.secondary.main,
                           },
                         },
                       }}
                       onClose={handleTooltipClose}
-                      open={true}
+                      open={toolTip}
                       disableFocusListener
                       disableHoverListener
                       disableTouchListener
-                      // sx={{ border: "2px solid" }}
-
+                      sx={{ border: "2px solid" }}
                       title={
-                        <>
-                          <Typography color="inherit">
-                            If you need help deciding check out our explantion
-                            for each{" "}
+                        <div style={{ display: "grid" }}>
+                          <Typography
+                            color="inherit"
+                            sx={{ marginBottom: "2px" }}
+                          >
+                            Explore posts and species for the selected ecoregion
+                            by different categories
                           </Typography>
-                        </>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            sx={{ marginBottom: "2px" }}
+                            onClick={() => handleTooltipClose()}
+                          >
+                            Got it!
+                          </Button>
+                        </div>
                       }
                       arrow
                     >
