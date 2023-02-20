@@ -453,6 +453,16 @@ const post = ({ post }) => {
           </>
         )}
         <EditorLayout>
+          {(post.category.sub === "Edible" ||
+            post.category.sub === "Medicinal") && (
+            <Typography sx={{ marginTop: "5px" }}>
+              <em>
+                Disclaimer: This content is for educational purposes only.
+                Before consuming anything make sure you have properly identified
+                it and speak to a professional about any possible effects.
+              </em>
+            </Typography>
+          )}
           <Editor
             cellPlugins={cellPlugins}
             value={value}
