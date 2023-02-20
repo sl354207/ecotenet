@@ -35,6 +35,7 @@ export async function generateUploadURL(name, postId, type) {
     return JSON.stringify(uploadURL);
   } catch (error) {
     console.error(error);
+    throw new Error(error);
   }
 }
 export async function generateDeleteURL(name, postId, key) {
@@ -50,26 +51,31 @@ export async function generateDeleteURL(name, postId, key) {
     return JSON.stringify(deleteURL);
   } catch (error) {
     console.error(error);
+    throw new Error(error);
   }
 }
 
 export async function deleteDirectoryPromise(path) {
-  const prefixes = await getDirectoryPrefixes(path);
+  try {
+    const prefixes = await getDirectoryPrefixes(path);
 
-  if (prefixes.length > 0) {
-    const deleteParams = {
-      Bucket: bucketName,
-      Delete: { Objects: prefixes },
-    };
+    if (prefixes.length > 0) {
+      const deleteParams = {
+        Bucket: bucketName,
+        Delete: { Objects: prefixes },
+      };
 
-    return s3.deleteObjects(deleteParams).promise();
+      return s3.deleteObjects(deleteParams).promise();
+    }
+    return s3
+      .deleteObject({
+        Bucket: bucketName,
+        Key: path,
+      })
+      .promise();
+  } catch (error) {
+    throw new Error(error);
   }
-  return s3
-    .deleteObject({
-      Bucket: bucketName,
-      Key: path,
-    })
-    .promise();
 }
 
 async function getDirectoryPrefixes(path) {
@@ -80,63 +86,71 @@ async function getDirectoryPrefixes(path) {
     Prefix: path,
     Delimiter: "/",
   };
-  const listedObjects = await s3.listObjectsV2(listParams).promise();
+  try {
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
 
-  if (
-    listedObjects.Contents.length > 0 ||
-    listedObjects.CommonPrefixes.length > 0
-  ) {
-    listedObjects.Contents.forEach(({ Key }) => {
-      prefixes.push({ Key });
-    });
+    if (
+      listedObjects.Contents.length > 0 ||
+      listedObjects.CommonPrefixes.length > 0
+    ) {
+      listedObjects.Contents.forEach(({ Key }) => {
+        prefixes.push({ Key });
+      });
 
-    listedObjects.CommonPrefixes.forEach(({ Prefix }) => {
-      prefixes.push({ Key: Prefix });
-      promises.push(getDirectoryPrefixes(Prefix));
+      listedObjects.CommonPrefixes.forEach(({ Prefix }) => {
+        prefixes.push({ Key: Prefix });
+        promises.push(getDirectoryPrefixes(Prefix));
+      });
+      // if (listedObjects.IsTruncated) await this.deleteDirectoryPromise(path);
+    }
+    const subPrefixes = await Promise.all(promises);
+    subPrefixes.map((arrPrefixes) => {
+      arrPrefixes.map((prefix) => {
+        prefixes.push(prefix);
+      });
     });
-    // if (listedObjects.IsTruncated) await this.deleteDirectoryPromise(path);
+    return prefixes;
+  } catch (error) {
+    throw new Error(error);
   }
-  const subPrefixes = await Promise.all(promises);
-  subPrefixes.map((arrPrefixes) => {
-    arrPrefixes.map((prefix) => {
-      prefixes.push(prefix);
-    });
-  });
-  return prefixes;
 }
 
 export async function deleteRecursive(path) {
   let count = 0;
   while (true) {
-    // list objects
-    const listedObjects = await s3
-      .listObjectsV2({
-        Bucket: bucketName,
-        Prefix: path,
-      })
-      .promise();
-    if (listedObjects.Contents === undefined) {
-      throw new Error("Listing S3 returns no contents");
-    }
-    if (listedObjects.Contents.length !== 0) {
-      // prepare delete request
-      const deleteParams = {
-        Bucket: bucketName,
-        Delete: {
-          Objects: listedObjects.Contents.map((obj) => ({
-            Key: obj.Key,
-          })),
-        },
-      };
-      // listedObjects.Contents.forEach(({ Key }) => {
-      //     deleteParams.Delete.Objects.push({ Key as string });
-      // });
-      const deleteOutput = await s3.deleteObjects(deleteParams).promise();
-      // count or list
-      count += deleteOutput.Deleted.length;
-    }
-    if (!listedObjects.IsTruncated) {
-      return count;
+    try {
+      // list objects
+      const listedObjects = await s3
+        .listObjectsV2({
+          Bucket: bucketName,
+          Prefix: path,
+        })
+        .promise();
+      if (listedObjects.Contents === undefined) {
+        throw new Error("Listing S3 returns no contents");
+      }
+      if (listedObjects.Contents.length !== 0) {
+        // prepare delete request
+        const deleteParams = {
+          Bucket: bucketName,
+          Delete: {
+            Objects: listedObjects.Contents.map((obj) => ({
+              Key: obj.Key,
+            })),
+          },
+        };
+        // listedObjects.Contents.forEach(({ Key }) => {
+        //     deleteParams.Delete.Objects.push({ Key as string });
+        // });
+        const deleteOutput = await s3.deleteObjects(deleteParams).promise();
+        // count or list
+        count += deleteOutput.Deleted.length;
+      }
+      if (!listedObjects.IsTruncated) {
+        return count;
+      }
+    } catch (error) {
+      throw new Error(error);
     }
   }
 }

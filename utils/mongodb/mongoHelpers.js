@@ -682,7 +682,7 @@ const getStats = async () => {
     const db = await connectToDatabase();
 
     const comments = await db.collection("comments").estimatedDocumentCount({});
-    const people = await db.collection("people").estimatedDocumentCount({});
+    const people = await db.collection("users").estimatedDocumentCount({});
     const flags = await db.collection("flags").estimatedDocumentCount({});
     const species = await db.collection("species").estimatedDocumentCount({});
     const posts = await db
@@ -786,7 +786,7 @@ const updateDenials = async (name, denials) => {
   try {
     const db = await connectToDatabase();
 
-    const response = await db.collection("people").updateOne(
+    const response = await db.collection("users").updateOne(
       {
         name: name,
       },
@@ -803,20 +803,19 @@ const deletePerson = async (name) => {
   try {
     const db = await connectToDatabase();
 
-    const person = await db.collection("people").deleteOne({
+    const notifications = await db.collection("notifications").deleteMany({
       name: name,
     });
-
+    const flags = await db.collection("flags").deleteMany({
+      name: name,
+    });
     const comments = await db.collection("comments").deleteMany({
       name: name,
     });
     const posts = await db.collection("posts").deleteMany({
       name: name,
     });
-    const flags = await db.collection("flags").deleteMany({
-      name: name,
-    });
-    const notifications = await db.collection("notifications").deleteMany({
+    const person = await db.collection("users").deleteOne({
       name: name,
     });
 
