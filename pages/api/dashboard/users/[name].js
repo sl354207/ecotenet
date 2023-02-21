@@ -4,6 +4,7 @@ import {
   checkPerson,
   deletePerson,
   getPersonDash,
+  updatePerson,
 } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
 import URISanity from "urisanity";
@@ -62,13 +63,9 @@ export default async function handler(req, res) {
         const validate = ajv.getSchema("person");
         const valid = validate(req.body);
 
-        const validWebsite = URISanity.vet(data.website, {
-          allowWebTransportURI: true,
-        });
-
         let validSocials = true;
 
-        if (data.socials.length > 0) {
+        if (data.socials && data.socials.length > 0) {
           let i = 0;
           while (i < data.socials.length) {
             if (
@@ -84,10 +81,20 @@ export default async function handler(req, res) {
           }
         }
 
+        //needed for when username is created and no website is provided
+        let validWebsite;
+        if (data.website) {
+          validWebsite = URISanity.vet(data.website, {
+            allowWebTransportURI: true,
+          });
+        } else {
+          validWebsite = "";
+        }
+
         if (
           valid &&
           validSocials &&
-          (validWebsite !== "about:blank" || test.website === "")
+          (validWebsite !== "about:blank" || data.website === "")
         ) {
           if (session.user.email === email) {
             try {

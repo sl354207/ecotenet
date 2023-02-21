@@ -11,8 +11,12 @@ const EmailInput = ({ provider, onSuccess }) => {
 
   // let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
   // sourced from https://github.com/ajv-validator/ajv-formats/blob/master/src/formats.ts
+  // let regex = new RegExp(
+  //   "/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,"
+  // );
+  // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
   let regex = new RegExp(
-    "/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i,"
+    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
   );
 
   const handleSignin = useCallback(async () => {

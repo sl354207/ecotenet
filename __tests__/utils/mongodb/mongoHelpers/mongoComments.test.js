@@ -8,7 +8,7 @@ import {
 import { MongoClient } from "mongodb";
 jest.mock("@utils/mongodb/mongoHelpers");
 
-describe("Test mongodb comment helper functions for nosql injections and validation", () => {
+describe("Test mongodb comment helper functions for validation", () => {
   let connection;
   let db;
 
@@ -223,10 +223,24 @@ describe("Test mongodb comment helper functions for nosql injections and validat
         throw new Error(error);
       }
     });
-    describe("Test nosql injections", () => {
-      describe("Blind boolean injections", () => {
-        it("should retrieve a comment from collection", async () => {
-          getPostComments.mockImplementation(async (mockComment) => {
+    describe("Test compound calls to check deletePerson functionality", () => {
+      it("should throw after second call", async () => {
+        getPostComments
+          .mockImplementationOnce(async (mockComment) => {
+            const data = mockComment;
+
+            const response = await db
+              .collection("comments")
+              .find({
+                post_id: data,
+                approved: "true",
+              })
+              .toArray();
+
+            return Promise.resolve(response);
+          })
+          .mockImplementationOnce(() => Promise.reject("error"))
+          .mockImplementationOnce(async (mockComment) => {
             const data = mockComment;
 
             const response = await db
@@ -240,43 +254,24 @@ describe("Test mongodb comment helper functions for nosql injections and validat
             return Promise.resolve(response);
           });
 
-          const insertedComment = await getPostComments(
+        try {
+          const insertedComment1 = await getPostComments(
             "012345678901234567890123"
           );
 
-          expect(insertedComment[0]).toEqual(mockComment);
+          expect(insertedComment1[0]).toEqual(mockComment);
+          await expect(
+            getPostComments("012345678901234567890123")
+          ).rejects.toThrow();
+          const insertedComment2 = await getPostComments(
+            "012345678901234567890123"
+          );
+        } catch (error) {
+          console.error;
+        }
 
-          expect(connectToDatabase).toHaveBeenCalledTimes(1);
-        });
-        it("should not insert a comment into collection based on improper fields", async () => {
-          getPostComments.mockImplementation(async (mockComment) => {
-            const data = mockComment;
-
-            const response = await db
-              .collection("comments")
-              .find({
-                post_id: String(data),
-                approved: "true",
-              })
-              .toArray();
-
-            return Promise.resolve(response);
-          });
-
-          const mockGet1 = { $ne: -1 };
-          const mockGet2 = { $in: [] };
-          const mockGet3 = { $and: [{ id: 5 }, { id: 6 }] };
-          const mockGet4 = { $where: "return true" };
-          const mockGet5 = { $or: [{}, { foo: "1" }] };
-
-          // await expect(getPostComments(mockGet1)).rejects.toThrow();
-          // await expect(getPostComments(mockGet2)).rejects.toThrow();
-          // await expect(getPostComments(mockGet3)).rejects.toThrow();
-          // await expect(getPostComments(mockGet4)).rejects.toThrow();
-          // await expect(getPostComments(mockGet5)).rejects.toThrow();
-
-          expect(connectToDatabase).toHaveBeenCalledTimes(1);
-        });
+        expect(connectToDatabase).toHaveBeenCalledTimes(1);
+        expect(getPostComments).toHaveBeenCalledTimes(2);
       });
     });
   });

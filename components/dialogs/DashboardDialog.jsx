@@ -15,6 +15,7 @@ import {
   deleteUserMedia,
   updatePost,
 } from "@utils/apiHelpers";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const DashboardDialog = ({
@@ -45,7 +46,7 @@ const DashboardDialog = ({
       break;
 
     case "Person":
-      item = "person";
+      item = "account";
 
       break;
     default:
@@ -141,10 +142,6 @@ const DashboardDialog = ({
       const userResponse = await deleteUser(deletion, "dashboard");
 
       if (userResponse.ok) {
-        if (mutate) {
-          mutate(fetchApi);
-        }
-
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -152,13 +149,14 @@ const DashboardDialog = ({
           severity: "success",
           message: `Person deleted successfully`,
         });
+        signOut();
       }
       if (!userResponse.ok) {
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "error",
-          message: `There was a problem deleting person. Please try again later`,
+          message: `There was a problem deleting your account. Please try again later`,
         });
       }
     }
@@ -167,7 +165,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "error",
-        message: `There was a problem deleting person. Please try again later`,
+        message: `There was a problem deleting your account. Please try again later`,
       });
     }
   };

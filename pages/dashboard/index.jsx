@@ -699,10 +699,28 @@ export default function Dashboard() {
                             ></Chip>
                           ))}
                       </div>
-                      {/* <Typography variant="h5" gutterBottom>
-                Private Settings:
-              </Typography>
-              <div style={{ display: "flex" }}>
+                      <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{ marginTop: "40px" }}
+                      >
+                        Private Settings:
+                      </Typography>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        disabled={
+                          user.name === null ||
+                          user.name === "" ||
+                          user.name === undefined
+                        }
+                        onClick={() =>
+                          handleOpenDialog("delete", "Person", user)
+                        }
+                      >
+                        Delete Account
+                      </Button>
+                      {/* <div style={{ display: "flex" }}>
                 <FormControl
                   sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
                   
@@ -738,7 +756,7 @@ export default function Dashboard() {
                 >
                   Update Email
                 </Button>
-              </div> */}
+              </div>  */}
                     </>
                   )}
                 </>

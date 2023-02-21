@@ -289,7 +289,7 @@ describe("dashboard posts api", () => {
         });
         describe("GET", () => {
           describe("invalid data", () => {
-            it("should deny invalid data", async () => {
+            it("should deny invalid user data", async () => {
               const req = {
                 method: "GET", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
@@ -298,6 +298,45 @@ describe("dashboard posts api", () => {
                 query: {
                   name: { $ne: -1 },
                   status: "draft",
+                },
+              };
+              const json = jest.fn();
+              const end = jest.fn();
+              const setHeader = jest.fn();
+
+              const status = jest.fn(() => {
+                return {
+                  json,
+                  end,
+                };
+              });
+
+              const res = {
+                status,
+                end,
+                setHeader,
+              };
+
+              getServerSession.mockResolvedValueOnce({
+                user: { name: "test 2", email: "test@gmail.com", role: "user" },
+                expires: new Date(Date.now() + 2 * 86400).toISOString(),
+              });
+
+              await handler(req, res);
+
+              expect(getServerSession).toHaveBeenCalledTimes(1);
+              expect(getDashboardPosts).toHaveBeenCalledTimes(0);
+              expect(res.status.mock.calls[0][0]).toBe(401);
+            });
+            it("should deny invalid status data", async () => {
+              const req = {
+                method: "GET", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                headers: {
+                  "content-type": "application/json",
+                },
+                query: {
+                  name: { $ne: -1 },
+                  status: "drafe",
                 },
               };
               const json = jest.fn();
