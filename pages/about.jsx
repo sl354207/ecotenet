@@ -160,7 +160,7 @@ const about = () => {
           <Link href="/data" underline="hover">
             here
           </Link>
-          . Our species summaries are sourced from{" "}
+          . Our species and ecoregion summaries are sourced from{" "}
           <Link
             href="https://www.wikipedia.org/"
             underline="hover"
