@@ -323,7 +323,7 @@ const MapMain = ({
               <Typography
                 color="textSecondary"
                 align="center"
-                sx={{ fontWeight: 500 }}
+                sx={{ fontWeight: 500, minWidth: "150px" }}
               >
                 Eco-{selectedRegion}
               </Typography>

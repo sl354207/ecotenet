@@ -40,6 +40,7 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
             color="secondary"
             onClick={() => handleOpenDialog("Comment", value)}
             sx={{ marginLeft: "10px" }}
+            disabled={value.text.trim().length === 0}
           >
             Submit
           </Button>

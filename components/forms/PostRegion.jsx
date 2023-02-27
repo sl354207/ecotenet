@@ -331,7 +331,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         )}
       />
       {isMobile ? (
-        <div style={{ display: "inline-grid" }}>
+        <div style={{ display: "inline-grid", marginTop: "5px" }}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <CustomChip
               label={`${state[1].scientific_name} - ${state[1].common_name}`}
@@ -391,7 +391,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           )}
         </div>
       ) : (
-        <>
+        <div style={{ marginTop: "5px" }}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <CustomChip
               label={`${state[1].scientific_name} - ${state[1].common_name}`}
@@ -449,7 +449,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           ) : (
             <></>
           )}
-        </>
+        </div>
       )}
       <Typography variant="h6" align="left">
         Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}

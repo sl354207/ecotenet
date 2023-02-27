@@ -292,7 +292,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
               <Typography
                 color="textSecondary"
                 align="center"
-                sx={{ fontWeight: 500 }}
+                sx={{ fontWeight: 500, minWidth: "150px" }}
               >
                 {ecoName}
               </Typography>

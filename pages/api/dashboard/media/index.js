@@ -37,7 +37,7 @@ export default async function handler(req, res) {
           // try get request, if successful return response, otherwise return error message
           try {
             const url = await generateUploadURL(name, postId, ext);
-            // await console.log(res.json(url))
+            // console.log(res.json(url));
             return res.status(200).json(url.substring(1, url.length - 1));
           } catch (err) {
             console.error(err);

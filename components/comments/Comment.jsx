@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import theme from "@utils/theme";
+
 import CommentForm from "./CommentForm";
 
 //pass in comment and post id from comments
@@ -22,6 +23,8 @@ const Comment = ({
   handleReply,
   drawer,
 }) => {
+  // console.log(new Date(parseInt(comment._id.substring(0, 8), 16) * 1000));
+
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
   if (comment.comment_ref === comment._id) {
@@ -72,11 +75,11 @@ const Comment = ({
                   )}
                 </Typography>
               </div>
-              <Typography variant="h6">
+              <Typography variant="body1">
                 {comment.text === "Comment deleted" ? (
                   <em>{comment.text}</em>
                 ) : (
-                  <>{comment.text}</>
+                  <b>{comment.text}</b>
                 )}
               </Typography>
               {(isMobile || drawer) && comment.text !== "Comment deleted" && (
@@ -117,15 +120,17 @@ const Comment = ({
             )}
 
             {/* )} */}
-            <IconButton
-              sx={{ marginLeft: "10px" }}
-              color="inherit"
-              aria-label="flag"
-              size="small"
-              onClick={() => handleOpenFlag("comment", comment)}
-            >
-              <FlagIcon />
-            </IconButton>
+            {comment.text !== "Comment deleted" && (
+              <IconButton
+                sx={{ marginLeft: "10px" }}
+                color="inherit"
+                aria-label="flag"
+                size="small"
+                onClick={() => handleOpenFlag("comment", comment)}
+              >
+                <FlagIcon />
+              </IconButton>
+            )}
           </div>
         </ListItem>
         <CommentForm
@@ -184,23 +189,25 @@ const Comment = ({
                 )}
               </Typography>
             </div>
-            <Typography variant="h6">
+            <Typography variant="body1">
               {comment.text === "Comment deleted" ? (
                 <em>{comment.text}</em>
               ) : (
-                <>{comment.text}</>
+                <b>{comment.text}</b>
               )}
             </Typography>
           </div>
-          <IconButton
-            sx={{ marginLeft: "10px" }}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenFlag("comment", comment)}
-          >
-            <FlagIcon />
-          </IconButton>
+          {comment.text !== "Comment deleted" && (
+            <IconButton
+              sx={{ marginLeft: "10px" }}
+              color="inherit"
+              aria-label="flag"
+              size="small"
+              onClick={() => handleOpenFlag("comment", comment)}
+            >
+              <FlagIcon />
+            </IconButton>
+          )}
         </div>
       </ListItem>
     );

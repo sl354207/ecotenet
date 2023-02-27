@@ -203,7 +203,7 @@ const AdminDialog = ({
           ...snackbar,
           open: true,
           severity: "success",
-          message: `Person deleted successfully`,
+          message: "Account deleted successfully",
         });
         if (router.query.flag) {
           router.push("/admin/flags");
@@ -216,7 +216,8 @@ const AdminDialog = ({
           ...snackbar,
           open: true,
           severity: "error",
-          message: `There was a problem deleting person. Please try again later`,
+          message:
+            "There was a problem deleting account. Please try again later",
         });
       }
     }
@@ -225,7 +226,7 @@ const AdminDialog = ({
         ...snackbar,
         open: true,
         severity: "error",
-        message: `There was a problem deleting person. Please try again later`,
+        message: "There was a problem deleting account. Please try again later",
       });
     }
   };

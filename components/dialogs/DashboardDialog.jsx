@@ -147,7 +147,7 @@ const DashboardDialog = ({
           ...snackbar,
           open: true,
           severity: "success",
-          message: `Person deleted successfully`,
+          message: "Account deleted successfully",
         });
         signOut();
       }
@@ -195,7 +195,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: `Post submitted successfully`,
+        message: "Success! Post will be made public upon approval",
       });
       router.reload();
     }
@@ -234,7 +234,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: `Post submitted successfully`,
+        message: "Success! Post will be made public upon approval",
       });
       router.reload();
     }
@@ -271,7 +271,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: "Post submitted successfully",
+        message: "Success! Post will be made public upon approval",
       });
     }
     if (!postResponse.ok) {

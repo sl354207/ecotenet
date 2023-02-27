@@ -101,6 +101,10 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
             onClick={() => handleSubmit()}
             color="secondary"
             variant="outlined"
+            disabled={
+              (typeof value === "string" && value.trim().length === 0) ||
+              value === undefined
+            }
           >
             Submit
           </Button>

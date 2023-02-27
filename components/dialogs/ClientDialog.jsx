@@ -58,7 +58,7 @@ const ClientDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: "Comment submitted successfully",
+        message: "Success! Comment will be visible upon approval",
       });
     }
     if (!createResponse.ok) {

@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
         if (person && person.email === session.user.email) {
           try {
-            const updatedNotification = await updateNotification(_id, viewed);
+            const updatedNotification = await updateNotification(id, viewed);
             return res.status(200).json(updatedNotification);
           } catch (err) {
             console.error(err);

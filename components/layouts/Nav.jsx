@@ -175,7 +175,7 @@ const Nav = () => {
     if (visited === null) {
       // setToolTip(true);
       if (ecoFilter && !ecoCounter) {
-        setTimeout(() => setToolTip(true), 8000);
+        setTimeout(() => setToolTip(true), 7000);
         setEcoCounter(true);
       }
     } else if (visited === undefined) {

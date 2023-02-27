@@ -47,7 +47,7 @@ const DashboardComment = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: "Comment updated successfully",
+        message: "Success! Comment will be visible upon approval",
       });
       setCommentValue("");
     }
@@ -140,35 +140,23 @@ const DashboardComment = ({
             >
               View Post
             </Link>
-            {commentValue != "" ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "start",
-                }}
-                size="small"
-                onClick={() => handleCommentUpdate(commentValue)}
-              >
-                Save Change
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "start",
-                }}
-                size="small"
-                disabled
-              >
-                Save Change
-              </Button>
-            )}
+
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
+              size="small"
+              onClick={() => handleCommentUpdate(commentValue)}
+              disabled={
+                commentValue.trim().length === 0 || commentValue === result.text
+              }
+            >
+              Save Change
+            </Button>
 
             <Button
               variant="contained"

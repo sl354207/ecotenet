@@ -194,7 +194,13 @@ const EcoDist = ({
             />
           )}
         />
-        {!isMobile && (
+        {isMobile ? (
+          <FormHelperText
+            sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
+          >
+            {""}
+          </FormHelperText>
+        ) : (
           <FormHelperText
             sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
           >
