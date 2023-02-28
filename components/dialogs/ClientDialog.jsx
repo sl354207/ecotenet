@@ -18,6 +18,8 @@ const ClientDialog = ({
   closeForm,
   post_id,
   name,
+  setVote,
+  setLimit,
 }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -89,6 +91,8 @@ const ClientDialog = ({
         message: `${contentType} submitted successfully`,
       });
       mutate(`/api/votes/${post_id}`);
+      setVote(0);
+      setLimit(0);
     } else if (updateResponse.status == 406) {
       setSnackbar({
         ...snackbar,

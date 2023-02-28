@@ -81,6 +81,11 @@ const DrawerPost = ({ id }) => {
     shouldRetryOnError: false,
   });
 
+  //set limit for vote count
+  const [limit, setLimit] = useState(0);
+  // set vote status
+  const [vote, setVote] = useState(0);
+
   const {
     data: votes,
     isLoading: voteLoading,
@@ -392,6 +397,10 @@ const DrawerPost = ({ id }) => {
                                   handleOpenDialog={handleOpenDialog}
                                   name={user && user.name}
                                   voters={votes && votes.voters}
+                                  vote={vote}
+                                  setVote={setVote}
+                                  limit={limit}
+                                  setLimit={setLimit}
                                 />
                               )}
                             </>
@@ -475,6 +484,8 @@ const DrawerPost = ({ id }) => {
                       closeForm={closeForm}
                       name={user && user.name}
                       mutate={mutate}
+                      setVote={setVote}
+                      setLimit={setLimit}
                     />
                   )}
 
