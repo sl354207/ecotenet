@@ -54,7 +54,9 @@ function a11yProps(index) {
   };
 }
 
-const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
 
 const species = ({ species, wiki }) => {
   const router = useRouter();

@@ -31,14 +31,23 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-const DynamicFilterDrawer = dynamic(() =>
-  import("@components/drawers/FilterDrawer")
+const DynamicFilterDrawer = dynamic(
+  () => import("@components/drawers/FilterDrawer"),
+  {
+    ssr: false,
+  }
 );
-const DynamicSearchDialog = dynamic(() =>
-  import("@components/dialogs/SearchDialog")
+const DynamicSearchDialog = dynamic(
+  () => import("@components/dialogs/SearchDialog"),
+  {
+    ssr: false,
+  }
 );
-const DynamicFeatureDialog = dynamic(() =>
-  import("@components/dialogs/FeatureDialog")
+const DynamicFeatureDialog = dynamic(
+  () => import("@components/dialogs/FeatureDialog"),
+  {
+    ssr: false,
+  }
 );
 
 const Nav = () => {

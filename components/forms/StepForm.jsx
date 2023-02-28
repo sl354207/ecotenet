@@ -12,8 +12,11 @@ import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
 
-const DynamicDashboardDialog = dynamic(() =>
-  import("@components/dialogs/DashboardDialog")
+const DynamicDashboardDialog = dynamic(
+  () => import("@components/dialogs/DashboardDialog"),
+  {
+    ssr: false,
+  }
 );
 
 // pass in post and url path as props

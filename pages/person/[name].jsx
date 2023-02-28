@@ -12,7 +12,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
 
 const person = ({ person, posts }) => {
   const router = useRouter();

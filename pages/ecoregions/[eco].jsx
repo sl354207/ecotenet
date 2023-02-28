@@ -14,7 +14,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
 
 const eco = ({ wiki, eco, id }) => {
   const router = useRouter();

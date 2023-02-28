@@ -42,9 +42,14 @@ import useSWR, { useSWRConfig } from "swr";
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
-const DynamicClientDialog = dynamic(() =>
-  import("@components/dialogs/ClientDialog")
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
+const DynamicClientDialog = dynamic(
+  () => import("@components/dialogs/ClientDialog"),
+  {
+    ssr: false,
+  }
 );
 
 const post = ({ post }) => {

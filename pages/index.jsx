@@ -31,11 +31,17 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { MapProvider } from "react-map-gl";
 
-const DynamicWelcomeDialog = dynamic(() =>
-  import("@components/dialogs/WelcomeDialog")
+const DynamicWelcomeDialog = dynamic(
+  () => import("@components/dialogs/WelcomeDialog"),
+  {
+    ssr: false,
+  }
 );
-const DynamicFeatureAndSearchDrawer = dynamic(() =>
-  import("@components/drawers/FeatureAndSearchDrawer")
+const DynamicFeatureAndSearchDrawer = dynamic(
+  () => import("@components/drawers/FeatureAndSearchDrawer"),
+  {
+    ssr: false,
+  }
 );
 
 const coords = Coords;

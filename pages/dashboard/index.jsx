@@ -69,8 +69,11 @@ function a11yProps(index) {
   };
 }
 
-const DynamicDashboardDialog = dynamic(() =>
-  import("@components/dialogs/DashboardDialog")
+const DynamicDashboardDialog = dynamic(
+  () => import("@components/dialogs/DashboardDialog"),
+  {
+    ssr: false,
+  }
 );
 
 export default function Dashboard() {

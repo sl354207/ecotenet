@@ -18,7 +18,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
-const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"));
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
 const DrawerSpecies = ({ species }) => {
   const router = useRouter();
   const { user } = useUserContext();
