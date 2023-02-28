@@ -4,6 +4,7 @@ import {
   deleteRecursive,
   generateDeleteURL,
 } from "@utils/aws";
+import { checkPerson } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket

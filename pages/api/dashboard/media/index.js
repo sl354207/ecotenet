@@ -1,5 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { generateUploadURL } from "@utils/aws";
+import { checkPerson } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
@@ -9,7 +10,7 @@ export default async function handler(req, res) {
     if (req.method !== "GET") {
       return res.status(405);
     }
-    // console.log(req);
+
     const name = req.query.name;
     const postId = req.query.post_id;
     const ext = req.query.ext;

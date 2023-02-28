@@ -169,14 +169,15 @@ const Nav = () => {
     }
   };
 
-  const [toolTip, setToolTip] = useState(true);
-  const [ecoCounter, setEcoCounter] = useState(false);
+  const [toolTip, setToolTip] = useState(false);
+  // don't update on ecoFilter update
+  const [ecoFilterUpdated, setEcoFilterUpdated] = useState(false);
   useEffect(() => {
     if (visited === null) {
       // setToolTip(true);
-      if (ecoFilter && !ecoCounter) {
+      if (ecoFilter && !ecoFilterUpdated) {
         setTimeout(() => setToolTip(true), 7000);
-        setEcoCounter(true);
+        setEcoFilterUpdated(true);
       }
     } else if (visited === undefined) {
       setToolTip(false);

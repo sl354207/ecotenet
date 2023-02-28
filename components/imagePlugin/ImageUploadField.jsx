@@ -442,13 +442,13 @@ function ImageUploadField({ onChange, value }) {
       <div style={{ display: "flex" }}>
         <Button
           variant="contained"
-          color={state.hasError ? "error" : "warning"}
+          color={state.errorText === "Error uploading" ? "error" : "warning"}
           fullWidth
           sx={{
             marginRight: "5px",
           }}
           disabled={
-            state.hasError ||
+            state.errorText === "Error deleting" ||
             state.isUploading ||
             state.isDeleting ||
             image.url == undefined ||
@@ -463,11 +463,12 @@ function ImageUploadField({ onChange, value }) {
         </Button>
         <Button
           variant="contained"
-          color={state.hasError ? "error" : "primary"}
+          color={state.errorText === "Error deleting" ? "error" : "primary"}
           fullWidth
           sx={{ marginLeft: "5px" }}
           onClick={() => deleteImage(value)}
           disabled={
+            state.errorText === "Error uploading" ||
             state.isUploading ||
             state.isDeleting ||
             image.url == undefined ||
