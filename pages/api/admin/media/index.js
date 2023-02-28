@@ -11,13 +11,27 @@ export default async function handler(req, res) {
   const postId = req.query.post_id;
   const ext = req.query.ext;
 
+  const allowedExtensions = [
+    "image/apng",
+    "image/avif",
+    "image/gif",
+    "image/jpg",
+    "image/jpeg",
+    "image/jfif",
+    "image/pjpeg",
+    "image/pjp",
+    "image/png",
+    "image/svg",
+    "image/webp",
+  ];
+
   if (
     typeof name == "string" &&
     name.length <= 100 &&
     typeof postId == "string" &&
     postId.length == 24 &&
     typeof ext == "string" &&
-    (ext === "image/jpg" || ext === "image/jpeg" || ext === "image/png")
+    allowedExtensions.includes(ext.toLowerCase())
   ) {
     // try get request, if successful return response, otherwise return error message
     try {
