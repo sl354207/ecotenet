@@ -21,7 +21,7 @@ import useSWR, { useSWRConfig } from "swr";
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
 });
-const DrawerSpecies = ({ species }) => {
+const DrawerSpecies = ({ species, handleFilterClose }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { mutate } = useSWRConfig();
@@ -292,6 +292,9 @@ const DrawerSpecies = ({ species }) => {
                     color="secondary"
                     underline="hover"
                     key={id}
+                    onClick={(event) => {
+                      handleFilterClose(event);
+                    }}
                   >
                     Eco-{id}
                     {", "}

@@ -13,6 +13,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const data = req.body;
+
     const validate = ajv.getSchema("flag");
     const valid = validate(data);
     if (valid) {
@@ -49,6 +50,7 @@ export default async function handler(req, res) {
         res.status(401);
       }
     } else {
+      // console.log(validate.errors);
       res.status(403);
     }
   } else {

@@ -27,7 +27,7 @@ const WelcomeDialog = () => {
           bottom: "auto",
         },
         "&.MuiDialog-root": {
-          top: "20%",
+          top: "10%",
         },
       }}
     >

@@ -25,7 +25,6 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
   };
 
   const handleSubmit = async () => {
-    //   UPDATE NAME AND ID
     const flag = {
       name: name,
       flagged: result.name ? result.name : "ecotenet",

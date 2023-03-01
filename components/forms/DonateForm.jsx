@@ -426,7 +426,8 @@ const DonateForm = () => {
             }}
           />
           <Slider
-            value={typeof value === "number" ? once : 1.0}
+            // value={typeof value === "number" ? once : 1.0}
+            value={once}
             color="secondary"
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
@@ -448,7 +449,7 @@ const DonateForm = () => {
               variant="contained"
               color="secondary"
               type="submit"
-              disabled={loading}
+              disabled={loading || once == 0}
               sx={{
                 display: "flex",
                 margin: "auto",

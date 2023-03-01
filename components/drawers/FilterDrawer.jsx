@@ -198,6 +198,7 @@ const FilterDrawer = ({
               description={description && description}
               setCategory={setCategory}
               setCategorySelected={setCategorySelected}
+              handleFilterClose={handleFilterClose}
             />
           ) : (
             <>

@@ -222,9 +222,14 @@ const PostDetails = ({
               disableTouchListener
               title={
                 <>
-                  <Typography color="inherit">
-                    If you need help deciding check out our explantion for each{" "}
-                    <Link href="/category" color="secondary" underline="hover">
+                  <Typography color="inherit" variant="h6">
+                    If you need help deciding check out our explanation for each{" "}
+                    <Link
+                      href="/category"
+                      color="secondary"
+                      underline="hover"
+                      sx={{ paddingRight: "150px" }}
+                    >
                       category
                     </Link>
                   </Typography>

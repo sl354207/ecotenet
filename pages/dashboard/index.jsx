@@ -210,7 +210,7 @@ export default function Dashboard() {
     ) {
       setError({ website: true, socials: error.socials });
     } else {
-      setError({ website: false, socials: error.socials });
+      setError({ website: false, socials: false });
       const value = {
         name: user.name,
         email: user.email,

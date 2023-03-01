@@ -728,7 +728,7 @@ const getPerson = async (name) => {
         name: name,
       },
       {
-        projection: { email: 0, _id: 0, denials: 0, emailVerified: 0, role: 0 },
+        projection: { email: 0, denials: 0, emailVerified: 0, role: 0 },
       }
     );
 

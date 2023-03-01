@@ -21,6 +21,7 @@ const CategoryList = ({
   setCategory,
   setCategorySelected,
   description,
+  handleFilterClose,
 }) => {
   const { data, isLoading, error } = useSWR(
     category
@@ -126,9 +127,15 @@ const CategoryList = ({
                   </Container>
 
                   {typeof item == "string" ? (
-                    <DrawerPost id={item} />
+                    <DrawerPost
+                      id={item}
+                      handleFilterClose={handleFilterClose}
+                    />
                   ) : (
-                    <DrawerSpecies species={item} />
+                    <DrawerSpecies
+                      species={item}
+                      handleFilterClose={handleFilterClose}
+                    />
                   )}
                 </>
               ) : (

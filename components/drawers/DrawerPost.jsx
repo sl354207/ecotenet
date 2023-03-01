@@ -47,7 +47,7 @@ const DynamicClientDialog = dynamic(
     ssr: false,
   }
 );
-const DrawerPost = ({ id }) => {
+const DrawerPost = ({ id, handleFilterClose }) => {
   const { mutate } = useSWRConfig();
   const {
     data: post,
@@ -309,6 +309,9 @@ const DrawerPost = ({ id }) => {
                             href={`/person/${post.name}`}
                             color="secondary"
                             underline="hover"
+                            onClick={(event) => {
+                              handleFilterClose(event);
+                            }}
                           >
                             {post.name}
                           </Link>
@@ -355,6 +358,9 @@ const DrawerPost = ({ id }) => {
                           color="secondary"
                           underline="hover"
                           key={ecoregion}
+                          onClick={(event) => {
+                            handleFilterClose(event);
+                          }}
                         >
                           Eco-{ecoregion},{" "}
                         </Link>
