@@ -809,6 +809,12 @@ const deletePerson = async (name) => {
     const flags = await db.collection("flags").deleteMany({
       name: name,
     });
+    const votes = await db.collection("posts").updateMany(
+      {
+        voters: name,
+      },
+      { $pull: { voters: name } }
+    );
     const comments = await db.collection("comments").updateMany(
       {
         name: name,
@@ -827,7 +833,8 @@ const deletePerson = async (name) => {
       comments,
       posts,
       flags,
-      notifications
+      notifications,
+      votes
     );
     // console.log(deleted);
 
