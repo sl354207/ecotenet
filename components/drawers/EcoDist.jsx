@@ -38,7 +38,6 @@ const EcoDist = ({
   isMobile,
 }) => {
   const handleChange = async (e) => {
-    // console.log(e);
     if (e.target.value) {
       const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
         method: "GET",
@@ -122,34 +121,37 @@ const EcoDist = ({
         </Typography>
       )}
 
-      {/* <Description
-        description=" Search for a species by common or scientific name to display their
-  distribution on the map. A maximum of three species can be mapped at the
-  same time"
-        align="left"
-      /> */}
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
         distribution on the map. A maximum of three species can be mapped at the
         same time
       </Typography>
       <FormControl sx={{ display: "flex" }}>
-        {/* <InputLabel htmlFor="keywords">Keywords:</InputLabel> */}
         <Autocomplete
           sx={{
-            position: "relative",
-            border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-            borderRadius: "4px",
-            backgroundColor: theme.palette.primary.light,
-            "&:focus-within": {
-              backgroundColor: theme.palette.primary.light,
-              border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-              borderRadius: "4px",
+            "& .MuiAutocomplete-inputRoot": {
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.8),
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.8),
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#94c9ff",
+              },
+              "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.3),
+              },
+              "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.3),
+              },
+              "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e57373",
+              },
+              "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e57373",
+              },
             },
-            marginTop: "10px",
-            marginBottom: "5px",
-
-            width: "auto",
           }}
           autoHighlight
           onChange={(event, newValue) => handleSubmit(event, newValue)}
@@ -157,7 +159,7 @@ const EcoDist = ({
           clearOnBlur
           blurOnSelect
           handleHomeEndKeys
-          id="species-map-auto"
+          id="dist-auto"
           fullWidth
           options={
             dist
@@ -173,46 +175,32 @@ const EcoDist = ({
           filterOptions={(x) => x}
           freeSolo
           renderInput={(params) => (
+            // ...params is causing error check dashboard index on how to log params
             <TextField
               {...params}
+              id="dist"
               autoFocus={!isMobile}
               placeholder="Search…"
               variant="outlined"
               fullWidth
-              sx={{
-                color: theme.palette.text.primary,
-                borderRadius: "4px",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                  },
-                  "&:hover fieldset": {
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                  },
-                  "&.Mui-focused fieldset": {
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                  },
-                },
-              }}
               ref={params.InputProps.ref}
-              inputProps={params.inputProps}
+              inputProps={{
+                ...params.inputProps,
+                type: "text",
+                maxLength: 100,
+              }}
               onChange={(e) => handleChange(e)}
+              InputLabelProps={{ shrink: true }}
             />
           )}
         />
-        {!isMobile && (
+        {isMobile ? (
+          <FormHelperText
+            sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
+          >
+            {""}
+          </FormHelperText>
+        ) : (
           <FormHelperText
             sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
           >

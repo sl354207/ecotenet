@@ -2,7 +2,7 @@ import { useHomepageContext } from "@components/context/HomepageContext";
 import { Button, List, ListItem, Typography } from "@mui/material";
 
 // pass down posts from database to CategoryPostList as a prop
-const CategoryPostList = ({ posts, setItemSelect, setItem }) => {
+const CategoryPostList = ({ posts, setItemSelected, setItem }) => {
   const { distributionDispatch, setTab } = useHomepageContext();
   return (
     <List>
@@ -18,19 +18,14 @@ const CategoryPostList = ({ posts, setItemSelect, setItem }) => {
                 justifyContent: "start",
                 textTransform: "none",
               }}
-              // href={featured ? `/featured/${post._id}` : `/posts/${post._id}`}
-
               onClick={() => {
-                // handleSubmit(post);
                 distributionDispatch({
                   type: "add",
                   payload: 0,
                   value: post.ecoregions,
                   _id: post._id,
-                  // s_name: result.scientific_name,
-                  // c_name: result.common_name,
                 });
-                setItemSelect(true);
+                setItemSelected(true);
                 setItem(post._id);
                 setTab({ id: 2, label: "Distributions" });
               }}

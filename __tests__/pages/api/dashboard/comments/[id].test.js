@@ -4,10 +4,10 @@
 
 import handler from "@pages/api/dashboard/comments/[id]";
 import { deleteComment, updateComment } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
-// jest.mock("@utils/mongodb/mongoPromise");
+import { getServerSession } from "next-auth/next";
+jest.mock("next-auth/next");
+
 jest.mock("@utils/mongodb/mongoHelpers");
-jest.mock("next-auth/react");
 
 describe("dashboard comment api", () => {
   beforeEach(() => {
@@ -39,11 +39,11 @@ describe("dashboard comment api", () => {
           setHeader,
         };
 
-        getSession.mockResolvedValueOnce(null);
+        getServerSession.mockResolvedValueOnce(null);
 
         await handler(req, res);
 
-        expect(getSession).toHaveBeenCalledTimes(1);
+        expect(getServerSession).toHaveBeenCalledTimes(1);
         expect(res.status.mock.calls[0][0]).toBe(401);
       });
     });
@@ -73,7 +73,7 @@ describe("dashboard comment api", () => {
             setHeader,
           };
 
-          getSession.mockResolvedValueOnce({
+          getServerSession.mockResolvedValueOnce({
             user: { name: "test 1", email: "test@gmail.com", role: "user" },
             expires: new Date(Date.now() + 2 * 86400).toISOString(),
           });
@@ -82,7 +82,7 @@ describe("dashboard comment api", () => {
 
           await handler(req, res);
 
-          expect(getSession).toHaveBeenCalledTimes(1);
+          expect(getServerSession).toHaveBeenCalledTimes(1);
           expect(res.status.mock.calls[0][0]).toBe(405);
         });
       });
@@ -121,14 +121,14 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -164,14 +164,14 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -208,14 +208,14 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -253,7 +253,7 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -262,7 +262,7 @@ describe("dashboard comment api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -299,7 +299,7 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -310,7 +310,7 @@ describe("dashboard comment api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updateComment).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
@@ -347,14 +347,14 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deleteComment).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -388,7 +388,7 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -397,7 +397,7 @@ describe("dashboard comment api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deleteComment).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -430,7 +430,7 @@ describe("dashboard comment api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -441,7 +441,7 @@ describe("dashboard comment api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deleteComment).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);

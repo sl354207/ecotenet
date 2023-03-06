@@ -1,9 +1,10 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { checkName } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   // only allow get request
   if (session) {
     if (req.method !== "GET") {
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
     }
 
     const name = req.query.name;
-    if (typeof name == "string") {
+    if (typeof name == "string" && name.length <= 100) {
       try {
         const nameResponse = await checkName(name);
 

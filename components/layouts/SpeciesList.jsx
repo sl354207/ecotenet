@@ -1,7 +1,6 @@
 import SpeciesItem from "@components/layouts/SpeciesItem";
 import { List } from "@mui/material";
 
-// pass in post as prop from PostList
 const SpeciesList = ({ results, handleClose }) => {
   return (
     <List>

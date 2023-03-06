@@ -3,29 +3,116 @@
       "properties": {
         "date": {
           "type": "string",
+          "maxLength": 100,
           "description": "must be a string"
         },
         "title": {
           "type": "string",
+          "maxLength": 100,
           "description": "must be a string"
         },
         "description": {
           "type": "string",
+          "maxLength": 160,
           "description": "must be a string"
         },
         "category": {
             "type": "object",
             "properties": {
-              "title": {"type": "string"},
-              "sub": {"type": "string"}
+              "title": {"type": "string", "maxLength": 100, "enum": [
+                "",
+                "Animals",
+                "mammal",
+                "reptile",
+                "amphibian",
+                "bird",
+                "fish",
+                "arthropod",
+                "mollusk",
+                "cnidaria",
+                "worm",
+                "other_animals",
+                "Plants",
+                "tree_shrub",
+                "vine",
+                "wildflower",
+                "water_master",
+                "graminoid",
+                "other_plants",
+                "uncategorized_plants",
+                "Fungi",
+                "gill_fungi",
+                "non_gilled_fungi",
+                "gasteroid_fungi",
+                "other_fungi",
+                "uncategorized_fungi",
+                "The Rest",
+                "bacteria",
+                "virus",
+                "protozoa",
+                "chromista",
+                "archaea",
+                "algae",
+                "ciliate",
+                "Hunt",
+                "Gather",
+                "Survival",
+                "Travel",
+                "Agriculture",
+                "Building",
+                "Culture"
+              ]},
+              "sub": {"type": "string", "maxLength": 100, "enum": [
+                "",
+                "Guides",
+                "Tracking/Stalking",
+                "Trapping",
+                "Fishing",
+                "Strategies/Techniques",
+                "Processing",
+                "Tools",
+                "Edible",
+                "Medicinal",
+                "Fire",
+                "Water",
+                "Basic Shelter",
+                "Navigation",
+                "Emergency",
+                "Land",
+                "Planting/Harvesting",
+                "Maintenance/Management",
+                "Processing/Storage",
+                "Livestock",
+                "Soil Health",
+                "Propogation/Cultivation",
+                "Irrigation",
+                "Techniques/Systems",
+                "Start-To-Finish/Lifecycles",
+                "Foundations",
+                "Floors",
+                "Walls",
+                "Roofs",
+                "Complete Structures",
+                "Water Systems",
+                "Heating/Cooling",
+                "Sanitation",
+                "Furniture/Utensils/Tools",
+                "Cooking/Recipes",
+                "Clothing",
+                "Art",
+                "Rituals",
+                "Stories"
+              ]}
             },
             "additionalProperties": false
         },
         "tags": {
           "type": "array",
           "description": "must be an array",
+          "maxItems": 3,
           "items": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 100
           }
         },
         "approved": {
@@ -43,6 +130,7 @@
         },
         "name": {
           "type": "string",
+          "maxLength": 100,
           "description": "must be a string"
         },
         "ecoregions": {
@@ -56,6 +144,7 @@
         },
         "id": {
           "type": "string",
+          "maxLength": 100,
           "description": "must be a string"
         },
         "version": {
@@ -98,7 +187,8 @@
           "type": "array",
           "description": "must be an array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 100
           }
         }
       },

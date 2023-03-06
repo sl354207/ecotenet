@@ -164,14 +164,16 @@ export const HomepageProvider = ({ children }) => {
 
   useEffect(() => {
     let visitedHome = localStorage.getItem("visited");
+    // console.log(visitedHome);
 
     if (router.pathname == "/") {
       localStorage.setItem("visited", true);
       setVisited(visitedHome);
+      // console.log(visited);
     } else {
       setVisited(visitedHome);
     }
-  }, [router.pathname == "/"]);
+  }, [router.pathname]);
 
   const [distributionState, distributionDispatch] = useReducer(
     reducer,

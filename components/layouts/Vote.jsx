@@ -3,12 +3,17 @@ import { alpha, Button, IconButton, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { useState } from "react";
 
-const Vote = ({ post_count, handleOpenDialog, voters }) => {
-  //set count value for post
+const Vote = ({
+  post_count,
+  handleOpenDialog,
+  voters,
+  limit,
+  setLimit,
+  vote,
+  setVote,
+}) => {
+  //set count value for voting
   const [count, setCount] = useState(post_count);
-  //set limit for count
-  const [limit, setLimit] = useState(0);
-  const [vote, setVote] = useState(0);
 
   const handleCountUp = () => {
     if (limit == 1) {

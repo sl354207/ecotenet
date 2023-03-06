@@ -3,15 +3,15 @@ import { useUserContext } from "@components/context/UserContext";
 import TextBox from "@components/inputFields/TextBox";
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
-import { Button, Container } from "@mui/material";
+import { Button, Container, FormControl, InputLabel } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 const newUser = () => {
   const router = useRouter();
 
-  const { user, setUser } = useUserContext();
-  const { snackbar, setSnackbar } = useSnackbarContext();
+  const { user } = useUserContext();
+  const { setSnackbar } = useSnackbarContext();
 
   const [name, setName] = useState("");
 
@@ -40,8 +40,7 @@ const newUser = () => {
     if (res.ok) {
       const check = await res.text();
       // console.log(check);
-      if (!check.length) {
-        // const test = JSON.parse(check);
+      if (check === "null") {
         const res1 = await fetch(`/api/dashboard/users/${name}`, {
           method: "PUT",
           headers: {
@@ -85,22 +84,21 @@ const newUser = () => {
     }
   };
 
-  //
-
   return (
     <Container>
       <Header title="New Profile" />
       <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
       <div style={{ display: "grid" }}>
+        <FormControl>
+          <InputLabel htmlFor="name" shrink></InputLabel>
+        </FormControl>
         <TextBox
           defaultValue=""
           placeHolder="profile name"
           id="name"
           autoFocus={true}
           handleChange={handleChange}
-          rows={1}
-          multiline={false}
-          inputProps={{ maxLength: 60 }}
+          inputProps={{ type: "text", maxLength: 100 }}
           onKeyPress={onKeyPress}
         />
         <Button

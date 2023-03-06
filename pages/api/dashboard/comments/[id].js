@@ -1,14 +1,15 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import {
   checkPerson,
   deleteComment,
   updateComment,
 } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 import { ajv } from "@schema/validation";
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   // console.log(session);
   if (session) {
     const method = req.method;
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
         const validate = ajv.getSchema("comment");
         const valid = validate(data);
         if (typeof id == "string" && id.length == 24 && valid) {
-          if (session.user.name && session.user.name == data.name) {
+          if (session.user.name && session.user.name === data.name) {
             try {
               data.date = new Date().toUTCString();
               data.approved = "pending";
@@ -33,7 +34,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(data.name);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 data.date = new Date().toUTCString();
@@ -67,9 +68,10 @@ export default async function handler(req, res) {
         if (
           typeof deleteId == "string" &&
           deleteId.length == 24 &&
-          typeof deleteName == "string"
+          typeof deleteName == "string" &&
+          deleteName.length <= 100
         ) {
-          if (session.user.name && session.user.name == deleteName) {
+          if (session.user.name && session.user.name === deleteName) {
             try {
               const deleted = await deleteComment(deleteId);
               return res.status(200).json(deleted);
@@ -80,7 +82,7 @@ export default async function handler(req, res) {
           } else if (!session.user.name) {
             const person = await checkPerson(deleteName);
 
-            if (person && person.email == session.user.email) {
+            if (person && person.email === session.user.email) {
               // try get request, if successful return response, otherwise return error message
               try {
                 const deleted = await deleteComment(deleteId);

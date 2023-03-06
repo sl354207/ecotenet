@@ -1,7 +1,5 @@
 import CommentList from "@components/comments/CommentList";
 import { useUserContext } from "@components/context/UserContext";
-import ClientDialog from "@components/dialogs/ClientDialog";
-import Flag from "@components/dialogs/Flag";
 import EditorLayout from "@components/layouts/EditorLayout";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
@@ -31,20 +29,29 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
+import fetcher from "@utils/fetcher";
 import { getFeatures, getPostById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
+const DynamicClientDialog = dynamic(
+  () => import("@components/dialogs/ClientDialog"),
+  {
+    ssr: false,
+  }
+);
 
-// pass in post and comments as props and create page for each post with corresponding comments
 const post = ({ post }) => {
   const router = useRouter();
   const { user } = useUserContext();
@@ -65,16 +72,30 @@ const post = ({ post }) => {
 
   const [loadComments, setLoadComments] = useState(false);
 
-  const { data: comments, error } = useSWR(
-    loadComments ? `/api/comments/${post._id}` : null,
-    fetcher
-  );
+  const { mutate } = useSWRConfig();
 
-  const { data: votes, mutate } = useSWR(`/api/votes/${post._id}`, fetcher);
+  const {
+    data: comments,
+    isLoading: commentLoading,
+    error: commentError,
+  } = useSWR(loadComments ? `/api/comments/${post._id}` : null, fetcher, {
+    shouldRetryOnError: false,
+  });
+
+  //set limit for vote count
+  const [limit, setLimit] = useState(0);
+  // set vote status
+  const [vote, setVote] = useState(0);
+
+  const {
+    data: votes,
+    isLoading: voteLoading,
+    error: voteError,
+  } = useSWR(`/api/votes/${post._id}`, fetcher, {
+    shouldRetryOnError: false,
+  });
 
   const reducer = (comments, toggle) => {
-    // console.log(comments);
-    // console.log(toggle);
     if (toggle.type == "load") {
       return toggle.payload;
     }
@@ -108,37 +129,32 @@ const post = ({ post }) => {
   const [state, dispatch] = useReducer(reducer, comments);
 
   useEffect(() => {
-    // console.log(loadComments);
     if (isVisible) {
       setLoadComments(true);
     }
   }, [isVisible]);
   useEffect(() => {
-    // console.log(comments);
     if (loadComments && comments) {
       comments.forEach((reply) => {
         reply.open = false;
-        // console.log("loadComments");
       });
       dispatch({ type: "load", payload: comments });
-      // console.log(comments);
     }
   }, [comments]);
 
   const handleOpenDialog = (action, result) => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setItem(result);
         setAction(action);
 
         setDialog(true);
-        // console.log(action);
-        // console.log(result);
+
         if (action == "Comment") {
           dispatch({ type: "open", payload: result.comment_ref });
         }
@@ -158,11 +174,11 @@ const post = ({ post }) => {
   };
 
   const toggleForm = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setShowForm(!showForm);
@@ -174,11 +190,11 @@ const post = ({ post }) => {
   };
 
   const handleOpenFlag = (action, result) => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setItem(result);
@@ -193,11 +209,11 @@ const post = ({ post }) => {
   };
 
   const handleReply = (toggle, ID) => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         dispatch({ type: toggle, payload: ID });
@@ -281,7 +297,6 @@ const post = ({ post }) => {
             </Box>
             <Typography
               sx={{
-                // marginLeft: { xs: "0px", md: "20px" },
                 fontStyle: "italic",
               }}
               align="left"
@@ -319,16 +334,44 @@ const post = ({ post }) => {
           </div>
           {!isMobile && (
             <>
-              {votes ? (
-                <Vote
-                  post_count={votes && votes.count}
-                  handleOpenDialog={handleOpenDialog}
-                  name={user && user.name}
-                  voters={votes && votes.voters}
-                />
-              ) : (
+              {voteLoading ? (
                 <CircularProgress size={19} color="secondary" />
-              )}{" "}
+              ) : (
+                <>
+                  {voteError ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => mutate(`/api/votes/${post._id}`)}
+                      >
+                        Error Loading. Retry
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {votes && (
+                        <Vote
+                          post_count={votes && votes.count}
+                          handleOpenDialog={handleOpenDialog}
+                          name={user && user.name}
+                          voters={votes && votes.voters}
+                          vote={vote}
+                          setVote={setVote}
+                          limit={limit}
+                          setLimit={setLimit}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
+              )}
             </>
           )}
         </div>
@@ -342,20 +385,58 @@ const post = ({ post }) => {
                 marginBlock: "10px",
               }}
             >
-              {votes ? (
-                <Vote
-                  post_count={votes && votes.count}
-                  handleOpenDialog={handleOpenDialog}
-                  name={user && user.name}
-                  voters={votes && votes.voters}
-                />
-              ) : (
+              {voteLoading ? (
                 <CircularProgress size={19} color="secondary" />
+              ) : (
+                <>
+                  {voteError ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "20px",
+                      }}
+                    >
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => mutate(`/api/votes/${post._id}`)}
+                      >
+                        Error Loading. Retry
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {votes && (
+                        <Vote
+                          post_count={votes && votes.count}
+                          handleOpenDialog={handleOpenDialog}
+                          name={user && user.name}
+                          voters={votes && votes.voters}
+                          vote={vote}
+                          setVote={setVote}
+                          limit={limit}
+                          setLimit={setLimit}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
               )}
             </div>
           </>
         )}
         <EditorLayout>
+          {(post.category.sub === "Edible" ||
+            post.category.sub === "Medicinal") && (
+            <Typography sx={{ marginTop: "5px" }}>
+              <em>
+                Disclaimer: This content is for educational purposes only.
+                Before consuming anything make sure you have properly identified
+                it and speak to a professional about any possible effects.
+              </em>
+            </Typography>
+          )}
           <Editor
             cellPlugins={cellPlugins}
             value={value}
@@ -368,38 +449,70 @@ const post = ({ post }) => {
           Comments:
         </Typography>
         <div ref={ref}>
-          {!comments && !error && <Typography>loading...</Typography>}
-          {comments && (
-            <CommentList
-              comments={comments}
-              post_id={post._id}
-              handleOpenDialog={handleOpenDialog}
-              handleOpenFlag={handleOpenFlag}
-              showForm={showForm}
-              handleForm={toggleForm}
-              handleReply={handleReply}
-            />
+          {commentLoading ? (
+            <Typography>loading...</Typography>
+          ) : (
+            <>
+              {commentError ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => mutate(`/api/comments/${post._id}`)}
+                  >
+                    Error Loading. Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {comments && (
+                    <CommentList
+                      comments={comments}
+                      post_id={post._id}
+                      handleOpenDialog={handleOpenDialog}
+                      handleOpenFlag={handleOpenFlag}
+                      showForm={showForm}
+                      handleForm={toggleForm}
+                      handleReply={handleReply}
+                    />
+                  )}
+                </>
+              )}
+            </>
           )}
         </div>
       </Container>
 
-      <ClientDialog
-        contentType={action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        post_id={post._id}
-        result={item}
-        closeForm={closeForm}
-        name={user && user.name}
-        mutate={mutate}
-      />
-      <Flag
-        open={flag}
-        handleClose={handleCloseFlag}
-        contentType={action}
-        result={item}
-        name={user && user.name}
-      />
+      {dialog && (
+        <DynamicClientDialog
+          contentType={action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          post_id={post._id}
+          result={item}
+          closeForm={closeForm}
+          name={user && user.name}
+          mutate={mutate}
+          setVote={setVote}
+          setLimit={setLimit}
+        />
+      )}
+
+      {flag && (
+        <DynamicFlag
+          open={flag}
+          handleClose={handleCloseFlag}
+          contentType={action}
+          result={item}
+          name={user && user.name}
+        />
+      )}
 
       <Footer />
     </>
@@ -413,12 +526,9 @@ export const getStaticProps = async (context) => {
 
   const post = await getPostById(_id);
 
-  // const comments = await getPostComments(post._id.toString());
-
   return {
     props: {
       post: JSON.parse(JSON.stringify(post)),
-      // comments: JSON.parse(JSON.stringify(comments)),
     },
     revalidate: 60,
   };

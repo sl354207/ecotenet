@@ -8,8 +8,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-// import dynamic from "next/dynamic";
-import WelcomeDialog from "@components/dialogs/WelcomeDialog";
+
 import EcoDist from "@components/drawers/EcoDist";
 import EcoRegions from "@components/drawers/EcoRegions";
 import EcoSummary from "@components/drawers/EcoSummary";
@@ -18,7 +17,6 @@ import Coords from "@data/eco_coord.json";
 import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 import { useHomepageContext } from "@components/context/HomepageContext";
-import FeatureAndSearchDrawer from "@components/drawers/FeatureAndSearchDrawer";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
@@ -28,14 +26,25 @@ import { styled, useTheme } from "@mui/material/styles";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { MapProvider } from "react-map-gl";
-// import useSWR from "swr";
+
+const DynamicWelcomeDialog = dynamic(
+  () => import("@components/dialogs/WelcomeDialog"),
+  {
+    ssr: false,
+  }
+);
+const DynamicFeatureAndSearchDrawer = dynamic(
+  () => import("@components/drawers/FeatureAndSearchDrawer"),
+  {
+    ssr: false,
+  }
+);
 
 const coords = Coords;
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -90,7 +99,7 @@ const MapPage = ({ ecoregions }) => {
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
   // });
-  // console.log(visited);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -110,19 +119,20 @@ const MapPage = ({ ecoregions }) => {
     distributionDispatch,
   } = useHomepageContext();
 
-  // const { data: ecoregions } = useSWR("/api/ecoregions", fetcher);
-
   const drawerWidth = 350;
 
   const [visitedHome, setVisitedHome] = useState(false);
 
   useEffect(() => {
-    if (visited == "true") {
-      setEcoOpen(false);
-      setVisitedHome(true);
-    } else {
+    if (visited === null) {
       setEcoOpen(true);
       setVisitedHome(false);
+    } else if (visited === undefined) {
+      setEcoOpen(false);
+      setVisitedHome(false);
+    } else {
+      setEcoOpen(false);
+      setVisitedHome(true);
     }
   }, [visited]);
 
@@ -236,7 +246,6 @@ const MapPage = ({ ecoregions }) => {
             >
               <Toolbar sx={{ display: "grid" }}>
                 <Tabs
-                  // orientation="vertical"
                   value={tab.id}
                   onChange={handleChange}
                   aria-label="Vertical tabs example"
@@ -312,76 +321,72 @@ const MapPage = ({ ecoregions }) => {
                   backgroundColor: theme.palette.primary.light,
                 }}
               >
-                {isMobile && (
-                  <>
-                    <ButtonGroup
-                      // orientation="vertical"
-                      aria-label="vertical outlined button group"
-                      sx={{ marginLeft: "10px" }}
-                    >
-                      <IconButton
-                        variant="text"
-                        color="inherit"
-                        onClick={() => {
-                          switch (drawerHeight) {
-                            case 0:
-                              setTop("50vh");
-                              setDrawerHeight(1);
+                <ButtonGroup
+                  // orientation="vertical"
+                  aria-label="vertical outlined button group"
+                  sx={{ marginLeft: "10px" }}
+                >
+                  <IconButton
+                    variant="text"
+                    color="inherit"
+                    onClick={() => {
+                      switch (drawerHeight) {
+                        case 0:
+                          setTop("50vh");
+                          setDrawerHeight(1);
 
-                              break;
-                            case 1:
-                              setTop("40px");
-                              setDrawerHeight(2);
+                          break;
+                        case 1:
+                          setTop("40px");
+                          setDrawerHeight(2);
 
-                              break;
+                          break;
 
-                            default:
-                              break;
-                          }
-                        }}
-                      >
-                        <KeyboardArrowUpIcon />
-                      </IconButton>
-                      <IconButton
-                        variant="text"
-                        color="inherit"
-                        onClick={() => {
-                          switch (drawerHeight) {
-                            case 1:
-                              setTop("calc(85vh - 59px)");
-                              setDrawerHeight(0);
+                        default:
+                          break;
+                      }
+                    }}
+                  >
+                    <KeyboardArrowUpIcon />
+                  </IconButton>
+                  <IconButton
+                    variant="text"
+                    color="inherit"
+                    onClick={() => {
+                      switch (drawerHeight) {
+                        case 1:
+                          setTop("calc(85vh - 59px)");
+                          setDrawerHeight(0);
 
-                              break;
-                            case 2:
-                              setTop("50vh");
-                              setDrawerHeight(1);
+                          break;
+                        case 2:
+                          setTop("50vh");
+                          setDrawerHeight(1);
 
-                              break;
+                          break;
 
-                            default:
-                              break;
-                          }
-                        }}
-                      >
-                        <KeyboardArrowDownIcon />
-                      </IconButton>
-                    </ButtonGroup>
-                    <Typography
-                      align="center"
-                      variant="h5"
-                      sx={{
-                        position: "absolute",
-                        left: "0px",
-                        right: "0px",
-                        marginInline: "auto",
-                        marginTop: "3px",
-                        width: "fit-content",
-                      }}
-                    >
-                      {tab.label}
-                    </Typography>
-                  </>
-                )}
+                        default:
+                          break;
+                      }
+                    }}
+                  >
+                    <KeyboardArrowDownIcon />
+                  </IconButton>
+                </ButtonGroup>
+                <Typography
+                  align="center"
+                  variant="h5"
+                  sx={{
+                    position: "absolute",
+                    left: "0px",
+                    right: "0px",
+                    marginInline: "auto",
+                    marginTop: "3px",
+                    width: "fit-content",
+                  }}
+                >
+                  {tab.label}
+                </Typography>
 
                 <IconButton
                   onClick={handleEcoClose}
@@ -435,16 +440,18 @@ const MapPage = ({ ecoregions }) => {
                 </>
               </Box>
             </Drawer>
-            <FeatureAndSearchDrawer
-              handleFSClose={handleFSClose}
-              top={top}
-              setTop={setTop}
-              drawerHeight={drawerHeight}
-              setDrawerHeight={setDrawerHeight}
-              anchor="bottom"
-              FS={FS}
-              FSOpen={FSOpen}
-            />
+            {FSOpen && (
+              <DynamicFeatureAndSearchDrawer
+                handleFSClose={handleFSClose}
+                top={top}
+                setTop={setTop}
+                drawerHeight={drawerHeight}
+                setDrawerHeight={setDrawerHeight}
+                anchor="bottom"
+                FS={FS}
+                FSOpen={FSOpen}
+              />
+            )}
           </>
         ) : (
           <>
@@ -573,27 +580,28 @@ const MapPage = ({ ecoregions }) => {
                 </>
               </Box>
             </Drawer>
-            <FeatureAndSearchDrawer
-              handleFSClose={handleFSClose}
-              top={top}
-              setTop={setTop}
-              drawerHeight={drawerHeight}
-              setDrawerHeight={setDrawerHeight}
-              anchor="left"
-              FS={FS}
-              FSOpen={FSOpen}
-            />
+            {FSOpen && (
+              <DynamicFeatureAndSearchDrawer
+                handleFSClose={handleFSClose}
+                top={top}
+                setTop={setTop}
+                drawerHeight={drawerHeight}
+                setDrawerHeight={setDrawerHeight}
+                anchor="bottom"
+                FS={FS}
+                FSOpen={FSOpen}
+              />
+            )}
           </>
         )}
       </MapProvider>
-      {!visited && <WelcomeDialog />}
+      {!visited && <DynamicWelcomeDialog />}
     </div>
   );
 };
 
 export const getStaticProps = async () => {
   const ecoregions = await getEcoregions();
-  //   console.log(ecoregions);
 
   return {
     props: {

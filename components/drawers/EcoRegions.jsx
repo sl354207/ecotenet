@@ -1,4 +1,4 @@
-import { List, ListItem, Typography } from "@mui/material";
+import { List, ListItemButton, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useMap } from "react-map-gl";
 
@@ -20,13 +20,12 @@ const EcoRegions = ({
     return a.unique_id - b.unique_id;
   });
 
+  // for map context provider
   const { mapA } = useMap();
-  // console.log(`initial ${mapA}`);
 
   const ecoClick = useCallback(
     (ecoregion) => {
       if (mapA) {
-        // console.log(`initial click ${mapA}`);
         setShowPopup(true);
 
         setHoverInfo({
@@ -40,19 +39,16 @@ const EcoRegions = ({
         setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });
 
         setWiki(ecoregion);
+        if (!visitedHome && !click) {
+          setTab({ id: 1, label: "Summary" });
+        }
+        setClick(true);
 
         mapA.easeTo({
           center: ecoregion.coordinates,
           duration: 3000,
           zoom: 3.5,
-          // speed: 0.2,
-          // essential: true,
         });
-        if (!visitedHome && !click) {
-          setTab({ id: 1, label: "Summary" });
-        }
-        setClick(true);
-        // console.log(`final ${mapA}`);
       }
     },
     [mapA, ecoMove]
@@ -80,13 +76,12 @@ const EcoRegions = ({
       <List>
         {sorted.map((ecoregion) => {
           return (
-            <ListItem
-              button
+            <ListItemButton
               onClick={() => ecoClick(ecoregion)}
               key={ecoregion.unique_id}
             >
               Eco-{ecoregion.unique_id}: {ecoregion.name}
-            </ListItem>
+            </ListItemButton>
           );
         })}
       </List>

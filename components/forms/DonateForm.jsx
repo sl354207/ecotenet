@@ -49,14 +49,14 @@ function a11yProps(index) {
 const DonateForm = () => {
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState(5.0);
+  const [once, setOnce] = useState(5.0);
   const [monthly, setMonthly] = useState({
     amount: 5.0,
     priceID: "price_1KyfgSIxZCxSXd1iyenrfWb5",
   });
 
   const handleInputChange = (event) => {
-    setValue(
+    setOnce(
       event.currentTarget.value === "" ? "" : Number(event.currentTarget.value)
     );
   };
@@ -105,7 +105,7 @@ const DonateForm = () => {
   };
 
   const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
+    setOnce(newValue);
   };
 
   const handleTabChange = (event, newValue) => {
@@ -146,7 +146,7 @@ const DonateForm = () => {
     setLoading(true);
     // Create a Checkout Session.
     const response = await fetchPostJSON("/api/checkout", {
-      amount: value,
+      amount: once,
     });
 
     if (response.statusCode === 500) {
@@ -413,7 +413,7 @@ const DonateForm = () => {
                 flexGrow: 1,
               },
             }}
-            value={value}
+            value={once}
             color="secondary"
             disableUnderline
             onChange={handleInputChange}
@@ -426,7 +426,8 @@ const DonateForm = () => {
             }}
           />
           <Slider
-            value={typeof value === "number" ? value : 1.0}
+            // value={typeof value === "number" ? once : 1.0}
+            value={once}
             color="secondary"
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
@@ -448,7 +449,7 @@ const DonateForm = () => {
               variant="contained"
               color="secondary"
               type="submit"
-              disabled={loading}
+              disabled={loading || once == 0}
               sx={{
                 display: "flex",
                 margin: "auto",
@@ -456,7 +457,7 @@ const DonateForm = () => {
                 minWidth: "300px",
               }}
             >
-              Donate {formatAmountForDisplay(value, "usd")}
+              Donate {formatAmountForDisplay(once, "usd")}
             </Button>
           )}
         </form>

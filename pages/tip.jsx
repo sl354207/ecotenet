@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 const tip = () => {
   const router = useRouter();
-  //   console.log(router.query);
+
   const name = router.query.q;
   return (
     <Container>

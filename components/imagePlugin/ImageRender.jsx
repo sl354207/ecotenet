@@ -1,7 +1,6 @@
-import Link from "@components/layouts/Link";
 import { Typography } from "@mui/material";
 import { lazyLoad } from "@react-page/editor";
-import Image from "next/image";
+import Image from "next/legacy/image";
 const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
 // ImageRender takes in data as prop passed down from testPlugin
@@ -13,14 +12,9 @@ const ImageRender = ({ data, preview }) => {
       // console.log("true blob");
       return true;
     } else {
-      // console.log(
-      //   /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-      //     string
-      //   )
-      // );
-      return /^https?:\/\/.+\.(jpeg|jpg|JPG|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-        string
-      );
+      const regex =
+        /^http[^\?]*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)(\?(.*))?$/gim;
+      return regex.test(string);
     }
   };
 
@@ -183,15 +177,6 @@ const ImageRender = ({ data, preview }) => {
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}. </Typography>
-                  )}
-                  {!data.image.url.startsWith("blob:") && (
-                    <Link
-                      href={data.image.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Link
-                    </Link>
                   )}
                 </figcaption>
               </figure>

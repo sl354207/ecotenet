@@ -26,10 +26,12 @@
         },
         "date": {
           "type": "string",
+          "maxLength": 100,
           "description": "must be a string"
         },
         "text": {
           "type": "string",
+          "maxLength": 5000,
           "description": "must be a string"
         },
         "approved": {
@@ -47,6 +49,7 @@
         },
         "name": {
           "type": "string",
+          "maxLength": 100,
           "description": "must be a string"
         }
       },

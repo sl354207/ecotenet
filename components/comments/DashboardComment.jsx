@@ -42,12 +42,12 @@ const DashboardComment = ({
 
     const updateResponse = await updateComment(comment, "dashboard");
     if (updateResponse.ok) {
-      mutate();
+      mutate(`/api/dashboard/comments?name=${name}`);
       setSnackbar({
         ...snackbar,
         open: true,
         severity: "success",
-        message: "Comment updated successfully",
+        message: "Success! Comment will be visible upon approval",
       });
       setCommentValue("");
     }
@@ -67,13 +67,15 @@ const DashboardComment = ({
       Approved: {result.approved}
       <div style={{ display: "flex", flexGrow: 1 }}>
         <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
-          <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
+          <InputLabel shrink htmlFor="dashboard-comment"></InputLabel>
           <TextBox
             defaultValue={result.text}
             placeHolder={null}
-            id="dashboardcomment"
+            id="dashboard-comment"
             handleChange={handleCommentChange}
             autoFocus={false}
+            multiline={true}
+            inputProps={{ type: "text", maxLength: 5000 }}
           />
         </FormControl>
         {isMobile ? (
@@ -117,18 +119,6 @@ const DashboardComment = ({
               </Button>
             )}
 
-            {/* <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                margin: "4px 0px",
-                minWidth: "fit-content",
-                justifyContent: "start",
-              }}
-              startIcon={<DeleteIcon />}
-              size="small"
-              onClick={handleDeleteOpen}
-            ></Button> */}
             <IconButton
               edge="start"
               color="inherit"
@@ -150,35 +140,23 @@ const DashboardComment = ({
             >
               View Post
             </Link>
-            {commentValue != "" ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "start",
-                }}
-                size="small"
-                onClick={() => handleCommentUpdate(commentValue)}
-              >
-                Save Change
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "start",
-                }}
-                size="small"
-                disabled
-              >
-                Save Change
-              </Button>
-            )}
+
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
+              size="small"
+              onClick={() => handleCommentUpdate(commentValue)}
+              disabled={
+                commentValue.trim().length === 0 || commentValue === result.text
+              }
+            >
+              Save Change
+            </Button>
 
             <Button
               variant="contained"

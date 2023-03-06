@@ -1,14 +1,15 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
 import {
   checkPerson,
   getPostVotes,
   updateVote,
 } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   // console.log(session);
   if (session) {
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
         if (voterNames.voters.includes(data.name)) {
           res.status(406).json({ msg: "You have already voted on this post." });
         } else {
-          if (data.vote == "add") {
+          if (data.vote === "add") {
             data.vote = 1;
             try {
               const response = await updateVote(data);
@@ -72,7 +73,7 @@ export default async function handler(req, res) {
               .status(406)
               .json({ msg: "You have already voted on this post." });
           } else {
-            if (data.vote == "add") {
+            if (data.vote === "add") {
               data.vote = 1;
               try {
                 const response = await updateVote(data);

@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   // try get request, if successful return response, otherwise return error message
 
-  if (typeof name == "string") {
+  if (typeof name == "string" && name.length <= 100) {
     if (!postId && !key) {
       try {
         const paths = await deleteDirectoryPromise(`${name}/`);

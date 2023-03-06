@@ -36,7 +36,6 @@ const PostList = ({ posts, featured, search, handleClose }) => {
                 justifyContent: "start",
                 textTransform: "none",
               }}
-              // href={featured ? `/featured/${post._id}` : `/posts/${post._id}`}
               onClick={() => {
                 if (router.pathname == "/") {
                   setFS({
@@ -55,8 +54,6 @@ const PostList = ({ posts, featured, search, handleClose }) => {
                     payload: 0,
                     value: post.ecoregions,
                     _id: post._id,
-                    // s_name: result.scientific_name,
-                    // c_name: result.common_name,
                   });
                   setTab({ id: 2, label: "Distributions" });
                 } else {

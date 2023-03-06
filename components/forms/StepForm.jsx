@@ -1,16 +1,23 @@
 import { useSnackbarContext } from "@components/context/SnackbarContext";
-import DashboardDialog from "@components/dialogs/DashboardDialog";
 import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { updatePost } from "@utils/apiHelpers";
 import theme from "@utils/theme";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
+
+const DynamicDashboardDialog = dynamic(
+  () => import("@components/dialogs/DashboardDialog"),
+  {
+    ssr: false,
+  }
+);
 
 // pass in post and url path as props
 const StepForm = ({ post, user }) => {
@@ -87,13 +94,6 @@ const StepForm = ({ post, user }) => {
       ...details,
       [name]: value,
     }));
-
-    // set errors
-    // const error = formValidation(name, value, fieldsValidation) || ""
-
-    // setFormErrors({
-    //   [name]: error
-    // })
   };
 
   // function to create a new draft. Takes in form values and editor value.
@@ -159,7 +159,6 @@ const StepForm = ({ post, user }) => {
     switch (step) {
       case 0:
         return (
-          // add back in when ready  formErrors={formErrors}
           <>
             <div
               style={{
@@ -183,7 +182,6 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -219,7 +217,6 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -262,7 +259,6 @@ const StepForm = ({ post, user }) => {
         );
       case 1:
         return (
-          // add back in when ready  formErrors={formErrors}
           <>
             <div
               style={{
@@ -281,7 +277,6 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -318,7 +313,6 @@ const StepForm = ({ post, user }) => {
                   </Button>
 
                   {details.title != "" &&
-                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -373,7 +367,6 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -409,7 +402,6 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
                   {details.title != "" &&
-                  details.category.title != "" &&
                   details.category != null &&
                   clickInfo.length > 0 &&
                   postValue &&
@@ -449,7 +441,7 @@ const StepForm = ({ post, user }) => {
             <PostRegion clickInfo={clickInfo} setClickInfo={setClickInfo} />
           </>
         );
-      // add back in when ready  formErrors={formErrors}
+
       default:
         break;
     }
@@ -457,14 +449,15 @@ const StepForm = ({ post, user }) => {
 
   return (
     <>
-      {/* <Link href="/dashboard" underline="hover">
-        &#10229;Dashboard
-      </Link> */}
-
       <Link
         href="/dashboard"
         underline="hover"
-        style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginTop: "10px",
+          maxWidth: "fit-content",
+        }}
       >
         <ArrowBackIcon fontSize="small" />
         Dashboard
@@ -473,9 +466,13 @@ const StepForm = ({ post, user }) => {
         alternativeLabel
         nonLinear
         activeStep={activeStep}
-        sx={{ backgroundColor: theme.palette.primary.dark, padding: "24px" }}
+        sx={{
+          backgroundColor: theme.palette.primary.dark,
+          padding: "24px",
+          justifyContent: "space-around",
+        }}
       >
-        <Step>
+        <Step sx={{ display: "flex", justifyContent: "center" }}>
           <StepButton
             onClick={handleStep(0)}
             sx={{
@@ -491,12 +488,13 @@ const StepForm = ({ post, user }) => {
               "& .MuiStepIcon-root": {
                 color: alpha(theme.palette.secondary.dark, 0.4),
               },
+              maxWidth: "fit-content",
             }}
           >
             details
           </StepButton>
         </Step>
-        <Step>
+        <Step sx={{ display: "flex", justifyContent: "center" }}>
           <StepButton
             onClick={handleStep(1)}
             sx={{
@@ -512,12 +510,13 @@ const StepForm = ({ post, user }) => {
               "& .MuiStepIcon-root": {
                 color: alpha(theme.palette.secondary.dark, 0.4),
               },
+              maxWidth: "fit-content",
             }}
           >
             body
           </StepButton>
         </Step>
-        <Step>
+        <Step sx={{ display: "flex", justifyContent: "center" }}>
           <StepButton
             onClick={handleStep(2)}
             sx={{
@@ -533,22 +532,25 @@ const StepForm = ({ post, user }) => {
               "& .MuiStepIcon-root": {
                 color: alpha(theme.palette.secondary.dark, 0.4),
               },
+              maxWidth: "fit-content",
             }}
           >
             map
           </StepButton>
         </Step>
       </Stepper>
-      <DashboardDialog
-        contentType={action.type}
-        action={action.action}
-        open={dialog}
-        handleClose={handleCloseDialog}
-        result={item}
-        snackbar={snackbar}
-        setSnackbar={setSnackbar}
-        name={user && user.name}
-      />
+      {dialog && (
+        <DynamicDashboardDialog
+          contentType={action.type}
+          action={action.action}
+          open={dialog}
+          handleClose={handleCloseDialog}
+          result={item}
+          snackbar={snackbar}
+          setSnackbar={setSnackbar}
+          name={user && user.name}
+        />
+      )}
 
       {handleSteps(activeStep)}
     </>

@@ -359,13 +359,29 @@ const updateComment = async (_id, data) => {
 };
 
 //delete a comment
+// const deleteComment = async (_id) => {
+//   try {
+//     const db = await connectToDatabase();
+
+//     const deleted = await db
+//       .collection("comments")
+//       .deleteMany({ $or: [{ _id: ObjectId(_id) }, { comment_ref: _id }] });
+
+//     return deleted;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 const deleteComment = async (_id) => {
   try {
     const db = await connectToDatabase();
 
-    const deleted = await db
-      .collection("comments")
-      .deleteMany({ $or: [{ _id: ObjectId(_id) }, { comment_ref: _id }] });
+    const deleted = await db.collection("comments").updateOne(
+      {
+        _id: ObjectId(_id),
+      },
+      { $set: { text: "Comment deleted", name: "" } }
+    );
 
     return deleted;
   } catch (error) {
@@ -666,7 +682,7 @@ const getStats = async () => {
     const db = await connectToDatabase();
 
     const comments = await db.collection("comments").estimatedDocumentCount({});
-    const people = await db.collection("people").estimatedDocumentCount({});
+    const people = await db.collection("users").estimatedDocumentCount({});
     const flags = await db.collection("flags").estimatedDocumentCount({});
     const species = await db.collection("species").estimatedDocumentCount({});
     const posts = await db
@@ -712,7 +728,7 @@ const getPerson = async (name) => {
         name: name,
       },
       {
-        projection: { email: 0, _id: 0, denials: 0, emailVerified: 0, role: 0 },
+        projection: { email: 0, denials: 0, emailVerified: 0, role: 0 },
       }
     );
 
@@ -770,7 +786,7 @@ const updateDenials = async (name, denials) => {
   try {
     const db = await connectToDatabase();
 
-    const response = await db.collection("people").updateOne(
+    const response = await db.collection("users").updateOne(
       {
         name: name,
       },
@@ -787,20 +803,28 @@ const deletePerson = async (name) => {
   try {
     const db = await connectToDatabase();
 
-    const person = await db.collection("people").deleteOne({
-      name: name,
-    });
-
-    const comments = await db.collection("comments").deleteMany({
-      name: name,
-    });
-    const posts = await db.collection("posts").deleteMany({
+    const notifications = await db.collection("notifications").deleteMany({
       name: name,
     });
     const flags = await db.collection("flags").deleteMany({
       name: name,
     });
-    const notifications = await db.collection("notifications").deleteMany({
+    const votes = await db.collection("posts").updateMany(
+      {
+        voters: name,
+      },
+      { $pull: { voters: name } }
+    );
+    const comments = await db.collection("comments").updateMany(
+      {
+        name: name,
+      },
+      { $set: { text: "Comment deleted", name: "" } }
+    );
+    const posts = await db.collection("posts").deleteMany({
+      name: name,
+    });
+    const person = await db.collection("users").deleteOne({
       name: name,
     });
 
@@ -809,7 +833,8 @@ const deletePerson = async (name) => {
       comments,
       posts,
       flags,
-      notifications
+      notifications,
+      votes
     );
     // console.log(deleted);
 

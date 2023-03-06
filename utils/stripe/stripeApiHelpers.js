@@ -20,6 +20,7 @@ export async function fetchPostJSON(url, data) {
       credentials: "same-origin", // include, *same-origin, omit
       headers: {
         "Content-Type": "application/json",
+        // Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       redirect: "follow", // manual, *follow, error

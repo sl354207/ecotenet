@@ -22,10 +22,8 @@ export default async function handler(req, res) {
       const approved = req.query.q2;
 
       if (
-        typeof status == "string" &&
-        (status == "published" || status == "draft") &&
-        typeof approved == "string" &&
-        (approved == "true" || approved == "false" || approved == "pending")
+        (status === "published" || status === "draft") &&
+        (approved === "true" || approved === "false" || approved === "pending")
       ) {
         try {
           const posts = await getPosts(status, approved);

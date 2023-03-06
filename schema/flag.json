@@ -3,10 +3,12 @@
     "properties": {
         "name": {
             "type": "string",
+            "maxLength": 100,
             "description": "must be a string"
           },
           "flagged": {
             "type": "string",
+            "maxLength": 100,
             "description": "must be a string"
           },
           "type": {
@@ -22,6 +24,7 @@
           },
           "text": {
             "type": "string",
+            "maxLength": 200,
             "description": "must be a string"
           },
           "content_id": {
@@ -61,6 +64,7 @@
           },
       "date": {
         "type": "string",
+        "maxLength": 100,
         "description": "must be a string"
       }
     },

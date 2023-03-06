@@ -15,6 +15,7 @@ import {
   deleteUserMedia,
   updatePost,
 } from "@utils/apiHelpers";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const DashboardDialog = ({
@@ -22,15 +23,16 @@ const DashboardDialog = ({
   handleClose,
   contentType,
   action,
-  className,
   result,
   name,
   snackbar,
   setSnackbar,
   mutate,
+  fetchApi,
 }) => {
   const router = useRouter();
 
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -44,7 +46,7 @@ const DashboardDialog = ({
       break;
 
     case "Person":
-      item = "person";
+      item = "account";
 
       break;
     default:
@@ -68,7 +70,7 @@ const DashboardDialog = ({
 
       if (postResponse.ok) {
         if (mutate) {
-          mutate();
+          mutate(fetchApi);
         }
 
         handleClose();
@@ -108,7 +110,7 @@ const DashboardDialog = ({
 
     if (commentResponse.ok) {
       if (mutate) {
-        mutate();
+        mutate(fetchApi);
       }
 
       handleClose();
@@ -140,24 +142,21 @@ const DashboardDialog = ({
       const userResponse = await deleteUser(deletion, "dashboard");
 
       if (userResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
-
         handleClose();
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "success",
-          message: `Person deleted successfully`,
+          message: "Account deleted successfully",
         });
+        signOut();
       }
       if (!userResponse.ok) {
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "error",
-          message: `There was a problem deleting person. Please try again later`,
+          message: `There was a problem deleting your account. Please try again later`,
         });
       }
     }
@@ -166,7 +165,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "error",
-        message: `There was a problem deleting person. Please try again later`,
+        message: `There was a problem deleting your account. Please try again later`,
       });
     }
   };
@@ -196,7 +195,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: `Post submitted successfully`,
+        message: "Success! Post will be made public upon approval",
       });
       router.reload();
     }
@@ -235,7 +234,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: `Post submitted successfully`,
+        message: "Success! Post will be made public upon approval",
       });
       router.reload();
     }
@@ -272,7 +271,7 @@ const DashboardDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: "Post submitted successfully",
+        message: "Success! Post will be made public upon approval",
       });
     }
     if (!postResponse.ok) {
@@ -328,15 +327,19 @@ const DashboardDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle
+        id="dashboard-dialog-title"
+        color="textPrimary"
+        align="center"
+      >
         {action == "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="dashboard-dialog-text" color="textPrimary">
           Are you sure you want to {action} {item}?
         </DialogContentText>
       </DialogContent>

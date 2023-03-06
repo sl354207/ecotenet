@@ -5,7 +5,7 @@ import {
   alpha,
   Container,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Typography,
 } from "@mui/material";
@@ -23,8 +23,8 @@ const featured = ({ featured }) => {
           Pinned
         </Typography>
         <List sx={{ display: "flex" }}>
-          <ListItem
-            button
+          <ListItemButton
+            key={"ideas"}
             variant="outlined"
             color="secondary"
             onClick={() => {
@@ -38,9 +38,9 @@ const featured = ({ featured }) => {
             }}
           >
             <ListItemText align="center">Ideas Behind Ecotenet</ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
+            key={"how"}
             variant="outlined"
             color="secondary"
             onClick={() => {
@@ -54,7 +54,7 @@ const featured = ({ featured }) => {
             }}
           >
             <ListItemText align="center">How to Create a Post</ListItemText>
-          </ListItem>
+          </ListItemButton>
         </List>
 
         <Typography variant="body1" align="center" sx={{ marginBlock: "10px" }}>

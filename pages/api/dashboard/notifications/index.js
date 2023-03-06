@@ -1,9 +1,10 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { checkPerson, getNotifications } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   // console.log(session);
   if (session) {
@@ -12,8 +13,8 @@ export default async function handler(req, res) {
     }
     const { name } = req.query;
     // console.log(name);
-    if (typeof name == "string") {
-      if (session.user.name && session.user.name == name) {
+    if (typeof name == "string" && name.length <= 100) {
+      if (session.user.name && session.user.name === name) {
         try {
           const notifications = await getNotifications(name);
 
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
       } else if (!session.user.name) {
         const person = await checkPerson(name);
 
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           try {
             const notifications = await getNotifications(name);
 
