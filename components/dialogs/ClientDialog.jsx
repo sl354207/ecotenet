@@ -8,21 +8,22 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { createComment, updateVote } from "@utils/apiHelpers";
-import { useRouter } from "next/router";
 
 const ClientDialog = ({
   open,
   handleClose,
   contentType,
-  className,
   result,
   mutate,
   closeForm,
   post_id,
   name,
+  setVote,
+  setLimit,
 }) => {
-  const router = useRouter();
   const { snackbar, setSnackbar } = useSnackbarContext();
+
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -59,7 +60,7 @@ const ClientDialog = ({
         ...snackbar,
         open: true,
         severity: "success",
-        message: "Comment submitted successfully",
+        message: "Success! Comment will be visible upon approval",
       });
     }
     if (!createResponse.ok) {
@@ -89,7 +90,9 @@ const ClientDialog = ({
         severity: "success",
         message: `${contentType} submitted successfully`,
       });
-      mutate();
+      mutate(`/api/votes/${post_id}`);
+      setVote(0);
+      setLimit(0);
     } else if (updateResponse.status == 406) {
       setSnackbar({
         ...snackbar,
@@ -105,22 +108,21 @@ const ClientDialog = ({
         message: `There was a problem submitting ${item}. Please try again later`,
       });
     }
-    // }
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="client-dialog-title" color="textPrimary" align="center">
         {contentType}
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="client-dialog-text" color="textPrimary">
           Are you sure you want to submit {item}?
         </DialogContentText>
       </DialogContent>

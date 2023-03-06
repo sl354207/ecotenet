@@ -7,7 +7,6 @@ const ecoregions = ({ ecoregions }) => {
   const sorted = ecoregions.sort(function (a, b) {
     return a.unique_id - b.unique_id;
   });
-  //   console.log(sorted);
 
   return (
     <Container>
@@ -33,7 +32,6 @@ const ecoregions = ({ ecoregions }) => {
 
 export const getStaticProps = async () => {
   const ecoregions = await getEcoregions();
-  //   console.log(ecoregions);
 
   return {
     props: {

@@ -29,6 +29,7 @@ import {
   updateUser,
 } from "@utils/apiHelpers";
 import theme from "@utils/theme";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
 const AdminDialog = ({
@@ -36,12 +37,13 @@ const AdminDialog = ({
   handleClose,
   contentType,
   action,
-  className,
   result,
   mutate,
 }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
+  const router = useRouter();
 
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -107,10 +109,6 @@ const AdminDialog = ({
       if (postResponse.ok) {
         const notifyResponse = await handleNotify("post", "deleted");
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -118,6 +116,12 @@ const AdminDialog = ({
             severity: "success",
             message: `Post deleted successfully`,
           });
+
+          if (router.query.flag) {
+            router.push("/admin/flags");
+          } else {
+            router.push("/admin/posts");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -158,10 +162,6 @@ const AdminDialog = ({
       const notifyResponse = await handleNotify("comment", "deleted");
 
       if (notifyResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
-
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -169,6 +169,7 @@ const AdminDialog = ({
           severity: "success",
           message: `Comment deleted successfully`,
         });
+        mutate("/api/admin/comments");
       }
       if (!notifyResponse.ok) {
         setSnackbar({
@@ -197,24 +198,26 @@ const AdminDialog = ({
       const userResponse = await deleteUser(deletion, "admin");
 
       if (userResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
-
         handleClose();
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "success",
-          message: `Person deleted successfully`,
+          message: "Account deleted successfully",
         });
+        if (router.query.flag) {
+          router.push("/admin/flags");
+        } else {
+          mutate("/api/admin/users");
+        }
       }
       if (!userResponse.ok) {
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "error",
-          message: `There was a problem deleting person. Please try again later`,
+          message:
+            "There was a problem deleting account. Please try again later",
         });
       }
     }
@@ -223,7 +226,7 @@ const AdminDialog = ({
         ...snackbar,
         open: true,
         severity: "error",
-        message: `There was a problem deleting person. Please try again later`,
+        message: "There was a problem deleting account. Please try again later",
       });
     }
   };
@@ -242,10 +245,6 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("post", "denied");
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -253,6 +252,12 @@ const AdminDialog = ({
             severity: "success",
             message: `Post denied successfully`,
           });
+
+          if (router.query.flag) {
+            router.push("/admin/flags");
+          } else {
+            router.push("/admin/posts");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -273,9 +278,6 @@ const AdminDialog = ({
       }
     } else {
       if (postResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -283,6 +285,11 @@ const AdminDialog = ({
           severity: "success",
           message: `Post approved successfully`,
         });
+        if (router.query.flag) {
+          router.push("/admin/flags");
+        } else {
+          router.push("/admin/posts");
+        }
       }
       if (!postResponse.ok) {
         setSnackbar({
@@ -307,10 +314,6 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("comment", "denied");
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -318,6 +321,7 @@ const AdminDialog = ({
             severity: "success",
             message: `Comment denied successfully`,
           });
+          mutate("/api/admin/comments");
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -338,9 +342,6 @@ const AdminDialog = ({
       }
     } else {
       if (commentResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -348,6 +349,7 @@ const AdminDialog = ({
           severity: "success",
           message: `Comment approved successfully`,
         });
+        mutate("/api/admin/comments");
       }
       if (!commentResponse.ok) {
         setSnackbar({
@@ -374,10 +376,6 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("profile item", "denied");
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -385,6 +383,11 @@ const AdminDialog = ({
             severity: "success",
             message: `Profile denied successfully`,
           });
+          if (router.query.flag) {
+            router.push("/admin/flags");
+          } else {
+            mutate("/api/admin/users");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -405,9 +408,6 @@ const AdminDialog = ({
       }
     } else {
       if (userResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -415,6 +415,11 @@ const AdminDialog = ({
           severity: "success",
           message: `Profile approved successfully`,
         });
+        if (router.query.flag) {
+          router.push("/admin/flags");
+        } else {
+          mutate("/api/admin/users");
+        }
       }
       if (!userResponse.ok) {
         setSnackbar({
@@ -471,15 +476,15 @@ const AdminDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="admin-dialog-title" color="textPrimary" align="center">
         {action}
       </DialogTitle>
       {action == "Approve" ? (
         <DialogContent>
-          <DialogContentText id="update" color="textPrimary">
+          <DialogContentText id="admin-dialog-text" color="textPrimary">
             Are you sure you want to approve {item}?
           </DialogContentText>
         </DialogContent>
@@ -547,15 +552,15 @@ const AdminDialog = ({
             {showForm ? (
               <Portal container={container.current}>
                 <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
-                  <InputLabel shrink htmlFor="commentform"></InputLabel>
+                  <InputLabel shrink htmlFor="admin-dialog"></InputLabel>
                   <TextBox
-                    id="info"
+                    id="admin-dialog"
                     handleChange={handleInfoChange}
                     defaultValue=""
                     placeHolder="additional comment on notification"
-                    rows={1}
                     autoFocus={false}
-                    name="info"
+                    name="admin-dialog"
+                    inputProps={{ type: "text", maxLength: 200 }}
                   />
                 </FormControl>
               </Portal>

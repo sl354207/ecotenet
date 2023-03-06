@@ -24,18 +24,15 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
                 : { flexGrow: 1, marginBottom: "10px" }
             }
           >
-            <InputLabel shrink htmlFor="commentform"></InputLabel>
+            <InputLabel shrink htmlFor="comment-form"></InputLabel>
             <TextBox
               defaultValue={null}
               placeHolder={null}
-              id="commentform"
+              id="comment-form"
               autoFocus={true}
               handleChange={handleChange}
-              // className={
-              //   comment_ref != ""
-              //     ? { marginLeft: "60px", padding: "0px 0px 10px 0px" }
-              //     : { padding: "5px 0px 10px 0px" }
-              // }
+              multiline={true}
+              inputProps={{ type: "text", maxLength: 5000 }}
             />
           </FormControl>
           <Button
@@ -43,6 +40,7 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
             color="secondary"
             onClick={() => handleOpenDialog("Comment", value)}
             sx={{ marginLeft: "10px" }}
+            disabled={value.text.trim().length === 0}
           >
             Submit
           </Button>

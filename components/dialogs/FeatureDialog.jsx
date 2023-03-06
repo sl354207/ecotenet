@@ -2,32 +2,39 @@ import PostList from "@components/layouts/PostList";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   alpha,
+  Button,
   CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
   IconButton,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Typography,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
-import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
+import useSWR, { useSWRConfig } from "swr";
 
 const FeatureDialog = ({ feature, setFeature }) => {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
   const handleCloseFeature = () => {
     setFeature(false);
   };
-  const { data: results } = useSWR("/api/features", fetcher);
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR("/api/features", fetcher, {
+    shouldRetryOnError: false,
+  });
 
   let list;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -41,13 +48,33 @@ const FeatureDialog = ({ feature, setFeature }) => {
       />
     );
   } else {
-    list = (
-      <PostList
-        posts={results}
-        featured={true}
-        handleClose={handleCloseFeature}
-      />
-    );
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate("/api/features")}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      list = (
+        <PostList
+          posts={results}
+          featured={true}
+          handleClose={handleCloseFeature}
+        />
+      );
+    }
   }
 
   return (
@@ -58,7 +85,6 @@ const FeatureDialog = ({ feature, setFeature }) => {
       maxWidth="md"
       scroll="paper"
       disableScrollLock
-      // hideBackdrop
       sx={{
         "&.MuiModal-root": {
           top: "30px",
@@ -79,7 +105,6 @@ const FeatureDialog = ({ feature, setFeature }) => {
         style={{
           display: "flex",
           justifyContent: "center",
-          // marginBottom: "20px",
         }}
       >
         <DialogTitle
@@ -98,15 +123,14 @@ const FeatureDialog = ({ feature, setFeature }) => {
           <CloseIcon />
         </IconButton>
       </div>
-      {/* <Divider /> */}
 
       <DialogContent>
         <Typography variant="body1" align="center">
           Pinned
         </Typography>
         <List sx={{ display: "flex" }}>
-          <ListItem
-            button
+          <ListItemButton
+            key={"ideas"}
             variant="outlined"
             color="secondary"
             onClick={() => {
@@ -121,9 +145,9 @@ const FeatureDialog = ({ feature, setFeature }) => {
             }}
           >
             <ListItemText align="center">Ideas Behind Ecotenet</ListItemText>
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
+            key={"how"}
             variant="outlined"
             color="secondary"
             onClick={() => {
@@ -138,7 +162,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
             }}
           >
             <ListItemText align="center">How to Create a Post</ListItemText>
-          </ListItem>
+          </ListItemButton>
         </List>
         <Typography variant="body1" align="center">
           These are currently our favorite posts that people have shared on the

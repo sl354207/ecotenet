@@ -4,12 +4,11 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-// pass in post and comments as props and create page for each post with corresponding comments
 const person = () => {
   const router = useRouter();
 
@@ -23,6 +22,7 @@ const person = () => {
   const [resolve, setResolve] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
+  const { mutate } = useSWRConfig();
 
   const handleOpenDialog = (action, type, result) => {
     setItem(result);
@@ -43,14 +43,17 @@ const person = () => {
     setResolve(false);
   };
 
-  const { data: results } = useSWR(
-    name ? `/api/admin/users/${name}` : null,
-    fetcher
-  );
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR(name ? `/api/admin/users/${name}` : null, fetcher, {
+    shouldRetryOnError: false,
+  });
 
   let person;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     person = (
       <CircularProgress
         color="secondary"
@@ -60,71 +63,99 @@ const person = () => {
       />
     );
   } else {
-    person = (
-      <>
-        <Header title={results.name} />
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={() => handleOpenResolve()}
+    if (error) {
+      person = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
         >
-          Resolve
-        </Button>
-
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{ marginLeft: "4px" }}
-          onClick={() => handleOpenDialog("Deny", "Person", results)}
-        >
-          Deny
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{ marginLeft: "4px", color: "#fc7ebf", borderColor: "#fc7ebf" }}
-          onClick={() => handleOpenDialog("Delete", "Person", results)}
-        >
-          Delete
-        </Button>
-        {/* {results.approved == "true" && ( */}
-        <div style={{ margin: "16px" }}>
-          {results.bio !== "" && (
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate(`/api/admin/users/${name}`)}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      person = (
+        <>
+          {results && (
             <>
-              <Typography gutterBottom>Bio:</Typography>
-              <Typography gutterBottom variant="body1">
-                {results.bio}
-              </Typography>
+              <Header title={results.name} />
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleOpenResolve()}
+              >
+                Resolve
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ marginLeft: "4px" }}
+                onClick={() => handleOpenDialog("Deny", "Person", results)}
+              >
+                Deny
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{
+                  marginLeft: "4px",
+                  color: "#fc7ebf",
+                  borderColor: "#fc7ebf",
+                }}
+                onClick={() => handleOpenDialog("Delete", "Person", results)}
+              >
+                Delete
+              </Button>
+
+              <div style={{ margin: "16px" }}>
+                {results.bio !== "" && (
+                  <>
+                    <Typography gutterBottom>Bio:</Typography>
+                    <Typography gutterBottom variant="body1">
+                      {results.bio}
+                    </Typography>
+                  </>
+                )}
+                {results.website !== "" && (
+                  <Typography gutterBottom>
+                    Personal Website:{" "}
+                    <Link href={results.website} underline="hover">
+                      {results.website}
+                    </Link>
+                  </Typography>
+                )}
+                {Array.isArray(results.socials) &&
+                  results.socials.length > 0 && (
+                    <Typography sx={{ display: "grid" }} gutterBottom>
+                      Socials:{" "}
+                      {results.socials.map((social) => (
+                        <Link
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={social}
+                          underline="hover"
+                          key={social}
+                        >
+                          {social}
+                        </Link>
+                      ))}
+                    </Typography>
+                  )}
+              </div>
             </>
           )}
-          {results.website !== "" && (
-            <Typography gutterBottom>
-              Personal Website:{" "}
-              <Link href={results.website} underline="hover">
-                {results.website}
-              </Link>
-            </Typography>
-          )}
-          {Array.isArray(results.socials) && results.socials.length > 0 && (
-            <Typography sx={{ display: "grid" }} gutterBottom>
-              Socials:{" "}
-              {results.socials.map((social) => (
-                <Link
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={social}
-                  underline="hover"
-                  key={social}
-                >
-                  {social}
-                </Link>
-              ))}
-            </Typography>
-          )}
-        </div>
-        {/* )} */}
-      </>
-    );
+        </>
+      );
+    }
   }
   return (
     <>
@@ -150,6 +181,7 @@ const person = () => {
           handleClose={handleCloseResolve}
           name={flagee}
           ID={flag}
+          route="name"
         />
       </Container>
     </>

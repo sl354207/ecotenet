@@ -1,10 +1,11 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
 import { checkPerson, createFlag } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   // console.log(session);
   if (session) {
@@ -12,10 +13,11 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const data = req.body;
+
     const validate = ajv.getSchema("flag");
     const valid = validate(data);
     if (valid) {
-      if (session.user.name && session.user.name == data.name) {
+      if (session.user.name && session.user.name === data.name) {
         try {
           data.status = "pending";
           data.date = new Date().toUTCString();
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
         }
       } else if (!session.user.name) {
         const person = await checkPerson(data.name);
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           try {
             data.status = "pending";
             data.date = new Date().toUTCString();
@@ -48,6 +50,7 @@ export default async function handler(req, res) {
         res.status(401);
       }
     } else {
+      // console.log(validate.errors);
       res.status(403);
     }
   } else {

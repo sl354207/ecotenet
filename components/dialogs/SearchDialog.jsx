@@ -4,19 +4,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import {
   alpha,
   Autocomplete,
+  Button,
   CircularProgress,
   createFilterOptions,
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
   Popper,
   TextField,
   Typography,
 } from "@mui/material";
-import theme from "@utils/theme";
+import fetcher from "@utils/fetcher";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 const CustomPopper = function (props) {
   return (
@@ -28,27 +30,33 @@ const CustomPopper = function (props) {
   );
 };
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
 const SearchDialog = ({ search, setSearch, ecoFilter }) => {
   const [query, setQuery] = useState();
+  const { mutate } = useSWRConfig();
 
   const handleCloseSearch = () => {
     setSearch(false);
     setQuery(undefined);
   };
-  const { data: results } = useSWR(
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR(
     query
       ? `/api/search?q=${query.q}&filter=${query.filter}&eco=${
           ecoFilter && ecoFilter.unique_id
         }`
       : null,
-    fetcher
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
   let list;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -61,19 +69,58 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
         }}
       />
     );
-  } else if (Array.isArray(results) && results.length == 0) {
-    list = (
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        no results
-      </Typography>
-    );
-  } else if (results && results.length > 0 && results[0].title !== undefined) {
-    list = (
-      <PostList posts={results} search={true} handleClose={handleCloseSearch} />
-    );
   } else {
-    list = <SpeciesList results={results} handleClose={handleCloseSearch} />;
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() =>
+              mutate(
+                `/api/search?q=${query.q}&filter=${query.filter}&eco=${
+                  ecoFilter && ecoFilter.unique_id
+                }`
+              )
+            }
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(results) && results.length == 0) {
+        list = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else if (
+        results &&
+        results.length > 0 &&
+        results[0].title !== undefined
+      ) {
+        list = (
+          <PostList
+            posts={results}
+            search={true}
+            handleClose={handleCloseSearch}
+          />
+        );
+      } else {
+        list = (
+          <SpeciesList results={results} handleClose={handleCloseSearch} />
+        );
+      }
+    }
   }
+
   // set filter for autocomplete options
   const filter = createFilterOptions();
   // set tag options for autocomplete
@@ -86,7 +133,6 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
       maxWidth="md"
       scroll="paper"
       disableScrollLock
-      // hideBackdrop
       sx={{
         "&.MuiModal-root": {
           top: "30px",
@@ -100,7 +146,6 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
         },
         "&.MuiDialog-root": {
           top: "30px",
-          // bottom: 0,
         },
       }}
     >
@@ -127,24 +172,34 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
           <CloseIcon />
         </IconButton>
       </div>
-      {/* <Divider /> */}
 
       <DialogContent>
+        <FormControl></FormControl>
         <Autocomplete
           sx={{
-            position: "relative",
-            border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-            borderRadius: "4px",
-            backgroundColor: theme.palette.primary.light,
-            "&:focus-within": {
-              backgroundColor: theme.palette.primary.light,
-              border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-              borderRadius: "4px",
+            "& .MuiAutocomplete-inputRoot": {
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.8),
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.8),
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#94c9ff",
+              },
+              "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.3),
+              },
+              "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: alpha("#94c9ff", 0.3),
+              },
+              "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e57373",
+              },
+              "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e57373",
+              },
             },
-            marginTop: "10px",
-            marginBottom: "5px",
-
-            width: "auto",
           }}
           autoHighlight
           disableClearable
@@ -199,16 +254,18 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             return filtered;
           }}
           selectOnFocus
-          // clearOnBlur
-
           blurOnSelect
           handleHomeEndKeys
-          id="nav-auto"
+          id="search-auto"
           options={tags}
           getOptionLabel={(option) => {
             return "";
           }}
-          renderOption={(props, option) => <li {...props}>{option.title}</li>}
+          renderOption={(props, option) => (
+            <li {...props} key={option.title}>
+              {option.title}
+            </li>
+          )}
           freeSolo
           PopperComponent={CustomPopper}
           ListboxProps={{
@@ -220,41 +277,21 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             },
           }}
           renderInput={(params) => (
+            // ...params is causing error check dashboard index on how to log params
             <TextField
+              id="search"
+              fullWidth
               {...params}
-              autoFocus
+              autoFocus={true}
               placeholder="Search site for species, posts, or authors"
               variant="outlined"
-              sx={{
-                color: theme.palette.text.primary,
-                borderRadius: "4px",
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                  },
-                  "&:hover fieldset": {
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                  },
-                  "&.Mui-focused fieldset": {
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    borderRadius: "4px",
-                  },
-                },
-              }}
               ref={params.InputProps.ref}
-              inputProps={params.inputProps}
-              // onChange={(e) => handleChange(e)}
+              inputProps={{
+                ...params.inputProps,
+                type: "text",
+                maxLength: 100,
+              }}
+              InputLabelProps={{ shrink: true }}
             />
           )}
         />

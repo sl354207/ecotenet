@@ -14,10 +14,13 @@ import {
   Portal,
 } from "@mui/material";
 import { createNotification, updateFlag } from "@utils/apiHelpers";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
-const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
+const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
+
+  const router = useRouter();
 
   const [addInfo, setAddInfo] = useState("");
 
@@ -51,16 +54,17 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
         const notifyResponse = await createNotification(notify);
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           setSnackbar({
             ...snackbar,
             open: true,
             severity: "success",
             message: `Flag resolved successfully`,
           });
+          if (route === "flag") {
+            mutate("/api/admin/flags");
+          } else {
+            router.push("/admin/flags");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
@@ -71,16 +75,17 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           });
         }
       } else {
-        if (mutate) {
-          mutate();
-        }
-
         setSnackbar({
           ...snackbar,
           open: true,
           severity: "success",
           message: `Flag resolved successfully`,
         });
+        if (route === "flag") {
+          mutate("/api/admin/flags");
+        } else {
+          router.push("/admin/flags");
+        }
       }
     }
     if (!flagResponse.ok) {
@@ -97,15 +102,15 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="resolve-title" color="textPrimary" align="center">
         Resolve
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="resolve-text" color="textPrimary">
           Are you sure you want to resolve flag?
         </DialogContentText>
         <Button
@@ -121,15 +126,14 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           {showForm ? (
             <Portal container={container.current}>
               <FormControl sx={{ flexGrow: 1, marginTop: "10px" }}>
-                <InputLabel shrink htmlFor="commentform"></InputLabel>
+                <InputLabel shrink htmlFor="resolve"></InputLabel>
                 <TextBox
-                  id="info"
+                  id="resolve"
                   handleChange={handleInfoChange}
                   defaultValue=""
                   placeHolder="additional comment on notification"
-                  rows={1}
                   autoFocus={false}
-                  name="info"
+                  inputProps={{ type: "text", maxLength: 200 }}
                 />
               </FormControl>
             </Portal>

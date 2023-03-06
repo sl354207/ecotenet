@@ -13,7 +13,7 @@ import {
   Drawer,
   IconButton,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -26,18 +26,16 @@ const drawerWidth = 370;
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {
+  // doesn't work in react strict mode because it gets called twice
   if (action.type == "toggle") {
     return menuItems.map((menuItem) => {
       if (menuItem.menuTitle == action.payload) {
         menuItem.openList = !menuItem.openList;
       }
+
       return menuItem;
     });
   }
-  // else {
-  // POTENTIALLY ADD ERROR MESSAGE
-  //   return menuItems;
-  // }
 };
 
 const FilterDrawer = ({
@@ -54,7 +52,7 @@ const FilterDrawer = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
 
-  const [categorySelect, setCategorySelect] = useState(false);
+  const [categorySelected, setCategorySelected] = useState(false);
   const [category, setCategory] = useState(null);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
@@ -192,39 +190,38 @@ const FilterDrawer = ({
             overflow: "auto",
           }}
         >
-          {categorySelect ? (
+          {categorySelected ? (
             <CategoryList
               category={category && category}
               ecoFilter={ecoFilter}
               title={title && title}
               description={description && description}
               setCategory={setCategory}
-              setCategorySelect={setCategorySelect}
+              setCategorySelected={setCategorySelected}
+              handleFilterClose={handleFilterClose}
             />
           ) : (
             <>
-              {drawerState.map((menuItem) => {
+              {drawerState.map((menuItem, index) => {
                 const { menuTitle, menuSubs, openList } = menuItem;
 
                 return (
                   <List
                     component="nav"
                     aria-labelledby="nested-list"
-                    key="mainlist"
+                    key={index}
                   >
-                    <ListItem
-                      button
+                    <ListItemButton
                       key={menuTitle}
                       onClick={() => handleListClick(menuTitle)}
                     >
                       <ListItemText primary={menuTitle} />
                       {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </ListItem>
+                    </ListItemButton>
                     <Collapse in={openList} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding key="sublist">
                         {menuSubs.map((menuSub) => (
-                          <ListItem
-                            button
+                          <ListItemButton
                             key={menuSub.subTitle}
                             sx={{ paddingLeft: theme.spacing(4) }}
                             onClick={() => {
@@ -235,12 +232,12 @@ const FilterDrawer = ({
                                 const sub = encodeURIComponent(
                                   menuSub.query.sub
                                 );
-                                setCategorySelect(true);
+                                setCategorySelected(true);
                                 setCategory({ title: title, sub: sub });
                                 setTitle(menuSub.subTitle);
                                 setDescription(menuSub.description);
                               } else {
-                                setCategorySelect(true);
+                                setCategorySelected(true);
                                 setCategory(menuSub.query);
                                 setTitle(menuSub.subTitle);
                                 setDescription(menuSub.description);
@@ -248,7 +245,7 @@ const FilterDrawer = ({
                             }}
                           >
                             <ListItemText primary={menuSub.subTitle} />
-                          </ListItem>
+                          </ListItemButton>
                         ))}
                       </List>
                     </Collapse>

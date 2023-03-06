@@ -1,5 +1,4 @@
 import { useUserContext } from "@components/context/UserContext";
-import Flag from "@components/dialogs/Flag";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
@@ -20,6 +19,7 @@ import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -54,6 +54,10 @@ function a11yProps(index) {
   };
 }
 
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
+
 const species = ({ species, wiki }) => {
   const router = useRouter();
   const { user } = useUserContext();
@@ -63,11 +67,11 @@ const species = ({ species, wiki }) => {
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);
@@ -376,7 +380,7 @@ const species = ({ species, wiki }) => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <List>
-              <ListItem>
+              <ListItem key={"inat"}>
                 <Link
                   variant="h6"
                   href={`https://www.inaturalist.org/search?q=${
@@ -390,7 +394,7 @@ const species = ({ species, wiki }) => {
                   iNaturalist
                 </Link>
               </ListItem>
-              <ListItem>
+              <ListItem key={"wiki"}>
                 <Link
                   variant="h6"
                   href={`https://commons.wikimedia.org/w/index.php?search=${
@@ -406,7 +410,7 @@ const species = ({ species, wiki }) => {
                   Wikimedia Commons
                 </Link>
               </ListItem>
-              <ListItem>
+              <ListItem key={"iucn"}>
                 <Link
                   variant="h6"
                   href={`https://www.iucnredlist.org/search?query=${
@@ -425,20 +429,21 @@ const species = ({ species, wiki }) => {
             </List>
           </TabPanel>
         </div>
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="species"
-          result={species}
-          name={user && user.name}
-        />
+        {dialog && (
+          <DynamicFlag
+            open={dialog}
+            handleClose={() => handleCloseDialog()}
+            contentType="species"
+            result={species}
+            name={user && user.name}
+          />
+        )}
       </Container>
       <Footer />
     </>
   );
 };
 
-// fetch species data at build time
 export const getServerSideProps = async (context) => {
   const speciesId = context.params.id;
   const species = await getSpeciesById(speciesId);
@@ -450,16 +455,12 @@ export const getServerSideProps = async (context) => {
     {
       method: "GET",
       headers: {
-        // Authorization:
-        //   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJmMWJmYjJlYmRjMjdjNDMxYjdiZDIzNjI0MWZhMGZkOSIsImp0aSI6IjdkMmI3NmZkNDFjNWU4NTcwZDgwYzY2MTgwOGMyZDI2Y2NjNzE0YjMwODJkODI1N2M5N2Q0NjVhZWQwMGMwNmZiOTljYTY5OGFkZWY4ZWY2IiwiaWF0IjoxNjQzMzA5NDAyLCJuYmYiOjE2NDMzMDk0MDIsImV4cCI6MzMyMDAyMTgyMDIsInN1YiI6IjY4Nzc3MDgxIiwiaXNzIjoiaHR0cHM6XC9cL21ldGEud2lraW1lZGlhLm9yZyIsInJhdGVsaW1pdCI6eyJyZXF1ZXN0c19wZXJfdW5pdCI6NTAwMCwidW5pdCI6IkhPVVIifSwic2NvcGVzIjpbImJhc2ljIl19.bIwXFgnWnc3_DNAkcBucrzwVnMAmQHKt_eoZuAwmYMZ7dvobReLNxP28D8C_VfAP7EOSSP7PmrkHAeQUDlY_qOXpLLe8Ls1FdTVmjFeXAQFm3dBtVDJe9FDc_Lnkqfb0zqV_OYZRdm_oDIqu16sItrhqQEkxAGQxdpaObWPQO4A8XcRhe0YrE82uFxTydTOO2RG910x9AkctxeyslzItr-qB5Gdz7pgua3YLaNSB0zcK0_D98_oSw61r7OQDT0L2xI_3DbIBbPlI1Lz0hbQVpzlEDxXp9v6GHFWu4VXaO27Mrr3XRegyo0tstid-wLtvjSdxphd8mdnrYhxT3PX9UZV5gotqC3BCnJlDdev_4q9QZjY-5n7aJbPSHC43aauZfUHrKDCp5y_ocxxS5eisG7ptqMRE1kflWIzLpzdDi1_UkBz-xqMuTnBVKNCf7aY45boDYI-aNfJt0nF2ujKSB76gsSI0-AyKJUBYj7PDvGcc5tyx4jK0EZzihCK3itTwhJE7JBfgCCyvgXtpQ8hGHSJyMnYBZci_ejwOK4-HwSIGhZV2QF0sJZat80LPq6vzt5omYnNZ9qUO02n7t_zegCZM-kwf0roOXhBgMSVkhbzConYTvh4sQPi1_LP77rbnPM96rWMF9hpCICB6Z2-e2KvSIJZwgA8rRx-nhJBAvq8",
         "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
       },
     }
   );
 
   const wiki = await wikiRes.json();
-  // console.log(species);
-  // console.log(wiki);
 
   return {
     props: {

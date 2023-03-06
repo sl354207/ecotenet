@@ -21,17 +21,13 @@ const WelcomeDialog = () => {
       onClose={handleCloseSearch}
       fullWidth
       maxWidth="md"
-      //   scroll="paper"
-      //   disableScrollLock
-      // hideBackdrop
       sx={{
         "&.MuiModal-root": {
           top: "20%",
           bottom: "auto",
         },
         "&.MuiDialog-root": {
-          top: "20%",
-          // bottom: 0,
+          top: "10%",
         },
       }}
     >
@@ -58,7 +54,6 @@ const WelcomeDialog = () => {
           <CloseIcon />
         </IconButton>
       </div>
-      {/* <Divider /> */}
 
       <DialogContent sx={{ marginTop: { xs: "20px", sm: "0px" } }}>
         <Typography variant="h6" align="center">
@@ -70,9 +65,6 @@ const WelcomeDialog = () => {
           Sign up to create posts and share your knowledge of the environment,
           or simply to comment and vote on other posts
         </Typography>
-        {/* <Typography variant="body1">
-          Explore the world through ecoregions!{" "}
-        </Typography> */}
       </DialogContent>
     </Dialog>
   );

@@ -14,6 +14,8 @@ import {
   Paper,
   Popper,
   Toolbar,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
@@ -22,21 +24,43 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useHomepageContext } from "@components/context/HomepageContext";
 import { useSnackbarContext } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
-import FeatureDialog from "@components/dialogs/FeatureDialog";
-import SearchDialog from "@components/dialogs/SearchDialog";
-import FilterDrawer from "@components/drawers/FilterDrawer";
 import CreatePostButton from "@components/layouts/CreatePostButton";
 import { createPost } from "@utils/apiHelpers";
 import { signIn, signOut } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
+const DynamicFilterDrawer = dynamic(
+  () => import("@components/drawers/FilterDrawer"),
+  {
+    ssr: false,
+  }
+);
+const DynamicSearchDialog = dynamic(
+  () => import("@components/dialogs/SearchDialog"),
+  {
+    ssr: false,
+  }
+);
+const DynamicFeatureDialog = dynamic(
+  () => import("@components/dialogs/FeatureDialog"),
+  {
+    ssr: false,
+  }
+);
+
 const Nav = () => {
-  // console.log(ecoFilter);
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
-  const { ecoFilter, filterOpen, setFilterOpen, setEcoOpen, setFSOpen } =
-    useHomepageContext();
+  const {
+    ecoFilter,
+    filterOpen,
+    setFilterOpen,
+    setEcoOpen,
+    setFSOpen,
+    visited,
+  } = useHomepageContext();
 
   let status;
   if (user == undefined) {
@@ -154,6 +178,27 @@ const Nav = () => {
     }
   };
 
+  const [toolTip, setToolTip] = useState(false);
+  // don't update on ecoFilter update
+  const [ecoFilterUpdated, setEcoFilterUpdated] = useState(false);
+  useEffect(() => {
+    if (visited === null) {
+      // setToolTip(true);
+      if (ecoFilter && !ecoFilterUpdated) {
+        setTimeout(() => setToolTip(true), 7000);
+        setEcoFilterUpdated(true);
+      }
+    } else if (visited === undefined) {
+      setToolTip(false);
+    } else {
+      setToolTip(false);
+    }
+  }, [visited, ecoFilter]);
+
+  const handleTooltipClose = () => {
+    setToolTip(false);
+  };
+
   return (
     <>
       <AppBar position="fixed" elevation={1} sx={{ margin: 0 }}>
@@ -163,6 +208,127 @@ const Nav = () => {
           {ecoFilter && (
             <>
               {isTab ? (
+                <ClickAwayListener onClickAway={handleTooltipClose}>
+                  <div>
+                    <Tooltip
+                      PopperProps={{
+                        disablePortal: true,
+                        sx: {
+                          "& .MuiTooltip-tooltip": {
+                            border: `solid  3px ${theme.palette.secondary.main}`,
+                            color: theme.palette.text.primary,
+                            backgroundColor: theme.palette.primary.dark,
+                          },
+                          "& .MuiTooltip-arrow": {
+                            // border: "solid skyblue 1px",
+                            top: "-9px!important",
+                            width: "2em",
+                            height: "1.42em",
+                            color: theme.palette.secondary.main,
+                          },
+                        },
+                      }}
+                      onClose={handleTooltipClose}
+                      open={toolTip}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      sx={{ border: "2px solid" }}
+                      title={
+                        <div style={{ display: "grid" }}>
+                          <Typography
+                            color="inherit"
+                            sx={{ marginBottom: "2px" }}
+                          >
+                            Explore posts and species for the selected ecoregion
+                            by different categories
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            sx={{ marginBottom: "2px" }}
+                            onClick={() => handleTooltipClose()}
+                          >
+                            Got it!
+                          </Button>
+                        </div>
+                      }
+                      arrow
+                    >
+                      <Button
+                        onClick={handleFilterOpen}
+                        endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
+                        variant="contained"
+                        color="secondary"
+                        size={isTab ? "small" : "medium"}
+                      >
+                        Eco-{ecoFilter.unique_id}
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </ClickAwayListener>
+              ) : (
+                <ClickAwayListener onClickAway={handleTooltipClose}>
+                  <div>
+                    <Tooltip
+                      PopperProps={{
+                        disablePortal: true,
+                        sx: {
+                          "& .MuiTooltip-tooltip": {
+                            border: `solid  3px ${theme.palette.secondary.main}`,
+                            color: theme.palette.text.primary,
+                            backgroundColor: theme.palette.primary.dark,
+                          },
+                          "& .MuiTooltip-arrow": {
+                            // border: "solid skyblue 1px",
+                            top: "-9px!important",
+                            width: "2em",
+                            height: "1.42em",
+                            color: theme.palette.secondary.main,
+                          },
+                        },
+                      }}
+                      onClose={handleTooltipClose}
+                      open={toolTip}
+                      disableFocusListener
+                      disableHoverListener
+                      disableTouchListener
+                      sx={{ border: "2px solid" }}
+                      title={
+                        <div style={{ display: "grid" }}>
+                          <Typography
+                            color="inherit"
+                            sx={{ marginBottom: "2px" }}
+                          >
+                            Explore posts and species for the selected ecoregion
+                            by different categories
+                          </Typography>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            size="small"
+                            sx={{ marginBottom: "2px" }}
+                            onClick={() => handleTooltipClose()}
+                          >
+                            Got it!
+                          </Button>
+                        </div>
+                      }
+                      arrow
+                    >
+                      <Button
+                        onClick={handleFilterOpen}
+                        variant="contained"
+                        color="secondary"
+                      >
+                        Eco-{ecoFilter.unique_id} Filter
+                      </Button>
+                    </Tooltip>
+                  </div>
+                </ClickAwayListener>
+              )}
+              {/* {isTab ? (
                 <Button
                   onClick={handleFilterOpen}
                   endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
@@ -175,21 +341,18 @@ const Nav = () => {
               ) : (
                 <Button
                   onClick={handleFilterOpen}
-                  // endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
                   variant="contained"
                   color="secondary"
                 >
                   Eco-{ecoFilter.unique_id} Filter
                 </Button>
-              )}
+              )} */}
             </>
           )}
 
           <Button
-            // href="/featured"
             onClick={() => {
               if (router.pathname == "/") {
-                // setFilterOpen(false);
                 setFeature(true);
               } else {
                 router.push("/featured");
@@ -212,7 +375,7 @@ const Nav = () => {
             size={isTab ? "small" : "medium"}
             sx={{
               display: { xs: "none", md: "block" },
-              // marginLeft: "5px",
+
               textAlign: "center",
             }}
           >
@@ -221,7 +384,6 @@ const Nav = () => {
           <Button
             sx={{
               display: { xs: "none", md: "block" },
-              // marginLeft: "5px",
             }}
             variant="text"
             color="secondary"
@@ -231,13 +393,13 @@ const Nav = () => {
             Forum
           </Button>
 
-          {status == "authenticated" && (
+          {status === "authenticated" && (
             <Button
               variant="text"
               color="secondary"
               size={isTab ? "small" : "medium"}
               onClick={
-                status == "authenticated" && user.name == undefined
+                status === "authenticated" && user.name === undefined
                   ? () => router.push("/auth/new-user")
                   : () => router.push("/dashboard")
               }
@@ -275,20 +437,28 @@ const Nav = () => {
           <IconButton
             color="secondary"
             size={isTab ? "small" : "large"}
-            // size="large"
             sx={{ marginLeft: "auto", marginRight: "5px" }}
             onClick={handleClickSearch}
           >
             <SearchIcon sx={{ fontSize: isTab ? "1.8rem" : "2rem" }} />
           </IconButton>
+          {search && (
+            <DynamicSearchDialog
+              search={search}
+              setSearch={setSearch}
+              ecoFilter={ecoFilter && ecoFilter}
+            />
+          )}
 
-          <SearchDialog
-            search={search}
-            setSearch={setSearch}
-            ecoFilter={ecoFilter && ecoFilter}
-          />
           {router.pathname == "/" && (
-            <FeatureDialog feature={feature} setFeature={setFeature} />
+            <>
+              {feature && (
+                <DynamicFeatureDialog
+                  feature={feature}
+                  setFeature={setFeature}
+                />
+              )}
+            </>
           )}
 
           <Box sx={{ display: { xs: "block", md: "none" } }}>
@@ -333,8 +503,6 @@ const Nav = () => {
                           onClick={() => {
                             setPopper(false);
                             if (router.pathname == "/") {
-                              // setFilterOpen(false);
-                              // setEcoOpen(false);
                               setFeature(true);
                             } else {
                               router.push("/featured");
@@ -363,11 +531,11 @@ const Nav = () => {
                           Forum
                         </MenuItem>
 
-                        {status == "authenticated" && (
+                        {status === "authenticated" && (
                           <MenuItem
                             onClick={
-                              status == "authenticated" &&
-                              user.name == undefined
+                              status === "authenticated" &&
+                              user.name === undefined
                                 ? () => {
                                     setPopper(false);
                                     router.push("/auth/new-user");
@@ -382,11 +550,11 @@ const Nav = () => {
                             Dashboard
                           </MenuItem>
                         )}
-                        {status == "authenticated" && (
+                        {status === "authenticated" && (
                           <MenuItem
                             onClick={
-                              status == "authenticated" &&
-                              user.name == undefined
+                              status === "authenticated" &&
+                              user.name === undefined
                                 ? () => {
                                     setPopper(false);
                                     router.push("/auth/new-user");
@@ -410,7 +578,7 @@ const Nav = () => {
                         <MenuItem
                           disabled={status == "loading"}
                           onClick={
-                            status == "authenticated"
+                            status === "authenticated"
                               ? () => {
                                   setPopper(false);
                                   signOut({
@@ -429,7 +597,7 @@ const Nav = () => {
                             marginBottom: "4px",
                           }}
                         >
-                          {status == "authenticated" ? (
+                          {status === "authenticated" ? (
                             <>Sign Out</>
                           ) : (
                             <>Sign In</>
@@ -462,9 +630,9 @@ const Nav = () => {
             </Popper>
           </Box>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {status == "authenticated" && (
+            {status === "authenticated" && (
               <>
-                {user.name == undefined ? (
+                {user.name === undefined ? (
                   <Button
                     sx={{ marginLeft: "10px" }}
                     variant="outlined"
@@ -493,7 +661,7 @@ const Nav = () => {
               sx={{ marginLeft: "10px" }}
               disabled={status == "loading"}
               onClick={
-                status == "authenticated"
+                status === "authenticated"
                   ? () =>
                       signOut({
                         callbackUrl: "http://localhost:3000",
@@ -501,7 +669,7 @@ const Nav = () => {
                   : () => signIn()
               }
             >
-              {status == "authenticated" ? <>Sign Out</> : <>Sign In</>}
+              {status === "authenticated" ? <>Sign Out</> : <>Sign In</>}
             </Button>
 
             <Button
@@ -514,16 +682,18 @@ const Nav = () => {
               Donate
             </Button>
           </Box>
-          <FilterDrawer
-            ecoFilter={ecoFilter}
-            filterOpen={filterOpen}
-            setFilterOpen={setFilterOpen}
-            handleFilterClose={handleFilterClose}
-            top={top}
-            setTop={setTop}
-            drawerHeight={drawerHeight}
-            setDrawerHeight={setDrawerHeight}
-          />
+          {ecoFilter && (
+            <DynamicFilterDrawer
+              ecoFilter={ecoFilter}
+              filterOpen={filterOpen}
+              setFilterOpen={setFilterOpen}
+              handleFilterClose={handleFilterClose}
+              top={top}
+              setTop={setTop}
+              drawerHeight={drawerHeight}
+              setDrawerHeight={setDrawerHeight}
+            />
+          )}
         </Toolbar>
       </AppBar>
       <Toolbar></Toolbar>

@@ -13,7 +13,6 @@ import {
   FormHelperText,
   Grid,
   IconButton,
-  InputBase,
   InputLabel,
   TextField,
   Tooltip,
@@ -72,62 +71,78 @@ const PostDetails = ({
         *denotes required field
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} key="title-grid">
           <FormControl
             sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
             required
           >
-            <InputLabel htmlFor="title">Title:</InputLabel>
+            <InputLabel htmlFor="title" shrink>
+              Title:
+            </InputLabel>
             <TextBox
               defaultValue={title || ""}
-              placeHolder=" title of post(max length 60 characters)"
+              placeHolder=" title of post(max length 100 characters)"
               id="title"
               name="title"
               handleChange={handleDetailChange}
-              rows={1}
-              inputProps={{ maxLength: 60 }}
+              inputProps={{ type: "text", maxLength: 100 }}
             />
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} key="description-grid">
           <FormControl
             sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
           >
-            <InputLabel htmlFor="description">Description:</InputLabel>
+            <InputLabel htmlFor="description" shrink>
+              Description:
+            </InputLabel>
             <TextBox
               defaultValue={description || ""}
               placeHolder=" short summary of post(max length 160 characters) "
               id="description"
               name="description"
               handleChange={handleDetailChange}
-              rows={2}
-              inputProps={{ maxLength: 160 }}
+              inputProps={{ type: "text", maxLength: 160 }}
             />
             <FormHelperText sx={{ color: theme.palette.text.primary }}>
               Helps with search functionality
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} key="category-grid">
           <FormControl
             sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
             required
           >
-            <InputLabel htmlFor="category">Category:</InputLabel>
+            <InputLabel htmlFor="category" shrink>
+              Category:
+            </InputLabel>
 
             <Autocomplete
               sx={{
-                position: "relative",
-                border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-                borderRadius: "4px",
-                backgroundColor: theme.palette.primary.main,
-                "&:focus-within": {
-                  backgroundColor: theme.palette.primary.main,
-                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-                  borderRadius: "4px",
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
                 },
-
-                width: "auto",
               }}
               ListboxProps={{
                 sx: {
@@ -146,10 +161,10 @@ const PostDetails = ({
                 },
               }}
               autoHighlight
-              id="category"
+              id="category-auto"
               name="category"
               onChange={(event, newValue) => {
-                console.log(newValue);
+                // console.log(newValue);
                 setDetails((details) => ({
                   ...details,
                   category: newValue && {
@@ -170,43 +185,26 @@ const PostDetails = ({
               }
               groupBy={(option) => option.title}
               getOptionLabel={(option) => {
-                // console.log(option);
                 if (option && option["sub"]) {
-                  // console.log(option["sub"]);
                   return option["sub"];
                 } else {
                   return "";
                 }
               }}
               renderInput={(params) => (
+                // ...params is causing error check dashboard index on how to log params
                 <TextField
                   {...params}
+                  id="category"
                   placeholder="Select category"
                   variant="outlined"
-                  sx={{
-                    color: theme.palette.text.primary,
-                    border: `1px solid ${alpha(
-                      theme.palette.secondary.main,
-                      0.5
-                    )}`,
-                    "& .MuiOutlinedInput-root": {
-                      "&:hover fieldset": {
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          0.5
-                        )}`,
-                        border: "none",
-                      },
-                      "& .Mui-focused fieldset": {
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          0.5
-                        )}`,
-                      },
-                    },
-                  }}
                   ref={params.InputProps.ref}
-                  inputProps={params.inputProps}
+                  inputProps={{
+                    ...params.inputProps,
+                    type: "text",
+                    maxLength: 100,
+                  }}
+                  InputLabelProps={{ shrink: true }}
                 />
               )}
             />
@@ -224,9 +222,14 @@ const PostDetails = ({
               disableTouchListener
               title={
                 <>
-                  <Typography color="inherit">
-                    If you need help deciding check out our explantion for each{" "}
-                    <Link href="/category" color="secondary" underline="hover">
+                  <Typography color="inherit" variant="h6">
+                    If you need help deciding check out our explanation for each{" "}
+                    <Link
+                      href="/category"
+                      color="secondary"
+                      underline="hover"
+                      sx={{ paddingRight: "150px" }}
+                    >
                       category
                     </Link>
                   </Typography>
@@ -240,24 +243,38 @@ const PostDetails = ({
             </Tooltip>
           </ClickAwayListener>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} key="keywords-grid">
           <FormControl
             sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
           >
-            <InputLabel htmlFor="keywords">Keywords:</InputLabel>
+            <InputLabel htmlFor="keywords" shrink>
+              Keywords:
+            </InputLabel>
             <Autocomplete
               sx={{
-                position: "relative",
-                border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-                borderRadius: "4px",
-                backgroundColor: theme.palette.primary.main,
-                "&:focus-within": {
-                  backgroundColor: theme.palette.primary.main,
-                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-                  borderRadius: "4px",
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
                 },
-
-                width: "auto",
               }}
               autoHighlight
               disabled={tags.length > 2 ? true : false}
@@ -285,25 +302,28 @@ const PostDetails = ({
               selectOnFocus
               clearOnBlur
               handleHomeEndKeys
-              id="tags"
+              id="keywords-auto"
               name="tags"
               options={[]}
               renderOption={(props, option) => (
                 <li {...props}>{option.title}</li>
               )}
+              getOptionLabel={(option) => option.title || ""}
               freeSolo
               filterSelectedOptions={false}
               renderInput={(params) => (
-                <InputBase
+                // ...params is causing error check dashboard index on how to log params
+                <TextField
                   {...params}
+                  id="keywords"
                   placeholder="Add keywords"
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      padding: "18px 9px 17px 9px",
-                    },
-                  }}
                   ref={params.InputProps.ref}
-                  inputProps={params.inputProps}
+                  inputProps={{
+                    ...params.inputProps,
+                    type: "text",
+                    maxLength: 100,
+                  }}
+                  InputLabelProps={{ shrink: true }}
                 />
               )}
             />

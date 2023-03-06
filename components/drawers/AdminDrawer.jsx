@@ -2,7 +2,7 @@ import {
   Divider,
   Drawer,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   Toolbar,
 } from "@mui/material";
@@ -24,37 +24,33 @@ const AdminDrawer = () => {
       <Toolbar />
       <div style={{ overflow: "auto" }}>
         <List>
-          <ListItem button key="home" onClick={() => router.push("/admin")}>
+          <ListItemButton key="home" onClick={() => router.push("/admin")}>
             <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key="people"
             onClick={() => router.push("/admin/people")}
           >
             <ListItemText primary="People" />
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key="posts"
             onClick={() => router.push("/admin/posts")}
           >
             <ListItemText primary="Posts" />
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key="comments"
             onClick={() => router.push("/admin/comments")}
           >
             <ListItemText primary="Comments" />
-          </ListItem>
-          <ListItem
-            button
+          </ListItemButton>
+          <ListItemButton
             key="flags"
             onClick={() => router.push("/admin/flags")}
           >
             <ListItemText primary="Flags" />
-          </ListItem>
+          </ListItemButton>
         </List>
         <Divider />
       </div>

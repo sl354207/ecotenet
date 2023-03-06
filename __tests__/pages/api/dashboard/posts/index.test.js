@@ -4,10 +4,10 @@
 
 import handler from "@pages/api/dashboard/posts/index";
 import { createPost, getDashboardPosts } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+jest.mock("next-auth/next");
 
 jest.mock("@utils/mongodb/mongoHelpers");
-jest.mock("next-auth/react");
 
 describe("dashboard posts api", () => {
   beforeEach(() => {
@@ -39,11 +39,11 @@ describe("dashboard posts api", () => {
           setHeader,
         };
 
-        getSession.mockResolvedValueOnce(null);
+        getServerSession.mockResolvedValueOnce(null);
 
         await handler(req, res);
 
-        expect(getSession).toHaveBeenCalledTimes(1);
+        expect(getServerSession).toHaveBeenCalledTimes(1);
         expect(res.status.mock.calls[0][0]).toBe(401);
       });
     });
@@ -73,7 +73,7 @@ describe("dashboard posts api", () => {
             setHeader,
           };
 
-          getSession.mockResolvedValueOnce({
+          getServerSession.mockResolvedValueOnce({
             user: { name: "test 1", email: "test@gmail.com", role: "user" },
             expires: new Date(Date.now() + 2 * 86400).toISOString(),
           });
@@ -82,7 +82,7 @@ describe("dashboard posts api", () => {
 
           await handler(req, res);
 
-          expect(getSession).toHaveBeenCalledTimes(1);
+          expect(getServerSession).toHaveBeenCalledTimes(1);
           expect(res.status.mock.calls[0][0]).toBe(405);
         });
       });
@@ -118,14 +118,14 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getDashboardPosts).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -159,14 +159,14 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(createPost).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -214,7 +214,7 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -223,7 +223,7 @@ describe("dashboard posts api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(createPost).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -269,7 +269,7 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -280,7 +280,7 @@ describe("dashboard posts api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(createPost).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
@@ -289,7 +289,7 @@ describe("dashboard posts api", () => {
         });
         describe("GET", () => {
           describe("invalid data", () => {
-            it("should deny invalid data", async () => {
+            it("should deny invalid user data", async () => {
               const req = {
                 method: "GET", // GET, POST, PUT, DELETE, OPTIONS, etc.
                 headers: {
@@ -317,14 +317,53 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
+              expect(getDashboardPosts).toHaveBeenCalledTimes(0);
+              expect(res.status.mock.calls[0][0]).toBe(401);
+            });
+            it("should deny invalid status data", async () => {
+              const req = {
+                method: "GET", // GET, POST, PUT, DELETE, OPTIONS, etc.
+                headers: {
+                  "content-type": "application/json",
+                },
+                query: {
+                  name: { $ne: -1 },
+                  status: "drafe",
+                },
+              };
+              const json = jest.fn();
+              const end = jest.fn();
+              const setHeader = jest.fn();
+
+              const status = jest.fn(() => {
+                return {
+                  json,
+                  end,
+                };
+              });
+
+              const res = {
+                status,
+                end,
+                setHeader,
+              };
+
+              getServerSession.mockResolvedValueOnce({
+                user: { name: "test 2", email: "test@gmail.com", role: "user" },
+                expires: new Date(Date.now() + 2 * 86400).toISOString(),
+              });
+
+              await handler(req, res);
+
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getDashboardPosts).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -358,7 +397,7 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -367,7 +406,7 @@ describe("dashboard posts api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getDashboardPosts).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -400,7 +439,7 @@ describe("dashboard posts api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -411,7 +450,7 @@ describe("dashboard posts api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getDashboardPosts).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);

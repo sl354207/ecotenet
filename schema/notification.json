@@ -3,14 +3,17 @@
     "properties": {
         "name": {
             "type": "string",
+            "maxLength": 100,
             "description": "must be a string"
           },
           "reason": {
             "type": "string",
-            "description": "must be a boolean"
+            "maxLength": 100,
+            "description": "must be a string"
           },
           "text": {
             "type": "string",
+            "maxLength": 200,
             "description": "must be a string"
           },
           "viewed": {
@@ -26,10 +29,12 @@
           "add_info": {
             "type": "string",
             "nullable": true,
+            "maxLength": 200,
             "description": "must be a string"
           },
       "date": {
         "type": "string",
+        "maxLength": 100,
         "description": "must be a string"
       }
     },

@@ -7,7 +7,7 @@ import {
   Divider,
   Drawer,
   IconButton,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -30,8 +30,6 @@ const FeatureAndSearchDrawer = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
-
-
 
   return (
     <>
@@ -73,15 +71,12 @@ const FeatureAndSearchDrawer = ({
           {isMobile && (
             <>
               <ButtonGroup
-                // orientation="vertical"
                 aria-label="vertical outlined button group"
-                // size="small"
                 sx={{ marginLeft: "10px" }}
               >
                 <IconButton
                   variant="text"
                   color="inherit"
-                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 0:
@@ -105,7 +100,6 @@ const FeatureAndSearchDrawer = ({
                 <IconButton
                   variant="text"
                   color="inherit"
-                  // size="small"
                   onClick={() => {
                     switch (drawerHeight) {
                       case 1:
@@ -175,7 +169,7 @@ const FeatureAndSearchDrawer = ({
           }}
         >
           {typeof FS.item == "string" ? (
-            <DrawerPost id={FS.item} FSOpen={FSOpen} />
+            <DrawerPost id={FS.item} />
           ) : (
             <DrawerSpecies species={FS.item} />
           )}

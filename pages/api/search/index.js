@@ -15,7 +15,9 @@ export default async function handler(req, res) {
   const eco = req.query.eco;
   if (
     typeof query == "string" &&
+    query.length <= 100 &&
     typeof filter == "string" &&
+    filter.length <= 100 &&
     typeof eco == "string" &&
     eco.length >= 1 &&
     eco.length <= 4

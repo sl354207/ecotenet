@@ -11,8 +11,7 @@ export default async function handler(req, res) {
   if (
     typeof id == "string" &&
     id.length == 24 &&
-    typeof status == "string" &&
-    (status == "resolved" || status == "pending")
+    (status === "resolved" || status === "pending")
   ) {
     try {
       const updatedFlag = await updateFlag(id, status);

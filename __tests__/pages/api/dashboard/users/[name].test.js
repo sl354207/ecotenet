@@ -8,10 +8,9 @@ import {
   getPersonDash,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
-import { getSession } from "next-auth/react";
-// jest.mock("@utils/mongodb/mongoPromise");
+import { getServerSession } from "next-auth/next";
+jest.mock("next-auth/next");
 jest.mock("@utils/mongodb/mongoHelpers");
-jest.mock("next-auth/react");
 
 describe("dashboard name api", () => {
   beforeEach(() => {
@@ -43,11 +42,11 @@ describe("dashboard name api", () => {
           setHeader,
         };
 
-        getSession.mockResolvedValueOnce(null);
+        getServerSession.mockResolvedValueOnce(null);
 
         await handler(req, res);
 
-        expect(getSession).toHaveBeenCalledTimes(1);
+        expect(getServerSession).toHaveBeenCalledTimes(1);
         expect(res.status.mock.calls[0][0]).toBe(401);
       });
     });
@@ -77,7 +76,7 @@ describe("dashboard name api", () => {
             setHeader,
           };
 
-          getSession.mockResolvedValueOnce({
+          getServerSession.mockResolvedValueOnce({
             user: { name: "test 1", email: "test@gmail.com", role: "user" },
             expires: new Date(Date.now() + 2 * 86400).toISOString(),
           });
@@ -86,7 +85,7 @@ describe("dashboard name api", () => {
 
           await handler(req, res);
 
-          expect(getSession).toHaveBeenCalledTimes(1);
+          expect(getServerSession).toHaveBeenCalledTimes(1);
           expect(updatePerson).toHaveBeenCalledTimes(0);
           expect(res.status.mock.calls[0][0]).toBe(405);
         });
@@ -121,14 +120,14 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updatePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -160,14 +159,14 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updatePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -200,14 +199,14 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updatePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -225,7 +224,7 @@ describe("dashboard name api", () => {
                   emailVerified: "2022-08-16T19:06:55.405+00:00",
                   bio: "test",
                   approved: "pending",
-                  website: "test",
+                  website: "",
                   socials: [],
                   denials: 0,
                   role: "user",
@@ -248,7 +247,7 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -257,7 +256,7 @@ describe("dashboard name api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               //   expect(updatePerson).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -274,7 +273,7 @@ describe("dashboard name api", () => {
                   emailVerified: "2022-08-16T19:06:55.405+00:00",
                   bio: "test",
                   approved: "pending",
-                  website: "test",
+                  website: "",
                   socials: [],
                   denials: 0,
                   role: "user",
@@ -297,7 +296,7 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -308,7 +307,7 @@ describe("dashboard name api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(updatePerson).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
@@ -342,14 +341,14 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deletePerson).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -380,7 +379,7 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -389,7 +388,7 @@ describe("dashboard name api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deletePerson).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -419,7 +418,7 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -430,7 +429,7 @@ describe("dashboard name api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deletePerson).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);
@@ -466,14 +465,14 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 2", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getPersonDash).toHaveBeenCalledTimes(0);
               expect(res.status.mock.calls[0][0]).toBe(403);
             });
@@ -506,7 +505,7 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 3", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -515,7 +514,7 @@ describe("dashboard name api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getPersonDash).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
@@ -547,7 +546,7 @@ describe("dashboard name api", () => {
                 setHeader,
               };
 
-              getSession.mockResolvedValueOnce({
+              getServerSession.mockResolvedValueOnce({
                 user: { name: "test 4", email: "test@gmail.com", role: "user" },
                 expires: new Date(Date.now() + 2 * 86400).toISOString(),
               });
@@ -558,7 +557,7 @@ describe("dashboard name api", () => {
 
               await handler(req, res);
 
-              expect(getSession).toHaveBeenCalledTimes(1);
+              expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getPersonDash).toHaveBeenCalledTimes(1);
 
               expect(res.status.mock.calls[0][0]).toBe(500);

@@ -273,26 +273,36 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       </Typography>
       <Autocomplete
         sx={{
-          position: "relative",
-          border: `1px solid ${alpha(theme.palette.secondary.main, 0.5)}`,
-          borderRadius: "4px",
-          backgroundColor: theme.palette.primary.light,
-          "&:focus-within": {
-            backgroundColor: theme.palette.primary.light,
-            border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-            borderRadius: "4px",
+          "& .MuiAutocomplete-inputRoot": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.8),
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.8),
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#94c9ff",
+            },
+            "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.3),
+            },
+            "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: alpha("#94c9ff", 0.3),
+            },
+            "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e57373",
+            },
+            "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e57373",
+            },
           },
-          marginTop: 2,
-          marginBottom: 1,
-
-          width: "auto",
         }}
         autoHighlight
         onChange={(event, newValue) => handleSubmit(event, newValue)}
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
-        id="free-solo-with-text-demo"
+        id="region-auto"
         options={
           results
             ? results.map((obj) => {
@@ -307,45 +317,21 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         filterOptions={(x) => x}
         freeSolo
         renderInput={(params) => (
+          // ...params is causing error check dashboard index on how to log params
           <TextField
             {...params}
+            id="region"
             placeholder="Search…"
             variant="outlined"
-            sx={{
-              color: theme.palette.text.primary,
-              borderRadius: "4px",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-                "&:hover fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-                "&.Mui-focused fieldset": {
-                  border: `1px solid ${alpha(
-                    theme.palette.secondary.main,
-                    0.5
-                  )}`,
-                  borderRadius: "4px",
-                },
-              },
-            }}
             ref={params.InputProps.ref}
-            inputProps={params.inputProps}
+            inputProps={{ ...params.inputProps, type: "text", maxLength: 100 }}
             onChange={(e) => handleChange(e)}
+            InputLabelProps={{ shrink: true }}
           />
         )}
       />
       {isMobile ? (
-        <div style={{ display: "inline-grid" }}>
+        <div style={{ display: "inline-grid", marginTop: "5px" }}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <CustomChip
               label={`${state[1].scientific_name} - ${state[1].common_name}`}
@@ -405,7 +391,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           )}
         </div>
       ) : (
-        <>
+        <div style={{ marginTop: "5px" }}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <CustomChip
               label={`${state[1].scientific_name} - ${state[1].common_name}`}
@@ -463,7 +449,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           ) : (
             <></>
           )}
-        </>
+        </div>
       )}
       <Typography variant="h6" align="left">
         Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
@@ -476,7 +462,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         // zoom={isMobile ? 3 : 4}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
-        *A species distribution often does not align perfectly with ecoregion
+        A species distribution often does not align perfectly with ecoregion
         boundaries, therefore a species may not be present throughout the entire
         ecoregion but only in specific areas. A species may also be widespread
         but in small numbers so rarely seen.

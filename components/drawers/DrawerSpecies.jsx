@@ -1,5 +1,4 @@
 import { useUserContext } from "@components/context/UserContext";
-import Flag from "@components/dialogs/Flag";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import {
@@ -9,27 +8,32 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-const DrawerSpecies = ({ species }) => {
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
+const DrawerSpecies = ({ species, handleFilterClose }) => {
   const router = useRouter();
   const { user } = useUserContext();
+  const { mutate } = useSWRConfig();
 
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);
@@ -40,14 +44,21 @@ const DrawerSpecies = ({ species }) => {
   const handleCloseDialog = () => {
     setDialog(false);
   };
-  // console.log(species);
-  const { data: wiki } = useSWR(
+
+  const {
+    data: wiki,
+    isLoading,
+    error,
+  } = useSWR(
     species
       ? `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
           species.scientific_name.toLowerCase().split(" ")[0]
         }_${species.scientific_name.toLowerCase().split(" ")[1]}?redirect=true`
       : null,
-    fetcher
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
   const options = {
@@ -189,139 +200,7 @@ const DrawerSpecies = ({ species }) => {
 
   return (
     <Container>
-      {wiki ? (
-        <>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ marginBlock: "15px" }}
-              href={`/species/${species._id}`}
-            >
-              view full page
-            </Button>
-            {/* <Typography
-              variant="h4"
-              align="center"
-              sx={{ marginBottom: "15px" }}
-            >
-              {species.scientific_name}: {species.common_name}
-            </Typography> */}
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <div
-                style={{
-                  display: "flex",
-                  marginRight: "auto",
-                  visibility: "hidden",
-                  minWidth: "30px",
-                }}
-              ></div>
-              <Typography
-                variant="h4"
-                align="center"
-                sx={{ marginBottom: "5px" }}
-              >
-                {species.scientific_name}: {species.common_name}
-              </Typography>
-              <div>
-                <IconButton
-                  sx={{ marginLeft: 2 }}
-                  color="inherit"
-                  aria-label="flag"
-                  size="small"
-                  onClick={() => handleOpenDialog()}
-                >
-                  <FlagIcon />
-                </IconButton>
-              </div>
-            </div>
-          </div>
-
-          <Typography
-            variant="h6"
-            sx={{
-              marginBottom: "20px",
-            }}
-          >
-            Ecoregions:{" "}
-            {species.unique_id.map((id) => (
-              <Link
-                href={`/ecoregions/${id}`}
-                color="secondary"
-                underline="hover"
-                key={id}
-              >
-                Eco-{id}
-                {", "}
-              </Link>
-            ))}
-          </Typography>
-
-          <div
-            style={{
-              flexGrow: 1,
-              backgroundColor: theme.palette.light,
-              borderRadius: "10px",
-            }}
-          >
-            {!wiki || wiki.title == "Not found." ? (
-              <Typography
-                variant="h6"
-                align="justify"
-                sx={{ marginTop: "20px" }}
-              >
-                We currently don&apos;t have a summary of this species. If you
-                want to help us out you can create a wikipedia page for the
-                species.
-              </Typography>
-            ) : (
-              <>
-                <Typography variant="h5" sx={{ marginTop: "10px" }}>
-                  Source:{" "}
-                  <Link
-                    href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                      " ",
-                      "_"
-                    )}?redirect=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="hover"
-                  >
-                    Wikipedia
-                  </Link>
-                </Typography>
-                {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-                {wiki.remaining.sections.map((section) => {
-                  if (section.anchor == "Gallery") {
-                    return <></>;
-                  } else if (section.toclevel == 2) {
-                    return (
-                      <>
-                        <h2>{section.line}</h2>
-                        {parse(DOMPurify.sanitize(section.text), options)}
-                      </>
-                    );
-                  } else {
-                    return (
-                      <>
-                        <h1>{section.line}</h1>
-                        {parse(DOMPurify.sanitize(section.text), options)}
-                      </>
-                    );
-                  }
-                })}
-              </>
-            )}
-          </div>
-          <Flag
-            open={dialog}
-            handleClose={() => handleCloseDialog()}
-            contentType="species"
-            result={species}
-            name={user && user.name}
-          />
-        </>
-      ) : (
+      {isLoading ? (
         <CircularProgress
           color="secondary"
           size={50}
@@ -332,6 +211,168 @@ const DrawerSpecies = ({ species }) => {
             justifySelf: "center",
           }}
         />
+      ) : (
+        <>
+          {error ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() =>
+                  mutate(
+                    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
+                      species.scientific_name.toLowerCase().split(" ")[0]
+                    }_${
+                      species.scientific_name.toLowerCase().split(" ")[1]
+                    }?redirect=true`
+                  )
+                }
+              >
+                Error Loading. Retry
+              </Button>
+            </div>
+          ) : (
+            <>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{ marginBlock: "15px" }}
+                  href={`/species/${species._id}`}
+                >
+                  view full page
+                </Button>
+
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginRight: "auto",
+                      visibility: "hidden",
+                      minWidth: "30px",
+                    }}
+                  ></div>
+                  <Typography
+                    variant="h4"
+                    align="center"
+                    sx={{ marginBottom: "5px" }}
+                  >
+                    {species.scientific_name}: {species.common_name}
+                  </Typography>
+                  <div>
+                    <IconButton
+                      sx={{ marginLeft: 2 }}
+                      color="inherit"
+                      aria-label="flag"
+                      size="small"
+                      onClick={() => handleOpenDialog()}
+                    >
+                      <FlagIcon />
+                    </IconButton>
+                  </div>
+                </div>
+              </div>
+
+              <Typography
+                variant="h6"
+                sx={{
+                  marginBottom: "20px",
+                }}
+              >
+                Ecoregions:{" "}
+                {species.unique_id.map((id) => (
+                  <Link
+                    href={`/ecoregions/${id}`}
+                    color="secondary"
+                    underline="hover"
+                    key={id}
+                    onClick={(event) => {
+                      handleFilterClose(event);
+                    }}
+                  >
+                    Eco-{id}
+                    {", "}
+                  </Link>
+                ))}
+              </Typography>
+
+              <div
+                style={{
+                  flexGrow: 1,
+                  backgroundColor: theme.palette.light,
+                  borderRadius: "10px",
+                }}
+              >
+                {!wiki || wiki.title == "Not found." ? (
+                  <Typography
+                    variant="h6"
+                    align="justify"
+                    sx={{ marginTop: "20px" }}
+                  >
+                    We currently don&apos;t have a summary of this species. If
+                    you want to help us out you can create a wikipedia page for
+                    the species.
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                      Source:{" "}
+                      <Link
+                        href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                          " ",
+                          "_"
+                        )}?redirect=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Wikipedia
+                      </Link>
+                    </Typography>
+                    {parse(
+                      DOMPurify.sanitize(wiki.lead.sections[0].text),
+                      options
+                    )}
+                    {wiki.remaining.sections.map((section, index) => {
+                      if (section.anchor == "Gallery") {
+                        return <></>;
+                      } else if (section.toclevel == 2) {
+                        return (
+                          <>
+                            <h2 key={index}>{section.line}</h2>
+                            {parse(DOMPurify.sanitize(section.text), options)}
+                          </>
+                        );
+                      } else {
+                        return (
+                          <>
+                            <h1 key={index}>{section.line}</h1>
+                            {parse(DOMPurify.sanitize(section.text), options)}
+                          </>
+                        );
+                      }
+                    })}
+                  </>
+                )}
+              </div>
+              {dialog && (
+                <DynamicFlag
+                  open={dialog}
+                  handleClose={() => handleCloseDialog()}
+                  contentType="species"
+                  result={species}
+                  name={user && user.name}
+                />
+              )}
+            </>
+          )}
+        </>
       )}
     </Container>
   );

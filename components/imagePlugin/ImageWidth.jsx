@@ -8,8 +8,11 @@ function ImageWidth({ onChange, value }) {
       <TextField
         placeholder="default width is set to 500"
         label="Width"
-        name="src"
-        type="number"
+        name="width"
+        id="width"
+        // type="number"
+        inputProps={{ type: "number", max: 1000, min: 1 }}
+        // inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
         sx={{
           display: "flex",
           flexGrow: 1,
@@ -30,6 +33,7 @@ function ImageWidth({ onChange, value }) {
           const width = Number(e.target.value);
           onChange(width);
         }}
+        // InputLabelProps={{ shrink: true }}
       />
     </>
   );

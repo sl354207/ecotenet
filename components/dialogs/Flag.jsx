@@ -7,6 +7,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { createFlag } from "@utils/apiHelpers";
 import theme from "@utils/theme";
@@ -23,7 +25,6 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
   };
 
   const handleSubmit = async () => {
-    //   UPDATE NAME AND ID
     const flag = {
       name: name,
       flagged: result.name ? result.name : "ecotenet",
@@ -58,11 +59,11 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="update"
-        aria-describedby="update"
+        // aria-labelledby="update"
+        // aria-describedby="update"
       >
         <DialogTitle
-          id="update"
+          id="flag-title"
           sx={{ backgroundColor: theme.palette.primary.light }}
           color="textPrimary"
           align="center"
@@ -71,18 +72,20 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
         </DialogTitle>
 
         <DialogContent sx={{ backgroundColor: theme.palette.primary.light }}>
-          <DialogContentText id="update" color="textPrimary">
+          <DialogContentText id="flag-text" color="textPrimary">
             Why would you like to flag this item?
           </DialogContentText>
-          <TextBox
-            id="flag"
-            handleChange={handleChange}
-            defaultValue=""
-            placeHolder=""
-            rows={1}
-            autoFocus={true}
-            name="flag"
-          />
+          <FormControl sx={{ display: "flex", flexGrow: 1, marginTop: "5px" }}>
+            <InputLabel shrink htmlFor="flag"></InputLabel>
+            <TextBox
+              id="flag"
+              handleChange={handleChange}
+              defaultValue=""
+              placeHolder=""
+              autoFocus={true}
+              inputProps={{ type: "text", maxLength: 200 }}
+            />
+          </FormControl>
         </DialogContent>
 
         <DialogActions sx={{ backgroundColor: theme.palette.primary.light }}>
@@ -97,6 +100,10 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
             onClick={() => handleSubmit()}
             color="secondary"
             variant="outlined"
+            disabled={
+              (typeof value === "string" && value.trim().length === 0) ||
+              value === undefined
+            }
           >
             Submit
           </Button>
