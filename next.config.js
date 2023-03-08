@@ -32,11 +32,11 @@ const securityHeaders = [
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
   },
-  // POSSIBLY UPDATE MORE FOR STRIPE TO WORK BE MORE SPECIFIC WITH URLS
+  // POSSIBLY UPDATE MORE FOR STRIPE TO WORK  AND VERCEL FEEDBACK AND BE MORE SPECIFIC WITH URLS
   {
     key: "Content-Security-Policy",
     value:
-      "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src * data: blob:; script-src 'self' https://vercel.live/_next-live/feedback/feedback.js https://api.mapbox.com https://js.stripe.com 'unsafe-eval'; style-src 'self'  https://fonts.googleapis.com 'unsafe-inline'; object-src 'none';  connect-src 'self' https://en.wikipedia.org https://api.mapbox.com https://events.mapbox.com https://eco-media-bucket.s3.us-east-2.amazonaws.com; worker-src 'self' blob:; frame-src https://js.stripe.com/; frame-ancestors 'self';",
+      "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src * data: blob:; script-src 'self' https://vercel.live/_next-live/feedback/feedback.js https://api.mapbox.com https://js.stripe.com 'unsafe-eval'; style-src 'self'  https://fonts.googleapis.com 'unsafe-inline'; object-src 'none';  connect-src 'self' https://en.wikipedia.org https://api.mapbox.com https://events.mapbox.com https://eco-media-bucket.s3.us-east-2.amazonaws.com; worker-src 'self' blob:; frame-src https://js.stripe.com/; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
   },
 ];
 
