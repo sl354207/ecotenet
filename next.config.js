@@ -1,17 +1,5 @@
-// update
-// default-src 'self';
-//   script-src 'self';
-//   child-src example.com;
-//   style-src 'self' example.com;
-//   font-src 'self';
 // const ContentSecurityPolicy = `
-// default-src 'none';
-// font-src https://fonts.googleapis.com;
-// img-src *;
-// object-src 'none';
-// script-src 'self' 'unsafe-eval';
-// style-src 'self' 'unsafe-inline';
-// frame-ancestors 'self';
+// child-src 'self' https://www.youtube-nocookie.com;
 // require-trusted-types-for 'script'
 // `;
 
@@ -44,11 +32,11 @@ const securityHeaders = [
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
   },
-
+  // POSSIBLY UPDATE MORE FOR STRIPE TO WORK BE MORE SPECIFIC WITH URLS
   {
     key: "Content-Security-Policy",
     value:
-      "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src * data:; script-src 'self'; style-src 'self'  https://fonts.googleapis.com 'unsafe-inline'; object-src 'none'; child-src 'self' https://www.youtube-nocookie.com; connect-src 'self' https://en.wikipedia.org; frame-ancestors 'self';",
+      "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src * data: blob:; script-src 'self' https://vercel.live/_next-live/feedback/feedback.js https://api.mapbox.com https://js.stripe.com 'unsafe-eval'; style-src 'self'  https://fonts.googleapis.com 'unsafe-inline'; object-src 'none';  connect-src 'self' https://en.wikipedia.org https://api.mapbox.com https://events.mapbox.com https://eco-media-bucket.s3.us-east-2.amazonaws.com; worker-src 'self' blob:; frame-src https://js.stripe.com/; frame-ancestors 'self';",
   },
 ];
 
