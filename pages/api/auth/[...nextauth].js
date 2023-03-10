@@ -23,22 +23,28 @@ export const authOptions = {
       },
       async sendVerificationRequest(params) {
         const { identifier, provider, token, theme } = params;
-        const url = new URL(params.url);
-        url.searchParams.delete("token"); // uncomment if you want the user to type this manually
-        const signInURL = new URL(
-          `/auth/email?${url.searchParams}`,
-          url.origin
+        const regex = new RegExp(
+          "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
         );
-        const escapedHost = signInURL.host.replace(/\./g, "&#8203;.");
+        if (!regex.test(identifier)) {
+          throw new Error("Invalid Email");
+        } else {
+          const url = new URL(params.url);
+          url.searchParams.delete("token"); // uncomment if you want the user to type this manually
+          const signInURL = new URL(
+            `/auth/email?${url.searchParams}`,
+            url.origin
+          );
+          const escapedHost = signInURL.host.replace(/\./g, "&#8203;.");
 
-        const result = await createTransport(
-          "smtp://projectprotectnature@gmail.com:bvyiapwmnivgxomf@smtp.gmail.com:587"
-        ).sendMail({
-          to: identifier,
-          from: provider.from,
-          subject: `Sign in to ${signInURL.host}`,
-          text: `Sign in on ${signInURL} using the verification code: ${token}`,
-          html: `<body style="background: "#f9f9f9";">
+          const result = await createTransport(
+            "smtp://projectprotectnature@gmail.com:bvyiapwmnivgxomf@smtp.gmail.com:587"
+          ).sendMail({
+            to: identifier,
+            from: provider.from,
+            subject: `Sign in to ${signInURL.host}`,
+            text: `Sign in on ${signInURL} using the verification code: ${token}`,
+            html: `<body style="background: "#f9f9f9";">
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center" style="padding: 10px 0px 20px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: "#444444";">
@@ -71,10 +77,13 @@ export const authOptions = {
               </table>
 
             </body>`,
-        });
-        const failed = result.rejected.concat(result.pending).filter(Boolean);
-        if (failed.length) {
-          throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
+          });
+          const failed = result.rejected.concat(result.pending).filter(Boolean);
+          if (failed.length) {
+            throw new Error(
+              `Email(s) (${failed.join(", ")}) could not be sent`
+            );
+          }
         }
       },
     }),
@@ -193,7 +202,7 @@ export const authOptions = {
   // },
 
   // Enable debug messages in the console if you are having problems
-  debug: true,
+  debug: false,
 };
 
 export default async function auth(req, res) {

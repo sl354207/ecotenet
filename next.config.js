@@ -32,7 +32,7 @@ const securityHeaders = [
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
   },
-  // POSSIBLY UPDATE MORE FOR STRIPE TO WORK  AND VERCEL FEEDBACK AND BE MORE SPECIFIC WITH URLS
+  // POSSIBLY UPDATE MORE FOR STRIPE TO WORK AND VERCEL FEEDBACK AND BE MORE SPECIFIC WITH URLS
   {
     key: "Content-Security-Policy",
     value:

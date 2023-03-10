@@ -247,6 +247,7 @@ export default function Dashboard() {
 
   // UPDATE ONCE MUTATE USER SESSION IS IMPLEMENTED IN NEXT AUTH OR CHANGE UPDATE PERSON FUNCTIONALITY
   const handleEmailUpdate = async () => {
+    // update regex
     let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
     if (!regex.test(email)) {
       setSnackbar({
