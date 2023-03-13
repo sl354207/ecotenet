@@ -219,7 +219,8 @@ export default async function auth(req, res) {
     const email = req.body.email;
 
     if (!regex.test(email)) {
-      throw new Error("Invalid Email");
+      // throw new Error("Invalid Email");
+      return res.status(403).json({ msg: "Invalid Email" });
     } else {
       return await NextAuth(req, res, authOptions);
     }
