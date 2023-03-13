@@ -26,6 +26,6 @@ export default async function handler(req, res) {
       res.status(500).json({ msg: "Something went wrong." });
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

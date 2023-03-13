@@ -40,13 +40,13 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
-              res.status(401);
+              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(403);
+          res.status(403).json({ msg: "Forbidden" });
         }
 
         break;
@@ -86,13 +86,13 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
-              res.status(401);
+              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(403);
+          res.status(403).json({ msg: "Forbidden" });
         }
         // console.log(req.body);
 
@@ -105,7 +105,7 @@ export default async function handler(req, res) {
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

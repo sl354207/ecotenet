@@ -4,7 +4,7 @@ import { getPostComments } from "@utils/mongodb/mongoHelpers";
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== "GET") {
-    return res.status(405);
+    return res.status(405).json({ msg: "Method not allowed" });
   }
 
   const { id } = req.query;
@@ -20,6 +20,6 @@ export default async function handler(req, res) {
       res.status(500).json({ msg: "Something went wrong." });
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

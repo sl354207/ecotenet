@@ -68,10 +68,10 @@ export default async function handler(req, res) {
         }
         break;
       default:
-        res.status(403);
+        res.status(403).json({ msg: "Forbidden" });
         break;
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

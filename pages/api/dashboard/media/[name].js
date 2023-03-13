@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     if (req.method !== "GET") {
-      return res.status(405);
+      return res.status(405).json({ msg: "Method not allowed" });
     }
     // console.log(req.query);
     const name = req.query.name;
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
               res.status(500).json({ msg: "Something went wrong." });
             }
           } else {
-            res.status(403);
+            res.status(403).json({ msg: "Forbidden" });
           }
         } else {
           if (
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
               res.status(500).json({ msg: "Something went wrong." });
             }
           } else {
-            res.status(403);
+            res.status(403).json({ msg: "Forbidden" });
           }
         }
       } else if (!session.user.name) {
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
-              res.status(403);
+              res.status(403).json({ msg: "Forbidden" });
             }
           } else {
             if (
@@ -117,21 +117,21 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
-              res.status(403);
+              res.status(403).json({ msg: "Forbidden" });
             }
           }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
-        res.status(401);
+        res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
-      res.status(403);
+      res.status(403).json({ msg: "Forbidden" });
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

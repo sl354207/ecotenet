@@ -98,17 +98,17 @@ export default async function handler(req, res) {
             }
           }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
-        res.status(401);
+        res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
-      res.status(403);
+      res.status(403).json({ msg: "Forbidden" });
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }
