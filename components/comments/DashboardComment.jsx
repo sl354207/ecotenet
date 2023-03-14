@@ -89,7 +89,7 @@ const DashboardComment = ({
             >
               View
             </Link>
-            {commentValue != "" ? (
+            {commentValue !== "" ? (
               <Button
                 variant="contained"
                 color="secondary"

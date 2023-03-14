@@ -41,7 +41,7 @@ const speciesChips = [
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (speciesChips, action) => {
-  if (action.type == "remove") {
+  if (action.type === "remove") {
     switch (action.payload) {
       case 1:
         speciesChips[1].open = speciesChips[2].open;
@@ -94,7 +94,7 @@ const reducer = (speciesChips, action) => {
         throw new Error();
     }
   }
-  if (action.type == "add") {
+  if (action.type === "add") {
     switch (action.payload) {
       case 0:
         speciesChips[1].open = true;
@@ -102,7 +102,7 @@ const reducer = (speciesChips, action) => {
         speciesChips[1].scientific_name = action.s_name;
         speciesChips[1].common_name = action.c_name;
         speciesChips[1]._id = action._id;
-        if (speciesChips[0].count == 0) {
+        if (speciesChips[0].count === 0) {
           speciesChips[0].count = 1;
         } else {
           speciesChips[0].count = speciesChips[0].count;
@@ -166,7 +166,7 @@ export const HomepageProvider = ({ children }) => {
     let visitedHome = localStorage.getItem("visited");
     // console.log(visitedHome);
 
-    if (router.pathname == "/") {
+    if (router.pathname === "/") {
       localStorage.setItem("visited", true);
       setVisited(visitedHome);
       // console.log(visited);

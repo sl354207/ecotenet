@@ -7,8 +7,8 @@ export default async function handler(req, res) {
       const { id, ...data } = req.body;
 
       if (
-        typeof id == "string" &&
-        id.length == 24 &&
+        typeof id === "string" &&
+        id.length === 24 &&
         (data.approved === "true" || data.approved === "false")
       ) {
         try {
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     case "DELETE":
       // set id based on request body
       const deleteId = req.body.id;
-      if (typeof deleteId == "string" && deleteId.length == 24) {
+      if (typeof deleteId === "string" && deleteId.length === 24) {
         try {
           const deleted = await deleteComment(deleteId);
           return res.status(200).json(deleted);

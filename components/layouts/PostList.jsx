@@ -37,7 +37,7 @@ const PostList = ({ posts, featured, search, handleClose }) => {
                 textTransform: "none",
               }}
               onClick={() => {
-                if (router.pathname == "/") {
+                if (router.pathname === "/") {
                   setFS({
                     state: search ? "Search Result" : "Feature",
                     item: post._id,

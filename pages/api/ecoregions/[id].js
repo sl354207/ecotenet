@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   const id = req.query.id;
-  if (typeof id == "string" && id.length >= 1 && id.length <= 4) {
+  if (typeof id === "string" && id.length >= 1 && id.length <= 4) {
     try {
       const results = await getEcoregionById(id);
 

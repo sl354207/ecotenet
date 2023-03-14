@@ -63,7 +63,7 @@ const Nav = () => {
   } = useHomepageContext();
 
   let status;
-  if (user == undefined) {
+  if (user === undefined) {
     status = "loading";
   } else {
     status = user.status;
@@ -352,7 +352,7 @@ const Nav = () => {
 
           <Button
             onClick={() => {
-              if (router.pathname == "/") {
+              if (router.pathname === "/") {
                 setFeature(true);
               } else {
                 router.push("/featured");
@@ -450,7 +450,7 @@ const Nav = () => {
             />
           )}
 
-          {router.pathname == "/" && (
+          {router.pathname === "/" && (
             <>
               {feature && (
                 <DynamicFeatureDialog
@@ -502,7 +502,7 @@ const Nav = () => {
                         <MenuItem
                           onClick={() => {
                             setPopper(false);
-                            if (router.pathname == "/") {
+                            if (router.pathname === "/") {
                               setFeature(true);
                             } else {
                               router.push("/featured");
@@ -576,7 +576,7 @@ const Nav = () => {
                         )}
 
                         <MenuItem
-                          disabled={status == "loading"}
+                          disabled={status === "loading"}
                           onClick={
                             status === "authenticated"
                               ? () => {
@@ -659,7 +659,7 @@ const Nav = () => {
               color="secondary"
               size={isTab ? "small" : "medium"}
               sx={{ marginLeft: "10px" }}
-              disabled={status == "loading"}
+              disabled={status === "loading"}
               onClick={
                 status === "authenticated"
                   ? () =>

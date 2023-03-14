@@ -466,9 +466,9 @@ export default function Dashboard() {
                         <Typography variant="h5" gutterBottom>
                           Public Profile: optional
                         </Typography>
-                        {results.bio == profile.bio &&
-                        results.website == profile.website &&
-                        results.socials == profile.socials ? (
+                        {results.bio === profile.bio &&
+                        results.website === profile.website &&
+                        results.socials === profile.socials ? (
                           <Button
                             variant="contained"
                             color="secondary"
@@ -755,7 +755,7 @@ export default function Dashboard() {
                   }}
                   onClick={() => handleEmailUpdate()}
                   disabled={
-                    email == "" || email == user.email || email == undefined
+                    email === "" || email === user.email || email === undefined
                   }
                 >
                   Update Email

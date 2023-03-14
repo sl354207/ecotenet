@@ -76,7 +76,7 @@ const adminComments = () => {
         </div>
       );
     } else {
-      if (Array.isArray(results) && results.length == 0) {
+      if (Array.isArray(results) && results.length === 0) {
         list = (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results

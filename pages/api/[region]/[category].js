@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   const valid = validate(dataCheck);
 
   if (valid) {
-    if (categorySub == "undefined") {
+    if (categorySub === "undefined") {
       try {
         const category = await getSpecies(categoryQuery, id);
 

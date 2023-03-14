@@ -52,11 +52,11 @@ const EcoDist = ({
   };
 
   const handleSubmit = (event, newValue) => {
-    if (newValue != null) {
+    if (newValue !== null) {
       const dash = newValue.indexOf("-");
       const name = newValue.slice(0, dash - 1);
       for (const result of dist) {
-        if (result.scientific_name == name) {
+        if (result.scientific_name === name) {
           switch (distributionState[0].count) {
             case 0:
               distributionDispatch({

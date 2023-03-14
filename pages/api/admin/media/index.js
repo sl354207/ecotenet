@@ -26,11 +26,11 @@ export default async function handler(req, res) {
   ];
 
   if (
-    typeof name == "string" &&
+    typeof name === "string" &&
     name.length <= 100 &&
-    typeof postId == "string" &&
-    postId.length == 24 &&
-    typeof ext == "string" &&
+    typeof postId === "string" &&
+    postId.length === 24 &&
+    typeof ext === "string" &&
     allowedExtensions.includes(ext.toLowerCase())
   ) {
     // try get request, if successful return response, otherwise return error message

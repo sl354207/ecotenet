@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const id = req.query.id;
   // console.log(id);
 
-  if (typeof id == "string" && id.length == 24) {
+  if (typeof id === "string" && id.length === 24) {
     try {
       const results = await getApprovedPostById(id);
 

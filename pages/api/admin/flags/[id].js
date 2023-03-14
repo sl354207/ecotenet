@@ -9,8 +9,8 @@ export default async function handler(req, res) {
 
   // const _id = req.query.id;
   if (
-    typeof id == "string" &&
-    id.length == 24 &&
+    typeof id === "string" &&
+    id.length === 24 &&
     (status === "resolved" || status === "pending")
   ) {
     try {

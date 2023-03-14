@@ -335,7 +335,7 @@ const DashboardDialog = ({
         color="textPrimary"
         align="center"
       >
-        {action == "delete" ? "Delete" : "Submit"}
+        {action === "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
       <DialogContent>
@@ -350,14 +350,14 @@ const DashboardDialog = ({
         </Button>
         <Button
           onClick={
-            action == "delete"
+            action === "delete"
               ? () => handleDeleteItem()
               : () => handleSubmitItem()
           }
           color="secondary"
           variant="outlined"
         >
-          {action == "delete" ? "delete" : "submit"}
+          {action === "delete" ? "delete" : "submit"}
         </Button>
       </DialogActions>
     </Dialog>

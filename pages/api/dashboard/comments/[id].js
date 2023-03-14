@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         const { id, ...data } = req.body;
         const validate = ajv.getSchema("comment");
         const valid = validate(data);
-        if (typeof id == "string" && id.length == 24 && valid) {
+        if (typeof id === "string" && id.length === 24 && valid) {
           if (session.user.name && session.user.name === data.name) {
             try {
               data.date = new Date().toUTCString();
@@ -66,9 +66,9 @@ export default async function handler(req, res) {
 
         // console.log(req.body);
         if (
-          typeof deleteId == "string" &&
-          deleteId.length == 24 &&
-          typeof deleteName == "string" &&
+          typeof deleteId === "string" &&
+          deleteId.length === 24 &&
+          typeof deleteName === "string" &&
           deleteName.length <= 100
         ) {
           if (session.user.name && session.user.name === deleteName) {

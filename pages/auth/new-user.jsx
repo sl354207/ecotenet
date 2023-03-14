@@ -105,7 +105,7 @@ const newUser = () => {
           variant="contained"
           color="secondary"
           onClick={() => handleNameUpdate(name)}
-          disabled={name == "" ? true : false}
+          disabled={name === "" ? true : false}
           sx={{ marginTop: "10px" }}
         >
           Submit

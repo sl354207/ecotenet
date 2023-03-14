@@ -29,10 +29,10 @@ export default async function handler(req, res) {
       "image/webp",
     ];
     if (
-      typeof name == "string" &&
+      typeof name === "string" &&
       name.length <= 100 &&
-      typeof postId == "string" &&
-      postId.length == 24 &&
+      typeof postId === "string" &&
+      postId.length === 24 &&
       allowedExtensions.includes(ext.toLowerCase())
     ) {
       if (session.user.name && session.user.name === name) {

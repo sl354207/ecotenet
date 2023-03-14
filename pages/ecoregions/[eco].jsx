@@ -85,10 +85,10 @@ const eco = ({ wiki, eco, id }) => {
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+      if (domNode.attribs && domNode.attribs.class === "gallerybox") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+      if (domNode.attribs && domNode.attribs.class === "metadata mbox-small") {
         return <></>;
       }
       if (
@@ -249,9 +249,9 @@ const eco = ({ wiki, eco, id }) => {
             </Typography>
             {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
             {wiki.remaining.sections.map((section) => {
-              if (section.anchor == "Gallery") {
+              if (section.anchor === "Gallery") {
                 return <></>;
-              } else if (section.toclevel == 2) {
+              } else if (section.toclevel === 2) {
                 return (
                   <>
                     <h2>{section.line}</h2>
@@ -340,7 +340,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       wiki:
-        wiki == undefined || wiki.title == "Not found."
+        wiki === undefined || wiki.title === "Not found."
           ? null
           : JSON.parse(JSON.stringify(wiki)),
 

@@ -209,9 +209,10 @@ export default async function auth(req, res) {
   }
   // console.log(`req.query: ${req.query.nextauth}`);
   // console.log(`req.method: ${req.method}`);
+  // console.log(req);
   // console.log(req.body);
 
-  if (req.query.nextauth.includes("signin,email" && req.method === "POST")) {
+  if (req.query.nextauth.includes("signin") && req.method === "POST") {
     const regex = new RegExp(
       "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
     );

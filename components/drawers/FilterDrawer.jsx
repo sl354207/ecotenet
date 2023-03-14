@@ -27,9 +27,9 @@ const drawerWidth = 370;
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (menuItems, action) => {
   // doesn't work in react strict mode because it gets called twice
-  if (action.type == "toggle") {
+  if (action.type === "toggle") {
     return menuItems.map((menuItem) => {
-      if (menuItem.menuTitle == action.payload) {
+      if (menuItem.menuTitle === action.payload) {
         menuItem.openList = !menuItem.openList;
       }
 
@@ -80,7 +80,7 @@ const FilterDrawer = ({
             top: { xs: top, md: "60px" },
             overflow: "visible",
             marginBottom: {
-              xs: router.pathname == "/" ? "55px" : "0px",
+              xs: router.pathname === "/" ? "55px" : "0px",
               md: "0px",
             },
           },

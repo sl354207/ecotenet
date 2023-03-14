@@ -23,7 +23,7 @@ const ImageRender = ({ data, preview }) => {
       style={
         data.image.url &&
         data.image.url.startsWith("blob:") &&
-        data.image.saved == false &&
+        data.image.saved === false &&
         !preview
           ? { border: "2px solid #ffa726", borderRadius: "4px" }
           : null

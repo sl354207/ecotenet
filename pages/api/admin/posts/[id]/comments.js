@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   const { id } = req.query;
 
-  if (typeof id == "string" && id.length == 24) {
+  if (typeof id === "string" && id.length === 24) {
     try {
       const comments = await getPostComments(id);
 

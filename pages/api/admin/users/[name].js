@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     case "GET":
       const getName = req.query.name;
 
-      if (typeof getName == "string" && getName.length <= 100) {
+      if (typeof getName === "string" && getName.length <= 100) {
         try {
           const person = await getPersonAdmin(getName);
 
@@ -51,7 +51,7 @@ export default async function handler(req, res) {
       // set id based on request body
       const deleteName = req.body;
 
-      if (typeof deleteName == "string" && deleteName.length <= 100) {
+      if (typeof deleteName === "string" && deleteName.length <= 100) {
         try {
           const deleted = await deletePerson(deleteName);
           return res.status(200).json(deleted);

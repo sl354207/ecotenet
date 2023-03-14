@@ -96,28 +96,28 @@ const post = ({ post }) => {
   });
 
   const reducer = (comments, toggle) => {
-    if (toggle.type == "load") {
+    if (toggle.type === "load") {
       return toggle.payload;
     }
-    if (toggle.type == "open") {
+    if (toggle.type === "open") {
       return comments.map((comment) => {
-        if (comment._id == toggle.payload) {
+        if (comment._id === toggle.payload) {
           comment.open = true;
         }
 
         return comment;
       });
     }
-    if (toggle.type == "close") {
+    if (toggle.type === "close") {
       return comments.map((comment) => {
-        if (comment._id == toggle.payload) {
+        if (comment._id === toggle.payload) {
           comment.open = false;
         }
 
         return comment;
       });
     }
-    if (toggle.type == "all") {
+    if (toggle.type === "all") {
       return comments.map((comment) => {
         comment.open = false;
 
@@ -155,7 +155,7 @@ const post = ({ post }) => {
 
         setDialog(true);
 
-        if (action == "Comment") {
+        if (action === "Comment") {
           dispatch({ type: "open", payload: result.comment_ref });
         }
       }
@@ -165,7 +165,7 @@ const post = ({ post }) => {
   const handleCloseDialog = (reply) => {
     setDialog(false);
 
-    if (reply == "reply") {
+    if (reply === "reply") {
       dispatch({ type: "all" });
     }
     if (reply && reply !== "reply" && reply !== "") {

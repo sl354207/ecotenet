@@ -14,11 +14,11 @@ export default async function handler(req, res) {
   const filter = req.query.filter;
   const eco = req.query.eco;
   if (
-    typeof query == "string" &&
+    typeof query === "string" &&
     query.length <= 100 &&
-    typeof filter == "string" &&
+    typeof filter === "string" &&
     filter.length <= 100 &&
-    typeof eco == "string" &&
+    typeof eco === "string" &&
     eco.length >= 1 &&
     eco.length <= 4
   ) {

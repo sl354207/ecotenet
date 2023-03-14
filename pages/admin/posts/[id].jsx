@@ -254,7 +254,7 @@ const post = () => {
                       </Button>
                     </div>
                   )}
-                  {comment_query == "flag" && (
+                  {comment_query === "flag" && (
                     <div
                       style={
                         isMobile ? { display: "grid" } : { display: "flex" }
@@ -345,7 +345,7 @@ const post = () => {
         </div>
       );
     } else {
-      if (Array.isArray(comments) && comments.length == 0) {
+      if (Array.isArray(comments) && comments.length === 0) {
         commentList = (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results

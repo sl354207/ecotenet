@@ -449,7 +449,7 @@ const DonateForm = () => {
               variant="contained"
               color="secondary"
               type="submit"
-              disabled={loading || once == 0}
+              disabled={loading || once === 0}
               sx={{
                 display: "flex",
                 margin: "auto",

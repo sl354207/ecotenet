@@ -234,13 +234,13 @@ const AdminDialog = ({
   const handleUpdatePost = async () => {
     const submission = {
       _id: result._id,
-      approved: action == "Deny" ? "false" : "true",
+      approved: action === "Deny" ? "false" : "true",
       feature: "false",
     };
 
     const postResponse = await updatePost(submission, "admin");
 
-    if (action == "Deny") {
+    if (action === "Deny") {
       if (postResponse.ok) {
         const notifyResponse = await handleNotify("post", "denied");
 
@@ -304,12 +304,12 @@ const AdminDialog = ({
   const handleUpdateComment = async () => {
     const submission = {
       id: result._id,
-      approved: action == "Deny" ? "false" : "true",
+      approved: action === "Deny" ? "false" : "true",
     };
 
     const commentResponse = await updateComment(submission, "admin");
 
-    if (action == "Deny") {
+    if (action === "Deny") {
       if (commentResponse.ok) {
         const notifyResponse = await handleNotify("comment", "denied");
 
@@ -365,13 +365,13 @@ const AdminDialog = ({
     const submission = {
       name: result.name,
       email: result.email,
-      denials: action == "Deny" ? result.denials + 1 : result.denials,
-      approved: action == "Approve" ? "true" : "false",
+      denials: action === "Deny" ? result.denials + 1 : result.denials,
+      approved: action === "Approve" ? "true" : "false",
     };
 
     const userResponse = await updateUser(submission, "admin");
 
-    if (action == "Deny") {
+    if (action === "Deny") {
       if (userResponse.ok) {
         const notifyResponse = await handleNotify("profile item", "denied");
 
@@ -482,7 +482,7 @@ const AdminDialog = ({
       <DialogTitle id="admin-dialog-title" color="textPrimary" align="center">
         {action}
       </DialogTitle>
-      {action == "Approve" ? (
+      {action === "Approve" ? (
         <DialogContent>
           <DialogContentText id="admin-dialog-text" color="textPrimary">
             Are you sure you want to approve {item}?
@@ -580,7 +580,7 @@ const AdminDialog = ({
         </Button>
         <Button
           onClick={
-            action == "Delete"
+            action === "Delete"
               ? () => handleDeleteItem()
               : () => handleUpdateItem()
           }

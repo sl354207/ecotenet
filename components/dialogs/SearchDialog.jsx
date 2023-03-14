@@ -95,7 +95,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
         </div>
       );
     } else {
-      if (Array.isArray(results) && results.length == 0) {
+      if (Array.isArray(results) && results.length === 0) {
         list = (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results
@@ -138,7 +138,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
           top: "30px",
           bottom:
             !query ||
-            (Array.isArray(results) && results.length == 0) ||
+            (Array.isArray(results) && results.length === 0) ||
             !results ||
             (Array.isArray(results) && results.length < 5)
               ? "auto"

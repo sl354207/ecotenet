@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   // set id based on id of url query
   const query = req.query.q;
-  if (typeof query == "string" && query.length <= 100) {
+  if (typeof query === "string" && query.length <= 100) {
     try {
       const results = await autoSpecies(query);
 

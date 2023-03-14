@@ -81,7 +81,7 @@ const person = ({ person, posts }) => {
           tip
         </Button>
 
-        {person.approved == "true" && (
+        {person.approved === "true" && (
           <div style={{ margin: "16px" }}>
             {person.bio !== "" && (
               <>

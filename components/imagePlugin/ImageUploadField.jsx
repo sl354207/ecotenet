@@ -451,9 +451,9 @@ function ImageUploadField({ onChange, value }) {
             state.errorText === "Error deleting" ||
             state.isUploading ||
             state.isDeleting ||
-            image.url == undefined ||
-            (image.url !== "blob" && image.url.startsWith("blob:") == false) ||
-            image.saved == true
+            image.url === undefined ||
+            (image.url !== "blob" && image.url.startsWith("blob:") === false) ||
+            image.saved === true
           }
           onClick={() => {
             saveImage(value.file);
@@ -471,9 +471,9 @@ function ImageUploadField({ onChange, value }) {
             state.errorText === "Error uploading" ||
             state.isUploading ||
             state.isDeleting ||
-            image.url == undefined ||
-            (image.url !== "blob" && image.url.startsWith("blob:") == false) ||
-            image.url == ""
+            image.url === undefined ||
+            (image.url !== "blob" && image.url.startsWith("blob:") === false) ||
+            image.url === ""
           }
         >
           {deleteInside}

@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const validate = ajv.getSchema("vote");
     const valid = validate(data);
     if (valid) {
-      if (session.user.name && session.user.name == data.name) {
+      if (session.user.name && session.user.name === data.name) {
         let voterNames;
         try {
           voterNames = await getPostVotes(data._id);
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
         }
       } else if (!session.user.name) {
         const person = await checkPerson(data.name);
-        if (person && person.email == session.user.email) {
+        if (person && person.email === session.user.email) {
           let voterNames;
           try {
             voterNames = await getPostVotes(data._id);

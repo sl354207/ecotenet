@@ -127,7 +127,7 @@ const MapMain = ({
 
       const region = event.features && event.features[0];
 
-      if (region.properties.unique_id != "<NA>") {
+      if (region.properties.unique_id !== "<NA>") {
         setHoverInfo({
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
@@ -214,7 +214,7 @@ const MapMain = ({
     (prevCount1, prevCount2, prevCount3) => {
       if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
         const coord = coords.filter(
-          (region) => region.unique_id == speciesRegions1[0]
+          (region) => region.unique_id === speciesRegions1[0]
         );
 
         mapRef.current?.flyTo({
@@ -225,7 +225,7 @@ const MapMain = ({
       }
       if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
         const coord = coords.filter(
-          (region) => region.unique_id == speciesRegions2[0]
+          (region) => region.unique_id === speciesRegions2[0]
         );
 
         mapRef.current?.flyTo({
@@ -236,7 +236,7 @@ const MapMain = ({
       }
       if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
         const coord = coords.filter(
-          (region) => region.unique_id == speciesRegions3[0]
+          (region) => region.unique_id === speciesRegions3[0]
         );
 
         mapRef.current?.flyTo({

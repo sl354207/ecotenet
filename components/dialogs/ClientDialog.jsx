@@ -93,7 +93,7 @@ const ClientDialog = ({
       mutate(`/api/votes/${post_id}`);
       setVote(0);
       setLimit(0);
-    } else if (updateResponse.status == 406) {
+    } else if (updateResponse.status === 406) {
       setSnackbar({
         ...snackbar,
         open: true,
@@ -137,7 +137,7 @@ const ClientDialog = ({
         </Button>
         <Button
           onClick={
-            contentType == "Vote"
+            contentType === "Vote"
               ? () => handleVoteSubmit()
               : () => handleCommentSubmit()
           }

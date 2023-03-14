@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     switch (method) {
       case "GET":
         const getName = req.query.name;
-        if (typeof getName == "string" && getName.length <= 100) {
+        if (typeof getName === "string" && getName.length <= 100) {
           if (session.user.name && session.user.name === getName) {
             try {
               const comments = await getDashboardComments(getName);

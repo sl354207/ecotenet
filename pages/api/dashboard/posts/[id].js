@@ -17,10 +17,10 @@ export default async function handler(req, res) {
         const getName = req.query.name;
         const id = req.query.id;
         if (
-          typeof getName == "string" &&
+          typeof getName === "string" &&
           getName.length <= 100 &&
-          typeof id == "string" &&
-          id.length == 24
+          typeof id === "string" &&
+          id.length === 24
         ) {
           if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         const { _id, ...data } = req.body;
         const validate = ajv.getSchema("post");
         const valid = validate(data);
-        if (typeof _id == "string" && _id.length == 24 && valid) {
+        if (typeof _id === "string" && _id.length === 24 && valid) {
           if (session.user.name && session.user.name === data.name) {
             try {
               data.approved = "pending";
@@ -119,9 +119,9 @@ export default async function handler(req, res) {
 
         // console.log(req.body);
         if (
-          typeof deleteId == "string" &&
-          deleteId.length == 24 &&
-          typeof deleteName == "string" &&
+          typeof deleteId === "string" &&
+          deleteId.length === 24 &&
+          typeof deleteName === "string" &&
           deleteName.length <= 100
         ) {
           if (session.user.name && session.user.name === deleteName) {

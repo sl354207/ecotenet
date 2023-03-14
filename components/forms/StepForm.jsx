@@ -31,7 +31,7 @@ const StepForm = ({ post, user }) => {
   const [activeStep, setActiveStep] = useState(0);
 
   // set editor value state
-  const [postValue, setPostValue] = useState(post.id != "" ? post : null);
+  const [postValue, setPostValue] = useState(post.id !== "" ? post : null);
 
   //set detail values state;
   const [details, setDetails] = useState({
@@ -103,9 +103,9 @@ const StepForm = ({ post, user }) => {
     };
 
     const postObject = {
-      id: postValue != null ? postValue.id : "",
-      version: postValue != null ? postValue.version : 1,
-      rows: postValue != null ? postValue.rows : [],
+      id: postValue !== null ? postValue.id : "",
+      version: postValue !== null ? postValue.version : 1,
+      rows: postValue !== null ? postValue.rows : [],
     };
 
     const silentObject = {
@@ -176,13 +176,13 @@ const StepForm = ({ post, user }) => {
                 Back
               </Button>
 
-              {post.status == "published" ? (
+              {post.status === "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
+                  {details.title !== "" &&
+                  details.category !== null &&
                   clickInfo.length > 0 &&
                   postValue &&
                   postValue.rows.length > 0 ? (
@@ -216,8 +216,8 @@ const StepForm = ({ post, user }) => {
                   >
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
+                  {details.title !== "" &&
+                  details.category !== null &&
                   clickInfo.length > 0 &&
                   postValue &&
                   postValue.rows.length > 0 ? (
@@ -271,13 +271,13 @@ const StepForm = ({ post, user }) => {
                 Back
               </Button>
 
-              {post.status == "published" ? (
+              {post.status === "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
+                  {details.title !== "" &&
+                  details.category !== null &&
                   clickInfo.length > 0 &&
                   postValue &&
                   postValue.rows.length > 0 ? (
@@ -312,8 +312,8 @@ const StepForm = ({ post, user }) => {
                     Save
                   </Button>
 
-                  {details.title != "" &&
-                  details.category != null &&
+                  {details.title !== "" &&
+                  details.category !== null &&
                   clickInfo.length > 0 &&
                   postValue &&
                   postValue.rows.length > 0 ? (
@@ -361,13 +361,13 @@ const StepForm = ({ post, user }) => {
                 Back
               </Button>
 
-              {post.status == "published" ? (
+              {post.status === "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
+                  {details.title !== "" &&
+                  details.category !== null &&
                   clickInfo.length > 0 &&
                   postValue &&
                   postValue.rows.length > 0 ? (
@@ -401,8 +401,8 @@ const StepForm = ({ post, user }) => {
                   >
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
+                  {details.title !== "" &&
+                  details.category !== null &&
                   clickInfo.length > 0 &&
                   postValue &&
                   postValue.rows.length > 0 ? (

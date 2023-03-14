@@ -60,7 +60,7 @@ const speciesChips = [
 
 // reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
 const reducer = (speciesChips, action) => {
-  if (action.type == "remove") {
+  if (action.type === "remove") {
     switch (action.payload) {
       case 1:
         speciesChips[1].open = speciesChips[2].open;
@@ -113,7 +113,7 @@ const reducer = (speciesChips, action) => {
         throw new Error();
     }
   }
-  if (action.type == "add") {
+  if (action.type === "add") {
     switch (action.payload) {
       case 1:
         speciesChips[1].open = true;
@@ -174,12 +174,12 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   const [state, dispatch] = useReducer(reducer, speciesChips);
 
   const handleSubmit = (event, newValue) => {
-    if (newValue != null) {
+    if (newValue !== null) {
       const dash = newValue.indexOf("-");
       const name = newValue.slice(0, dash - 1);
 
       for (const result of results) {
-        if (result.scientific_name == name) {
+        if (result.scientific_name === name) {
           switch (state[0].count) {
             case 0:
               dispatch({
@@ -225,7 +225,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   const handleMapClick = useCallback((event) => {
     const region = event.features && event.features[0];
 
-    if (region && region.properties.unique_id != "<NA>") {
+    if (region && region.properties.unique_id !== "<NA>") {
       setClickInfo((clickInfo) => {
         if (!clickInfo.includes(region && region.properties.unique_id)) {
           return [...clickInfo, region && region.properties.unique_id];

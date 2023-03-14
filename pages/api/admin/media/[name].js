@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   // try get request, if successful return response, otherwise return error message
 
-  if (typeof name == "string" && name.length <= 100) {
+  if (typeof name === "string" && name.length <= 100) {
     if (!postId && !key) {
       try {
         const paths = await deleteDirectoryPromise(`${name}/`);
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         res.status(500).json({ msg: "Something went wrong." });
       }
     } else if (!key) {
-      if (typeof postId == "string" && postId.length == 24) {
+      if (typeof postId === "string" && postId.length === 24) {
         try {
           const paths = await deleteRecursive(`${name}/${postId}/`);
 
@@ -44,10 +44,10 @@ export default async function handler(req, res) {
       }
     } else {
       if (
-        typeof postId == "string" &&
-        postId.length == 24 &&
-        typeof key == "string" &&
-        key.substring(0, key.indexOf(".")).length == 32
+        typeof postId === "string" &&
+        postId.length === 24 &&
+        typeof key === "string" &&
+        key.substring(0, key.indexOf(".")).length === 32
       ) {
         try {
           const url = await generateDeleteURL(name, postId, key);
