@@ -12,7 +12,8 @@ export default async function handler(req, res) {
     }
 
     const name = req.query.name;
-    if (typeof name === "string" && name.length <= 100) {
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+    if (typeof name === "string" && name.length <= 60 && !regex.test(name)) {
       try {
         const nameResponse = await checkName(name);
 

@@ -14,6 +14,8 @@ export default async function handler(req, res) {
     }
     const data = req.body;
 
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
     const validate = ajv.getSchema("flag");
     const valid = validate(data);
     if (valid) {
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
 
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
+      } else if (!session.user.name && !regex.test(data.name)) {
         const person = await checkPerson(data.name);
         if (person && person.email === session.user.email) {
           try {

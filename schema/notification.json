@@ -3,7 +3,7 @@
     "properties": {
         "name": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 60,
             "description": "must be a string"
           },
           "reason": {
@@ -34,7 +34,7 @@
           },
       "date": {
         "type": "string",
-        "maxLength": 100,
+        "maxLength": 60,
         "description": "must be a string"
       }
     },

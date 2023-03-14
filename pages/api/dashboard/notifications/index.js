@@ -12,9 +12,28 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const { name } = req.query;
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
     // console.log(name);
-    if (typeof name === "string" && name.length <= 100) {
-      if (session.user.name && session.user.name === name) {
+
+    if (session.user.name && session.user.name === name) {
+      try {
+        const notifications = await getNotifications(name);
+
+        return res.status(200).json(notifications);
+      } catch (err) {
+        console.error(err);
+
+        res.status(500).json({ msg: "Something went wrong." });
+      }
+    } else if (
+      !session.user.name &&
+      typeof name === "string" &&
+      name.length <= 60 &&
+      !regex.test(name)
+    ) {
+      const person = await checkPerson(name);
+
+      if (person && person.email === session.user.email) {
         try {
           const notifications = await getNotifications(name);
 
@@ -24,27 +43,11 @@ export default async function handler(req, res) {
 
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
-        const person = await checkPerson(name);
-
-        if (person && person.email === session.user.email) {
-          try {
-            const notifications = await getNotifications(name);
-
-            return res.status(200).json(notifications);
-          } catch (err) {
-            console.error(err);
-
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else {
-          res.status(401).json({ msg: "Unauthorized" });
-        }
       } else {
         res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
-      res.status(403).json({ msg: "Forbidden" });
+      res.status(401).json({ msg: "Unauthorized" });
     }
   } else {
     // Not Signed in

@@ -12,16 +12,12 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     const method = req.method;
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
     switch (method) {
       case "GET":
         const getName = req.query.name;
         const id = req.query.id;
-        if (
-          typeof getName === "string" &&
-          getName.length <= 100 &&
-          typeof id === "string" &&
-          id.length === 24
-        ) {
+        if (typeof id === "string" && id.length === 24) {
           if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
             try {
@@ -35,7 +31,12 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (
+            !session.user.name &&
+            typeof getName === "string" &&
+            getName.length <= 60 &&
+            !regex.test(getName)
+          ) {
             const person = await checkPerson(getName);
 
             if (person && person.email === session.user.email) {
@@ -81,7 +82,12 @@ export default async function handler(req, res) {
               console.error(err);
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (
+            !session.user.name &&
+            typeof data.name === "string" &&
+            data.name.length <= 60 &&
+            !regex.test(data.name)
+          ) {
             const person = await checkPerson(data.name);
 
             if (person && person.email === session.user.email) {
@@ -118,12 +124,7 @@ export default async function handler(req, res) {
         // try delete request, if successful return response, otherwise return error message
 
         // console.log(req.body);
-        if (
-          typeof deleteId === "string" &&
-          deleteId.length === 24 &&
-          typeof deleteName === "string" &&
-          deleteName.length <= 100
-        ) {
+        if (typeof deleteId === "string" && deleteId.length === 24) {
           if (session.user.name && session.user.name === deleteName) {
             try {
               const deleted = await deletePost(deleteId);
@@ -132,7 +133,12 @@ export default async function handler(req, res) {
               console.error(err);
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (
+            !session.user.name &&
+            typeof deleteName === "string" &&
+            deleteName.length <= 60 &&
+            !regex.test(deleteName)
+          ) {
             const person = await checkPerson(deleteName);
 
             if (person && person.email === session.user.email) {

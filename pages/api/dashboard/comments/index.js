@@ -11,11 +11,31 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     const method = req.method;
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
     switch (method) {
       case "GET":
         const getName = req.query.name;
-        if (typeof getName === "string" && getName.length <= 100) {
-          if (session.user.name && session.user.name === getName) {
+
+        if (session.user.name && session.user.name === getName) {
+          try {
+            const comments = await getDashboardComments(getName);
+
+            return res.status(200).json(comments);
+          } catch (err) {
+            console.error(err);
+
+            res.status(500).json({ msg: "Something went wrong." });
+          }
+        } else if (
+          !session.user.name &&
+          typeof getName === "string" &&
+          getName.length <= 60 &&
+          !regex.test(getName)
+        ) {
+          const person = await checkPerson(getName);
+
+          if (person && person.email === session.user.email) {
+            // try get request, if successful return response, otherwise return error message
             try {
               const comments = await getDashboardComments(getName);
 
@@ -25,28 +45,11 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
-            const person = await checkPerson(getName);
-
-            if (person && person.email === session.user.email) {
-              // try get request, if successful return response, otherwise return error message
-              try {
-                const comments = await getDashboardComments(getName);
-
-                return res.status(200).json(comments);
-              } catch (err) {
-                console.error(err);
-
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              res.status(401).json({ msg: "Unauthorized" });
-            }
           } else {
             res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(403).json({ msg: "Forbidden" });
+          res.status(401).json({ msg: "Unauthorized" });
         }
 
         break;
@@ -68,7 +71,12 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (
+            !session.user.name &&
+            typeof data.name === "string" &&
+            data.name.length <= 60 &&
+            !regex.test(data.name)
+          ) {
             const person = await checkPerson(data.name);
 
             if (person && person.email === session.user.email) {

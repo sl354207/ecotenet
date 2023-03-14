@@ -15,6 +15,8 @@ export default async function handler(req, res) {
     const postId = req.query.post_id;
     const ext = req.query.ext;
 
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
     const allowedExtensions = [
       "image/apng",
       "image/avif",
@@ -29,8 +31,6 @@ export default async function handler(req, res) {
       "image/webp",
     ];
     if (
-      typeof name === "string" &&
-      name.length <= 100 &&
       typeof postId === "string" &&
       postId.length === 24 &&
       allowedExtensions.includes(ext.toLowerCase())
@@ -45,7 +45,12 @@ export default async function handler(req, res) {
 
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
+      } else if (
+        !session.user.name &&
+        typeof name === "string" &&
+        name.length <= 60 &&
+        !regex.test(name)
+      ) {
         const person = await checkPerson(name);
 
         if (person && person.email === session.user.email) {

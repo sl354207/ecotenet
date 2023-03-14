@@ -11,6 +11,8 @@ export default async function handler(req, res) {
   const postId = req.query.post_id;
   const ext = req.query.ext;
 
+  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
   const allowedExtensions = [
     "image/apng",
     "image/avif",
@@ -27,7 +29,8 @@ export default async function handler(req, res) {
 
   if (
     typeof name === "string" &&
-    name.length <= 100 &&
+    name.length <= 60 &&
+    !regex.test(name) &&
     typeof postId === "string" &&
     postId.length === 24 &&
     typeof ext === "string" &&

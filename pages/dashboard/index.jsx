@@ -247,8 +247,9 @@ export default function Dashboard() {
 
   // UPDATE ONCE MUTATE USER SESSION IS IMPLEMENTED IN NEXT AUTH OR CHANGE UPDATE PERSON FUNCTIONALITY
   const handleEmailUpdate = async () => {
-    // update regex
-    let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+    // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
+    const regex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     if (!regex.test(email)) {
       setSnackbar({
         ...snackbar,

@@ -11,6 +11,7 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     const method = req.method;
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
     switch (method) {
       case "GET":
         const getName = req.query.name;
@@ -28,7 +29,12 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (
+            !session.user.name &&
+            typeof getName === "string" &&
+            getName.length <= 60 &&
+            !regex.test(getName)
+          ) {
             const person = await checkPerson(getName);
 
             if (person && person.email === session.user.email) {
@@ -73,7 +79,12 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (
+            !session.user.name &&
+            typeof data.name === "string" &&
+            data.name.length <= 60 &&
+            !regex.test(data.name)
+          ) {
             const person = await checkPerson(data.name);
 
             if (person && person.email === session.user.email) {

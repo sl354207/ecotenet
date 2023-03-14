@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     typeof query === "string" &&
     query.length <= 100 &&
     typeof filter === "string" &&
-    filter.length <= 100 &&
+    filter.length <= 10 &&
     typeof eco === "string" &&
     eco.length >= 1 &&
     eco.length <= 4

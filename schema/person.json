@@ -6,13 +6,13 @@
     "properties": {
       "name": {
         "type": "string",
-        "maxLength": 100,
+        "maxLength": 60,
         "description": "must be a string"
         },
       "email": {
         "type": "string",
         "format": "email",
-        "maxLength": 100,
+        "maxLength": 60,
         "description": "must be an email"
       },
       "bio": {

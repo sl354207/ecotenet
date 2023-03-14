@@ -12,13 +12,8 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const { name, id, viewed } = req.body;
-    if (
-      typeof name === "string" &&
-      name.length <= 100 &&
-      typeof id === "string" &&
-      id.length === 24 &&
-      viewed === true
-    ) {
+    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+    if (typeof id === "string" && id.length === 24 && viewed === true) {
       if (session.user.name && session.user.name === name) {
         try {
           const updatedNotification = await updateNotification(id, viewed);
@@ -27,7 +22,12 @@ export default async function handler(req, res) {
           console.error(err);
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
+      } else if (
+        !session.user.name &&
+        typeof name === "string" &&
+        name.length <= 60 &&
+        !regex.test(name)
+      ) {
         const person = await checkPerson(name);
 
         if (person && person.email === session.user.email) {

@@ -15,9 +15,11 @@ export default async function handler(req, res) {
   const postId = req.query.post_id;
   const key = req.query.id;
 
+  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
   // try get request, if successful return response, otherwise return error message
 
-  if (typeof name === "string" && name.length <= 100) {
+  if (typeof name === "string" && name.length <= 60 && !regex.test(name)) {
     if (!postId && !key) {
       try {
         const paths = await deleteDirectoryPromise(`${name}/`);

@@ -213,9 +213,9 @@ export default async function auth(req, res) {
   // console.log(req.body);
 
   if (req.query.nextauth.includes("signin") && req.method === "POST") {
-    const regex = new RegExp(
-      "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-    );
+    // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
+    const regex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
     const email = req.body.email;
 
