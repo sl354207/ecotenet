@@ -46,6 +46,8 @@ const DashboardComment = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Comment will be visible upon approval",
       });
@@ -55,6 +57,8 @@ const DashboardComment = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem saving comment. Please try again later",
       });

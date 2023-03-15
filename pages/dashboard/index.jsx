@@ -176,6 +176,8 @@ export default function Dashboard() {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message:
           "There was a problem resolving notification. Please try again later",
@@ -226,6 +228,8 @@ export default function Dashboard() {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: "Profile saved successfully",
         });
@@ -234,6 +238,8 @@ export default function Dashboard() {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: "There was a problem saving profile. Please try again later",
         });
@@ -254,6 +260,8 @@ export default function Dashboard() {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "Invalid Email",
       });
@@ -269,6 +277,8 @@ export default function Dashboard() {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: "Email changed successfully",
         });
@@ -277,6 +287,8 @@ export default function Dashboard() {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: "There was a problem changing email. Please try again later",
         });

@@ -13,14 +13,18 @@ export default async function handler(req, res) {
   const query = req.query.q;
   const filter = req.query.filter;
   const eco = req.query.eco;
+
+  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
   if (
     typeof query === "string" &&
     query.length <= 100 &&
+    !regex.test(query) &&
     typeof filter === "string" &&
     filter.length <= 10 &&
     typeof eco === "string" &&
     eco.length >= 1 &&
-    eco.length <= 4
+    eco.length <= 4 &&
+    !regex.test(eco)
   ) {
     switch (filter) {
       case "allPosts":

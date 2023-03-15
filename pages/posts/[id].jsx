@@ -188,6 +188,8 @@ const post = ({ post }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Added to feature list",
       });
@@ -196,6 +198,8 @@ const post = ({ post }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message:
           "There was a problem submitting feature. Please try again later",
@@ -587,14 +591,28 @@ export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const _id = context.params.id;
 
-  const post = await getPostById(_id);
+  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
 
-  return {
-    props: {
-      post: JSON.parse(JSON.stringify(post)),
-    },
-    revalidate: 60,
-  };
+  if (typeof _id === "string" && _id.length === 24 && !regex.test(_id)) {
+    const post = await getPostById(_id);
+
+    if (post === null) {
+      return {
+        notFound: true,
+      };
+    } else {
+      return {
+        props: {
+          post: JSON.parse(JSON.stringify(post)),
+        },
+        revalidate: 60,
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 // build routing paths for each post at build time

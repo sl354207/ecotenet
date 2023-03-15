@@ -113,6 +113,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: `Post deleted successfully`,
           });
@@ -127,6 +129,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message: `There was a problem creating notification but post was deleted`,
           });
@@ -136,6 +140,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem deleting post. Please try again later`,
         });
@@ -145,6 +151,8 @@ const AdminDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting post. Please try again later`,
       });
@@ -166,6 +174,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Comment deleted successfully`,
         });
@@ -175,6 +185,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem creating notification but comment was deleted`,
         });
@@ -184,6 +196,8 @@ const AdminDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
       });
@@ -202,6 +216,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: "Account deleted successfully",
         });
@@ -215,6 +231,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message:
             "There was a problem deleting account. Please try again later",
@@ -225,6 +243,8 @@ const AdminDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem deleting account. Please try again later",
       });
@@ -249,6 +269,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: `Post denied successfully`,
           });
@@ -263,6 +285,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message: `There was a problem creating notification but post was denied`,
           });
@@ -272,6 +296,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem denying post. Please try again later`,
         });
@@ -282,6 +308,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Post approved successfully`,
         });
@@ -295,6 +323,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem approving post. Please try again later`,
         });
@@ -318,6 +348,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: `Comment denied successfully`,
           });
@@ -327,6 +359,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message: `There was a problem creating notification but comment was denied`,
           });
@@ -336,6 +370,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem denying comment. Please try again later`,
         });
@@ -346,6 +382,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Comment approved successfully`,
         });
@@ -355,6 +393,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem approving comment. Please try again later`,
         });
@@ -380,6 +420,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: `Profile denied successfully`,
           });
@@ -393,6 +435,8 @@ const AdminDialog = ({
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message: `There was a problem creating notification but profile was denied`,
           });
@@ -402,6 +446,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem denying profile. Please try again later`,
         });
@@ -412,6 +458,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Profile approved successfully`,
         });
@@ -425,6 +473,8 @@ const AdminDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem approving profile. Please try again later`,
         });

@@ -10,7 +10,8 @@ const tip = () => {
     <Container>
       {name && (
         <>
-          <Header title={`Tip ${name}`} />
+          <Header title="Tipping" />
+          {/* <Header title={`Tip ${name}`} /> */}
           <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
             We are currently working on adding the ability to tip people in
             cryptocurrencies...more to come.

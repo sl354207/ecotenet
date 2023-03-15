@@ -41,6 +41,8 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Flag submitted successfully",
       });
@@ -49,6 +51,8 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem submitting flag. Please try again later",
       });

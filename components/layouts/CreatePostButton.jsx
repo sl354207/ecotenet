@@ -29,6 +29,8 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem creating post. Please try again later",
       });

@@ -77,6 +77,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Post deleted successfully`,
         });
@@ -86,6 +88,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem deleting post. Please try again later`,
         });
@@ -95,6 +99,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting post media. Please try again later`,
       });
@@ -117,6 +123,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: `Comment deleted successfully`,
       });
@@ -126,6 +134,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
       });
@@ -146,6 +156,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: "Account deleted successfully",
         });
@@ -155,6 +167,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem deleting your account. Please try again later`,
         });
@@ -164,6 +178,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting your account. Please try again later`,
       });
@@ -194,6 +210,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
@@ -204,6 +222,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });
@@ -233,6 +253,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
@@ -242,6 +264,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });
@@ -270,6 +294,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
@@ -278,6 +304,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });

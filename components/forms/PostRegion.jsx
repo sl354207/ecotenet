@@ -158,16 +158,21 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
   const handleChange = async (e) => {
     if (e.target.value) {
-      const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+      if (!regex.test(e.target.value)) {
+        const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      const data = await res.json();
+        if (res.ok) {
+          const data = await res.json();
 
-      setResults(data);
+          setResults(data);
+        }
+      }
     }
   };
 

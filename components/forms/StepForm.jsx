@@ -125,6 +125,8 @@ const StepForm = ({ post, user }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Draft saved successfully",
       });
@@ -134,6 +136,8 @@ const StepForm = ({ post, user }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem saving draft. Please try again later",
       });

@@ -59,6 +59,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Comment will be visible upon approval",
       });
@@ -67,6 +69,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message:
           "There was a problem submitting comment. Please try again later",
@@ -87,6 +91,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: `${contentType} submitted successfully`,
       });
@@ -97,6 +103,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `You have already voted on this post.`,
       });
@@ -104,6 +112,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting ${item}. Please try again later`,
       });

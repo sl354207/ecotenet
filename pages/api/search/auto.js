@@ -7,7 +7,9 @@ export default async function handler(req, res) {
 
   // set id based on id of url query
   const query = req.query.q;
-  if (typeof query === "string" && query.length <= 100) {
+  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
+  if (typeof query === "string" && query.length <= 100 && !regex.test(query)) {
     try {
       const results = await autoSpecies(query);
 
