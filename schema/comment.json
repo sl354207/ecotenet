@@ -9,14 +9,16 @@
           "type": "string",
           "minLength": 24,
           "maxLength": 24,
-          "description": "must be a string"
+          "description": "must be a string",
+          "pattern": "^[A-Za-z0-9]*$"
         },
         "comment_ref": {
           "oneOf": [
             {"type": "string",
             "minLength": 24,
             "maxLength": 24,
-            "description": "must be a string"
+            "description": "must be a string",
+            "pattern": "^[A-Za-z0-9]*$"
             },
             {"type": "string",
             "const": "",

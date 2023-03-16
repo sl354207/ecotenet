@@ -33,6 +33,7 @@ import { createFilterOptions } from "@mui/material/useAutocomplete";
 import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
+import { validEmail } from "@utils/validationHelpers";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -253,10 +254,7 @@ export default function Dashboard() {
 
   // UPDATE ONCE MUTATE USER SESSION IS IMPLEMENTED IN NEXT AUTH OR CHANGE UPDATE PERSON FUNCTIONALITY
   const handleEmailUpdate = async () => {
-    // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
-    const regex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    if (!regex.test(email)) {
+    if (!validEmail(email)) {
       setSnackbar({
         ...snackbar,
         open: true,

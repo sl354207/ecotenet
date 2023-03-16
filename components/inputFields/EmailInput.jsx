@@ -1,5 +1,6 @@
 import { Button, FormControl, FormHelperText, InputLabel } from "@mui/material";
 import theme from "@utils/theme";
+import { validEmail } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import TextBox from "./TextBox";
@@ -9,16 +10,8 @@ const EmailInput = ({ provider, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  // let regex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
-  // sourced from https://github.com/ajv-validator/ajv-formats/blob/master/src/formats.ts
-  // const regex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
-  // );
-  // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
-  const regex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
   const handleSignin = useCallback(async () => {
-    if (!regex.test(email)) {
+    if (!validEmail(email)) {
       setError(true);
     } else {
       setError(false);

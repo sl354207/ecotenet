@@ -1,5 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { checkPerson, getNotifications } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts by user from database
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const { name } = req.query;
-    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
     // console.log(name);
 
     if (session.user.name && session.user.name === name) {
@@ -25,12 +26,7 @@ export default async function handler(req, res) {
 
         res.status(500).json({ msg: "Something went wrong." });
       }
-    } else if (
-      !session.user.name &&
-      typeof name === "string" &&
-      name.length <= 60 &&
-      !regex.test(name)
-    ) {
+    } else if (!session.user.name && validName(name)) {
       const person = await checkPerson(name);
 
       if (person && person.email === session.user.email) {

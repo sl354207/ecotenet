@@ -1,5 +1,6 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
+import { validEmail } from "@utils/validationHelpers";
 import { randomBytes } from "crypto";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
@@ -23,12 +24,7 @@ export const authOptions = {
       },
       async sendVerificationRequest(params) {
         const { identifier, provider, token, theme } = params;
-        // const regex = new RegExp(
-        //   "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-        // );
-        // if (!regex.test(identifier)) {
-        //   throw new Error("Invalid Email");
-        // } else {
+
         const url = new URL(params.url);
         url.searchParams.delete("token"); // uncomment if you want the user to type this manually
         const signInURL = new URL(
@@ -82,7 +78,6 @@ export const authOptions = {
         if (failed.length) {
           throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
         }
-        // }
       },
     }),
   ],
@@ -213,13 +208,9 @@ export default async function auth(req, res) {
   // console.log(req.body);
 
   if (req.query.nextauth.includes("signin") && req.method === "POST") {
-    // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
-    const regex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
     const email = req.body.email;
 
-    if (!regex.test(email)) {
+    if (!validEmail(email)) {
       // throw new Error("Invalid Email");
       return res.status(403).json({ msg: "Invalid Email" });
     } else {

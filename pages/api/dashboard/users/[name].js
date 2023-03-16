@@ -6,6 +6,7 @@ import {
   getPersonDash,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 import URISanity from "urisanity";
 
@@ -14,7 +15,7 @@ export default async function handler(req, res) {
   // console.log(session);
   if (session) {
     const method = req.method;
-    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
     switch (method) {
       case "GET":
         const getName = req.query.name;
@@ -30,12 +31,7 @@ export default async function handler(req, res) {
 
             res.status(500).json({ msg: "Something went wrong." });
           }
-        } else if (
-          !session.user.name &&
-          typeof getName === "string" &&
-          getName.length <= 60 &&
-          !regex.test(getName)
-        ) {
+        } else if (!session.user.name && validName(getName)) {
           const person = await checkPerson(getName);
           // console.log(person);
 
@@ -95,6 +91,7 @@ export default async function handler(req, res) {
 
         if (
           valid &&
+          validName(name) &&
           validSocials &&
           (validWebsite !== "about:blank" || data.website === "")
         ) {
@@ -135,12 +132,7 @@ export default async function handler(req, res) {
             console.error(err);
             res.status(500).json({ msg: "Something went wrong." });
           }
-        } else if (
-          !session.user.name &&
-          typeof deleteName === "string" &&
-          deleteName.length <= 60 &&
-          !regex.test(deleteName)
-        ) {
+        } else if (!session.user.name && validName(deleteName)) {
           const person = await checkPerson(deleteName);
 
           if (person && person.email === session.user.email) {

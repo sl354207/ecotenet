@@ -35,6 +35,7 @@ import fetcher from "@utils/fetcher";
 import { getPostById, getPosts } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
+import { validID } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -591,9 +592,7 @@ export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const _id = context.params.id;
 
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
-
-  if (typeof _id === "string" && _id.length === 24 && !regex.test(_id)) {
+  if (validID(_id)) {
     const post = await getPostById(_id);
 
     if (post === null) {

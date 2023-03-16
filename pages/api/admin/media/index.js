@@ -1,4 +1,5 @@
 import { generateUploadURL } from "@utils/aws";
+import { validID, validName } from "@utils/validationHelpers";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
@@ -10,8 +11,6 @@ export default async function handler(req, res) {
   const name = req.query.name;
   const postId = req.query.post_id;
   const ext = req.query.ext;
-
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
 
   const allowedExtensions = [
     "image/apng",
@@ -28,11 +27,8 @@ export default async function handler(req, res) {
   ];
 
   if (
-    typeof name === "string" &&
-    name.length <= 60 &&
-    !regex.test(name) &&
-    typeof postId === "string" &&
-    postId.length === 24 &&
+    validName(name) &&
+    validID(postId) &&
     typeof ext === "string" &&
     allowedExtensions.includes(ext.toLowerCase())
   ) {

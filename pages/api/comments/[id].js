@@ -1,4 +1,5 @@
 import { getPostComments } from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -6,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   const id = req.query.id;
-  if (typeof id === "string" && id.length === 24) {
+  if (validID(id)) {
     try {
       const results = await getPostComments(id);
 

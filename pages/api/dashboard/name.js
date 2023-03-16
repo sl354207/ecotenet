@@ -1,5 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { checkName } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
@@ -12,8 +13,8 @@ export default async function handler(req, res) {
     }
 
     const name = req.query.name;
-    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
-    if (typeof name === "string" && name.length <= 60 && !regex.test(name)) {
+
+    if (validName(name)) {
       try {
         const nameResponse = await checkName(name);
 

@@ -5,6 +5,7 @@ import {
   getPostVotes,
   updateVote,
 } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts from database
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const data = req.body;
-    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+
     const validate = ajv.getSchema("vote");
     const valid = validate(data);
     if (valid) {
@@ -58,12 +59,7 @@ export default async function handler(req, res) {
             }
           }
         }
-      } else if (
-        !session.user.name &&
-        typeof data.name === "string" &&
-        data.name.length <= 60 &&
-        !regex.test(data.name)
-      ) {
+      } else if (!session.user.name && validName(data.name)) {
         const person = await checkPerson(data.name);
         if (person && person.email === session.user.email) {
           let voterNames;

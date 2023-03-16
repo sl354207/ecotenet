@@ -4,21 +4,16 @@ import {
   getPersonAdmin,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   const method = req.method;
-
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
 
   switch (method) {
     case "GET":
       const getName = req.query.name;
 
-      if (
-        typeof getName === "string" &&
-        getName.length <= 60 &&
-        !regex.test(getName)
-      ) {
+      if (validName(getName)) {
         try {
           const person = await getPersonAdmin(getName);
 
@@ -37,7 +32,7 @@ export default async function handler(req, res) {
       const { email, name, ...data } = req.body;
       const validate = ajv.getSchema("person");
       const valid = validate(req.body);
-      if (valid && !regex.test(name)) {
+      if (valid && validName(name)) {
         try {
           const update = await updatePerson(email, data);
 
@@ -58,11 +53,7 @@ export default async function handler(req, res) {
       // set id based on request body
       const deleteName = req.body;
 
-      if (
-        typeof deleteName === "string" &&
-        deleteName.length <= 60 &&
-        !regex.test(deleteName)
-      ) {
+      if (validName(deleteName)) {
         try {
           const deleted = await deletePerson(deleteName);
           return res.status(200).json(deleted);

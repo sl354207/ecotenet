@@ -11,6 +11,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import theme from "@utils/theme";
+import { validName } from "@utils/validationHelpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -22,8 +23,6 @@ const newUser = () => {
 
   const [name, setName] = useState("");
   const [error, setError] = useState(false);
-
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
 
   // update text input field
   const handleChange = (event) => {
@@ -39,7 +38,7 @@ const newUser = () => {
   // handle comment submission to database through api
   const handleNameUpdate = async (name) => {
     //combine all objects and send to api
-    if (typeof name === "string" && name.length <= 60 && !regex.test(name)) {
+    if (validName(name)) {
       const submission = {
         email: user.email,
         name: name,

@@ -1,4 +1,5 @@
 import { autoSpecies } from "@utils/mongodb/mongoHelpers";
+import { validSearch } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -7,9 +8,8 @@ export default async function handler(req, res) {
 
   // set id based on id of url query
   const query = req.query.q;
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
 
-  if (typeof query === "string" && query.length <= 100 && !regex.test(query)) {
+  if (validSearch(query)) {
     try {
       const results = await autoSpecies(query);
 

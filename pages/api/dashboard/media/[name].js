@@ -5,6 +5,7 @@ import {
   generateDeleteURL,
 } from "@utils/aws";
 import { checkPerson } from "@utils/mongodb/mongoHelpers";
+import { validID, validKey, validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
@@ -19,7 +20,6 @@ export default async function handler(req, res) {
     const postId = req.query.post_id;
     const key = req.query.key;
 
-    const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
     // console.log(key)
 
     // const key = req.query.id;
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
           res.status(500).json({ msg: "Something went wrong." });
         }
       } else if (!key) {
-        if (typeof postId === "string" && postId.length === 24) {
+        if (validID(postId)) {
           try {
             const paths = await deleteRecursive(`${name}/${postId}/`);
 
@@ -53,12 +53,7 @@ export default async function handler(req, res) {
           res.status(403).json({ msg: "Forbidden" });
         }
       } else {
-        if (
-          typeof postId === "string" &&
-          postId.length === 24 &&
-          typeof key === "string" &&
-          key.substring(0, key.indexOf(".")).length === 32
-        ) {
+        if (validID(postId) && validKey(key)) {
           try {
             const url = await generateDeleteURL(name, postId, key);
             // await console.log(res.json(url))
@@ -72,12 +67,7 @@ export default async function handler(req, res) {
           res.status(403).json({ msg: "Forbidden" });
         }
       }
-    } else if (
-      !session.user.name &&
-      typeof name === "string" &&
-      name.length <= 60 &&
-      !regex.test(name)
-    ) {
+    } else if (!session.user.name && validName(name)) {
       const person = await checkPerson(name);
 
       if (person && person.email === session.user.email) {
@@ -93,7 +83,7 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else if (!key) {
-          if (typeof postId === "string" && postId.length === 24) {
+          if (validID(postId)) {
             try {
               const paths = await deleteRecursive(`${name}/${postId}/`);
 
@@ -107,12 +97,7 @@ export default async function handler(req, res) {
             res.status(403).json({ msg: "Forbidden" });
           }
         } else {
-          if (
-            typeof postId === "string" &&
-            postId.length === 24 &&
-            typeof key === "string" &&
-            key.substring(0, key.indexOf(".")).length === 32
-          ) {
+          if (validID(postId) && validKey(key)) {
             try {
               const url = await generateDeleteURL(name, postId, key);
               // await console.log(res.json(url))

@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { getSpeciesById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
+import { validID } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -462,8 +463,8 @@ const species = ({ species, wiki }) => {
 
 export const getServerSideProps = async (context) => {
   const speciesId = context.params.id;
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
-  if (speciesId.length === 24 && !regex.test(speciesId)) {
+
+  if (validID(speciesId)) {
     try {
       const species = await getSpeciesById(speciesId);
 

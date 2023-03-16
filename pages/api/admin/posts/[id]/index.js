@@ -4,6 +4,7 @@ import {
   getPostById,
   updatePost,
 } from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   const method = req.method;
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       const id = req.query.id;
-      if (typeof id === "string" && id.length === 24) {
+      if (validID(id)) {
         try {
           const post = await getPostById(id);
 
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
       // console.log(req);
       const validate = ajv.getSchema("post");
       const valid = validate(data);
-      if (typeof _id === "string" && _id.length === 24 && valid) {
+      if (validID(_id) && valid) {
         try {
           const update = await updatePost(_id, data);
 
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
 
     case "DELETE":
       const deleteId = req.body._id;
-      if (typeof deleteId === "string" && deleteId.length === 24) {
+      if (validID(deleteId)) {
         try {
           const deleted = await deletePost(deleteId);
           return res.status(200).json(deleted);

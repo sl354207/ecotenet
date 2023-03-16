@@ -7,6 +7,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
 import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
+import { validEco } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -305,9 +306,8 @@ const eco = ({ wiki, eco, id }) => {
 export const getServerSideProps = async (context) => {
   // console.log(context);
   const id = context.params.eco;
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
 
-  if (id.length >= 1 && id.length <= 4 && !regex.test(id)) {
+  if (validEco(id)) {
     try {
       const eco = await getEcoregionById(id);
 

@@ -1,4 +1,5 @@
 import { getPostComments } from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {
@@ -9,7 +10,7 @@ export default async function handler(req, res) {
 
   const { id } = req.query;
 
-  if (typeof id === "string" && id.length === 24) {
+  if (validID(id)) {
     try {
       const comments = await getPostComments(id);
 

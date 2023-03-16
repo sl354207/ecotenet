@@ -28,19 +28,6 @@ function ImageUploadField({ onChange, value }) {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const allowedExtensions = [
-    "apng",
-    "avif",
-    "gif",
-    "jpg",
-    "jpeg",
-    "jfif",
-    "pjpeg",
-    "pjp",
-    "png",
-    "svg",
-    "webp",
-  ];
   const maxFileSize = 5242880;
 
   const [image, setImage] = useState(
@@ -55,11 +42,9 @@ function ImageUploadField({ onChange, value }) {
   });
 
   const hasExtension = (fileName) => {
-    const patternPart = allowedExtensions
-      ? allowedExtensions.map((a) => a.toLowerCase()).join("|")
-      : "";
-    const pattern = "(" + patternPart.replace(/\./g, "\\.") + ")$";
-    return new RegExp(pattern, "i").test(fileName.toLowerCase());
+    // allowed extensions
+    const regex = /(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$/i;
+    return regex.test(fileName.toLowerCase());
   };
 
   const handleError = (errorCode) => {
