@@ -105,6 +105,7 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
             color="secondary"
             variant="outlined"
             disabled={
+              // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
               (typeof value === "string" && value.trim().length === 0) ||
               value === undefined
             }

@@ -325,7 +325,7 @@ const DrawerSpecies = ({ species, handleFilterClose }) => {
                       Source:{" "}
                       <Link
                         href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                          " ",
+                          / /g,
                           "_"
                         )}?redirect=true`}
                         target="_blank"

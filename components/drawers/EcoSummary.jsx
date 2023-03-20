@@ -18,14 +18,15 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
       },
     })
       .then((response) => response.json())
-      .then((data) => setWiki(data));
+      .then((data) => setWiki(data))
+      .catch((error) => console.log(error));
   }
 
   if (wiki) {
     switch (wiki.url) {
       case undefined:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.name.replace(
-          " ",
+          / /g,
           "_"
         )}?redirect=true`;
 
@@ -38,7 +39,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
 
       default:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.url.replace(
-          " ",
+          / /g,
           "_"
         )}?redirect=true`;
         break;
@@ -274,7 +275,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                         Source:{" "}
                         <Link
                           href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
-                            " ",
+                            / /g,
                             "_"
                           )}?redirect=true`}
                           target="_blank"

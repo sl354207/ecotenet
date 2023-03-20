@@ -50,9 +50,10 @@ module.exports = {
       },
     ];
   },
+  poweredByHeader: false,
 
   // filter dropdowns, editor and dialogs don't open when true
-  reactStrictMode: true,
+  // reactStrictMode: true,
   images: {
     domains: ["eco-media-bucket.s3.us-east-2.amazonaws.com"],
     formats: ["image/avif", "image/webp"],

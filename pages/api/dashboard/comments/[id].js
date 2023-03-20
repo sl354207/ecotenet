@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       case "PUT":
         const { id, ...data } = req.body;
         const validate = ajv.getSchema("comment");
-        const valid = validate(req.body);
+        const valid = validate(data);
         if (validID(id) && valid) {
           if (session.user.name && session.user.name === data.name) {
             try {
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
             res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          // console.log(validate.errors);
+          console.log(validate.errors);
           res.status(403).json({ msg: "Forbidden" });
         }
 

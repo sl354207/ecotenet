@@ -251,7 +251,7 @@ const eco = ({ wiki, eco, id }) => {
                   Source:{" "}
                   <Link
                     href={`https://en.wikipedia.org/wiki/${eco.name.replace(
-                      " ",
+                      / /g,
                       "_"
                     )}?redirect=true`}
                     target="_blank"
@@ -316,7 +316,7 @@ export const getServerSideProps = async (context) => {
           notFound: true,
         };
       } else {
-        const unSlug = eco.name.replace(" ", "_");
+        const unSlug = eco.name.replace(/ /g, "_");
 
         let wikiRes;
         let wiki;
@@ -347,7 +347,7 @@ export const getServerSideProps = async (context) => {
           default:
             wikiRes = await fetch(
               `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
-                " ",
+                / /g,
                 "_"
               )}?redirect=true`,
               {

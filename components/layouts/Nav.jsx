@@ -118,7 +118,6 @@ const Nav = () => {
       tags: [],
       ecoregions: [],
       id: "",
-      status: "",
       name: user.name,
       status: "draft",
       approved: "false",

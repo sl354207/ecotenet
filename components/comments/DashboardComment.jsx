@@ -156,6 +156,7 @@ const DashboardComment = ({
               size="small"
               onClick={() => handleCommentUpdate(commentValue)}
               disabled={
+                // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
                 commentValue.trim().length === 0 || commentValue === result.text
               }
             >
