@@ -1,3 +1,4 @@
+const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
 // const ContentSecurityPolicy = `
 // child-src 'self' https://www.youtube-nocookie.com;
 // require-trusted-types-for 'script'
@@ -40,25 +41,54 @@ const securityHeaders = [
   },
 ];
 
-module.exports = {
-  async headers() {
-    return [
-      {
-        // Apply these headers to all routes in your application.
-        source: "/:path*",
-        headers: securityHeaders,
+module.exports = (phase, { defaultConfig }) => {
+  if (phase === PHASE_DEVELOPMENT_SERVER) {
+    return {
+      /* development only config options here */
+      async headers() {
+        return [
+          {
+            // Apply these headers to all routes in your application.
+            source: "/:path*",
+            headers: securityHeaders,
+          },
+        ];
       },
-    ];
-  },
-  poweredByHeader: false,
+      poweredByHeader: false,
 
-  // filter dropdowns, editor and dialogs don't open when true
-  // reactStrictMode: true,
-  images: {
-    domains: ["eco-media-bucket.s3.us-east-2.amazonaws.com"],
-    formats: ["image/avif", "image/webp"],
-  },
-  eslint: {
-    dirs: ["pages", "components", "utils"], // Only run ESLint on the 'pages', 'components' and 'utils' directories during production builds (next build)
-  },
+      // filter dropdowns, editor and dialogs don't open when true
+      reactStrictMode: false,
+      images: {
+        domains: ["eco-media-bucket.s3.us-east-2.amazonaws.com"],
+        formats: ["image/avif", "image/webp"],
+      },
+      eslint: {
+        dirs: ["pages", "components", "utils"], // Only run ESLint on the 'pages', 'components' and 'utils' directories during production builds (next build)
+      },
+    };
+  }
+
+  return {
+    /* config options for all phases except development here */
+    async headers() {
+      return [
+        {
+          // Apply these headers to all routes in your application.
+          source: "/:path*",
+          headers: securityHeaders,
+        },
+      ];
+    },
+    poweredByHeader: false,
+
+    // filter dropdowns, editor and dialogs don't open when true
+    reactStrictMode: true,
+    images: {
+      domains: ["eco-media-bucket.s3.us-east-2.amazonaws.com"],
+      formats: ["image/avif", "image/webp"],
+    },
+    eslint: {
+      dirs: ["pages", "components", "utils"], // Only run ESLint on the 'pages', 'components' and 'utils' directories during production builds (next build)
+    },
+  };
 };
