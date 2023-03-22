@@ -33,7 +33,7 @@ function ImageUploadField({ onChange, value }) {
   const [image, setImage] = useState(
     value || { url: undefined, saved: false, file: {} }
   );
-  // console.log(value);
+  // console.log(image.url);
   const [state, setState] = useState({
     isUploading: false,
     isDeleting: false,

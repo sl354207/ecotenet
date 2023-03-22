@@ -47,7 +47,7 @@ const DynamicClientDialog = dynamic(
     ssr: false,
   }
 );
-const DrawerPost = ({ id, handleFilterClose }) => {
+const DrawerPost = ({ id, handleClose }) => {
   const { mutate } = useSWRConfig();
   const {
     data: post,
@@ -283,7 +283,13 @@ const DrawerPost = ({ id, handleFilterClose }) => {
                         >
                           {post.title}
                         </Typography>
-                        <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            marginLeft: "auto",
+                            marginBlock: "auto",
+                          }}
+                        >
                           <IconButton
                             sx={{ marginLeft: 2 }}
                             color="inherit"
@@ -310,7 +316,7 @@ const DrawerPost = ({ id, handleFilterClose }) => {
                             color="secondary"
                             underline="hover"
                             onClick={(event) => {
-                              handleFilterClose(event);
+                              handleClose(event);
                             }}
                           >
                             {post.name}
@@ -359,7 +365,7 @@ const DrawerPost = ({ id, handleFilterClose }) => {
                           underline="hover"
                           key={ecoregion}
                           onClick={(event) => {
-                            handleFilterClose(event);
+                            handleClose(event);
                           }}
                         >
                           Eco-{ecoregion},{" "}

@@ -127,14 +127,11 @@ const CategoryList = ({
                   </Container>
 
                   {typeof item === "string" ? (
-                    <DrawerPost
-                      id={item}
-                      handleFilterClose={handleFilterClose}
-                    />
+                    <DrawerPost id={item} handleClose={handleFilterClose} />
                   ) : (
                     <DrawerSpecies
                       species={item}
-                      handleFilterClose={handleFilterClose}
+                      handleClose={handleFilterClose}
                     />
                   )}
                 </>

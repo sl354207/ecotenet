@@ -30,7 +30,7 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       flagged: result.name ? result.name : "ecotenet",
       type: contentType,
       text: value,
-      content_id: result._id,
+      content_id: contentType === "profile" ? "" : result._id,
       ref: result.post_id ? result.post_id : "",
     };
 

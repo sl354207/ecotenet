@@ -169,9 +169,9 @@ const FeatureAndSearchDrawer = ({
           }}
         >
           {typeof FS.item === "string" ? (
-            <DrawerPost id={FS.item} />
+            <DrawerPost id={FS.item} handleClose={handleFSClose} />
           ) : (
-            <DrawerSpecies species={FS.item} />
+            <DrawerSpecies species={FS.item} handleClose={handleFSClose} />
           )}
         </Box>
       </Drawer>

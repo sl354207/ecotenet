@@ -40,6 +40,10 @@
               "maxLength": 4,
               "description": "must be a string",
               "pattern": "^\\d+$"
+              },
+              {"type": "string",
+              "const": "",
+              "description": "must be an empty string"
               }
             ]
           },

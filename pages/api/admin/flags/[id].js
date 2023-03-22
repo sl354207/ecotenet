@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   const { id, status } = req.body;
 
   // const _id = req.query.id;
-  if (validID(id)(status === "resolved" || status === "pending")) {
+  if (validID(id) && (status === "resolved" || status === "pending")) {
     try {
       const updatedFlag = await updateFlag(id, status);
       return res.status(200).json(updatedFlag);

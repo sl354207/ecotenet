@@ -103,25 +103,29 @@ const newUser = () => {
       <Header title="New Profile" />
       <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
       <div style={{ display: "grid" }}>
-        <FormControl error={error}>
-          <InputLabel htmlFor="name" shrink></InputLabel>
-        </FormControl>
-        <TextBox
-          defaultValue=""
-          placeHolder="profile name"
-          id="name"
-          autoFocus={true}
-          handleChange={handleChange}
-          inputProps={{ type: "text", maxLength: 60 }}
-          onKeyPress={onKeyPress}
+        <FormControl
+          sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
           error={error}
-        />
-        <FormHelperText
-          sx={{ color: theme.palette.text.primary, fontSize: 16 }}
-          id="component-error-text"
         >
-          {error ? "Invalid Name" : " "}
-        </FormHelperText>
+          <InputLabel htmlFor="name" shrink></InputLabel>
+          <TextBox
+            defaultValue=""
+            placeHolder="profile name"
+            id="name"
+            autoFocus={true}
+            handleChange={handleChange}
+            inputProps={{ type: "text", maxLength: 60 }}
+            onKeyPress={onKeyPress}
+            error={error}
+          />
+          <FormHelperText
+            sx={{ color: theme.palette.text.primary, fontSize: 16 }}
+            id="component-error-text"
+          >
+            {error ? "Invalid Name" : " "}
+          </FormHelperText>
+        </FormControl>
+
         <Button
           variant="contained"
           color="secondary"
