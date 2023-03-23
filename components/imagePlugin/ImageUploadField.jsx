@@ -33,7 +33,7 @@ function ImageUploadField({ onChange, value }) {
   const [image, setImage] = useState(
     value || { url: undefined, saved: false, file: {} }
   );
-  // console.log(image.url);
+  console.log(image.url);
   const [state, setState] = useState({
     isUploading: false,
     isDeleting: false,
@@ -415,6 +415,8 @@ function ImageUploadField({ onChange, value }) {
           disabled={
             (value.url && value.url.startsWith("blob:")) ||
             (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
+              ? true
+              : false
           }
           onChange={(e) => {
             const imageUrl = e.target.value;
@@ -457,8 +459,10 @@ function ImageUploadField({ onChange, value }) {
             state.isUploading ||
             state.isDeleting ||
             image.url === undefined ||
-            (image.url !== "blob" && image.url.startsWith("blob:") === false) ||
-            image.url === ""
+            image.url === "" ||
+            (image.url !== "blob" &&
+              !image.url.startsWith("https://eco-media-bucket.s3") &&
+              !image.url.startsWith("blob:"))
           }
         >
           {deleteInside}
