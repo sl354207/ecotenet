@@ -356,7 +356,7 @@ describe("dashboard comment api", () => {
 
               expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deleteComment).toHaveBeenCalledTimes(0);
-              expect(res.status.mock.calls[0][0]).toBe(403);
+              expect(res.status.mock.calls[0][0]).toBe(401);
             });
           });
           describe("valid data", () => {

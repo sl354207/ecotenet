@@ -22,6 +22,7 @@ export function validName(string) {
   if (
     typeof string === "string" &&
     string.length <= 60 &&
+    string.length > 1 &&
     !regex.test(string)
   ) {
     return true;

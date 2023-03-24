@@ -7,7 +7,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import {
   Autocomplete,
   Chip,
-  ClickAwayListener,
   Container,
   FormControl,
   FormHelperText,
@@ -21,7 +20,6 @@ import {
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import theme from "@utils/theme";
-import { useState } from "react";
 
 //pass in and destructure props.
 const PostDetails = ({
@@ -38,16 +36,6 @@ const PostDetails = ({
       );
     }
   })[0];
-
-  const [open, setOpen] = useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -210,38 +198,30 @@ const PostDetails = ({
             />
           </FormControl>
 
-          <ClickAwayListener onClickAway={handleTooltipClose}>
-            <Tooltip
-              PopperProps={{
-                disablePortal: true,
-              }}
-              onClose={handleTooltipClose}
-              open={open}
-              disableFocusListener
-              disableHoverListener
-              disableTouchListener
-              title={
-                <>
-                  <Typography color="inherit" variant="h6">
-                    If you need help deciding check out our explanation for each{" "}
-                    <Link
-                      href="/category"
-                      color="secondary"
-                      underline="hover"
-                      sx={{ paddingRight: "150px" }}
-                    >
-                      category
-                    </Link>
-                  </Typography>
-                </>
-              }
-              arrow
-            >
-              <IconButton edge="start" size="small" onClick={handleTooltipOpen}>
-                <InfoIcon fontSize="small"></InfoIcon>
-              </IconButton>
-            </Tooltip>
-          </ClickAwayListener>
+          <Tooltip
+            enterTouchDelay={100}
+            leaveTouchDelay={5000}
+            arrow
+            title={
+              <>
+                <Typography color="inherit" variant="h6">
+                  If you need help deciding check out our explanation for each{" "}
+                  <Link
+                    href="/category"
+                    color="secondary"
+                    underline="hover"
+                    sx={{ paddingRight: "100px" }}
+                  >
+                    category
+                  </Link>
+                </Typography>
+              </>
+            }
+          >
+            <IconButton edge="start" size="small">
+              <InfoIcon fontSize="small"></InfoIcon>
+            </IconButton>
+          </Tooltip>
         </Grid>
         <Grid item xs={12} sm={6} key="keywords-grid">
           <FormControl

@@ -161,7 +161,7 @@ const DashboardDialog = ({
           severity: "success",
           message: "Account deleted successfully",
         });
-        signOut();
+        signOut({ callbackUrl: "/" });
       }
       if (!userResponse.ok) {
         setSnackbar({

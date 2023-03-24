@@ -360,7 +360,7 @@ describe("dashboard comments api", () => {
 
               expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getDashboardComments).toHaveBeenCalledTimes(0);
-              expect(res.status.mock.calls[0][0]).toBe(403);
+              expect(res.status.mock.calls[0][0]).toBe(401);
             });
           });
           describe("valid data", () => {

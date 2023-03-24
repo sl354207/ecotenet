@@ -329,25 +329,6 @@ const Nav = () => {
                   </div>
                 </ClickAwayListener>
               )}
-              {/* {isTab ? (
-                <Button
-                  onClick={handleFilterOpen}
-                  endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
-                  variant="contained"
-                  color="secondary"
-                  size={isTab ? "small" : "medium"}
-                >
-                  Eco-{ecoFilter.unique_id}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleFilterOpen}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Eco-{ecoFilter.unique_id} Filter
-                </Button>
-              )} */}
             </>
           )}
 
