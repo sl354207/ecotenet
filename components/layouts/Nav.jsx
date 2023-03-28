@@ -564,7 +564,7 @@ const Nav = () => {
                               ? () => {
                                   setPopper(false);
                                   signOut({
-                                    callbackUrl: "http://localhost:3000",
+                                    callbackUrl: "/",
                                   });
                                 }
                               : () => {
@@ -646,7 +646,7 @@ const Nav = () => {
                 status === "authenticated"
                   ? () =>
                       signOut({
-                        callbackUrl: "http://localhost:3000",
+                        callbackUrl: "/",
                       })
                   : () => signIn()
               }

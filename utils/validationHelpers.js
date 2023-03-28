@@ -12,9 +12,13 @@ export function validID(string) {
   }
 }
 export function validEco(string) {
-  // only allow numbers
-  const regex = /^\d+$/;
-  return regex.test(string);
+  if (string === "null") {
+    return true;
+  } else {
+    // only allow numbers
+    const regex = /^\d+$/;
+    return regex.test(string);
+  }
 }
 export function validName(string) {
   // no special characters

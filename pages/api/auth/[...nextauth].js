@@ -131,7 +131,11 @@ export const authOptions = {
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      // console.log(user);
+      console.log(`signin user: ${user}`);
+      console.log(`signin account: ${account}`);
+      console.log(`signin profile: ${profile}`);
+      console.log(`signin email: ${email}`);
+      console.log(`signin credentials: ${credentials}`);
       // console.log(account);
       if (!user?.role) {
         user.role = "user";
@@ -145,6 +149,11 @@ export const authOptions = {
       return true;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(`jwt user: ${user}`);
+      console.log(`jwt account: ${account}`);
+      console.log(`jwt profile: ${profile}`);
+      console.log(`jwt token: ${token}`);
+      console.log(`jwt new: ${isNewUser}`);
       // if (account?.accessToken) {
       //   token.accessToken = account.accessToken;
       // }

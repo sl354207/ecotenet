@@ -7,7 +7,7 @@ import { updatePost } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
@@ -18,7 +18,13 @@ const DynamicDashboardDialog = dynamic(
     ssr: false,
   }
 );
-
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
 // pass in post and url path as props
 const StepForm = ({ post, user }) => {
   const router = useRouter();
@@ -47,6 +53,60 @@ const StepForm = ({ post, user }) => {
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
+
+  const initialEditorState = post;
+  const initialDetailsState = { title, description, category, tags };
+  const initialMapState = ecoregions;
+
+  const [saved, setSaved] = useState(true);
+
+  // const prevAmount = usePrevious({ postValue });
+  // console.log(prevAmount);
+  useEffect(() => {
+    if (initialEditorState !== postValue) {
+      console.log(`initial: ${initialEditorState}`);
+      console.log(`post: ${postValue}`);
+      setSaved(false);
+    }
+    // if (initialDetailsState != details) {
+    //   console.log(initialDetailsState);
+    //   console.log(details);
+    //   setSaved(false);
+    // }
+    if (initialMapState !== clickInfo) {
+      console.log(`initial: ${initialMapState}`);
+      console.log(`map: ${clickInfo}`);
+      setSaved(false);
+    }
+  }, [postValue, details, clickInfo]);
+
+  useEffect(() => {
+    const confirmationMessage =
+      "You have unsaved changes. Are you sure you want to leave?";
+    const beforeUnloadHandler = (e) => {
+      (e || window.event).returnValue = confirmationMessage;
+      return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
+    };
+    const beforeRouteHandler = (url) => {
+      if (router.pathname !== url && !confirm(confirmationMessage)) {
+        // to inform NProgress or something ...
+        router.events.emit("routeChangeError");
+        // tslint:disable-next-line: no-string-throw
+        throw `Route change to "${url}" was aborted (this error can be safely ignored). See https://github.com/zeit/next.js/issues/2476.`;
+      }
+    };
+    if (!saved) {
+      window.addEventListener("beforeunload", beforeUnloadHandler);
+      router.events.on("routeChangeStart", beforeRouteHandler);
+    } else {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      router.events.off("routeChangeStart", beforeRouteHandler);
+    }
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      router.events.off("routeChangeStart", beforeRouteHandler);
+    };
+  }, [saved]);
 
   const handleOpenDialog = (action, type, postValue, details, clickInfo) => {
     const result = {
@@ -557,6 +617,7 @@ const StepForm = ({ post, user }) => {
       )}
 
       {handleSteps(activeStep)}
+      {/* <UnsavedChangesDialog shouldConfirmLeave={true} /> */}
     </>
   );
 };

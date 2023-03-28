@@ -12,7 +12,6 @@ export default async function handler(req, res) {
   }
 
   const query = req.query.q;
-  // deepcode ignore HTTPSourceWithUncheckedType: <please specify a reason of ignoring this>
   const filter = req.query.filter;
   const eco = req.query.eco;
 
