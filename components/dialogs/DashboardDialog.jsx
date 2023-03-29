@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@mui/material";
 import {
-  createPost,
   deleteComment,
   deletePost,
   deletePostMedia,
@@ -29,6 +28,7 @@ const DashboardDialog = ({
   setSnackbar,
   mutate,
   fetchApi,
+  setSaved,
 }) => {
   const router = useRouter();
 
@@ -215,7 +215,10 @@ const DashboardDialog = ({
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
-      router.reload();
+      if (setSaved) {
+        setSaved(true);
+      }
+      // router.reload();
     }
 
     if (!postResponse.ok) {
@@ -258,47 +261,9 @@ const DashboardDialog = ({
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
-      router.reload();
-    }
-    if (!postResponse.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        vertical: "bottom",
-        horizontal: "left",
-        severity: "error",
-        message: `There was a problem submitting post. Please try again later`,
-      });
-    }
-  };
-  const handlePublishNewDraft = async () => {
-    const submission = {
-      title: result.title,
-      name: name,
-      description: result.description,
-      category: result.category,
-      tags: result.tags,
-      ecoregions: result.ecoregions,
-      id: result.id,
-      version: result.version,
-      rows: result.rows,
-      status: "published",
-    };
-
-    const postResponse = await createPost(submission);
-
-    if (postResponse.ok) {
-      handleClose();
-      const ID = await postResponse.json();
-      router.push(`/dashboard/posts/${ID.insertedId}`);
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        vertical: "bottom",
-        horizontal: "left",
-        severity: "success",
-        message: "Success! Post will be made public upon approval",
-      });
+      if (setSaved) {
+        setSaved(true);
+      }
     }
     if (!postResponse.ok) {
       setSnackbar({
@@ -339,10 +304,6 @@ const DashboardDialog = ({
         break;
       case "publish":
         await handlePublishSavedDraft();
-
-        break;
-      case "create":
-        await handlePublishNewDraft();
 
         break;
 

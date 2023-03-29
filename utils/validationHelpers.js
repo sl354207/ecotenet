@@ -12,12 +12,32 @@ export function validID(string) {
   }
 }
 export function validEco(string) {
-  if (string === "null") {
+  // only allow numbers in string
+  const regex = /^\d+$/;
+  if (
+    typeof string === "string" &&
+    string.length >= 0 &&
+    string.length < 5 &&
+    regex.test(string)
+  ) {
     return true;
   } else {
-    // only allow numbers
-    const regex = /^\d+$/;
-    return regex.test(string);
+    return false;
+  }
+}
+export function validSearchEco(string) {
+  // only allow numbers in string
+  const regex = /^\d+$/;
+  if (
+    (typeof string === "string" &&
+      string.length >= 0 &&
+      string.length < 5 &&
+      regex.test(string)) ||
+    string === "null"
+  ) {
+    return true;
+  } else {
+    return false;
   }
 }
 export function validName(string) {
@@ -54,7 +74,7 @@ export function validEmail(string) {
   // sourced from https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#validation
   const regex =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  if (regex.test(string)) {
+  if (typeof string === "string" && regex.test(string)) {
     return true;
   } else {
     return false;
@@ -62,7 +82,7 @@ export function validEmail(string) {
 }
 
 export function validImagePluginURL(string) {
-  if (/^blob:https?:\/\//.test(string)) {
+  if (typeof string === "string" && /^blob:https?:\/\//.test(string)) {
     // console.log("true blob");
     return true;
   } else {

@@ -235,10 +235,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         if (!clickInfo.includes(region && region.properties.unique_id)) {
           return [...clickInfo, region && region.properties.unique_id];
         } else {
-          const removed = clickInfo.splice(
-            clickInfo.indexOf(region.properties.unique_id),
-            1
-          );
+          clickInfo.splice(clickInfo.indexOf(region.properties.unique_id), 1);
 
           return [...clickInfo];
         }

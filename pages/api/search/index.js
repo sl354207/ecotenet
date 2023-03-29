@@ -4,7 +4,7 @@ import {
   searchEcoPosts,
   searchEcoSpecies,
 } from "@utils/mongodb/mongoHelpers";
-import { validEco, validSearch } from "@utils/validationHelpers";
+import { validSearch, validSearchEco } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     validSearch(query) &&
     typeof filter === "string" &&
     filter.length <= 10 &&
-    validEco(eco)
+    validSearchEco(eco)
   ) {
     switch (filter) {
       case "allPosts":
