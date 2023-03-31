@@ -63,7 +63,7 @@ const Nav = () => {
   } = useHomepageContext();
 
   let status;
-  if (user == undefined) {
+  if (user === undefined) {
     status = "loading";
   } else {
     status = user.status;
@@ -118,7 +118,6 @@ const Nav = () => {
       tags: [],
       ecoregions: [],
       id: "",
-      status: "",
       name: user.name,
       status: "draft",
       approved: "false",
@@ -140,6 +139,8 @@ const Nav = () => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem creating post. Please try again later",
       });
@@ -328,31 +329,12 @@ const Nav = () => {
                   </div>
                 </ClickAwayListener>
               )}
-              {/* {isTab ? (
-                <Button
-                  onClick={handleFilterOpen}
-                  endIcon={<SortIcon sx={{ marginBottom: "2px" }} />}
-                  variant="contained"
-                  color="secondary"
-                  size={isTab ? "small" : "medium"}
-                >
-                  Eco-{ecoFilter.unique_id}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleFilterOpen}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Eco-{ecoFilter.unique_id} Filter
-                </Button>
-              )} */}
             </>
           )}
 
           <Button
             onClick={() => {
-              if (router.pathname == "/") {
+              if (router.pathname === "/") {
                 setFeature(true);
               } else {
                 router.push("/featured");
@@ -450,7 +432,7 @@ const Nav = () => {
             />
           )}
 
-          {router.pathname == "/" && (
+          {router.pathname === "/" && (
             <>
               {feature && (
                 <DynamicFeatureDialog
@@ -502,7 +484,7 @@ const Nav = () => {
                         <MenuItem
                           onClick={() => {
                             setPopper(false);
-                            if (router.pathname == "/") {
+                            if (router.pathname === "/") {
                               setFeature(true);
                             } else {
                               router.push("/featured");
@@ -576,13 +558,13 @@ const Nav = () => {
                         )}
 
                         <MenuItem
-                          disabled={status == "loading"}
+                          disabled={status === "loading"}
                           onClick={
                             status === "authenticated"
                               ? () => {
                                   setPopper(false);
                                   signOut({
-                                    callbackUrl: "http://localhost:3000",
+                                    callbackUrl: "/",
                                   });
                                 }
                               : () => {
@@ -659,12 +641,12 @@ const Nav = () => {
               color="secondary"
               size={isTab ? "small" : "medium"}
               sx={{ marginLeft: "10px" }}
-              disabled={status == "loading"}
+              disabled={status === "loading"}
               onClick={
                 status === "authenticated"
                   ? () =>
                       signOut({
-                        callbackUrl: "http://localhost:3000",
+                        callbackUrl: "/",
                       })
                   : () => signIn()
               }

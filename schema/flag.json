@@ -3,12 +3,12 @@
     "properties": {
         "name": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 60,
             "description": "must be a string"
           },
           "flagged": {
             "type": "string",
-            "maxLength": 100,
+            "maxLength": 60,
             "description": "must be a string"
           },
           "type": {
@@ -32,12 +32,18 @@
               {"type": "string",
               "minLength": 24,
               "maxLength": 24,
-              "description": "must be a string"
+              "description": "must be a string",
+              "pattern": "^[A-Za-z0-9]*$"
               },
               {"type": "string",
               "minLength": 1,
               "maxLength": 4,
-              "description": "must be a string"
+              "description": "must be a string",
+              "pattern": "^\\d+$"
+              },
+              {"type": "string",
+              "const": "",
+              "description": "must be an empty string"
               }
             ]
           },
@@ -54,7 +60,8 @@
               {"type": "string",
               "minLength": 24,
               "maxLength": 24,
-              "description": "must be a string"
+              "description": "must be a string",
+              "pattern": "^[A-Za-z0-9]*$"
               },
               {"type": "string",
               "const": "",
@@ -64,7 +71,7 @@
           },
       "date": {
         "type": "string",
-        "maxLength": 100,
+        "maxLength": 60,
         "description": "must be a string"
       }
     },

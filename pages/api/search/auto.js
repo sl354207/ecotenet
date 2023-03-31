@@ -1,4 +1,5 @@
 import { autoSpecies } from "@utils/mongodb/mongoHelpers";
+import { validSearch } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -7,7 +8,8 @@ export default async function handler(req, res) {
 
   // set id based on id of url query
   const query = req.query.q;
-  if (typeof query == "string" && query.length <= 100) {
+
+  if (validSearch(query)) {
     try {
       const results = await autoSpecies(query);
 
@@ -18,8 +20,6 @@ export default async function handler(req, res) {
       res.status(500).json({ msg: "Something went wrong." });
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
-
-  // try get request, if successful return response, otherwise return error message
 }

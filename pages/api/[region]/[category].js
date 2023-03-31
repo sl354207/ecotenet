@@ -11,8 +11,18 @@ export default async function handler(req, res) {
   }
 
   const id = req.query.region;
-  const categoryQuery = decodeURIComponent(req.query.category);
-  const categorySub = decodeURIComponent(req.query.sub);
+  let categoryQuery = req.query.category;
+  let categorySub = req.query.sub;
+
+  // catch malicious or improper encoding
+  try {
+    categoryQuery = decodeURIComponent(categoryQuery);
+    categorySub = decodeURIComponent(categorySub);
+  } catch (error) {
+    console.error(error);
+    return res.status(403).json({ msg: "Forbidden" });
+  }
+
   // console.log(categorySub);
   const dataCheck = {
     id: id,
@@ -25,7 +35,7 @@ export default async function handler(req, res) {
   const valid = validate(dataCheck);
 
   if (valid) {
-    if (categorySub == "undefined") {
+    if (categorySub === "undefined") {
       try {
         const category = await getSpecies(categoryQuery, id);
 
@@ -53,6 +63,6 @@ export default async function handler(req, res) {
     }
   } else {
     // console.log(validate.errors);
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

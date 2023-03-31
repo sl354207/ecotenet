@@ -59,6 +59,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Comment will be visible upon approval",
       });
@@ -67,6 +69,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message:
           "There was a problem submitting comment. Please try again later",
@@ -87,16 +91,20 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: `${contentType} submitted successfully`,
       });
       mutate(`/api/votes/${post_id}`);
       setVote(0);
       setLimit(0);
-    } else if (updateResponse.status == 406) {
+    } else if (updateResponse.status === 406) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `You have already voted on this post.`,
       });
@@ -104,6 +112,8 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting ${item}. Please try again later`,
       });
@@ -137,7 +147,7 @@ const ClientDialog = ({
         </Button>
         <Button
           onClick={
-            contentType == "Vote"
+            contentType === "Vote"
               ? () => handleVoteSubmit()
               : () => handleCommentSubmit()
           }

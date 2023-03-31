@@ -3,7 +3,7 @@
       "properties": {
         "date": {
           "type": "string",
-          "maxLength": 100,
+          "maxLength": 60,
           "description": "must be a string"
         },
         "title": {
@@ -19,7 +19,7 @@
         "category": {
             "type": "object",
             "properties": {
-              "title": {"type": "string", "maxLength": 100, "enum": [
+              "title": {"type": "string", "maxLength": 60, "enum": [
                 "",
                 "Animals",
                 "mammal",
@@ -62,7 +62,7 @@
                 "Building",
                 "Culture"
               ]},
-              "sub": {"type": "string", "maxLength": 100, "enum": [
+              "sub": {"type": "string", "maxLength": 60, "enum": [
                 "",
                 "Guides",
                 "Tracking/Stalking",
@@ -130,7 +130,7 @@
         },
         "name": {
           "type": "string",
-          "maxLength": 100,
+          "maxLength": 60,
           "description": "must be a string"
         },
         "ecoregions": {
@@ -139,7 +139,8 @@
           "items": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 4
+            "maxLength": 4,
+            "pattern": "^\\d+$"
           }
         },
         "id": {
@@ -188,7 +189,7 @@
           "description": "must be an array",
           "items": {
             "type": "string",
-            "maxLength": 100
+            "maxLength": 60
           }
         }
       },

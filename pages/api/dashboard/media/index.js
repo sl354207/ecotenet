@@ -1,6 +1,7 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { generateUploadURL } from "@utils/aws";
 import { checkPerson } from "@utils/mongodb/mongoHelpers";
+import { validID, validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     if (req.method !== "GET") {
-      return res.status(405);
+      return res.status(405).json({ msg: "Method not allowed" });
     }
 
     const name = req.query.name;
@@ -28,13 +29,7 @@ export default async function handler(req, res) {
       "image/svg",
       "image/webp",
     ];
-    if (
-      typeof name == "string" &&
-      name.length <= 100 &&
-      typeof postId == "string" &&
-      postId.length == 24 &&
-      allowedExtensions.includes(ext.toLowerCase())
-    ) {
+    if (validID(postId) && allowedExtensions.includes(ext.toLowerCase())) {
       if (session.user.name && session.user.name === name) {
         try {
           const url = await generateUploadURL(name, postId, ext);
@@ -45,7 +40,7 @@ export default async function handler(req, res) {
 
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
+      } else if (!session.user.name && validName(name)) {
         const person = await checkPerson(name);
 
         if (person && person.email === session.user.email) {
@@ -60,17 +55,17 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
-        res.status(401);
+        res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
-      res.status(403);
+      res.status(403).json({ msg: "Forbidden" });
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

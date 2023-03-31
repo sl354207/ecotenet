@@ -18,6 +18,7 @@
 # misc
 .DS_Store
 *.pem
+.dccache
 
 # debug
 npm-debug.log*
@@ -34,4 +35,7 @@ yarn-error.log*
 .vercel
 
 #vscode
+.vscode/*
 .vscode
+/.vscode
+/.vscode/*

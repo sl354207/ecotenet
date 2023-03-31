@@ -39,24 +39,30 @@ const EcoDist = ({
 }) => {
   const handleChange = async (e) => {
     if (e.target.value) {
-      const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+      if (!regex.test(e.target.value)) {
+        const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      const data = await res.json();
-      setDist(data);
+        if (res.ok) {
+          const data = await res.json();
+
+          setDist(data);
+        }
+      }
     }
   };
 
   const handleSubmit = (event, newValue) => {
-    if (newValue != null) {
+    if (newValue !== null) {
       const dash = newValue.indexOf("-");
       const name = newValue.slice(0, dash - 1);
       for (const result of dist) {
-        if (result.scientific_name == name) {
+        if (result.scientific_name === name) {
           switch (distributionState[0].count) {
             case 0:
               distributionDispatch({

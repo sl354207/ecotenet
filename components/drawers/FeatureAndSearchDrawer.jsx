@@ -47,7 +47,7 @@ const FeatureAndSearchDrawer = ({
             top: { xs: top, md: "60px" },
             overflow: "visible",
             marginBottom: {
-              xs: router.pathname == "/" ? "55px" : "0px",
+              xs: router.pathname === "/" ? "55px" : "0px",
               md: "0px",
             },
           },
@@ -168,10 +168,10 @@ const FeatureAndSearchDrawer = ({
             overflow: "auto",
           }}
         >
-          {typeof FS.item == "string" ? (
-            <DrawerPost id={FS.item} />
+          {typeof FS.item === "string" ? (
+            <DrawerPost id={FS.item} handleClose={handleFSClose} />
           ) : (
-            <DrawerSpecies species={FS.item} />
+            <DrawerSpecies species={FS.item} handleClose={handleFSClose} />
           )}
         </Box>
       </Drawer>

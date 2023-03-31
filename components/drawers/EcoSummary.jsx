@@ -18,14 +18,15 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
       },
     })
       .then((response) => response.json())
-      .then((data) => setWiki(data));
+      .then((data) => setWiki(data))
+      .catch((error) => console.log(error));
   }
 
   if (wiki) {
     switch (wiki.url) {
       case undefined:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.name.replace(
-          " ",
+          / /g,
           "_"
         )}?redirect=true`;
 
@@ -38,7 +39,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
 
       default:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.url.replace(
-          " ",
+          / /g,
           "_"
         )}?redirect=true`;
         break;
@@ -82,10 +83,10 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+      if (domNode.attribs && domNode.attribs.class === "gallerybox") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+      if (domNode.attribs && domNode.attribs.class === "metadata mbox-small") {
         return <></>;
       }
       if (
@@ -214,7 +215,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
             </Typography>
           </div>
 
-          {/* {!wikiUrl || (results && results.title == "Not found.") || (results === null) ? (
+          {/* {!wikiUrl || (results && results.title === "Not found.") || (results === null) ? (
             <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
               We currently don&apos;t have a summary of this ecoregion. If you
               want to help us out you can create a wikipedia page for the
@@ -254,7 +255,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
               ) : (
                 <>
                   {!wikiUrl ||
-                  (results && results.title == "Not found.") ||
+                  (results && results.title === "Not found.") ||
                   results === null ? (
                     <Typography
                       variant="h6"
@@ -274,7 +275,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                         Source:{" "}
                         <Link
                           href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
-                            " ",
+                            / /g,
                             "_"
                           )}?redirect=true`}
                           target="_blank"
@@ -292,9 +293,9 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                       )}
                       {results &&
                         results.remaining.sections.map((section, index) => {
-                          if (section.anchor == "Gallery") {
+                          if (section.anchor === "Gallery") {
                             return <></>;
-                          } else if (section.toclevel == 2) {
+                          } else if (section.toclevel === 2) {
                             return (
                               <>
                                 <h2 key={index}>{section.line}</h2>

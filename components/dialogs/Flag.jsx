@@ -30,7 +30,7 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       flagged: result.name ? result.name : "ecotenet",
       type: contentType,
       text: value,
-      content_id: result._id,
+      content_id: contentType === "profile" ? "" : result._id,
       ref: result.post_id ? result.post_id : "",
     };
 
@@ -41,6 +41,8 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Flag submitted successfully",
       });
@@ -49,6 +51,8 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem submitting flag. Please try again later",
       });
@@ -101,6 +105,7 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
             color="secondary"
             variant="outlined"
             disabled={
+              // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
               (typeof value === "string" && value.trim().length === 0) ||
               value === undefined
             }

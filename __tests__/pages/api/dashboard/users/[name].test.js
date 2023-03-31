@@ -350,7 +350,7 @@ describe("dashboard name api", () => {
 
               expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(deletePerson).toHaveBeenCalledTimes(0);
-              expect(res.status.mock.calls[0][0]).toBe(403);
+              expect(res.status.mock.calls[0][0]).toBe(401);
             });
           });
           describe("valid data", () => {
@@ -474,7 +474,7 @@ describe("dashboard name api", () => {
 
               expect(getServerSession).toHaveBeenCalledTimes(1);
               expect(getPersonDash).toHaveBeenCalledTimes(0);
-              expect(res.status.mock.calls[0][0]).toBe(403);
+              expect(res.status.mock.calls[0][0]).toBe(401);
             });
           });
           describe("valid data", () => {

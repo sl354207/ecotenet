@@ -46,6 +46,8 @@ const DashboardComment = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Comment will be visible upon approval",
       });
@@ -55,6 +57,8 @@ const DashboardComment = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem saving comment. Please try again later",
       });
@@ -89,7 +93,7 @@ const DashboardComment = ({
             >
               View
             </Link>
-            {commentValue != "" ? (
+            {commentValue !== "" ? (
               <Button
                 variant="contained"
                 color="secondary"
@@ -152,6 +156,7 @@ const DashboardComment = ({
               size="small"
               onClick={() => handleCommentUpdate(commentValue)}
               disabled={
+                // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
                 commentValue.trim().length === 0 || commentValue === result.text
               }
             >

@@ -121,20 +121,17 @@ const CategoryList = ({
                           textTransform: "uppercase",
                         }}
                       >
-                        {typeof item == "string" ? "POST" : "SPECIES"}
+                        {typeof item === "string" ? "POST" : "SPECIES"}
                       </Typography>
                     </Breadcrumbs>
                   </Container>
 
-                  {typeof item == "string" ? (
-                    <DrawerPost
-                      id={item}
-                      handleFilterClose={handleFilterClose}
-                    />
+                  {typeof item === "string" ? (
+                    <DrawerPost id={item} handleClose={handleFilterClose} />
                   ) : (
                     <DrawerSpecies
                       species={item}
-                      handleFilterClose={handleFilterClose}
+                      handleClose={handleFilterClose}
                     />
                   )}
                 </>
@@ -187,7 +184,7 @@ const CategoryList = ({
 
                   {data && data.category.length === 0 ? (
                     <Container sx={{ minHeight: "auto" }}>
-                      {data.tag == "species" ? (
+                      {data.tag === "species" ? (
                         <Typography
                           variant="h6"
                           align="center"

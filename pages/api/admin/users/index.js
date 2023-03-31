@@ -4,7 +4,7 @@ import { getPeople } from "@utils/mongodb/mongoHelpers";
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== "GET") {
-    return res.status(405);
+    return res.status(405).json({ msg: "Method not allowed" });
   }
 
   // try get request, if successful return response, otherwise return error message

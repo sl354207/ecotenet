@@ -1,10 +1,11 @@
 import { generateUploadURL } from "@utils/aws";
+import { validID, validName } from "@utils/validationHelpers";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== "GET") {
-    return res.status(405);
+    return res.status(405).json({ msg: "Method not allowed" });
   }
 
   const name = req.query.name;
@@ -26,11 +27,9 @@ export default async function handler(req, res) {
   ];
 
   if (
-    typeof name == "string" &&
-    name.length <= 100 &&
-    typeof postId == "string" &&
-    postId.length == 24 &&
-    typeof ext == "string" &&
+    validName(name) &&
+    validID(postId) &&
+    typeof ext === "string" &&
     allowedExtensions.includes(ext.toLowerCase())
   ) {
     // try get request, if successful return response, otherwise return error message
@@ -44,6 +43,6 @@ export default async function handler(req, res) {
       res.status(500).json({ msg: "Something went wrong." });
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

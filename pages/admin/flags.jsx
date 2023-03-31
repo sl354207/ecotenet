@@ -68,7 +68,7 @@ const adminFlags = () => {
         </div>
       );
     } else {
-      if (Array.isArray(results) && results.length == 0) {
+      if (Array.isArray(results) && results.length === 0) {
         list = (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results
@@ -118,7 +118,7 @@ const adminFlags = () => {
                     </div>
 
                     <div style={{ display: "grid" }}>
-                      {result.type == "comment" && (
+                      {result.type === "comment" && (
                         <Button
                           variant="outlined"
                           color="secondary"
@@ -127,7 +127,7 @@ const adminFlags = () => {
                           View Post
                         </Button>
                       )}
-                      {result.type == "post" && (
+                      {result.type === "post" && (
                         <Button
                           variant="outlined"
                           color="secondary"
@@ -137,7 +137,7 @@ const adminFlags = () => {
                         </Button>
                       )}
 
-                      {result.type == "profile" && (
+                      {result.type === "profile" && (
                         <Button
                           variant="outlined"
                           color="secondary"
@@ -146,7 +146,7 @@ const adminFlags = () => {
                           View Profile
                         </Button>
                       )}
-                      {result.type == "ecoregion" && (
+                      {result.type === "ecoregion" && (
                         <>
                           <Button
                             variant="outlined"
@@ -169,7 +169,7 @@ const adminFlags = () => {
                           </Button>
                         </>
                       )}
-                      {result.type == "species" && (
+                      {result.type === "species" && (
                         <>
                           <Button
                             variant="outlined"

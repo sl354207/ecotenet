@@ -27,7 +27,7 @@ const SpeciesItem = ({ result, handleClose }) => {
           textTransform: "none",
         }}
         onClick={() => {
-          if (router.pathname == "/") {
+          if (router.pathname === "/") {
             setFS({ state: "Search Result", item: result });
             handleClose();
             setFilterOpen(false);

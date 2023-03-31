@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-const Description = ({ description, align, className }) => {
+const Description = ({ description, align }) => {
   return (
     <Typography
       variant="body1"

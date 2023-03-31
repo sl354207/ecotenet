@@ -5,12 +5,14 @@ import {
   createPost,
   getDashboardPosts,
 } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     const method = req.method;
+
     switch (method) {
       case "GET":
         const getName = req.query.name;
@@ -28,7 +30,7 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (!session.user.name && validName(getName)) {
             const person = await checkPerson(getName);
 
             if (person && person.email === session.user.email) {
@@ -43,13 +45,13 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
-              res.status(401);
+              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(403);
+          res.status(403).json({ msg: "Forbidden" });
         }
 
         break;
@@ -73,7 +75,7 @@ export default async function handler(req, res) {
 
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name) {
+          } else if (!session.user.name && validName(data.name)) {
             const person = await checkPerson(data.name);
 
             if (person && person.email === session.user.email) {
@@ -93,14 +95,14 @@ export default async function handler(req, res) {
                 res.status(500).json({ msg: "Something went wrong." });
               }
             } else {
-              res.status(401);
+              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
           // console.log(validate.errors);
-          res.status(403);
+          res.status(403).json({ msg: "Forbidden" });
         }
 
         break;
@@ -112,7 +114,7 @@ export default async function handler(req, res) {
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

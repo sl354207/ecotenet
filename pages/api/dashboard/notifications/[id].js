@@ -1,5 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { checkPerson, updateNotification } from "@utils/mongodb/mongoHelpers";
+import { validID, validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts by user from database
@@ -12,13 +13,8 @@ export default async function handler(req, res) {
       return res.status(405).json({ msg: "Method not allowed" });
     }
     const { name, id, viewed } = req.body;
-    if (
-      typeof name == "string" &&
-      name.length <= 100 &&
-      typeof id == "string" &&
-      id.length == 24 &&
-      viewed === true
-    ) {
+
+    if (validID(id) && viewed === true) {
       if (session.user.name && session.user.name === name) {
         try {
           const updatedNotification = await updateNotification(id, viewed);
@@ -27,7 +23,7 @@ export default async function handler(req, res) {
           console.error(err);
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
+      } else if (!session.user.name && validName(name)) {
         const person = await checkPerson(name);
 
         if (person && person.email === session.user.email) {
@@ -39,18 +35,18 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
-        res.status(401);
+        res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
-      res.status(403);
+      res.status(403).json({ msg: "Forbidden" });
     }
     // console.log(name);
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

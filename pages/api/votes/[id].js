@@ -1,4 +1,5 @@
 import { getPostVotes } from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -7,7 +8,7 @@ export default async function handler(req, res) {
 
   const id = req.query.id;
 
-  if (typeof id == "string" && id.length == 24) {
+  if (validID(id)) {
     try {
       const results = await getPostVotes(id);
 
@@ -21,6 +22,6 @@ export default async function handler(req, res) {
       res.status(500).json({ msg: "Something went wrong." });
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

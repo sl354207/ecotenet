@@ -7,6 +7,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Button, Container, IconButton, Typography } from "@mui/material";
 import { getPerson, getProfilePosts } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -81,7 +82,7 @@ const person = ({ person, posts }) => {
           tip
         </Button>
 
-        {person.approved == "true" && (
+        {person.approved === "true" && (
           <div style={{ margin: "16px" }}>
             {person.bio !== "" && (
               <>
@@ -124,8 +125,8 @@ const person = ({ person, posts }) => {
         <Typography variant="h6" sx={{ marginLeft: "16px" }}>
           Posts:
         </Typography>
+        {posts && <PostList posts={posts} />}
 
-        <PostList posts={posts} />
         {dialog && (
           <DynamicFlag
             open={dialog}
@@ -145,19 +146,41 @@ export const getServerSideProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const name = context.params.name;
 
-  let person = await getPerson(name);
-  if (person.approved !== "true") {
-    person = { name: person.name };
+  if (validName(name)) {
+    try {
+      let person = await getPerson(name);
+      if (person === null) {
+        return {
+          notFound: true,
+        };
+      } else {
+        if (person.approved !== "true") {
+          person = { name: person.name };
+        }
+
+        const posts = await getProfilePosts(name);
+
+        return {
+          props: {
+            person: JSON.parse(JSON.stringify(person)),
+            posts: JSON.parse(JSON.stringify(posts)),
+          },
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {
+          person: null,
+          posts: null,
+        },
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
   }
-
-  const posts = await getProfilePosts(name);
-
-  return {
-    props: {
-      person: JSON.parse(JSON.stringify(person)),
-      posts: JSON.parse(JSON.stringify(posts)),
-    },
-  };
 };
 
 export default person;

@@ -7,6 +7,7 @@ import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
 import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
+import { validEco } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -85,10 +86,10 @@ const eco = ({ wiki, eco, id }) => {
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+      if (domNode.attribs && domNode.attribs.class === "gallerybox") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+      if (domNode.attribs && domNode.attribs.class === "metadata mbox-small") {
         return <></>;
       }
       if (
@@ -195,93 +196,108 @@ const eco = ({ wiki, eco, id }) => {
 
   return (
     <>
-      <Container>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              marginRight: "auto",
-              visibility: "hidden",
-              minWidth: 30,
-            }}
-          ></div>
-          <Header
-            title={`Eco-${id}: ${eco.name}`}
-            sx={{ marginBottom: "40px" }}
-          />
-          <IconButton
-            sx={{
-              display: "flex",
-              marginLeft: "auto",
-              marginTop: "auto",
-              marginBottom: "auto",
-            }}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenDialog()}
-          >
-            <FlagIcon />
-          </IconButton>
-        </div>
-
-        {!wiki ? (
-          <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
-            We currently don&apos;t have a summary of this ecoregion. If you
-            want to help us out you can create a wikipedia page for the
-            ecoregion.
-          </Typography>
-        ) : (
-          <>
-            <Typography variant="h5" sx={{ marginTop: "10px" }}>
-              Source:{" "}
-              <Link
-                href={`https://en.wikipedia.org/wiki/${eco.name.replace(
-                  " ",
-                  "_"
-                )}?redirect=true`}
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="hover"
+      {!eco || wiki === "error" ? (
+        <>
+          <Container>
+            <Header title="Something went wrong. Please try again later" />
+          </Container>
+          <Footer />
+        </>
+      ) : (
+        <>
+          <Container>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  marginRight: "auto",
+                  visibility: "hidden",
+                  minWidth: 30,
+                }}
+              ></div>
+              <Header
+                title={`Eco-${id}: ${eco.name}`}
+                sx={{ marginBottom: "40px" }}
+              />
+              <IconButton
+                sx={{
+                  display: "flex",
+                  marginLeft: "auto",
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                }}
+                color="inherit"
+                aria-label="flag"
+                size="small"
+                onClick={() => handleOpenDialog()}
               >
-                Wikipedia
-              </Link>
-            </Typography>
-            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-            {wiki.remaining.sections.map((section) => {
-              if (section.anchor == "Gallery") {
-                return <></>;
-              } else if (section.toclevel == 2) {
-                return (
-                  <>
-                    <h2>{section.line}</h2>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <h1>{section.line}</h1>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              }
-            })}
-          </>
-        )}
+                <FlagIcon />
+              </IconButton>
+            </div>
 
-        {/* UPDATE */}
-        {dialog && (
-          <DynamicFlag
-            open={dialog}
-            handleClose={() => handleCloseDialog()}
-            contentType="ecoregion"
-            result={{ _id: id }}
-            name={user && user.name}
-          />
-        )}
-      </Container>
-      <Footer />
+            {!wiki ? (
+              <Typography
+                variant="h6"
+                align="justify"
+                sx={{ marginTop: "20px" }}
+              >
+                We currently don&apos;t have a summary of this ecoregion. If you
+                want to help us out you can create a wikipedia page for the
+                ecoregion.
+              </Typography>
+            ) : (
+              <>
+                <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                  Source:{" "}
+                  <Link
+                    href={`https://en.wikipedia.org/wiki/${eco.name.replace(
+                      / /g,
+                      "_"
+                    )}?redirect=true`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    Wikipedia
+                  </Link>
+                </Typography>
+                {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+                {wiki.remaining.sections.map((section) => {
+                  if (section.anchor === "Gallery") {
+                    return <></>;
+                  } else if (section.toclevel === 2) {
+                    return (
+                      <>
+                        <h2>{section.line}</h2>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <h1>{section.line}</h1>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  }
+                })}
+              </>
+            )}
+
+            {/* UPDATE */}
+            {dialog && (
+              <DynamicFlag
+                open={dialog}
+                handleClose={() => handleCloseDialog()}
+                contentType="ecoregion"
+                result={{ _id: id }}
+                name={user && user.name}
+              />
+            )}
+          </Container>
+          <Footer />
+        </>
+      )}
     </>
   );
 };
@@ -291,63 +307,93 @@ export const getServerSideProps = async (context) => {
   // console.log(context);
   const id = context.params.eco;
 
-  const eco = await getEcoregionById(id);
+  if (validEco(id)) {
+    try {
+      const eco = await getEcoregionById(id);
 
-  const unSlug = eco.name.replace(" ", "_");
+      if (eco === null) {
+        return {
+          notFound: true,
+        };
+      } else {
+        const unSlug = eco.name.replace(/ /g, "_");
 
-  let wikiRes;
-  let wiki;
+        let wikiRes;
+        let wiki;
 
-  switch (eco.url) {
-    case undefined:
-      wikiRes = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`,
-        {
-          method: "GET",
-          headers: {
-            "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
-          },
+        switch (eco.url) {
+          case undefined:
+            wikiRes = await fetch(
+              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`,
+              {
+                method: "GET",
+                headers: {
+                  "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+                },
+              }
+            );
+            if (wikiRes.ok) {
+              wiki = await wikiRes.json();
+            } else {
+              wiki = "error";
+            }
+
+            break;
+          case "undefined":
+            wiki = undefined;
+
+            break;
+
+          default:
+            wikiRes = await fetch(
+              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
+                / /g,
+                "_"
+              )}?redirect=true`,
+              {
+                method: "GET",
+                headers: {
+                  "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+                },
+              }
+            );
+
+            if (wikiRes.ok) {
+              wiki = await wikiRes.json();
+            } else {
+              wiki = "error";
+            }
+
+            break;
         }
-      );
 
-      wiki = await wikiRes.json();
+        return {
+          props: {
+            wiki:
+              wiki === undefined || wiki.title === "Not found."
+                ? null
+                : JSON.parse(JSON.stringify(wiki)),
 
-      break;
-    case "undefined":
-      wiki = undefined;
-
-      break;
-
-    default:
-      wikiRes = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
-          " ",
-          "_"
-        )}?redirect=true`,
-        {
-          method: "GET",
-          headers: {
-            "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+            eco: JSON.parse(JSON.stringify(eco)),
+            id: id,
           },
-        }
-      );
-
-      wiki = await wikiRes.json();
-
-      break;
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {
+          wiki: null,
+          eco: null,
+          id: null,
+        },
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
   }
-
-  return {
-    props: {
-      wiki:
-        wiki == undefined || wiki.title == "Not found."
-          ? null
-          : JSON.parse(JSON.stringify(wiki)),
-
-      eco: JSON.parse(JSON.stringify(eco)),
-      id: id,
-    },
-  };
 };
 
 export default eco;

@@ -16,7 +16,7 @@ const Vote = ({
   const [count, setCount] = useState(post_count);
 
   const handleCountUp = () => {
-    if (limit == 1) {
+    if (limit === 1) {
       setLimit(1);
       setCount(count);
     } else {
@@ -27,10 +27,10 @@ const Vote = ({
   };
 
   const handleCountDown = () => {
-    if (count == 0 && limit == 0) {
+    if (count === 0 && limit === 0) {
       setLimit(0);
       setCount(count);
-    } else if (limit == -1) {
+    } else if (limit === -1) {
       setLimit(limit);
       setCount(count);
     } else {

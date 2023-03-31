@@ -1,5 +1,6 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
+import { validEmail } from "@utils/validationHelpers";
 import { randomBytes } from "crypto";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
@@ -23,6 +24,7 @@ export const authOptions = {
       },
       async sendVerificationRequest(params) {
         const { identifier, provider, token, theme } = params;
+
         const url = new URL(params.url);
         url.searchParams.delete("token"); // uncomment if you want the user to type this manually
         const signInURL = new URL(
@@ -129,7 +131,11 @@ export const authOptions = {
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      // console.log(user);
+      console.log(`signin user: ${user}`);
+      console.log(`signin account: ${account}`);
+      console.log(`signin profile: ${profile}`);
+      console.log(`signin email: ${email}`);
+      console.log(`signin credentials: ${credentials}`);
       // console.log(account);
       if (!user?.role) {
         user.role = "user";
@@ -143,6 +149,11 @@ export const authOptions = {
       return true;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(`jwt user: ${user}`);
+      console.log(`jwt account: ${account}`);
+      console.log(`jwt profile: ${profile}`);
+      console.log(`jwt token: ${token}`);
+      console.log(`jwt new: ${isNewUser}`);
       // if (account?.accessToken) {
       //   token.accessToken = account.accessToken;
       // }
@@ -165,7 +176,7 @@ export const authOptions = {
       // if (token?.isNew) {
       //   session.user.isNew = token.isNew;
       // }
-      // console.log(session);
+      console.log(session);
       return session;
     },
     // async redirect({ url, baseUrl }) {
@@ -193,12 +204,28 @@ export const authOptions = {
   // },
 
   // Enable debug messages in the console if you are having problems
-  debug: true,
+  debug: false,
 };
 
 export default async function auth(req, res) {
   if (req.method === "HEAD") {
     return res.status(200);
   }
-  return await NextAuth(req, res, authOptions);
+  // console.log(`req.query: ${req.query.nextauth}`);
+  // console.log(`req.method: ${req.method}`);
+  // console.log(req);
+  // console.log(req.body);
+
+  if (req.query.nextauth.includes("signin") && req.method === "POST") {
+    const email = req.body.email;
+
+    if (!validEmail(email)) {
+      // throw new Error("Invalid Email");
+      return res.status(403).json({ msg: "Invalid Email" });
+    } else {
+      return await NextAuth(req, res, authOptions);
+    }
+  } else {
+    return await NextAuth(req, res, authOptions);
+  }
 }

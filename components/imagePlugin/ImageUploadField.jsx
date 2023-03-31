@@ -28,25 +28,12 @@ function ImageUploadField({ onChange, value }) {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const allowedExtensions = [
-    "apng",
-    "avif",
-    "gif",
-    "jpg",
-    "jpeg",
-    "jfif",
-    "pjpeg",
-    "pjp",
-    "png",
-    "svg",
-    "webp",
-  ];
   const maxFileSize = 5242880;
 
   const [image, setImage] = useState(
     value || { url: undefined, saved: false, file: {} }
   );
-  // console.log(value);
+  console.log(image.url);
   const [state, setState] = useState({
     isUploading: false,
     isDeleting: false,
@@ -55,11 +42,9 @@ function ImageUploadField({ onChange, value }) {
   });
 
   const hasExtension = (fileName) => {
-    const patternPart = allowedExtensions
-      ? allowedExtensions.map((a) => a.toLowerCase()).join("|")
-      : "";
-    const pattern = "(" + patternPart.replace(/\./g, "\\.") + ")$";
-    return new RegExp(pattern, "i").test(fileName.toLowerCase());
+    // allowed extensions
+    const regex = /(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$/i;
+    return regex.test(fileName.toLowerCase());
   };
 
   const handleError = (errorCode) => {
@@ -430,6 +415,8 @@ function ImageUploadField({ onChange, value }) {
           disabled={
             (value.url && value.url.startsWith("blob:")) ||
             (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
+              ? true
+              : false
           }
           onChange={(e) => {
             const imageUrl = e.target.value;
@@ -451,9 +438,9 @@ function ImageUploadField({ onChange, value }) {
             state.errorText === "Error deleting" ||
             state.isUploading ||
             state.isDeleting ||
-            image.url == undefined ||
-            (image.url !== "blob" && image.url.startsWith("blob:") == false) ||
-            image.saved == true
+            image.url === undefined ||
+            (image.url !== "blob" && image.url.startsWith("blob:") === false) ||
+            image.saved === true
           }
           onClick={() => {
             saveImage(value.file);
@@ -471,9 +458,11 @@ function ImageUploadField({ onChange, value }) {
             state.errorText === "Error uploading" ||
             state.isUploading ||
             state.isDeleting ||
-            image.url == undefined ||
-            (image.url !== "blob" && image.url.startsWith("blob:") == false) ||
-            image.url == ""
+            image.url === undefined ||
+            image.url === "" ||
+            (image.url !== "blob" &&
+              !image.url.startsWith("https://eco-media-bucket.s3") &&
+              !image.url.startsWith("blob:"))
           }
         >
           {deleteInside}

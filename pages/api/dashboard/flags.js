@@ -1,6 +1,7 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
 import { checkPerson, createFlag } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts from database
@@ -17,7 +18,11 @@ export default async function handler(req, res) {
     const validate = ajv.getSchema("flag");
     const valid = validate(data);
     if (valid) {
-      if (session.user.name && session.user.name === data.name) {
+      if (
+        session.user.name &&
+        session.user.name === data.name &&
+        validName(data.flagged)
+      ) {
         try {
           data.status = "pending";
           data.date = new Date().toUTCString();
@@ -29,7 +34,11 @@ export default async function handler(req, res) {
 
           res.status(500).json({ msg: "Something went wrong." });
         }
-      } else if (!session.user.name) {
+      } else if (
+        !session.user.name &&
+        validName(data.name) &&
+        validName(data.flagged)
+      ) {
         const person = await checkPerson(data.name);
         if (person && person.email === session.user.email) {
           try {
@@ -44,18 +53,18 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
-        res.status(401);
+        res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
       // console.log(validate.errors);
-      res.status(403);
+      res.status(403).json({ msg: "Forbidden" });
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

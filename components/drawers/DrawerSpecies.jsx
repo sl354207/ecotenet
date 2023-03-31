@@ -21,7 +21,7 @@ import useSWR, { useSWRConfig } from "swr";
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
 });
-const DrawerSpecies = ({ species, handleFilterClose }) => {
+const DrawerSpecies = ({ species, handleClose }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { mutate } = useSWRConfig();
@@ -90,10 +90,10 @@ const DrawerSpecies = ({ species, handleFilterClose }) => {
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+      if (domNode.attribs && domNode.attribs.class === "gallerybox") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+      if (domNode.attribs && domNode.attribs.class === "metadata mbox-small") {
         return <></>;
       }
       if (
@@ -293,7 +293,7 @@ const DrawerSpecies = ({ species, handleFilterClose }) => {
                     underline="hover"
                     key={id}
                     onClick={(event) => {
-                      handleFilterClose(event);
+                      handleClose(event);
                     }}
                   >
                     Eco-{id}
@@ -309,7 +309,7 @@ const DrawerSpecies = ({ species, handleFilterClose }) => {
                   borderRadius: "10px",
                 }}
               >
-                {!wiki || wiki.title == "Not found." ? (
+                {!wiki || wiki.title === "Not found." ? (
                   <Typography
                     variant="h6"
                     align="justify"
@@ -325,7 +325,7 @@ const DrawerSpecies = ({ species, handleFilterClose }) => {
                       Source:{" "}
                       <Link
                         href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                          " ",
+                          / /g,
                           "_"
                         )}?redirect=true`}
                         target="_blank"
@@ -340,9 +340,9 @@ const DrawerSpecies = ({ species, handleFilterClose }) => {
                       options
                     )}
                     {wiki.remaining.sections.map((section, index) => {
-                      if (section.anchor == "Gallery") {
+                      if (section.anchor === "Gallery") {
                         return <></>;
-                      } else if (section.toclevel == 2) {
+                      } else if (section.toclevel === 2) {
                         return (
                           <>
                             <h2 key={index}>{section.line}</h2>

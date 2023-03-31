@@ -3,7 +3,15 @@ import { useUserContext } from "@components/context/UserContext";
 import TextBox from "@components/inputFields/TextBox";
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
-import { Button, Container, FormControl, InputLabel } from "@mui/material";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+} from "@mui/material";
+import theme from "@utils/theme";
+import { validName } from "@utils/validationHelpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -14,6 +22,7 @@ const newUser = () => {
   const { setSnackbar } = useSnackbarContext();
 
   const [name, setName] = useState("");
+  const [error, setError] = useState(false);
 
   // update text input field
   const handleChange = (event) => {
@@ -29,28 +38,42 @@ const newUser = () => {
   // handle comment submission to database through api
   const handleNameUpdate = async (name) => {
     //combine all objects and send to api
-    const submission = {
-      email: user.email,
-      name: name,
-    };
+    if (validName(name)) {
+      const submission = {
+        email: user.email,
+        name: name,
+      };
 
-    const res = await fetch(`/api/dashboard/name?name=${name}`, {
-      method: "GET",
-    });
-    if (res.ok) {
-      const check = await res.text();
-      // console.log(check);
-      if (check === "null") {
-        const res1 = await fetch(`/api/dashboard/users/${name}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(submission),
-        });
-        if (res1.ok) {
-          sessionStorage.setItem("name", name);
-          router.push("/");
+      const res = await fetch(`/api/dashboard/name?name=${name}`, {
+        method: "GET",
+      });
+      if (res.ok) {
+        setError(false);
+        const check = await res.text();
+        // console.log(check);
+        if (check === "null") {
+          const res1 = await fetch(`/api/dashboard/users/${name}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(submission),
+          });
+          if (res1.ok) {
+            sessionStorage.setItem("name", name);
+            // update();
+            router.push("/");
+          } else {
+            setSnackbar({
+              class: true,
+              vertical: "top",
+              horizontal: "center",
+              open: true,
+              severity: "error",
+              message:
+                "There was a problem submitting your name. Please try again",
+            });
+          }
         } else {
           setSnackbar({
             class: true,
@@ -58,8 +81,7 @@ const newUser = () => {
             horizontal: "center",
             open: true,
             severity: "error",
-            message:
-              "There was a problem submitting your name. Please try again",
+            message: "That name is already taken. Please try another name",
           });
         }
       } else {
@@ -69,18 +91,11 @@ const newUser = () => {
           horizontal: "center",
           open: true,
           severity: "error",
-          message: "That name is already taken. Please try another name",
+          message: "There was a problem please try again",
         });
       }
     } else {
-      setSnackbar({
-        class: true,
-        vertical: "top",
-        horizontal: "center",
-        open: true,
-        severity: "error",
-        message: "There was a problem please try again",
-      });
+      setError(true);
     }
   };
 
@@ -89,23 +104,34 @@ const newUser = () => {
       <Header title="New Profile" />
       <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
       <div style={{ display: "grid" }}>
-        <FormControl>
+        <FormControl
+          sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
+          error={error}
+        >
           <InputLabel htmlFor="name" shrink></InputLabel>
+          <TextBox
+            defaultValue=""
+            placeHolder="profile name"
+            id="name"
+            autoFocus={true}
+            handleChange={handleChange}
+            inputProps={{ type: "text", maxLength: 60 }}
+            onKeyPress={onKeyPress}
+            error={error}
+          />
+          <FormHelperText
+            sx={{ color: theme.palette.text.primary, fontSize: 16 }}
+            id="component-error-text"
+          >
+            {error ? "Invalid Name" : " "}
+          </FormHelperText>
         </FormControl>
-        <TextBox
-          defaultValue=""
-          placeHolder="profile name"
-          id="name"
-          autoFocus={true}
-          handleChange={handleChange}
-          inputProps={{ type: "text", maxLength: 100 }}
-          onKeyPress={onKeyPress}
-        />
+
         <Button
           variant="contained"
           color="secondary"
           onClick={() => handleNameUpdate(name)}
-          disabled={name == "" ? true : false}
+          disabled={name === "" ? true : false}
           sx={{ marginTop: "10px" }}
         >
           Submit

@@ -79,6 +79,8 @@ const admin = () => {
             setSnackbar({
               ...snackbar,
               open: true,
+              vertical: "bottom",
+              horizontal: "left",
               severity: "success",
               message: "Feature added successfully",
             });
@@ -87,6 +89,8 @@ const admin = () => {
             setSnackbar({
               ...snackbar,
               open: true,
+              vertical: "bottom",
+              horizontal: "left",
               severity: "error",
               message:
                 "There was a problem adding feature. Please try again later",
@@ -97,6 +101,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message:
               "There was a problem adding feature. Please try again later",
@@ -123,6 +129,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message:
               "Feature removed successfully and has been put back on pending list",
@@ -132,6 +140,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message:
               "There was a problem submitting feature. Please try again later",
@@ -158,6 +168,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: "Feature removed from list",
           });
@@ -166,6 +178,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message:
               "There was a problem removing feature. Please try again later",
@@ -211,7 +225,7 @@ const admin = () => {
         </div>
       );
     } else {
-      if (Array.isArray(posts) && posts.length == 0) {
+      if (Array.isArray(posts) && posts.length === 0) {
         list = (
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             no results
@@ -219,7 +233,7 @@ const admin = () => {
         );
       } else {
         for (const item of posts) {
-          if (item.feature == "true") {
+          if (item.feature === "true") {
             count += 1;
           }
         }
@@ -301,7 +315,7 @@ const admin = () => {
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
                         >
-                          {post.feature == "true" ? (
+                          {post.feature === "true" ? (
                             <Button
                               variant="outlined"
                               color="secondary"

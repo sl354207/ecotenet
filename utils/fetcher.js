@@ -4,7 +4,7 @@ const fetcher = async (url) => {
   // If the status code is not in the range 200-299,
   // we still try to parse and throw it.
   if (!res.ok) {
-    if (url.includes("wikipedia" && res.status == 404)) {
+    if (url.includes("wikipedia" && res.status === 404)) {
       return null;
     } else {
       const error = new Error("An error occurred while fetching the data.");

@@ -6,7 +6,8 @@
             "type": "string",
             "description": "must be a string",
             "minLength": 1,
-            "maxLength": 4
+            "maxLength": 4, 
+            "pattern": "^\\d+$"
           },
         "title": {
           "type": "string",
@@ -102,5 +103,4 @@
         }
       },
       "additionalProperties": false
-    
 }

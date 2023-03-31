@@ -4,6 +4,7 @@ import {
   searchEcoPosts,
   searchEcoSpecies,
 } from "@utils/mongodb/mongoHelpers";
+import { validSearch, validSearchEco } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -13,14 +14,12 @@ export default async function handler(req, res) {
   const query = req.query.q;
   const filter = req.query.filter;
   const eco = req.query.eco;
+
   if (
-    typeof query == "string" &&
-    query.length <= 100 &&
-    typeof filter == "string" &&
-    filter.length <= 100 &&
-    typeof eco == "string" &&
-    eco.length >= 1 &&
-    eco.length <= 4
+    validSearch(query) &&
+    typeof filter === "string" &&
+    filter.length <= 10 &&
+    validSearchEco(eco)
   ) {
     switch (filter) {
       case "allPosts":
@@ -68,10 +67,10 @@ export default async function handler(req, res) {
         }
         break;
       default:
-        res.status(403);
+        res.status(403).json({ msg: "Forbidden" });
         break;
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

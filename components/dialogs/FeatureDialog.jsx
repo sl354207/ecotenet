@@ -89,7 +89,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
         "&.MuiModal-root": {
           top: "30px",
           bottom:
-            (Array.isArray(results) && results.length == 0) ||
+            (Array.isArray(results) && results.length === 0) ||
             !results ||
             (Array.isArray(results) && results.length < 5)
               ? "auto"

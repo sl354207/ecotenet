@@ -5,9 +5,10 @@ import { Button, Step, StepButton, Stepper } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { updatePost } from "@utils/apiHelpers";
 import theme from "@utils/theme";
+import { isEqual } from "lodash";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PostDetails from "./PostDetails";
 import PostEditor from "./PostEditor";
 import PostRegion from "./PostRegion";
@@ -23,30 +24,83 @@ const DynamicDashboardDialog = dynamic(
 const StepForm = ({ post, user }) => {
   const router = useRouter();
 
-  const { title, description, category, tags, ecoregions } = post;
+  const { title, description, category, tags, ecoregions, id, version, rows } =
+    post;
 
   const { snackbar, setSnackbar } = useSnackbarContext();
 
   // set form step state
   const [activeStep, setActiveStep] = useState(0);
 
-  // set editor value state
-  const [postValue, setPostValue] = useState(post.id != "" ? post : null);
-
-  //set detail values state;
-  const [details, setDetails] = useState({
+  const initialDetailsState = {
     title,
     description,
     category,
     tags,
-  });
+  };
+  const initialEditorState = id !== "" ? { id, version, rows } : null;
+
+  const initialMapState = ecoregions;
+
+  const [saved, setSaved] = useState(true);
+
+  // set editor value state
+  const [postValue, setPostValue] = useState(
+    id !== "" ? initialEditorState : null
+  );
+
+  //set detail values state;
+  const [details, setDetails] = useState(initialDetailsState);
 
   // set map state
-  const [clickInfo, setClickInfo] = useState(ecoregions);
+  const [clickInfo, setClickInfo] = useState(initialMapState);
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
+
+  // if values in form have changed set saved value accordingly
+  useEffect(() => {
+    // equality in js doesn't work on objects so use lodash function
+    if (!isEqual(initialEditorState, postValue)) {
+      setSaved(false);
+    } else if (!isEqual(initialDetailsState, details)) {
+      setSaved(false);
+    } else if (initialMapState !== clickInfo) {
+      setSaved(false);
+    } else {
+      setSaved(true);
+    }
+  }, [postValue, details, clickInfo]);
+
+  // If user tries to leave page without saving show a dialog box warning them
+  useEffect(() => {
+    const confirmationMessage =
+      "You have unsaved changes. Are you sure you want to leave?";
+    const beforeUnloadHandler = (e) => {
+      (e || window.event).returnValue = confirmationMessage;
+      return confirmationMessage; // Gecko + Webkit, Safari, Chrome etc.
+    };
+    const beforeRouteHandler = (url) => {
+      if (router.pathname !== url && !confirm(confirmationMessage)) {
+        // to inform NProgress or something ...
+        router.events.emit("routeChangeError");
+        // tslint:disable-next-line: no-string-throw
+        throw `Route change to "${url}" was aborted (this error can be safely ignored). See https://github.com/zeit/next.js/issues/2476.`;
+      }
+    };
+    if (!saved) {
+      window.addEventListener("beforeunload", beforeUnloadHandler);
+      router.events.on("routeChangeStart", beforeRouteHandler);
+    } else {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      router.events.off("routeChangeStart", beforeRouteHandler);
+    }
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      router.events.off("routeChangeStart", beforeRouteHandler);
+    };
+  }, [saved]);
 
   const handleOpenDialog = (action, type, postValue, details, clickInfo) => {
     const result = {
@@ -103,9 +157,9 @@ const StepForm = ({ post, user }) => {
     };
 
     const postObject = {
-      id: postValue != null ? postValue.id : "",
-      version: postValue != null ? postValue.version : 1,
-      rows: postValue != null ? postValue.rows : [],
+      id: postValue !== null ? postValue.id : "",
+      version: postValue !== null ? postValue.version : 1,
+      rows: postValue !== null ? postValue.rows : [],
     };
 
     const silentObject = {
@@ -122,18 +176,25 @@ const StepForm = ({ post, user }) => {
 
     const updateResponse = await updatePost(value, "dashboard");
     if (updateResponse.ok) {
+      setSaved(true);
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Draft saved successfully",
       });
-      router.reload();
+      // if (saved) {
+      //   router.reload();
+      // }
     }
     if (!updateResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem saving draft. Please try again later",
       });
@@ -176,36 +237,37 @@ const StepForm = ({ post, user }) => {
                 Back
               </Button>
 
-              {post.status == "published" ? (
+              {post.status === "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
-                  clickInfo.length > 0 &&
-                  postValue &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "update",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
+
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        "update",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={
+                      details.title === "" ||
+                      details.category === null ||
+                      (details.category.title === "" &&
+                        details.category.sub === "") ||
+                      clickInfo.length === 0 ||
+                      postValue === null ||
+                      (postValue && postValue.rows.length <= 0) ||
+                      saved
+                    }
+                  >
+                    Publish
+                  </Button>
                 </>
               ) : (
                 <>
@@ -213,34 +275,35 @@ const StepForm = ({ post, user }) => {
                     onClick={() => updateDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
+                    disabled={saved}
                   >
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
-                  clickInfo.length > 0 &&
-                  postValue &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "publish",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
+
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        "publish",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={
+                      details.title === "" ||
+                      details.category === null ||
+                      (details.category.title === "" &&
+                        details.category.sub === "") ||
+                      clickInfo.length === 0 ||
+                      postValue === null ||
+                      (postValue && postValue.rows.length <= 0)
+                    }
+                  >
+                    Publish
+                  </Button>
                 </>
               )}
 
@@ -271,36 +334,37 @@ const StepForm = ({ post, user }) => {
                 Back
               </Button>
 
-              {post.status == "published" ? (
+              {post.status === "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
-                  clickInfo.length > 0 &&
-                  postValue &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "update",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
+
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        "update",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={
+                      details.title === "" ||
+                      details.category === null ||
+                      (details.category.title === "" &&
+                        details.category.sub === "") ||
+                      clickInfo.length === 0 ||
+                      postValue === null ||
+                      (postValue && postValue.rows.length <= 0) ||
+                      saved
+                    }
+                  >
+                    Publish
+                  </Button>
                 </>
               ) : (
                 <>
@@ -308,35 +372,35 @@ const StepForm = ({ post, user }) => {
                     onClick={() => updateDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
+                    disabled={saved}
                   >
                     Save
                   </Button>
 
-                  {details.title != "" &&
-                  details.category != null &&
-                  clickInfo.length > 0 &&
-                  postValue &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "publish",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        "publish",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={
+                      details.title === "" ||
+                      details.category === null ||
+                      (details.category.title === "" &&
+                        details.category.sub === "") ||
+                      clickInfo.length === 0 ||
+                      postValue === null ||
+                      (postValue && postValue.rows.length <= 0)
+                    }
+                  >
+                    Publish
+                  </Button>
                 </>
               )}
 
@@ -361,36 +425,37 @@ const StepForm = ({ post, user }) => {
                 Back
               </Button>
 
-              {post.status == "published" ? (
+              {post.status === "published" ? (
                 <>
                   <Button variant="contained" color="secondary" disabled>
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
-                  clickInfo.length > 0 &&
-                  postValue &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "update",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
+
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        "update",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={
+                      details.title === "" ||
+                      details.category === null ||
+                      (details.category.title === "" &&
+                        details.category.sub === "") ||
+                      clickInfo.length === 0 ||
+                      postValue === null ||
+                      (postValue && postValue.rows.length <= 0) ||
+                      saved
+                    }
+                  >
+                    Publish
+                  </Button>
                 </>
               ) : (
                 <>
@@ -398,34 +463,35 @@ const StepForm = ({ post, user }) => {
                     onClick={() => updateDraft(postValue, details, clickInfo)}
                     variant="contained"
                     color="secondary"
+                    disabled={saved}
                   >
                     Save
                   </Button>
-                  {details.title != "" &&
-                  details.category != null &&
-                  clickInfo.length > 0 &&
-                  postValue &&
-                  postValue.rows.length > 0 ? (
-                    <Button
-                      onClick={() =>
-                        handleOpenDialog(
-                          "publish",
-                          "Post",
-                          postValue,
-                          details,
-                          clickInfo
-                        )
-                      }
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Publish
-                    </Button>
-                  ) : (
-                    <Button variant="contained" color="secondary" disabled>
-                      Publish
-                    </Button>
-                  )}
+
+                  <Button
+                    onClick={() =>
+                      handleOpenDialog(
+                        "publish",
+                        "Post",
+                        postValue,
+                        details,
+                        clickInfo
+                      )
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={
+                      details.title === "" ||
+                      details.category === null ||
+                      (details.category.title === "" &&
+                        details.category.sub === "") ||
+                      clickInfo.length === 0 ||
+                      postValue === null ||
+                      (postValue && postValue.rows.length <= 0)
+                    }
+                  >
+                    Publish
+                  </Button>
                 </>
               )}
 
@@ -549,6 +615,7 @@ const StepForm = ({ post, user }) => {
           snackbar={snackbar}
           setSnackbar={setSnackbar}
           name={user && user.name}
+          setSaved={setSaved}
         />
       )}
 

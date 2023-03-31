@@ -18,10 +18,16 @@ export const SnackbarProvider = ({ children }) => {
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
-      setSnackbar({ ...snackbar, open: false });
+      setSnackbar({
+        ...snackbar,
+        open: false,
+      });
     }
 
-    setSnackbar({ ...snackbar, open: false });
+    setSnackbar({
+      ...snackbar,
+      open: false,
+    });
   };
 
   return (

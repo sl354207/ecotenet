@@ -1,14 +1,15 @@
 import { deleteComment, updateComment } from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   const method = req.method;
+
   switch (method) {
     case "PUT":
       const { id, ...data } = req.body;
 
       if (
-        typeof id == "string" &&
-        id.length == 24 &&
+        validID(id) &&
         (data.approved === "true" || data.approved === "false")
       ) {
         try {
@@ -19,7 +20,7 @@ export default async function handler(req, res) {
           res.status(500).json({ msg: "Something went wrong." });
         }
       } else {
-        res.status(403);
+        res.status(403).json({ msg: "Forbidden" });
       }
 
       break;
@@ -27,7 +28,7 @@ export default async function handler(req, res) {
     case "DELETE":
       // set id based on request body
       const deleteId = req.body.id;
-      if (typeof deleteId == "string" && deleteId.length == 24) {
+      if (validID(deleteId)) {
         try {
           const deleted = await deleteComment(deleteId);
           return res.status(200).json(deleted);
@@ -36,7 +37,7 @@ export default async function handler(req, res) {
           res.status(500).json({ msg: "Something went wrong." });
         }
       } else {
-        res.status(403);
+        res.status(403).json({ msg: "Forbidden" });
       }
 
       // try delete request, if successful return response, otherwise return error message

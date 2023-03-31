@@ -1,4 +1,5 @@
 import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
+import { validEco } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -6,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   const id = req.query.id;
-  if (typeof id == "string" && id.length >= 1 && id.length <= 4) {
+  if (validEco(id)) {
     try {
       const results = await getEcoregionById(id);
 
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
       res.status(500).json({ msg: "Something went wrong." });
     }
   } else {
-    res.status(403);
+    res.status(403).json({ msg: "Forbidden" });
   }
   // console.log(id);
 }

@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { getSpeciesById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
+import { validID } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -116,10 +117,10 @@ const species = ({ species, wiki }) => {
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+      if (domNode.attribs && domNode.attribs.class === "gallerybox") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+      if (domNode.attribs && domNode.attribs.class === "metadata mbox-small") {
         return <></>;
       }
       if (
@@ -226,251 +227,302 @@ const species = ({ species, wiki }) => {
 
   return (
     <>
-      <Container>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              marginRight: "auto",
-              visibility: "hidden",
-              minWidth: 30,
-            }}
-          ></div>
-          <Header
-            title={`${species.scientific_name}: ${species.common_name}`}
-          />
-          <IconButton
-            sx={{
-              display: "flex",
-              marginLeft: "auto",
-              marginTop: "auto",
-            }}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenDialog()}
-          >
-            <FlagIcon />
-          </IconButton>
-        </div>
-
-        <Typography
-          variant="h6"
-          sx={{
-            marginTop: "20px",
-            marginBottom: "20px",
-          }}
-        >
-          Ecoregions:{" "}
-          {species.unique_id.map((id) => (
-            <Link
-              href={`/ecoregions/${id}`}
-              color="secondary"
-              underline="hover"
-              key={id}
-            >
-              Eco-{id}
-              {", "}
-            </Link>
-          ))}
-        </Typography>
-
-        <div
-          style={{
-            flexGrow: 1,
-            backgroundColor: theme.palette.background.paper,
-            borderRadius: "10px",
-          }}
-        >
-          <AppBar
-            position="static"
-            elevation={0}
-            sx={{
-              backgroundColor: theme.palette.primary.light,
-              borderRadius: "10px",
-            }}
-          >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="simple tabs example"
-              centered
-              indicatorColor="secondary"
-              textColor="inherit"
-            >
-              <Tab
-                sx={{
-                  flexGrow: 1,
-                  backgroundColor: theme.palette.primary.light,
-                  minHeight: 80,
-                  borderRadius: "10px",
-                  "&:hover": {
-                    color: theme.text,
-                    opacity: 1,
-                  },
+      {!species || wiki === "error" ? (
+        <>
+          <Container>
+            <Header title="Something went wrong. Please try again later" />
+          </Container>
+          <Footer />
+        </>
+      ) : (
+        <>
+          <Container>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  marginRight: "auto",
+                  visibility: "hidden",
+                  minWidth: 30,
                 }}
-                label="General Info"
-                {...a11yProps(0)}
+              ></div>
+              <Header
+                title={`${species.scientific_name}: ${species.common_name}`}
               />
-              <Tab
+              <IconButton
                 sx={{
-                  flexGrow: 1,
-                  backgroundColor: theme.palette.primary.light,
-                  minHeight: 80,
-                  borderRadius: "10px",
-                  "&:hover": {
-                    color: theme.text,
-                    opacity: 1,
-                  },
+                  display: "flex",
+                  marginLeft: "auto",
+                  marginTop: "auto",
                 }}
-                label="Additional Resources"
-                {...a11yProps(1)}
-              />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            {!wiki ? (
-              <Typography
-                variant="h6"
-                align="justify"
-                sx={{ marginTop: "20px" }}
+                color="inherit"
+                aria-label="flag"
+                size="small"
+                onClick={() => handleOpenDialog()}
               >
-                We currently don&apos;t have a summary of this species. If you
-                want to help us out you can create a wikipedia page for the
-                species.
-              </Typography>
-            ) : (
-              <>
-                <Typography variant="h5" sx={{ marginTop: "10px" }}>
-                  Source:{" "}
-                  <Link
-                    href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                      " ",
-                      "_"
-                    )}?redirect=true`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    underline="hover"
+                <FlagIcon />
+              </IconButton>
+            </div>
+
+            <Typography
+              variant="h6"
+              sx={{
+                marginTop: "20px",
+                marginBottom: "20px",
+              }}
+            >
+              Ecoregions:{" "}
+              {species.unique_id.map((id) => (
+                <Link
+                  href={`/ecoregions/${id}`}
+                  color="secondary"
+                  underline="hover"
+                  key={id}
+                >
+                  Eco-{id}
+                  {", "}
+                </Link>
+              ))}
+            </Typography>
+
+            <div
+              style={{
+                flexGrow: 1,
+                backgroundColor: theme.palette.background.paper,
+                borderRadius: "10px",
+              }}
+            >
+              <AppBar
+                position="static"
+                elevation={0}
+                sx={{
+                  backgroundColor: theme.palette.primary.light,
+                  borderRadius: "10px",
+                }}
+              >
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="simple tabs example"
+                  centered
+                  indicatorColor="secondary"
+                  textColor="inherit"
+                >
+                  <Tab
+                    sx={{
+                      flexGrow: 1,
+                      backgroundColor: theme.palette.primary.light,
+                      minHeight: 80,
+                      borderRadius: "10px",
+                      "&:hover": {
+                        color: theme.text,
+                        opacity: 1,
+                      },
+                    }}
+                    label="General Info"
+                    {...a11yProps(0)}
+                  />
+                  <Tab
+                    sx={{
+                      flexGrow: 1,
+                      backgroundColor: theme.palette.primary.light,
+                      minHeight: 80,
+                      borderRadius: "10px",
+                      "&:hover": {
+                        color: theme.text,
+                        opacity: 1,
+                      },
+                    }}
+                    label="Additional Resources"
+                    {...a11yProps(1)}
+                  />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={value} index={0}>
+                {!wiki ? (
+                  <Typography
+                    variant="h6"
+                    align="justify"
+                    sx={{ marginTop: "20px" }}
                   >
-                    Wikipedia
-                  </Link>
-                </Typography>
-                {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-                {wiki.remaining.sections.map((section) => {
-                  if (section.anchor == "Gallery") {
-                    return <></>;
-                  } else if (section.toclevel == 2) {
-                    return (
-                      <>
-                        <h2>{section.line}</h2>
-                        {parse(DOMPurify.sanitize(section.text), options)}
-                      </>
-                    );
-                  } else {
-                    return (
-                      <>
-                        <h1>{section.line}</h1>
-                        {parse(DOMPurify.sanitize(section.text), options)}
-                      </>
-                    );
-                  }
-                })}
-              </>
+                    We currently don&apos;t have a summary of this species. If
+                    you want to help us out you can create a wikipedia page for
+                    the species.
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                      Source:{" "}
+                      <Link
+                        href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                          / /g,
+                          "_"
+                        )}?redirect=true`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Wikipedia
+                      </Link>
+                    </Typography>
+                    {parse(
+                      DOMPurify.sanitize(wiki.lead.sections[0].text),
+                      options
+                    )}
+                    {wiki.remaining.sections.map((section) => {
+                      if (section.anchor === "Gallery") {
+                        return <></>;
+                      } else if (section.toclevel === 2) {
+                        return (
+                          <>
+                            <h2>{section.line}</h2>
+                            {parse(DOMPurify.sanitize(section.text), options)}
+                          </>
+                        );
+                      } else {
+                        return (
+                          <>
+                            <h1>{section.line}</h1>
+                            {parse(DOMPurify.sanitize(section.text), options)}
+                          </>
+                        );
+                      }
+                    })}
+                  </>
+                )}
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <List>
+                  <ListItem key={"inat"}>
+                    <Link
+                      variant="h6"
+                      href={`https://www.inaturalist.org/search?q=${
+                        species.scientific_name.toLowerCase().split(" ")[0]
+                      }%20${
+                        species.scientific_name.toLowerCase().split(" ")[1]
+                      }`}
+                      color="secondary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover"
+                    >
+                      iNaturalist
+                    </Link>
+                  </ListItem>
+                  <ListItem key={"wiki"}>
+                    <Link
+                      variant="h6"
+                      href={`https://commons.wikimedia.org/w/index.php?search=${
+                        species.scientific_name.toLowerCase().split(" ")[0]
+                      }+${
+                        species.scientific_name.toLowerCase().split(" ")[1]
+                      }&title=Special:MediaSearch&go=Go&type=image`}
+                      color="secondary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover"
+                    >
+                      Wikimedia Commons
+                    </Link>
+                  </ListItem>
+                  <ListItem key={"iucn"}>
+                    <Link
+                      variant="h6"
+                      href={`https://www.iucnredlist.org/search?query=${
+                        species.scientific_name.toLowerCase().split(" ")[0]
+                      }%20${
+                        species.scientific_name.toLowerCase().split(" ")[1]
+                      }&searchType=species`}
+                      color="secondary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover"
+                    >
+                      IUCN Red List
+                    </Link>
+                  </ListItem>
+                </List>
+              </TabPanel>
+            </div>
+            {dialog && (
+              <DynamicFlag
+                open={dialog}
+                handleClose={() => handleCloseDialog()}
+                contentType="species"
+                result={species}
+                name={user && user.name}
+              />
             )}
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <List>
-              <ListItem key={"inat"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.inaturalist.org/search?q=${
-                    species.scientific_name.toLowerCase().split(" ")[0]
-                  }%20${species.scientific_name.toLowerCase().split(" ")[1]}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  iNaturalist
-                </Link>
-              </ListItem>
-              <ListItem key={"wiki"}>
-                <Link
-                  variant="h6"
-                  href={`https://commons.wikimedia.org/w/index.php?search=${
-                    species.scientific_name.toLowerCase().split(" ")[0]
-                  }+${
-                    species.scientific_name.toLowerCase().split(" ")[1]
-                  }&title=Special:MediaSearch&go=Go&type=image`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Wikimedia Commons
-                </Link>
-              </ListItem>
-              <ListItem key={"iucn"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.iucnredlist.org/search?query=${
-                    species.scientific_name.toLowerCase().split(" ")[0]
-                  }%20${
-                    species.scientific_name.toLowerCase().split(" ")[1]
-                  }&searchType=species`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  IUCN Red List
-                </Link>
-              </ListItem>
-            </List>
-          </TabPanel>
-        </div>
-        {dialog && (
-          <DynamicFlag
-            open={dialog}
-            handleClose={() => handleCloseDialog()}
-            contentType="species"
-            result={species}
-            name={user && user.name}
-          />
-        )}
-      </Container>
-      <Footer />
+          </Container>
+          <Footer />
+        </>
+      )}
     </>
   );
 };
 
 export const getServerSideProps = async (context) => {
   const speciesId = context.params.id;
-  const species = await getSpeciesById(speciesId);
 
-  const wikiRes = await fetch(
-    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
-      species.scientific_name.toLowerCase().split(" ")[0]
-    }_${species.scientific_name.toLowerCase().split(" ")[1]}?redirect=true`,
-    {
-      method: "GET",
-      headers: {
-        "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
-      },
+  if (validID(speciesId)) {
+    try {
+      const species = await getSpeciesById(speciesId);
+
+      if (species === null) {
+        return {
+          notFound: true,
+        };
+      } else {
+        const wikiRes = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
+            species.scientific_name.toLowerCase().split(" ")[0]
+          }_${
+            species.scientific_name.toLowerCase().split(" ")[1]
+          }?redirect=true`,
+          {
+            method: "GET",
+            headers: {
+              "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+            },
+          }
+        );
+        let wiki;
+        if (wikiRes.ok) {
+          wiki = await wikiRes.json();
+          return {
+            props: {
+              species: JSON.parse(JSON.stringify(species)),
+              wiki:
+                wiki === undefined || wiki.title === "Not found."
+                  ? null
+                  : JSON.parse(JSON.stringify(wiki)),
+            },
+          };
+        } else {
+          return {
+            props: {
+              species: JSON.parse(JSON.stringify(species)),
+              wiki: "error",
+            },
+          };
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {
+          species: null,
+          wiki: null,
+        },
+      };
     }
-  );
+  } else {
+    return {
+      notFound: true,
+    };
+  }
 
-  const wiki = await wikiRes.json();
-
-  return {
-    props: {
-      species: JSON.parse(JSON.stringify(species)),
-      wiki:
-        wiki == undefined || wiki.title == "Not found."
-          ? null
-          : JSON.parse(JSON.stringify(wiki)),
-    },
-  };
+  // console.log(species);
 };
 
 export default species;

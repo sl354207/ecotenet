@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@mui/material";
 import {
-  createPost,
   deleteComment,
   deletePost,
   deletePostMedia,
@@ -29,6 +28,7 @@ const DashboardDialog = ({
   setSnackbar,
   mutate,
   fetchApi,
+  setSaved,
 }) => {
   const router = useRouter();
 
@@ -77,6 +77,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Post deleted successfully`,
         });
@@ -86,6 +88,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem deleting post. Please try again later`,
         });
@@ -95,6 +99,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting post media. Please try again later`,
       });
@@ -117,6 +123,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: `Comment deleted successfully`,
       });
@@ -126,6 +134,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
       });
@@ -146,15 +156,19 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: "Account deleted successfully",
         });
-        signOut();
+        signOut({ callbackUrl: "/" });
       }
       if (!userResponse.ok) {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem deleting your account. Please try again later`,
         });
@@ -164,6 +178,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting your account. Please try again later`,
       });
@@ -194,16 +210,23 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
-      router.reload();
+      if (setSaved) {
+        setSaved(true);
+      }
+      // router.reload();
     }
 
     if (!postResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });
@@ -233,51 +256,21 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Success! Post will be made public upon approval",
       });
-      router.reload();
+      if (setSaved) {
+        setSaved(true);
+      }
     }
     if (!postResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
-        severity: "error",
-        message: `There was a problem submitting post. Please try again later`,
-      });
-    }
-  };
-  const handlePublishNewDraft = async () => {
-    const submission = {
-      title: result.title,
-      name: name,
-      description: result.description,
-      category: result.category,
-      tags: result.tags,
-      ecoregions: result.ecoregions,
-      id: result.id,
-      version: result.version,
-      rows: result.rows,
-      status: "published",
-    };
-
-    const postResponse = await createPost(submission);
-
-    if (postResponse.ok) {
-      handleClose();
-      const ID = await postResponse.json();
-      router.push(`/dashboard/posts/${ID.insertedId}`);
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: "Success! Post will be made public upon approval",
-      });
-    }
-    if (!postResponse.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });
@@ -313,10 +306,6 @@ const DashboardDialog = ({
         await handlePublishSavedDraft();
 
         break;
-      case "create":
-        await handlePublishNewDraft();
-
-        break;
 
       default:
         break;
@@ -335,7 +324,7 @@ const DashboardDialog = ({
         color="textPrimary"
         align="center"
       >
-        {action == "delete" ? "Delete" : "Submit"}
+        {action === "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
       <DialogContent>
@@ -350,14 +339,14 @@ const DashboardDialog = ({
         </Button>
         <Button
           onClick={
-            action == "delete"
+            action === "delete"
               ? () => handleDeleteItem()
               : () => handleSubmitItem()
           }
           color="secondary"
           variant="outlined"
         >
-          {action == "delete" ? "delete" : "submit"}
+          {action === "delete" ? "delete" : "submit"}
         </Button>
       </DialogActions>
     </Dialog>

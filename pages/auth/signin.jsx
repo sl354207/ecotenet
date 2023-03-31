@@ -62,10 +62,11 @@ const SigninPage = ({ providers, isLoggedIn }) => {
 export const getServerSideProps = async (context) => {
   const { req, res } = context;
   const session = await getServerSession(req, res, authOptions);
+  const providers = await getProviders();
   return {
     props: {
       isLoggedIn: session !== null,
-      providers: await getProviders(),
+      providers: providers,
     },
   };
 };

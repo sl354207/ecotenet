@@ -57,6 +57,8 @@ const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: `Flag resolved successfully`,
           });
@@ -70,6 +72,8 @@ const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message: `There was a problem resolving flag. Please try again later`,
           });
@@ -78,6 +82,8 @@ const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Flag resolved successfully`,
         });
@@ -92,6 +98,8 @@ const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem resolving flag. Please try again later`,
       });

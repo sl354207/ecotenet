@@ -35,6 +35,7 @@ import fetcher from "@utils/fetcher";
 import { getPostById, getPosts } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
+import { validID } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -99,28 +100,28 @@ const post = ({ post }) => {
   });
 
   const reducer = (comments, toggle) => {
-    if (toggle.type == "load") {
+    if (toggle.type === "load") {
       return toggle.payload;
     }
-    if (toggle.type == "open") {
+    if (toggle.type === "open") {
       return comments.map((comment) => {
-        if (comment._id == toggle.payload) {
+        if (comment._id === toggle.payload) {
           comment.open = true;
         }
 
         return comment;
       });
     }
-    if (toggle.type == "close") {
+    if (toggle.type === "close") {
       return comments.map((comment) => {
-        if (comment._id == toggle.payload) {
+        if (comment._id === toggle.payload) {
           comment.open = false;
         }
 
         return comment;
       });
     }
-    if (toggle.type == "all") {
+    if (toggle.type === "all") {
       return comments.map((comment) => {
         comment.open = false;
 
@@ -158,7 +159,7 @@ const post = ({ post }) => {
 
         setDialog(true);
 
-        if (action == "Comment") {
+        if (action === "Comment") {
           dispatch({ type: "open", payload: result.comment_ref });
         }
       }
@@ -168,7 +169,7 @@ const post = ({ post }) => {
   const handleCloseDialog = (reply) => {
     setDialog(false);
 
-    if (reply == "reply") {
+    if (reply === "reply") {
       dispatch({ type: "all" });
     }
     if (reply && reply !== "reply" && reply !== "") {
@@ -188,6 +189,8 @@ const post = ({ post }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Added to feature list",
       });
@@ -196,6 +199,8 @@ const post = ({ post }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message:
           "There was a problem submitting feature. Please try again later",
@@ -587,14 +592,26 @@ export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const _id = context.params.id;
 
-  const post = await getPostById(_id);
+  if (validID(_id)) {
+    const post = await getPostById(_id);
 
-  return {
-    props: {
-      post: JSON.parse(JSON.stringify(post)),
-    },
-    revalidate: 60,
-  };
+    if (post === null) {
+      return {
+        notFound: true,
+      };
+    } else {
+      return {
+        props: {
+          post: JSON.parse(JSON.stringify(post)),
+        },
+        revalidate: 60,
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 // build routing paths for each post at build time
