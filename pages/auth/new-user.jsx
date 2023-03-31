@@ -61,6 +61,7 @@ const newUser = () => {
           });
           if (res1.ok) {
             sessionStorage.setItem("name", name);
+            // update();
             router.push("/");
           } else {
             setSnackbar({

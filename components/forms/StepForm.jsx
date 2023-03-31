@@ -61,6 +61,7 @@ const StepForm = ({ post, user }) => {
 
   // if values in form have changed set saved value accordingly
   useEffect(() => {
+    // equality in js doesn't work on objects so use lodash function
     if (!isEqual(initialEditorState, postValue)) {
       setSaved(false);
     } else if (!isEqual(initialDetailsState, details)) {

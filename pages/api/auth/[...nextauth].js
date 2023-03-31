@@ -176,7 +176,7 @@ export const authOptions = {
       // if (token?.isNew) {
       //   session.user.isNew = token.isNew;
       // }
-      // console.log(session);
+      console.log(session);
       return session;
     },
     // async redirect({ url, baseUrl }) {
