@@ -16,7 +16,7 @@ export function validEco(string) {
   const regex = /^\d+$/;
   if (
     typeof string === "string" &&
-    string.length >= 0 &&
+    string.length > 0 &&
     string.length < 5 &&
     regex.test(string)
   ) {
@@ -30,7 +30,7 @@ export function validSearchEco(string) {
   const regex = /^\d+$/;
   if (
     (typeof string === "string" &&
-      string.length >= 0 &&
+      string.length > 0 &&
       string.length < 5 &&
       regex.test(string)) ||
     string === "null"

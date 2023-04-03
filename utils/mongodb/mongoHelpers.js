@@ -954,22 +954,22 @@ const checkName = async (name) => {
   }
 };
 
-const checkPerson = async (name) => {
-  try {
-    const db = await connectToDatabase();
+// const checkPerson = async (name) => {
+//   try {
+//     const db = await connectToDatabase();
 
-    const response = await db.collection("users").findOne(
-      {
-        name: name,
-      },
-      { projection: { name: 1, email: 1, _id: 0 } }
-    );
+//     const response = await db.collection("users").findOne(
+//       {
+//         name: name,
+//       },
+//       { projection: { name: 1, email: 1, _id: 0 } }
+//     );
 
-    return response;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+//     return response;
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 
 const getEcoregions = async () => {
   try {
@@ -1047,7 +1047,6 @@ module.exports = {
   getNotifications,
   updateNotification,
   checkName,
-  checkPerson,
   getEcoregions,
   getEcoregionById,
 };

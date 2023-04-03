@@ -197,11 +197,6 @@ export default async function auth(req, res) {
   if (req.method === "HEAD") {
     return res.status(200);
   }
-  // console.log(`req.query: ${req.query.nextauth}`);
-  // console.log(`req.method: ${req.method}`);
-  // console.log(req);
-  // console.log(req.body);
-  // console.log(req.query.nextauth);
 
   if (
     req.query.nextauth.includes("signin") &&
