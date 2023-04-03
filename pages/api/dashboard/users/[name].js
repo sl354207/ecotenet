@@ -1,7 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
 import {
-  checkPerson,
   deletePerson,
   getPersonDash,
   updatePerson,
@@ -30,25 +29,6 @@ export default async function handler(req, res) {
             console.error(err);
 
             res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name && validName(getName)) {
-          const person = await checkPerson(getName);
-          // console.log(person);
-
-          if (person && person.email === session.user.email) {
-            // try get request, if successful return response, otherwise return error message
-            try {
-              const person = await getPersonDash(getName);
-
-              return res.status(200).json(person);
-            } catch (err) {
-              console.error(err);
-
-              res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else {
-            // console.log("test1");
-            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
           res.status(401).json({ msg: "Unauthorized" });
@@ -131,21 +111,6 @@ export default async function handler(req, res) {
           } catch (err) {
             console.error(err);
             res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name && validName(deleteName)) {
-          const person = await checkPerson(deleteName);
-
-          if (person && person.email === session.user.email) {
-            // try get request, if successful return response, otherwise return error message
-            try {
-              const deleted = await deletePerson(deleteName);
-              return res.status(200).json(deleted);
-            } catch (err) {
-              console.error(err);
-              res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else {
-            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
           res.status(401).json({ msg: "Unauthorized" });

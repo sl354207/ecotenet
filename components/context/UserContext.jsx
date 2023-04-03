@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export const UserContext = createContext();
@@ -7,8 +6,8 @@ export const UserContext = createContext();
 export const useUserContext = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  // const router = useRouter();
+  const { data: session, status, update } = useSession();
 
   const [user, setUser] = useState();
 
@@ -22,31 +21,18 @@ export const UserProvider = ({ children }) => {
       });
     }
     if (status === "authenticated") {
-      let userName = sessionStorage.getItem("name");
-      if (
-        session.user.name === null ||
-        session.user.name === "" ||
-        session.user.name === undefined
-      ) {
-        setUser({
-          email: session.user.email,
-          name: userName,
-          role: session.user.role,
-          status: status,
-        });
-      } else {
-        setUser({
-          email: session.user.email,
-          name: session.user.name,
-          role: session.user.role,
-          status: status,
-        });
-      }
+      setUser({
+        email: session.user.email,
+        name: session.user.name,
+        role: session.user.role,
+        status: status,
+      });
     }
-  }, [router.pathname, status]);
+  }, [status]);
+  // [router.pathname, status]
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, update }}>
       {children}
     </UserContext.Provider>
   );

@@ -3,6 +3,7 @@ import { createPost } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
+  console.log(name);
   const router = useRouter();
 
   const startPost = async () => {
@@ -38,7 +39,13 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
   };
   return (
     <Button
-      onClick={() => startPost()}
+      onClick={() => {
+        if (name === null || name === "" || name === undefined) {
+          router.push("/auth/new-user");
+        } else {
+          startPost();
+        }
+      }}
       variant={nav ? "outlined" : "contained"}
       color="secondary"
       size={nav ? (isTab ? "small" : "medium") : "large"}

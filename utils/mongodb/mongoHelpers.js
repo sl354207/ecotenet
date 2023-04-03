@@ -133,7 +133,7 @@ const getPostById = async (_id) => {
     const db = await connectToDatabase();
 
     const post = await db.collection("posts").findOne({
-      _id: ObjectId(_id),
+      _id: new ObjectId(_id),
     });
 
     return post;
@@ -148,7 +148,7 @@ const getApprovedPostById = async (_id) => {
     // POTENTIALLY UPDATE RETURNING VOTERS
 
     const post = await db.collection("posts").findOne({
-      _id: ObjectId(_id),
+      _id: new ObjectId(_id),
       approved: "true",
     });
 
@@ -165,7 +165,7 @@ const getPostVotes = async (_id) => {
 
     const post = await db.collection("posts").findOne(
       {
-        _id: ObjectId(_id),
+        _id: new ObjectId(_id),
       },
       { projection: { count: 1, voters: 1 } }
     );
@@ -224,7 +224,7 @@ const updatePost = async (_id, data) => {
 
     const response = await db.collection("posts").updateOne(
       {
-        _id: ObjectId(_id),
+        _id: new ObjectId(_id),
       },
       { $set: data }
     );
@@ -240,7 +240,7 @@ const updateVote = async (data) => {
 
     const response = await db.collection("posts").updateOne(
       {
-        _id: ObjectId(data._id),
+        _id: new ObjectId(data._id),
       },
       {
         $push: { voters: data.name },
@@ -260,7 +260,7 @@ const deletePost = async (_id) => {
     const db = await connectToDatabase();
 
     const post = await db.collection("posts").deleteOne({
-      _id: ObjectId(_id),
+      _id: new ObjectId(_id),
     });
 
     const comments = await db.collection("comments").deleteMany({
@@ -347,7 +347,7 @@ const updateComment = async (_id, data) => {
 
     const response = await db.collection("comments").updateOne(
       {
-        _id: ObjectId(_id),
+        _id: new ObjectId(_id),
       },
       { $set: data }
     );
@@ -365,7 +365,7 @@ const updateComment = async (_id, data) => {
 
 //     const deleted = await db
 //       .collection("comments")
-//       .deleteMany({ $or: [{ _id: ObjectId(_id) }, { comment_ref: _id }] });
+//       .deleteMany({ $or: [{ _id: new ObjectId(_id) }, { comment_ref: _id }] });
 
 //     return deleted;
 //   } catch (error) {
@@ -378,7 +378,7 @@ const deleteComment = async (_id) => {
 
     const deleted = await db.collection("comments").updateOne(
       {
-        _id: ObjectId(_id),
+        _id: new ObjectId(_id),
       },
       { $set: { text: "Comment deleted", name: "" } }
     );
@@ -416,7 +416,7 @@ const getSpeciesById = async (id) => {
     const db = await connectToDatabase();
 
     const species = await db.collection("species").findOne({
-      _id: ObjectId(id),
+      _id: new ObjectId(id),
     });
 
     return species;
@@ -879,7 +879,7 @@ const updateFlag = async (_id, status) => {
 
     const response = await db.collection("flags").updateOne(
       {
-        _id: ObjectId(_id),
+        _id: new ObjectId(_id),
       },
       { $set: { status: status } }
     );
@@ -926,7 +926,7 @@ const updateNotification = async (_id, viewed) => {
 
     const response = await db.collection("notifications").updateOne(
       {
-        _id: ObjectId(_id),
+        _id: new ObjectId(_id),
       },
       { $set: { viewed: viewed } }
     );

@@ -1,12 +1,11 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
 import {
-  checkPerson,
   deletePost,
   getPostById,
   updatePost,
 } from "@utils/mongodb/mongoHelpers";
-import { validID, validName } from "@utils/validationHelpers";
+import { validID } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
@@ -31,25 +30,6 @@ export default async function handler(req, res) {
               console.error(err);
 
               res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else if (!session.user.name && validName(getName)) {
-            const person = await checkPerson(getName);
-
-            if (person && person.email === session.user.email) {
-              // try get request, if successful return response, otherwise return error message
-              try {
-                const post = await getPostById(id);
-                // don't send voters
-                post.voters = [];
-
-                return res.status(200).json(post);
-              } catch (err) {
-                console.error(err);
-
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
             res.status(401).json({ msg: "Unauthorized" });
@@ -78,26 +58,6 @@ export default async function handler(req, res) {
               console.error(err);
               res.status(500).json({ msg: "Something went wrong." });
             }
-          } else if (!session.user.name && validName(data.name)) {
-            const person = await checkPerson(data.name);
-
-            if (person && person.email === session.user.email) {
-              // try get request, if successful return response, otherwise return error message
-              try {
-                data.approved = "pending";
-                data.date = new Date().toUTCString();
-                data.feature = "false";
-                const update = await updatePost(_id, data);
-
-                // console.log(update);
-                return res.status(200).json(update);
-              } catch (err) {
-                console.error(err);
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              res.status(401).json({ msg: "Unauthorized" });
-            }
           } else {
             res.status(401).json({ msg: "Unauthorized" });
           }
@@ -123,21 +83,6 @@ export default async function handler(req, res) {
             } catch (err) {
               console.error(err);
               res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else if (!session.user.name && validName(deleteName)) {
-            const person = await checkPerson(deleteName);
-
-            if (person && person.email === session.user.email) {
-              // try get request, if successful return response, otherwise return error message
-              try {
-                const deleted = await deletePost(deleteId);
-                return res.status(200).json(deleted);
-              } catch (err) {
-                console.error(err);
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
             res.status(401).json({ msg: "Unauthorized" });

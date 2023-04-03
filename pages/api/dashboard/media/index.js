@@ -1,7 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { generateUploadURL } from "@utils/aws";
-import { checkPerson } from "@utils/mongodb/mongoHelpers";
-import { validID, validName } from "@utils/validationHelpers";
+import { validID } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get image from aws s3 bucket
@@ -39,23 +38,6 @@ export default async function handler(req, res) {
           console.error(err);
 
           res.status(500).json({ msg: "Something went wrong." });
-        }
-      } else if (!session.user.name && validName(name)) {
-        const person = await checkPerson(name);
-
-        if (person && person.email === session.user.email) {
-          // try get request, if successful return response, otherwise return error message
-          try {
-            const url = await generateUploadURL(name, postId, ext);
-            // console.log(res.json(url));
-            return res.status(200).json(url.substring(1, url.length - 1));
-          } catch (err) {
-            console.error(err);
-
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else {
-          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
         res.status(401).json({ msg: "Unauthorized" });

@@ -1,11 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
-import {
-  checkPerson,
-  createPost,
-  getDashboardPosts,
-} from "@utils/mongodb/mongoHelpers";
-import { validName } from "@utils/validationHelpers";
+import { createPost, getDashboardPosts } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
@@ -29,23 +24,6 @@ export default async function handler(req, res) {
               console.error(err);
 
               res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else if (!session.user.name && validName(getName)) {
-            const person = await checkPerson(getName);
-
-            if (person && person.email === session.user.email) {
-              // try get request, if successful return response, otherwise return error message
-              try {
-                const posts = await getDashboardPosts(getName, getStatus);
-
-                return res.status(200).json(posts);
-              } catch (err) {
-                console.error(err);
-
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
             res.status(401).json({ msg: "Unauthorized" });
@@ -74,28 +52,6 @@ export default async function handler(req, res) {
               console.error(err);
 
               res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else if (!session.user.name && validName(data.name)) {
-            const person = await checkPerson(data.name);
-
-            if (person && person.email === session.user.email) {
-              // try get request, if successful return response, otherwise return error message
-              try {
-                data.updated = false;
-                data.featured = false;
-                data.feature = "false";
-                data.date = new Date().toUTCString();
-                data.approved = "pending";
-                const createdPost = await createPost(data);
-
-                return res.status(200).json(createdPost);
-              } catch (err) {
-                console.error(err);
-
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              res.status(401).json({ msg: "Unauthorized" });
             }
           } else {
             res.status(401).json({ msg: "Unauthorized" });
