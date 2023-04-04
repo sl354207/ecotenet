@@ -1,11 +1,6 @@
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { ajv } from "@schema/validation";
-import {
-  checkPerson,
-  getPostVotes,
-  updateVote,
-} from "@utils/mongodb/mongoHelpers";
-import { validName } from "@utils/validationHelpers";
+import { getPostVotes, updateVote } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts from database
@@ -58,49 +53,6 @@ export default async function handler(req, res) {
               res.status(500).json({ msg: "Something went wrong." });
             }
           }
-        }
-      } else if (!session.user.name && validName(data.name)) {
-        const person = await checkPerson(data.name);
-        if (person && person.email === session.user.email) {
-          let voterNames;
-          try {
-            voterNames = await getPostVotes(data._id);
-          } catch (error) {
-            console.error(err);
-
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-          if (voterNames.voters.includes(data.name)) {
-            res
-              .status(406)
-              .json({ msg: "You have already voted on this post." });
-          } else {
-            if (data.vote === "add") {
-              data.vote = 1;
-              try {
-                const response = await updateVote(data);
-
-                return res.status(200).json(response);
-              } catch (error) {
-                console.error(err);
-
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            } else {
-              data.vote = -1;
-              try {
-                const response = await updateVote(data);
-
-                return res.status(200).json(response);
-              } catch (error) {
-                console.error(err);
-
-                res.status(500).json({ msg: "Something went wrong." });
-              }
-            }
-          }
-        } else {
-          res.status(401).json({ msg: "Unauthorized" });
         }
       } else {
         res.status(401).json({ msg: "Unauthorized" });

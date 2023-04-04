@@ -1,6 +1,6 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
-import { validEmail } from "@utils/validationHelpers";
+import { validEmail, validName } from "@utils/validationHelpers";
 import { randomBytes } from "crypto";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
@@ -131,12 +131,6 @@ export const authOptions = {
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log(`signin user: ${user}`);
-      console.log(`signin account: ${account}`);
-      console.log(`signin profile: ${profile}`);
-      console.log(`signin email: ${email}`);
-      console.log(`signin credentials: ${credentials}`);
-      // console.log(account);
       if (!user?.role) {
         user.role = "user";
         user.bio = "";
@@ -144,39 +138,31 @@ export const authOptions = {
         user.socials = [];
         user.denials = 0;
         user.approved = "pending";
-        // user.isNew = true;
       }
       return true;
     },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      console.log(`jwt user: ${user}`);
-      console.log(`jwt account: ${account}`);
-      console.log(`jwt profile: ${profile}`);
-      console.log(`jwt token: ${token}`);
-      console.log(`jwt new: ${isNewUser}`);
-      // if (account?.accessToken) {
-      //   token.accessToken = account.accessToken;
-      // }
+    async jwt({ token, trigger, session, user, account, profile, isNewUser }) {
       if (user?.role) {
         token.role = user.role;
       }
-      // if (user?.isNew) {
-      //   token.isNew = user.isNew;
-      // }
-      // console.log(token);
+      if (trigger === "update" && session?.name) {
+        if (
+          Object.keys(session).length === 1 &&
+          Object.keys(session[0] === "name" && validName(session.name))
+        ) {
+          token.name = session.name;
+        }
+        // console.log(session);
+      }
+
       return token;
     },
     async session({ session, token }) {
-      // if (token?.accessToken) {
-      //   session.accessToken = token.accessToken;
-      // }
       if (token?.role) {
         session.user.role = token.role;
       }
-      // if (token?.isNew) {
-      //   session.user.isNew = token.isNew;
-      // }
-      console.log(session);
+
+      // console.log(session);
       return session;
     },
     // async redirect({ url, baseUrl }) {
@@ -211,12 +197,13 @@ export default async function auth(req, res) {
   if (req.method === "HEAD") {
     return res.status(200);
   }
-  // console.log(`req.query: ${req.query.nextauth}`);
-  // console.log(`req.method: ${req.method}`);
-  // console.log(req);
-  // console.log(req.body);
 
-  if (req.query.nextauth.includes("signin") && req.method === "POST") {
+  if (
+    req.query.nextauth.includes("signin") &&
+    req.query.nextauth.includes("email") &&
+    req.query.nextauth.length === 2 &&
+    req.method === "POST"
+  ) {
     const email = req.body.email;
 
     if (!validEmail(email)) {

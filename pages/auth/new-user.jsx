@@ -3,8 +3,10 @@ import { useUserContext } from "@components/context/UserContext";
 import TextBox from "@components/inputFields/TextBox";
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
+import Nav from "@components/layouts/Nav";
 import {
   Button,
+  CircularProgress,
   Container,
   FormControl,
   FormHelperText,
@@ -18,11 +20,12 @@ import { useState } from "react";
 const newUser = () => {
   const router = useRouter();
 
-  const { user } = useUserContext();
+  const { user, update } = useUserContext();
   const { setSnackbar } = useSnackbarContext();
 
   const [name, setName] = useState("");
   const [error, setError] = useState(false);
+  const [updated, setUpdated] = useState(false);
 
   // update text input field
   const handleChange = (event) => {
@@ -60,8 +63,8 @@ const newUser = () => {
             body: JSON.stringify(submission),
           });
           if (res1.ok) {
-            sessionStorage.setItem("name", name);
-            // update();
+            setUpdated(true);
+            update({ name });
             router.push("/");
           } else {
             setSnackbar({
@@ -100,44 +103,82 @@ const newUser = () => {
   };
 
   return (
-    <Container>
-      <Header title="New Profile" />
-      <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
-      <div style={{ display: "grid" }}>
-        <FormControl
-          sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
-          error={error}
-        >
-          <InputLabel htmlFor="name" shrink></InputLabel>
-          <TextBox
-            defaultValue=""
-            placeHolder="profile name"
-            id="name"
-            autoFocus={true}
-            handleChange={handleChange}
-            inputProps={{ type: "text", maxLength: 60 }}
-            onKeyPress={onKeyPress}
-            error={error}
+    <>
+      {!user || (user && user.status === "loading") || updated === true ? (
+        <>
+          <CircularProgress
+            color="secondary"
+            size={100}
+            disableShrink={true}
+            sx={{
+              margin: "100px auto",
+              display: "flex",
+              justifySelf: "center",
+            }}
           />
-          <FormHelperText
-            sx={{ color: theme.palette.text.primary, fontSize: 16 }}
-            id="component-error-text"
-          >
-            {error ? "Invalid Name" : " "}
-          </FormHelperText>
-        </FormControl>
+        </>
+      ) : (
+        <>
+          {user &&
+          user.status === "authenticated" &&
+          (user.name === null ||
+            user.name === "" ||
+            user.name === undefined) ? (
+            <>
+              <Container>
+                <Header title="New Profile" />
+                <Description description="Please select a profile name that you wish to be shown on your posts and comments. This name will not be able to be changed once submitted. If your name has not already been used you will be redirected back to the site" />
+                <div style={{ display: "grid" }}>
+                  <FormControl
+                    sx={{
+                      display: "flex",
+                      flexGrow: 1,
+                      margin: "10px 0 10px 0",
+                    }}
+                    error={error}
+                  >
+                    <InputLabel htmlFor="name" shrink></InputLabel>
+                    <TextBox
+                      defaultValue=""
+                      placeHolder="profile name"
+                      id="name"
+                      autoFocus={true}
+                      handleChange={handleChange}
+                      inputProps={{ type: "text", maxLength: 60 }}
+                      onKeyPress={onKeyPress}
+                      error={error}
+                    />
+                    <FormHelperText
+                      sx={{ color: theme.palette.text.primary, fontSize: 16 }}
+                      id="component-error-text"
+                    >
+                      {error ? "Invalid Name" : " "}
+                    </FormHelperText>
+                  </FormControl>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleNameUpdate(name)}
-          disabled={name === "" ? true : false}
-          sx={{ marginTop: "10px" }}
-        >
-          Submit
-        </Button>
-      </div>
-    </Container>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleNameUpdate(name)}
+                    disabled={name === "" ? true : false}
+                    sx={{ marginTop: "10px" }}
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </Container>
+            </>
+          ) : (
+            <>
+              <Nav />
+              <Container>
+                <Header title="Access Denied" />
+              </Container>
+            </>
+          )}
+        </>
+      )}
+    </>
   );
 };
 
