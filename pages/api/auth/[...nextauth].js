@@ -6,6 +6,10 @@ import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
 
+const useSecureCookies = process.env.NEXTAUTH_URL.startsWith("https://");
+const cookiePrefix = useSecureCookies ? "__Secure-" : "";
+const hostName = new URL(process.env.NEXTAUTH_URL).hostname;
+
 export const authOptions = {
   // Configure one or more authentication providers
   adapter: MongoDBAdapter(clientPromise),
@@ -124,6 +128,19 @@ export const authOptions = {
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
     newUser: "/auth/new-user", // If set, new users will be directed here on first sign in
+  },
+
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+        domain: hostName == "localhost" ? hostName : "." + hostName,
+      },
+    },
   },
 
   // Callbacks are asynchronous functions you can use to control what happens

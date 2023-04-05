@@ -3,7 +3,6 @@ import { createPost } from "@utils/apiHelpers";
 import { useRouter } from "next/router";
 
 const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
-  console.log(name);
   const router = useRouter();
 
   const startPost = async () => {
