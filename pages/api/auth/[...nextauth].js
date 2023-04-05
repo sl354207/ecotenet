@@ -6,9 +6,17 @@ import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
 
-const useSecureCookies = process.env.NEXTAUTH_URL.startsWith("https://");
+let useSecureCookies;
+if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
+  useSecureCookies = false;
+} else {
+  useSecureCookies = true;
+}
+
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(process.env.NEXTAUTH_URL).hostname;
+// console.log(hostName);
+// console.log(useSecureCookies);
 
 export const authOptions = {
   // Configure one or more authentication providers
