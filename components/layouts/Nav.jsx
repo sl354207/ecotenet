@@ -370,7 +370,7 @@ const Nav = () => {
             variant="text"
             color="secondary"
             size={isTab ? "small" : "medium"}
-            onClick={() => router.push("http://147.182.209.91:4567/")}
+            onClick={() => router.push("https://forum.ecotenet.org/")}
           >
             Forum
           </Button>
@@ -506,7 +506,7 @@ const Nav = () => {
                         <MenuItem
                           onClick={() => {
                             setPopper(false);
-                            router.push("http://147.182.209.91:4567/");
+                            router.push("https://forum.ecotenet.org/");
                           }}
                           sx={{ color: theme.palette.secondary.main }}
                         >
