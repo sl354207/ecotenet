@@ -7,14 +7,17 @@ import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
 
 let useSecureCookies;
+let hostName;
 if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
   useSecureCookies = false;
+  hostName = "localhost";
 } else {
   useSecureCookies = true;
+  hostName = "ecotenet.org";
 }
 
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
-const hostName = new URL(process.env.NEXTAUTH_URL).hostname;
+
 // console.log(hostName);
 // console.log(useSecureCookies);
 
