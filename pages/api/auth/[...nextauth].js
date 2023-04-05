@@ -149,7 +149,7 @@ export const authOptions = {
         sameSite: "lax",
         path: "/",
         secure: useSecureCookies,
-        domain: hostName == "localhost" ? hostName : "." + hostName,
+        domain: hostName,
       },
     },
   },
