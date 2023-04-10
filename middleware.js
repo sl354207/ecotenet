@@ -1,4 +1,4 @@
-import { importSPKI, jwtVerify } from "jose";
+import { jwtVerify } from "jose";
 import { withAuth } from "next-auth/middleware";
 // More on how NextAuth.js middleware works: https://next-auth.js.org/configuration/nextjs#middleware
 
@@ -32,11 +32,20 @@ export default withAuth({
     // },
     decode: async ({ token }) => {
       if (!token) return null;
-      const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
+      // const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
 
-      const { payload } = await jwtVerify(token, publicKey, {
-        clockTolerance: 15,
+      // const { payload } = await jwtVerify(token, publicKey, {
+      //   clockTolerance: 15,
+      // });
+
+      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      const { payload, protectedHeader } = await jwtVerify(token, secret, {
+        issuer: "urn:example:issuer",
+        audience: "urn:example:audience",
       });
+
+      console.log(protectedHeader);
+      console.log(payload);
       return payload;
     },
   },

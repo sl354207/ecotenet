@@ -3,7 +3,7 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
 import { validEmail, validName } from "@utils/validationHelpers";
 import { randomBytes, randomUUID } from "crypto";
-import { SignJWT, importPKCS8, importSPKI, jwtVerify } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
@@ -37,7 +37,12 @@ const DEFAULT_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
 //   ["sign", "verify"]
 // );
 // console.log(secret);
-const alg = "RS256";
+// const secret = new TextEncoder().encode(
+//   'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
+// )
+const alg = "HS256";
+
+// const alg = "RS256";
 
 const now = () => (Date.now() / 1000) | 0;
 
@@ -146,26 +151,44 @@ export const authOptions = {
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour.
     encode: async ({ token = {}, maxAge = DEFAULT_MAX_AGE }) => {
-      const privateKey = await importPKCS8(process.env.JWT_SECRET, alg);
+      // const privateKey = await importPKCS8(process.env.JWT_SECRET, alg);
 
+      // const jwt = await new SignJWT(token)
+      //   .setProtectedHeader({ alg })
+      //   .setIssuedAt()
+      //   .setExpirationTime(now() + maxAge)
+      //   .setJti(randomUUID())
+      //   .sign(privateKey);
+      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      console.dir(secret);
       const jwt = await new SignJWT(token)
         .setProtectedHeader({ alg })
         .setIssuedAt()
+        .setIssuer("urn:example:issuer")
+        .setAudience("urn:example:audience")
         .setExpirationTime(now() + maxAge)
         .setJti(randomUUID())
-        .sign(privateKey);
-
-      // console.log(jwt);
+        .sign(secret);
+      console.log(jwt);
 
       return jwt;
     },
     decode: async ({ token }) => {
       if (!token) return null;
-      const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
+      // const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
 
-      const { payload } = await jwtVerify(token, publicKey, {
-        clockTolerance: 15,
+      // const { payload } = await jwtVerify(token, publicKey, {
+      //   clockTolerance: 15,
+      // });
+
+      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      const { payload, protectedHeader } = await jwtVerify(token, secret, {
+        issuer: "urn:example:issuer",
+        audience: "urn:example:audience",
       });
+
+      console.log(protectedHeader);
+      console.log(payload);
       return payload;
     },
   },
