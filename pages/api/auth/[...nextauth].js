@@ -1,5 +1,4 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-// import { key } from "@utils/authSecret";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
 import { validEmail, validName } from "@utils/validationHelpers";
 import { randomBytes, randomUUID } from "crypto";
@@ -24,25 +23,6 @@ const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 // console.log(useSecureCookies);
 
 const DEFAULT_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
-// const TEST_SECRET =
-//   "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2";
-
-// const key = createSecretKey(TEST_SECRET, "utf-8");
-// let key = await window.crypto.subtle.generateKey(
-//   {
-//     name: "HMAC",
-//     hash: { name: "SHA-512" },
-//   },
-//   true,
-//   ["sign", "verify"]
-// );
-// console.log(secret);
-// const secret = new TextEncoder().encode(
-//   'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
-// )
-const alg = "HS256";
-
-// const alg = "RS256";
 
 const now = () => (Date.now() / 1000) | 0;
 
@@ -160,16 +140,21 @@ export const authOptions = {
       //   .setJti(randomUUID())
       //   .sign(privateKey);
       const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-      console.dir(secret);
+
       const jwt = await new SignJWT(token)
-        .setProtectedHeader({ alg })
+        .setProtectedHeader({ alg: "HS512", typ: "JWT" })
         .setIssuedAt()
-        .setIssuer("urn:example:issuer")
-        .setAudience("urn:example:audience")
+        .setIssuer("https://www.ecotenet.org")
+        .setAudience([
+          "https://www.ecotenet.org",
+          "https://ecotenet.org",
+          "https://www.forum.ecotenet.org",
+          "https://forum.ecotenet.org",
+        ])
         .setExpirationTime(now() + maxAge)
         .setJti(randomUUID())
         .sign(secret);
-      console.log(jwt);
+      // console.log(jwt);
 
       return jwt;
     },
@@ -182,13 +167,18 @@ export const authOptions = {
       // });
 
       const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-      const { payload, protectedHeader } = await jwtVerify(token, secret, {
-        issuer: "urn:example:issuer",
-        audience: "urn:example:audience",
+      const { payload } = await jwtVerify(token, secret, {
+        issuer: "https://www.ecotenet.org",
+        audience: [
+          "https://www.ecotenet.org",
+          "https://ecotenet.org",
+          "https://www.forum.ecotenet.org",
+          "https://forum.ecotenet.org",
+        ],
       });
 
-      console.log(protectedHeader);
-      console.log(payload);
+      // console.log(protectedHeader);
+      // console.log(payload);
       return payload;
     },
   },

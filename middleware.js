@@ -2,13 +2,6 @@ import { jwtVerify } from "jose";
 import { withAuth } from "next-auth/middleware";
 // More on how NextAuth.js middleware works: https://next-auth.js.org/configuration/nextjs#middleware
 
-// const TEST_SECRET =
-//   "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2";
-
-// const key = createSecretKey(TEST_SECRET, "utf-8");
-
-const alg = "RS256";
-
 export default withAuth({
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
@@ -18,18 +11,7 @@ export default withAuth({
     // maxAge: 60 * 60 * 24 * 30,
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour.
-    // encode: async ({ token = {}, secret, maxAge = DEFAULT_MAX_AGE }) => {
-    //   const jwt = await new SignJWT(token)
-    //     .setProtectedHeader({ alg: "HS256" })
-    //     .setIssuedAt()
-    //     .setExpirationTime(now() + maxAge)
-    //     .setJti(randomUUID())
-    //     .sign(secret);
 
-    //   console.log(jwt);
-
-    //   return jwt;
-    // },
     decode: async ({ token }) => {
       if (!token) return null;
       // const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
@@ -39,13 +21,18 @@ export default withAuth({
       // });
 
       const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-      const { payload, protectedHeader } = await jwtVerify(token, secret, {
-        issuer: "urn:example:issuer",
-        audience: "urn:example:audience",
+      const { payload } = await jwtVerify(token, secret, {
+        issuer: "https://www.ecotenet.org",
+        audience: [
+          "https://www.ecotenet.org",
+          "https://ecotenet.org",
+          "https://www.forum.ecotenet.org",
+          "https://forum.ecotenet.org",
+        ],
       });
 
-      console.log(protectedHeader);
-      console.log(payload);
+      // console.log(protectedHeader);
+      // console.log(payload);
       return payload;
     },
   },
