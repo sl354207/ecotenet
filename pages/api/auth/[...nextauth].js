@@ -8,17 +8,17 @@ import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
 
-// let useSecureCookies;
-// let hostName;
-// if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
-//   useSecureCookies = false;
-//   hostName = "localhost";
-// } else {
-//   useSecureCookies = true;
-//   hostName = "ecotenet.org";
-// }
+let useSecureCookies;
+let hostName;
+if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
+  useSecureCookies = false;
+  hostName = "localhost";
+} else {
+  useSecureCookies = true;
+  hostName = "ecotenet.org";
+}
 
-// const cookiePrefix = useSecureCookies ? "__Secure-" : "";
+const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 
 // console.log(hostName);
 // console.log(useSecureCookies);
@@ -183,18 +183,18 @@ export const authOptions = {
     newUser: "/auth/new-user", // If set, new users will be directed here on first sign in
   },
 
-  // cookies: {
-  //   sessionToken: {
-  //     name: `${cookiePrefix}next-auth.session-token`,
-  //     options: {
-  //       httpOnly: true,
-  //       sameSite: "lax",
-  //       path: "/",
-  //       secure: useSecureCookies,
-  //       domain: hostName,
-  //     },
-  //   },
-  // },
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+        domain: hostName,
+      },
+    },
+  },
 
   // Callbacks are asynchronous functions you can use to control what happens
   // when an action is performed.
