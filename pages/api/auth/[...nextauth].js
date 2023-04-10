@@ -1,7 +1,9 @@
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+// import { key } from "@utils/authSecret";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
 import { validEmail, validName } from "@utils/validationHelpers";
-import { randomBytes } from "crypto";
+import { randomBytes, randomUUID } from "crypto";
+import { SignJWT, importPKCS8, importSPKI, jwtVerify } from "jose";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
@@ -20,6 +22,24 @@ const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 
 // console.log(hostName);
 // console.log(useSecureCookies);
+
+const DEFAULT_MAX_AGE = 30 * 24 * 60 * 60; // 30 days
+// const TEST_SECRET =
+//   "cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2";
+
+// const key = createSecretKey(TEST_SECRET, "utf-8");
+// let key = await window.crypto.subtle.generateKey(
+//   {
+//     name: "HMAC",
+//     hash: { name: "SHA-512" },
+//   },
+//   true,
+//   ["sign", "verify"]
+// );
+// console.log(secret);
+const alg = "RS256";
+
+const now = () => (Date.now() / 1000) | 0;
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -119,13 +139,35 @@ export const authOptions = {
   // https://next-auth.js.org/configuration/options#jwt
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
-    // secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',
-    // Set to true to use encryption (default: false)
-    // encryption: true,
+    // secret: secret,
+    // The maximum age of the NextAuth.js issued JWT in seconds.
+    // Defaults to `session.maxAge`.
+    maxAge: 60 * 60 * 24 * 30,
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour.
-    // encode: async ({ secret, token, maxAge }) => {},
-    // decode: async ({ secret, token, maxAge }) => {},
+    encode: async ({ token = {}, maxAge = DEFAULT_MAX_AGE }) => {
+      const privateKey = await importPKCS8(process.env.JWT_SECRET, alg);
+
+      const jwt = await new SignJWT(token)
+        .setProtectedHeader({ alg })
+        .setIssuedAt()
+        .setExpirationTime(now() + maxAge)
+        .setJti(randomUUID())
+        .sign(privateKey);
+
+      // console.log(jwt);
+
+      return jwt;
+    },
+    decode: async ({ token }) => {
+      if (!token) return null;
+      const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
+
+      const { payload } = await jwtVerify(token, publicKey, {
+        clockTolerance: 15,
+      });
+      return payload;
+    },
   },
 
   // You can define custom pages to override the built-in ones. These will be regular Next.js pages
