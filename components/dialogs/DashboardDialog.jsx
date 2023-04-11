@@ -7,14 +7,14 @@ import {
   DialogTitle,
 } from "@mui/material";
 import {
-  createPost,
   deleteComment,
   deletePost,
   deletePostMedia,
   deleteUser,
   deleteUserMedia,
   updatePost,
-} from "@utils/api-helpers";
+} from "@utils/apiHelpers";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const DashboardDialog = ({
@@ -22,15 +22,17 @@ const DashboardDialog = ({
   handleClose,
   contentType,
   action,
-  className,
   result,
   name,
   snackbar,
   setSnackbar,
   mutate,
+  fetchApi,
+  setSaved,
 }) => {
   const router = useRouter();
 
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -44,7 +46,7 @@ const DashboardDialog = ({
       break;
 
     case "Person":
-      item = "person";
+      item = "account";
 
       break;
     default:
@@ -68,13 +70,15 @@ const DashboardDialog = ({
 
       if (postResponse.ok) {
         if (mutate) {
-          mutate();
+          mutate(fetchApi);
         }
 
         handleClose();
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Post deleted successfully`,
         });
@@ -84,6 +88,8 @@ const DashboardDialog = ({
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
           message: `There was a problem deleting post. Please try again later`,
         });
@@ -93,6 +99,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting post media. Please try again later`,
       });
@@ -108,13 +116,15 @@ const DashboardDialog = ({
 
     if (commentResponse.ok) {
       if (mutate) {
-        mutate();
+        mutate(fetchApi);
       }
 
       handleClose();
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: `Comment deleted successfully`,
       });
@@ -124,6 +134,8 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
       });
@@ -140,24 +152,25 @@ const DashboardDialog = ({
       const userResponse = await deleteUser(deletion, "dashboard");
 
       if (userResponse.ok) {
-        if (mutate) {
-          mutate();
-        }
-
         handleClose();
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
-          message: `Person deleted successfully`,
+          message: "Account deleted successfully",
         });
+        signOut({ callbackUrl: "/" });
       }
       if (!userResponse.ok) {
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "error",
-          message: `There was a problem deleting person. Please try again later`,
+          message: `There was a problem deleting your account. Please try again later`,
         });
       }
     }
@@ -165,8 +178,10 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
-        message: `There was a problem deleting person. Please try again later`,
+        message: `There was a problem deleting your account. Please try again later`,
       });
     }
   };
@@ -184,11 +199,8 @@ const DashboardDialog = ({
       version: result.version,
       rows: result.rows,
       status: "published",
-      approved: "pending",
       updated: true,
       featured: result.featured,
-      date: new Date().toUTCString(),
-      feature: "false",
     };
 
     const postResponse = await updatePost(submission, "dashboard");
@@ -198,16 +210,23 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
-        message: `Post submitted successfully`,
+        message: "Success! Post will be made public upon approval",
       });
-      router.reload();
+      if (setSaved) {
+        setSaved(true);
+      }
+      // router.reload();
     }
 
     if (!postResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });
@@ -226,11 +245,8 @@ const DashboardDialog = ({
       version: result.version,
       rows: result.rows,
       status: "published",
-      approved: "pending",
       updated: false,
       featured: false,
-      date: new Date().toUTCString(),
-      feature: "false",
     };
 
     const postResponse = await updatePost(submission, "dashboard");
@@ -240,56 +256,21 @@ const DashboardDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
-        message: `Post submitted successfully`,
+        message: "Success! Post will be made public upon approval",
       });
-      router.reload();
+      if (setSaved) {
+        setSaved(true);
+      }
     }
     if (!postResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
-        severity: "error",
-        message: `There was a problem submitting post. Please try again later`,
-      });
-    }
-  };
-  const handlePublishNewDraft = async () => {
-    const submission = {
-      title: result.title,
-      name: name,
-      description: result.description,
-      category: result.category,
-      tags: result.tags,
-      ecoregions: result.ecoregions,
-      id: result.id,
-      version: result.version,
-      rows: result.rows,
-      status: "published",
-      approved: "pending",
-      updated: false,
-      featured: false,
-      date: new Date().toUTCString(),
-      feature: "false",
-    };
-
-    const postResponse = await createPost(submission);
-
-    if (postResponse.ok) {
-      handleClose();
-      const ID = await postResponse.json();
-      router.push(`/dashboard/posts/${ID.insertedId}`);
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        severity: "success",
-        message: "Post submitted successfully",
-      });
-    }
-    if (!postResponse.ok) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting post. Please try again later`,
       });
@@ -325,10 +306,6 @@ const DashboardDialog = ({
         await handlePublishSavedDraft();
 
         break;
-      case "create":
-        await handlePublishNewDraft();
-
-        break;
 
       default:
         break;
@@ -339,15 +316,19 @@ const DashboardDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
-        {action == "delete" ? "Delete" : "Submit"}
+      <DialogTitle
+        id="dashboard-dialog-title"
+        color="textPrimary"
+        align="center"
+      >
+        {action === "delete" ? "Delete" : "Submit"}
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="dashboard-dialog-text" color="textPrimary">
           Are you sure you want to {action} {item}?
         </DialogContentText>
       </DialogContent>
@@ -358,14 +339,14 @@ const DashboardDialog = ({
         </Button>
         <Button
           onClick={
-            action == "delete"
+            action === "delete"
               ? () => handleDeleteItem()
               : () => handleSubmitItem()
           }
           color="secondary"
           variant="outlined"
         >
-          {action == "delete" ? "delete" : "submit"}
+          {action === "delete" ? "delete" : "submit"}
         </Button>
       </DialogActions>
     </Dialog>

@@ -14,27 +14,41 @@ const CommentList = ({
   handleOpenDialog,
   handleOpenFlag,
   handleReply,
+  drawer,
 }) => {
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
     if (comment.comment_ref === "") {
       comment.comment_ref = comment._id;
       comment.date = new Date(comment.date);
+      comment.original_date = new Date(
+        parseInt(comment._id.substring(0, 8), 16) * 1000
+      );
       return comment;
     }
     comment.date = new Date(comment.date);
+    comment.original_date = new Date(
+      parseInt(comment._id.substring(0, 8), 16) * 1000
+    );
     return comment;
   });
   //sort comments so all comments are grouped together by ref(initial comment and replies) and then each group is sorted based on date created
+  // console.log(dateComments);
   const sortedComments = dateComments.sort(function (a, b) {
     return (
       a.comment_ref.localeCompare(b.comment_ref) ||
-      a.date.getTime() - b.date.getTime()
+      a.original_date.getTime() - b.original_date.getTime()
     );
   });
 
   return (
-    <List sx={{ backgroundColor: theme.palette.primary.main }}>
+    <List
+      sx={{
+        backgroundColor: drawer
+          ? theme.palette.primary.light
+          : theme.palette.primary.main,
+      }}
+    >
       <Button
         variant="outlined"
         color="secondary"
@@ -57,6 +71,8 @@ const CommentList = ({
           handleOpenDialog={handleOpenDialog}
           handleOpenFlag={handleOpenFlag}
           handleReply={handleReply}
+          key={comment._id}
+          drawer={drawer}
         />
       ))}
     </List>

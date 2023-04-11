@@ -1,7 +1,7 @@
-import AdminDrawer from "@components/AdminDrawer";
 import AdminDialog from "@components/dialogs/AdminDialog";
-import Header from "@components/Header";
-import Link from "@components/Link";
+import AdminDrawer from "@components/drawers/AdminDrawer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import {
   Button,
   CircularProgress,
@@ -10,16 +10,17 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useState } from "react";
-import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
+import useSWR, { useSWRConfig } from "swr";
 
 const adminPeople = () => {
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
+
+  const { mutate } = useSWRConfig();
 
   const handleOpenDialog = (action, type, result) => {
     setItem(result);
@@ -32,11 +33,17 @@ const adminPeople = () => {
     setDialog(false);
   };
 
-  const { data: results, mutate } = useSWR("/api/admin/users", fetcher);
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR("/api/admin/users", fetcher, {
+    shouldRetryOnError: false,
+  });
 
   let list;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -45,106 +52,138 @@ const adminPeople = () => {
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
-  } else if (Array.isArray(results) && results.length == 0) {
-    list = (
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        no results
-      </Typography>
-    );
   } else {
-    list = (
-      <List>
-        {results.map((result) => {
-          return (
-            <>
-              <ListItem
-                key={result._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: "start",
-                  textTransform: "none",
-                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-                  margin: "20px auto",
-                  borderRadius: "10px",
-                }}
-              >
-                <div style={{ display: "flow-root", flexGrow: 1 }}>
-                  <Link href={`/admin/people/${result.name}`} underline="hover">
-                    {result.name}
-                  </Link>
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate("/api/admin/users")}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(results) && results.length === 0) {
+        list = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else {
+        list = (
+          <List>
+            {results.map((result) => {
+              return (
+                <>
+                  <ListItem
+                    key={result._id}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "start",
+                      textTransform: "none",
+                      border: `1px solid ${alpha(
+                        theme.palette.secondary.main,
+                        1
+                      )}`,
+                      margin: "20px auto",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <div style={{ display: "flow-root", flexGrow: 1 }}>
+                      <Link
+                        href={`/admin/people/${result.name}`}
+                        underline="hover"
+                      >
+                        {result.name}
+                      </Link>
 
-                  <Typography>bio: {result.bio}</Typography>
-                  <Typography sx={{ overflowWrap: "anywhere" }}>
-                    email: {result.email}
-                  </Typography>
-                  <Typography>
-                    website:{" "}
-                    <Link
-                      href={result.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      underline="hover"
-                    >
-                      {result.website}
-                    </Link>
-                  </Typography>
-                  <Typography>
-                    socials:{" "}
-                    {result.socials.map((social) => (
-                      <>
+                      <Typography>bio: {result.bio}</Typography>
+                      <Typography sx={{ overflowWrap: "anywhere" }}>
+                        email: {result.email}
+                      </Typography>
+                      <Typography>
+                        website:{" "}
                         <Link
-                          href={social}
+                          href={result.website}
                           target="_blank"
                           rel="noopener noreferrer"
                           underline="hover"
                         >
-                          {social}
+                          {result.website}
                         </Link>
-                        ,{" "}
-                      </>
-                    ))}
-                  </Typography>
+                      </Typography>
+                      <Typography>
+                        socials:{" "}
+                        {result.socials.map((social) => (
+                          <>
+                            <Link
+                              href={social}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              underline="hover"
+                            >
+                              {social}
+                            </Link>
+                            ,{" "}
+                          </>
+                        ))}
+                      </Typography>
 
-                  <Typography>denials: {result.denials}</Typography>
-                </div>
+                      <Typography>denials: {result.denials}</Typography>
+                    </div>
 
-                <div style={{ display: "grid" }}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() =>
-                      handleOpenDialog("Approve", "Person", result)
-                    }
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={{ marginTop: "4px" }}
-                    onClick={() => handleOpenDialog("Deny", "Person", result)}
-                  >
-                    Deny
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    sx={{
-                      marginTop: "4px",
-                      color: "#fc7ebf",
-                      borderColor: "#fc7ebf",
-                    }}
-                    onClick={() => handleOpenDialog("Delete", "Person", result)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </ListItem>
-            </>
-          );
-        })}
-      </List>
-    );
+                    <div style={{ display: "grid" }}>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() =>
+                          handleOpenDialog("Approve", "Person", result)
+                        }
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={{ marginTop: "4px" }}
+                        onClick={() =>
+                          handleOpenDialog("Deny", "Person", result)
+                        }
+                      >
+                        Deny
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={{
+                          marginTop: "4px",
+                          color: "#fc7ebf",
+                          borderColor: "#fc7ebf",
+                        }}
+                        onClick={() =>
+                          handleOpenDialog("Delete", "Person", result)
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </ListItem>
+                </>
+              );
+            })}
+          </List>
+        );
+      }
+    }
   }
 
   return (

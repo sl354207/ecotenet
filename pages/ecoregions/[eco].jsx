@@ -1,38 +1,50 @@
-// UPDATE TO ECOREGION INDEX OR SOMETHING
-import Flag from "@components/dialogs/Flag";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import { useUserContext } from "@components/UserContext";
+import { useHomepageContext } from "@components/context/HomepageContext";
+import { useUserContext } from "@components/context/UserContext";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Container, IconButton, Typography } from "@mui/material";
-import { getEcoregionById } from "@utils/mongodb/helpers";
+import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
+import { validEco } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const eco = ({ wiki, ecoName, id }) => {
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
+
+const eco = ({ wiki, eco, id }) => {
   const router = useRouter();
   const { user } = useUserContext();
-  // console.log(userName);
+
   let status;
-  if (user == undefined) {
+  if (user === undefined) {
     status = "loading";
   } else {
     status = user.status;
   }
 
+  const { setEcoFilter } = useHomepageContext();
+
+  useEffect(() => {
+    sessionStorage.setItem("ecoregion", JSON.stringify(eco));
+    setEcoFilter(eco);
+  }, []);
+
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);
@@ -74,10 +86,10 @@ const eco = ({ wiki, ecoName, id }) => {
       if (domNode.attribs && domNode.attribs.class === "noviewer") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "gallerybox") {
+      if (domNode.attribs && domNode.attribs.class === "gallerybox") {
         return <></>;
       }
-      if (domNode.attribs && domNode.attribs.class == "metadata mbox-small") {
+      if (domNode.attribs && domNode.attribs.class === "metadata mbox-small") {
         return <></>;
       }
       if (
@@ -184,90 +196,108 @@ const eco = ({ wiki, ecoName, id }) => {
 
   return (
     <>
-      <Container>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              marginRight: "auto",
-              visibility: "hidden",
-              minWidth: 30,
-            }}
-          ></div>
-          <Header
-            title={`Eco-${id}: ${ecoName}`}
-            sx={{ marginBottom: "40px" }}
-          />
-          <IconButton
-            sx={{
-              display: "flex",
-              marginLeft: "auto",
-              marginTop: "auto",
-              marginBottom: "auto",
-            }}
-            color="inherit"
-            aria-label="flag"
-            size="small"
-            onClick={() => handleOpenDialog()}
-          >
-            <FlagIcon />
-          </IconButton>
-        </div>
-
-        {!wiki ? (
-          <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
-            We currently don't have a summary of this ecoregion. If you want to
-            help us out you can create a wikipedia page for the ecoregion.
-          </Typography>
-        ) : (
-          <>
-            <Typography variant="h5" sx={{ marginTop: "10px" }}>
-              Source:{" "}
-              <Link
-                href={`https://en.wikipedia.org/wiki/${ecoName.replace(
-                  " ",
-                  "_"
-                )}?redirect=true`}
-                target="_blank"
-                rel="noopener noreferrer"
-                underline="hover"
+      {!eco || wiki === "error" ? (
+        <>
+          <Container>
+            <Header title="Something went wrong. Please try again later" />
+          </Container>
+          <Footer />
+        </>
+      ) : (
+        <>
+          <Container>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  marginRight: "auto",
+                  visibility: "hidden",
+                  minWidth: 30,
+                }}
+              ></div>
+              <Header
+                title={`Eco-${id}: ${eco.name}`}
+                sx={{ marginBottom: "40px" }}
+              />
+              <IconButton
+                sx={{
+                  display: "flex",
+                  marginLeft: "auto",
+                  marginTop: "auto",
+                  marginBottom: "auto",
+                }}
+                color="inherit"
+                aria-label="flag"
+                size="small"
+                onClick={() => handleOpenDialog()}
               >
-                Wikipedia
-              </Link>
-            </Typography>
-            {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-            {wiki.remaining.sections.map((section) => {
-              if (section.anchor == "Gallery") {
-                return <></>;
-              } else if (section.toclevel == 2) {
-                return (
-                  <>
-                    <h2>{section.line}</h2>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              } else {
-                return (
-                  <>
-                    <h1>{section.line}</h1>
-                    {parse(DOMPurify.sanitize(section.text), options)}
-                  </>
-                );
-              }
-            })}
-          </>
-        )}
+                <FlagIcon />
+              </IconButton>
+            </div>
 
-        {/* UPDATE */}
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="ecoregion"
-          result={{ _id: id }}
-          name={user && user.name}
-        />
-      </Container>
-      <Footer />
+            {!wiki ? (
+              <Typography
+                variant="h6"
+                align="justify"
+                sx={{ marginTop: "20px" }}
+              >
+                We currently don&apos;t have a summary of this ecoregion. If you
+                want to help us out you can create a wikipedia page for the
+                ecoregion.
+              </Typography>
+            ) : (
+              <>
+                <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                  Source:{" "}
+                  <Link
+                    href={`https://en.wikipedia.org/wiki/${eco.name.replace(
+                      / /g,
+                      "_"
+                    )}?redirect=true`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    Wikipedia
+                  </Link>
+                </Typography>
+                {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
+                {wiki.remaining.sections.map((section) => {
+                  if (section.anchor === "Gallery") {
+                    return <></>;
+                  } else if (section.toclevel === 2) {
+                    return (
+                      <>
+                        <h2>{section.line}</h2>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <h1>{section.line}</h1>
+                        {parse(DOMPurify.sanitize(section.text), options)}
+                      </>
+                    );
+                  }
+                })}
+              </>
+            )}
+
+            {/* UPDATE */}
+            {dialog && (
+              <DynamicFlag
+                open={dialog}
+                handleClose={() => handleCloseDialog()}
+                contentType="ecoregion"
+                result={{ _id: id }}
+                name={user && user.name}
+              />
+            )}
+          </Container>
+          <Footer />
+        </>
+      )}
     </>
   );
 };
@@ -276,88 +306,94 @@ const eco = ({ wiki, ecoName, id }) => {
 export const getServerSideProps = async (context) => {
   // console.log(context);
   const id = context.params.eco;
-  // const id = context.query.id;
 
-  const eco = await getEcoregionById(id);
-  // const ecoName = eco.name
-  const unSlug = eco.name.replace(" ", "_");
-  // console.log(typeof eco.name);
+  if (validEco(id)) {
+    try {
+      const eco = await getEcoregionById(id);
 
-  let wikiRes;
-  let wiki;
+      if (eco === null) {
+        return {
+          notFound: true,
+        };
+      } else {
+        const unSlug = eco.name.replace(/ /g, "_");
 
-  switch (eco.url) {
-    case undefined:
-      wikiRes = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`,
-        {
-          method: "GET",
-          headers: {
-            // Authorization:
-            //   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJmMWJmYjJlYmRjMjdjNDMxYjdiZDIzNjI0MWZhMGZkOSIsImp0aSI6IjdkMmI3NmZkNDFjNWU4NTcwZDgwYzY2MTgwOGMyZDI2Y2NjNzE0YjMwODJkODI1N2M5N2Q0NjVhZWQwMGMwNmZiOTljYTY5OGFkZWY4ZWY2IiwiaWF0IjoxNjQzMzA5NDAyLCJuYmYiOjE2NDMzMDk0MDIsImV4cCI6MzMyMDAyMTgyMDIsInN1YiI6IjY4Nzc3MDgxIiwiaXNzIjoiaHR0cHM6XC9cL21ldGEud2lraW1lZGlhLm9yZyIsInJhdGVsaW1pdCI6eyJyZXF1ZXN0c19wZXJfdW5pdCI6NTAwMCwidW5pdCI6IkhPVVIifSwic2NvcGVzIjpbImJhc2ljIl19.bIwXFgnWnc3_DNAkcBucrzwVnMAmQHKt_eoZuAwmYMZ7dvobReLNxP28D8C_VfAP7EOSSP7PmrkHAeQUDlY_qOXpLLe8Ls1FdTVmjFeXAQFm3dBtVDJe9FDc_Lnkqfb0zqV_OYZRdm_oDIqu16sItrhqQEkxAGQxdpaObWPQO4A8XcRhe0YrE82uFxTydTOO2RG910x9AkctxeyslzItr-qB5Gdz7pgua3YLaNSB0zcK0_D98_oSw61r7OQDT0L2xI_3DbIBbPlI1Lz0hbQVpzlEDxXp9v6GHFWu4VXaO27Mrr3XRegyo0tstid-wLtvjSdxphd8mdnrYhxT3PX9UZV5gotqC3BCnJlDdev_4q9QZjY-5n7aJbPSHC43aauZfUHrKDCp5y_ocxxS5eisG7ptqMRE1kflWIzLpzdDi1_UkBz-xqMuTnBVKNCf7aY45boDYI-aNfJt0nF2ujKSB76gsSI0-AyKJUBYj7PDvGcc5tyx4jK0EZzihCK3itTwhJE7JBfgCCyvgXtpQ8hGHSJyMnYBZci_ejwOK4-HwSIGhZV2QF0sJZat80LPq6vzt5omYnNZ9qUO02n7t_zegCZM-kwf0roOXhBgMSVkhbzConYTvh4sQPi1_LP77rbnPM96rWMF9hpCICB6Z2-e2KvSIJZwgA8rRx-nhJBAvq8",
-            "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
-          },
+        let wikiRes;
+        let wiki;
+
+        switch (eco.url) {
+          case undefined:
+            wikiRes = await fetch(
+              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`,
+              {
+                method: "GET",
+                headers: {
+                  "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+                },
+              }
+            );
+            if (wikiRes.ok) {
+              wiki = await wikiRes.json();
+            } else {
+              wiki = "error";
+            }
+
+            break;
+          case "undefined":
+            wiki = undefined;
+
+            break;
+
+          default:
+            wikiRes = await fetch(
+              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
+                / /g,
+                "_"
+              )}?redirect=true`,
+              {
+                method: "GET",
+                headers: {
+                  "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+                },
+              }
+            );
+
+            if (wikiRes.ok) {
+              wiki = await wikiRes.json();
+            } else {
+              wiki = "error";
+            }
+
+            break;
         }
-      );
 
-      wiki = await wikiRes.json();
+        return {
+          props: {
+            wiki:
+              wiki === undefined || wiki.title === "Not found."
+                ? null
+                : JSON.parse(JSON.stringify(wiki)),
 
-      break;
-    case "undefined":
-      wiki = undefined;
-
-      break;
-
-    default:
-      wikiRes = await fetch(
-        `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
-          " ",
-          "_"
-        )}?redirect=true`,
-        {
-          method: "GET",
-          headers: {
-            // Authorization:
-            //   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJmMWJmYjJlYmRjMjdjNDMxYjdiZDIzNjI0MWZhMGZkOSIsImp0aSI6IjdkMmI3NmZkNDFjNWU4NTcwZDgwYzY2MTgwOGMyZDI2Y2NjNzE0YjMwODJkODI1N2M5N2Q0NjVhZWQwMGMwNmZiOTljYTY5OGFkZWY4ZWY2IiwiaWF0IjoxNjQzMzA5NDAyLCJuYmYiOjE2NDMzMDk0MDIsImV4cCI6MzMyMDAyMTgyMDIsInN1YiI6IjY4Nzc3MDgxIiwiaXNzIjoiaHR0cHM6XC9cL21ldGEud2lraW1lZGlhLm9yZyIsInJhdGVsaW1pdCI6eyJyZXF1ZXN0c19wZXJfdW5pdCI6NTAwMCwidW5pdCI6IkhPVVIifSwic2NvcGVzIjpbImJhc2ljIl19.bIwXFgnWnc3_DNAkcBucrzwVnMAmQHKt_eoZuAwmYMZ7dvobReLNxP28D8C_VfAP7EOSSP7PmrkHAeQUDlY_qOXpLLe8Ls1FdTVmjFeXAQFm3dBtVDJe9FDc_Lnkqfb0zqV_OYZRdm_oDIqu16sItrhqQEkxAGQxdpaObWPQO4A8XcRhe0YrE82uFxTydTOO2RG910x9AkctxeyslzItr-qB5Gdz7pgua3YLaNSB0zcK0_D98_oSw61r7OQDT0L2xI_3DbIBbPlI1Lz0hbQVpzlEDxXp9v6GHFWu4VXaO27Mrr3XRegyo0tstid-wLtvjSdxphd8mdnrYhxT3PX9UZV5gotqC3BCnJlDdev_4q9QZjY-5n7aJbPSHC43aauZfUHrKDCp5y_ocxxS5eisG7ptqMRE1kflWIzLpzdDi1_UkBz-xqMuTnBVKNCf7aY45boDYI-aNfJt0nF2ujKSB76gsSI0-AyKJUBYj7PDvGcc5tyx4jK0EZzihCK3itTwhJE7JBfgCCyvgXtpQ8hGHSJyMnYBZci_ejwOK4-HwSIGhZV2QF0sJZat80LPq6vzt5omYnNZ9qUO02n7t_zegCZM-kwf0roOXhBgMSVkhbzConYTvh4sQPi1_LP77rbnPM96rWMF9hpCICB6Z2-e2KvSIJZwgA8rRx-nhJBAvq8",
-            "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+            eco: JSON.parse(JSON.stringify(eco)),
+            id: id,
           },
-        }
-      );
-
-      wiki = await wikiRes.json();
-
-      break;
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {
+          wiki: null,
+          eco: null,
+          id: null,
+        },
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
   }
-
-  // console.log(objectData);
-
-  // const id = context.params.id;
-  // const wikiRes = await fetch(!eco.url ? `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`: `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${ecoName}?redirect=true`
-  //   ,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       // Authorization:
-  //       //   "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJmMWJmYjJlYmRjMjdjNDMxYjdiZDIzNjI0MWZhMGZkOSIsImp0aSI6IjdkMmI3NmZkNDFjNWU4NTcwZDgwYzY2MTgwOGMyZDI2Y2NjNzE0YjMwODJkODI1N2M5N2Q0NjVhZWQwMGMwNmZiOTljYTY5OGFkZWY4ZWY2IiwiaWF0IjoxNjQzMzA5NDAyLCJuYmYiOjE2NDMzMDk0MDIsImV4cCI6MzMyMDAyMTgyMDIsInN1YiI6IjY4Nzc3MDgxIiwiaXNzIjoiaHR0cHM6XC9cL21ldGEud2lraW1lZGlhLm9yZyIsInJhdGVsaW1pdCI6eyJyZXF1ZXN0c19wZXJfdW5pdCI6NTAwMCwidW5pdCI6IkhPVVIifSwic2NvcGVzIjpbImJhc2ljIl19.bIwXFgnWnc3_DNAkcBucrzwVnMAmQHKt_eoZuAwmYMZ7dvobReLNxP28D8C_VfAP7EOSSP7PmrkHAeQUDlY_qOXpLLe8Ls1FdTVmjFeXAQFm3dBtVDJe9FDc_Lnkqfb0zqV_OYZRdm_oDIqu16sItrhqQEkxAGQxdpaObWPQO4A8XcRhe0YrE82uFxTydTOO2RG910x9AkctxeyslzItr-qB5Gdz7pgua3YLaNSB0zcK0_D98_oSw61r7OQDT0L2xI_3DbIBbPlI1Lz0hbQVpzlEDxXp9v6GHFWu4VXaO27Mrr3XRegyo0tstid-wLtvjSdxphd8mdnrYhxT3PX9UZV5gotqC3BCnJlDdev_4q9QZjY-5n7aJbPSHC43aauZfUHrKDCp5y_ocxxS5eisG7ptqMRE1kflWIzLpzdDi1_UkBz-xqMuTnBVKNCf7aY45boDYI-aNfJt0nF2ujKSB76gsSI0-AyKJUBYj7PDvGcc5tyx4jK0EZzihCK3itTwhJE7JBfgCCyvgXtpQ8hGHSJyMnYBZci_ejwOK4-HwSIGhZV2QF0sJZat80LPq6vzt5omYnNZ9qUO02n7t_zegCZM-kwf0roOXhBgMSVkhbzConYTvh4sQPi1_LP77rbnPM96rWMF9hpCICB6Z2-e2KvSIJZwgA8rRx-nhJBAvq8",
-  //       "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
-  //     },
-  //   }
-  // );
-
-  // const wiki = await wikiRes.json();
-  // console.log(eco.name);
-  // console.log(id);
-
-  return {
-    props: {
-      wiki:
-        wiki == undefined || wiki.title == "Not found."
-          ? null
-          : JSON.parse(JSON.stringify(wiki)),
-      ecoName: eco.name,
-      id: id,
-    },
-  };
 };
 
 export default eco;

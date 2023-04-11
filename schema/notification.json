@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "maxLength": 60,
+            "description": "must be a string"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "must be a string"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "must be a string"
+          },
+          "viewed": {
+            "type": "boolean",
+            "description": "must be a boolean"
+          },
+          "ref": {
+              "type": "string",
+              "minLength": 24,
+              "maxLength": 24,
+              "description": "must be a string",
+              "pattern": "^[A-Za-z0-9]*$"
+          },
+          "add_info": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200,
+            "description": "must be a string"
+          },
+      "date": {
+        "type": "string",
+        "maxLength": 60,
+        "description": "must be a string"
+      }
+    },
+    "additionalProperties": false
+}

@@ -1,4 +1,4 @@
-import { useSnackbarContext } from "@components/SnackbarContext";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
 import {
   Button,
   Dialog,
@@ -7,22 +7,23 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { createComment, updatePost } from "@utils/api-helpers";
-import { useRouter } from "next/router";
+import { createComment, updateVote } from "@utils/apiHelpers";
 
 const ClientDialog = ({
   open,
   handleClose,
   contentType,
-  className,
   result,
   mutate,
   closeForm,
   post_id,
   name,
+  setVote,
+  setLimit,
 }) => {
-  const router = useRouter();
   const { snackbar, setSnackbar } = useSnackbarContext();
+
+  // used to display proper text in dialog
   let item;
 
   switch (contentType) {
@@ -44,10 +45,7 @@ const ClientDialog = ({
       name: name,
       post_id: post_id,
       comment_ref: result.comment_ref,
-      date: new Date().toUTCString(),
       text: result.text,
-      approved: "pending",
-      updated: false,
     };
 
     const createResponse = await createComment(submission);
@@ -61,14 +59,18 @@ const ClientDialog = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
-        message: "Comment submitted successfully",
+        message: "Success! Comment will be visible upon approval",
       });
     }
     if (!createResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message:
           "There was a problem submitting comment. Please try again later",
@@ -80,46 +82,57 @@ const ClientDialog = ({
     const submission = {
       _id: post_id,
       name: name,
-      count: result.count,
-      voters: [...result.voters, name],
+      vote: result.vote,
     };
-    const updateResponse = await updatePost(submission, "dashboard");
+    const updateResponse = await updateVote(submission);
 
     if (updateResponse.ok) {
       handleClose();
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
-        message: `${contentType} submit successfully`,
+        message: `${contentType} submitted successfully`,
       });
-      mutate();
-    }
-
-    if (!updateResponse.ok) {
+      mutate(`/api/votes/${post_id}`);
+      setVote(0);
+      setLimit(0);
+    } else if (updateResponse.status === 406) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
+        severity: "error",
+        message: `You have already voted on this post.`,
+      });
+    } else {
+      setSnackbar({
+        ...snackbar,
+        open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem submitting ${item}. Please try again later`,
       });
     }
-    // }
   };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="client-dialog-title" color="textPrimary" align="center">
         {contentType}
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="client-dialog-text" color="textPrimary">
           Are you sure you want to submit {item}?
         </DialogContentText>
       </DialogContent>
@@ -134,7 +147,7 @@ const ClientDialog = ({
         </Button>
         <Button
           onClick={
-            contentType == "Vote"
+            contentType === "Vote"
               ? () => handleVoteSubmit()
               : () => handleCommentSubmit()
           }

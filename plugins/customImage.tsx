@@ -32,6 +32,7 @@ const customImage: CellPlugin<Data> = {
     width: undefined,
     height: undefined
   }),
+  isInlineable: true,
   
    // the Renderer displays the output of the plugin.
   Renderer: ({ data, isPreviewMode }) => (
@@ -73,7 +74,6 @@ const customImage: CellPlugin<Data> = {
           },
           width: {
             type: 'number',
-            
             uniforms: {
               component: ImageWidth
             }
@@ -82,13 +82,9 @@ const customImage: CellPlugin<Data> = {
             type: 'number',
             uniforms: {
               component: ImageHeight
-              
             },
-           
           },
-          
         },
-       
       },
     },
   },{
@@ -98,10 +94,8 @@ const customImage: CellPlugin<Data> = {
       columnCount: 1,
       schema: {
         properties: {
-          
           caption: {
             type: 'string',
-            
             uniforms: {
               component: ImageCaption
             }
@@ -110,23 +104,18 @@ const customImage: CellPlugin<Data> = {
             type: 'string',
             uniforms: {
               component: ImageCitation
-              
             },
-           
           },
-          
           description: {
             type: 'string',
             uniforms: {
               component: ImageDescription
-              
             },
           },
         },
-        
+        // required: ['citation'],
       },
     },
-    
 }]
 };
 

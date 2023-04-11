@@ -1,5 +1,5 @@
-import Link from "@components/Link";
-import TextBox from "@components/TextBox";
+import TextBox from "@components/inputFields/TextBox";
+import Link from "@components/layouts/Link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
@@ -8,7 +8,7 @@ import {
   InputLabel,
   useMediaQuery,
 } from "@mui/material";
-import { updateComment } from "@utils/api-helpers";
+import { updateComment } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import { useState } from "react";
 
@@ -37,20 +37,19 @@ const DashboardComment = ({
     const comment = {
       id: result._id,
       name: name,
-      date: new Date().toUTCString(),
       text: commentValue,
-      approved: "pending",
-      updated: true,
     };
 
     const updateResponse = await updateComment(comment, "dashboard");
     if (updateResponse.ok) {
-      mutate();
+      mutate(`/api/dashboard/comments?name=${name}`);
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
-        message: "Comment updated successfully",
+        message: "Success! Comment will be visible upon approval",
       });
       setCommentValue("");
     }
@@ -58,6 +57,8 @@ const DashboardComment = ({
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem saving comment. Please try again later",
       });
@@ -70,13 +71,15 @@ const DashboardComment = ({
       Approved: {result.approved}
       <div style={{ display: "flex", flexGrow: 1 }}>
         <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
-          <InputLabel shrink htmlFor="dashboardcomment"></InputLabel>
+          <InputLabel shrink htmlFor="dashboard-comment"></InputLabel>
           <TextBox
             defaultValue={result.text}
             placeHolder={null}
-            id="dashboardcomment"
+            id="dashboard-comment"
             handleChange={handleCommentChange}
             autoFocus={false}
+            multiline={true}
+            inputProps={{ type: "text", maxLength: 5000 }}
           />
         </FormControl>
         {isMobile ? (
@@ -90,7 +93,7 @@ const DashboardComment = ({
             >
               View
             </Link>
-            {commentValue != "" ? (
+            {commentValue !== "" ? (
               <Button
                 variant="contained"
                 color="secondary"
@@ -120,18 +123,6 @@ const DashboardComment = ({
               </Button>
             )}
 
-            {/* <Button
-              variant="contained"
-              color="secondary"
-              sx={{
-                margin: "4px 0px",
-                minWidth: "fit-content",
-                justifyContent: "start",
-              }}
-              startIcon={<DeleteIcon />}
-              size="small"
-              onClick={handleDeleteOpen}
-            ></Button> */}
             <IconButton
               edge="start"
               color="inherit"
@@ -153,35 +144,24 @@ const DashboardComment = ({
             >
               View Post
             </Link>
-            {commentValue != "" ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "start",
-                }}
-                size="small"
-                onClick={() => handleCommentUpdate(commentValue)}
-              >
-                Save Change
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "start",
-                }}
-                size="small"
-                disabled
-              >
-                Save Change
-              </Button>
-            )}
+
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{
+                margin: "4px 0px",
+                minWidth: "fit-content",
+                justifyContent: "start",
+              }}
+              size="small"
+              onClick={() => handleCommentUpdate(commentValue)}
+              disabled={
+                // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
+                commentValue.trim().length === 0 || commentValue === result.text
+              }
+            >
+              Save Change
+            </Button>
 
             <Button
               variant="contained"

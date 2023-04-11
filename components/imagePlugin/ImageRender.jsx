@@ -1,41 +1,26 @@
-import Link from "@components/Link";
 import { Typography } from "@mui/material";
 import { lazyLoad } from "@react-page/editor";
-import Image from "next/image";
+import { validImagePluginURL } from "@utils/validationHelpers";
+import Image from "next/legacy/image";
 const ImageIcon = lazyLoad(() => import("@mui/icons-material/Landscape"));
 
 // ImageRender takes in data as prop passed down from testPlugin
 const ImageRender = ({ data, preview }) => {
   // console.log(data);
   // console.log(preview);
-  const isValidHttpUrl = (string) => {
-    if (/^blob:https?:\/\//.test(string)) {
-      // console.log("true blob");
-      return true;
-    } else {
-      // console.log(
-      //   /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-      //     string
-      //   )
-      // );
-      return /^https?:\/\/.+\.(jpeg|jpg|jfif|pjpeg|pjpgif|png|apng|svg|webp|avif)$/.test(
-        string
-      );
-    }
-  };
 
   return (
     <div
       style={
         data.image.url &&
         data.image.url.startsWith("blob:") &&
-        data.image.saved == false &&
+        data.image.saved === false &&
         !preview
           ? { border: "2px solid #ffa726", borderRadius: "4px" }
           : null
       }
     >
-      {isValidHttpUrl(data.image.url) ? (
+      {validImagePluginURL(data.image.url) ? (
         <>
           {data.image.url.startsWith("https://eco-media-bucket.s3") ? (
             <div
@@ -64,7 +49,9 @@ const ImageRender = ({ data, preview }) => {
                   }}
                 >
                   {data.caption && (
-                    <Typography variant="caption">{data.caption}.</Typography>
+                    <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                      {data.caption}.
+                    </Typography>
                   )}{" "}
                   {data.citation && (
                     <Typography variant="caption">{data.citation}</Typography>
@@ -175,19 +162,12 @@ const ImageRender = ({ data, preview }) => {
                   }}
                 >
                   {data.caption && (
-                    <Typography variant="caption">{data.caption}.</Typography>
+                    <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                      {data.caption}.
+                    </Typography>
                   )}{" "}
                   {data.citation && (
-                    <Typography variant="caption">{data.citation}</Typography>
-                  )}
-                  {!data.image.url.startsWith("blob:") && (
-                    <Link
-                      href={data.image.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Link
-                    </Link>
+                    <Typography variant="caption">{data.citation}. </Typography>
                   )}
                 </figcaption>
               </figure>

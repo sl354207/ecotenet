@@ -1,17 +1,22 @@
-import Flag from "@components/dialogs/Flag";
-import Footer from "@components/Footer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import PostList from "@components/PostList";
-import { useUserContext } from "@components/UserContext";
+import { useUserContext } from "@components/context/UserContext";
+import Footer from "@components/layouts/Footer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
+import PostList from "@components/layouts/PostList";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Container, IconButton, Typography } from "@mui/material";
-import { getPerson, getProfilePosts } from "@utils/mongodb/helpers";
+import { Button, Container, IconButton, Typography } from "@mui/material";
+import { getPerson, getProfilePosts } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-// pass in post and comments as props and create page for each post with corresponding comments
+const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
+  ssr: false,
+});
+
 const person = ({ person, posts }) => {
   const router = useRouter();
   const { user } = useUserContext();
@@ -19,11 +24,11 @@ const person = ({ person, posts }) => {
   const [dialog, setDialog] = useState(false);
 
   const handleOpenDialog = () => {
-    if (user.status == "unauthenticated" || user.status == "loading") {
+    if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
     }
-    if (user.status == "authenticated") {
-      if (user.name == null || user.name == "" || user.name == undefined) {
+    if (user.status === "authenticated") {
+      if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
         setDialog(true);
@@ -58,25 +63,49 @@ const person = ({ person, posts }) => {
             <FlagIcon />
           </IconButton>
         </div>
+        <Button
+          href={`/tip?q=${person.name}`}
+          color="secondary"
+          variant="outlined"
+          sx={{
+            display: "flex",
+            marginInline: "auto",
+            marginTop: "10px",
+            maxWidth: "fit-content",
+            "& .MuiButton-startIcon": {
+              marginRight: "0px",
+            },
+          }}
+          size="medium"
+          startIcon={<AttachMoneyIcon />}
+        >
+          tip
+        </Button>
 
-        {person.approved == "true" && (
+        {person.approved === "true" && (
           <div style={{ margin: "16px" }}>
             {person.bio !== "" && (
               <>
-                <Typography gutterBottom>Bio:</Typography>
+                <Typography variant="h6">Bio:</Typography>
                 <Typography gutterBottom variant="body1">
                   {person.bio}
                 </Typography>
               </>
             )}
             {person.website !== "" && (
-              <Typography gutterBottom>
+              <Typography variant="h6">
                 Personal Website:{" "}
-                <Link underline="hover">{person.website}</Link>
+                <Link
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${person.website}`}
+                >
+                  {person.website}
+                </Link>
               </Typography>
             )}
             {Array.isArray(person.socials) && person.socials.length > 0 && (
-              <Typography sx={{ display: "grid" }} gutterBottom>
+              <Typography sx={{ display: "grid" }} variant="h6">
                 Socials:{" "}
                 {person.socials.map((social) => (
                   <Link
@@ -84,6 +113,7 @@ const person = ({ person, posts }) => {
                     rel="noopener noreferrer"
                     href={`${social}`}
                     underline="hover"
+                    key={social}
                   >
                     {social}
                   </Link>
@@ -92,37 +122,65 @@ const person = ({ person, posts }) => {
             )}
           </div>
         )}
+        <Typography variant="h6" sx={{ marginLeft: "16px" }}>
+          Posts:
+        </Typography>
+        {posts && <PostList posts={posts} />}
 
-        <PostList posts={posts} />
-        <Flag
-          open={dialog}
-          handleClose={() => handleCloseDialog()}
-          contentType="profile"
-          result={person}
-          name={user && user.name}
-        />
+        {dialog && (
+          <DynamicFlag
+            open={dialog}
+            handleClose={() => handleCloseDialog()}
+            contentType="profile"
+            result={person}
+            name={user && user.name}
+          />
+        )}
       </Container>
       <Footer />
     </>
   );
 };
 
-// UPDATE
-// fetch post data at build time
 export const getServerSideProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const name = context.params.name;
 
-  const person = await getPerson(name);
+  if (validName(name)) {
+    try {
+      let person = await getPerson(name);
+      if (person === null) {
+        return {
+          notFound: true,
+        };
+      } else {
+        if (person.approved !== "true") {
+          person = { name: person.name };
+        }
 
-  const posts = await getProfilePosts(name);
+        const posts = await getProfilePosts(name);
 
-  return {
-    props: {
-      person: JSON.parse(JSON.stringify(person)),
-      posts: JSON.parse(JSON.stringify(posts)),
-    },
-  };
+        return {
+          props: {
+            person: JSON.parse(JSON.stringify(person)),
+            posts: JSON.parse(JSON.stringify(posts)),
+          },
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {
+          person: null,
+          posts: null,
+        },
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default person;

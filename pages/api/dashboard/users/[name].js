@@ -1,23 +1,28 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { ajv } from "@schema/validation";
 import {
-  checkPerson,
   deletePerson,
-  getPerson,
+  getPersonDash,
   updatePerson,
-} from "@utils/mongodb/helpers";
-import { getSession } from "next-auth/react";
+} from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
+import { getServerSession } from "next-auth/next";
+import URISanity from "urisanity";
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
+  // console.log(session);
   if (session) {
     const method = req.method;
+
     switch (method) {
       case "GET":
         const getName = req.query.name;
-        // console.log(getName);
-        if (session.user.name && session.user.name == getName) {
+
+        if (session.user.name && session.user.name === getName) {
           // try get request, if successful return response, otherwise return error message
           try {
-            const person = await getPerson(getName);
+            const person = await getPersonDash(getName);
 
             return res.status(200).json(person);
           } catch (err) {
@@ -25,46 +30,71 @@ export default async function handler(req, res) {
 
             res.status(500).json({ msg: "Something went wrong." });
           }
-        } else if (!session.user.name) {
-          const person = await checkPerson(getName);
-
-          if (person && person.email == session.user.email) {
-            // try get request, if successful return response, otherwise return error message
-            try {
-              const person = await getPerson(getName);
-
-              return res.status(200).json(person);
-            } catch (err) {
-              console.error(err);
-
-              res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else {
-            res.status(401);
-          }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
 
         break;
       case "PUT":
         const { email, name, ...data } = req.body;
 
-        if (session.user.email == email) {
-          try {
-            const update = await updatePerson(
-              email,
-              Object.keys(data).length ? data : { name: name }
-            );
+        const validate = ajv.getSchema("person");
+        const valid = validate(req.body);
 
-            // console.log(update);
-            return res.status(200).json(update);
-          } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: "Something went wrong." });
+        let validSocials = true;
+
+        if (data.socials && data.socials.length > 0) {
+          let i = 0;
+          while (i < data.socials.length) {
+            if (
+              URISanity.vet(data.socials[i], {
+                allowWebTransportURI: true,
+              }) === "about:blank"
+            ) {
+              validSocials = false;
+
+              break;
+            }
+            i++;
+          }
+        }
+
+        //needed for when username is created and no website is provided
+        let validWebsite;
+        if (data.website) {
+          validWebsite = URISanity.vet(data.website, {
+            allowWebTransportURI: true,
+          });
+        } else {
+          validWebsite = "";
+        }
+
+        if (
+          valid &&
+          validName(name) &&
+          validSocials &&
+          (validWebsite !== "about:blank" || data.website === "")
+        ) {
+          if (session.user.email === email) {
+            try {
+              data.approved = "pending";
+
+              const update = await updatePerson(
+                email,
+                Object.keys(data).length === 1 ? { name: name } : data
+              );
+
+              // console.log(update);
+              return res.status(200).json(update);
+            } catch (err) {
+              console.error(err);
+              res.status(500).json({ msg: "Something went wrong." });
+            }
+          } else {
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(401);
+          res.status(403).json({ msg: "Forbidden" });
         }
 
         break;
@@ -73,7 +103,7 @@ export default async function handler(req, res) {
         // set id based on request body
         const deleteName = req.body;
 
-        if (session.user.name && session.user.name == deleteName) {
+        if (session.user.name && session.user.name === deleteName) {
           // try get request, if successful return response, otherwise return error message
           try {
             const deleted = await deletePerson(deleteName);
@@ -82,23 +112,8 @@ export default async function handler(req, res) {
             console.error(err);
             res.status(500).json({ msg: "Something went wrong." });
           }
-        } else if (!session.user.name) {
-          const person = await checkPerson(deleteName);
-
-          if (person && person.email == session.user.email) {
-            // try get request, if successful return response, otherwise return error message
-            try {
-              const deleted = await deletePerson(deleteName);
-              return res.status(200).json(deleted);
-            } catch (err) {
-              console.error(err);
-              res.status(500).json({ msg: "Something went wrong." });
-            }
-          } else {
-            res.status(401);
-          }
         } else {
-          res.status(401);
+          res.status(401).json({ msg: "Unauthorized" });
         }
 
         break;
@@ -110,7 +125,7 @@ export default async function handler(req, res) {
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

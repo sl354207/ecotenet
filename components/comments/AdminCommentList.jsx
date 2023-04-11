@@ -1,4 +1,4 @@
-import Link from "@components/Link";
+import Link from "@components/layouts/Link";
 import {
   Button,
   Container,
@@ -74,7 +74,7 @@ const AdminCommentList = ({
                       }
                 }
                 style={
-                  comment._id == comment_query
+                  comment._id === comment_query
                     ? { borderColor: "#fc7ebf" }
                     : { borderColor: "#94c9ff" }
                 }
@@ -96,7 +96,7 @@ const AdminCommentList = ({
                 </div>
 
                 <div style={{ display: "grid" }}>
-                  {comment._id == comment_query ? (
+                  {comment._id === comment_query ? (
                     <>
                       <Button
                         variant="outlined"

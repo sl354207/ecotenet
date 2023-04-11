@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export default function useOnScreen(ref) {
+export function useOnScreenServer(ref) {
   const [isIntersecting, setIntersecting] = useState(false);
 
   useEffect(() => {
@@ -18,4 +18,32 @@ export default function useOnScreen(ref) {
   }, []);
 
   return isIntersecting;
+}
+
+export function useOnScreenClient({ root = null, rootMargin, threshold = 0 }) {
+  const [entry, updateEntry] = useState({});
+  const [node, setNode] = useState(null);
+
+  const observer = useRef(
+    new window.IntersectionObserver(([entry]) => updateEntry(entry), {
+      root,
+      rootMargin,
+      threshold,
+    })
+  );
+
+  useEffect(() => {
+    const { current: currentObserver } = observer;
+    currentObserver.disconnect();
+
+    if (node) {
+      // console.log("test");
+
+      return currentObserver.observe(node);
+    }
+
+    return () => currentObserver.disconnect();
+  }, [node]);
+
+  return [setNode, entry];
 }

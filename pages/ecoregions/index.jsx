@@ -1,13 +1,12 @@
-import Header from "@components/Header";
-import Link from "@components/Link";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import { Container, List, ListItem } from "@mui/material";
-import { getEcoregions } from "@utils/mongodb/helpers";
+import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 const ecoregions = ({ ecoregions }) => {
   const sorted = ecoregions.sort(function (a, b) {
     return a.unique_id - b.unique_id;
   });
-  //   console.log(sorted);
 
   return (
     <Container>
@@ -15,7 +14,7 @@ const ecoregions = ({ ecoregions }) => {
       <List>
         {sorted.map((ecoregion) => {
           return (
-            <ListItem>
+            <ListItem key={ecoregion}>
               Eco-{ecoregion.unique_id}:{" "}
               <Link
                 sx={{ marginLeft: "5px" }}
@@ -33,7 +32,6 @@ const ecoregions = ({ ecoregions }) => {
 
 export const getStaticProps = async () => {
   const ecoregions = await getEcoregions();
-  //   console.log(ecoregions);
 
   return {
     props: {

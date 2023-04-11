@@ -1,4 +1,4 @@
-import { useUserContext } from "@components/UserContext";
+import { useUserContext } from "@components/context/UserContext";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ErrorIcon from "@mui/icons-material/Error";
 import {
@@ -19,7 +19,7 @@ const NO_FILE_ERROR_CODE = 1;
 const BAD_EXTENSION_ERROR_CODE = 2;
 const TOO_BIG_ERROR_CODE = 3;
 const UPLOADING_ERROR_CODE = 4;
-const DELETING_ERROR_CODE = 4;
+const DELETING_ERROR_CODE = 5;
 
 function ImageUploadField({ onChange, value }) {
   const { user } = useUserContext();
@@ -28,13 +28,12 @@ function ImageUploadField({ onChange, value }) {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const allowedExtensions = ["jpg", "jpeg", "png"];
   const maxFileSize = 5242880;
 
   const [image, setImage] = useState(
     value || { url: undefined, saved: false, file: {} }
   );
-  // console.log(value);
+  console.log(image.url);
   const [state, setState] = useState({
     isUploading: false,
     isDeleting: false,
@@ -43,11 +42,9 @@ function ImageUploadField({ onChange, value }) {
   });
 
   const hasExtension = (fileName) => {
-    const patternPart = allowedExtensions
-      ? allowedExtensions.map((a) => a.toLowerCase()).join("|")
-      : "";
-    const pattern = "(" + patternPart.replace(/\./g, "\\.") + ")$";
-    return new RegExp(pattern, "i").test(fileName.toLowerCase());
+    // allowed extensions
+    const regex = /(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$/i;
+    return regex.test(fileName.toLowerCase());
   };
 
   const handleError = (errorCode) => {
@@ -60,7 +57,7 @@ function ImageUploadField({ onChange, value }) {
 
         break;
       case BAD_EXTENSION_ERROR_CODE:
-        errorText = "Bad file type";
+        errorText = "Invalid file type";
 
         break;
       case TOO_BIG_ERROR_CODE:
@@ -68,11 +65,11 @@ function ImageUploadField({ onChange, value }) {
 
         break;
       case UPLOADING_ERROR_CODE:
-        errorText = "Error while uploading";
+        errorText = "Error uploading";
 
         break;
       case DELETING_ERROR_CODE:
-        errorText = "Error while deleting";
+        errorText = "Error deleting";
 
         break;
       default:
@@ -81,10 +78,10 @@ function ImageUploadField({ onChange, value }) {
         break;
     }
 
-    setState({ ...state, hasError: true, errorText });
+    setState({ ...state, hasError: true, errorText: errorText });
     setTimeout(
       () => setState({ ...state, hasError: false, errorText: "" }),
-      4000
+      3000
     );
   };
 
@@ -101,7 +98,6 @@ function ImageUploadField({ onChange, value }) {
       return;
     }
     if (maxFileSize && file.size > maxFileSize) {
-      // console.log(file.size)
       handleError(TOO_BIG_ERROR_CODE);
       return;
     } else {
@@ -114,15 +110,13 @@ function ImageUploadField({ onChange, value }) {
   };
 
   const uploadFile = async (photo, callback) => {
-    try {
-      // // get secure url from our server
-      const url = await fetch(
-        `/api/dashboard/media?name=${user.name}&post_id=${postId}&type=${photo.type}`
-      ).then((res) => res.json());
-      // console.log(url)
+    const res = await fetch(
+      `/api/dashboard/media?name=${user.name}&post_id=${postId}&ext=${photo.type}`
+    );
 
-      // // post the image directly to the s3 bucket
-      await fetch(url, {
+    if (res.ok) {
+      const url = await res.json();
+      const res1 = await fetch(url, {
         method: "Put",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -130,75 +124,86 @@ function ImageUploadField({ onChange, value }) {
         body: photo,
       });
 
-      const imageUrl = url.split("?")[0];
-      // const imageUrl = URL.createObjectURL(photo);
+      if (res1.ok) {
+        const imageUrl = url.split("?")[0];
 
-      // // add callback so url is available outside function.
-      callback(imageUrl);
-    } catch (error) {
-      console.error(error);
+        // // add callback so url is available outside function.
+        callback(imageUrl);
+      } else {
+        return "error";
+      }
+    } else {
+      return "error";
     }
   };
 
   const deleteFile = async (photo, callback) => {
-    try {
-      const key = photo.substring(photo.lastIndexOf("/") + 1);
-      // // get secure url from our server
-      const url = await fetch(
-        `/api/dashboard/media/${user.name}?post_id=${postId}&key=${key}`
-      ).then((res) => res.json());
-      // console.log(url)
+    const key = photo.substring(photo.lastIndexOf("/") + 1);
 
-      // // post the image directly to the s3 bucket
-      await fetch(url, {
+    // get secure url from our server
+
+    const res = await fetch(
+      `/api/dashboard/media/${user.name}?post_id=${postId}&key=${key}`
+    );
+
+    if (res.ok) {
+      const url = await res.json();
+
+      const res1 = await fetch(url, {
         method: "Delete",
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        // body: photo,
       });
 
-      const imageUrl = undefined;
+      if (res1.ok) {
+        const imageUrl = undefined;
 
-      // // add callback so url is available outside function.
-      callback(imageUrl);
-    } catch (error) {
-      console.error(error);
+        // // add callback so url is available outside function.
+        callback(imageUrl);
+      } else {
+        return "error";
+      }
+    } else {
+      return "error";
     }
   };
   const saveImage = async (img) => {
     setState({ ...state, isUploading: true });
-    try {
-      await uploadFile(img, async function (url) {
-        // call onChange with fetched url to make available to component.
 
-        onChange({ url: url, saved: true, file: img });
-      });
-      setImage({ url: "blob", saved: true, file: img });
-      setTimeout(() => setState({ ...state, isUploading: false }), 4000);
-    } catch (error) {
+    const res = await uploadFile(img, async function (url) {
+      // call onChange with fetched url to make available to component.
+
+      onChange({ url: url, saved: true, file: img });
+    });
+    if (res === "error") {
       setState({ ...state, isUploading: false });
-      console.error(error);
+
       handleError(UPLOADING_ERROR_CODE);
-      setImage({ url: undefined, saved: false, file: img });
+      setImage({ url: "blob", saved: false, file: img });
+    } else {
+      setImage({ url: "blob", saved: true, file: img });
+
+      setState({ ...state, isUploading: false });
     }
   };
   const deleteImage = async (img) => {
     if (img.saved) {
       setState({ ...state, isDeleting: true });
-      try {
-        await deleteFile(img.url, async function (url) {
-          // call onChange with fetched url to make available to component.
 
-          onChange({ url: url, saved: false, file: {} });
-        });
-        setImage({ url: undefined, saved: false, file: {} });
-        setTimeout(() => setState({ ...state, isDeleting: false }), 4000);
-      } catch (error) {
+      const res = await deleteFile(img.url, async function (url) {
+        // call onChange with fetched url to make available to component.
+
+        onChange({ url: url, saved: false, file: {} });
+      });
+      if (res === "error") {
         setState({ ...state, isDeleting: false });
-        console.error(error);
-        handleError(UPLOADING_ERROR_CODE);
+
+        handleError(DELETING_ERROR_CODE);
+      } else {
         setImage({ url: undefined, saved: false, file: {} });
+
+        setState({ ...state, isDeleting: false });
       }
     } else {
       img.url = undefined;
@@ -253,7 +258,7 @@ function ImageUploadField({ onChange, value }) {
           </>
         );
         deleteInside = <>delete image</>;
-      case "Bad file type":
+      case "Invalid file type":
         saveInside = <>save image</>;
         uploadInside = (
           <>
@@ -273,7 +278,7 @@ function ImageUploadField({ onChange, value }) {
         );
         deleteInside = <>delete image</>;
         break;
-      case "Error while uploading":
+      case "Error uploading":
         saveInside = (
           <>
             {state.errorText}
@@ -289,7 +294,7 @@ function ImageUploadField({ onChange, value }) {
         );
         deleteInside = <>delete image</>;
         break;
-      case "Error while deleting":
+      case "Error deleting":
         saveInside = <>save image</>;
         uploadInside = (
           <>
@@ -353,7 +358,6 @@ function ImageUploadField({ onChange, value }) {
               }
         }
       >
-        {/* <label htmlFor="file-input"> */}
         <Button
           disabled={
             state.isUploading ||
@@ -363,22 +367,19 @@ function ImageUploadField({ onChange, value }) {
           }
           variant="contained"
           color={state.hasError ? "error" : "primary"}
-          // onClick={handleFileUploadClick}
           component="label"
         >
           {uploadInside}
 
-          {/* {!state.isUploading && ( */}
+          <label htmlFor="file-input"></label>
           <input
             id="file-input"
             style={{ display: "none" }}
-            // ref={(fileInput) => (fileInput = fileInput)}
             type="file"
             onChange={handleFileSelected}
           />
-          {/* )} */}
         </Button>
-        {/* </label> */}
+
         <Typography variant="body1" sx={{ margin: "20px 16px 0 16px" }}>
           or
         </Typography>
@@ -386,6 +387,7 @@ function ImageUploadField({ onChange, value }) {
           placeholder="http://example.com/image.png"
           label="Existing image URL"
           name="url"
+          id="url"
           sx={{
             display: "flex",
             flexGrow: 1,
@@ -409,30 +411,36 @@ function ImageUploadField({ onChange, value }) {
               ? ""
               : value.url || ""
           }
-          // UPDATE DISABLED
+          inputProps={{ type: "url", maxLength: 100 }}
           disabled={
             (value.url && value.url.startsWith("blob:")) ||
             (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
+              ? true
+              : false
           }
           onChange={(e) => {
             const imageUrl = e.target.value;
             setImage({ url: imageUrl, saved: false, file: {} });
             onChange({ url: imageUrl, saved: false, file: {} });
           }}
+          // InputLabelProps={{ shrink: true }}
         />
       </div>
       <div style={{ display: "flex" }}>
         <Button
           variant="contained"
-          color={state.hasError ? "error" : "warning"}
+          color={state.errorText === "Error uploading" ? "error" : "warning"}
           fullWidth
-          sx={{ marginRight: "5px" }}
+          sx={{
+            marginRight: "5px",
+          }}
           disabled={
+            state.errorText === "Error deleting" ||
             state.isUploading ||
             state.isDeleting ||
-            image.url == undefined ||
-            (image.url !== "blob" && image.url.startsWith("blob:") == false) ||
-            image.saved == true
+            image.url === undefined ||
+            (image.url !== "blob" && image.url.startsWith("blob:") === false) ||
+            image.saved === true
           }
           onClick={() => {
             saveImage(value.file);
@@ -442,15 +450,19 @@ function ImageUploadField({ onChange, value }) {
         </Button>
         <Button
           variant="contained"
-          color={state.hasError ? "secondary" : "primary"}
+          color={state.errorText === "Error deleting" ? "error" : "primary"}
           fullWidth
           sx={{ marginLeft: "5px" }}
           onClick={() => deleteImage(value)}
           disabled={
+            state.errorText === "Error uploading" ||
             state.isUploading ||
             state.isDeleting ||
-            image.url == undefined ||
-            image.url == ""
+            image.url === undefined ||
+            image.url === "" ||
+            (image.url !== "blob" &&
+              !image.url.startsWith("https://eco-media-bucket.s3") &&
+              !image.url.startsWith("blob:"))
           }
         >
           {deleteInside}

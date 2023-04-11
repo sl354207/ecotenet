@@ -1,9 +1,9 @@
 import AdminCommentList from "@components/comments/AdminCommentList";
 import AdminDialog from "@components/dialogs/AdminDialog";
 import Resolve from "@components/dialogs/Resolve";
-import EditorLayout from "@components/EditorLayout";
-import Header from "@components/Header";
-import Link from "@components/Link";
+import EditorLayout from "@components/layouts/EditorLayout";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Button,
@@ -23,16 +23,15 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, video, spacer, divider];
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
-// pass in post and comments as props and create page for each post with corresponding comments
 const post = () => {
   const router = useRouter();
 
@@ -48,6 +47,8 @@ const post = () => {
   const [resolve, setResolve] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
+
+  const { mutate } = useSWRConfig();
 
   const handleOpenDialog = (action, type, result) => {
     setItem(result);
@@ -68,18 +69,31 @@ const post = () => {
     setResolve(false);
   };
 
-  const { data: post } = useSWR(ID ? `/api/admin/posts/${ID}` : null, fetcher);
+  const {
+    data: post,
+    isLoading: postLoading,
+    error: postError,
+  } = useSWR(ID ? `/api/admin/posts/${ID}` : null, fetcher, {
+    shouldRetryOnError: false,
+  });
 
-  const { data: comments, mutate } = useSWR(
+  const {
+    data: comments,
+    isLoading: commentLoading,
+    error: commentError,
+  } = useSWR(
     comment_query ? `/api/admin/posts/${ID}/comments` : null,
-    fetcher
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
-  let date;
+  // let date;
 
   let list;
 
-  if (!post || post == undefined) {
+  if (postLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -89,164 +103,220 @@ const post = () => {
       />
     );
   } else {
-    date = new Date(post.date);
-    list = (
-      <>
-        {comment_query ? (
-          <Link
-            href="/admin/flags"
-            underline="hover"
-            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+    if (postError) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate(`/api/admin/posts/${ID}`)}
           >
-            <ArrowBackIcon fontSize="small" />
-            Flags
-          </Link>
-        ) : (
-          <Link
-            href="/admin/posts"
-            underline="hover"
-            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
-          >
-            <ArrowBackIcon fontSize="small" />
-            Posts
-          </Link>
-        )}
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      // date = new Date(post.date);
+      list = (
+        <>
+          {post && (
+            <>
+              {comment_query ? (
+                <Link
+                  href="/admin/flags"
+                  underline="hover"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <ArrowBackIcon fontSize="small" />
+                  Flags
+                </Link>
+              ) : (
+                <Link
+                  href="/admin/posts"
+                  underline="hover"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginTop: "10px",
+                  }}
+                >
+                  <ArrowBackIcon fontSize="small" />
+                  Posts
+                </Link>
+              )}
 
-        <Container sx={{ backgroundColor: theme.palette.primary.main }}>
-          <Header title={post.title} />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              style={{
-                flexDirection: "column",
-                maxWidth: "800px",
-                flexGrow: 1,
-                marginLeft: "20px",
-              }}
-            >
-              <div style={{ display: "flex" }}>
-                <Typography align="center" variant="h6">
-                  <Link href={`/admin/people/${post.name}`} underline="hover">
-                    {post.name}
-                  </Link>
-                </Typography>
-                <Typography
-                  sx={{ marginLeft: "20px", fontStyle: "italic" }}
-                  align="left"
-                  variant="h6"
+              <Container sx={{ backgroundColor: theme.palette.primary.main }}>
+                <Header title={post.title} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 >
-                  {isMobile ? date.toLocaleDateString() : date.toDateString()}
-                </Typography>
-              </div>
-              <Typography variant="h6">
-                Ecoregions:{" "}
-                {post.ecoregions.map((ecoregion) => (
-                  <Link
-                    href={`/ecoregions/${ecoregion}`}
-                    color="secondary"
-                    underline="hover"
+                  <div
+                    style={{
+                      flexDirection: "column",
+                      maxWidth: "800px",
+                      flexGrow: 1,
+                      marginLeft: "20px",
+                    }}
                   >
-                    Eco-{ecoregion},{" "}
-                  </Link>
-                ))}
-              </Typography>
-            </div>
-            {!comment_query && (
-              <div style={isMobile ? { display: "grid" } : { display: "flex" }}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleOpenDialog("Approve", "Post", post)}
-                >
-                  Approve
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={isMobile ? { marginTop: "4px" } : { marginLeft: "4px" }}
-                  onClick={() => handleOpenDialog("Deny", "Post", post)}
-                >
-                  Deny
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={
-                    isMobile
-                      ? {
-                          marginTop: "4px",
-                          color: "#fc7ebf",
-                          borderColor: "#fc7ebf",
+                    <div style={{ display: "flex" }}>
+                      <Typography align="center" variant="h6">
+                        <Link
+                          href={`/admin/people/${post.name}`}
+                          underline="hover"
+                        >
+                          {post.name}
+                        </Link>
+                      </Typography>
+                      <Typography
+                        sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                        align="left"
+                        variant="h6"
+                      >
+                        {isMobile
+                          ? new Date(post.date).toLocaleDateString()
+                          : new Date(post.date).toDateString()}
+                      </Typography>
+                    </div>
+                    <Typography variant="h6">
+                      Ecoregions:{" "}
+                      {post.ecoregions.map((ecoregion) => (
+                        <Link
+                          href={`/ecoregions/${ecoregion}`}
+                          color="secondary"
+                          underline="hover"
+                          key={ecoregion}
+                        >
+                          Eco-{ecoregion},{" "}
+                        </Link>
+                      ))}
+                    </Typography>
+                  </div>
+                  {!comment_query && (
+                    <div
+                      style={
+                        isMobile ? { display: "grid" } : { display: "flex" }
+                      }
+                    >
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() =>
+                          handleOpenDialog("Approve", "Post", post)
                         }
-                      : {
-                          marginLeft: "4px",
-                          color: "#fc7ebf",
-                          borderColor: "#fc7ebf",
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? { marginTop: "4px" }
+                            : { marginLeft: "4px" }
                         }
-                  }
-                  onClick={() => handleOpenDialog("Delete", "Post", post)}
-                >
-                  Delete
-                </Button>
-              </div>
-            )}
-            {comment_query == "flag" && (
-              <div style={isMobile ? { display: "grid" } : { display: "flex" }}>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() => handleOpenResolve()}
-                >
-                  Resolve
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={isMobile ? { marginTop: "4px" } : { marginLeft: "4px" }}
-                  onClick={() => handleOpenDialog("Deny", "Post", post)}
-                >
-                  Deny
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  sx={
-                    isMobile
-                      ? {
-                          marginTop: "4px",
-                          color: "#fc7ebf",
-                          borderColor: "#fc7ebf",
+                        onClick={() => handleOpenDialog("Deny", "Post", post)}
+                      >
+                        Deny
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? {
+                                marginTop: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                            : {
+                                marginLeft: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
                         }
-                      : {
-                          marginLeft: "4px",
-                          color: "#fc7ebf",
-                          borderColor: "#fc7ebf",
+                        onClick={() => handleOpenDialog("Delete", "Post", post)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                  {comment_query === "flag" && (
+                    <div
+                      style={
+                        isMobile ? { display: "grid" } : { display: "flex" }
+                      }
+                    >
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => handleOpenResolve()}
+                      >
+                        Resolve
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? { marginTop: "4px" }
+                            : { marginLeft: "4px" }
                         }
-                  }
-                  onClick={() => handleOpenDialog("Delete", "Post", post)}
-                >
-                  Delete
-                </Button>
-              </div>
-            )}
-          </div>
-          <EditorLayout>
-            <Editor cellPlugins={cellPlugins} value={post} readOnly />
-          </EditorLayout>
-        </Container>
-      </>
-    );
+                        onClick={() => handleOpenDialog("Deny", "Post", post)}
+                      >
+                        Deny
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={
+                          isMobile
+                            ? {
+                                marginTop: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                            : {
+                                marginLeft: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }
+                        }
+                        onClick={() => handleOpenDialog("Delete", "Post", post)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                <EditorLayout>
+                  <Editor cellPlugins={cellPlugins} value={post} readOnly />
+                </EditorLayout>
+              </Container>
+            </>
+          )}
+        </>
+      );
+    }
   }
 
   let commentList;
   if (!comment_query) {
     commentList = <></>;
-  } else if (!comments || comments == undefined) {
+  } else if (commentLoading) {
     commentList = (
       <CircularProgress
         color="secondary"
@@ -255,21 +325,47 @@ const post = () => {
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
-  } else if (Array.isArray(comments) && comments.length == 0) {
-    commentList = (
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        no results
-      </Typography>
-    );
   } else {
-    commentList = (
-      <AdminCommentList
-        comments={comments}
-        comment_query={comment_query}
-        handleOpenDialog={handleOpenDialog}
-        handleOpenResolve={handleOpenResolve}
-      />
-    );
+    if (commentError) {
+      commentList = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate(`/api/admin/posts/${ID}/comments`)}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(comments) && comments.length === 0) {
+        commentList = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else {
+        commentList = (
+          <>
+            {comments && (
+              <AdminCommentList
+                comments={comments}
+                comment_query={comment_query}
+                handleOpenDialog={handleOpenDialog}
+                handleOpenResolve={handleOpenResolve}
+              />
+            )}
+          </>
+        );
+      }
+    }
   }
 
   return (
@@ -291,6 +387,7 @@ const post = () => {
         name={flagee}
         ID={flag}
         mutate={mutate}
+        route="post"
       />
     </>
   );

@@ -1,0 +1,198 @@
+{
+    "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "must be a string"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "must be a string"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 160,
+          "description": "must be a string"
+        },
+        "category": {
+            "type": "object",
+            "properties": {
+              "title": {"type": "string", "maxLength": 60, "enum": [
+                "",
+                "Animals",
+                "mammal",
+                "reptile",
+                "amphibian",
+                "bird",
+                "fish",
+                "arthropod",
+                "mollusk",
+                "cnidaria",
+                "worm",
+                "other_animals",
+                "Plants",
+                "tree_shrub",
+                "vine",
+                "wildflower",
+                "water_master",
+                "graminoid",
+                "other_plants",
+                "uncategorized_plants",
+                "Fungi",
+                "gill_fungi",
+                "non_gilled_fungi",
+                "gasteroid_fungi",
+                "other_fungi",
+                "uncategorized_fungi",
+                "The Rest",
+                "bacteria",
+                "virus",
+                "protozoa",
+                "chromista",
+                "archaea",
+                "algae",
+                "ciliate",
+                "Hunt",
+                "Gather",
+                "Survival",
+                "Travel",
+                "Agriculture",
+                "Building",
+                "Culture"
+              ]},
+              "sub": {"type": "string", "maxLength": 60, "enum": [
+                "",
+                "Guides",
+                "Tracking/Stalking",
+                "Trapping",
+                "Fishing",
+                "Strategies/Techniques",
+                "Processing",
+                "Tools",
+                "Edible",
+                "Medicinal",
+                "Fire",
+                "Water",
+                "Basic Shelter",
+                "Navigation",
+                "Emergency",
+                "Land",
+                "Planting/Harvesting",
+                "Maintenance/Management",
+                "Processing/Storage",
+                "Livestock",
+                "Soil Health",
+                "Propogation/Cultivation",
+                "Irrigation",
+                "Techniques/Systems",
+                "Start-To-Finish/Lifecycles",
+                "Foundations",
+                "Floors",
+                "Walls",
+                "Roofs",
+                "Complete Structures",
+                "Water Systems",
+                "Heating/Cooling",
+                "Sanitation",
+                "Furniture/Utensils/Tools",
+                "Cooking/Recipes",
+                "Clothing",
+                "Art",
+                "Rituals",
+                "Stories"
+              ]}
+            },
+            "additionalProperties": false
+        },
+        "tags": {
+          "type": "array",
+          "description": "must be an array",
+          "maxItems": 3,
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "approved": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false",
+            "pending"
+          ],
+          "description": "must be a string"
+        },
+        "updated": {
+          "type": "boolean",
+          "description": "must be a boolean"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "must be a string"
+        },
+        "ecoregions": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4,
+            "pattern": "^\\d+$"
+          }
+        },
+        "id": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "must be a string"
+        },
+        "version": {
+          "type": "integer",
+          "description": "must be an int"
+        },
+        "rows": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "description": "must be an int"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "published",
+            "draft"
+          ],
+          "description": "must be a string"
+        },
+        "feature": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false",
+            "pending"
+          ],
+          "description": "must be a string"
+        },
+        "featured": {
+          "type": "boolean",
+          "description": "must be a boolean"
+        },
+        "voters": {
+          "type": "array",
+          "description": "must be an array",
+          "items": {
+            "type": "string",
+            "maxLength": 60
+          }
+        }
+      },
+      "additionalProperties": false
+    
+}

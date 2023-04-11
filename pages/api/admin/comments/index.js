@@ -1,15 +1,12 @@
-import { getComments } from "@utils/mongodb/helpers";
+import { getComments } from "@utils/mongodb/mongoHelpers";
 
 // api endpoint to get all posts by user from database
 export default async function handler(req, res) {
   // only allow get request
   if (req.method !== "GET") {
-    return res.status(405);
+    return res.status(405).json({ msg: "Method not allowed" });
   }
 
-  //   const { q } = req.query;
-  // console.log(name);
-  // try get request, if successful return response, otherwise return error message
   try {
     const comments = await getComments("pending");
 

@@ -1,9 +1,12 @@
-import Description from "@components/Description";
-import EmailInput from "@components/EmailInput";
-import Header from "@components/Header";
-import VerificationStep from "@components/VerificationStep";
+import EmailInput from "@components/inputFields/EmailInput";
+import VerificationStep from "@components/inputFields/VerificationStep";
+import Description from "@components/layouts/Description";
+import Header from "@components/layouts/Header";
 import { Container } from "@mui/material";
-import { getProviders, getSession } from "next-auth/react";
+import { getServerSession } from "next-auth/next";
+import { getProviders } from "next-auth/react";
+
+import { authOptions } from "@pages/api/auth/[...nextauth]";
 
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
@@ -57,12 +60,13 @@ const SigninPage = ({ providers, isLoggedIn }) => {
 };
 
 export const getServerSideProps = async (context) => {
-  const { req } = context;
-  const session = await getSession({ req });
+  const { req, res } = context;
+  const session = await getServerSession(req, res, authOptions);
+  const providers = await getProviders();
   return {
     props: {
       isLoggedIn: session !== null,
-      providers: await getProviders(),
+      providers: providers,
     },
   };
 };

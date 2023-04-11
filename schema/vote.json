@@ -1,0 +1,32 @@
+{
+    "type": "object",
+    "required": [
+        "_id",
+      "name",
+      "vote"
+    ],
+    "properties": {
+      "_id": {
+        "type": "string",
+        "minLength": 24,
+        "maxLength": 24,
+        "description": "must be a string",
+        "pattern": "^[A-Za-z0-9]*$"
+      },
+      "name": {
+        "type": "string",
+        "maxLength": 60,
+        "description": "must be a string"
+      },
+      "vote": {
+        "type": "string",
+        "enum": [
+          "add",
+          "subtract"
+        ],
+        "description": "must be a string"
+      }
+      
+    },
+    "additionalProperties": false
+}

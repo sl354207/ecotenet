@@ -2,101 +2,226 @@
     {
       "menuTitle": "Animals",
       "menuSubs": [
-        {"subTitle": "Mammals", "query": "mammal"},
-        {"subTitle": "Reptiles", "query": "reptile"},
-        {"subTitle": "Amphibians", "query": "amphibian"},
-        {"subTitle": "Birds", "query": "bird"},
-        {"subTitle": "Fish", "query": "fish"},
-        {"subTitle": "Arthropods", "query": "arthropod"},
-        {"subTitle": "Mollusks", "query": "mollusk"},
-        {"subTitle": "Cnidaria", "query": "cnidaria"},
-        {"subTitle": "Wormish", "query": "worm"},
-        {"subTitle": "The Rest", "query": "other_animals"},
-        {"subTitle": "Guides", "query": "animal_guide"}
+        {"subTitle": "Mammals", "query": "mammal", "description": null},
+        {"subTitle": "Reptiles", "query": "reptile", "description": null},
+        {"subTitle": "Amphibians", "query": "amphibian", "description": null},
+        {"subTitle": "Birds", "query": "bird", "description": null},
+        {"subTitle": "Fish", "query": "fish", "description": null},
+        {"subTitle": "Arthropods", "query": "arthropod", "description": null},
+        {"subTitle": "Mollusks", "query": "mollusk", "description": null},
+        {"subTitle": "Cnidaria", "query": "cnidaria", "description": null},
+        {"subTitle": "Wormish", "query": "worm", "description": null},
+        {"subTitle": "The Rest", "query": "other_animals", "description": "These are species that either may not fit well into other categories or occur in small numbers in our dataset so they have been grouped together"},
+        {"subTitle": "Guides", "query": {
+          "title": "Animals",
+          "sub": "Guides"
+        }, "description": "This category is for posts that may be more in depth and complete than the general info given for that species(id guides, lifecycle guides, etc.) or for posts that share information on several species within the category e.g. a comparison of species of oak trees within an ecoregion"}
       ],
       "openList": false
     },
     {
       "menuTitle": "Plants",
-      "menuSubs": [{"subTitle": "Trees and Shrubs", "query": "tree_shrub"}, {"subTitle": "Vines", "query": "vine"}, {"subTitle": "Wildflowers", "query": "wildflower"}, {"subTitle": "Water Masters", "query": "water_master"}, {"subTitle": "Grassish", "query": "graminoid"}, {"subTitle": "The Rest", "query": "other_plants"}, {"subTitle": "Unplaced", "query": "uncategorized_plants"}, {"subTitle": "Guides", "query": "plant_guide"}],
+      "menuSubs": [{"subTitle": "Trees and Shrubs", "query": "tree_shrub", "description": null}, {"subTitle": "Vines", "query": "vine", "description": null}, {"subTitle": "Wildflowers", "query": "wildflower", "description": null}, {"subTitle": "Water Masters", "query": "water_master", "description": null}, {"subTitle": "Grassish", "query": "graminoid", "description": null}, {"subTitle": "The Rest", "query": "other_plants", "description": "These are species that either may not fit well into other categories or occur in small numbers in our dataset so they have been grouped together"}, {"subTitle": "Unplaced", "query": "uncategorized_plants", "description": "These are species that we just haven't gotten to placing in their proper category yet, but rather than leave them out we placed them all here until they get categorized"}, {"subTitle": "Guides", "query": {
+        "title": "Plants",
+        "sub": "Guides"
+      }, "description": "This category is for posts that may be more in depth and complete than the general info given for that species(id guides, lifecycle guides, etc.) or for posts that share information on several species within the category e.g. a comparison of species of oak trees within an ecoregion"}],
       "openList": false
     },
     {
       "menuTitle": "Fungi",
-      "menuSubs": [{"subTitle": "Gilled", "query": "gill_fungi"}, {"subTitle": "Non-Gilled", "query": "non_gilled_fungi"}, {"subTitle": "Gasteroid", "query": "gasteroid_fungi"}, {"subTitle": "The Rest", "query": "other_fungi"}, {"subTitle": "Unplaced", "query": "uncategorized_fungi"}, {"subTitle": "Guides", "query": "fungi_guide"}],
+      "menuSubs": [{"subTitle": "Gilled", "query": "gill_fungi", "description": null}, {"subTitle": "Non-Gilled", "query": "non_gilled_fungi", "description": null}, {"subTitle": "Gasteroid", "query": "gasteroid_fungi", "description": null}, {"subTitle": "The Rest", "query": "other_fungi", "description": "These are species that either may not fit well into other categories or occur in small numbers in our dataset so they have been grouped together"}, {"subTitle": "Unplaced", "query": "uncategorized_fungi", "description": "These are species that we just haven't gotten to placing in their proper category yet, but rather than leave them out we placed them all here until they get categorized"}, {"subTitle": "Guides", "query": {
+        "title": "Fungi",
+        "sub": "Guides"
+      }, "description": "This category is for posts that may be more in depth and complete than the general info given for that species(id guides, lifecycle guides, etc.) or for posts that share information on several species within the category e.g. a comparison of species of oak trees within an ecoregion"}],
       "openList": false
     },
     {
       "menuTitle": "The Rest",
-      "menuSubs": [{"subTitle": "Bacteria", "query": "bacteria"}, {"subTitle": "Viruses", "query": "virus"}, {"subTitle": "Protozoa", "query": "protozoa"}, {"subTitle": "Chromista", "query": "chromista"}, {"subTitle": "Archaea", "query": "archaea"}, {"subTitle": "Algae", "query": "algae"}, {"subTitle": "Ciliates", "query": "ciliate"}, {"subTitle": "Guides", "query": "the_rest_guide"}],      
+      "menuSubs": [{"subTitle": "Bacteria", "query": "bacteria", "description": null}, {"subTitle": "Viruses", "query": "virus", "description": null}, {"subTitle": "Protozoa", "query": "protozoa", "description": null}, {"subTitle": "Chromista", "query": "chromista", "description": null}, {"subTitle": "Archaea", "query": "archaea", "description": null}, {"subTitle": "Algae", "query": "algae", "description": null}, {"subTitle": "Ciliates", "query": "ciliate", "description": null}, {"subTitle": "Guides", "query": {
+        "title": "The Rest",
+        "sub": "Guides"
+      }, "description": "This category is for posts that may be more in depth and complete than the general info given for that species(id guides, lifecycle guides, etc.) or for posts that share information on several species within the category e.g. a comparison of species of oak trees within an ecoregion"}],      
       "openList": false
     },
     {
       "menuTitle": "Hunt",
       "menuSubs": [
-        {"subTitle": "Tracking or Stalking", "query": "hunt_track_stalk"},
-        {"subTitle": "Trapping", "query": "hunt_trap"},
-        {"subTitle": "Fishing", "query": "hunt_fish"},
-        {"subTitle": "Strategies or Techniques", "query": "hunt_strategy_technique"},
-        {"subTitle": "Processing", "query": "hunt_process"},
-        {"subTitle": "Tools", "query": "hunt_tool"}
+        {"subTitle": "Tracking or Stalking", "query": {
+          "title": "Hunt",
+          "sub": "Tracking/Stalking"
+        }, "description": "Posts related to tracking or stalking"},
+        {"subTitle": "Trapping", "query": {
+          "title": "Hunt",
+          "sub": "Trapping"
+        }, "description": "Posts related to trapping"},
+        {"subTitle": "Fishing", "query": {
+          "title": "Hunt",
+          "sub": "Fishing"
+        }, "description": "Posts related to fishing"},
+        {"subTitle": "Strategies or Techniques", "query": {
+          "title": "Hunt",
+          "sub": "Strategies/Techniques"
+        }, "description": "Posts about strategies or techniques for hunting specific species or terrain e.g. how to hunt whitetail deer in specific situations"},
+        {"subTitle": "Processing", "query": {
+          "title": "Hunt",
+          "sub": "Processing"
+        }, "description": "Posts about field dressing, skinning, processing, etc."},
+        {"subTitle": "Tools", "query":  {
+          "title": "Hunt",
+          "sub": "Tools"
+        }, "description": "Posts about making tools, like bow or arrow making, or how to use specific tools for hunting"}
       ],
       "openList": false
     },
     {
       "menuTitle": "Gather",
-      "menuSubs": [{"subTitle": "Edible", "query": "gather_edible"}, {"subTitle": "Medicinal", "query": "gather_medicinal"}],
+      "menuSubs": [{"subTitle": "Edible", "query": {
+        "title": "Gather",
+        "sub": "Edible"
+      }, "description": "Posts related to wild edibles"}, {"subTitle": "Medicinal", "query": {
+        "title": "Gather",
+        "sub": "Medicinal"
+      }, "description": "Posts related to herbal medicine"}],
      " openList": false
     },
     {
       "menuTitle": "Survival",
-      "menuSubs": [{"subTitle": "Fire", "query": "survival_fire"}, {"subTitle": "Water", "query": "survival_water"}, {"subTitle": "Basic Shelter", "query": "survival_shelter"}, {"subTitle": "Navigation", "query": "survival_navigation"}, {"subTitle": "Emergency", "query": "survival_emergency"}],
+      "menuSubs": [{"subTitle": "Fire", "query": {
+        "title": "Survival",
+        "sub": "Fire"
+      }, "description": "Posts related to fires and fire making"}, {"subTitle": "Water", "query": {
+        "title": "Survival",
+        "sub": "Water"
+      }, "description": "Posts related to water collection, purification, etc. in a survival setting"}, {"subTitle": "Basic Shelter", "query": {
+        "title": "Survival",
+        "sub": "Basic Shelter"
+      }, "description": "Posts related to basic shelter making or living"}, {"subTitle": "Navigation", "query": {
+        "title": "Survival",
+        "sub": "Navigation"
+      }, "description": "Posts related to navigation in a survival setting"}, {"subTitle": "Emergency", "query": {
+        "title": "Survival",
+        "sub": "Emergency"
+      }, "description": "Posts related to emergency situation skills like injuries and rescue etc."}],
      " openList": false
     },
     {
       "menuTitle": "Travel",
-      "menuSubs": [{"subTitle": "Land", "query": "travel_land"}, {"subTitle": "Water", "query": "travel_water"}],
+      "menuSubs": [{"subTitle": "Land", "query": {
+        "title": "Travel",
+        "sub": "Land"
+      }, "description": "Posts related to land travel ranging from mountaineering type skills to a review about your favorite hiking spot to what type of gear you should use for a specific excursion etc."}, {"subTitle": "Water", "query": {
+        "title": "Travel",
+        "sub": "Water"
+      }, "description": "Posts related to water travel ranging from paddling type skills to a review about your favorite river float to what type of gear you should use for a specific excursion etc."}],
       "openList": false
     },
     {
       "menuTitle": "Agriculture",
       "menuSubs": [
-        {"subTitle": "Planting or Harvesting", "query": "agriculture_plant_harvest"},
-        {"subTitle": "Maintenance or Management", "query": "agriculture_maintenance_management"},
-        {"subTitle": "Processing or Storage", "query": "agriculture_processing_storage"},
-        {"subTitle": "Livestock", "query": "agriculture_livestock"},
-        {"subTitle": "Soil Health", "query": "agriculture_soil"},
-        {"subTitle": "Propogation or Cultivation", "query": "agriculture_propogation_cultivation"},
-        {"subTitle": "Irrigation", "query": "agriculture_irrigation"},
-        {"subTitle": "Techniques or Systems", "query": "agriculture_technique_system"},
-        {"subTitle": "Start-To-Finish or Lifecycles", "query": "agriculture_lifecycle"}
+        {"subTitle": "Planting or Harvesting", "query": {
+          "title": "Agriculture",
+          "sub": "Planting/Harvesting"
+        }, "description": "Posts related to planting or harvesting"},
+        {"subTitle": "Maintenance or Management", "query": {
+          "title": "Agriculture",
+          "sub": "Maintenance/Management"
+        }, "description": "Posts about weeding techniques, pruning, or any other management that happens between planting and harvesting"},
+        {"subTitle": "Processing or Storage", "query": {
+          "title": "Agriculture",
+          "sub": "Processing/Storage"
+        }, "description": "Posts about canning, smoking, root cellars, etc."},
+        {"subTitle": "Livestock", "query": {
+          "title": "Agriculture",
+          "sub": "Livestock"
+        }, "description": "Posts related to livestock"},
+        {"subTitle": "Soil Health", "query": {
+          "title": "Agriculture",
+          "sub": "Soil Health"
+        }, "description": "Posts about composting techniques, soil building and maintenance, etc."},
+        {"subTitle": "Propogation or Cultivation", "query": {
+          "title": "Agriculture",
+          "sub": "Propogation/Cultivation"
+        }, "description": "Posts about seed propogation, collection, and storage. Or posts related to growing a species e.g. tree nursery information, etc."},
+        {"subTitle": "Irrigation", "query": {
+          "title": "Agriculture",
+          "sub": "Irrigation"
+        }, "description": "Posts related to getting water where it needs to go"},
+        {"subTitle": "Techniques or Systems", "query": {
+          "title": "Agriculture",
+          "sub": "Techniques/Systems"
+        }, "description": "Posts about specific farming practices/systems/techniques that you employ e.g. permaculture etc."},
+        {"subTitle": "Start-To-Finish or Lifecycles", "query": {
+          "title": "Agriculture",
+          "sub": "Start-To-Finish/Lifecycles"
+        }, "description": "Deep dives on one specific crop or species all the way through it's entire lifecycle."}
       ],
       "openList": false
     },
     {
       "menuTitle": "Building",
       "menuSubs": [
-        {"subTitle": "Foundations", "query": "build_foundation"},
-        {"subTitle": "Floors", "query": "build_floor"},
-        {"subTitle": "Walls", "query": "build_wall"},
-        {"subTitle": "Roofs", "query": "build_roof"},
-        {"subTitle": "Complete Structures", "query": "build_complete_structure"},
-        {"subTitle": "Water Systems", "query": "build_water_system"},
-        {"subTitle": "Heating or Cooling", "query": "build_heat_cool"},
-        {"subTitle": "Sanitation", "query": "build_sanitation"},
-        {"subTitle": "Furniture or Utensils or Tools", "query": "build_tool"}
+        {"subTitle": "Foundations", "query": {
+          "title": "Building",
+          "sub": "Foundations"
+        }, "description": "Posts related to foundations"},
+        {"subTitle": "Floors", "query": {
+          "title": "Building",
+          "sub": "Floors"
+        }, "description": "Posts related to floors"},
+        {"subTitle": "Walls", "query": {
+          "title": "Building",
+          "sub": "Walls"
+        }, "description": "Posts related to building walls"},
+        {"subTitle": "Roofs", "query": {
+          "title": "Building",
+          "sub": "Roofs"
+        }, "description": "Posts related to roofing"},
+        {"subTitle": "Complete Structures", "query": {
+          "title": "Building",
+          "sub": "Complete Structures"
+        }, "description": "Posts related to the start-to-finish process of a building project e.g. fencing, outhouses, decks, pavilions, etc."},
+        {"subTitle": "Water Systems", "query": {
+          "title": "Building",
+          "sub": "Water Systems"
+        }, "description": "Posts related water systems for a house or in the environment e.g plumbing, ponds, etc."},
+        {"subTitle": "Heating or Cooling", "query": {
+          "title": "Building",
+          "sub": "Heating/Cooling"
+        }, "description": "Posts related to heating and cooling"},
+        {"subTitle": "Sanitation", "query": {
+          "title": "Building",
+          "sub": "Sanitation"
+        }, "description": "Posts related to sanitation"},
+        {"subTitle": "Furniture or Utensils or Tools", "query": {
+          "title": "Building",
+          "sub": "Furniture/Utensils/Tools"
+        }, "description": "Posts about how to make or use furniture, utensils or any type of tool"}
       ],
       "openList": false
     },
     {
       "menuTitle": "Culture",
       "menuSubs": [
-        {"subTitle": "Cooking or Recipes", "query": "culture_cook_recipes"},
-        {"subTitle": "Clothing", "query": "culture_clothing"},
-        {"subTitle": "Art", "query": "culture_art"},
-        {"subTitle": "Music", "query": "culture_music"},
-        {"subTitle": "Rituals", "query": "culture_ritual"},
-        {"subTitle": "Stories", "query": "culture_story"}
+        {"subTitle": "Cooking or Recipes", "query": {
+          "title": "Culture",
+          "sub": "Cooking/Recipes"
+        }, "description": "Posts related to recipes or cooking processes and techniques."},
+        {"subTitle": "Clothing", "query": {
+          "title": "Culture",
+          "sub": "Clothing"
+        }, "description": "Posts about how to make clothing, from tanning to sewing, as well as styling"},
+        {"subTitle": "Art", "query": {
+          "title": "Culture",
+          "sub": "Art"
+        }, "description": "Posts related to art(music, sculpting, painting, etc.)"},
+        {"subTitle": "Rituals", "query": {
+          "title": "Culture",
+          "sub": "Rituals"
+        }, "description": "Posts related to rituals whether it be religious or otherwise"},
+        {"subTitle": "Stories", "query": {
+          "title": "Culture",
+          "sub": "Stories"
+        }, "description": "Post related to storytelling"}
       ],
       "openList": false
     }

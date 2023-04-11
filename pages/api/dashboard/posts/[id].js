@@ -1,38 +1,29 @@
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { ajv } from "@schema/validation";
 import {
-  checkPerson,
   deletePost,
   getPostById,
   updatePost,
-} from "@utils/mongodb/helpers";
-import { getSession } from "next-auth/react";
+} from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
+import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
   if (session) {
     const method = req.method;
+
     switch (method) {
       case "GET":
         const getName = req.query.name;
         const id = req.query.id;
-        // console.log(getName);
-        if (session.user.name && session.user.name == getName) {
-          // try get request, if successful return response, otherwise return error message
-          try {
-            const post = await getPostById(id);
-
-            return res.status(200).json(post);
-          } catch (err) {
-            console.error(err);
-
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name) {
-          const person = await checkPerson(getName);
-
-          if (person && person.email == session.user.email) {
+        if (validID(id)) {
+          if (session.user.name && session.user.name === getName) {
             // try get request, if successful return response, otherwise return error message
             try {
               const post = await getPostById(id);
+              // don't send voters
+              post.voters = [];
 
               return res.status(200).json(post);
             } catch (err) {
@@ -41,33 +32,24 @@ export default async function handler(req, res) {
               res.status(500).json({ msg: "Something went wrong." });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(401);
+          res.status(403).json({ msg: "Forbidden" });
         }
+        // console.log(getName);
 
         break;
       case "PUT":
-        const { _id, name, ...data } = req.body;
-        // console.log(req.body);
-
-        if (session.user.name && session.user.name == name) {
-          try {
-            const update = await updatePost(_id, data);
-
-            // console.log(update);
-            return res.status(200).json(update);
-          } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name) {
-          const person = await checkPerson(name);
-
-          if (person && person.email == session.user.email) {
-            // try get request, if successful return response, otherwise return error message
+        const { _id, ...data } = req.body;
+        const validate = ajv.getSchema("post");
+        const valid = validate(data);
+        if (validID(_id) && valid) {
+          if (session.user.name && session.user.name === data.name) {
             try {
+              data.approved = "pending";
+              data.date = new Date().toUTCString();
+              data.feature = "false";
               const update = await updatePost(_id, data);
 
               // console.log(update);
@@ -77,10 +59,11 @@ export default async function handler(req, res) {
               res.status(500).json({ msg: "Something went wrong." });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(401);
+          // console.log(validate.errors);
+          res.status(403).json({ msg: "Forbidden" });
         }
 
         break;
@@ -92,19 +75,8 @@ export default async function handler(req, res) {
         // try delete request, if successful return response, otherwise return error message
 
         // console.log(req.body);
-        if (session.user.name && session.user.name == deleteName) {
-          try {
-            const deleted = await deletePost(deleteId);
-            return res.status(200).json(deleted);
-          } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-        } else if (!session.user.name) {
-          const person = await checkPerson(deleteName);
-
-          if (person && person.email == session.user.email) {
-            // try get request, if successful return response, otherwise return error message
+        if (validID(deleteId)) {
+          if (session.user.name && session.user.name === deleteName) {
             try {
               const deleted = await deletePost(deleteId);
               return res.status(200).json(deleted);
@@ -113,10 +85,10 @@ export default async function handler(req, res) {
               res.status(500).json({ msg: "Something went wrong." });
             }
           } else {
-            res.status(401);
+            res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          res.status(401);
+          res.status(403).json({ msg: "Forbidden" });
         }
 
         break;
@@ -128,7 +100,7 @@ export default async function handler(req, res) {
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

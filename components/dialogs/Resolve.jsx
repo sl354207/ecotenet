@@ -1,5 +1,5 @@
-import { useSnackbarContext } from "@components/SnackbarContext";
-import TextBox from "@components/TextBox";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import TextBox from "@components/inputFields/TextBox";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -13,11 +13,14 @@ import {
   InputLabel,
   Portal,
 } from "@mui/material";
-import { createNotification, updateFlag } from "@utils/api-helpers";
+import { createNotification, updateFlag } from "@utils/apiHelpers";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 
-const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
+const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
+
+  const router = useRouter();
 
   const [addInfo, setAddInfo] = useState("");
 
@@ -46,49 +49,57 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           text: `a flag you submitted was resolved`,
           add_info: addInfo,
           ref: ID,
-          date: new Date().toUTCString(),
-          viewed: false,
         };
 
         const notifyResponse = await createNotification(notify);
 
         if (notifyResponse.ok) {
-          if (mutate) {
-            mutate();
-          }
-
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: `Flag resolved successfully`,
           });
+          if (route === "flag") {
+            mutate("/api/admin/flags");
+          } else {
+            router.push("/admin/flags");
+          }
         }
         if (!notifyResponse.ok) {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message: `There was a problem resolving flag. Please try again later`,
           });
         }
       } else {
-        if (mutate) {
-          mutate();
-        }
-
         setSnackbar({
           ...snackbar,
           open: true,
+          vertical: "bottom",
+          horizontal: "left",
           severity: "success",
           message: `Flag resolved successfully`,
         });
+        if (route === "flag") {
+          mutate("/api/admin/flags");
+        } else {
+          router.push("/admin/flags");
+        }
       }
     }
     if (!flagResponse.ok) {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: `There was a problem resolving flag. Please try again later`,
       });
@@ -99,15 +110,15 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="update"
-      aria-describedby="update"
+      // aria-labelledby="update"
+      // aria-describedby="update"
     >
-      <DialogTitle id="update" color="textPrimary" align="center">
+      <DialogTitle id="resolve-title" color="textPrimary" align="center">
         Resolve
       </DialogTitle>
 
       <DialogContent>
-        <DialogContentText id="update" color="textPrimary">
+        <DialogContentText id="resolve-text" color="textPrimary">
           Are you sure you want to resolve flag?
         </DialogContentText>
         <Button
@@ -123,15 +134,14 @@ const Resolve = ({ open, handleClose, name, ID, className, mutate }) => {
           {showForm ? (
             <Portal container={container.current}>
               <FormControl sx={{ flexGrow: 1, marginTop: "10px" }}>
-                <InputLabel shrink htmlFor="commentform"></InputLabel>
+                <InputLabel shrink htmlFor="resolve"></InputLabel>
                 <TextBox
-                  id="info"
+                  id="resolve"
                   handleChange={handleInfoChange}
                   defaultValue=""
                   placeHolder="additional comment on notification"
-                  rows={1}
                   autoFocus={false}
-                  name="info"
+                  inputProps={{ type: "text", maxLength: 200 }}
                 />
               </FormControl>
             </Portal>

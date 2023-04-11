@@ -1,5 +1,5 @@
-import { useSnackbarContext } from "@components/SnackbarContext";
-import TextBox from "@components/TextBox";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import TextBox from "@components/inputFields/TextBox";
 import {
   Button,
   Dialog,
@@ -7,8 +7,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
-import { createFlag } from "@utils/api-helpers";
+import { createFlag } from "@utils/apiHelpers";
 import theme from "@utils/theme";
 import { useState } from "react";
 
@@ -23,16 +25,13 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
   };
 
   const handleSubmit = async () => {
-    //   UPDATE NAME AND ID
     const flag = {
       name: name,
       flagged: result.name ? result.name : "ecotenet",
       type: contentType,
       text: value,
-      content_id: result._id,
+      content_id: contentType === "profile" ? "" : result._id,
       ref: result.post_id ? result.post_id : "",
-      status: "pending",
-      date: new Date().toUTCString(),
     };
 
     const flagResponse = await createFlag(flag);
@@ -42,6 +41,8 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "success",
         message: "Flag submitted successfully",
       });
@@ -50,6 +51,8 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       setSnackbar({
         ...snackbar,
         open: true,
+        vertical: "bottom",
+        horizontal: "left",
         severity: "error",
         message: "There was a problem submitting flag. Please try again later",
       });
@@ -60,11 +63,11 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="update"
-        aria-describedby="update"
+        // aria-labelledby="update"
+        // aria-describedby="update"
       >
         <DialogTitle
-          id="update"
+          id="flag-title"
           sx={{ backgroundColor: theme.palette.primary.light }}
           color="textPrimary"
           align="center"
@@ -73,18 +76,20 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
         </DialogTitle>
 
         <DialogContent sx={{ backgroundColor: theme.palette.primary.light }}>
-          <DialogContentText id="update" color="textPrimary">
+          <DialogContentText id="flag-text" color="textPrimary">
             Why would you like to flag this item?
           </DialogContentText>
-          <TextBox
-            id="flag"
-            handleChange={handleChange}
-            defaultValue=""
-            placeHolder=""
-            rows={1}
-            autoFocus={true}
-            name="flag"
-          />
+          <FormControl sx={{ display: "flex", flexGrow: 1, marginTop: "5px" }}>
+            <InputLabel shrink htmlFor="flag"></InputLabel>
+            <TextBox
+              id="flag"
+              handleChange={handleChange}
+              defaultValue=""
+              placeHolder=""
+              autoFocus={true}
+              inputProps={{ type: "text", maxLength: 200 }}
+            />
+          </FormControl>
         </DialogContent>
 
         <DialogActions sx={{ backgroundColor: theme.palette.primary.light }}>
@@ -99,6 +104,11 @@ const Flag = ({ open, handleClose, contentType, result, name }) => {
             onClick={() => handleSubmit()}
             color="secondary"
             variant="outlined"
+            disabled={
+              // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
+              (typeof value === "string" && value.trim().length === 0) ||
+              value === undefined
+            }
           >
             Submit
           </Button>

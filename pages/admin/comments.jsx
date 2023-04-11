@@ -1,7 +1,7 @@
-import AdminDrawer from "@components/AdminDrawer";
 import AdminDialog from "@components/dialogs/AdminDialog";
-import Header from "@components/Header";
-import Link from "@components/Link";
+import AdminDrawer from "@components/drawers/AdminDrawer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import {
   Button,
   CircularProgress,
@@ -12,15 +12,15 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
+import fetcher from "@utils/fetcher";
 import { useState } from "react";
-import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
+import useSWR, { useSWRConfig } from "swr";
 
 const adminComments = () => {
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const { mutate } = useSWRConfig();
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
@@ -37,11 +37,17 @@ const adminComments = () => {
     setDialog(false);
   };
 
-  const { data: results, mutate } = useSWR("/api/admin/comments", fetcher);
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR("/api/admin/comments", fetcher, {
+    shouldRetryOnError: false,
+  });
 
   let list;
 
-  if (!results || results == undefined) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -50,117 +56,145 @@ const adminComments = () => {
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
-  } else if (Array.isArray(results) && results.length == 0) {
-    list = (
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        no results
-      </Typography>
-    );
   } else {
-    list = (
-      <List>
-        {results.map((result) => {
-          return (
-            <>
-              <ListItem
-                key={result._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: "start",
-                  textTransform: "none",
-                  border: `1px solid ${alpha(theme.palette.secondary.main, 1)}`,
-                  margin: "20px auto",
-                  borderRadius: "10px",
-                }}
-              >
-                <div style={{ display: "flow-root", flexGrow: 1 }}>
-                  <Link href={`/admin/people/${result.name}`} underline="hover">
-                    {result.name}
-                  </Link>
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate("/api/admin/comments")}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(results) && results.length === 0) {
+        list = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else {
+        list = (
+          <List>
+            {results.map((result) => {
+              return (
+                <>
+                  <ListItem
+                    key={result._id}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "start",
+                      textTransform: "none",
+                      border: `1px solid ${alpha(
+                        theme.palette.secondary.main,
+                        1
+                      )}`,
+                      margin: "20px auto",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <div style={{ display: "flow-root", flexGrow: 1 }}>
+                      <Link
+                        href={`/admin/people/${result.name}`}
+                        underline="hover"
+                      >
+                        {result.name}
+                      </Link>
 
-                  <ListItemText primary={result.text}></ListItemText>
-                </div>
+                      <ListItemText primary={result.text}></ListItemText>
+                    </div>
 
-                {isMobile ? (
-                  <div style={{ display: "grid" }}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() =>
-                        handleOpenDialog("Approve", "Comment", result)
-                      }
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      sx={{ marginTop: "4px" }}
-                      onClick={() =>
-                        handleOpenDialog("Deny", "Comment", result)
-                      }
-                    >
-                      Deny
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      sx={{
-                        marginTop: "4px",
-                        color: "#fc7ebf",
-                        borderColor: "#fc7ebf",
-                      }}
-                      onClick={() =>
-                        handleOpenDialog("Delete", "Comment", result)
-                      }
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                ) : (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={() =>
-                        handleOpenDialog("Approve", "Comment", result)
-                      }
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      sx={{ marginLeft: "4px" }}
-                      onClick={() =>
-                        handleOpenDialog("Deny", "Comment", result)
-                      }
-                    >
-                      Deny
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      sx={{
-                        marginLeft: "4px",
-                        marginTop: "4px",
-                        color: "#fc7ebf",
-                        borderColor: "#fc7ebf",
-                      }}
-                      onClick={() =>
-                        handleOpenDialog("Delete", "Comment", result)
-                      }
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
-              </ListItem>
-            </>
-          );
-        })}
-      </List>
-    );
+                    {isMobile ? (
+                      <div style={{ display: "grid" }}>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() =>
+                            handleOpenDialog("Approve", "Comment", result)
+                          }
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          sx={{ marginTop: "4px" }}
+                          onClick={() =>
+                            handleOpenDialog("Deny", "Comment", result)
+                          }
+                        >
+                          Deny
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          sx={{
+                            marginTop: "4px",
+                            color: "#fc7ebf",
+                            borderColor: "#fc7ebf",
+                          }}
+                          onClick={() =>
+                            handleOpenDialog("Delete", "Comment", result)
+                          }
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() =>
+                            handleOpenDialog("Approve", "Comment", result)
+                          }
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          sx={{ marginLeft: "4px" }}
+                          onClick={() =>
+                            handleOpenDialog("Deny", "Comment", result)
+                          }
+                        >
+                          Deny
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          sx={{
+                            marginLeft: "4px",
+                            marginTop: "4px",
+                            color: "#fc7ebf",
+                            borderColor: "#fc7ebf",
+                          }}
+                          onClick={() =>
+                            handleOpenDialog("Delete", "Comment", result)
+                          }
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    )}
+                  </ListItem>
+                </>
+              );
+            })}
+          </List>
+        );
+      }
+    }
   }
 
   return (

@@ -1,0 +1,59 @@
+{
+      "type": "object",
+      "required": [
+        "name",
+        "text"
+      ],
+      "properties": {
+        "post_id": {
+          "type": "string",
+          "minLength": 24,
+          "maxLength": 24,
+          "description": "must be a string",
+          "pattern": "^[A-Za-z0-9]*$"
+        },
+        "comment_ref": {
+          "oneOf": [
+            {"type": "string",
+            "minLength": 24,
+            "maxLength": 24,
+            "description": "must be a string",
+            "pattern": "^[A-Za-z0-9]*$"
+            },
+            {"type": "string",
+            "const": "",
+            "description": "must be an empty string"
+            }
+          ]
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "must be a string"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 5000,
+          "description": "must be a string"
+        },
+        "approved": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false",
+            "pending"
+          ],
+          "description": "must be a string"
+        },
+        "updated": {
+          "type": "boolean",
+          "description": "must be a boolean"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "must be a string"
+        }
+      },
+      "additionalProperties": false
+  }

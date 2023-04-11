@@ -1,4 +1,5 @@
-import { getPostComments } from "@utils/mongodb/helpers";
+import { getPostComments } from "@utils/mongodb/mongoHelpers";
+import { validID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -6,14 +7,17 @@ export default async function handler(req, res) {
   }
 
   const id = req.query.id;
+  if (validID(id)) {
+    try {
+      const results = await getPostComments(id);
 
-  try {
-    const results = await getPostComments(id);
+      return res.status(200).json(results);
+    } catch (err) {
+      console.error(err);
 
-    return res.status(200).json(results);
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({ msg: "Something went wrong." });
+      res.status(500).json({ msg: "Something went wrong." });
+    }
+  } else {
+    res.status(403).json({ msg: "Forbidden" });
   }
 }

@@ -1,51 +1,32 @@
-import { checkPerson, createFlag } from "@utils/mongodb/helpers";
-import { getSession } from "next-auth/react";
+import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { ajv } from "@schema/validation";
+import { createFlag } from "@utils/mongodb/mongoHelpers";
+import { validName } from "@utils/validationHelpers";
+import { getServerSession } from "next-auth/next";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
   // console.log(session);
   if (session) {
     if (req.method !== "POST") {
       return res.status(405).json({ msg: "Method not allowed" });
     }
-    const { name, flagged, type, text, content_id, ref, status, date } =
-      req.body;
+    const data = req.body;
 
-    if (session.user.name && session.user.name == name) {
-      try {
-        const createdFlag = await createFlag(
-          name,
-          flagged,
-          type,
-          text,
-          content_id,
-          ref,
-          status,
-          date
-        );
-
-        return res.status(200).json(createdFlag);
-      } catch (err) {
-        console.error(err);
-
-        res.status(500).json({ msg: "Something went wrong." });
-      }
-    } else if (!session.user.name) {
-      const person = await checkPerson(name);
-      if (person && person.email == session.user.email) {
+    const validate = ajv.getSchema("flag");
+    const valid = validate(data);
+    if (valid) {
+      if (
+        session.user.name &&
+        session.user.name === data.name &&
+        validName(data.flagged)
+      ) {
         try {
-          const createdFlag = await createFlag(
-            name,
-            flagged,
-            type,
-            text,
-            content_id,
-            ref,
-            status,
-            date
-          );
+          data.status = "pending";
+          data.date = new Date().toUTCString();
+          const createdFlag = await createFlag(data);
 
           return res.status(200).json(createdFlag);
         } catch (err) {
@@ -54,14 +35,15 @@ export default async function handler(req, res) {
           res.status(500).json({ msg: "Something went wrong." });
         }
       } else {
-        res.status(401);
+        res.status(401).json({ msg: "Unauthorized" });
       }
     } else {
-      res.status(401);
+      // console.log(validate.errors);
+      res.status(403).json({ msg: "Forbidden" });
     }
   } else {
     // Not Signed in
-    res.status(401);
+    res.status(401).json({ msg: "Unauthorized" });
   }
   res.end();
 }

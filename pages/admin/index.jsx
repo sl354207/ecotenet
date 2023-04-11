@@ -1,7 +1,7 @@
-import AdminDrawer from "@components/AdminDrawer";
-import Header from "@components/Header";
-import Link from "@components/Link";
-import { useSnackbarContext } from "@components/SnackbarContext";
+import { useSnackbarContext } from "@components/context/SnackbarContext";
+import AdminDrawer from "@components/drawers/AdminDrawer";
+import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import {
@@ -13,16 +13,27 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
-import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
-
+import useSWR, { useSWRConfig } from "swr";
 const admin = () => {
   const { snackbar, setSnackbar } = useSnackbarContext();
+  const { mutate } = useSWRConfig();
 
-  const { data: stats } = useSWR("/api/admin/stats", fetcher);
-  const { data: posts, mutate } = useSWR("/api/admin/posts", fetcher);
+  const {
+    data: stats,
+    isLoading: statLoading,
+    error: statError,
+  } = useSWR("/api/admin/stats", fetcher, {
+    shouldRetryOnError: false,
+  });
+  const {
+    data: posts,
+    isLoading: postLoading,
+    error: postError,
+  } = useSWR("/api/admin/posts", fetcher, {
+    shouldRetryOnError: false,
+  });
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const updateFeature = async (action, post) => {
@@ -62,12 +73,14 @@ const admin = () => {
 
           if (res1.ok) {
             if (mutate) {
-              mutate();
+              mutate("/api/admin/posts");
             }
 
             setSnackbar({
               ...snackbar,
               open: true,
+              vertical: "bottom",
+              horizontal: "left",
               severity: "success",
               message: "Feature added successfully",
             });
@@ -76,6 +89,8 @@ const admin = () => {
             setSnackbar({
               ...snackbar,
               open: true,
+              vertical: "bottom",
+              horizontal: "left",
               severity: "error",
               message:
                 "There was a problem adding feature. Please try again later",
@@ -86,6 +101,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message:
               "There was a problem adding feature. Please try again later",
@@ -108,10 +125,12 @@ const admin = () => {
         });
 
         if (res1.ok) {
-          mutate();
+          mutate("/api/admin/posts");
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message:
               "Feature removed successfully and has been put back on pending list",
@@ -121,6 +140,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message:
               "There was a problem submitting feature. Please try again later",
@@ -143,10 +164,12 @@ const admin = () => {
         });
 
         if (res2.ok) {
-          mutate();
+          mutate("/api/admin/posts");
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "success",
             message: "Feature removed from list",
           });
@@ -155,6 +178,8 @@ const admin = () => {
           setSnackbar({
             ...snackbar,
             open: true,
+            vertical: "bottom",
+            horizontal: "left",
             severity: "error",
             message:
               "There was a problem removing feature. Please try again later",
@@ -171,7 +196,7 @@ const admin = () => {
 
   let list;
 
-  if (!posts || posts == undefined) {
+  if (postLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -180,190 +205,223 @@ const admin = () => {
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
-  } else if (Array.isArray(posts) && posts.length == 0) {
-    list = (
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        no results
-      </Typography>
-    );
   } else {
-    for (const item of posts) {
-      if (item.feature == "true") {
-        count += 1;
-      }
-    }
-    list = (
-      <>
-        <Typography>Feature count: {count}</Typography>
-        <List>
-          {posts.map((post) => {
-            return (
-              <>
-                <ListItem
-                  key={post._id}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "start",
-                    textTransform: "none",
-                    border: `1px solid ${theme.palette.secondary.main}`,
-                    margin: "20px auto",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <Grid container spacing={1} sx={{ marginTop: "20px" }}>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
+    if (postError) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate("/api/admin/posts")}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(posts) && posts.length === 0) {
+        list = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else {
+        for (const item of posts) {
+          if (item.feature === "true") {
+            count += 1;
+          }
+        }
+        list = (
+          <>
+            <Typography>Feature count: {count}</Typography>
+            <List>
+              {posts.map((post) => {
+                return (
+                  <>
+                    <ListItem
+                      key={post._id}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "start",
+                        textTransform: "none",
+                        border: `1px solid ${theme.palette.secondary.main}`,
+                        margin: "20px auto",
+                        borderRadius: "10px",
+                      }}
                     >
-                      <Link
-                        href={`/admin/people/${post.name}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="hover"
-                      >
-                        {post.name}
-                      </Link>
-                    </Grid>
+                      <Grid container spacing={1} sx={{ marginTop: "20px" }}>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Link
+                            href={`/admin/people/${post.name}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            underline="hover"
+                          >
+                            {post.name}
+                          </Link>
+                        </Grid>
 
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      <Typography>Current Feature: {post.feature}</Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      <Link
-                        href={`/posts/${post._id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="hover"
-                      >
-                        View Post
-                      </Link>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      <Typography>{post.title}</Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      <Typography>
-                        Featured Before: {post.featured ? "true" : "false"}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      {post.feature == "true" ? (
-                        <Button variant="outlined" color="secondary" disabled>
-                          {isMobile ? (
-                            <>
-                              <AddIcon></AddIcon>
-                            </>
-                          ) : (
-                            <>Add to Features</>
-                          )}
-                        </Button>
-                      ) : (
-                        <>
-                          {count >= 10 ? (
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Typography>
+                            Current Feature: {post.feature}
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Link
+                            href={`/posts/${post._id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            underline="hover"
+                          >
+                            View Post
+                          </Link>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Typography>{post.title}</Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Typography>
+                            Featured Before: {post.featured ? "true" : "false"}
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          {post.feature === "true" ? (
                             <Button
                               variant="outlined"
                               color="secondary"
                               disabled
                             >
                               {isMobile ? (
-                                <AddIcon></AddIcon>
+                                <>
+                                  <AddIcon></AddIcon>
+                                </>
                               ) : (
                                 <>Add to Features</>
                               )}
+                            </Button>
+                          ) : (
+                            <>
+                              {count >= 10 ? (
+                                <Button
+                                  variant="outlined"
+                                  color="secondary"
+                                  disabled
+                                >
+                                  {isMobile ? (
+                                    <AddIcon></AddIcon>
+                                  ) : (
+                                    <>Add to Features</>
+                                  )}
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="outlined"
+                                  color="secondary"
+                                  onClick={() =>
+                                    updateFeature("addFeature", post)
+                                  }
+                                >
+                                  {isMobile ? (
+                                    <AddIcon></AddIcon>
+                                  ) : (
+                                    <>Add to Features</>
+                                  )}
+                                </Button>
+                              )}
+                            </>
+                          )}
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Typography>{post.date}</Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          <Typography variant="h6" color="secondary">
+                            {post.count}
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={4}
+                          sx={{ textAlign: "center", alignSelf: "center" }}
+                        >
+                          {post.feature !== "true" ? (
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              onClick={() => updateFeature("removeList", post)}
+                              size={isMobile ? "small" : "medium"}
+                            >
+                              {isMobile ? <>Delist</> : <>Remove from List</>}
                             </Button>
                           ) : (
                             <Button
                               variant="outlined"
                               color="secondary"
-                              onClick={() => updateFeature("addFeature", post)}
+                              onClick={() =>
+                                updateFeature("removeFeature", post)
+                              }
                             >
                               {isMobile ? (
-                                <AddIcon></AddIcon>
+                                <RemoveIcon></RemoveIcon>
                               ) : (
-                                <>Add to Features</>
+                                <>Remove from Features</>
                               )}
                             </Button>
                           )}
-                        </>
-                      )}
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      <Typography>{post.date}</Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      <Typography variant="h6" color="secondary">
-                        {post.count}
-                      </Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ textAlign: "center", alignSelf: "center" }}
-                    >
-                      {post.feature !== "true" ? (
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => updateFeature("removeList", post)}
-                          size={isMobile ? "small" : "medium"}
-                        >
-                          {isMobile ? <>Delist</> : <>Remove from List</>}
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => updateFeature("removeFeature", post)}
-                        >
-                          {isMobile ? (
-                            <RemoveIcon></RemoveIcon>
-                          ) : (
-                            <>Remove from Features</>
-                          )}
-                        </Button>
-                      )}
-                    </Grid>
-                  </Grid>
-                </ListItem>
-              </>
-            );
-          })}
-        </List>
-      </>
-    );
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                  </>
+                );
+              })}
+            </List>
+          </>
+        );
+      }
+    }
   }
+
   let statSection;
 
-  if (!stats || stats == undefined) {
+  if (statLoading) {
     statSection = (
       <CircularProgress
         color="secondary"
@@ -373,15 +431,35 @@ const admin = () => {
       />
     );
   } else {
-    statSection = (
-      <>
-        <Typography align="center">Species: {stats.species}</Typography>
-        <Typography align="center">People: {stats.people}</Typography>
-        <Typography align="center">Posts: {stats.posts}</Typography>
-        <Typography align="center">Comments: {stats.comments}</Typography>
-        <Typography align="center">Flags: {stats.flags}</Typography>
-      </>
-    );
+    if (statError) {
+      statSection = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate("/api/admin/stats")}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      statSection = (
+        <>
+          <Typography align="center">Species: {stats.species}</Typography>
+          <Typography align="center">People: {stats.people}</Typography>
+          <Typography align="center">Posts: {stats.posts}</Typography>
+          <Typography align="center">Comments: {stats.comments}</Typography>
+          <Typography align="center">Flags: {stats.flags}</Typography>
+        </>
+      );
+    }
   }
 
   return (

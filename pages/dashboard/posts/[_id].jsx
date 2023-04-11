@@ -1,26 +1,34 @@
-import StepForm from "@components/postForm/StepForm";
-import { useUserContext } from "@components/UserContext";
-import { CircularProgress } from "@mui/material";
+import { useUserContext } from "@components/context/UserContext";
+import StepForm from "@components/forms/StepForm";
+import { Button, CircularProgress } from "@mui/material";
+import fetcher from "@utils/fetcher";
 import { useRouter } from "next/router";
-import useSWR from "swr";
-
-const fetcher = (url) => fetch(url).then((r) => r.json());
+import useSWR, { useSWRConfig } from "swr";
 
 export default function DraftByUser() {
-  // set id to id in url query
   const router = useRouter();
   const id = router.query._id;
 
   const { user } = useUserContext();
+  const { mutate } = useSWRConfig();
 
   // retrieve drafts from drafts api. convert swr data to name posts.
-  const { data: post } = useSWR(
-    id ? `/api/dashboard/posts/${id}?name=${user.name}` : null,
-    fetcher
+  const {
+    data: post,
+    isLoading,
+    error,
+  } = useSWR(
+    id && user && user.name
+      ? `/api/dashboard/posts/${id}?name=${user.name}`
+      : null,
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
   // loading state until draft is retrieved
-  if (!post || post == undefined)
+  if (isLoading) {
     return (
       <CircularProgress
         color="secondary"
@@ -29,6 +37,29 @@ export default function DraftByUser() {
         sx={{ margin: "100px auto", display: "flex", justifySelf: "center" }}
       />
     );
-
-  return <StepForm post={post} user={user} />;
+  } else {
+    if (error) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() =>
+              mutate(`/api/dashboard/posts/${id}?name=${user.name}`)
+            }
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      return <>{post && <StepForm post={post} user={user} />}</>;
+    }
+  }
 }

@@ -1,0 +1,65 @@
+{
+    "type": "object",
+    "required": [
+      "email"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "maxLength": 60,
+        "description": "must be a string"
+        },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "maxLength": 60,
+        "description": "must be an email"
+      },
+      "bio": {
+        "type": "string",
+        "maxLength": 5000,
+        "description": "must be a string"
+      },
+      "website": {
+        "type": "string",
+        "maxLength": 100,
+        "description": "must be a string"
+      },
+      "socials": {
+        "type": "array",
+        "description": "must be an array",
+        "maxItems": 3,
+        "items": {
+            "type": "string",
+            "maxLength": 100
+        }
+      },
+      "denials": {
+        "type": "integer",
+        "description": "must be an integer"
+      },
+      "approved": {
+        "type": "string",
+        "enum": [
+          "true",
+          "false",
+          "pending"
+        ],
+        "description": "must be a string"
+      },
+      "emailVerified": {
+        "type": "string",
+        "format": "date-time",
+        "description": "must be a date"
+      },
+      "role": {
+        "type": "string",
+        "enum": [
+            "user",
+            "admin"
+          ],
+        "description": "must be a string"
+      }
+    },
+    "additionalProperties": false
+}
