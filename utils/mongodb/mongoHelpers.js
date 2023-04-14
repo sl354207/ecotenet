@@ -409,6 +409,22 @@ const getSpecies = async (speciesType, unique_id) => {
     throw new Error(error);
   }
 };
+const getAllSpecies = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db
+      .collection("species")
+      .find({})
+      .project({ _id: 1 })
+
+      .toArray();
+
+    return species;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 // retrieve single mammal by id from database
 const getSpeciesById = async (id) => {
@@ -711,6 +727,24 @@ const getPeople = async () => {
       .find({
         approved: "pending",
       })
+      .toArray();
+
+    return people;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getApprovedPeople = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const people = await db
+      .collection("users")
+      .find({
+        approved: "true",
+      })
+
+      .project({ name: 1 })
       .toArray();
 
     return people;
@@ -1026,6 +1060,7 @@ module.exports = {
   updateComment,
   deleteComment,
   getSpecies,
+  getAllSpecies,
   getSpeciesById,
   searchAllPosts,
   searchAllSpecies,
@@ -1034,6 +1069,7 @@ module.exports = {
   autoSpecies,
   getStats,
   getPeople,
+  getApprovedPeople,
   getPerson,
   getPersonDash,
   getPersonAdmin,

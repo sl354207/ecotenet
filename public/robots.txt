@@ -1,25 +1,30 @@
-
-User-agent: *
+# AdsBot-Google
 User-agent: AdsBot-Google
-Disallow: /admin/
-Disallow: /auth/new-user
-Disallow: /dashboard/
+Disallow: /dashboard*
+Disallow: /admin*
+Disallow: /featured*
+Disallow: /api*
 Disallow: /approved
-Disallow: /search
+Disallow: /500
+Disallow: /404
+Disallow: /auth/new-user
+Disallow: /server-sitemap.xml
 
-# Use Allow to make exceptions to Disallow
+# *
+User-agent: *
+Disallow: /*.json$
+Disallow: /*_buildManifest.js$
+Disallow: /*_middlewareManifest.js$
+Disallow: /*_ssgManifest.js$
+Disallow: /*.js$
 
-# Allow all crawlers
-# User-agent: *
-# Allow: /
+# *
+User-agent: *
+Allow: /
 
-#UPDATE, double check which ones are necessary
+# Host
+Host: https://www.ecotenet.org
 
-#Sitemap: https://ecotenet.com/sitemap.xml
-#Sitemap: https://www.ecotenet.com/sitemap.xml
-#Sitemap: http://ecotenet.com/sitemap.xml
-#Sitemap: http://www.ecotenet.com/sitemap.xml
-#Sitemap: https://ecotenet.org/sitemap.xml
-Sitemap: https://www.ecotenet.org/sitemap_index.xml
-#Sitemap: http://ecotenet.org/sitemap.xml
-#Sitemap: http://www.ecotenet.org/sitemap.xml
+# Sitemaps
+Sitemap: https://www.ecotenet.org/sitemap.xml
+Sitemap: https://www.ecotenet.org/server-sitemap.xml
