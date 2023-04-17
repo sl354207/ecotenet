@@ -174,6 +174,7 @@ export const getStaticProps = async (context) => {
             person: JSON.parse(JSON.stringify(person)),
             posts: JSON.parse(JSON.stringify(posts)),
           },
+          revalidate: 60,
         };
       }
     } catch (error) {
