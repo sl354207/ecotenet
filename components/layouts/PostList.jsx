@@ -10,7 +10,7 @@ import theme from "@utils/theme";
 import { useRouter } from "next/router";
 
 // pass down posts from database to PostList as a prop
-const PostList = ({ posts, featured, search, handleClose }) => {
+const PostList = ({ posts, search, handleClose }) => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -61,9 +61,7 @@ const PostList = ({ posts, featured, search, handleClose }) => {
                     handleClose();
                   }
 
-                  router.push(
-                    featured ? `/featured/${post._id}` : `/posts/${post._id}`
-                  );
+                  router.push(`/posts/${post._id}`);
                 }
               }}
             >

@@ -718,6 +718,25 @@ const getStats = async () => {
     throw new Error(error);
   }
 };
+const getSitemapStats = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db.collection("species").estimatedDocumentCount({});
+    const ecoregions = await db
+      .collection("ecoregions")
+      .estimatedDocumentCount({});
+
+    const stats = {
+      species: species,
+      ecoregions: ecoregions,
+    };
+
+    return stats;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const getPeople = async () => {
   try {
     const db = await connectToDatabase();
@@ -1068,6 +1087,7 @@ module.exports = {
   searchEcoSpecies,
   autoSpecies,
   getStats,
+  getSitemapStats,
   getPeople,
   getApprovedPeople,
   getPerson,

@@ -67,13 +67,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
         </div>
       );
     } else {
-      list = (
-        <PostList
-          posts={results}
-          featured={true}
-          handleClose={handleCloseFeature}
-        />
-      );
+      list = <PostList posts={results} handleClose={handleCloseFeature} />;
     }
   }
 

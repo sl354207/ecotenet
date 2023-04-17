@@ -90,5 +90,15 @@ module.exports = (phase, { defaultConfig }) => {
     eslint: {
       dirs: ["pages", "components", "utils"], // Only run ESLint on the 'pages', 'components' and 'utils' directories during production builds (next build)
     },
+    rewrites: async () => [
+      {
+        source: "/server-sitemap.xml",
+        destination: "/server-sitemap",
+      },
+      {
+        source: "/server-sitemap-:page.xml",
+        destination: "/server-sitemap/:page",
+      },
+    ],
   };
 };

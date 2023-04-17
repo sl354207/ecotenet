@@ -61,7 +61,7 @@ const featured = ({ featured }) => {
           These are currently our favorite posts that people have shared on the
           site
         </Typography>
-        <PostList posts={featured} featured={true} />
+        <PostList posts={featured} />
       </Container>
       <Footer />
     </>
