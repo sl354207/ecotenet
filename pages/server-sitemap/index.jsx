@@ -1,7 +1,7 @@
 import { getSitemapStats } from "@utils/mongodb/mongoHelpers";
 import { getServerSideSitemapIndexLegacy } from "next-sitemap";
 
-const URLS_PER_SITEMAP = 40000;
+const URLS_PER_SITEMAP = 30000;
 
 export const getServerSideProps = async (ctx) => {
   try {

@@ -1,6 +1,6 @@
 import { getAllSpecies, getEcoregions } from "@utils/mongodb/mongoHelpers";
 import { getServerSideSitemapLegacy } from "next-sitemap";
-const URLS_PER_SITEMAP = 40000;
+const URLS_PER_SITEMAP = 30000;
 const SITE_URL = "https://www.ecotenet.org";
 
 export const getServerSideProps = async (ctx) => {
@@ -25,7 +25,7 @@ export const getServerSideProps = async (ctx) => {
 
     const totalSitemaps = Math.ceil(species.length / URLS_PER_SITEMAP) + 1;
 
-    if (page > totalSitemaps) {
+    if (page > totalSitemaps - 1) {
       return { notFound: true };
     }
 
@@ -43,7 +43,7 @@ export const getServerSideProps = async (ctx) => {
       }));
     } else {
       if (species.length / page < URLS_PER_SITEMAP) {
-        const slice = species.slice((page - 1) * 40000);
+        const slice = species.slice((page - 1) * URLS_PER_SITEMAP);
         fields = slice?.map((data) => ({
           loc: `${SITE_URL}//species/${data._id.toString()}`,
           changefreq: "monthly",
@@ -51,7 +51,10 @@ export const getServerSideProps = async (ctx) => {
           lastmod: new Date().toISOString(),
         }));
       } else {
-        const slice = species.slice((page - 1) * 40000, page * 40000);
+        const slice = species.slice(
+          (page - 1) * URLS_PER_SITEMAP,
+          page * URLS_PER_SITEMAP
+        );
         fields = slice?.map((data) => ({
           loc: `${SITE_URL}//species/${data._id.toString()}`,
           changefreq: "monthly",
