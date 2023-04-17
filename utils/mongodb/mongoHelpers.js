@@ -358,20 +358,6 @@ const updateComment = async (_id, data) => {
   }
 };
 
-//delete a comment
-// const deleteComment = async (_id) => {
-//   try {
-//     const db = await connectToDatabase();
-
-//     const deleted = await db
-//       .collection("comments")
-//       .deleteMany({ $or: [{ _id: new ObjectId(_id) }, { comment_ref: _id }] });
-
-//     return deleted;
-//   } catch (error) {
-//     throw new Error(error);
-//   }
-// };
 const deleteComment = async (_id) => {
   try {
     const db = await connectToDatabase();
@@ -753,14 +739,14 @@ const getPeople = async () => {
     throw new Error(error);
   }
 };
-const getApprovedPeople = async () => {
+const getAllPeople = async (blocked) => {
   try {
     const db = await connectToDatabase();
 
     const people = await db
       .collection("users")
       .find({
-        approved: "true",
+        blocked: blocked,
       })
 
       .project({ name: 1 })
@@ -1089,7 +1075,7 @@ module.exports = {
   getStats,
   getSitemapStats,
   getPeople,
-  getApprovedPeople,
+  getAllPeople,
   getPerson,
   getPersonDash,
   getPersonAdmin,

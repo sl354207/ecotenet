@@ -59,6 +59,10 @@
             "admin"
           ],
         "description": "must be a string"
+      },
+      "blocked": {
+        "type": "boolean",
+          "description": "must be a boolean"
       }
     },
     "additionalProperties": false

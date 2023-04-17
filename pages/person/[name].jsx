@@ -6,7 +6,11 @@ import PostList from "@components/layouts/PostList";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
 import { Button, Container, IconButton, Typography } from "@mui/material";
-import { getPerson, getProfilePosts } from "@utils/mongodb/mongoHelpers";
+import {
+  getAllPeople,
+  getPerson,
+  getProfilePosts,
+} from "@utils/mongodb/mongoHelpers";
 import { validName } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -122,10 +126,15 @@ const person = ({ person, posts }) => {
             )}
           </div>
         )}
-        <Typography variant="h6" sx={{ marginLeft: "16px" }}>
-          Posts:
-        </Typography>
-        {posts && <PostList posts={posts} />}
+
+        {posts.length > 0 && (
+          <>
+            <Typography variant="h6" sx={{ marginLeft: "16px" }}>
+              Posts:
+            </Typography>
+            <PostList posts={posts} />
+          </>
+        )}
 
         {dialog && (
           <DynamicFlag
@@ -142,7 +151,7 @@ const person = ({ person, posts }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
+export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id
   const name = context.params.name;
 
@@ -181,6 +190,25 @@ export const getServerSideProps = async (context) => {
       notFound: true,
     };
   }
+};
+
+// build routing paths for each post at build time
+export const getStaticPaths = async () => {
+  const people = await getAllPeople(false);
+
+  const peopleClean = people.filter(function (element) {
+    return element.name !== undefined;
+  });
+
+  const names = peopleClean.map((person) => person.name);
+
+  // create paths array with objects that follow structure given
+  const paths = names.map((name) => ({ params: { name: name.toString() } }));
+
+  return {
+    paths,
+    fallback: "blocking",
+  };
 };
 
 export default person;

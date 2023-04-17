@@ -221,6 +221,7 @@ export const authOptions = {
         user.socials = [];
         user.denials = 0;
         user.approved = "pending";
+        user.blocked = false;
       }
       return true;
     },

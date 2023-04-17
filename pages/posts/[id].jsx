@@ -568,25 +568,6 @@ const post = ({ post }) => {
   );
 };
 
-// UPDATE!!! POSSIBLY ONLY STATIC FOR USER TESTING UNTIL UPGRADE ACCOUNT
-
-// fetch post data at build time
-// export const getServerSideProps = async (context) => {
-//   // context allows us to fetch specific data points from data such as id
-//   const _id = context.params.id;
-
-//   const post = await getPostById(_id);
-
-//   // const comments = await getPostComments(post._id.toString());
-
-//   return {
-//     props: {
-//       post: JSON.parse(JSON.stringify(post)),
-//       // comments: JSON.parse(JSON.stringify(comments)),
-//     },
-//   };
-// };
-
 // fetch post data at build time
 export const getStaticProps = async (context) => {
   // context allows us to fetch specific data points from data such as id

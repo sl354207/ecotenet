@@ -9,15 +9,6 @@ export const getServerSideProps = async (ctx) => {
   }
   const page = Number(ctx.params?.page);
 
-  // // this would load the items that make dynamic pages
-  // const response = await fetchDynamicPagesForSitemap({
-  //   page,
-  //   pageSize: URLS_PER_SITEMAP,
-  // });
-
-  // const total = response.data.pageData.total;
-  // const totalSitemaps = Math.ceil(total / URLS_PER_SITEMAP);
-  // const res = await getSitemapStats();
   try {
     const ecoregions = await getEcoregions();
 
@@ -29,10 +20,6 @@ export const getServerSideProps = async (ctx) => {
       return { notFound: true };
     }
 
-    // const fields = response.data.items.map(items => ({
-    //   loc: `${SITE_URL}/${memorial.slug}`,
-    //   lastmod: new Date().toISOString(),
-    // }));
     let fields;
     if (page === 0) {
       fields = ecoregions?.map((data) => ({
@@ -67,25 +54,6 @@ export const getServerSideProps = async (ctx) => {
   } catch (error) {
     console.error(error);
   }
-
-  // const people = await getApprovedPeople();
-  // const peopleFields = people?.map((data) => ({
-  //   loc: `${siteUrl}/person/${data.name}`,
-  //   lastmod: new Date().toISOString(),
-  // }));
-
-  // const posts = await getPosts("published", "true");
-  // const postFields = posts?.map((data) => ({
-  //   loc: `${siteUrl}/posts/${data._id.toString()}`,
-  //   lastmod: new Date().toISOString(),
-  // }));
-  // const species = await getAllSpecies();
-  // const speciesFields = species?.map((data) => ({
-  //   loc: `${siteUrl}/species/${data._id.toString()}`,
-  //   lastmod: new Date().toISOString(),
-  // }));
-
-  // const fields = ecoFields.concat(peopleFields, postFields, speciesFields);
 };
 
 // Default export to prevent next.js errors

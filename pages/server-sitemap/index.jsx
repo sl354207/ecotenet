@@ -20,7 +20,6 @@ export const getServerSideProps = async (ctx) => {
   } catch (error) {
     console.error(error);
   }
-  // obtain the count hitting an API endpoint or checking the DB
 };
 
 // Default export to prevent Next.js errors
