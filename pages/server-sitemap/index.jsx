@@ -5,13 +5,10 @@ const URLS_PER_SITEMAP = 40000;
 
 export const getServerSideProps = async (ctx) => {
   try {
-    // obtain the count hitting an API endpoint or checking the DB
     const res = await getSitemapStats();
-    const species = res.species;
-    //   const ecoregions = res.ecoregions
-    //   const count = res.species + res.ecoregions;
+    const count = res.species + res.ecoregions;
 
-    const totalSitemaps = Math.ceil(species.length / URLS_PER_SITEMAP) + 1;
+    const totalSitemaps = Math.ceil(count / URLS_PER_SITEMAP) + 1;
 
     const sitemaps = Array(totalSitemaps)
       .fill("")
@@ -23,6 +20,7 @@ export const getServerSideProps = async (ctx) => {
   } catch (error) {
     console.error(error);
   }
+  // obtain the count hitting an API endpoint or checking the DB
 };
 
 // Default export to prevent Next.js errors
