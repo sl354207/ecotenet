@@ -20,8 +20,9 @@ export const getServerSideProps = async (ctx) => {
   // const res = await getSitemapStats();
   try {
     const ecoregions = await getEcoregions();
+
     const species = await getAllSpecies();
-    const count = ecoregions.length() + species.length();
+    const count = ecoregions.length + species.length;
     const totalSitemaps = Math.ceil(count / URLS_PER_SITEMAP);
 
     if (page > totalSitemaps) {
