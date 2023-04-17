@@ -1,6 +1,6 @@
 import { getAllSpecies, getEcoregions } from "@utils/mongodb/mongoHelpers";
 import { getServerSideSitemapLegacy } from "next-sitemap";
-const URLS_PER_SITEMAP = 30000;
+const URLS_PER_SITEMAP = 20000;
 const SITE_URL = "https://www.ecotenet.org";
 
 export const getServerSideProps = async (ctx) => {
