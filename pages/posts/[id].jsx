@@ -37,6 +37,7 @@ import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
 import { validID } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
+import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
@@ -260,6 +261,7 @@ const post = ({ post }) => {
 
   return (
     <>
+      <NextSeo />
       <Container sx={{ backgroundColor: theme.palette.primary.main }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div

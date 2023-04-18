@@ -40,12 +40,22 @@ export default function MyApp(props) {
               <CssBaseline />
               <MainLayout>
                 <DefaultSeo
-                  title="Ecotenet"
-                  description="Connecting nature-based knowledge to place"
+                  title="Connect nature-based knowledge to place"
+                  titleTemplate="Ecotenet | %s"
+                  defaultTitle="Ecotenet"
+                  description="Learn and share knowledge about how we interact with our local environment and the species within it. Connect this knowledge to place through ecological boundaries called ecoregions"
                   openGraph={{
                     type: "website",
                     url: "https://www.ecotenet.org",
                     siteName: "Ecotenet",
+                    images: [
+                      {
+                        url: "https://www.ecotenet.org/logo.svg",
+                        width: 1200,
+                        height: 630,
+                        alt: "Ecotenet logo",
+                      },
+                    ],
                   }}
                   // twitter={{
                   //   handle: "@handle",
