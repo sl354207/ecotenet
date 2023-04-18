@@ -43,14 +43,14 @@ export default function MyApp(props) {
                   title="Connect nature-based knowledge to place"
                   titleTemplate="Ecotenet | %s"
                   defaultTitle="Ecotenet"
-                  description="Learn and share knowledge about how we interact with our local environment and the species within it. Connect this knowledge to place through ecological boundaries called ecoregions"
+                  description="Use ecoregions to learn and share knowledge about how we interact with our local environment and the species within it. "
                   openGraph={{
                     type: "website",
                     url: "https://www.ecotenet.org",
                     siteName: "Ecotenet",
                     images: [
                       {
-                        url: "/logo.svg",
+                        url: "https://www.ecotenet.org/logo.svg",
                         width: 1200,
                         height: 630,
                         alt: "Ecotenet logo",
