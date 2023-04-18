@@ -9,7 +9,6 @@
     "lint": "next lint",
     "test": "jest --watch",
     "postbuild": "next-sitemap"
-    
   },
   "dependencies": {
     "@emotion/cache": "^11.10.5",
@@ -34,6 +33,7 @@
     "mongodb": "^5.1.0",
     "next": "^13.2.4",
     "next-auth": "^4.21.1",
+    "next-seo": "^6.0.0",
     "nodemailer": "^6.9.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",

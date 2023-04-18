@@ -15,6 +15,7 @@ import ErrorBoundary from "@components/layouts/ErrorBoundary";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import { DefaultSeo } from "next-seo";
 import Head from "next/head";
 import PropTypes from "prop-types";
 
@@ -38,6 +39,20 @@ export default function MyApp(props) {
               {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
               <CssBaseline />
               <MainLayout>
+                <DefaultSeo
+                  title="Ecotenet"
+                  description="Connecting nature-based knowledge to place"
+                  openGraph={{
+                    type: "website",
+                    url: "https://www.ecotenet.org",
+                    siteName: "Ecotenet",
+                  }}
+                  // twitter={{
+                  //   handle: "@handle",
+                  //   site: "@site",
+                  //   cardType: "summary_large_image",
+                  // }}
+                />
                 <Component key={router.asPath} {...pageProps} />
               </MainLayout>
             </ThemeProvider>
