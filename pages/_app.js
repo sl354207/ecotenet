@@ -50,7 +50,7 @@ export default function MyApp(props) {
                     siteName: "Ecotenet",
                     images: [
                       {
-                        url: "https://www.ecotenet.org/logo.svg",
+                        url: "/logo.svg",
                         width: 1200,
                         height: 630,
                         alt: "Ecotenet logo",
