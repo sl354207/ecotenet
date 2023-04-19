@@ -37,7 +37,7 @@ import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
 import { validID } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
-import { NextSeo } from "next-seo";
+import { ArticleJsonLd, NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
@@ -261,7 +261,53 @@ const post = ({ post }) => {
 
   return (
     <>
-      <NextSeo />
+      <NextSeo
+        title={post.title}
+        description={post.description}
+        openGraph={{
+          title: post.title,
+          description: post.description,
+          url: `https://www.ecotenet.org/posts/${post._id}`,
+          siteName: "Ecotenet",
+          type: "article",
+          article: {
+            publishedTime: post.date.toISOString(),
+            authors: post.name,
+            tags: post.tags,
+          },
+          // images: [
+          //   {
+          //     url: "https://www.ecotenet.org/logo.svg",
+          //     width: 1200,
+          //     height: 630,
+          //     alt: "Ecotenet logo",
+          //   },
+          // ],
+        }}
+      />
+      <ArticleJsonLd
+        // type="BlogPosting"
+        url={`https://www.ecotenet.org/posts/${post._id}`}
+        title={post.title}
+        // images={[
+        //   'https://example.com/photos/1x1/photo.jpg',
+        //   'https://example.com/photos/4x3/photo.jpg',
+        //   'https://example.com/photos/16x9/photo.jpg',
+        // ]}
+        datePublished={post.date.toISOString()}
+        description={post.description}
+        useAppDir={false}
+        authorName={[
+          {
+            name: post.name,
+            url: `https://www.ecotenet.org/person/${post.name}`,
+          },
+        ]}
+        publisherName="Ecotenet"
+        publisherLogo="https://www.ecotenet.org/logo.svg"
+        isAccessibleForFree={true}
+      />
+
       <Container sx={{ backgroundColor: theme.palette.primary.main }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div

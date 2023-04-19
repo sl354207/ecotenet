@@ -20,6 +20,7 @@ import { validID } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import { ArticleJsonLd, NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
@@ -236,6 +237,64 @@ const species = ({ species, wiki }) => {
         </>
       ) : (
         <>
+          <NextSeo
+            title={species.scientific_name}
+            titleTemplate="%s | Ecotenet"
+            description={`General information about ${species.scientific_name} and the ecoregions it inhabits`}
+            openGraph={{
+              title: species.scientific_name,
+              description: `General information about ${species.scientific_name} and the ecoregions it inhabits`,
+              url: `https://www.ecotenet.org/species/${species._id}`,
+              siteName: "Ecotenet",
+              type: "article",
+              article: {
+                publishedTime: parse(
+                  DOMPurify.sanitize(wiki.lead.lastmodified),
+                  options
+                ),
+                authors: ["Wikipedia"],
+                tags: [species.common_name],
+              },
+              // images: [
+              //   {
+              //     url: "https://www.ecotenet.org/logo.svg",
+              //     width: 1200,
+              //     height: 630,
+              //     alt: "Ecotenet logo",
+              //   },
+              // ],
+            }}
+          />
+          <ArticleJsonLd
+            // type="BlogPosting"
+            url={`https://www.ecotenet.org/species/${species._id}`}
+            title={species.scientific_name}
+            // images={[
+            //   'https://example.com/photos/1x1/photo.jpg',
+            //   'https://example.com/photos/4x3/photo.jpg',
+            //   'https://example.com/photos/16x9/photo.jpg',
+            // ]}
+            datePublished={parse(
+              DOMPurify.sanitize(wiki.lead.lastmodified),
+              options
+            )}
+            description={post.description}
+            useAppDir={false}
+            authorName={[
+              {
+                name: "Wikipedia",
+                url: `https://en.wikipedia.org/wiki/${
+                  species.scientific_name.toLowerCase().split(" ")[0]
+                }_${
+                  species.scientific_name.toLowerCase().split(" ")[1]
+                }?redirect=true`,
+              },
+            ]}
+            publisherName="Ecotenet"
+            publisherLogo="https://www.ecotenet.org/logo.svg"
+            isAccessibleForFree={true}
+          />
+
           <Container>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div
