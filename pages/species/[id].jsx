@@ -240,6 +240,7 @@ const species = ({ species, wiki }) => {
           <NextSeo
             title={species.scientific_name}
             titleTemplate="%s | Ecotenet"
+            defaultTitle="Ecotenet"
             description={`General information about ${species.scientific_name} and the ecoregions it inhabits`}
             openGraph={{
               title: species.scientific_name,
@@ -248,10 +249,6 @@ const species = ({ species, wiki }) => {
               siteName: "Ecotenet",
               type: "article",
               article: {
-                publishedTime: parse(
-                  DOMPurify.sanitize(wiki.lead.lastmodified),
-                  options
-                ),
                 authors: ["Wikipedia"],
                 tags: [species.common_name],
               },
@@ -274,14 +271,12 @@ const species = ({ species, wiki }) => {
             //   'https://example.com/photos/4x3/photo.jpg',
             //   'https://example.com/photos/16x9/photo.jpg',
             // ]}
-            datePublished={parse(
-              DOMPurify.sanitize(wiki.lead.lastmodified),
-              options
-            )}
-            description={post.description}
+
+            description={`General information about ${species.scientific_name} and the ecoregions it inhabits`}
             useAppDir={false}
             authorName={[
               {
+                type: "Organization",
                 name: "Wikipedia",
                 url: `https://en.wikipedia.org/wiki/${
                   species.scientific_name.toLowerCase().split(" ")[0]

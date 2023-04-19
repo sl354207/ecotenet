@@ -263,6 +263,8 @@ const post = ({ post }) => {
     <>
       <NextSeo
         title={post.title}
+        titleTemplate="%s"
+        defaultTitle="Ecotenet"
         description={post.description}
         openGraph={{
           title: post.title,
@@ -271,8 +273,8 @@ const post = ({ post }) => {
           siteName: "Ecotenet",
           type: "article",
           article: {
-            publishedTime: post.date.toISOString(),
-            authors: post.name,
+            // publishedTime: post.date,
+            authors: [post.name],
             tags: post.tags,
           },
           // images: [
@@ -294,7 +296,7 @@ const post = ({ post }) => {
         //   'https://example.com/photos/4x3/photo.jpg',
         //   'https://example.com/photos/16x9/photo.jpg',
         // ]}
-        datePublished={post.date.toISOString()}
+        // datePublished={post.date}
         description={post.description}
         useAppDir={false}
         authorName={[
