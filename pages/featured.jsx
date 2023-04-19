@@ -11,12 +11,42 @@ import {
 } from "@mui/material";
 import { getFeatures } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
+import { CollectionPageJsonLd, NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 
 const featured = ({ featured }) => {
   const router = useRouter();
+
+  const featureSEO = featured.map((post) => {
+    const seo = {
+      about: post.description,
+      author: post.name,
+      name: post.title,
+    };
+    return seo;
+  });
   return (
     <>
+      <NextSeo
+        title="Featured Posts"
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        description="These are currently our favorite posts that people have shared on the site"
+        openGraph={{
+          type: "website",
+          url: "https://www.ecotenet.org/featured",
+          siteName: "Ecotenet",
+          images: [
+            {
+              url: "https://www.ecotenet.org/logo.svg",
+              width: 1200,
+              height: 630,
+              alt: "Ecotenet logo",
+            },
+          ],
+        }}
+      />
+      <CollectionPageJsonLd name="Featured Posts" hasPart={featureSEO} />
       <Container>
         <Header title="Featured Posts" />
         <Typography variant="body1" align="center" sx={{ marginBlock: "10px" }}>

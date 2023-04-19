@@ -1,10 +1,38 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Box, Container } from "@mui/material";
+import { NextSeo, VideoJsonLd } from "next-seo";
 
 const how = () => {
   return (
     <>
+      <NextSeo
+        title="How to create a post"
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        description="Video showing how to create, save and submit a post"
+        openGraph={{
+          title: "How to create a post on Ecotenet",
+          description: "Video showing how to create, save and submit a post",
+          url: "https://www.ecotenet.org/how",
+          type: "video.movie",
+          video: {
+            duration: 1020,
+            releaseDate: "2022-12-21T22:04:11Z",
+            // Multiple Open Graph tags is only available in version `7.0.2-canary.35`+ of next
+            tags: ["Ecotenet", "post", "ecoregions"],
+          },
+          siteName: "Ecotenet",
+        }}
+      />
+      <VideoJsonLd
+        name="How to create a post on Ecotenet"
+        description="Video showing how to create, save and submit a post"
+        contentUrl="https://www.ecotenet.org/how"
+        embedUrl="https://www.youtube-nocookie.com/embed/Ll2A6GenqM4?rel=0"
+        uploadDate="2022-12-21T22:04:11Z"
+        duration="PT17M"
+      />
       <Container>
         <Header title="How to Create a Post" />
         <Box

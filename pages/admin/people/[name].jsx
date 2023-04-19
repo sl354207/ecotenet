@@ -5,6 +5,7 @@ import Link from "@components/layouts/Link";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, CircularProgress, Container, Typography } from "@mui/material";
 import fetcher from "@utils/fetcher";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
@@ -159,6 +160,7 @@ const person = () => {
   }
   return (
     <>
+      <NextSeo noindex={true} nofollow={true} />
       <Link
         href="/admin/flags"
         underline="hover"

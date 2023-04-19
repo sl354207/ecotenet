@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import theme from "@utils/theme";
 import { validName } from "@utils/validationHelpers";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -104,6 +105,7 @@ const newUser = () => {
 
   return (
     <>
+      <NextSeo noindex={true} nofollow={true} />
       {!user || (user && user.status === "loading") || updated === true ? (
         <>
           <CircularProgress

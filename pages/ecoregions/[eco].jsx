@@ -11,6 +11,7 @@ import { validEco } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
+import { ArticleJsonLd, NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -205,6 +206,56 @@ const eco = ({ wiki, eco, id }) => {
         </>
       ) : (
         <>
+          <NextSeo
+            title={`Eco-${id}: ${eco.name}`}
+            titleTemplate="%s | Ecotenet"
+            defaultTitle="Ecotenet"
+            description={`General information about Eco-${id}: ${eco.name}`}
+            openGraph={{
+              title: `Eco-${id}: ${eco.name}`,
+              description: `General information about Eco-${id}: ${eco.name}`,
+              url: `https://www.ecotenet.org/ecoregions/${id}`,
+              siteName: "Ecotenet",
+              type: "article",
+              article: {
+                authors: ["Wikipedia"],
+              },
+              // images: [
+              //   {
+              //     url: "https://www.ecotenet.org/logo.svg",
+              //     width: 1200,
+              //     height: 630,
+              //     alt: "Ecotenet logo",
+              //   },
+              // ],
+            }}
+          />
+          <ArticleJsonLd
+            // type="BlogPosting"
+            url={`https://www.ecotenet.org/ecoregions/${id}`}
+            title={`Eco-${id}: ${eco.name}`}
+            // images={[
+            //   'https://example.com/photos/1x1/photo.jpg',
+            //   'https://example.com/photos/4x3/photo.jpg',
+            //   'https://example.com/photos/16x9/photo.jpg',
+            // ]}
+
+            description={`General information about Eco-${id}: ${eco.name}`}
+            useAppDir={false}
+            authorName={[
+              {
+                type: "Organization",
+                name: "Wikipedia",
+                url: `https://en.wikipedia.org/wiki/${eco.name.replace(
+                  / /g,
+                  "_"
+                )}?redirect=true`,
+              },
+            ]}
+            publisherName="Ecotenet"
+            publisherLogo="https://www.ecotenet.org/logo.svg"
+            isAccessibleForFree={true}
+          />
           <Container>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div

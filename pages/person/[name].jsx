@@ -13,6 +13,7 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 import { validName } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
+import { NextSeo, SocialProfileJsonLd } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -46,6 +47,33 @@ const person = ({ person, posts }) => {
 
   return (
     <>
+      <NextSeo
+        title={person.name}
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        openGraph={{
+          title: person.name,
+          url: `https://www.ecotenet.org/person/${person.name}`,
+          type: "profile",
+          profile: {
+            username: person.name,
+          },
+          // images: [
+          //   {
+          //     url: 'https://www.test.ie/images/profile.jpg',
+          //     width: 850,
+          //     height: 650,
+          //     alt: 'Profile Photo',
+          //   },
+          // ],
+        }}
+      />
+      <SocialProfileJsonLd
+        type="Person"
+        name={person.name}
+        url={`https://www.ecotenet.org/person/${person.name}`}
+        sameAs={person.socials}
+      />
       <Container>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div

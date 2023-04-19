@@ -24,6 +24,7 @@ import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { validEmail } from "@utils/validationHelpers";
+import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -293,97 +294,34 @@ export default function Dashboard() {
   };
 
   return (
-    <Container>
-      <Header title="Dashboard" />
-      <div
-        style={{
-          flexGrow: 1,
-          backgroundColor: theme.palette.background.paper,
-          marginTop: "20px",
-          borderRadius: "10px",
-        }}
-      >
-        <AppBar
-          position="static"
-          elevation={0}
-          sx={{
-            backgroundColor: theme.palette.primary.light,
+    <>
+      <NextSeo noindex={true} nofollow={true} />
+      <Container>
+        <Header title="Dashboard" />
+        <div
+          style={{
+            flexGrow: 1,
+            backgroundColor: theme.palette.background.paper,
+            marginTop: "20px",
             borderRadius: "10px",
           }}
         >
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            aria-label="simple tabs example"
-            centered
-            indicatorColor="secondary"
-            textColor="inherit"
+          <AppBar
+            position="static"
+            elevation={0}
+            sx={{
+              backgroundColor: theme.palette.primary.light,
+              borderRadius: "10px",
+            }}
           >
-            <Tab
-              sx={{
-                flexGrow: 1,
-                backgroundColor: theme.palette.primary.light,
-                minHeight: "80px",
-                minWidth: "inherit",
-                padding: "inherit",
-                borderRadius: "10px",
-                "&:hover": {
-                  color: theme.text,
-                  opacity: 1,
-                },
-              }}
-              label="Profile"
-              {...a11yProps(0)}
-            />
-            <Tab
-              sx={{
-                flexGrow: 1,
-                backgroundColor: theme.palette.primary.light,
-                minHeight: "80px",
-                minWidth: "inherit",
-                padding: "inherit",
-                borderRadius: "10px",
-                "&:hover": {
-                  color: theme.text,
-                  opacity: 1,
-                },
-              }}
-              label="Posts"
-              {...a11yProps(1)}
-            />
-            <Tab
-              sx={{
-                flexGrow: 1,
-                backgroundColor: theme.palette.primary.light,
-                minHeight: "80px",
-                minWidth: "inherit",
-                padding: "inherit",
-                borderRadius: "10px",
-                "&:hover": {
-                  color: theme.text,
-                  opacity: 1,
-                },
-              }}
-              label="Drafts"
-              {...a11yProps(2)}
-            />
-            <Tab
-              sx={{
-                flexGrow: 1,
-                backgroundColor: theme.palette.primary.light,
-                minHeight: "80px",
-                minWidth: "inherit",
-                padding: "inherit",
-                borderRadius: "10px",
-                "&:hover": {
-                  color: theme.text,
-                  opacity: 1,
-                },
-              }}
-              label="Comments"
-              {...a11yProps(3)}
-            />
-            {isMobile ? (
+            <Tabs
+              value={tabValue}
+              onChange={handleTabChange}
+              aria-label="simple tabs example"
+              centered
+              indicatorColor="secondary"
+              textColor="inherit"
+            >
               <Tab
                 sx={{
                   flexGrow: 1,
@@ -397,335 +335,401 @@ export default function Dashboard() {
                     opacity: 1,
                   },
                 }}
-                label={<NotificationsNoneIcon />}
-                {...a11yProps(4)}
+                label="Profile"
+                {...a11yProps(0)}
+              />
+              <Tab
+                sx={{
+                  flexGrow: 1,
+                  backgroundColor: theme.palette.primary.light,
+                  minHeight: "80px",
+                  minWidth: "inherit",
+                  padding: "inherit",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    color: theme.text,
+                    opacity: 1,
+                  },
+                }}
+                label="Posts"
+                {...a11yProps(1)}
+              />
+              <Tab
+                sx={{
+                  flexGrow: 1,
+                  backgroundColor: theme.palette.primary.light,
+                  minHeight: "80px",
+                  minWidth: "inherit",
+                  padding: "inherit",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    color: theme.text,
+                    opacity: 1,
+                  },
+                }}
+                label="Drafts"
+                {...a11yProps(2)}
+              />
+              <Tab
+                sx={{
+                  flexGrow: 1,
+                  backgroundColor: theme.palette.primary.light,
+                  minHeight: "80px",
+                  minWidth: "inherit",
+                  padding: "inherit",
+                  borderRadius: "10px",
+                  "&:hover": {
+                    color: theme.text,
+                    opacity: 1,
+                  },
+                }}
+                label="Comments"
+                {...a11yProps(3)}
+              />
+              {isMobile ? (
+                <Tab
+                  sx={{
+                    flexGrow: 1,
+                    backgroundColor: theme.palette.primary.light,
+                    minHeight: "80px",
+                    minWidth: "inherit",
+                    padding: "inherit",
+                    borderRadius: "10px",
+                    "&:hover": {
+                      color: theme.text,
+                      opacity: 1,
+                    },
+                  }}
+                  label={<NotificationsNoneIcon />}
+                  {...a11yProps(4)}
+                />
+              ) : (
+                <Tab
+                  sx={{
+                    flexGrow: 1,
+                    backgroundColor: theme.palette.primary.light,
+                    minHeight: "80px",
+                    minWidth: "inherit",
+                    padding: "inherit",
+                    borderRadius: "10px",
+                    "&:hover": {
+                      color: theme.text,
+                      opacity: 1,
+                    },
+                  }}
+                  label="Notifications"
+                  {...a11yProps(4)}
+                />
+              )}
+            </Tabs>
+          </AppBar>
+
+          <TabPanel value={tabValue} index={0}>
+            {isLoading ? (
+              <CircularProgress
+                color="secondary"
+                size={100}
+                disableShrink={true}
+                sx={{
+                  margin: "100px auto",
+                  display: "flex",
+                  justifySelf: "center",
+                }}
               />
             ) : (
-              <Tab
-                sx={{
-                  flexGrow: 1,
-                  backgroundColor: theme.palette.primary.light,
-                  minHeight: "80px",
-                  minWidth: "inherit",
-                  padding: "inherit",
-                  borderRadius: "10px",
-                  "&:hover": {
-                    color: theme.text,
-                    opacity: 1,
-                  },
-                }}
-                label="Notifications"
-                {...a11yProps(4)}
-              />
+              <>
+                {resultError ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => mutate(fetchApi)}
+                    >
+                      Error Loading. Retry
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {results && (
+                      <DashboardProfile
+                        user={user && user}
+                        results={results && results}
+                        profile={profile}
+                        setProfile={setProfile}
+                        handleProfileSubmit={handleProfileSubmit}
+                        handleProfileChange={handleProfileChange}
+                        handleRemoveChip={handleRemoveChip}
+                        handleOpenDialog={handleOpenDialog}
+                        error={error}
+                        setError={setError}
+                      />
+                    )}
+                  </>
+                )}
+              </>
             )}
-          </Tabs>
-        </AppBar>
-
-        <TabPanel value={tabValue} index={0}>
-          {isLoading ? (
-            <CircularProgress
-              color="secondary"
-              size={100}
-              disableShrink={true}
-              sx={{
-                margin: "100px auto",
-                display: "flex",
-                justifySelf: "center",
-              }}
+          </TabPanel>
+          <TabPanel value={tabValue} index={1}>
+            <CreatePostButton
+              name={user && user.name}
+              snackbar={snackbar}
+              setSnackbar={setSnackbar}
+              nav={false}
+              isTab={false}
             />
-          ) : (
-            <>
-              {resultError ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => mutate(fetchApi)}
+            {isLoading ? (
+              <CircularProgress
+                color="secondary"
+                size={100}
+                disableShrink={true}
+                sx={{
+                  margin: "100px auto",
+                  display: "flex",
+                  justifySelf: "center",
+                }}
+              />
+            ) : (
+              <>
+                {resultError ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "20px",
+                    }}
                   >
-                    Error Loading. Retry
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {results && (
-                    <DashboardProfile
-                      user={user && user}
-                      results={results && results}
-                      profile={profile}
-                      setProfile={setProfile}
-                      handleProfileSubmit={handleProfileSubmit}
-                      handleProfileChange={handleProfileChange}
-                      handleRemoveChip={handleRemoveChip}
-                      handleOpenDialog={handleOpenDialog}
-                      error={error}
-                      setError={setError}
-                    />
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <CreatePostButton
-            name={user && user.name}
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => mutate(fetchApi)}
+                    >
+                      Error Loading. Retry
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {results && (
+                      <>
+                        {results.length > 0 && (
+                          <DashboardPostList
+                            results={results && results}
+                            handleOpenDialog={handleOpenDialog}
+                            draft={false}
+                            isMobile={isMobile}
+                          />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </TabPanel>
+          <TabPanel value={tabValue} index={2}>
+            <CreatePostButton
+              name={user && user.name}
+              snackbar={snackbar}
+              setSnackbar={setSnackbar}
+              nav={false}
+              isTab={false}
+            />
+            {isLoading ? (
+              <CircularProgress
+                color="secondary"
+                size={100}
+                disableShrink={true}
+                sx={{
+                  margin: "100px auto",
+                  display: "flex",
+                  justifySelf: "center",
+                }}
+              />
+            ) : (
+              <>
+                {resultError ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => mutate(fetchApi)}
+                    >
+                      Error Loading. Retry
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {results && (
+                      <>
+                        {results.length > 0 && (
+                          <DashboardPostList
+                            results={results && results}
+                            handleOpenDialog={handleOpenDialog}
+                            draft={true}
+                            isMobile={isMobile}
+                          />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </TabPanel>
+          <TabPanel value={tabValue} index={3}>
+            {isLoading ? (
+              <CircularProgress
+                color="secondary"
+                size={100}
+                disableShrink={true}
+                sx={{
+                  margin: "100px auto",
+                  display: "flex",
+                  justifySelf: "center",
+                }}
+              />
+            ) : (
+              <>
+                {resultError ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => mutate(fetchApi)}
+                    >
+                      Error Loading. Retry
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {results && (
+                      <>
+                        {results.length > 0 && (
+                          <List>
+                            {results.map((result) => {
+                              return (
+                                <ListItem
+                                  key={result._id}
+                                  sx={{
+                                    display: "flex",
+                                    justifyContent: "start",
+                                    textTransform: "none",
+                                    border: `1px solid ${alpha(
+                                      theme.palette.secondary.main,
+                                      0.5
+                                    )}`,
+                                    margin: "20px auto",
+                                    borderRadius: "10px",
+                                  }}
+                                >
+                                  <DashboardComment
+                                    result={result}
+                                    handleDeleteOpen={() =>
+                                      handleOpenDialog(
+                                        "delete",
+                                        "Comment",
+                                        result
+                                      )
+                                    }
+                                    snackbar={snackbar}
+                                    setSnackbar={setSnackbar}
+                                    mutate={mutate}
+                                    name={user && user.name}
+                                  />
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </TabPanel>
+          <TabPanel value={tabValue} index={4}>
+            {isLoading ? (
+              <CircularProgress
+                color="secondary"
+                size={100}
+                disableShrink={true}
+                sx={{
+                  margin: "100px auto",
+                  display: "flex",
+                  justifySelf: "center",
+                }}
+              />
+            ) : (
+              <>
+                {resultError ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "20px",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => mutate(fetchApi)}
+                    >
+                      Error Loading. Retry
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    {results && (
+                      <>
+                        {results.length > 0 && (
+                          <DashboardNotificationList
+                            results={results && results}
+                            isMobile={isMobile}
+                            handleUpdateNotify={handleUpdateNotify}
+                          />
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </TabPanel>
+        </div>
+
+        {dialog && (
+          <DynamicDashboardDialog
+            contentType={dialogAction.type}
+            action={dialogAction.action}
+            open={dialog}
+            handleClose={handleCloseDialog}
+            result={dialogItem}
             snackbar={snackbar}
             setSnackbar={setSnackbar}
-            nav={false}
-            isTab={false}
-          />
-          {isLoading ? (
-            <CircularProgress
-              color="secondary"
-              size={100}
-              disableShrink={true}
-              sx={{
-                margin: "100px auto",
-                display: "flex",
-                justifySelf: "center",
-              }}
-            />
-          ) : (
-            <>
-              {resultError ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => mutate(fetchApi)}
-                  >
-                    Error Loading. Retry
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {results && (
-                    <>
-                      {results.length > 0 && (
-                        <DashboardPostList
-                          results={results && results}
-                          handleOpenDialog={handleOpenDialog}
-                          draft={false}
-                          isMobile={isMobile}
-                        />
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </TabPanel>
-        <TabPanel value={tabValue} index={2}>
-          <CreatePostButton
+            mutate={mutate}
             name={user && user.name}
-            snackbar={snackbar}
-            setSnackbar={setSnackbar}
-            nav={false}
-            isTab={false}
+            fetchApi={fetchApi}
           />
-          {isLoading ? (
-            <CircularProgress
-              color="secondary"
-              size={100}
-              disableShrink={true}
-              sx={{
-                margin: "100px auto",
-                display: "flex",
-                justifySelf: "center",
-              }}
-            />
-          ) : (
-            <>
-              {resultError ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => mutate(fetchApi)}
-                  >
-                    Error Loading. Retry
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {results && (
-                    <>
-                      {results.length > 0 && (
-                        <DashboardPostList
-                          results={results && results}
-                          handleOpenDialog={handleOpenDialog}
-                          draft={true}
-                          isMobile={isMobile}
-                        />
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </TabPanel>
-        <TabPanel value={tabValue} index={3}>
-          {isLoading ? (
-            <CircularProgress
-              color="secondary"
-              size={100}
-              disableShrink={true}
-              sx={{
-                margin: "100px auto",
-                display: "flex",
-                justifySelf: "center",
-              }}
-            />
-          ) : (
-            <>
-              {resultError ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => mutate(fetchApi)}
-                  >
-                    Error Loading. Retry
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {results && (
-                    <>
-                      {results.length > 0 && (
-                        <List>
-                          {results.map((result) => {
-                            return (
-                              <ListItem
-                                key={result._id}
-                                sx={{
-                                  display: "flex",
-                                  justifyContent: "start",
-                                  textTransform: "none",
-                                  border: `1px solid ${alpha(
-                                    theme.palette.secondary.main,
-                                    0.5
-                                  )}`,
-                                  margin: "20px auto",
-                                  borderRadius: "10px",
-                                }}
-                              >
-                                <DashboardComment
-                                  result={result}
-                                  handleDeleteOpen={() =>
-                                    handleOpenDialog(
-                                      "delete",
-                                      "Comment",
-                                      result
-                                    )
-                                  }
-                                  snackbar={snackbar}
-                                  setSnackbar={setSnackbar}
-                                  mutate={mutate}
-                                  name={user && user.name}
-                                />
-                              </ListItem>
-                            );
-                          })}
-                        </List>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </TabPanel>
-        <TabPanel value={tabValue} index={4}>
-          {isLoading ? (
-            <CircularProgress
-              color="secondary"
-              size={100}
-              disableShrink={true}
-              sx={{
-                margin: "100px auto",
-                display: "flex",
-                justifySelf: "center",
-              }}
-            />
-          ) : (
-            <>
-              {resultError ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => mutate(fetchApi)}
-                  >
-                    Error Loading. Retry
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {results && (
-                    <>
-                      {results.length > 0 && (
-                        <DashboardNotificationList
-                          results={results && results}
-                          isMobile={isMobile}
-                          handleUpdateNotify={handleUpdateNotify}
-                        />
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </TabPanel>
-      </div>
-
-      {dialog && (
-        <DynamicDashboardDialog
-          contentType={dialogAction.type}
-          action={dialogAction.action}
-          open={dialog}
-          handleClose={handleCloseDialog}
-          result={dialogItem}
-          snackbar={snackbar}
-          setSnackbar={setSnackbar}
-          mutate={mutate}
-          name={user && user.name}
-          fetchApi={fetchApi}
-        />
-      )}
-    </Container>
+        )}
+      </Container>
+    </>
   );
 }

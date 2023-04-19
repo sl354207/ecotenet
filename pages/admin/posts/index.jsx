@@ -12,6 +12,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -110,13 +111,16 @@ const adminPosts = () => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <AdminDrawer />
-      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
-        <Header title="Posts" />
-        {list}
+    <>
+      <NextSeo noindex={true} nofollow={true} />
+      <div style={{ display: "flex" }}>
+        <AdminDrawer />
+        <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
+          <Header title="Posts" />
+          {list}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

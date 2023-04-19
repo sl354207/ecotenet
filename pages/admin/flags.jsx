@@ -12,6 +12,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
+import { NextSeo } from "next-seo";
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -204,21 +205,24 @@ const adminFlags = () => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <AdminDrawer />
-      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
-        <Header title="Flags" />
-        {list}
-        <Resolve
-          open={dialog}
-          handleClose={handleCloseResolve}
-          name={action.name}
-          ID={action.ID}
-          mutate={mutate}
-          route="flag"
-        />
+    <>
+      <NextSeo noindex={true} nofollow={true} />
+      <div style={{ display: "flex" }}>
+        <AdminDrawer />
+        <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
+          <Header title="Flags" />
+          {list}
+          <Resolve
+            open={dialog}
+            handleClose={handleCloseResolve}
+            name={action.name}
+            ID={action.ID}
+            mutate={mutate}
+            route="flag"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

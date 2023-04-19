@@ -8,6 +8,7 @@ import { getProviders } from "next-auth/react";
 
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/dist/client/router";
 import { useState } from "react";
 
@@ -35,27 +36,48 @@ const SigninPage = ({ providers, isLoggedIn }) => {
   }
 
   return (
-    <Container>
-      {!isLoggedIn ? (
-        <>
-          <Header title="Email Sign in" />
-          <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes" />
+    <>
+      <NextSeo
+        title="Sign In"
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        description="Sign up or log in to Ecotenet"
+        openGraph={{
+          type: "website",
+          url: "https://www.ecotenet.org/auth/signin",
+          siteName: "Ecotenet",
+          images: [
+            {
+              url: "https://www.ecotenet.org/logo.svg",
+              width: 1200,
+              height: 630,
+              alt: "Ecotenet logo",
+            },
+          ],
+        }}
+      />
+      <Container>
+        {!isLoggedIn ? (
+          <>
+            <Header title="Email Sign in" />
+            <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes" />
 
-          {emailProvider.map((provider) => (
-            <EmailInput
-              key={provider.id}
-              provider={provider}
-              onSuccess={(email) => {
-                setEmail(email);
-                setShowVerificationStep(true);
-              }}
-            />
-          ))}
-        </>
-      ) : (
-        <Header title="You are already signed in" />
-      )}
-    </Container>
+            {emailProvider.map((provider) => (
+              <EmailInput
+                key={provider.id}
+                provider={provider}
+                onSuccess={(email) => {
+                  setEmail(email);
+                  setShowVerificationStep(true);
+                }}
+              />
+            ))}
+          </>
+        ) : (
+          <Header title="You are already signed in" />
+        )}
+      </Container>
+    </>
   );
 };
 

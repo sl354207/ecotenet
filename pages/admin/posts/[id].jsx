@@ -25,6 +25,7 @@ import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
@@ -370,8 +371,8 @@ const post = () => {
 
   return (
     <>
+      <NextSeo noindex={true} nofollow={true} />
       {list}
-
       {commentList}
       <AdminDialog
         contentType={action.type}

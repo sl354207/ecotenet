@@ -17,6 +17,7 @@ const exclude = [
   "/404",
   "/auth/new-user",
   "/server-sitemap",
+  "/tip",
 ];
 
 /** @type {import('next-sitemap').IConfig} */

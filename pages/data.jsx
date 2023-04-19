@@ -2,10 +2,30 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { Container, Divider, List, ListItem, Typography } from "@mui/material";
+import { NextSeo } from "next-seo";
 
 const data = () => {
   return (
     <>
+      <NextSeo
+        title="Data"
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        description="A list of all the data sources that are used on Ecotenet"
+        openGraph={{
+          type: "website",
+          url: "https://www.ecotenet.org/data",
+          siteName: "Ecotenet",
+          images: [
+            {
+              url: "https://www.ecotenet.org/logo.svg",
+              width: 1200,
+              height: 630,
+              alt: "Ecotenet logo",
+            },
+          ],
+        }}
+      />
       <Container>
         <Header title="Datasets" />
         <Divider sx={{ marginTop: "20px" }} />

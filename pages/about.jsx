@@ -2,10 +2,30 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { Box, Container, Divider, Typography } from "@mui/material";
+import { NextSeo } from "next-seo";
 
 const about = () => {
   return (
     <>
+      <NextSeo
+        title="About"
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        description="Learn about the goals behind Ecotenet"
+        openGraph={{
+          type: "website",
+          url: "https://www.ecotenet.org/about",
+          siteName: "Ecotenet",
+          images: [
+            {
+              url: "https://www.ecotenet.org/logo.svg",
+              width: 1200,
+              height: 630,
+              alt: "Ecotenet logo",
+            },
+          ],
+        }}
+      />
       <Container>
         <Header title="Ecotenet Mission" />
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>

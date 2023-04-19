@@ -2,10 +2,30 @@ import Description from "@components/layouts/Description";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
+import { NextSeo } from "next-seo";
 
 const category = () => {
   return (
     <>
+      <NextSeo
+        title="Categories"
+        titleTemplate="%s | Ecotenet"
+        defaultTitle="Ecotenet"
+        description="Get a breakdown of each post category that is available to filter by within an ecoregion"
+        openGraph={{
+          type: "website",
+          url: "https://www.ecotenet.org/category",
+          siteName: "Ecotenet",
+          images: [
+            {
+              url: "https://www.ecotenet.org/logo.svg",
+              width: 1200,
+              height: 630,
+              alt: "Ecotenet logo",
+            },
+          ],
+        }}
+      />
       <Container>
         <Header title="Category Breakdown" />
         <Description

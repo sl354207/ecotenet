@@ -1,6 +1,7 @@
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
 import { fetchGetJSON } from "@utils/stripe/stripeApiHelpers";
+import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -16,13 +17,16 @@ const approved = () => {
 
   if (error) return <div>failed to load</div>;
   return (
-    <Container>
-      <Header title="Checkout Results" />
-      <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-        Payment Status: {data?.status ?? "loading..."}
-      </Typography>
-      {/* ADD POSSIBLE ERROR MESSAGES AND ADD EMAIL AND THANK YOUS AND WHATNOT */}
-    </Container>
+    <>
+      <NextSeo noindex={true} nofollow={true} />
+      <Container>
+        <Header title="Checkout Results" />
+        <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+          Payment Status: {data?.status ?? "loading..."}
+        </Typography>
+        {/* ADD POSSIBLE ERROR MESSAGES AND ADD EMAIL AND THANK YOUS AND WHATNOT */}
+      </Container>
+    </>
   );
 };
 

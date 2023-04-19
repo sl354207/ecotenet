@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
+import { NextSeo } from "next-seo";
 import useSWR, { useSWRConfig } from "swr";
 const admin = () => {
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -463,15 +464,18 @@ const admin = () => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <AdminDrawer />
-      <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
-        <Header title="Stats" />
-        {statSection}
-        <Header title="Feature Candidates" />
-        {list}
+    <>
+      <NextSeo noindex={true} nofollow={true} />
+      <div style={{ display: "flex" }}>
+        <AdminDrawer />
+        <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
+          <Header title="Stats" />
+          {statSection}
+          <Header title="Feature Candidates" />
+          {list}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

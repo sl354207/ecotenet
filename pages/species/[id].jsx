@@ -278,11 +278,10 @@ const species = ({ species, wiki }) => {
               {
                 type: "Organization",
                 name: "Wikipedia",
-                url: `https://en.wikipedia.org/wiki/${
-                  species.scientific_name.toLowerCase().split(" ")[0]
-                }_${
-                  species.scientific_name.toLowerCase().split(" ")[1]
-                }?redirect=true`,
+                url: `https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                  / /g,
+                  "_"
+                )}?redirect=true`,
               },
             ]}
             publisherName="Ecotenet"
