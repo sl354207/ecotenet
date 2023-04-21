@@ -3,17 +3,17 @@ import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 
-const terms = () => {
+const sponsors = () => {
   return (
     <>
       <NextSeo
-        title="Terms of Service"
+        title="Sponsors"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
         // description="Ideas on the purpose of Ecotenet and the possible vision for the future"
         openGraph={{
           type: "website",
-          url: "https://www.ecotenet.org/terms",
+          url: "https://www.ecotenet.org/sponsors",
           siteName: "Ecotenet",
           images: [
             {
@@ -26,7 +26,7 @@ const terms = () => {
         }}
       />
       <Container>
-        <Header title="Terms of Service" />
+        <Header title="Sponsors" />
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
           Details coming Soon
         </Typography>
@@ -36,4 +36,4 @@ const terms = () => {
   );
 };
 
-export default terms;
+export default sponsors;

@@ -29,6 +29,7 @@ const Footer = () => {
               Contact Us
             </Link>
           </Grid>
+
           <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Link href="/data" underline="hover">
               Species Data
@@ -37,7 +38,7 @@ const Footer = () => {
 
           <Grid item xs={4} sx={{ textAlign: "center" }}>
             <Link href="/terms" underline="hover">
-              Terms of Use
+              Terms of Service
             </Link>
           </Grid>
           <Grid item xs={4} sx={{ textAlign: "center" }}>
@@ -45,9 +46,30 @@ const Footer = () => {
               About Us
             </Link>
           </Grid>
+          <Grid item xs={4} sx={{ textAlign: "center" }}>
+            <Link href="/sponsors" underline="hover">
+              Sponsors
+            </Link>
+          </Grid>
 
           <Grid item xs={4} sx={{ textAlign: "center" }}>
-            <Button href="/donate" variant="contained" color="secondary">
+            <Link href="/conduct" underline="hover">
+              Code of Conduct
+            </Link>
+          </Grid>
+          <Grid item xs={4} sx={{ textAlign: "center" }}>
+            <Link href="/disclaimer" underline="hover">
+              Disclaimer
+            </Link>
+          </Grid>
+
+          <Grid item xs={4} sx={{ textAlign: "center" }}>
+            <Button
+              href="/donate"
+              variant="contained"
+              color="secondary"
+              size="small"
+            >
               Donate
             </Button>
           </Grid>

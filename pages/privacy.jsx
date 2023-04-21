@@ -1,5 +1,6 @@
+import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 
 const privacy = () => {
@@ -25,8 +26,12 @@ const privacy = () => {
         }}
       />
       <Container>
-        <Header title="details coming soon" />
+        <Header title="Privacy Policy" />
+        <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
+          Details coming Soon
+        </Typography>
       </Container>
+      <Footer />
     </>
   );
 };

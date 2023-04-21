@@ -1,3 +1,4 @@
+import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
@@ -14,7 +15,6 @@ const tip = () => {
         {name && (
           <>
             <Header title="Tipping" />
-            {/* <Header title={`Tip ${name}`} /> */}
             <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
               We are currently working on adding the ability to tip people in
               cryptocurrencies...more to come.
@@ -22,6 +22,7 @@ const tip = () => {
           </>
         )}
       </Container>
+      <Footer />
     </>
   );
 };
