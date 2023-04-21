@@ -214,6 +214,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           width: "auto",
           height: "80vh",
           margin: "0px 10px 0px 10px",
+          border: "1px solid #94c9ff",
         }}
         initialViewState={{
           latitude: 37.8,

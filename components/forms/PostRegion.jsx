@@ -3,6 +3,7 @@ import Header from "@components/layouts/Header";
 import MapEditor from "@components/maps/MapEditor";
 import {
   Autocomplete,
+  Button,
   Chip,
   Container,
   TextField,
@@ -177,6 +178,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   };
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
+  // console.log(state);
+  console.log(clickInfo);
 
   const handleSubmit = (event, newValue) => {
     if (newValue !== null) {
@@ -252,6 +255,20 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       c_name: "",
       _id: "",
     });
+  };
+  const selectInterSecting = (first, second, third) => {
+    let rest = [];
+    if (second.length !== 0) {
+      rest = [...rest, second];
+    }
+    if (third.length !== 0) {
+      rest = [...rest, third];
+    }
+
+    rest = rest.map((array) => new Set(array));
+
+    const intersecting = first.filter((e) => rest.every((set) => set.has(e)));
+    setClickInfo(intersecting);
   };
 
   return (
@@ -456,6 +473,44 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       <Typography variant="h6" align="left">
         Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
       </Typography>
+
+      <Button
+        variant="outlined"
+        color="secondary"
+        sx={{ marginRight: "5px", marginBottom: "10px" }}
+        disabled={state[0].count === 0}
+        onClick={() => {
+          setClickInfo(
+            state[1].regions.concat(state[2].regions, state[3].regions)
+          );
+        }}
+      >
+        Select All
+      </Button>
+      <Button
+        variant="outlined"
+        color="secondary"
+        sx={{ marginRight: "5px", marginBottom: "10px" }}
+        disabled={Array.isArray(clickInfo) && !clickInfo.length}
+        onClick={() => setClickInfo([])}
+      >
+        Clear All
+      </Button>
+      <Button
+        variant="outlined"
+        color="secondary"
+        sx={{ marginBottom: "10px" }}
+        onClick={() =>
+          selectInterSecting(
+            state[1].regions,
+            state[2].regions,
+            state[3].regions
+          )
+        }
+        disabled={state[0].count <= 1}
+      >
+        Select Intersecting
+      </Button>
 
       <MapEditor
         clickInfo={clickInfo}
