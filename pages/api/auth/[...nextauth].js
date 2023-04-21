@@ -53,14 +53,13 @@ export const authOptions = {
         );
         const escapedHost = signInURL.host.replace(/\./g, "&#8203;.");
 
-        const result = await createTransport(
-          "smtp://projectprotectnature@gmail.com:bvyiapwmnivgxomf@smtp.gmail.com:587"
-        ).sendMail({
-          to: identifier,
-          from: provider.from,
-          subject: `Sign in to ${signInURL.host}`,
-          text: `Sign in on ${signInURL} using the verification code: ${token}`,
-          html: `<body style="background: "#f9f9f9";">
+        const result = await createTransport(process.env.EMAIL_SERVER).sendMail(
+          {
+            to: identifier,
+            from: provider.from,
+            subject: `Sign in to ${signInURL.host}`,
+            text: `Sign in on ${signInURL} using the verification code: ${token}`,
+            html: `<body style="background: "#f9f9f9";">
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center" style="padding: 10px 0px 20px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: "#444444";">
@@ -90,10 +89,16 @@ export const authOptions = {
                     If you did not request this email you can safely ignore it.
                   </td>
                 </tr>
+                <tr>
+                  <td align="center" style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: "#444444";">
+                    This is a no-reply email address so please do not respond to this email. If you need to contact us email us at info@ecotenet.org
+                  </td>
+                </tr>
               </table>
 
             </body>`,
-        });
+          }
+        );
         const failed = result.rejected.concat(result.pending).filter(Boolean);
         if (failed.length) {
           throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
