@@ -29,9 +29,15 @@ const contact = () => {
       <Container>
         <Header title="Contact Us" />
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
-          Details coming Soon
+          For general support you can contact us through the forum at{" "}
+          <Link href="https://forum.ecotenet.org/category/3/support">
+            Support.
+          </Link>
         </Typography>
-        <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
+        <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
+          Or you can contact us directly at{" "}
+          <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
+        </Typography>
       </Container>
       <Footer />
     </>
