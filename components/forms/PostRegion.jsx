@@ -179,7 +179,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
   const [state, dispatch] = useReducer(reducer, speciesChips);
   // console.log(state);
-  console.log(clickInfo);
+  // console.log(clickInfo);
 
   const handleSubmit = (event, newValue) => {
     if (newValue !== null) {

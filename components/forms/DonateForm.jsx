@@ -8,6 +8,7 @@ import {
   Tabs,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import getStripe from "@utils/stripe/getStripe";
@@ -211,7 +212,9 @@ const DonateForm = () => {
       </Tabs>
 
       <TabPanel value={tab} index={0}>
-        <form onSubmit={handleMonthlyDonation}>
+        <form
+        // onSubmit={handleMonthlyDonation}
+        >
           <label></label>
           <ToggleButtonGroup
             value={monthly.amount}
@@ -376,25 +379,33 @@ const DonateForm = () => {
               }}
             />
           ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              type="submit"
-              disabled={loading}
-              sx={{
-                display: "flex",
-                margin: "auto",
-                marginTop: "10px",
-                minWidth: "300px",
-              }}
-            >
-              Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                // disabled={loading}
+                disabled
+                sx={{
+                  display: "flex",
+                  margin: "auto",
+                  marginTop: "10px",
+                  minWidth: "300px",
+                }}
+              >
+                Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
+              </Button>
+              <Typography align="center" variant="h6">
+                Donations coming soon
+              </Typography>
+            </>
           )}
         </form>
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        <form onSubmit={handleOneTimeDonation}>
+        <form
+        // onSubmit={handleOneTimeDonation}
+        >
           <label>
             Custom donation amount ({formatAmountForDisplay(1.0, "usd")}-
             {formatAmountForDisplay(1000.0, "usd")}):
@@ -445,20 +456,26 @@ const DonateForm = () => {
               }}
             />
           ) : (
-            <Button
-              variant="contained"
-              color="secondary"
-              type="submit"
-              disabled={loading || once === 0}
-              sx={{
-                display: "flex",
-                margin: "auto",
-                marginTop: "10px",
-                minWidth: "300px",
-              }}
-            >
-              Donate {formatAmountForDisplay(once, "usd")}
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color="secondary"
+                type="submit"
+                // disabled={loading || once === 0}
+                disabled
+                sx={{
+                  display: "flex",
+                  margin: "auto",
+                  marginTop: "10px",
+                  minWidth: "300px",
+                }}
+              >
+                Donate {formatAmountForDisplay(once, "usd")}
+              </Button>
+              <Typography align="center" variant="h6">
+                Donations coming soon
+              </Typography>
+            </>
           )}
         </form>
       </TabPanel>
