@@ -1,5 +1,6 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import { Container, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 
@@ -30,6 +31,7 @@ const contact = () => {
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
           Details coming Soon
         </Typography>
+        <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
       </Container>
       <Footer />
     </>
