@@ -15,7 +15,6 @@ import {
   updatePost,
 } from "@utils/apiHelpers";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
 
 const DashboardDialog = ({
   open,
@@ -30,8 +29,6 @@ const DashboardDialog = ({
   fetchApi,
   setSaved,
 }) => {
-  const router = useRouter();
-
   // used to display proper text in dialog
   let item;
 
