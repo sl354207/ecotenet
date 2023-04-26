@@ -5,6 +5,7 @@ const uri = process.env.MONGODB_URI;
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  serverSelectionTimeoutMS: 50000,
 };
 
 let client;
