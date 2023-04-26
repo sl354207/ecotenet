@@ -7,6 +7,10 @@ export default async function handler(req, res) {
 
   try {
     const results = await getEcoregions();
+    res.setHeader(
+      "Cache-Control",
+      "public, s-maxage=604800, stale-while-revalidate=59"
+    );
 
     return res.status(200).json(results);
   } catch (err) {

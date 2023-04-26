@@ -515,7 +515,8 @@ const species = ({ species, wiki }) => {
 };
 
 export const getServerSideProps = async (context) => {
-  const speciesId = context.params.id;
+  const { res, params } = context;
+  const speciesId = params.id;
 
   if (validID(speciesId)) {
     try {
@@ -542,6 +543,10 @@ export const getServerSideProps = async (context) => {
         let wiki;
         if (wikiRes.ok) {
           wiki = await wikiRes.json();
+          res.setHeader(
+            "Cache-Control",
+            "public, s-maxage=604800, stale-while-revalidate=59"
+          );
           return {
             props: {
               species: JSON.parse(JSON.stringify(species)),

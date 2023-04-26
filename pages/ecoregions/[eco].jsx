@@ -356,7 +356,8 @@ const eco = ({ wiki, eco, id }) => {
 // CHANGE to static potentially
 export const getServerSideProps = async (context) => {
   // console.log(context);
-  const id = context.params.eco;
+  const { res, params } = context;
+  const id = params.eco;
 
   if (validEco(id)) {
     try {
@@ -385,6 +386,10 @@ export const getServerSideProps = async (context) => {
             );
             if (wikiRes.ok) {
               wiki = await wikiRes.json();
+              res.setHeader(
+                "Cache-Control",
+                "public, s-maxage=604800, stale-while-revalidate=59"
+              );
             } else {
               wiki = "error";
             }
@@ -411,6 +416,10 @@ export const getServerSideProps = async (context) => {
 
             if (wikiRes.ok) {
               wiki = await wikiRes.json();
+              res.setHeader(
+                "Cache-Control",
+                "public, s-maxage=604800, stale-while-revalidate=59"
+              );
             } else {
               wiki = "error";
             }

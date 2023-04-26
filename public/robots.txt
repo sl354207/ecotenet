@@ -8,6 +8,7 @@ Disallow: /500
 Disallow: /404
 Disallow: /auth/new-user
 Disallow: /server-sitemap
+Disallow: /tip
 Disallow: /*.json$
 Disallow: /*_buildManifest.js$
 Disallow: /*_middlewareManifest.js$
@@ -24,6 +25,7 @@ Disallow: /500
 Disallow: /404
 Disallow: /auth/new-user
 Disallow: /server-sitemap
+Disallow: /tip
 Disallow: /*.json$
 Disallow: /*_buildManifest.js$
 Disallow: /*_middlewareManifest.js$
@@ -40,6 +42,7 @@ Disallow: /500
 Disallow: /404
 Disallow: /auth/new-user
 Disallow: /server-sitemap
+Disallow: /tip
 Disallow: /*.json$
 Disallow: /*_buildManifest.js$
 Disallow: /*_middlewareManifest.js$
