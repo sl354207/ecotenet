@@ -60,8 +60,6 @@ const admin = () => {
             reason: "feature",
             text: "A post of yours was selected as a featured post",
             ref: post._id,
-            date: new Date().toUTCString(),
-            viewed: false,
           };
 
           const res1 = await fetch("/api/admin/notifications", {
@@ -367,7 +365,9 @@ const admin = () => {
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
                         >
-                          <Typography>{post.date}</Typography>
+                          <Typography>
+                            {new Date(post.date).toDateString()}
+                          </Typography>
                         </Grid>
                         <Grid
                           item

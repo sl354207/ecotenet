@@ -3,8 +3,8 @@
       "properties": {
         "date": {
           "type": "string",
-          "maxLength": 60,
-          "description": "must be a string"
+          "format": "date-time",
+          "description": "must be a date"
         },
         "title": {
           "type": "string",

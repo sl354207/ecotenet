@@ -96,7 +96,6 @@ describe("dashboard post api", () => {
                 },
                 body: {
                   name: "test",
-
                   updated: "true",
                 },
               };
@@ -190,7 +189,6 @@ describe("dashboard post api", () => {
                   updated: false,
                   featured: false,
                   feature: "false",
-                  date: "",
                   version: 1,
                   rows: [],
                 },
@@ -222,7 +220,7 @@ describe("dashboard post api", () => {
               await handler(req, res);
 
               expect(getServerSession).toHaveBeenCalledTimes(1);
-              //   expect(updatePost).toHaveBeenCalledTimes(1);
+              expect(updatePost).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
 
@@ -246,7 +244,6 @@ describe("dashboard post api", () => {
                   updated: false,
                   featured: false,
                   feature: "false",
-                  date: "",
                   version: 1,
                   rows: [],
                 },

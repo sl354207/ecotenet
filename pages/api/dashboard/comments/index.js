@@ -37,7 +37,7 @@ export default async function handler(req, res) {
         if (valid) {
           if (session.user.name && session.user.name === data.name) {
             try {
-              data.date = new Date().toUTCString();
+              data.date = new Date();
               data.approved = "pending";
               data.updated = false;
               const createdComment = await createComment(data);
@@ -52,6 +52,7 @@ export default async function handler(req, res) {
             res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
+          console.log(validate.errors);
           res.status(403).json({ msg: "Forbidden" });
         }
         // console.log(req.body);

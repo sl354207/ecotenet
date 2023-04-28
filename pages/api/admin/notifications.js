@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   if (valid) {
     // try post request, if successful return response, otherwise return error message.
     try {
-      data.date = new Date().toUTCString();
+      data.date = new Date();
       data.viewed = false;
       const createdNotification = await createNotification(data);
 

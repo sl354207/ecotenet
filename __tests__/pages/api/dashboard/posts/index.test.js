@@ -97,7 +97,6 @@ describe("dashboard posts api", () => {
                 },
                 body: {
                   name: "test",
-
                   updated: "true",
                 },
               };
@@ -137,7 +136,6 @@ describe("dashboard posts api", () => {
                 },
                 body: {
                   name: "test",
-
                   updated: true,
                   test_field: "test",
                 },
@@ -192,7 +190,6 @@ describe("dashboard posts api", () => {
                   updated: false,
                   featured: false,
                   feature: "false",
-                  date: "",
                   version: 1,
                   rows: [],
                 },
@@ -247,7 +244,6 @@ describe("dashboard posts api", () => {
                   updated: false,
                   featured: false,
                   feature: "false",
-                  date: "",
                   version: 1,
                   rows: [],
                 },

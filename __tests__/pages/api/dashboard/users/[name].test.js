@@ -257,7 +257,7 @@ describe("dashboard name api", () => {
               await handler(req, res);
 
               expect(getServerSession).toHaveBeenCalledTimes(1);
-              //   expect(updatePerson).toHaveBeenCalledTimes(1);
+              expect(updatePerson).toHaveBeenCalledTimes(1);
               expect(res.status.mock.calls[0][0]).toBe(200);
             });
 

@@ -48,7 +48,7 @@ export default async function handler(req, res) {
           if (session.user.name && session.user.name === data.name) {
             try {
               data.approved = "pending";
-              data.date = new Date().toUTCString();
+              data.date = new Date();
               data.feature = "false";
               const update = await updatePost(_id, data);
 

@@ -19,7 +19,7 @@ export default async function handler(req, res) {
         if (validID(id) && valid) {
           if (session.user.name && session.user.name === data.name) {
             try {
-              data.date = new Date().toUTCString();
+              data.date = new Date();
               data.approved = "pending";
               data.updated = true;
               const updatedComment = await updateComment(id, data);

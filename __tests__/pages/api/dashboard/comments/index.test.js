@@ -101,7 +101,6 @@ describe("dashboard comments api", () => {
                 body: {
                   id: "62fa81eb88f30d14e512d873",
                   // name: 'test',
-                  date: new Date().toUTCString(),
                   text: "test",
                   approved: "pending",
                   updated: true,
@@ -144,7 +143,6 @@ describe("dashboard comments api", () => {
                 body: {
                   id: "62fa81eb88f30d14e512d87",
                   name: "test",
-                  date: new Date().toUTCString(),
                   text: "test",
                   approved: "pending",
                   updated: true,
@@ -187,8 +185,7 @@ describe("dashboard comments api", () => {
                 body: {
                   id: "62fa81eb88f30d14e512d87",
                   name: "test",
-                  date: new Date().toUTCString(),
-                  text: "test",
+                  text: "test 2",
                   approved: "pending",
                   updated: true,
                   test_field: "test",
@@ -234,8 +231,7 @@ describe("dashboard comments api", () => {
                   post_id: "32fa81eb88f30d14e512d872",
                   comment_ref: "",
                   name: "test 3",
-                  date: new Date().toUTCString(),
-                  text: "test",
+                  text: "test 3",
                   approved: "pending",
                   updated: true,
                 },
@@ -281,7 +277,6 @@ describe("dashboard comments api", () => {
                   post_id: "32fa81eb88f30d14e512d872",
                   comment_ref: "",
                   name: "test 4",
-                  date: new Date().toUTCString(),
                   text: "test",
                   approved: "pending",
                   updated: true,

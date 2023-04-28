@@ -117,7 +117,6 @@ const StepForm = ({ post, user }) => {
       approved: "pending",
       updated: true,
       featured: post.featured,
-      date: new Date().toUTCString(),
       feature: "false",
     };
     setItem(result);

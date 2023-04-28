@@ -64,8 +64,8 @@ describe("Test mongodb comment helper functions for validation", () => {
               ],
             },
             date: {
-              bsonType: "string",
-              description: "must be a string",
+              bsonType: "date",
+              description: "must be a date",
             },
             text: {
               bsonType: "string",
@@ -108,7 +108,7 @@ describe("Test mongodb comment helper functions for validation", () => {
           name: "test name",
           post_id: "012345678901234567890123",
           comment_ref: "",
-          date: new Date().toUTCString(),
+          date: new Date(),
           text: "test comment",
           approved: "pending",
           updated: false,
@@ -144,7 +144,7 @@ describe("Test mongodb comment helper functions for validation", () => {
           name: "test name",
           post_id: "012345678901234567890123",
           comment_ref: "a",
-          date: new Date().toUTCString(),
+          date: new Date(),
           text: "test comment",
           approved: "pending",
           updated: false,
@@ -170,7 +170,7 @@ describe("Test mongodb comment helper functions for validation", () => {
           name: "test name",
           post_id: "012345678901234567890123",
           comment_ref: "",
-          date: new Date().toUTCString(),
+          date: new Date(),
           text: "test comment",
           approved: "pending",
           updated: false,
@@ -201,7 +201,7 @@ describe("Test mongodb comment helper functions for validation", () => {
         name: "test name",
         post_id: "012345678901234567890123",
         comment_ref: "",
-        date: new Date().toUTCString(),
+        date: new Date(),
         text: "test comment",
         approved: "true",
         updated: false,
@@ -267,7 +267,7 @@ describe("Test mongodb comment helper functions for validation", () => {
             "012345678901234567890123"
           );
         } catch (error) {
-          console.error;
+          // console.error;
         }
 
         expect(connectToDatabase).toHaveBeenCalledTimes(1);

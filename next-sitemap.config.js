@@ -47,55 +47,5 @@ module.exports = {
       },
     ],
     additionalSitemaps: ["https://www.ecotenet.org/server-sitemap.xml"],
-    // additionalPaths: async (config) => {
-    //   const result = [];
-
-    //   result.push({
-    //     loc: "/donate",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/ecoregions",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/data",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/about",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/category",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/terms",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/privacy",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/contact",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/how",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/ideas",
-    //     lastmod: new Date().toISOString(),
-    //   });
-    //   result.push({
-    //     loc: "/featured",
-    //     lastmod: new Date().toISOString(),
-    //   });
-
-    //   return result;
-    // },
   },
 };

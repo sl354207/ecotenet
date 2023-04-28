@@ -43,7 +43,7 @@ export default async function handler(req, res) {
               data.updated = false;
               data.featured = false;
               data.feature = "false";
-              data.date = new Date().toUTCString();
+              data.date = new Date();
               data.approved = "pending";
               const createdPost = await createPost(data);
 

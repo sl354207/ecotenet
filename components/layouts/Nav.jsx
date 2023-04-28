@@ -124,7 +124,6 @@ const Nav = () => {
       updated: false,
       featured: false,
       feature: "false",
-      date: "",
       version: 1,
       rows: [],
     };

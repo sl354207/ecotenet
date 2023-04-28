@@ -90,8 +90,6 @@ const post = () => {
     }
   );
 
-  // let date;
-
   let list;
 
   if (postLoading) {
@@ -123,7 +121,6 @@ const post = () => {
         </div>
       );
     } else {
-      // date = new Date(post.date);
       list = (
         <>
           {post && (
