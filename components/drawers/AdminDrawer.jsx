@@ -51,6 +51,12 @@ const AdminDrawer = () => {
           >
             <ListItemText primary="Flags" />
           </ListItemButton>
+          <ListItemButton
+            key="notifications"
+            onClick={() => router.push("/admin/notifications")}
+          >
+            <ListItemText primary="Notifications" />
+          </ListItemButton>
         </List>
         <Divider />
       </div>

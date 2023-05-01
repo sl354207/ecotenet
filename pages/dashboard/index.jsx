@@ -156,7 +156,7 @@ export default function Dashboard() {
       viewed: true,
     };
 
-    const notifyResponse = await updateNotification(notify);
+    const notifyResponse = await updateNotification(notify, "dashboard");
 
     if (notifyResponse.ok) {
       mutate(fetchApi);

@@ -458,6 +458,9 @@ const admin = () => {
           <Typography align="center">Posts: {stats.posts}</Typography>
           <Typography align="center">Comments: {stats.comments}</Typography>
           <Typography align="center">Flags: {stats.flags}</Typography>
+          <Typography align="center">
+            Notifications: {stats.notifications}
+          </Typography>
         </>
       );
     }

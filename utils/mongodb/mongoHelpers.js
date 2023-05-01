@@ -690,6 +690,9 @@ const getStats = async () => {
     const posts = await db
       .collection("posts")
       .count({ status: "published", approved: "true" });
+    const notifications = await db
+      .collection("notifications")
+      .count({ reason: "admin", viewed: false });
 
     const stats = {
       comments: comments,
@@ -697,6 +700,7 @@ const getStats = async () => {
       flags: flags,
       species: species,
       posts: posts,
+      notifications: notifications,
     };
 
     return stats;
@@ -958,6 +962,20 @@ const getNotifications = async (name) => {
     throw new Error(error);
   }
 };
+const getAdminNotifications = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const notifications = await db
+      .collection("notifications")
+      .find({ reason: "admin", viewed: false })
+      .toArray();
+
+    return notifications;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const updateNotification = async (_id, viewed) => {
   try {
@@ -1087,6 +1105,7 @@ module.exports = {
   updateFlag,
   createNotification,
   getNotifications,
+  getAdminNotifications,
   updateNotification,
   checkName,
   getEcoregions,

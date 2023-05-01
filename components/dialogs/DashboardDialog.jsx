@@ -43,7 +43,8 @@ const DashboardDialog = ({
       break;
 
     case "Person":
-      item = "account";
+      item =
+        "your account? This includes posts, comments, and forum interactions";
 
       break;
     default:
@@ -149,16 +150,36 @@ const DashboardDialog = ({
       const userResponse = await deleteUser(deletion, "dashboard");
 
       if (userResponse.ok) {
-        handleClose();
-        setSnackbar({
-          ...snackbar,
-          open: true,
-          vertical: "bottom",
-          horizontal: "left",
-          severity: "success",
-          message: "Account deleted successfully",
-        });
-        signOut({ callbackUrl: "/" });
+        const notify = {
+          name: deletion,
+          reason: "admin",
+          text: "deleted account. Delete from forum",
+        };
+
+        const notifyResponse = await createNotification(notify, "dashboard");
+
+        if (notifyResponse.ok) {
+          handleClose();
+          setSnackbar({
+            ...snackbar,
+            open: true,
+            vertical: "bottom",
+            horizontal: "left",
+            severity: "success",
+            message: "Account deleted successfully",
+          });
+          signOut({ callbackUrl: "/" });
+        }
+        if (!notifyResponse.ok) {
+          setSnackbar({
+            ...snackbar,
+            open: true,
+            vertical: "bottom",
+            horizontal: "left",
+            severity: "error",
+            message: `There was a problem deleting your account. Please try again later`,
+          });
+        }
       }
       if (!userResponse.ok) {
         setSnackbar({
@@ -326,7 +347,8 @@ const DashboardDialog = ({
 
       <DialogContent>
         <DialogContentText id="dashboard-dialog-text" color="textPrimary">
-          Are you sure you want to {action} {item}?
+          Are you sure you want to {action} {item}
+          {contentType === "Person" ? "." : "?"}
         </DialogContentText>
       </DialogContent>
 

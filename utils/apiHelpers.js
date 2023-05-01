@@ -26,8 +26,8 @@ export async function deleteUserMedia(name, endpoint) {
 
   return res;
 }
-export async function createNotification(notification) {
-  const res = await fetch("/api/admin/notifications", {
+export async function createNotification(notification, endpoint) {
+  const res = await fetch(`/api/${endpoint}/notifications`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -37,8 +37,8 @@ export async function createNotification(notification) {
 
   return res;
 }
-export async function updateNotification(notification) {
-  const res = await fetch(`/api/dashboard/notifications/${notification.id}`, {
+export async function updateNotification(notification, endpoint) {
+  const res = await fetch(`/api/${endpoint}/notifications/${notification.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
