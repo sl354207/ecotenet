@@ -19,12 +19,12 @@ if (process.env.VERCEL_ENV === "production") {
     domain: "ecotenet.org",
   };
 } else {
-  cookiePrefix = "";
+  cookiePrefix = process.env.VERCEL_ENV === "preview" ? "__Secure-" : "";
   cookieOptions = {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
-    secure: false,
+    secure: process.env.VERCEL_ENV === "preview" ? true : false,
   };
 }
 
