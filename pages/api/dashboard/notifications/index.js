@@ -6,7 +6,6 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
 
-// api endpoint to get all posts by user from database
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
 
