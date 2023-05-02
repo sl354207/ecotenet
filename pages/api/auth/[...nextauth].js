@@ -7,17 +7,26 @@ import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
 
-let useSecureCookies;
-let hostName;
-if (process.env.NEXTAUTH_URL === "http://localhost:3000") {
-  useSecureCookies = false;
-  hostName = "localhost";
+let cookieOptions;
+let cookiePrefix;
+if (process.env.VERCEL_ENV === "production") {
+  cookiePrefix = "__Secure-";
+  cookieOptions = {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: true,
+    domain: "ecotenet.org",
+  };
 } else {
-  useSecureCookies = true;
-  hostName = "ecotenet.org";
+  cookiePrefix = "";
+  cookieOptions = {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: false,
+  };
 }
-
-const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 
 // console.log(hostName);
 // console.log(useSecureCookies);
@@ -204,13 +213,7 @@ export const authOptions = {
   cookies: {
     sessionToken: {
       name: `${cookiePrefix}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: useSecureCookies,
-        domain: hostName,
-      },
+      options: cookieOptions,
     },
   },
 
