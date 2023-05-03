@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import customImage from "@plugins/customImage";
+import customVideo from "@plugins/customVideo";
 import Editor from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
@@ -21,7 +22,6 @@ import slate from "@react-page/plugins-slate";
 import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
-import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
@@ -31,7 +31,7 @@ import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 // Define which plugins we want to use.
-const cellPlugins = [slate(), customImage, video, spacer, divider];
+const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
 
 const post = () => {
   const router = useRouter();

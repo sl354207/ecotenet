@@ -87,8 +87,16 @@ export function validImagePluginURL(string) {
     return true;
   } else {
     const regex =
-      /^http[^\?]*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)(\?(.*))?$/gim;
+      /^https[^\?]*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)(\?(.*))?$/gim;
     return regex.test(string);
+  }
+}
+export function validVideoPluginURL(string) {
+  const regex = /https:\/{2}(www\.)?(youtube\.com|youtu\.be)/gim;
+  if (typeof string === "string" && regex.test(string)) {
+    return true;
+  } else {
+    return false;
   }
 }
 

@@ -1,10 +1,10 @@
-import ImageCaption from '@components/imagePlugin/ImageCaption';
-import ImageCitation from '@components/imagePlugin/ImageCitation';
-import ImageDescription from '@components/imagePlugin/ImageDescription';
-import ImageHeight from '@components/imagePlugin/ImageHeight';
-import ImageRender from '@components/imagePlugin/ImageRender';
-import ImageUploadField from '@components/imagePlugin/ImageUploadField';
-import ImageWidth from '@components/imagePlugin/ImageWidth';
+import ImageCaption from '@components/editorPlugins/ImageCaption';
+import ImageCitation from '@components/editorPlugins/ImageCitation';
+import ImageDescription from '@components/editorPlugins/ImageDescription';
+import ImageHeight from '@components/editorPlugins/ImageHeight';
+import ImageRender from '@components/editorPlugins/ImageRender';
+import ImageUploadField from '@components/editorPlugins/ImageUploadField';
+import ImageWidth from '@components/editorPlugins/ImageWidth';
 import { CellPlugin, lazyLoad } from '@react-page/editor';
 
 const Panorama = lazyLoad(() => import('@mui/icons-material/Panorama'));
@@ -42,7 +42,7 @@ const customImage: CellPlugin<Data> = {
   // set fields for plugin UI
   id: 'customImage',
   title: 'Image',
-  description: 'Upload image from local file or external url',
+  description: 'Upload an image from a local file or an external url.',
   version: 1,
   icon: <Panorama />,
 

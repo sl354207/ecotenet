@@ -685,22 +685,16 @@ const getStats = async () => {
 
     const comments = await db.collection("comments").estimatedDocumentCount({});
     const people = await db.collection("users").estimatedDocumentCount({});
-    const flags = await db.collection("flags").estimatedDocumentCount({});
     const species = await db.collection("species").estimatedDocumentCount({});
     const posts = await db
       .collection("posts")
       .count({ status: "published", approved: "true" });
-    const notifications = await db
-      .collection("notifications")
-      .count({ reason: "admin", viewed: false });
 
     const stats = {
       comments: comments,
       people: people,
-      flags: flags,
       species: species,
       posts: posts,
-      notifications: notifications,
     };
 
     return stats;

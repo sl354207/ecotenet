@@ -3,6 +3,7 @@ import EditorLayout from "@components/layouts/EditorLayout";
 import Header from "@components/layouts/Header";
 import { Container, createTheme } from "@mui/material";
 import customImage from "@plugins/customImage";
+import customVideo from "@plugins/customVideo";
 import Editor, { defaultThemeOptions } from "@react-page/editor";
 import "@react-page/editor/lib/index.css";
 import divider from "@react-page/plugins-divider";
@@ -11,7 +12,6 @@ import slate from "@react-page/plugins-slate";
 import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
-import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 
 const darkTheme = createTheme({
@@ -20,7 +20,7 @@ const darkTheme = createTheme({
 });
 
 // Define which plugins we want to use.
-const cellPlugins = [slate(), customImage, video, spacer, divider];
+const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
 
 const PostEditor = ({ value, setPostValue }) => {
   return (
