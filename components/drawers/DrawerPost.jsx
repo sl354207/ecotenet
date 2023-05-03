@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import customImage from "@plugins/customImage";
+import customVideo from "@plugins/customVideo";
 
 // The editor core
 import Editor from "@react-page/editor";
@@ -25,7 +26,6 @@ import slate from "@react-page/plugins-slate";
 import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
-import video from "@react-page/plugins-video";
 import "@react-page/plugins-video/lib/index.css";
 import fetcher from "@utils/fetcher";
 import { useOnScreenClient } from "@utils/useOnScreen";
@@ -36,7 +36,7 @@ import { useEffect, useReducer, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 // Define which plugins we want to use.
-const cellPlugins = [slate(), customImage, video, spacer, divider];
+const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
 
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
