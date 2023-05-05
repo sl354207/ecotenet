@@ -369,7 +369,11 @@ const Nav = () => {
             variant="text"
             color="secondary"
             size={isTab ? "small" : "medium"}
-            onClick={() => router.push("https://forum.ecotenet.org/")}
+            onClick={
+              status === "authenticated" && user.name === undefined
+                ? () => router.push("/auth/new-user")
+                : () => router.push("https://forum.ecotenet.org")
+            }
           >
             Forum
           </Button>
@@ -504,8 +508,16 @@ const Nav = () => {
                         </MenuItem>
                         <MenuItem
                           onClick={() => {
-                            setPopper(false);
-                            router.push("https://forum.ecotenet.org/");
+                            status === "authenticated" &&
+                            user.name === undefined
+                              ? () => {
+                                  setPopper(false);
+                                  router.push("/auth/new-user");
+                                }
+                              : () => {
+                                  setPopper(false);
+                                  router.push("https://forum.ecotenet.org");
+                                };
                           }}
                           sx={{ color: theme.palette.secondary.main }}
                         >
