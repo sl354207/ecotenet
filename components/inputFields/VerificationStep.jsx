@@ -94,7 +94,7 @@ const VerificationStep = ({ email, callbackUrl }) => {
                 <>
                   We have sent another email. Please try restarting the sign in
                   process or contact us at{" "}
-                  <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
+                  <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>{" "}
                   if you are not receiving an email
                 </>
               )}
