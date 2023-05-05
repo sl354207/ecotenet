@@ -1,3 +1,4 @@
+import Link from "@components/layouts/Link";
 import { Button, FormControl, FormHelperText, InputLabel } from "@mui/material";
 import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
@@ -90,7 +91,12 @@ const VerificationStep = ({ email, callbackUrl }) => {
                   </Button>
                 </>
               ) : (
-                "We have sent another email. Please try restarting the sign in process or contact us if you are not receiving an email"
+                <>
+                  We have sent another email. Please try restarting the sign in
+                  process or contact us at{" "}
+                  <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
+                  if you are not receiving an email
+                </>
               )}
             </>
           )}

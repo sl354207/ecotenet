@@ -88,7 +88,7 @@ const AdminDialog = ({
       ref: result._id,
     };
 
-    const notifyResponse = await createNotification(notify);
+    const notifyResponse = await createNotification(notify, "admin");
 
     return notifyResponse;
   };
