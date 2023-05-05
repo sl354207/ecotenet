@@ -62,7 +62,7 @@ export default async function handler(req, res) {
             res.status(401).json({ msg: "Unauthorized" });
           }
         } else {
-          console.log(validate.errors);
+          // console.log(validate.errors);
           res.status(403).json({ msg: "Forbidden" });
         }
 
