@@ -507,7 +507,7 @@ const Nav = () => {
                           About
                         </MenuItem>
                         <MenuItem
-                          onClick={() => {
+                          onClick={
                             status === "authenticated" &&
                             user.name === undefined
                               ? () => {
@@ -517,8 +517,8 @@ const Nav = () => {
                               : () => {
                                   setPopper(false);
                                   router.push("https://forum.ecotenet.org");
-                                };
-                          }}
+                                }
+                          }
                           sx={{ color: theme.palette.secondary.main }}
                         >
                           Forum
