@@ -65,7 +65,10 @@ export const authOptions = {
         const result = await createTransport(process.env.EMAIL_SERVER).sendMail(
           {
             to: identifier,
-            from: provider.from,
+            from: {
+              name: "Ecotenet",
+              address: provider.from,
+            },
             subject: `Sign in to ${signInURL.host}`,
             text: `Sign in on ${signInURL} using the verification code: ${token}`,
             html: `<body style="background: "#f9f9f9";">
