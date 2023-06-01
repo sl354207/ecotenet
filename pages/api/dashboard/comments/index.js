@@ -34,6 +34,7 @@ export default async function handler(req, res) {
         const data = req.body;
         const validate = ajv.getSchema("comment");
         const valid = validate(data);
+
         if (valid) {
           if (session.user.name && session.user.name === data.name) {
             try {

@@ -43,6 +43,9 @@ import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
+import * as toxicity from "@tensorflow-models/toxicity";
+import "@tensorflow/tfjs";
+
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
 
@@ -258,6 +261,39 @@ const post = ({ post }) => {
   };
 
   const date = new Date(post.date);
+
+  const threshold = 0.9;
+  toxicity.load(threshold).then((model) => {
+    const sentences = ["you suck"];
+    console.log(sentences);
+
+    model.classify(sentences).then((predictions) => {
+      // `predictions` is an array of objects, one for each prediction head,
+      // that contains the raw probabilities for each input along with the
+      // final prediction in `match` (either `false` or `true`).
+      // If neither prediction exceeds the threshold, `match` is `null`.
+
+      console.log(predictions);
+      /*
+      prints:
+      {
+        "label": "identity_attack",
+        "results": [{
+          "probabilities": [0.9659664034843445, 0.03403361141681671],
+          "match": false
+        }]
+      },
+      {
+        "label": "insult",
+        "results": [{
+          "probabilities": [0.08124706149101257, 0.9187529683113098],
+          "match": true
+        }]
+      },
+      ...
+       */
+    });
+  });
 
   return (
     <>
