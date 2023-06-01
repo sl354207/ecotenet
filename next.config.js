@@ -37,7 +37,7 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value:
-      "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src https: data: blob:; script-src 'self' https://vercel.live/_next-live/feedback/feedback.js https://api.mapbox.com https://js.stripe.com https://www.youtube.com 'unsafe-eval'; style-src 'self'  https://fonts.googleapis.com 'unsafe-inline'; object-src 'none';  connect-src 'self' https://en.wikipedia.org https://api.mapbox.com https://events.mapbox.com https://eco-media-bucket.s3.us-east-2.amazonaws.com; worker-src 'self' blob:; frame-src https: https://js.stripe.com/ https://www.youtube-nocookie.com/; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
+      "default-src 'self'; font-src 'self' https://fonts.gstatic.com; img-src https: data: blob:; script-src 'self' https://vercel.live/_next-live/feedback/feedback.js https://api.mapbox.com https://js.stripe.com https://www.youtube.com 'unsafe-eval'; style-src 'self'  https://fonts.googleapis.com 'unsafe-inline'; object-src 'none';  connect-src 'self' https://en.wikipedia.org https://api.mapbox.com https://events.mapbox.com https://eco-media-bucket.s3.us-east-2.amazonaws.com https://tfhub.dev/tensorflow/tfjs-model/toxicity/1/default/1/model.json https://tfhub.dev/tensorflow/tfjs-model/toxicity/1/default/1/  https://storage.googleapis.com/tfjs-models/savedmodel/universal_sentence_encoder/vocab.json; worker-src 'self' blob:; frame-src https: https://js.stripe.com/ https://www.youtube-nocookie.com/; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
   },
 ];
 

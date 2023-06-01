@@ -27,7 +27,6 @@
     "@stripe/stripe-js": "^1.52.1",
     "@tensorflow-models/toxicity": "^1.2.2",
     "@tensorflow/tfjs": "^4.6.0",
-    "@tensorflow/tfjs-node": "^4.6.0",
     "ajv-formats": "^2.1.1",
     "aws-sdk": "^2.1361.0",
     "html-react-parser": "^3.0.15",

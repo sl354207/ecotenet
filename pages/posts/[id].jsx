@@ -43,8 +43,7 @@ import { useRouter } from "next/router";
 import { useEffect, useReducer, useRef, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
-import * as toxicity from "@tensorflow-models/toxicity";
-import "@tensorflow/tfjs";
+import useToxicity from "@utils/textMod";
 
 // Define which plugins we want to use.
 const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
@@ -58,6 +57,16 @@ const DynamicClientDialog = dynamic(
     ssr: false,
   }
 );
+
+let model;
+const isToxic = async (model, message) => {
+  // Get predictions
+  const predictions = await model.classify(message);
+  // Check if there are toxic messages in the predictions
+  // Match is true when the message is toxic
+  const toxicPredictions = predictions.filter((p) => p.results[0].match);
+  return toxicPredictions.length > 0;
+};
 
 const post = ({ post }) => {
   const router = useRouter();
@@ -150,6 +159,8 @@ const post = ({ post }) => {
     }
   }, [comments]);
 
+  const [textToCheck, setTextToCheck] = useState("");
+
   const handleOpenDialog = (action, result) => {
     if (user.status === "unauthenticated" || user.status === "loading") {
       signIn();
@@ -158,14 +169,16 @@ const post = ({ post }) => {
       if (user.name === null || user.name === "" || user.name === undefined) {
         router.push("/auth/new-user");
       } else {
-        setItem(result);
-        setAction(action);
+        // setItem(result);
+        // setAction(action);
 
-        setDialog(true);
+        // setDialog(true);
 
-        if (action === "Comment") {
-          dispatch({ type: "open", payload: result.comment_ref });
-        }
+        // if (action === "Comment") {
+        //   dispatch({ type: "open", payload: result.comment_ref });
+        // }
+        // console.log(result);
+        setTextToCheck(result.text);
       }
     }
   };
@@ -262,38 +275,63 @@ const post = ({ post }) => {
 
   const date = new Date(post.date);
 
-  const threshold = 0.9;
-  toxicity.load(threshold).then((model) => {
-    const sentences = ["you suck"];
-    console.log(sentences);
+  // const threshold = 0.9;
+  // toxicity.load(threshold).then((model) => {
+  //   const sentences = ["you suck"];
+  //   console.log(sentences);
 
-    model.classify(sentences).then((predictions) => {
-      // `predictions` is an array of objects, one for each prediction head,
-      // that contains the raw probabilities for each input along with the
-      // final prediction in `match` (either `false` or `true`).
-      // If neither prediction exceeds the threshold, `match` is `null`.
+  //   model.classify(sentences).then((predictions) => {
+  //     // `predictions` is an array of objects, one for each prediction head,
+  //     // that contains the raw probabilities for each input along with the
+  //     // final prediction in `match` (either `false` or `true`).
+  //     // If neither prediction exceeds the threshold, `match` is `null`.
 
-      console.log(predictions);
-      /*
-      prints:
-      {
-        "label": "identity_attack",
-        "results": [{
-          "probabilities": [0.9659664034843445, 0.03403361141681671],
-          "match": false
-        }]
-      },
-      {
-        "label": "insult",
-        "results": [{
-          "probabilities": [0.08124706149101257, 0.9187529683113098],
-          "match": true
-        }]
-      },
-      ...
-       */
-    });
-  });
+  //     console.log(predictions);
+  //     /*
+  //     prints:
+  //     {
+  //       "label": "identity_attack",
+  //       "results": [{
+  //         "probabilities": [0.9659664034843445, 0.03403361141681671],
+  //         "match": false
+  //       }]
+  //     },
+  //     {
+  //       "label": "insult",
+  //       "results": [{
+  //         "probabilities": [0.08124706149101257, 0.9187529683113098],
+  //         "match": true
+  //       }]
+  //     },
+  //     ...
+  //      */
+  //   });
+  // });
+  // const [toxic, setToxic] = useState();
+  // const [loadingModel, setModelLoading] = useState(true);
+  // const [loadingResult, setResultLoading] = useState(true);
+  // useEffect(() => {
+  //   const loadModel = async () => {
+  //     // Loading model
+  //     model = await toxicity.load(0.9);
+  //     // Display chat
+  //     setModelLoading(false);
+  //   };
+  //   // Load model on component mount
+  //   loadModel();
+  // });
+  // useEffect(() => {
+  //   const getToxic = async () => {
+  //     // Get toxicity of message
+  //     const textToxicity = await isToxic(model, "text");
+  //     // Save toxicity into state
+  //     setToxic(textToxicity);
+  //     // Display toxicity
+  //     setResultLoading(false);
+  //   };
+  //   getToxic();
+  // });
+  const { loading, isToxic } = useToxicity(textToCheck);
 
   return (
     <>
