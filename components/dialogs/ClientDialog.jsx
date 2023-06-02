@@ -1,6 +1,7 @@
 import { useSnackbarContext } from "@components/context/SnackbarContext";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,6 +9,8 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { createComment, updateVote } from "@utils/apiHelpers";
+import { useToxicity } from "@utils/textMod";
+import { useEffect, useState } from "react";
 
 const ClientDialog = ({
   open,
@@ -20,6 +23,11 @@ const ClientDialog = ({
   name,
   setVote,
   setLimit,
+  model,
+  modelLoading,
+  setModelLoading,
+  modelError,
+  setModelError,
 }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -39,6 +47,30 @@ const ClientDialog = ({
     default:
       break;
   }
+
+  const [classification, setClassification] = useState(false);
+
+  useEffect(() => {
+    if (result.text) {
+      const getToxic = async () => {
+        setModelLoading(true);
+        try {
+          // Get toxicity of message
+          const classification = await useToxicity(model, result.text);
+          // Save toxicity into state
+          setClassification(classification);
+          setTimeout(() => setModelLoading(false), 1000);
+        } catch (error) {
+          console.log(error);
+          setModelError(true);
+          setModelLoading(false);
+        }
+      };
+      getToxic();
+    }
+
+    // console.log("test");
+  }, [result]);
 
   const handleCommentSubmit = async () => {
     const submission = {
@@ -133,7 +165,39 @@ const ClientDialog = ({
 
       <DialogContent>
         <DialogContentText id="client-dialog-text" color="textPrimary">
-          Are you sure you want to submit {item}?
+          {contentType === "Vote" ? (
+            <>Are you sure you want to submit {item}?</>
+          ) : (
+            <>
+              {modelLoading ? (
+                <CircularProgress
+                  color="secondary"
+                  size={40}
+                  disableShrink={true}
+                  sx={{
+                    margin: "0px 140px 0px 150px",
+                    // margin: { xs: "auto", md: "0px 150px 0px 160px" },
+                    display: "flex",
+                    justifySelf: "center",
+                  }}
+                />
+              ) : (
+                <>
+                  {modelError ? (
+                    <>Sorry there was an error please try again later</>
+                  ) : (
+                    <>
+                      {classification ? (
+                        <>Sorry this comment was found to be inappropriate</>
+                      ) : (
+                        <>Are you sure you want to submit {item}?</>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          )}
         </DialogContentText>
       </DialogContent>
 
@@ -153,6 +217,7 @@ const ClientDialog = ({
           }
           color="secondary"
           variant="outlined"
+          disabled={classification || modelLoading || modelError}
         >
           {contentType}
         </Button>
