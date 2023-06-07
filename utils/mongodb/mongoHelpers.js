@@ -300,7 +300,7 @@ const getPostComments = async (id) => {
       .collection("comments")
       .find({
         post_id: id,
-        approved: "true",
+        approved: { $in: ["true", "pending"] },
       })
       .project({ approved: 0 })
       .toArray();

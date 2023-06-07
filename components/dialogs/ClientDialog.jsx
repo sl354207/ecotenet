@@ -48,7 +48,7 @@ const ClientDialog = ({
       break;
   }
 
-  const [classification, setClassification] = useState(false);
+  const [toxic, setToxic] = useState(false);
 
   useEffect(() => {
     if (result.text) {
@@ -58,7 +58,7 @@ const ClientDialog = ({
           // Get toxicity of message
           const classification = await useToxicity(model, result.text);
           // Save toxicity into state
-          setClassification(classification);
+          setToxic(classification);
           setTimeout(() => setModelLoading(false), 1000);
         } catch (error) {
           console.log(error);
@@ -187,7 +187,7 @@ const ClientDialog = ({
                     <>Sorry there was an error please try again later</>
                   ) : (
                     <>
-                      {classification ? (
+                      {toxic ? (
                         <>Sorry this comment was found to be inappropriate</>
                       ) : (
                         <>Are you sure you want to submit {item}?</>
@@ -217,7 +217,7 @@ const ClientDialog = ({
           }
           color="secondary"
           variant="outlined"
-          disabled={classification || modelLoading || modelError}
+          disabled={toxic || modelLoading || modelError}
         >
           {contentType}
         </Button>

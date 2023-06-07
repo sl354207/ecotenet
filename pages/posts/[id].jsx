@@ -157,7 +157,7 @@ const post = ({ post }) => {
         setModelLoading(true);
         try {
           // Loading model
-          const model = await loadToxicity(0.3);
+          const model = await loadToxicity(0.7);
           if (model) {
             setModel(model);
             // setModelLoading(false);

@@ -40,21 +40,19 @@ const DashboardProfile = ({
         <Typography variant="h5" gutterBottom>
           Public Profile: optional
         </Typography>
-        {results.bio === profile.bio &&
-        results.website === profile.website &&
-        results.socials === profile.socials ? (
-          <Button variant="contained" color="secondary" disabled>
-            Save Changes
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => handleProfileSubmit()}
-          >
-            Save Changes
-          </Button>
-        )}
+
+        <Button
+          variant="contained"
+          color="secondary"
+          disabled={
+            results.bio === profile.bio &&
+            results.website === profile.website &&
+            results.socials === profile.socials
+          }
+          onClick={() => handleProfileSubmit()}
+        >
+          Save Changes
+        </Button>
       </div>
 
       <Typography variant="body1" gutterBottom>
@@ -66,6 +64,7 @@ const DashboardProfile = ({
           flexGrow: 1,
           margin: "10px 0 10px 0",
         }}
+        error={error.bio}
       >
         <InputLabel htmlFor="bio" shrink>
           <b>Bio:</b>
@@ -79,7 +78,11 @@ const DashboardProfile = ({
           handleChange={handleProfileChange}
           multiline={true}
           inputProps={{ type: "text", maxLength: 5000 }}
+          error={error.bio}
         />
+        <FormHelperText sx={{ color: theme.palette.text.primary }}>
+          {error.bio ? "Inappropriate language" : <></>}
+        </FormHelperText>
       </FormControl>
       <FormControl
         sx={{
@@ -157,13 +160,17 @@ const DashboardProfile = ({
               }) === "about:blank"
             ) {
               setError({
+                bio: error.bio,
                 website: error.website,
                 socials: true,
+                comment: error.comment,
               });
             } else {
               setError({
+                bio: error.bio,
                 website: error.website,
                 socials: false,
+                comment: error.comment,
               });
               setProfile((profile) => ({
                 ...profile,

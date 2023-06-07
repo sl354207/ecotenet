@@ -22,6 +22,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
+import { loadToxicity, useToxicity } from "@utils/textMod";
 import theme from "@utils/theme";
 import { validEmail } from "@utils/validationHelpers";
 import { NextSeo } from "next-seo";
@@ -61,6 +62,18 @@ function a11yProps(index) {
   };
 }
 
+const checkWebsite = (website) => {
+  const valid = URISanity.vet(website, {
+    allowWebTransportURI: true,
+  });
+
+  if (valid === "about:blank") {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 const DynamicDashboardDialog = dynamic(
   () => import("@components/dialogs/DashboardDialog"),
   {
@@ -78,16 +91,43 @@ export default function Dashboard() {
 
   const [fetchApi, setFetchApi] = useState();
 
+  const [model, setModel] = useState();
+  const [modelLoading, setModelLoading] = useState(false);
+  const [modelError, setModelError] = useState(false);
+  // const [classification, setClassification] = useState(false);
+
   useEffect(() => {
     if (user && user.status === "authenticated") {
       setFetchApi(`/api/dashboard/users/${user.name}`);
+
+      const loadModel = async () => {
+        setModelLoading(true);
+        try {
+          // Loading model
+          const model = await loadToxicity(0.7);
+          if (model) {
+            setModel(model);
+            setModelLoading(false);
+          }
+        } catch (error) {
+          console.log(error);
+          setModelError(true);
+          setModelLoading(false);
+        }
+      };
+      loadModel();
     }
   }, [user]);
 
   const [dialog, setDialog] = useState(false);
   const [dialogAction, setDialogAction] = useState({ action: "", type: "" });
   const [dialogItem, setDialogItem] = useState("");
-  const [error, setError] = useState({ website: false, socials: false });
+  const [error, setError] = useState({
+    bio: false,
+    website: false,
+    socials: false,
+    comment: false,
+  });
 
   const {
     data: results,
@@ -136,7 +176,6 @@ export default function Dashboard() {
 
         break;
       case 3:
-        // update comments request
         setFetchApi(`/api/dashboard/comments?name=${user.name}`);
 
         break;
@@ -193,15 +232,58 @@ export default function Dashboard() {
   };
 
   const handleProfileSubmit = async () => {
-    if (
-      profile.website !== "" &&
-      URISanity.vet(profile.website, {
-        allowWebTransportURI: true,
-      }) === "about:blank"
-    ) {
-      setError({ website: true, socials: error.socials });
-    } else {
-      setError({ website: false, socials: false });
+    let validWebsite = true;
+    let toxicBio = false;
+    if (profile.website !== results.website && profile.website !== "") {
+      validWebsite = checkWebsite(profile.website);
+
+      if (!validWebsite) {
+        setError({
+          bio: error.bio,
+          website: true,
+          socials: error.socials,
+          comment: error.comment,
+        });
+      }
+    }
+
+    if (results.bio !== profile.bio) {
+      setModelLoading(true);
+      try {
+        // Get toxicity of message
+        toxicBio = await useToxicity(model, profile.bio);
+
+        if (toxicBio) {
+          setError({
+            bio: true,
+            website: error.website,
+            socials: error.socials,
+            comment: error.comment,
+          });
+        }
+
+        setTimeout(() => setModelLoading(false), 1000);
+      } catch (error) {
+        console.log(error);
+        setModelError(true);
+        setModelLoading(false);
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          vertical: "bottom",
+          horizontal: "left",
+          severity: "error",
+          message: "There was a problem saving profile. Please try again later",
+        });
+      }
+    }
+    if (validWebsite && !toxicBio) {
+      setError({
+        bio: false,
+        website: false,
+        socials: false,
+        comment: error.comment,
+      });
       const value = {
         name: user.name,
         email: user.email,

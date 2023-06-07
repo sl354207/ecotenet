@@ -15,8 +15,11 @@ export const loadToxicity = async (threshold = 0.85) => {
 export const useToxicity = async (model, text) => {
   try {
     const predictions = await model.classify(text);
-    const prediction = predictions.filter((p) => p.results[0].match);
-    console.log(predictions);
+    const prediction = predictions.filter(
+      (p) => p.results[0].match || p.results[0].match === null
+    );
+    // console.log(predictions);
+    // console.log(prediction);
     return prediction.length > 0;
   } catch (error) {
     console.log(error);
