@@ -92,7 +92,7 @@ export function validImagePluginURL(string) {
   }
 }
 export function validVideoPluginURL(string) {
-  const regex = /https:\/{2}(www\.)?(youtube\.com|youtu\.be)/gim;
+  const regex = /https:\/{2}(m\.|www\.)?(youtube\.com|youtu\.be)/gim;
   if (typeof string === "string" && regex.test(string)) {
     return true;
   } else {

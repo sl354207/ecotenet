@@ -93,8 +93,6 @@ export default function Dashboard() {
 
   const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
-  const [modelError, setModelError] = useState(false);
-  // const [classification, setClassification] = useState(false);
 
   useEffect(() => {
     if (user && user.status === "authenticated") {
@@ -111,7 +109,7 @@ export default function Dashboard() {
           }
         } catch (error) {
           console.log(error);
-          setModelError(true);
+
           setModelLoading(false);
         }
       };
@@ -265,7 +263,7 @@ export default function Dashboard() {
         setTimeout(() => setModelLoading(false), 1000);
       } catch (error) {
         console.log(error);
-        setModelError(true);
+        toxicBio = true;
         setModelLoading(false);
         setSnackbar({
           ...snackbar,
@@ -550,6 +548,7 @@ export default function Dashboard() {
                         handleOpenDialog={handleOpenDialog}
                         error={error}
                         setError={setError}
+                        modelLoading={modelLoading}
                       />
                     )}
                   </>
@@ -723,17 +722,16 @@ export default function Dashboard() {
                                 >
                                   <DashboardComment
                                     result={result}
-                                    handleDeleteOpen={() =>
-                                      handleOpenDialog(
-                                        "delete",
-                                        "Comment",
-                                        result
-                                      )
-                                    }
+                                    handleOpenDialog={handleOpenDialog}
                                     snackbar={snackbar}
                                     setSnackbar={setSnackbar}
                                     mutate={mutate}
                                     name={user && user.name}
+                                    error={error}
+                                    setError={setError}
+                                    model={model}
+                                    modelLoading={modelLoading}
+                                    setModelLoading={setModelLoading}
                                   />
                                 </ListItem>
                               );

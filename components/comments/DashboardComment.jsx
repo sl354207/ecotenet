@@ -3,22 +3,30 @@ import Link from "@components/layouts/Link";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
+  CircularProgress,
   FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   useMediaQuery,
 } from "@mui/material";
 import { updateComment } from "@utils/apiHelpers";
+import { useToxicity } from "@utils/textMod";
 import theme from "@utils/theme";
 import { useState } from "react";
 
 const DashboardComment = ({
   result,
-  handleDeleteOpen,
+  handleOpenDialog,
   mutate,
   snackbar,
   setSnackbar,
   name,
+  error,
+  setError,
+  model,
+  modelLoading,
+  setModelLoading,
 }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -33,27 +41,26 @@ const DashboardComment = ({
 
   // handle comment submission to database through api
   const handleCommentUpdate = async (commentValue) => {
-    //combine all objects and send to api
-    const comment = {
-      id: result._id,
-      name: name,
-      text: commentValue,
-    };
+    let toxicComment = false;
+    setModelLoading(true);
+    try {
+      // Get toxicity of message
+      toxicComment = await useToxicity(model, commentValue);
 
-    const updateResponse = await updateComment(comment, "dashboard");
-    if (updateResponse.ok) {
-      mutate(`/api/dashboard/comments?name=${name}`);
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        vertical: "bottom",
-        horizontal: "left",
-        severity: "success",
-        message: "Success! Comment will be visible upon approval",
-      });
-      setCommentValue("");
-    }
-    if (!updateResponse.ok) {
+      if (toxicComment) {
+        setError({
+          bio: error.bio,
+          website: error.website,
+          socials: error.socials,
+          comment: true,
+        });
+      }
+
+      setTimeout(() => setModelLoading(false), 1000);
+    } catch (error) {
+      console.log(error);
+      toxicComment = true;
+      setModelLoading(false);
       setSnackbar({
         ...snackbar,
         open: true,
@@ -63,6 +70,44 @@ const DashboardComment = ({
         message: "There was a problem saving comment. Please try again later",
       });
     }
+    if (!toxicComment) {
+      setError({
+        bio: error.bio,
+        website: error.website,
+        socials: error.socials,
+        comment: false,
+      });
+      //combine all objects and send to api
+      const comment = {
+        id: result._id,
+        name: name,
+        text: commentValue,
+      };
+
+      const updateResponse = await updateComment(comment, "dashboard");
+      if (updateResponse.ok) {
+        mutate(`/api/dashboard/comments?name=${name}`);
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          vertical: "bottom",
+          horizontal: "left",
+          severity: "success",
+          message: "Success! Comment will be visible upon approval",
+        });
+        setCommentValue("");
+      }
+      if (!updateResponse.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          vertical: "bottom",
+          horizontal: "left",
+          severity: "error",
+          message: "There was a problem saving comment. Please try again later",
+        });
+      }
+    }
   };
 
   return (
@@ -70,7 +115,10 @@ const DashboardComment = ({
       {isMobile ? result.date.toLocaleDateString() : result.date.toDateString()}{" "}
       Approved: {result.approved}
       <div style={{ display: "flex", flexGrow: 1 }}>
-        <FormControl sx={{ flexGrow: 1, marginTop: "5px" }}>
+        <FormControl
+          sx={{ flexGrow: 1, marginTop: "5px" }}
+          error={error.comment}
+        >
           <InputLabel shrink htmlFor="dashboard-comment"></InputLabel>
           <TextBox
             defaultValue={result.text}
@@ -80,7 +128,11 @@ const DashboardComment = ({
             autoFocus={false}
             multiline={true}
             inputProps={{ type: "text", maxLength: 5000 }}
+            error={error.comment}
           />
+          <FormHelperText sx={{ color: theme.palette.text.primary }}>
+            {error.comment ? "Inappropriate language" : <></>}
+          </FormHelperText>
         </FormControl>
         {isMobile ? (
           <div style={{ display: "grid", margin: "auto 0px auto 8px" }}>
@@ -93,42 +145,32 @@ const DashboardComment = ({
             >
               View
             </Link>
-            {commentValue !== "" ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "center",
-                }}
-                size="small"
-                onClick={() => handleCommentUpdate(commentValue)}
-              >
-                Save
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{
-                  margin: "4px 0px",
-                  minWidth: "fit-content",
-                  justifyContent: "center",
-                }}
-                size="small"
-                disabled
-              >
-                Save
-              </Button>
-            )}
+
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{
+                margin: "4px 0px",
+                minWidth: "56px",
+                justifyContent: "center",
+              }}
+              size="small"
+              onClick={() => handleCommentUpdate(commentValue)}
+              disabled={
+                commentValue.trim().length === 0 ||
+                commentValue === result.text ||
+                modelLoading
+              }
+            >
+              {modelLoading ? <CircularProgress size={19} /> : <>Save</>}
+            </Button>
 
             <IconButton
               edge="start"
               color="inherit"
               aria-label="filter"
               size="small"
-              onClick={handleDeleteOpen}
+              onClick={() => handleOpenDialog("delete", "Comment", result)}
             >
               <DeleteIcon />
             </IconButton>
@@ -150,17 +192,22 @@ const DashboardComment = ({
               color="secondary"
               sx={{
                 margin: "4px 0px",
-                minWidth: "fit-content",
-                justifyContent: "start",
+                minWidth: "111px",
+                justifyContent: "center",
               }}
               size="small"
               onClick={() => handleCommentUpdate(commentValue)}
               disabled={
-                // deepcode ignore NotTrimmed: <please specify a reason of ignoring this>
-                commentValue.trim().length === 0 || commentValue === result.text
+                commentValue.trim().length === 0 ||
+                commentValue === result.text ||
+                modelLoading
               }
             >
-              Save Change
+              {modelLoading ? (
+                <CircularProgress size={19} />
+              ) : (
+                <>Save Changes</>
+              )}
             </Button>
 
             <Button
@@ -173,7 +220,7 @@ const DashboardComment = ({
               }}
               startIcon={<DeleteIcon />}
               size="small"
-              onClick={handleDeleteOpen}
+              onClick={() => handleOpenDialog("delete", "Comment", result)}
             >
               Delete
             </Button>

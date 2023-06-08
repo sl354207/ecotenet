@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Button,
   Chip,
+  CircularProgress,
   createFilterOptions,
   FormControl,
   FormHelperText,
@@ -25,6 +26,7 @@ const DashboardProfile = ({
   handleOpenDialog,
   error,
   setError,
+  modelLoading,
 }) => {
   // set filter for autocomplete options
   const filter = createFilterOptions();
@@ -44,14 +46,16 @@ const DashboardProfile = ({
         <Button
           variant="contained"
           color="secondary"
+          sx={{ minWidth: "138px" }}
           disabled={
-            results.bio === profile.bio &&
-            results.website === profile.website &&
-            results.socials === profile.socials
+            (results.bio === profile.bio &&
+              results.website === profile.website &&
+              results.socials === profile.socials) ||
+            modelLoading
           }
           onClick={() => handleProfileSubmit()}
         >
-          Save Changes
+          {modelLoading ? <CircularProgress size={19} /> : <>Save Changes</>}
         </Button>
       </div>
 

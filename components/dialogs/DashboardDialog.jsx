@@ -110,7 +110,7 @@ const DashboardDialog = ({
       id: result._id,
       name: name,
     };
-
+    console.log(deletion);
     const commentResponse = await deleteComment(deletion, "dashboard");
 
     if (commentResponse.ok) {
