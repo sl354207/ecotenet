@@ -54,11 +54,13 @@ const ClientDialog = ({
     if (result.text) {
       const getToxic = async () => {
         setModelLoading(true);
+        console.log(model);
         try {
           // Get toxicity of message
           const classification = await useToxicity(model, result.text);
           // Save toxicity into state
           setToxic(classification);
+          setModelError(false);
           setTimeout(() => setModelLoading(false), 1000);
         } catch (error) {
           console.log(error);

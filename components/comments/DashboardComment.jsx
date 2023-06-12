@@ -42,24 +42,16 @@ const DashboardComment = ({
   // handle comment submission to database through api
   const handleCommentUpdate = async (commentValue) => {
     let toxicComment = false;
+    let modelError = false;
     setModelLoading(true);
     try {
       // Get toxicity of message
       toxicComment = await useToxicity(model, commentValue);
 
-      if (toxicComment) {
-        setError({
-          bio: error.bio,
-          website: error.website,
-          socials: error.socials,
-          comment: true,
-        });
-      }
-
       setTimeout(() => setModelLoading(false), 1000);
     } catch (error) {
       console.log(error);
-      toxicComment = true;
+      modelError = true;
       setModelLoading(false);
       setSnackbar({
         ...snackbar,
@@ -70,7 +62,13 @@ const DashboardComment = ({
         message: "There was a problem saving comment. Please try again later",
       });
     }
-    if (!toxicComment) {
+    setError({
+      bio: error.bio,
+      website: error.website,
+      socials: error.socials,
+      comment: toxicComment,
+    });
+    if (!toxicComment && !modelError) {
       setError({
         bio: error.bio,
         website: error.website,

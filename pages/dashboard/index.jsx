@@ -103,6 +103,10 @@ export default function Dashboard() {
         try {
           // Loading model
           const model = await loadToxicity(0.7);
+          // await model.model.save("indexeddb://model");
+          // const modelNew = await model("indexeddb://model");
+          // console.log(model);
+          // console.log(`modelNew: ${modelNew}`);
           if (model) {
             setModel(model);
             setModelLoading(false);
@@ -232,17 +236,11 @@ export default function Dashboard() {
   const handleProfileSubmit = async () => {
     let validWebsite = true;
     let toxicBio = false;
-    if (profile.website !== results.website && profile.website !== "") {
-      validWebsite = checkWebsite(profile.website);
+    let modelError = false;
 
-      if (!validWebsite) {
-        setError({
-          bio: error.bio,
-          website: true,
-          socials: error.socials,
-          comment: error.comment,
-        });
-      }
+    if (profile.website !== results.website && profile.website !== "") {
+      setModelLoading(true);
+      validWebsite = checkWebsite(profile.website);
     }
 
     if (results.bio !== profile.bio) {
@@ -250,20 +248,9 @@ export default function Dashboard() {
       try {
         // Get toxicity of message
         toxicBio = await useToxicity(model, profile.bio);
-
-        if (toxicBio) {
-          setError({
-            bio: true,
-            website: error.website,
-            socials: error.socials,
-            comment: error.comment,
-          });
-        }
-
-        setTimeout(() => setModelLoading(false), 1000);
       } catch (error) {
         console.log(error);
-        toxicBio = true;
+        modelError = true;
         setModelLoading(false);
         setSnackbar({
           ...snackbar,
@@ -275,7 +262,14 @@ export default function Dashboard() {
         });
       }
     }
-    if (validWebsite && !toxicBio) {
+    setTimeout(() => setModelLoading(false), 1000);
+    setError({
+      bio: toxicBio,
+      website: !validWebsite,
+      socials: error.socials,
+      comment: error.comment,
+    });
+    if (validWebsite && !toxicBio && !modelError) {
       setError({
         bio: false,
         website: false,
