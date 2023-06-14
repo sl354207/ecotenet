@@ -22,6 +22,7 @@ const Comment = ({
   handleOpenFlag,
   handleReply,
   drawer,
+  modelLoading,
 }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   //if comment ref equals comment id then display reply button otherwise do not. This creates only 1 level of nested comments
@@ -136,6 +137,7 @@ const Comment = ({
           comment_ref={comment._id}
           showForm={comment.open}
           handleOpenDialog={handleOpenDialog}
+          modelLoading={modelLoading}
         />
       </>
     );

@@ -1,9 +1,20 @@
 import TextBox from "@components/inputFields/TextBox";
-import { Button, FormControl, InputLabel, Portal } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Portal,
+} from "@mui/material";
 import { useRef, useState } from "react";
 
 //pass in post id and comment ref from comment
-const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
+const CommentForm = ({
+  showForm,
+  comment_ref,
+  handleOpenDialog,
+  modelLoading,
+}) => {
   const [value, setValue] = useState({ text: "", comment_ref: comment_ref });
 
   const container = useRef(null);
@@ -40,9 +51,9 @@ const CommentForm = ({ showForm, comment_ref, handleOpenDialog }) => {
             color="secondary"
             onClick={() => handleOpenDialog("Comment", value)}
             sx={{ marginLeft: "10px" }}
-            disabled={value.text.trim().length === 0}
+            disabled={value.text.trim().length === 0 || modelLoading}
           >
-            Submit
+            {modelLoading ? <CircularProgress size={19} /> : <>Submit</>}
           </Button>
         </Portal>
       ) : null}

@@ -160,7 +160,7 @@ const post = ({ post }) => {
           const model = await loadToxicity(0.7);
           if (model) {
             setModel(model);
-            // setModelLoading(false);
+            setModelLoading(false);
           }
         } catch (error) {
           console.log(error);
@@ -192,7 +192,6 @@ const post = ({ post }) => {
 
   const handleCloseDialog = (reply) => {
     setDialog(false);
-    setModelLoading(true);
 
     if (reply === "reply") {
       dispatch({ type: "all" });
@@ -603,6 +602,7 @@ const post = ({ post }) => {
                       showForm={showForm}
                       handleForm={toggleForm}
                       handleReply={handleReply}
+                      modelLoading={modelLoading}
                     />
                   )}
                 </>

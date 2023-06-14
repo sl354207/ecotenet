@@ -49,23 +49,28 @@ const ClientDialog = ({
   }
 
   const [toxic, setToxic] = useState(false);
+  const [spinner, setSpinner] = useState(true);
 
   useEffect(() => {
     if (result.text) {
       const getToxic = async () => {
         setModelLoading(true);
-        console.log(model);
+        // console.log(model);
         try {
           // Get toxicity of message
           const classification = await useToxicity(model, result.text);
           // Save toxicity into state
           setToxic(classification);
           setModelError(false);
-          setTimeout(() => setModelLoading(false), 1000);
+          setTimeout(() => {
+            setModelLoading(false);
+            setSpinner(false);
+          }, 1000);
         } catch (error) {
           console.log(error);
           setModelError(true);
           setModelLoading(false);
+          setSpinner(false);
         }
       };
       getToxic();
@@ -171,7 +176,7 @@ const ClientDialog = ({
             <>Are you sure you want to submit {item}?</>
           ) : (
             <>
-              {modelLoading ? (
+              {modelLoading || spinner ? (
                 <CircularProgress
                   color="secondary"
                   size={40}
@@ -219,7 +224,9 @@ const ClientDialog = ({
           }
           color="secondary"
           variant="outlined"
-          disabled={toxic || modelLoading || modelError}
+          disabled={
+            contentType === "Comment" && (toxic || modelLoading || modelError)
+          }
         >
           {contentType}
         </Button>

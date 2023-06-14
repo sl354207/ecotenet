@@ -15,6 +15,7 @@ const CommentList = ({
   handleOpenFlag,
   handleReply,
   drawer,
+  modelLoading,
 }) => {
   //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
   const dateComments = comments.map((comment) => {
@@ -63,6 +64,7 @@ const CommentList = ({
         comment_ref=""
         showForm={showForm}
         handleOpenDialog={handleOpenDialog}
+        modelLoading={modelLoading}
       />
       {sortedComments.map((comment) => (
         <Comment
@@ -73,6 +75,7 @@ const CommentList = ({
           handleReply={handleReply}
           key={comment._id}
           drawer={drawer}
+          modelLoading={modelLoading}
         />
       ))}
     </List>
