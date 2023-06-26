@@ -128,7 +128,6 @@ export default function Dashboard() {
     bio: false,
     website: false,
     socials: false,
-    comment: false,
   });
 
   const {
@@ -267,14 +266,12 @@ export default function Dashboard() {
       bio: toxicBio,
       website: !validWebsite,
       socials: error.socials,
-      comment: error.comment,
     });
     if (validWebsite && !toxicBio && !modelError) {
       setError({
         bio: false,
         website: false,
         socials: false,
-        comment: error.comment,
       });
       const value = {
         name: user.name,
@@ -699,6 +696,7 @@ export default function Dashboard() {
                         {results.length > 0 && (
                           <List>
                             {results.map((result) => {
+                              result.error = false;
                               return (
                                 <ListItem
                                   key={result._id}
@@ -721,8 +719,6 @@ export default function Dashboard() {
                                     setSnackbar={setSnackbar}
                                     mutate={mutate}
                                     name={user && user.name}
-                                    error={error}
-                                    setError={setError}
                                     model={model}
                                     modelLoading={modelLoading}
                                     setModelLoading={setModelLoading}

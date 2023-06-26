@@ -22,8 +22,6 @@ const DashboardComment = ({
   snackbar,
   setSnackbar,
   name,
-  error,
-  setError,
   model,
   modelLoading,
   setModelLoading,
@@ -33,6 +31,7 @@ const DashboardComment = ({
   result.date = new Date(result.date);
 
   const [commentValue, setCommentValue] = useState("");
+  const [error, setError] = useState(false);
 
   // update text input field
   const handleCommentChange = (event) => {
@@ -62,19 +61,12 @@ const DashboardComment = ({
         message: "There was a problem saving comment. Please try again later",
       });
     }
-    setError({
-      bio: error.bio,
-      website: error.website,
-      socials: error.socials,
-      comment: toxicComment,
-    });
+
+    if (toxicComment) {
+      setError(true);
+    }
     if (!toxicComment && !modelError) {
-      setError({
-        bio: error.bio,
-        website: error.website,
-        socials: error.socials,
-        comment: false,
-      });
+      setError(false);
       //combine all objects and send to api
       const comment = {
         id: result._id,
@@ -113,10 +105,7 @@ const DashboardComment = ({
       {isMobile ? result.date.toLocaleDateString() : result.date.toDateString()}{" "}
       Approved: {result.approved}
       <div style={{ display: "flex", flexGrow: 1 }}>
-        <FormControl
-          sx={{ flexGrow: 1, marginTop: "5px" }}
-          error={error.comment}
-        >
+        <FormControl sx={{ flexGrow: 1, marginTop: "5px" }} error={error}>
           <InputLabel shrink htmlFor="dashboard-comment"></InputLabel>
           <TextBox
             defaultValue={result.text}
@@ -126,10 +115,10 @@ const DashboardComment = ({
             autoFocus={false}
             multiline={true}
             inputProps={{ type: "text", maxLength: 5000 }}
-            error={error.comment}
+            error={error}
           />
           <FormHelperText sx={{ color: theme.palette.text.primary }}>
-            {error.comment ? "Inappropriate language" : <></>}
+            {error ? "Inappropriate language" : <></>}
           </FormHelperText>
         </FormControl>
         {isMobile ? (

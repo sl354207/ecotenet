@@ -167,14 +167,12 @@ const DashboardProfile = ({
                 bio: error.bio,
                 website: error.website,
                 socials: true,
-                comment: error.comment,
               });
             } else {
               setError({
                 bio: error.bio,
                 website: error.website,
                 socials: false,
-                comment: error.comment,
               });
               setProfile((profile) => ({
                 ...profile,
