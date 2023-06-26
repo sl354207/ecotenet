@@ -1,7 +1,6 @@
 import Link from "@components/layouts/Link";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Table, Typography } from "@mui/material";
 import fetcher from "@utils/fetcher";
-import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import useSWR, { useSWRConfig } from "swr";
@@ -25,7 +24,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   if (wiki) {
     switch (wiki.url) {
       case undefined:
-        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.name.replace(
+        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.name.replace(
           / /g,
           "_"
         )}?redirect=true`;
@@ -38,7 +37,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
         break;
 
       default:
-        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${wiki.url.replace(
+        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.url.replace(
           / /g,
           "_"
         )}?redirect=true`;
@@ -66,6 +65,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
             target="_blank"
             rel="noopener noreferrer"
             underline="hover"
+            sx={{ overflowWrap: "anywhere" }}
           >
             {domToReact(domNode.children, options)}
           </Link>
@@ -98,20 +98,16 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <table
+          <Table
             {...props}
-            style={{
-              [theme.breakpoints.down("sm")]: {
-                margin: "auto",
-                float: "none",
-              },
-              float: "right",
+            sx={{
               border: "thin solid",
-              marginLeft: 10,
+              margin: { xs: "auto", md: "0px 0px 0px 10px" },
+              float: { xs: "none", md: "right" },
             }}
           >
             {domToReact(domNode.children, options)}
-          </table>
+          </Table>
         );
       }
       if (domNode.attribs && domNode.children && domNode.name === "th") {
@@ -215,14 +211,6 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
             </Typography>
           </div>
 
-          {/* {!wikiUrl || (results && results.title === "Not found.") || (results === null) ? (
-            <Typography variant="h6" align="justify" sx={{ marginTop: "20px" }}>
-              We currently don&apos;t have a summary of this ecoregion. If you
-              want to help us out you can create a wikipedia page for the
-              ecoregion.
-            </Typography>
-          ) : (
-            <> */}
           {isLoading ? (
             <CircularProgress
               color="secondary"

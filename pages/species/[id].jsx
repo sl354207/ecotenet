@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   Tab,
+  Table,
   Tabs,
   Typography,
 } from "@mui/material";
@@ -101,6 +102,7 @@ const species = ({ species, wiki }) => {
             target="_blank"
             rel="noopener noreferrer"
             underline="hover"
+            sx={{ overflowWrap: "anywhere" }}
           >
             {domToReact(domNode.children, options)}
           </Link>
@@ -133,20 +135,16 @@ const species = ({ species, wiki }) => {
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <table
+          <Table
             {...props}
-            style={{
-              [theme.breakpoints.down("sm")]: {
-                margin: "auto",
-                float: "none",
-              },
-              float: "right",
+            sx={{
               border: "thin solid",
-              marginLeft: 10,
+              margin: { xs: "auto", md: "0px 0px 0px 10px" },
+              float: { xs: "none", md: "right" },
             }}
           >
             {domToReact(domNode.children, options)}
-          </table>
+          </Table>
         );
       }
       if (domNode.attribs && domNode.children && domNode.name === "th") {
@@ -306,7 +304,7 @@ const species = ({ species, wiki }) => {
                 sx={{
                   display: "flex",
                   marginLeft: "auto",
-                  marginTop: "auto",
+                  marginTop: "40px",
                 }}
                 color="inherit"
                 aria-label="flag"
@@ -391,7 +389,7 @@ const species = ({ species, wiki }) => {
                   />
                 </Tabs>
               </AppBar>
-              <TabPanel value={value} index={0}>
+              <TabPanel value={value} index={0} style={{ minHeight: "1000px" }}>
                 {!wiki ? (
                   <Typography
                     variant="h6"
@@ -418,11 +416,8 @@ const species = ({ species, wiki }) => {
                         Wikipedia
                       </Link>
                     </Typography>
-                    {parse(
-                      DOMPurify.sanitize(wiki.lead.sections[0].text),
-                      options
-                    )}
-                    {wiki.remaining.sections.map((section) => {
+                    {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
+                    {/* {wiki.remaining.sections.map((section) => {
                       if (section.anchor === "Gallery") {
                         return <></>;
                       } else if (section.toclevel === 2) {
@@ -440,7 +435,7 @@ const species = ({ species, wiki }) => {
                           </>
                         );
                       }
-                    })}
+                    })} */}
                   </>
                 )}
               </TabPanel>
@@ -528,7 +523,7 @@ export const getServerSideProps = async (context) => {
         };
       } else {
         const wikiRes = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
+          `https://en.wikipedia.org/api/rest_v1/page/segments/${
             species.scientific_name.toLowerCase().split(" ")[0]
           }_${
             species.scientific_name.toLowerCase().split(" ")[1]

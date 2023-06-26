@@ -6,6 +6,7 @@ import {
   CircularProgress,
   Container,
   IconButton,
+  Table,
   Typography,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
@@ -51,7 +52,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
     error,
   } = useSWR(
     species
-      ? `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
+      ? `https://en.wikipedia.org/api/rest_v1/page/segments/${
           species.scientific_name.toLowerCase().split(" ")[0]
         }_${species.scientific_name.toLowerCase().split(" ")[1]}?redirect=true`
       : null,
@@ -73,6 +74,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
             target="_blank"
             rel="noopener noreferrer"
             underline="hover"
+            sx={{ overflowWrap: "anywhere" }}
           >
             {domToReact(domNode.children, options)}
           </Link>
@@ -105,20 +107,16 @@ const DrawerSpecies = ({ species, handleClose }) => {
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <table
+          <Table
             {...props}
-            style={{
-              [theme.breakpoints.down("sm")]: {
-                margin: "auto",
-                float: "none",
-              },
-              float: "right",
+            sx={{
               border: "thin solid",
-              marginLeft: 10,
+              margin: { xs: "auto", md: "0px 0px 0px 10px" },
+              float: { xs: "none", md: "right" },
             }}
           >
             {domToReact(domNode.children, options)}
-          </table>
+          </Table>
         );
       }
       if (domNode.attribs && domNode.children && domNode.name === "th") {
@@ -226,7 +224,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 color="error"
                 onClick={() =>
                   mutate(
-                    `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${
+                    `https://en.wikipedia.org/api/rest_v1/page/segments/${
                       species.scientific_name.toLowerCase().split(" ")[0]
                     }_${
                       species.scientific_name.toLowerCase().split(" ")[1]

@@ -4,9 +4,8 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
-import { Container, IconButton, Typography } from "@mui/material";
+import { Container, IconButton, Table, Typography } from "@mui/material";
 import { getEcoregionById } from "@utils/mongodb/mongoHelpers";
-import theme from "@utils/theme";
 import { validEco } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -70,6 +69,7 @@ const eco = ({ wiki, eco, id }) => {
             target="_blank"
             rel="noopener noreferrer"
             underline="hover"
+            sx={{ overflowWrap: "anywhere" }}
           >
             {domToReact(domNode.children, options)}
           </Link>
@@ -102,20 +102,16 @@ const eco = ({ wiki, eco, id }) => {
       if (domNode.attribs && domNode.children && domNode.name === "table") {
         const props = attributesToProps(domNode.attribs);
         return (
-          <table
+          <Table
             {...props}
-            style={{
-              [theme.breakpoints.down("sm")]: {
-                margin: "auto",
-                float: "none",
-              },
-              float: "right",
+            sx={{
               border: "thin solid",
-              marginLeft: 10,
+              margin: { xs: "auto", md: "0px 0px 0px 10px" },
+              float: { xs: "none", md: "right" },
             }}
           >
             {domToReact(domNode.children, options)}
-          </table>
+          </Table>
         );
       }
       if (domNode.attribs && domNode.children && domNode.name === "th") {
@@ -256,7 +252,7 @@ const eco = ({ wiki, eco, id }) => {
             publisherLogo="https://www.ecotenet.org/logo.svg"
             isAccessibleForFree={true}
           />
-          <Container>
+          <Container sx={{ minHeight: "1000px" }}>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div
                 style={{
@@ -274,8 +270,7 @@ const eco = ({ wiki, eco, id }) => {
                 sx={{
                   display: "flex",
                   marginLeft: "auto",
-                  marginTop: "auto",
-                  marginBottom: "auto",
+                  marginTop: "40px",
                 }}
                 color="inherit"
                 aria-label="flag"
@@ -312,8 +307,8 @@ const eco = ({ wiki, eco, id }) => {
                     Wikipedia
                   </Link>
                 </Typography>
-                {parse(DOMPurify.sanitize(wiki.lead.sections[0].text), options)}
-                {wiki.remaining.sections.map((section) => {
+                {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
+                {/* {wiki.remaining.sections.map((section) => {
                   if (section.anchor === "Gallery") {
                     return <></>;
                   } else if (section.toclevel === 2) {
@@ -331,11 +326,10 @@ const eco = ({ wiki, eco, id }) => {
                       </>
                     );
                   }
-                })}
+                })} */}
               </>
             )}
 
-            {/* UPDATE */}
             {dialog && (
               <DynamicFlag
                 open={dialog}
@@ -376,7 +370,7 @@ export const getServerSideProps = async (context) => {
         switch (eco.url) {
           case undefined:
             wikiRes = await fetch(
-              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${unSlug}?redirect=true`,
+              `https://en.wikipedia.org/api/rest_v1/page/segments/${unSlug}?redirect=true`,
               {
                 method: "GET",
                 headers: {
@@ -402,7 +396,7 @@ export const getServerSideProps = async (context) => {
 
           default:
             wikiRes = await fetch(
-              `https://en.wikipedia.org/api/rest_v1/page/mobile-sections/${eco.url.replace(
+              `https://en.wikipedia.org/api/rest_v1/page/segments/${eco.url.replace(
                 / /g,
                 "_"
               )}?redirect=true`,
