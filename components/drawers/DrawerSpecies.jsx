@@ -348,25 +348,6 @@ const DrawerSpecies = ({ species, handleClose }) => {
                       </Link>
                     </Typography>
                     {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
-                    {/* {wiki.remaining.sections.map((section, index) => {
-                      if (section.anchor === "Gallery") {
-                        return <></>;
-                      } else if (section.toclevel === 2) {
-                        return (
-                          <>
-                            <h2 key={index}>{section.line}</h2>
-                            {parse(DOMPurify.sanitize(section.text), options)}
-                          </>
-                        );
-                      } else {
-                        return (
-                          <>
-                            <h1 key={index}>{section.line}</h1>
-                            {parse(DOMPurify.sanitize(section.text), options)}
-                          </>
-                        );
-                      }
-                    })} */}
                   </>
                 )}
               </div>

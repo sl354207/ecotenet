@@ -430,25 +430,6 @@ const species = ({ species, wiki }) => {
                       </Link>
                     </Typography>
                     {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
-                    {/* {wiki.remaining.sections.map((section) => {
-                      if (section.anchor === "Gallery") {
-                        return <></>;
-                      } else if (section.toclevel === 2) {
-                        return (
-                          <>
-                            <h2>{section.line}</h2>
-                            {parse(DOMPurify.sanitize(section.text), options)}
-                          </>
-                        );
-                      } else {
-                        return (
-                          <>
-                            <h1>{section.line}</h1>
-                            {parse(DOMPurify.sanitize(section.text), options)}
-                          </>
-                        );
-                      }
-                    })} */}
                   </>
                 )}
               </TabPanel>
