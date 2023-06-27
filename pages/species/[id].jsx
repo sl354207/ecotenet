@@ -192,6 +192,19 @@ const species = ({ species, wiki }) => {
           </td>
         );
       }
+      if (domNode.attribs && domNode.children && domNode.name === "span") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <span
+            {...props}
+            style={{
+              overflowWrap: "anywhere",
+            }}
+          >
+            {domToReact(domNode.children, options)}
+          </span>
+        );
+      }
       if (
         domNode.attribs &&
         domNode.children &&
@@ -531,7 +544,7 @@ export const getServerSideProps = async (context) => {
           {
             method: "GET",
             headers: {
-              "Api-User-Agent": "ecotenet (sl354207@ohio.edu)",
+              "Api-User-Agent": "ecotenet (info@ecotenet.org)",
             },
           }
         );

@@ -111,8 +111,9 @@ const DrawerSpecies = ({ species, handleClose }) => {
             {...props}
             sx={{
               border: "thin solid",
-              margin: { xs: "auto", md: "0px 0px 0px 10px" },
-              float: { xs: "none", md: "right" },
+              // margin: { xs: "auto", md: "0px 0px 0px 10px" },
+              margin: { xs: "auto", md: "10px 0px 10px 0px" },
+              // float: { xs: "none", md: "right" },
             }}
           >
             {domToReact(domNode.children, options)}
@@ -162,6 +163,19 @@ const DrawerSpecies = ({ species, handleClose }) => {
           >
             {domToReact(domNode.children, options)}
           </td>
+        );
+      }
+      if (domNode.attribs && domNode.children && domNode.name === "span") {
+        const props = attributesToProps(domNode.attribs);
+        return (
+          <span
+            {...props}
+            style={{
+              overflowWrap: "anywhere",
+            }}
+          >
+            {domToReact(domNode.children, options)}
+          </span>
         );
       }
       if (
@@ -333,11 +347,8 @@ const DrawerSpecies = ({ species, handleClose }) => {
                         Wikipedia
                       </Link>
                     </Typography>
-                    {parse(
-                      DOMPurify.sanitize(wiki.lead.sections[0].text),
-                      options
-                    )}
-                    {wiki.remaining.sections.map((section, index) => {
+                    {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
+                    {/* {wiki.remaining.sections.map((section, index) => {
                       if (section.anchor === "Gallery") {
                         return <></>;
                       } else if (section.toclevel === 2) {
@@ -355,7 +366,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                           </>
                         );
                       }
-                    })}
+                    })} */}
                   </>
                 )}
               </div>

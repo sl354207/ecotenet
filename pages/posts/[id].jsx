@@ -345,7 +345,7 @@ const post = ({ post }) => {
           ></div>
           <Header title={post.title} />
           <div
-            style={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
+            style={{ display: "flex", marginLeft: "auto", marginTop: "40px" }}
           >
             {user && user.role === "admin" && (
               <Button

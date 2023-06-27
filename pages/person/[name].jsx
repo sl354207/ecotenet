@@ -86,7 +86,7 @@ const person = ({ person, posts }) => {
           ></div>
           <Header title={person.name} />
           <IconButton
-            sx={{ display: "flex", marginLeft: "auto", marginTop: "auto" }}
+            sx={{ display: "flex", marginLeft: "auto", marginTop: "40px" }}
             color="inherit"
             aria-label="flag"
             size="small"

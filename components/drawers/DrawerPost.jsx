@@ -287,7 +287,7 @@ const DrawerPost = ({ id, handleClose }) => {
                           style={{
                             display: "flex",
                             marginLeft: "auto",
-                            marginBlock: "auto",
+                            marginBottom: "auto",
                           }}
                         >
                           <IconButton
