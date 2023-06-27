@@ -124,7 +124,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
         const props = attributesToProps(domNode.attribs);
         return (
           <th
-            {...props}
+            // {...props}
             style={{
               backgroundColor: "#001e3c!important",
               textAlign: "center",

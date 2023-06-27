@@ -402,7 +402,7 @@ const species = ({ species, wiki }) => {
                   />
                 </Tabs>
               </AppBar>
-              <TabPanel value={value} index={0} style={{ minHeight: "1000px" }}>
+              <TabPanel value={value} index={0} style={{ overflow: "auto" }}>
                 {!wiki ? (
                   <Typography
                     variant="h6"
