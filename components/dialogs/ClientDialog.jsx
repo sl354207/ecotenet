@@ -182,7 +182,7 @@ const ClientDialog = ({
                   size={40}
                   disableShrink={true}
                   sx={{
-                    margin: "0px 140px 0px 150px",
+                    margin: "0px 140px 0px 140px",
                     // margin: { xs: "auto", md: "0px 150px 0px 160px" },
                     display: "flex",
                     justifySelf: "center",

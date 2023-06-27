@@ -265,7 +265,7 @@ const eco = ({ wiki, eco, id }) => {
             publisherLogo="https://www.ecotenet.org/logo.svg"
             isAccessibleForFree={true}
           />
-          <Container sx={{ minHeight: "1000px" }}>
+          <Container sx={{ overflow: "auto" }}>
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div
                 style={{
