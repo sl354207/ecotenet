@@ -28,6 +28,7 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
 import fetcher from "@utils/fetcher";
+import { loadToxicity } from "@utils/textMod";
 import { useOnScreenClient } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -132,12 +133,35 @@ const DrawerPost = ({ id, handleClose }) => {
       setLoadComments(true);
     }
   }, [entry]);
+
+  const [model, setModel] = useState();
+  const [modelLoading, setModelLoading] = useState(false);
+  const [modelError, setModelError] = useState(false);
+
   useEffect(() => {
     if (loadComments && comments) {
       comments.forEach((reply) => {
         reply.open = false;
       });
       dispatch({ type: "load", payload: comments });
+    }
+    if (loadComments && comments && user.status === "authenticated") {
+      const loadModel = async () => {
+        setModelLoading(true);
+        try {
+          // Loading model
+          const model = await loadToxicity(0.7);
+          if (model) {
+            setModel(model);
+            setModelLoading(false);
+          }
+        } catch (error) {
+          console.log(error);
+          setModelError(true);
+          setModelLoading(false);
+        }
+      };
+      loadModel();
     }
   }, [comments]);
 
@@ -477,6 +501,7 @@ const DrawerPost = ({ id, handleClose }) => {
                                   handleForm={toggleForm}
                                   handleReply={handleReply}
                                   drawer={true}
+                                  modelLoading={modelLoading}
                                 />
                               )}
                             </>
@@ -498,6 +523,11 @@ const DrawerPost = ({ id, handleClose }) => {
                       mutate={mutate}
                       setVote={setVote}
                       setLimit={setLimit}
+                      model={model}
+                      modelLoading={modelLoading}
+                      setModelLoading={setModelLoading}
+                      modelError={modelError}
+                      setModelError={setModelError}
                     />
                   )}
 
