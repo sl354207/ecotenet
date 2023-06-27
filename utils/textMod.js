@@ -1,7 +1,8 @@
 import * as toxicity from "@tensorflow-models/toxicity";
-import "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs";
 
 export const loadToxicity = async (threshold = 0.85) => {
+  tf.enableProdMode();
   try {
     const model = await toxicity.load(threshold);
 
@@ -13,6 +14,7 @@ export const loadToxicity = async (threshold = 0.85) => {
 };
 
 export const useToxicity = async (model, text) => {
+  tf.enableProdMode();
   try {
     const predictions = await model.classify(text);
     const prediction = predictions.filter(
