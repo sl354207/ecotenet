@@ -1,3 +1,5 @@
+import URISanity from "urisanity";
+
 export function validID(string) {
   // only contains letters(uppercase and lowercase) and numbers
   const regex = /^[A-Za-z0-9]*$/;
@@ -107,5 +109,17 @@ export function validKey(string) {
     return true;
   } else {
     return false;
+  }
+}
+
+export function checkWebsite(website) {
+  const valid = URISanity.vet(website, {
+    allowWebTransportURI: true,
+  });
+
+  if (valid === "about:blank") {
+    return false;
+  } else {
+    return true;
   }
 }

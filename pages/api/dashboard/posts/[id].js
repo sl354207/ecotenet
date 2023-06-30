@@ -5,7 +5,7 @@ import {
   getPostById,
   updatePost,
 } from "@utils/mongodb/mongoHelpers";
-import { validID } from "@utils/validationHelpers";
+import { checkWebsite, validID } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
@@ -44,7 +44,13 @@ export default async function handler(req, res) {
         const { _id, ...data } = req.body;
         const validate = ajv.getSchema("post");
         const valid = validate(data);
-        if (validID(_id) && valid) {
+        let validWebsite;
+        if (data.originalUrl) {
+          validWebsite = checkWebsite(data.originalUrl);
+        } else {
+          validWebsite = true;
+        }
+        if (validID(_id) && valid && validWebsite) {
           if (session.user.name && session.user.name === data.name) {
             try {
               data.approved = "pending";

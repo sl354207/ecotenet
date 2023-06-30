@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import theme from "@utils/theme";
-import URISanity from "urisanity";
+import { checkWebsite } from "@utils/validationHelpers";
 
 const DashboardProfile = ({
   user,
@@ -158,11 +158,7 @@ const DashboardProfile = ({
           disableClearable={true}
           value={[]}
           onChange={(event, newValue) => {
-            if (
-              URISanity.vet(newValue.inputValue, {
-                allowWebTransportURI: true,
-              }) === "about:blank"
-            ) {
+            if (!checkWebsite(newValue.inputValue)) {
               setError({
                 bio: error.bio,
                 website: error.website,

@@ -6,6 +6,7 @@ import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Autocomplete,
+  Box,
   Chip,
   Container,
   FormControl,
@@ -20,11 +21,13 @@ import {
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import theme from "@utils/theme";
+import { checkWebsite } from "@utils/validationHelpers";
+import { useState } from "react";
 
 //pass in and destructure props.
 const PostDetails = ({
   handleDetailChange,
-  details: { title, description, category, tags },
+  details: { title, description, category, originalUrl, tags },
   setDetails,
   handleRemoveChip,
 }) => {
@@ -39,6 +42,9 @@ const PostDetails = ({
 
   // set filter for autocomplete options
   const filter = createFilterOptions();
+
+  const [error, setError] = useState(false);
+  const [value, setValue] = useState(originalUrl);
 
   // check MUI docs and examples for component prop explanations. Need to change some ids and props.
   return (
@@ -98,10 +104,7 @@ const PostDetails = ({
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6} key="category-grid">
-          <FormControl
-            sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
-            required
-          >
+          <FormControl sx={{ display: "flex", flexGrow: 1 }} required>
             <InputLabel htmlFor="category" shrink>
               Category:
             </InputLabel>
@@ -223,6 +226,205 @@ const PostDetails = ({
             </IconButton>
           </Tooltip>
         </Grid>
+        <Grid item xs={12} sm={6} key="op-grid">
+          <FormControl
+            sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
+            error={error}
+          >
+            <InputLabel htmlFor="op" shrink>
+              Originally Posted On:
+            </InputLabel>
+            <Autocomplete
+              sx={{
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                },
+              }}
+              // autoHighlight
+              // value={value}
+              // // defaultValue={originalUrl}
+              // onChange={(event, newValue) => {
+              //   if (newValue) {
+              //     if (checkWebsite(newValue.inputValue)) {
+              //       setDetails((details) => ({
+              //         ...details,
+              //         originalUrl: newValue.inputValue,
+              //       }));
+              //       setValue(newValue.inputValue);
+              //       setError(false);
+              //     } else {
+              //       setError(true);
+              //     }
+              //   } else {
+              //     setError(false);
+              //     setDetails((details) => ({
+              //       ...details,
+              //       originalUrl: null,
+              //     }));
+              //   }
+              // }}
+              // filterOptions={(options, params) => {
+              //   const filtered = filter(options, params);
+
+              //   // Suggest the creation of a new value
+              //   if (params.inputValue !== "") {
+              //     filtered.push({
+              //       inputValue: params.inputValue,
+              //       title: `Add "${params.inputValue}"`,
+              //     });
+              //   }
+
+              //   return filtered;
+              // }}
+              // selectOnFocus
+              // // clearOnBlur
+              // handleHomeEndKeys
+              // id="op-auto"
+              // name="op"
+              // options={[]}
+              // renderOption={(props, option) => (
+              //   <li {...props}>{option.title}</li>
+              // )}
+              // getOptionLabel={(option) => option.inputValue || ""}
+              // freeSolo
+              // filterSelectedOptions={false}
+              // renderInput={(params) => (
+              //   // ...params is causing error check dashboard index on how to log params
+              // <TextField
+              //   {...params}
+              //   id="op"
+              //   placeholder="https://yourblog.com"
+              //   ref={params.InputProps.ref}
+              //   inputProps={{
+              //     ...params.inputProps,
+              //     type: "text",
+              //     maxLength: 100,
+              //   }}
+              //   InputLabelProps={{ shrink: true }}
+              //   error={error}
+              // />
+              // )}
+              value={value}
+              // onChange={(event, newValue) => {
+              //   if (typeof newValue === "string") {
+              //     // timeout to avoid instant validation of the dialog's form.
+              //     setTimeout(() => {
+              //       toggleOpen(true);
+              //       setDialogValue({
+              //         title: newValue,
+              //         year: "",
+              //       });
+              //     });
+              //   } else if (newValue && newValue.inputValue) {
+              //     toggleOpen(true);
+              //     setDialogValue({
+              //       title: newValue.inputValue,
+              //       year: "",
+              //     });
+              //   } else {
+              //     setValue(newValue);
+              //   }
+
+              // }}
+              onChange={(event, newValue) => {
+                if (newValue) {
+                  if (checkWebsite(newValue.inputValue)) {
+                    setDetails((details) => ({
+                      ...details,
+                      originalUrl: newValue.inputValue,
+                    }));
+                    setValue(newValue.inputValue);
+                    setError(false);
+                  } else {
+                    setError(true);
+                  }
+                } else {
+                  setError(false);
+                  setValue(newValue);
+                  setDetails((details) => ({
+                    ...details,
+                    originalUrl: null,
+                  }));
+                }
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                if (params.inputValue !== "") {
+                  filtered.push({
+                    inputValue: params.inputValue,
+                    title: `Add "${params.inputValue}"`,
+                  });
+                }
+
+                return filtered;
+              }}
+              id="free-solo-dialog-demo"
+              options={[]}
+              getOptionLabel={(option) => {
+                // e.g value selected with enter, right from the input
+                if (typeof option === "string") {
+                  return option;
+                }
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+                return option.title;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              renderOption={(props, option) => (
+                <li {...props}>{option.title}</li>
+              )}
+              // sx={{ width: 300 }}
+              freeSolo
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  id="op"
+                  placeholder="https://yourblog.com"
+                  ref={params.InputProps.ref}
+                  inputProps={{
+                    ...params.inputProps,
+                    type: "text",
+                    maxLength: 100,
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  error={error}
+                />
+              )}
+            />
+            <FormHelperText
+              sx={{
+                color: theme.palette.text.primary,
+                visibility: error ? "visible" : "hidden",
+              }}
+            >
+              Invalid url
+            </FormHelperText>
+          </FormControl>
+        </Grid>
         <Grid item xs={12} sm={6} key="keywords-grid">
           <FormControl
             sx={{ display: "flex", flexGrow: 1, marginBottom: "12px" }}
@@ -311,7 +513,19 @@ const PostDetails = ({
               Helps with search functionality (3 max)
             </FormHelperText>
           </FormControl>
-          <div>
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          key="tags-grid"
+          sx={{
+            "&.MuiGrid-item": {
+              paddingTop: { xs: "0px", md: "16px" },
+            },
+          }}
+        >
+          <Box sx={{ marginTop: { xs: "0px", md: "32px" } }}>
             {tags.map((tag) => (
               <Chip
                 label={tag}
@@ -337,7 +551,7 @@ const PostDetails = ({
                 key={tag}
               ></Chip>
             ))}
-          </div>
+          </Box>
         </Grid>
       </Grid>
     </Container>
