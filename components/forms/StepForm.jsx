@@ -24,8 +24,17 @@ const DynamicDashboardDialog = dynamic(
 const StepForm = ({ post, user }) => {
   const router = useRouter();
 
-  const { title, description, category, tags, ecoregions, id, version, rows } =
-    post;
+  const {
+    title,
+    description,
+    category,
+    originalUrl,
+    tags,
+    ecoregions,
+    id,
+    version,
+    rows,
+  } = post;
 
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -36,6 +45,7 @@ const StepForm = ({ post, user }) => {
     title,
     description,
     category,
+    originalUrl,
     tags,
   };
   const initialEditorState = id !== "" ? { id, version, rows } : null;
@@ -107,6 +117,7 @@ const StepForm = ({ post, user }) => {
       title: details.title,
       description: details.description,
       category: details.category,
+      originalUrl: details.originalUrl,
       tags: details.tags,
       ecoregions: clickInfo,
       _id: post._id,
@@ -170,7 +181,6 @@ const StepForm = ({ post, user }) => {
     };
 
     // combine form value and editor value into one object to pass to api.
-
     const value = { ...silentObject, ...postObject, ...details, ...ecoObject };
 
     const updateResponse = await updatePost(value, "dashboard");

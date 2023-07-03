@@ -24,13 +24,12 @@ import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
 import { loadToxicity, useToxicity } from "@utils/textMod";
 import theme from "@utils/theme";
-import { validEmail } from "@utils/validationHelpers";
+import { checkWebsite, validEmail } from "@utils/validationHelpers";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
-import URISanity from "urisanity";
 
 // taken directly from material ui tabs example
 function TabPanel(props) {
@@ -61,18 +60,6 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
-const checkWebsite = (website) => {
-  const valid = URISanity.vet(website, {
-    allowWebTransportURI: true,
-  });
-
-  if (valid === "about:blank") {
-    return false;
-  } else {
-    return true;
-  }
-};
 
 const DynamicDashboardDialog = dynamic(
   () => import("@components/dialogs/DashboardDialog"),

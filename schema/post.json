@@ -107,6 +107,12 @@
             },
             "additionalProperties": false
         },
+        "originalUrl": {
+          "nullable": true,
+          "type": "string",
+          "maxLength": 100,
+          "description": "must be a string"
+        },
         "tags": {
           "type": "array",
           "description": "must be an array",

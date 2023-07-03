@@ -5,9 +5,8 @@ import {
   getPersonDash,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
-import { validName } from "@utils/validationHelpers";
+import { checkWebsite, validName } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
-import URISanity from "urisanity";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -46,11 +45,7 @@ export default async function handler(req, res) {
         if (data.socials && data.socials.length > 0) {
           let i = 0;
           while (i < data.socials.length) {
-            if (
-              URISanity.vet(data.socials[i], {
-                allowWebTransportURI: true,
-              }) === "about:blank"
-            ) {
+            if (!checkWebsite(data.socials[i])) {
               validSocials = false;
 
               break;
@@ -62,19 +57,12 @@ export default async function handler(req, res) {
         //needed for when username is created and no website is provided
         let validWebsite;
         if (data.website) {
-          validWebsite = URISanity.vet(data.website, {
-            allowWebTransportURI: true,
-          });
+          validWebsite = checkWebsite(data.website);
         } else {
-          validWebsite = "";
+          validWebsite = true;
         }
 
-        if (
-          valid &&
-          validName(name) &&
-          validSocials &&
-          (validWebsite !== "about:blank" || data.website === "")
-        ) {
+        if (valid && validName(name) && validSocials && validWebsite) {
           if (session.user.email === email) {
             try {
               data.approved = "pending";
