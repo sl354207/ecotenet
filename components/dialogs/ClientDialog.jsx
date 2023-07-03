@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { createComment, updateVote } from "@utils/apiHelpers";
-import { useToxicity } from "@utils/textMod";
+import { useToxicity } from "@utils/moderation";
 import { useEffect, useState } from "react";
 
 const ClientDialog = ({

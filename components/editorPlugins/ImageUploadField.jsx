@@ -8,6 +8,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import { loadImageClassifier, useImageClassifier } from "@utils/moderation";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -85,7 +86,7 @@ function ImageUploadField({ onChange, value }) {
     );
   };
 
-  const handleFileSelected = (e) => {
+  const handleFileSelected = async (e) => {
     // console.log(e)
     if (!e.target.files || !e.target.files[0]) {
       handleError(NO_FILE_ERROR_CODE);
@@ -101,6 +102,13 @@ function ImageUploadField({ onChange, value }) {
       handleError(TOO_BIG_ERROR_CODE);
       return;
     } else {
+      // convert img from File to Image type for classification
+      const classifyImg = new Image();
+      classifyImg.src = URL.createObjectURL(file);
+
+      const model = await loadImageClassifier();
+      const classify = await useImageClassifier(model, classifyImg);
+
       const imageUrl = URL.createObjectURL(file);
 
       setImage({ url: "blob", saved: false, file: file });

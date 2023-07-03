@@ -22,7 +22,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
-import { loadToxicity, useToxicity } from "@utils/textMod";
+import { loadToxicity, useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { checkWebsite, validEmail } from "@utils/validationHelpers";
 import { NextSeo } from "next-seo";

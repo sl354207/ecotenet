@@ -33,8 +33,8 @@ import "@react-page/plugins-video/lib/index.css";
 
 import { updatePost } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
+import { loadToxicity } from "@utils/moderation";
 import { getPostById, getPosts } from "@utils/mongodb/mongoHelpers";
-import { loadToxicity } from "@utils/textMod";
 import theme from "@utils/theme";
 import { useOnScreenServer } from "@utils/useOnScreen";
 import { validID } from "@utils/validationHelpers";

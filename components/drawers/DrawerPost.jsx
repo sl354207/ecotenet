@@ -28,7 +28,7 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
 import fetcher from "@utils/fetcher";
-import { loadToxicity } from "@utils/textMod";
+import { loadToxicity } from "@utils/moderation";
 import { useOnScreenClient } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";

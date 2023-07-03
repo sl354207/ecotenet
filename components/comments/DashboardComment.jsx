@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { updateComment } from "@utils/apiHelpers";
-import { useToxicity } from "@utils/textMod";
+import { useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { useState } from "react";
 
