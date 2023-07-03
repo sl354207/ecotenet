@@ -306,6 +306,7 @@ const PostDetails = ({
                 }
                 return option.title;
               }}
+              autoHighlight
               selectOnFocus
               clearOnBlur
               handleHomeEndKeys
