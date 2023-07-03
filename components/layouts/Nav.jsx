@@ -115,6 +115,7 @@ const Nav = () => {
       title: "",
       description: "",
       category: { title: "", sub: "" },
+      originalUrl: null,
       tags: [],
       ecoregions: [],
       id: "",

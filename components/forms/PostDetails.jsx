@@ -260,92 +260,7 @@ const PostDetails = ({
                   },
                 },
               }}
-              // autoHighlight
-              // value={value}
-              // // defaultValue={originalUrl}
-              // onChange={(event, newValue) => {
-              //   if (newValue) {
-              //     if (checkWebsite(newValue.inputValue)) {
-              //       setDetails((details) => ({
-              //         ...details,
-              //         originalUrl: newValue.inputValue,
-              //       }));
-              //       setValue(newValue.inputValue);
-              //       setError(false);
-              //     } else {
-              //       setError(true);
-              //     }
-              //   } else {
-              //     setError(false);
-              //     setDetails((details) => ({
-              //       ...details,
-              //       originalUrl: null,
-              //     }));
-              //   }
-              // }}
-              // filterOptions={(options, params) => {
-              //   const filtered = filter(options, params);
-
-              //   // Suggest the creation of a new value
-              //   if (params.inputValue !== "") {
-              //     filtered.push({
-              //       inputValue: params.inputValue,
-              //       title: `Add "${params.inputValue}"`,
-              //     });
-              //   }
-
-              //   return filtered;
-              // }}
-              // selectOnFocus
-              // // clearOnBlur
-              // handleHomeEndKeys
-              // id="op-auto"
-              // name="op"
-              // options={[]}
-              // renderOption={(props, option) => (
-              //   <li {...props}>{option.title}</li>
-              // )}
-              // getOptionLabel={(option) => option.inputValue || ""}
-              // freeSolo
-              // filterSelectedOptions={false}
-              // renderInput={(params) => (
-              //   // ...params is causing error check dashboard index on how to log params
-              // <TextField
-              //   {...params}
-              //   id="op"
-              //   placeholder="https://yourblog.com"
-              //   ref={params.InputProps.ref}
-              //   inputProps={{
-              //     ...params.inputProps,
-              //     type: "text",
-              //     maxLength: 100,
-              //   }}
-              //   InputLabelProps={{ shrink: true }}
-              //   error={error}
-              // />
-              // )}
               value={value}
-              // onChange={(event, newValue) => {
-              //   if (typeof newValue === "string") {
-              //     // timeout to avoid instant validation of the dialog's form.
-              //     setTimeout(() => {
-              //       toggleOpen(true);
-              //       setDialogValue({
-              //         title: newValue,
-              //         year: "",
-              //       });
-              //     });
-              //   } else if (newValue && newValue.inputValue) {
-              //     toggleOpen(true);
-              //     setDialogValue({
-              //       title: newValue.inputValue,
-              //       year: "",
-              //     });
-              //   } else {
-              //     setValue(newValue);
-              //   }
-
-              // }}
               onChange={(event, newValue) => {
                 if (newValue) {
                   if (checkWebsite(newValue.inputValue)) {
@@ -397,7 +312,6 @@ const PostDetails = ({
               renderOption={(props, option) => (
                 <li {...props}>{option.title}</li>
               )}
-              // sx={{ width: 300 }}
               freeSolo
               renderInput={(params) => (
                 <TextField
