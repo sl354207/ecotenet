@@ -1,14 +1,17 @@
+import { useImageClassifyContext } from "@components/context/ImageClassifyContext";
 import { useUserContext } from "@components/context/UserContext";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ErrorIcon from "@mui/icons-material/Error";
 import {
+  Autocomplete,
   Button,
   CircularProgress,
   TextField,
   Typography,
+  createFilterOptions,
   useMediaQuery,
 } from "@mui/material";
-import { loadImageClassifier, useImageClassifier } from "@utils/moderation";
+import { useImageClassifier } from "@utils/moderation";
 import theme from "@utils/theme";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -21,13 +24,18 @@ const BAD_EXTENSION_ERROR_CODE = 2;
 const TOO_BIG_ERROR_CODE = 3;
 const UPLOADING_ERROR_CODE = 4;
 const DELETING_ERROR_CODE = 5;
+const INAPPROPRIATE_ERROR_CODE = 6;
 
 function ImageUploadField({ onChange, value }) {
   const { user } = useUserContext();
+  const { model } = useImageClassifyContext();
+
   const router = useRouter();
   const postId = router.query._id;
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const filter = createFilterOptions();
 
   const maxFileSize = 5242880;
 
@@ -73,6 +81,10 @@ function ImageUploadField({ onChange, value }) {
         errorText = "Error deleting";
 
         break;
+      case INAPPROPRIATE_ERROR_CODE:
+        errorText = "Inappropriate content";
+
+        break;
       default:
         errorText = "Unknown error";
 
@@ -87,7 +99,7 @@ function ImageUploadField({ onChange, value }) {
   };
 
   const handleFileSelected = async (e) => {
-    // console.log(e)
+    // console.log(e);
     if (!e.target.files || !e.target.files[0]) {
       handleError(NO_FILE_ERROR_CODE);
       return;
@@ -102,18 +114,60 @@ function ImageUploadField({ onChange, value }) {
       handleError(TOO_BIG_ERROR_CODE);
       return;
     } else {
+      setState({ ...state, isUploading: true });
       // convert img from File to Image type for classification
       const classifyImg = new Image();
-      classifyImg.src = URL.createObjectURL(file);
+      const objectUrl = URL.createObjectURL(file);
+      classifyImg.onload = async () => {
+        const inappropriateImage = await useImageClassifier(model, classifyImg);
 
-      const model = await loadImageClassifier();
-      const classify = await useImageClassifier(model, classifyImg);
+        if (inappropriateImage) {
+          setState({ ...state, isUploading: false });
+          handleError(INAPPROPRIATE_ERROR_CODE);
+        } else {
+          const imageUrl = URL.createObjectURL(file);
 
-      const imageUrl = URL.createObjectURL(file);
+          setImage({ url: "blob", saved: false, file: file });
 
-      setImage({ url: "blob", saved: false, file: file });
+          onChange({ url: imageUrl, saved: false, file: file });
+          setState({ ...state, isUploading: false });
+        }
 
-      onChange({ url: imageUrl, saved: false, file: file });
+        URL.revokeObjectURL(objectUrl);
+      };
+      classifyImg.src = objectUrl;
+    }
+  };
+  const handleImageUrl = async (e, newValue) => {
+    if (newValue && newValue !== null) {
+      const imageUrl = newValue.inputValue;
+      setState({ ...state, isUploading: true });
+      // convert img from File to Image type for classification
+      const classifyImg = new Image();
+      // console.log(classifyImg);
+      // const objectUrl = URL.createObjectURL(file);
+      classifyImg.onload = async () => {
+        console.log(classifyImg);
+        classifyImg.crossOrigin = "anonymous";
+        // classifyImg.width = await this.naturalWidth;
+        // classifyImg.height = await this.naturalHeight;
+        const inappropriateImage = await useImageClassifier(model, classifyImg);
+        // console.log(inappropriateImage);
+
+        if (inappropriateImage) {
+          setState({ ...state, isUploading: false });
+          handleError(INAPPROPRIATE_ERROR_CODE);
+        } else {
+          // const imageUrl = URL.createObjectURL(file);
+
+          setImage({ url: imageUrl, saved: false, file: {} });
+          onChange({ url: imageUrl, saved: false, file: {} });
+          setState({ ...state, isUploading: false });
+        }
+
+        // URL.revokeObjectURL(objectUrl);
+      };
+      classifyImg.src = imageUrl;
     }
   };
 
@@ -318,6 +372,16 @@ function ImageUploadField({ onChange, value }) {
           </>
         );
         break;
+      case "Inappropriate content":
+        saveInside = <>save image</>;
+        uploadInside = (
+          <>
+            {state.errorText}
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
+          </>
+        );
+        deleteInside = <>delete image</>;
+        break;
       case "Unknown error":
         saveInside = (
           <>
@@ -391,7 +455,7 @@ function ImageUploadField({ onChange, value }) {
         <Typography variant="body1" sx={{ margin: "20px 16px 0 16px" }}>
           or
         </Typography>
-        <TextField
+        {/* <TextField
           placeholder="http://example.com/image.png"
           label="Existing image URL"
           name="url"
@@ -428,10 +492,92 @@ function ImageUploadField({ onChange, value }) {
           }
           onChange={(e) => {
             const imageUrl = e.target.value;
+            console.log(imageUrl);
             setImage({ url: imageUrl, saved: false, file: {} });
             onChange({ url: imageUrl, saved: false, file: {} });
           }}
-          // InputLabelProps={{ shrink: true }}
+          
+        /> */}
+        <Autocomplete
+          value={
+            value.url &&
+            (value.url.startsWith("blob:") ||
+              value.url.startsWith("https://eco-media-bucket.s3"))
+              ? ""
+              : value.url || ""
+          }
+          disabled={
+            (value.url && value.url.startsWith("blob:")) ||
+            (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
+              ? true
+              : false
+          }
+          // value={value}
+          onChange={handleImageUrl}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+
+            if (params.inputValue !== "") {
+              filtered.push({
+                inputValue: params.inputValue,
+                title: `Add "${params.inputValue}"`,
+              });
+            }
+
+            return filtered;
+          }}
+          options={[]}
+          getOptionLabel={(option) => {
+            // e.g value selected with enter, right from the input
+            if (typeof option === "string") {
+              return option;
+            }
+            if (option.inputValue) {
+              return option.inputValue;
+            }
+            return option.title;
+          }}
+          autoHighlight
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          renderOption={(props, option) => <li {...props}>{option.title}</li>}
+          freeSolo
+          renderInput={(params) => (
+            <TextField
+              sx={{
+                display: "flex",
+                flexGrow: 1,
+                marginBottom: "5px",
+                marginRight: "5px",
+                width: "300px",
+                [theme.breakpoints.down("md")]: {
+                  width: "250px",
+                  display: "flex",
+                  marginBottom: "5px",
+                  marginRight: "5px",
+                },
+                [theme.breakpoints.down("sm")]: {
+                  width: "150px",
+                  display: "flex",
+                  marginBottom: "5px",
+                  marginRight: "5px",
+                },
+              }}
+              {...params}
+              placeholder="http://example.com/image.png"
+              label="Existing image URL"
+              name="url"
+              id="url"
+              variant="standard"
+              ref={params.InputProps.ref}
+              inputProps={{
+                ...params.inputProps,
+                type: "url",
+                maxLength: 300,
+              }}
+            />
+          )}
         />
       </div>
       <div style={{ display: "flex" }}>

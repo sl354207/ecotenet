@@ -21,8 +21,7 @@ export const useToxicity = async (model, text) => {
     const prediction = predictions.filter(
       (p) => p.results[0].match || p.results[0].match === null
     );
-    // console.log(predictions);
-    // console.log(prediction);
+
     return prediction.length > 0;
   } catch (error) {
     console.log(error);
@@ -44,9 +43,18 @@ export const loadImageClassifier = async () => {
 
 export const useImageClassifier = async (model, img) => {
   tf.enableProdMode();
+
   try {
     const predictions = await model.classify(img);
-    console.log("Predictions: ", predictions);
+    const prediction = predictions.filter(
+      (p) =>
+        p.probability >= 0.7 &&
+        (p.className === "Sexy" ||
+          p.className === "Porn" ||
+          p.className === "Hentai")
+    );
+
+    return prediction.length > 0;
   } catch (error) {
     console.log(error);
     throw new Error("failed to classify image");

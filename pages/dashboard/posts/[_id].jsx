@@ -1,3 +1,4 @@
+import { ImageClassifyProvider } from "@components/context/ImageClassifyContext";
 import { useUserContext } from "@components/context/UserContext";
 import StepForm from "@components/forms/StepForm";
 import { Button, CircularProgress } from "@mui/material";
@@ -71,7 +72,9 @@ export default function DraftByUser() {
           {post && (
             <>
               <NextSeo noindex={true} nofollow={true} />
-              <StepForm post={post} user={user} />
+              <ImageClassifyProvider>
+                <StepForm post={post} user={user} />
+              </ImageClassifyProvider>
             </>
           )}
         </>
