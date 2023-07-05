@@ -1,4 +1,4 @@
-import aws from "aws-sdk";
+import { S3 } from "@aws-sdk/client-s3";
 import crypto from "crypto";
 import { promisify } from "util";
 
@@ -9,7 +9,7 @@ const bucketName = "eco-media-bucket";
 const accessKeyId = AWS_ID;
 const secretAccessKey = AWS_KEY;
 
-const s3 = new aws.S3({
+const s3 = new S3({
   region,
   accessKeyId,
   secretAccessKey,
@@ -65,14 +65,13 @@ export async function deleteDirectoryPromise(path) {
         Delete: { Objects: prefixes },
       };
 
-      return s3.deleteObjects(deleteParams).promise();
+      return s3.deleteObjects(deleteParams);
     }
     return s3
       .deleteObject({
         Bucket: bucketName,
         Key: path,
-      })
-      .promise();
+      });
   } catch (error) {
     throw new Error(error);
   }
@@ -87,7 +86,7 @@ async function getDirectoryPrefixes(path) {
     Delimiter: "/",
   };
   try {
-    const listedObjects = await s3.listObjectsV2(listParams).promise();
+    const listedObjects = await s3.listObjectsV2(listParams);
 
     if (
       listedObjects.Contents.length > 0 ||
@@ -124,8 +123,7 @@ export async function deleteRecursive(path) {
         .listObjectsV2({
           Bucket: bucketName,
           Prefix: path,
-        })
-        .promise();
+        });
       if (listedObjects.Contents === undefined) {
         throw new Error("Listing S3 returns no contents");
       }
@@ -142,7 +140,7 @@ export async function deleteRecursive(path) {
         // listedObjects.Contents.forEach(({ Key }) => {
         //     deleteParams.Delete.Objects.push({ Key as string });
         // });
-        const deleteOutput = await s3.deleteObjects(deleteParams).promise();
+        const deleteOutput = await s3.deleteObjects(deleteParams);
         // count or list
         count += deleteOutput.Deleted.length;
       }
