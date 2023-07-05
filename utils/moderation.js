@@ -53,7 +53,6 @@ export const useImageClassifier = async (model, img) => {
           p.className === "Porn" ||
           p.className === "Hentai")
     );
-    // console.log(predictions);
 
     return prediction.length > 0;
   } catch (error) {
