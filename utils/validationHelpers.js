@@ -85,7 +85,6 @@ export function validEmail(string) {
 
 export function validImagePluginURL(string) {
   if (typeof string === "string" && /^blob:https?:\/\//.test(string)) {
-    // console.log("true blob");
     return true;
   } else {
     const regex =
