@@ -1,4 +1,5 @@
-import { S3 } from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 import { promisify } from "util";
 
@@ -27,11 +28,12 @@ export async function generateUploadURL(name, postId, type) {
   const params = {
     Bucket: bucketName,
     Key: file,
-    Expires: 60,
   };
 
+  const command = new PutObjectCommand(params);
+
   try {
-    const uploadURL = await s3.getSignedUrlPromise("putObject", params);
+    const uploadURL = await getSignedUrl(s3, command, { expiresIn: 120 });
     return JSON.stringify(uploadURL);
   } catch (error) {
     console.error(error);
@@ -67,11 +69,10 @@ export async function deleteDirectoryPromise(path) {
 
       return s3.deleteObjects(deleteParams);
     }
-    return s3
-      .deleteObject({
-        Bucket: bucketName,
-        Key: path,
-      });
+    return s3.deleteObject({
+      Bucket: bucketName,
+      Key: path,
+    });
   } catch (error) {
     throw new Error(error);
   }
@@ -119,11 +120,10 @@ export async function deleteRecursive(path) {
   while (true) {
     try {
       // list objects
-      const listedObjects = await s3
-        .listObjectsV2({
-          Bucket: bucketName,
-          Prefix: path,
-        });
+      const listedObjects = await s3.listObjectsV2({
+        Bucket: bucketName,
+        Prefix: path,
+      });
       if (listedObjects.Contents === undefined) {
         throw new Error("Listing S3 returns no contents");
       }
