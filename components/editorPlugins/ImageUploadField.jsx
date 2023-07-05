@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useImageClassifier } from "@utils/moderation";
 import theme from "@utils/theme";
-import { validImagePluginURL } from "@utils/validationHelpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { connectField } from "uniforms";
@@ -100,12 +99,13 @@ function ImageUploadField({ onChange, value }) {
   };
 
   const handleFileSelected = async (e) => {
+    // console.log(e);
     if (!e.target.files || !e.target.files[0]) {
       handleError(NO_FILE_ERROR_CODE);
       return;
     }
     const file = e.target.files[0];
-
+    // console.log(file);
     if (!hasExtension(file.name)) {
       handleError(BAD_EXTENSION_ERROR_CODE);
       return;
@@ -115,78 +115,59 @@ function ImageUploadField({ onChange, value }) {
       return;
     } else {
       setState({ ...state, isUploading: true });
-      try {
-        // convert img from File to Image type for classification
-        const classifyImg = new Image();
-        const objectUrl = URL.createObjectURL(file);
-        classifyImg.onload = async () => {
-          try {
-            const inappropriateImage = await useImageClassifier(
-              model,
-              classifyImg
-            );
+      // convert img from File to Image type for classification
+      const classifyImg = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      classifyImg.onload = async () => {
+        const inappropriateImage = await useImageClassifier(model, classifyImg);
 
-            if (inappropriateImage) {
-              setState({ ...state, isUploading: false });
-              handleError(INAPPROPRIATE_ERROR_CODE);
-            } else {
-              const imageUrl = URL.createObjectURL(file);
+        if (inappropriateImage) {
+          setState({ ...state, isUploading: false });
+          handleError(INAPPROPRIATE_ERROR_CODE);
+        } else {
+          const imageUrl = URL.createObjectURL(file);
 
-              setImage({ url: "blob", saved: false, file: file });
+          setImage({ url: "blob", saved: false, file: file });
 
-              onChange({ url: imageUrl, saved: false, file: file });
-              setState({ ...state, isUploading: false });
-            }
-          } catch (error) {
-            console.error(error);
-            handleError();
-          }
+          onChange({ url: imageUrl, saved: false, file: file });
+          setState({ ...state, isUploading: false });
+        }
 
-          URL.revokeObjectURL(objectUrl);
-        };
-        classifyImg.src = objectUrl;
-      } catch (error) {
-        console.error(error);
-        handleError();
-      }
+        URL.revokeObjectURL(objectUrl);
+      };
+      classifyImg.src = objectUrl;
     }
   };
   const handleImageUrl = async (e, newValue) => {
-    if (newValue) {
+    if (newValue && newValue !== null) {
       const imageUrl = newValue.inputValue;
       setState({ ...state, isUploading: true });
-      if (validImagePluginURL(imageUrl)) {
-        // convert img from File to Image type for classification
-        const classifyImg = new Image();
+      // convert img from File to Image type for classification
+      const classifyImg = new Image();
+      // console.log(classifyImg);
+      // const objectUrl = URL.createObjectURL(file);
+      classifyImg.onload = async () => {
+        console.log(classifyImg);
+        classifyImg.crossOrigin = "anonymous";
+        // classifyImg.width = await this.naturalWidth;
+        // classifyImg.height = await this.naturalHeight;
+        const inappropriateImage = await useImageClassifier(model, classifyImg);
+        // console.log(inappropriateImage);
 
-        classifyImg.onload = async () => {
-          // corb problem
-          classifyImg.crossOrigin = "anonymous";
+        if (inappropriateImage) {
+          setState({ ...state, isUploading: false });
+          handleError(INAPPROPRIATE_ERROR_CODE);
+        } else {
+          // const imageUrl = URL.createObjectURL(file);
 
-          // wait for image to load width and height
-          await classifyImg.decode();
-          const inappropriateImage = await useImageClassifier(
-            model,
-            classifyImg
-          );
+          setImage({ url: imageUrl, saved: false, file: {} });
+          onChange({ url: imageUrl, saved: false, file: {} });
+          setState({ ...state, isUploading: false });
+        }
 
-          if (inappropriateImage) {
-            setState({ ...state, isUploading: false });
-            handleError(INAPPROPRIATE_ERROR_CODE);
-          } else {
-            setImage({ url: imageUrl, saved: false, file: {} });
-            onChange({ url: imageUrl, saved: false, file: {} });
-            setState({ ...state, isUploading: false });
-          }
-        };
-        classifyImg.src = imageUrl;
-      } else {
-        handleError(BAD_EXTENSION_ERROR_CODE);
-        return;
-      }
-    } else {
-      setImage({ url: undefined, saved: false, file: {} });
-      onChange({ url: undefined, saved: false, file: {} });
+        // URL.revokeObjectURL(objectUrl);
+      };
+      classifyImg.src = imageUrl;
     }
   };
 
@@ -474,7 +455,49 @@ function ImageUploadField({ onChange, value }) {
         <Typography variant="body1" sx={{ margin: "20px 16px 0 16px" }}>
           or
         </Typography>
-
+        {/* <TextField
+          placeholder="http://example.com/image.png"
+          label="Existing image URL"
+          name="url"
+          id="url"
+          sx={{
+            display: "flex",
+            flexGrow: 1,
+            marginBottom: "5px",
+            width: "300px",
+            [theme.breakpoints.down("md")]: {
+              width: "250px",
+              display: "flex",
+              marginBottom: "5px",
+            },
+            [theme.breakpoints.down("sm")]: {
+              width: "150px",
+              display: "flex",
+              marginBottom: "5px",
+            },
+          }}
+          value={
+            value.url &&
+            (value.url.startsWith("blob:") ||
+              value.url.startsWith("https://eco-media-bucket.s3"))
+              ? ""
+              : value.url || ""
+          }
+          inputProps={{ type: "url", maxLength: 100 }}
+          disabled={
+            (value.url && value.url.startsWith("blob:")) ||
+            (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
+              ? true
+              : false
+          }
+          onChange={(e) => {
+            const imageUrl = e.target.value;
+            console.log(imageUrl);
+            setImage({ url: imageUrl, saved: false, file: {} });
+            onChange({ url: imageUrl, saved: false, file: {} });
+          }}
+          
+        /> */}
         <Autocomplete
           value={
             value.url &&
