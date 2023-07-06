@@ -5,7 +5,10 @@ import {
   Button,
   CircularProgress,
   Container,
+  Divider,
   IconButton,
+  List,
+  ListItem,
   Table,
   Typography,
 } from "@mui/material";
@@ -351,6 +354,56 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   </>
                 )}
               </div>
+              <Divider sx={{ marginBlock: "20px" }} />
+              <Typography variant="h5">Additional Resources</Typography>
+              <List>
+                <ListItem key={"inat"}>
+                  <Link
+                    variant="h6"
+                    href={`https://www.inaturalist.org/search?q=${
+                      species.scientific_name.toLowerCase().split(" ")[0]
+                    }%20${species.scientific_name.toLowerCase().split(" ")[1]}`}
+                    color="secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    iNaturalist
+                  </Link>
+                </ListItem>
+                <ListItem key={"wiki"}>
+                  <Link
+                    variant="h6"
+                    href={`https://commons.wikimedia.org/w/index.php?search=${
+                      species.scientific_name.toLowerCase().split(" ")[0]
+                    }+${
+                      species.scientific_name.toLowerCase().split(" ")[1]
+                    }&title=Special:MediaSearch&go=Go&type=image`}
+                    color="secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    Wikimedia Commons
+                  </Link>
+                </ListItem>
+                <ListItem key={"iucn"}>
+                  <Link
+                    variant="h6"
+                    href={`https://www.iucnredlist.org/search?query=${
+                      species.scientific_name.toLowerCase().split(" ")[0]
+                    }%20${
+                      species.scientific_name.toLowerCase().split(" ")[1]
+                    }&searchType=species`}
+                    color="secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="hover"
+                  >
+                    IUCN Red List
+                  </Link>
+                </ListItem>
+              </List>
               {dialog && (
                 <DynamicFlag
                   open={dialog}
