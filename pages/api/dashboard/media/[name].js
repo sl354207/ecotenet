@@ -22,8 +22,8 @@ export default async function handler(req, res) {
     // console.log(key)
 
     // const key = req.query.id;
-    // // const name = "Muskrat";
-    // // const postId = "62c9c684a38cd3357c7e28f3";
+    // const name = "Muskrat";
+    // const postId = "62434f2ee7aaa0cc6f8d61cd";
     // // const key = "b36580f51a71b20d5f166a9807d98650.jpeg";
 
     if (session.user.name && session.user.name === name) {
