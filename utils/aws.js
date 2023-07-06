@@ -147,9 +147,10 @@ export async function deleteRecursive(path) {
       // list objects
       const listedObjects = await s3.send(command);
       if (listedObjects.Contents === undefined) {
-        throw new Error("Listing S3 returns no contents");
+        // throw new Error("Listing S3 returns no contents");
+        return count;
       }
-      if (listedObjects.Contents.length !== 0) {
+      if (listedObjects.Contents && listedObjects.Contents.length !== 0) {
         // prepare delete request
         const deleteParams = {
           Bucket: bucketName,
