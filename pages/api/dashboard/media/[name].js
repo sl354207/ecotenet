@@ -14,17 +14,10 @@ export default async function handler(req, res) {
     if (req.method !== "GET") {
       return res.status(405).json({ msg: "Method not allowed" });
     }
-    // console.log(req.query);
+
     const name = req.query.name;
     const postId = req.query.post_id;
     const key = req.query.key;
-
-    // console.log(key)
-
-    // const key = req.query.id;
-    // const name = "Muskrat";
-    // const postId = "62434f2ee7aaa0cc6f8d61cd";
-    // // const key = "b36580f51a71b20d5f166a9807d98650.jpeg";
 
     if (session.user.name && session.user.name === name) {
       if (!postId && !key) {

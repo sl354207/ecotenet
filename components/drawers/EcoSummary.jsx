@@ -60,7 +60,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
         return (
           <Link
             {...props}
-            href={"https://en.wikipedia.org/" + domNode.attribs.href}
+            href={"https://en.wikipedia.org/wiki/" + domNode.attribs.href}
             color="secondary"
             target="_blank"
             rel="noopener noreferrer"
