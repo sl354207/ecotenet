@@ -8,7 +8,6 @@ import {
   Tabs,
   ToggleButton,
   ToggleButtonGroup,
-  Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import getStripe from "@utils/stripe/getStripe";
@@ -212,9 +211,7 @@ const DonateForm = () => {
       </Tabs>
 
       <TabPanel value={tab} index={0}>
-        <form
-        // onSubmit={handleMonthlyDonation}
-        >
+        <form onSubmit={handleMonthlyDonation}>
           <label></label>
           <ToggleButtonGroup
             value={monthly.amount}
@@ -384,8 +381,7 @@ const DonateForm = () => {
                 variant="contained"
                 color="secondary"
                 type="submit"
-                // disabled={loading}
-                disabled
+                disabled={loading}
                 sx={{
                   display: "flex",
                   margin: "auto",
@@ -395,17 +391,15 @@ const DonateForm = () => {
               >
                 Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
               </Button>
-              <Typography align="center" variant="h6">
+              {/* <Typography align="center" variant="h6">
                 Donations coming soon
-              </Typography>
+              </Typography> */}
             </>
           )}
         </form>
       </TabPanel>
       <TabPanel value={tab} index={1}>
-        <form
-        // onSubmit={handleOneTimeDonation}
-        >
+        <form onSubmit={handleOneTimeDonation}>
           <label>
             Custom donation amount ({formatAmountForDisplay(1.0, "usd")}-
             {formatAmountForDisplay(1000.0, "usd")}):
@@ -461,8 +455,7 @@ const DonateForm = () => {
                 variant="contained"
                 color="secondary"
                 type="submit"
-                // disabled={loading || once === 0}
-                disabled
+                disabled={loading || once === 0}
                 sx={{
                   display: "flex",
                   margin: "auto",
@@ -472,9 +465,9 @@ const DonateForm = () => {
               >
                 Donate {formatAmountForDisplay(once, "usd")}
               </Button>
-              <Typography align="center" variant="h6">
+              {/* <Typography align="center" variant="h6">
                 Donations coming soon
-              </Typography>
+              </Typography> */}
             </>
           )}
         </form>

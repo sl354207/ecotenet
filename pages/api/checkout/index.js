@@ -33,12 +33,22 @@ export default async function handler(req, res) {
         // Create Checkout Sessions from body params.
         params = {
           submit_type: "donate",
+          mode: "payment",
           payment_method_types: ["card"],
           line_items: [
             {
-              name: "Donation",
-              amount: formatAmountForStripe(amount, "usd"),
-              currency: "usd",
+              // name: "Donation",
+              // amount: formatAmountForStripe(amount, "usd"),
+              // currency: "usd",
+              price_data: {
+                currency: "usd",
+                unit_amount: formatAmountForStripe(amount, "usd"),
+                product_data: {
+                  name: "Donation",
+                  // description: 'Comfortable cotton t-shirt',
+                  // images: ['https://example.com/t-shirt.png'],
+                },
+              },
               quantity: 1,
             },
           ],
