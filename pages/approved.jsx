@@ -10,22 +10,18 @@ import useSWR from "swr";
 const approved = () => {
   const router = useRouter();
 
-  // Fetch CheckoutSession from static page via
-  // https://nextjs.org/docs/basic-features/data-fetching#static-generation
   const { data, error } = useSWR(
     router.query.session_id ? `/api/checkout/${router.query.session_id}` : null,
     fetchGetJSON
   );
-  // console.log(data);
 
-  if (error)
-    return <div>Sorry, something went wrong. Please reload the page</div>;
   return (
     <>
       <NextSeo noindex={true} nofollow={true} />
       <Container>
         <Header title="Checkout Results" />
-        {data || (data && data.status === "open") ? (
+
+        {data || (data && data.status !== "open") ? (
           <>
             {data?.statusCode === 500 ? (
               <Typography
@@ -78,21 +74,36 @@ const approved = () => {
             )}
           </>
         ) : (
-          <CircularProgress
-            size={50}
-            color="secondary"
-            disableShrink={true}
-            sx={{
-              margin: "20px auto",
-              // margin: { xs: "auto", md: "0px 150px 0px 160px" },
-              display: "flex",
-              justifySelf: "center",
-            }}
-          />
-        )}
+          <>
+            {error ? (
+              <Typography
+                variant="h6"
+                align="center"
+                sx={{ marginTop: "20px" }}
+              >
+                Sorry, something went wrong. Please reload the page
+              </Typography>
+            ) : (
+              <>
+                {!router.query.session_id ? (
+                  <></>
+                ) : (
+                  <CircularProgress
+                    size={50}
+                    color="secondary"
+                    disableShrink={true}
+                    sx={{
+                      margin: "20px auto",
 
-        {/* {data && data} */}
-        {/* ADD POSSIBLE ERROR MESSAGES AND ADD EMAIL AND THANK YOUS AND WHATNOT */}
+                      display: "flex",
+                      justifySelf: "center",
+                    }}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
       </Container>
     </>
   );
