@@ -1,3 +1,4 @@
+import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { CircularProgress, Container, Typography } from "@mui/material";
@@ -105,6 +106,7 @@ const approved = () => {
           </>
         )}
       </Container>
+      <Footer />
     </>
   );
 };

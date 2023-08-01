@@ -15,7 +15,8 @@ const Footer = () => {
       <Divider />
       <Container sx={{ minHeight: "fit-content", marginTop: "20px" }}>
         <Typography variant="body2" align="center" gutterBottom>
-          Copyright &#169; Ecotenet 2022
+          Copyright &#169; Ecotenet 2023. We are 501(c)(3) nonprofit
+          organization
         </Typography>
 
         <Grid container spacing={2} sx={{ marginTop: "20px" }}>
