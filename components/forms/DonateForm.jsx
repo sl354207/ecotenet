@@ -391,9 +391,6 @@ const DonateForm = () => {
               >
                 Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
               </Button>
-              {/* <Typography align="center" variant="h6">
-                Donations coming soon
-              </Typography> */}
             </>
           )}
         </form>
@@ -455,7 +452,12 @@ const DonateForm = () => {
                 variant="contained"
                 color="secondary"
                 type="submit"
-                disabled={loading || once === 0 || once > 1000}
+                disabled={
+                  loading ||
+                  once === 0 ||
+                  once > 1000 ||
+                  typeof once !== "number"
+                }
                 sx={{
                   display: "flex",
                   margin: "auto",
@@ -465,9 +467,6 @@ const DonateForm = () => {
               >
                 Donate {formatAmountForDisplay(once, "usd")}
               </Button>
-              {/* <Typography align="center" variant="h6">
-                Donations coming soon
-              </Typography> */}
             </>
           )}
         </form>
