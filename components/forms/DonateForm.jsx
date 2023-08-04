@@ -395,7 +395,7 @@ const DonateForm = () => {
             disableUnderline
             onChange={handleInputChange}
             inputProps={{
-              step: 5.0,
+              step: 1.0,
               min: 1.0,
               max: 10000.0,
               type: "number",
