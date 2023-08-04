@@ -50,79 +50,45 @@ const DonateForm = () => {
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [once, setOnce] = useState(5.0);
-  const [monthly, setMonthly] = useState({
-    amount: 5.0,
-    priceID: "price_1KyfgSIxZCxSXd1iyenrfWb5",
-  });
+  const [monthly, setMonthly] = useState(5.0);
+  const [error, setError] = useState(false);
 
   const handleInputChange = (event) => {
     setOnce(
       event.currentTarget.value === "" ? "" : Number(event.currentTarget.value)
     );
+    setError(false);
   };
   const handleMonthlyChange = (event) => {
-    switch (event.currentTarget.value) {
-      case "2":
-        setMonthly({
-          amount: Number(event.currentTarget.value),
-          priceID: "price_1KydUGIxZCxSXd1ihseMlZY1",
-        });
-        break;
-      case "5":
-        setMonthly({
-          amount: Number(event.currentTarget.value),
-          priceID: "price_1KyfgSIxZCxSXd1iyenrfWb5",
-        });
-        break;
-      case "10":
-        setMonthly({
-          amount: Number(event.currentTarget.value),
-          priceID: "price_1KyfgpIxZCxSXd1i61bID9fv",
-        });
-        break;
-      case "20":
-        setMonthly({
-          amount: Number(event.currentTarget.value),
-          priceID: "price_1KyfhZIxZCxSXd1i0FMziStb",
-        });
-        break;
-      case "50":
-        setMonthly({
-          amount: Number(event.currentTarget.value),
-          priceID: "price_1Kyfi8IxZCxSXd1iv0I8IsNs",
-        });
-        break;
-      case "100":
-        setMonthly({
-          amount: Number(event.currentTarget.value),
-          priceID: "price_1KyfihIxZCxSXd1iHsLTrftf",
-        });
-        break;
-
-      default:
-        break;
-    }
+    setMonthly(Number(event.currentTarget.value));
+    setError(false);
+    // console.log(monthly);
   };
 
   const handleSliderChange = (event, newValue) => {
     setOnce(newValue);
+    setError(false);
   };
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
+    setError(false);
   };
 
   const handleMonthlyDonation = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(false);
     // Create a Checkout Session.
     const response = await fetchPostJSON("/api/checkout", {
-      amount: monthly.amount,
-      priceID: monthly.priceID,
+      amount: monthly,
+      sub: true,
     });
 
     if (response.statusCode === 500) {
       console.error(response.message);
+      setLoading(false);
+      setError(true);
       return;
     }
 
@@ -139,11 +105,13 @@ const DonateForm = () => {
     // using `error.message`.
     console.warn(error.message);
     setLoading(false);
+    setError(true);
   };
 
   const handleOneTimeDonation = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(false);
     // Create a Checkout Session.
     const response = await fetchPostJSON("/api/checkout", {
       amount: once,
@@ -151,6 +119,8 @@ const DonateForm = () => {
 
     if (response.statusCode === 500) {
       console.error(response.message);
+      setLoading(false);
+      setError(true);
       return;
     }
 
@@ -167,6 +137,7 @@ const DonateForm = () => {
     // using `error.message`.
     console.warn(error.message);
     setLoading(false);
+    setError(true);
   };
   return (
     <>
@@ -214,7 +185,7 @@ const DonateForm = () => {
         <form onSubmit={handleMonthlyDonation}>
           <label></label>
           <ToggleButtonGroup
-            value={monthly.amount}
+            value={monthly}
             exclusive
             onChange={handleMonthlyChange}
             sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
@@ -379,7 +350,7 @@ const DonateForm = () => {
             <>
               <Button
                 variant="contained"
-                color="secondary"
+                color={error ? "error" : "secondary"}
                 type="submit"
                 disabled={loading}
                 sx={{
@@ -389,7 +360,11 @@ const DonateForm = () => {
                   minWidth: "300px",
                 }}
               >
-                Donate {formatAmountForDisplay(monthly.amount, "usd")}/Month
+                {error ? (
+                  "Error Retry"
+                ) : (
+                  <>Donate {formatAmountForDisplay(monthly, "usd")}/Month</>
+                )}
               </Button>
             </>
           )}
@@ -399,7 +374,7 @@ const DonateForm = () => {
         <form onSubmit={handleOneTimeDonation}>
           <label>
             Custom donation amount ({formatAmountForDisplay(1.0, "usd")}-
-            {formatAmountForDisplay(1000.0, "usd")}):
+            {formatAmountForDisplay(10000.0, "usd")}):
           </label>
           <Input
             sx={{
@@ -420,9 +395,9 @@ const DonateForm = () => {
             disableUnderline
             onChange={handleInputChange}
             inputProps={{
-              step: 1.0,
+              step: 5.0,
               min: 1.0,
-              max: 1000.0,
+              max: 10000.0,
               type: "number",
               "aria-labelledby": "input-slider",
             }}
@@ -434,7 +409,7 @@ const DonateForm = () => {
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
             min={1.0}
-            max={1000.0}
+            max={10000.0}
           />
           {loading ? (
             <CircularProgress
@@ -455,7 +430,7 @@ const DonateForm = () => {
                 disabled={
                   loading ||
                   once === 0 ||
-                  once > 1000 ||
+                  once > 10000 ||
                   typeof once !== "number"
                 }
                 sx={{

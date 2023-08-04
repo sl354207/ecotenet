@@ -10,18 +10,49 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const amount = req.body.amount;
+    const subscription = req.body.sub;
     try {
       // Validate the amount that was passed from the client.
-      if (!(amount >= 1.0 && amount <= 1000.0)) {
+      if (!(amount >= 1.0 && amount <= 10000.0)) {
         throw new Error("Invalid amount.");
       }
       let params;
-      if (req.body.priceID) {
+      let priceID;
+      if (subscription) {
+        switch (amount) {
+          case 2:
+            priceID = "price_1NbT6xIxZCxSXd1iyxci5HUa";
+
+            break;
+          case 5:
+            priceID = "price_1NbT6mIxZCxSXd1ih0AnXYqN";
+
+            break;
+          case 10:
+            priceID = "price_1NbT6ZIxZCxSXd1ilKl6mfc5";
+
+            break;
+          case 20:
+            priceID = "price_1NbT6LIxZCxSXd1iRbAGz00E";
+
+            break;
+          case 50:
+            priceID = "price_1NbT5uIxZCxSXd1iPxt05Qz4";
+
+            break;
+          case 100:
+            priceID = "price_1NbT4MIxZCxSXd1iGAxKDrdQ";
+
+            break;
+
+          default:
+            break;
+        }
         // Create Checkout Sessions from body params.
-        const priceID = req.body.priceID;
+        // const priceID = req.body.priceID;
         params = {
           mode: "subscription",
-          payment_method_types: ["card"],
+          // payment_method_types: ["card"],
           line_items: [
             {
               price: priceID,
@@ -37,7 +68,7 @@ export default async function handler(req, res) {
         params = {
           submit_type: "donate",
           mode: "payment",
-          payment_method_types: ["card"],
+          // payment_method_types: ["card"],
           line_items: [
             {
               // name: "Donation",
