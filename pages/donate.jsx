@@ -30,15 +30,15 @@ const donate = () => {
       <Container maxWidth="sm">
         <Header title="Donations" />
         <DonateForm />
-        <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+        <Typography variant="body1" align="center" sx={{ marginTop: "20px" }}>
           Ecotenet is 501(c)(3) nonprofit organization. We rely on donations
           from people like you to keep running and growing.
         </Typography>
-        <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+        <Typography variant="body1" align="center" sx={{ marginTop: "20px" }}>
           Thank You!
         </Typography>
         <Typography variant="body1" align="center" sx={{ marginTop: "20px" }}>
-          For larger donations or other questions email us at{" "}
+          For donation related questions email us at{" "}
           <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
         </Typography>
       </Container>
