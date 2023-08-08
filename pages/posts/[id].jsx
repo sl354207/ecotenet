@@ -569,7 +569,7 @@ const post = ({ post }) => {
         <EditorLayout>
           {(post.category.sub === "Edible" ||
             post.category.sub === "Medicinal") && (
-            <Typography sx={{ marginTop: "5px" }}>
+            <Typography sx={{ paddingTop: "16px" }}>
               <em>
                 Disclaimer: This content is for educational purposes only.
                 Before consuming anything make sure you have properly identified
