@@ -85,8 +85,8 @@ const ideas = () => {
           globalization and technology, everything from food to clothing to
           culture is connected to place.
         </Typography>
-        <Typography variant="body1" gutterBottom>
-          A brief tangent on technology: at first glance this may seem
+        <Typography variant="body1" gutterBottom sx={{ marginBlock: "20px" }}>
+          <b>A brief tangent on technology:</b> at first glance this may seem
           applicable mainly to primitive skills or interactions very closely
           tied to nature. And that technology(to be clear, I&apos;m using
           technology to mean machines and tools, not just computers and stuff)
