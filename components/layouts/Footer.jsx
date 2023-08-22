@@ -103,51 +103,51 @@ const Footer = () => {
         </div>
 
         <Grid container spacing={2} sx={{ marginTop: "0px" }}>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="privacy-grid">
             <Link href="/privacy" underline="hover">
               Privacy Policy
             </Link>
           </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="contact-grid">
             <Link href="/contact" underline="hover">
               Contact Us
             </Link>
           </Grid>
 
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="species-grid">
             <Link href="/data" underline="hover">
               Species Data
             </Link>
           </Grid>
 
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="terms-grid">
             <Link href="/terms" underline="hover">
               Terms of Service
             </Link>
           </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="about-grid">
             <Link href="/about" underline="hover">
               About Us
             </Link>
           </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="sponsors-grid">
             <Link href="/sponsors" underline="hover">
               Sponsors
             </Link>
           </Grid>
 
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="conduct-grid">
             <Link href="/conduct" underline="hover">
               Code of Conduct
             </Link>
           </Grid>
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="disclaimer-grid">
             <Link href="/disclaimer" underline="hover">
               Disclaimer
             </Link>
           </Grid>
 
-          <Grid item xs={4} sx={{ textAlign: "center" }}>
+          <Grid item xs={4} sx={{ textAlign: "center" }} key="donate-grid">
             <Button
               href="/donate"
               variant="contained"

@@ -16,7 +16,14 @@ import {
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
+import Pusher from "pusher-js";
+import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
+
+const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+});
+
 const admin = () => {
   const { snackbar, setSnackbar } = useSnackbarContext();
   const { mutate } = useSWRConfig();
@@ -35,6 +42,21 @@ const admin = () => {
   } = useSWR("/api/admin/posts", fetcher, {
     shouldRetryOnError: false,
   });
+
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const channel = pusher.subscribe("ecotenet");
+
+    channel.bind("my-event", (data) => {
+      setNotifications([...notifications, data]);
+    });
+    console.log(notifications);
+    return () => {
+      pusher.unsubscribe("ecotenet");
+    };
+  }, [notifications]);
+
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const updateFeature = async (action, post) => {
@@ -259,6 +281,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="people-grid"
                         >
                           <Link
                             href={`/admin/people/${post.name}`}
@@ -274,6 +297,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="current-grid"
                         >
                           <Typography>
                             Current Feature: {post.feature}
@@ -283,6 +307,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="post-grid"
                         >
                           <Link
                             href={`/posts/${post._id}`}
@@ -297,6 +322,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="title-grid"
                         >
                           <Typography>{post.title}</Typography>
                         </Grid>
@@ -304,6 +330,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="featured-grid"
                         >
                           <Typography>
                             Featured Before: {post.featured ? "true" : "false"}
@@ -313,6 +340,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="add-grid"
                         >
                           {post.feature === "true" ? (
                             <Button
@@ -364,6 +392,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="date-grid"
                         >
                           <Typography>
                             {new Date(post.date).toDateString()}
@@ -373,6 +402,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="count-grid"
                         >
                           <Typography variant="h6" color="secondary">
                             {post.count}
@@ -382,6 +412,7 @@ const admin = () => {
                           item
                           xs={4}
                           sx={{ textAlign: "center", alignSelf: "center" }}
+                          key="remove-grid"
                         >
                           {post.feature !== "true" ? (
                             <Button
@@ -472,6 +503,14 @@ const admin = () => {
           {statSection}
           <Header title="Feature Candidates" />
           {list}
+          <div>
+            <h2>Notifications</h2>
+            <ul>
+              {notifications.map((notification) => (
+                <li key={notification.id}>{notification}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </>
