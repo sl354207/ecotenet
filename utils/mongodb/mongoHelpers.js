@@ -325,6 +325,19 @@ const getDashboardComments = async (name) => {
     throw new Error(error);
   }
 };
+const getCommentById = async (_id) => {
+  try {
+    const db = await connectToDatabase();
+
+    const comment = await db.collection("comments").findOne({
+      _id: new ObjectId(_id),
+    });
+
+    return comment;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const getComments = async (approved) => {
   try {
     const db = await connectToDatabase();
@@ -1065,6 +1078,7 @@ module.exports = {
   getPostVotes,
   getDashboardPosts,
   getProfilePosts,
+  getCommentById,
   getComments,
   getPostById,
   getApprovedPostById,

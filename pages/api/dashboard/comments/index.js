@@ -5,6 +5,7 @@ import {
   getDashboardComments,
 } from "@utils/mongodb/mongoHelpers";
 import { getServerSession } from "next-auth/next";
+import * as Pusher from "pusher";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -42,6 +43,19 @@ export default async function handler(req, res) {
               data.approved = "pending";
               data.updated = false;
               const createdComment = await createComment(data);
+
+              const commentID = createdComment.insertedId.toString();
+              const pusher = new Pusher({
+                appId: process.env.PUSHER_APP_ID,
+                key: process.env.NEXT_PUBLIC_PUSHER_KEY,
+                secret: process.env.PUSHER_SECRET_KEY,
+                cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+              });
+
+              pusher.trigger("ecotenet", "event", {
+                type: "comment",
+                id: commentID,
+              });
 
               return res.status(200).json(createdComment);
             } catch (err) {
