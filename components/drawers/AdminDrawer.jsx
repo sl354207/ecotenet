@@ -29,31 +29,46 @@ const AdminDrawer = () => {
           </ListItemButton>
           <ListItemButton
             key="people"
-            onClick={() => router.push("/admin/people")}
+            // onClick={() => router.push("/admin/people")}
+            href="/admin/people"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <ListItemText primary="People" />
           </ListItemButton>
           <ListItemButton
             key="posts"
-            onClick={() => router.push("/admin/posts")}
+            // onClick={() => router.push("/admin/posts")}
+            href="/admin/posts"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <ListItemText primary="Posts" />
           </ListItemButton>
           <ListItemButton
             key="comments"
-            onClick={() => router.push("/admin/comments")}
+            // onClick={() => router.push("/admin/comments")}
+            href="/admin/comments"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <ListItemText primary="Comments" />
           </ListItemButton>
           <ListItemButton
             key="flags"
-            onClick={() => router.push("/admin/flags")}
+            // onClick={() => router.push("/admin/flags")}
+            href="/admin/flags"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <ListItemText primary="Flags" />
           </ListItemButton>
           <ListItemButton
             key="notifications"
-            onClick={() => router.push("/admin/notifications")}
+            // onClick={() => router.push("/admin/notifications")}
+            href="/admin/notifications"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <ListItemText primary="Notifications" />
           </ListItemButton>

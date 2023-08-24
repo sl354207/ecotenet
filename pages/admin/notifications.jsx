@@ -154,7 +154,12 @@ const notifications = () => {
   }
   return (
     <>
-      <NextSeo noindex={true} nofollow={true} />
+      <NextSeo
+        noindex={true}
+        nofollow={true}
+        title="Notifications"
+        titleTemplate="Notifications"
+      />
       <div style={{ display: "flex" }}>
         <AdminDrawer />
         <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>

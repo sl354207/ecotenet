@@ -44,7 +44,6 @@ export default async function handler(req, res) {
               data.updated = false;
               const createdComment = await createComment(data);
 
-              const commentID = createdComment.insertedId.toString();
               const pusher = new Pusher({
                 appId: process.env.PUSHER_APP_ID,
                 key: process.env.NEXT_PUBLIC_PUSHER_KEY,
@@ -52,9 +51,8 @@ export default async function handler(req, res) {
                 cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
               });
 
-              pusher.trigger("ecotenet", "event", {
+              pusher.trigger("ecotenet", "comment", {
                 type: "comment",
-                id: commentID,
               });
 
               return res.status(200).json(createdComment);

@@ -189,7 +189,12 @@ const adminPeople = () => {
 
   return (
     <>
-      <NextSeo noindex={true} nofollow={true} />
+      <NextSeo
+        noindex={true}
+        nofollow={true}
+        title="People"
+        titleTemplate="People"
+      />
       <div style={{ display: "flex" }}>
         <AdminDrawer />
         <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>

@@ -14,16 +14,9 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
-import { loadToxicity, useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
-import Pusher from "pusher-js";
-import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
-
-const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-});
 
 const admin = () => {
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -43,87 +36,6 @@ const admin = () => {
   } = useSWR("/api/admin/posts", fetcher, {
     shouldRetryOnError: false,
   });
-
-  const [notifications, setNotifications] = useState([]);
-  const [model, setModel] = useState();
-  const [modelLoading, setModelLoading] = useState(false);
-
-  useEffect(() => {
-    const loadModel = async () => {
-      setModelLoading(true);
-      try {
-        // Loading model
-        const model = await loadToxicity(0.7);
-        // await model.model.save("indexeddb://model");
-        // const modelNew = await model("indexeddb://model");
-        // console.log(model);
-        // console.log(`modelNew: ${modelNew}`);
-        if (model) {
-          setModel(model);
-          setModelLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-
-        setModelLoading(false);
-      }
-    };
-    loadModel();
-  }, []);
-
-  useEffect(() => {
-    const channel = pusher.subscribe("ecotenet");
-
-    channel.bind("event", (data) => {
-      setNotifications([...notifications, data]);
-      console.log(data);
-    });
-    const moderate = async () => {
-      if (model && modelLoading === false && notifications.length > 0) {
-        for (const notification of notifications) {
-          switch (notification.type) {
-            case "comment":
-              try {
-                const res = await fetch(
-                  `/api/admin/comments/${notification.id}`,
-                  {
-                    method: "GET",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                );
-
-                if (res.ok) {
-                  const comment = await res.json();
-                  try {
-                    const toxic = await useToxicity(model, comment.text);
-                    console.log(toxic);
-                  } catch (error) {
-                    console.log(error);
-                    setModelLoading(false);
-                  }
-                }
-              } catch (error) {
-                console.log(error);
-              }
-
-              break;
-
-            default:
-              break;
-          }
-        }
-      }
-    };
-    moderate();
-
-    // console.log(notifications);
-
-    return () => {
-      pusher.unsubscribe("ecotenet");
-    };
-  }, [notifications]);
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -571,16 +483,6 @@ const admin = () => {
           {statSection}
           <Header title="Feature Candidates" />
           {list}
-          <div>
-            <h2>Notifications</h2>
-            <ul>
-              {notifications.map((notification) => (
-                <li key={notification.id}>
-                  {notification.type}: {notification.id}
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
       </div>
     </>

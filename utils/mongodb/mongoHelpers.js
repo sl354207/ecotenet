@@ -300,7 +300,7 @@ const getPostComments = async (id) => {
       .collection("comments")
       .find({
         post_id: id,
-        approved: { $in: ["true", "pending"] },
+        approved: "true",
       })
       .project({ approved: 0 })
       .toArray();
@@ -321,19 +321,6 @@ const getDashboardComments = async (name) => {
       .toArray();
 
     return comments;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-const getCommentById = async (_id) => {
-  try {
-    const db = await connectToDatabase();
-
-    const comment = await db.collection("comments").findOne({
-      _id: new ObjectId(_id),
-    });
-
-    return comment;
   } catch (error) {
     throw new Error(error);
   }
@@ -1078,7 +1065,6 @@ module.exports = {
   getPostVotes,
   getDashboardPosts,
   getProfilePosts,
-  getCommentById,
   getComments,
   getPostById,
   getApprovedPostById,

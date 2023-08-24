@@ -12,9 +12,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
+import { updateComment } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
+import { loadToxicity, useToxicity } from "@utils/moderation";
 import { NextSeo } from "next-seo";
-import { useState } from "react";
+import Pusher from "pusher-js";
+import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 const adminComments = () => {
@@ -45,6 +48,89 @@ const adminComments = () => {
   } = useSWR("/api/admin/comments", fetcher, {
     shouldRetryOnError: false,
   });
+
+  const [notifications, setNotifications] = useState(0);
+  const [model, setModel] = useState();
+  const [modelLoading, setModelLoading] = useState(false);
+  const [pusher, setPusher] = useState();
+  const [toxicComments, setToxicComments] = useState([]);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      setModelLoading(true);
+      try {
+        const model = await loadToxicity(0.7);
+
+        if (model) {
+          setModel(model);
+          setModelLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+
+        setModelLoading(false);
+      }
+    };
+    loadModel();
+    setPusher(
+      new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    const moderate = async () => {
+      if (model && modelLoading === false) {
+        if (results && results.length > 0) {
+          setModelLoading(true);
+          for (const result of results) {
+            try {
+              const toxic = await useToxicity(model, result.text);
+
+              if (toxic) {
+                setToxicComments([...toxicComments, result]);
+              } else {
+                handleUpdateComment(result, "true");
+              }
+            } catch (error) {
+              console.log(error);
+              setModelLoading(false);
+            }
+          }
+          setModelLoading(false);
+        }
+      }
+    };
+    moderate();
+  }, [results, model]);
+
+  useEffect(() => {
+    if (pusher) {
+      const channel = pusher.subscribe("ecotenet");
+
+      channel.bind("comment", () => {
+        setNotifications(notifications + 1);
+      });
+      mutate("/api/admin/comments");
+
+      return () => {
+        pusher.unsubscribe("ecotenet");
+      };
+    }
+  }, [notifications]);
+
+  const handleUpdateComment = async (result, approved) => {
+    const submission = {
+      id: result._id,
+      approved: approved,
+    };
+
+    const commentResponse = await updateComment(submission, "admin");
+    if (!commentResponse.ok) {
+      setToxicComments([...toxicComments, result]);
+    }
+  };
 
   let list;
 
@@ -85,114 +171,118 @@ const adminComments = () => {
         );
       } else {
         list = (
-          <List>
-            {results.map((result) => {
-              return (
-                <>
-                  <ListItem
-                    key={result._id}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "start",
-                      textTransform: "none",
-                      border: `1px solid ${alpha(
-                        theme.palette.secondary.main,
-                        1
-                      )}`,
-                      margin: "20px auto",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <div style={{ display: "flow-root", flexGrow: 1 }}>
-                      <Link
-                        href={`/admin/people/${result.name}`}
-                        underline="hover"
+          <>
+            {toxicComments.length > 0 && (
+              <List>
+                {toxicComments.map((result) => {
+                  return (
+                    <>
+                      <ListItem
+                        key={result._id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            1
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
                       >
-                        {result.name}
-                      </Link>
+                        <div style={{ display: "flow-root", flexGrow: 1 }}>
+                          <Link
+                            href={`/admin/people/${result.name}`}
+                            underline="hover"
+                          >
+                            {result.name}
+                          </Link>
 
-                      <ListItemText primary={result.text}></ListItemText>
-                    </div>
+                          <ListItemText primary={result.text}></ListItemText>
+                        </div>
 
-                    {isMobile ? (
-                      <div style={{ display: "grid" }}>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() =>
-                            handleOpenDialog("Approve", "Comment", result)
-                          }
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          sx={{ marginTop: "4px" }}
-                          onClick={() =>
-                            handleOpenDialog("Deny", "Comment", result)
-                          }
-                        >
-                          Deny
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          sx={{
-                            marginTop: "4px",
-                            color: "#fc7ebf",
-                            borderColor: "#fc7ebf",
-                          }}
-                          onClick={() =>
-                            handleOpenDialog("Delete", "Comment", result)
-                          }
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    ) : (
-                      <div>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() =>
-                            handleOpenDialog("Approve", "Comment", result)
-                          }
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          sx={{ marginLeft: "4px" }}
-                          onClick={() =>
-                            handleOpenDialog("Deny", "Comment", result)
-                          }
-                        >
-                          Deny
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          sx={{
-                            marginLeft: "4px",
-                            marginTop: "4px",
-                            color: "#fc7ebf",
-                            borderColor: "#fc7ebf",
-                          }}
-                          onClick={() =>
-                            handleOpenDialog("Delete", "Comment", result)
-                          }
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    )}
-                  </ListItem>
-                </>
-              );
-            })}
-          </List>
+                        {isMobile ? (
+                          <div style={{ display: "grid" }}>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              onClick={() =>
+                                handleOpenDialog("Approve", "Comment", result)
+                              }
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              sx={{ marginTop: "4px" }}
+                              onClick={() =>
+                                handleOpenDialog("Deny", "Comment", result)
+                              }
+                            >
+                              Deny
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              sx={{
+                                marginTop: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }}
+                              onClick={() =>
+                                handleOpenDialog("Delete", "Comment", result)
+                              }
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        ) : (
+                          <div>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              onClick={() =>
+                                handleOpenDialog("Approve", "Comment", result)
+                              }
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              sx={{ marginLeft: "4px" }}
+                              onClick={() =>
+                                handleOpenDialog("Deny", "Comment", result)
+                              }
+                            >
+                              Deny
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="secondary"
+                              sx={{
+                                marginLeft: "4px",
+                                marginTop: "4px",
+                                color: "#fc7ebf",
+                                borderColor: "#fc7ebf",
+                              }}
+                              onClick={() =>
+                                handleOpenDialog("Delete", "Comment", result)
+                              }
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        )}
+                      </ListItem>
+                    </>
+                  );
+                })}
+              </List>
+            )}
+          </>
         );
       }
     }
@@ -200,11 +290,19 @@ const adminComments = () => {
 
   return (
     <>
-      <NextSeo noindex={true} nofollow={true} />
+      <NextSeo
+        noindex={true}
+        nofollow={true}
+        title="Comments"
+        titleTemplate="Comments"
+      />
       <div style={{ display: "flex" }}>
         <AdminDrawer />
         <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
           <Header title="Comments" />
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            Moderating: {modelLoading ? "True" : "False"}
+          </Typography>
           {list}
           <AdminDialog
             contentType={action.type}
