@@ -24,7 +24,7 @@ import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
 import { loadToxicity, useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
-import { checkWebsite, validEmail } from "@utils/validationHelpers";
+import { validEmail, validURL } from "@utils/validationHelpers";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
@@ -226,7 +226,7 @@ export default function Dashboard() {
 
     if (profile.website !== results.website && profile.website !== "") {
       setModelLoading(true);
-      validWebsite = checkWebsite(profile.website);
+      validWebsite = validURL(profile.website);
     }
 
     if (results.bio !== profile.bio) {

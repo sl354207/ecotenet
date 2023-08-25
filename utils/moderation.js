@@ -60,3 +60,42 @@ export const useImageClassifier = async (model, img) => {
     throw new Error("failed to classify image");
   }
 };
+
+export const checkLinks = async (links) => {
+  try {
+    const res = await fetch(
+      `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${process.env.NEXT_PUBLIC_GOOGLE_SAFE_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          client: {
+            clientId: "ecotenet",
+            clientVersion: "1.0.0",
+          },
+          threatInfo: {
+            threatTypes: [
+              "MALWARE",
+              "SOCIAL_ENGINEERING",
+              "UNWANTED_SOFTWARE",
+              "POTENTIALLY_HARMFUL_APPLICATION",
+              "THREAT_TYPE_UNSPECIFIED",
+            ],
+            platformTypes: ["ANY_PLATFORM"],
+            threatEntryTypes: ["URL"],
+            threatEntries: links.map((link) =>
+              Object.assign({}, { url: link })
+            ),
+          },
+        }),
+      }
+    );
+
+    const response = await res.json();
+    // console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new Error("failed to check links");
+  }
+};

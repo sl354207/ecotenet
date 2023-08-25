@@ -112,8 +112,8 @@ export function validKey(string) {
   }
 }
 
-export function checkWebsite(website) {
-  const valid = URISanity.vet(website, {
+export function validURL(url) {
+  const valid = URISanity.vet(url, {
     allowWebTransportURI: true,
   });
 

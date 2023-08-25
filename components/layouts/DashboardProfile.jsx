@@ -13,7 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import theme from "@utils/theme";
-import { checkWebsite } from "@utils/validationHelpers";
+import { validURL } from "@utils/validationHelpers";
 
 const DashboardProfile = ({
   user,
@@ -158,7 +158,7 @@ const DashboardProfile = ({
           disableClearable={true}
           value={[]}
           onChange={(event, newValue) => {
-            if (!checkWebsite(newValue.inputValue)) {
+            if (!validURL(newValue.inputValue)) {
               setError({
                 bio: error.bio,
                 website: error.website,

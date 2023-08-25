@@ -10,10 +10,13 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import { updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
+import { checkLinks, loadToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
-import { useState } from "react";
+import Pusher from "pusher-js";
+import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 const adminPeople = () => {
@@ -41,6 +44,116 @@ const adminPeople = () => {
   } = useSWR("/api/admin/users", fetcher, {
     shouldRetryOnError: false,
   });
+
+  const [notifications, setNotifications] = useState(0);
+  const [model, setModel] = useState();
+  const [modelLoading, setModelLoading] = useState(false);
+  const [pusher, setPusher] = useState();
+  const [toxicProfiles, setToxicProfiles] = useState([]);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      setModelLoading(true);
+      try {
+        const model = await loadToxicity(0.7);
+
+        if (model) {
+          setModel(model);
+          setModelLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+
+        setModelLoading(false);
+      }
+    };
+    loadModel();
+    setPusher(
+      new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    const moderate = async () => {
+      if (model && modelLoading === false) {
+        if (results && results.length > 0) {
+          setModelLoading(true);
+          for (const result of results) {
+            let links = [];
+            if (result.socials.length > 0) {
+              links = result.socials;
+            }
+            if (result.website !== "") {
+              links = [...links, result.website];
+            }
+            // console.log(links);
+            if (links.length > 0) {
+              try {
+                handleCheckLinks(links);
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            // try {
+            //   const toxic = await useToxicity(model, result.bio);
+
+            //   if (toxic) {
+            //     setToxicProfiles([...toxicProfiles, result]);
+            //   } else {
+            //     handleUpdatePerson(result, "true");
+            //   }
+            // } catch (error) {
+            //   console.log(error);
+            //   setModelLoading(false);
+            // }
+          }
+          setModelLoading(false);
+        }
+      }
+    };
+    moderate();
+    console.log(results);
+  }, [results, model]);
+
+  useEffect(() => {
+    if (pusher) {
+      const channel = pusher.subscribe("ecotenet");
+
+      channel.bind("profile", () => {
+        setNotifications(notifications + 1);
+      });
+      mutate("/api/admin/users");
+
+      return () => {
+        pusher.unsubscribe("ecotenet");
+      };
+    }
+  }, [notifications]);
+
+  const handleCheckLinks = async (links, result) => {
+    try {
+      const badLinks = await checkLinks(links);
+      console.log(badLinks);
+    } catch (error) {
+      console.log(error);
+      setToxicProfiles([...toxicProfiles, result]);
+    }
+  };
+
+  const handleUpdatePerson = async (result, approved) => {
+    const submission = {
+      name: result.name,
+      email: result.email,
+      approved: approved,
+    };
+
+    const userResponse = await updateUser(submission, "admin");
+    if (!userResponse.ok) {
+      setToxicProfiles([...toxicProfiles, result]);
+    }
+  };
 
   let list;
 
@@ -81,107 +194,111 @@ const adminPeople = () => {
         );
       } else {
         list = (
-          <List>
-            {results.map((result) => {
-              return (
-                <>
-                  <ListItem
-                    key={result._id}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "start",
-                      textTransform: "none",
-                      border: `1px solid ${alpha(
-                        theme.palette.secondary.main,
-                        1
-                      )}`,
-                      margin: "20px auto",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <div style={{ display: "flow-root", flexGrow: 1 }}>
-                      <Link
-                        href={`/admin/people/${result.name}`}
-                        underline="hover"
+          <>
+            {toxicProfiles.length > 0 && (
+              <List>
+                {results.map((result) => {
+                  return (
+                    <>
+                      <ListItem
+                        key={result._id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            1
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
                       >
-                        {result.name}
-                      </Link>
+                        <div style={{ display: "flow-root", flexGrow: 1 }}>
+                          <Link
+                            href={`/admin/people/${result.name}`}
+                            underline="hover"
+                          >
+                            {result.name}
+                          </Link>
 
-                      <Typography>bio: {result.bio}</Typography>
-                      <Typography sx={{ overflowWrap: "anywhere" }}>
-                        email: {result.email}
-                      </Typography>
-                      <Typography>
-                        website:{" "}
-                        <Link
-                          href={result.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          underline="hover"
-                        >
-                          {result.website}
-                        </Link>
-                      </Typography>
-                      <Typography>
-                        socials:{" "}
-                        {result.socials.map((social) => (
-                          <>
+                          <Typography>bio: {result.bio}</Typography>
+                          <Typography sx={{ overflowWrap: "anywhere" }}>
+                            email: {result.email}
+                          </Typography>
+                          <Typography>
+                            website:{" "}
                             <Link
-                              href={social}
+                              href={result.website}
                               target="_blank"
                               rel="noopener noreferrer"
                               underline="hover"
                             >
-                              {social}
+                              {result.website}
                             </Link>
-                            ,{" "}
-                          </>
-                        ))}
-                      </Typography>
+                          </Typography>
+                          <Typography>
+                            socials:{" "}
+                            {result.socials.map((social) => (
+                              <>
+                                <Link
+                                  href={social}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  underline="hover"
+                                >
+                                  {social}
+                                </Link>
+                                ,{" "}
+                              </>
+                            ))}
+                          </Typography>
 
-                      <Typography>denials: {result.denials}</Typography>
-                    </div>
+                          <Typography>denials: {result.denials}</Typography>
+                        </div>
 
-                    <div style={{ display: "grid" }}>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() =>
-                          handleOpenDialog("Approve", "Person", result)
-                        }
-                      >
-                        Approve
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        sx={{ marginTop: "4px" }}
-                        onClick={() =>
-                          handleOpenDialog("Deny", "Person", result)
-                        }
-                      >
-                        Deny
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        sx={{
-                          marginTop: "4px",
-                          color: "#fc7ebf",
-                          borderColor: "#fc7ebf",
-                        }}
-                        onClick={() =>
-                          handleOpenDialog("Delete", "Person", result)
-                        }
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </ListItem>
-                </>
-              );
-            })}
-          </List>
+                        <div style={{ display: "grid" }}>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() =>
+                              handleOpenDialog("Approve", "Person", result)
+                            }
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            sx={{ marginTop: "4px" }}
+                            onClick={() =>
+                              handleOpenDialog("Deny", "Person", result)
+                            }
+                          >
+                            Deny
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            sx={{
+                              marginTop: "4px",
+                              color: "#fc7ebf",
+                              borderColor: "#fc7ebf",
+                            }}
+                            onClick={() =>
+                              handleOpenDialog("Delete", "Person", result)
+                            }
+                          >
+                            Delete
+                          </Button>
+                        </div>
+                      </ListItem>
+                    </>
+                  );
+                })}
+              </List>
+            )}
+          </>
         );
       }
     }
@@ -199,6 +316,9 @@ const adminPeople = () => {
         <AdminDrawer />
         <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
           <Header title="People" />
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            Moderating: {modelLoading ? "True" : "False"}
+          </Typography>
           {list}
           <AdminDialog
             contentType={action.type}

@@ -5,7 +5,7 @@ import {
   getPostById,
   updatePost,
 } from "@utils/mongodb/mongoHelpers";
-import { checkWebsite, validID } from "@utils/validationHelpers";
+import { validID, validURL } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
         const valid = validate(data);
         let validWebsite;
         if (data.originalUrl) {
-          validWebsite = checkWebsite(data.originalUrl);
+          validWebsite = validURL(data.originalUrl);
         } else {
           validWebsite = true;
         }

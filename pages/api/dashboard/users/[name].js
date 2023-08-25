@@ -5,7 +5,7 @@ import {
   getPersonDash,
   updatePerson,
 } from "@utils/mongodb/mongoHelpers";
-import { checkWebsite, validName } from "@utils/validationHelpers";
+import { validName, validURL } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
 
 export default async function handler(req, res) {
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
         if (data.socials && data.socials.length > 0) {
           let i = 0;
           while (i < data.socials.length) {
-            if (!checkWebsite(data.socials[i])) {
+            if (!validURL(data.socials[i])) {
               validSocials = false;
 
               break;
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
         //needed for when username is created and no website is provided
         let validWebsite;
         if (data.website) {
-          validWebsite = checkWebsite(data.website);
+          validWebsite = validURL(data.website);
         } else {
           validWebsite = true;
         }

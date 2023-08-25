@@ -21,7 +21,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { createFilterOptions } from "@mui/material/useAutocomplete";
 import theme from "@utils/theme";
-import { checkWebsite } from "@utils/validationHelpers";
+import { validURL } from "@utils/validationHelpers";
 import { useState } from "react";
 
 //pass in and destructure props.
@@ -263,7 +263,7 @@ const PostDetails = ({
               value={value}
               onChange={(event, newValue) => {
                 if (newValue) {
-                  if (checkWebsite(newValue.inputValue)) {
+                  if (validURL(newValue.inputValue)) {
                     setDetails((details) => ({
                       ...details,
                       originalUrl: newValue.inputValue,
