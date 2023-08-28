@@ -12,7 +12,7 @@ import {
 import { alpha } from "@mui/material/styles";
 import { updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
-import { checkLinks, loadToxicity } from "@utils/moderation";
+import { checkLinks, loadToxicity, useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 import Pusher from "pusher-js";
@@ -80,7 +80,24 @@ const adminPeople = () => {
       if (model && modelLoading === false) {
         if (results && results.length > 0) {
           setModelLoading(true);
+          let tempProfiles = [];
           for (const result of results) {
+            result.toxic = [];
+            if (result.bio !== "") {
+              try {
+                const toxicBio = await useToxicity(model, result.bio);
+
+                if (toxicBio) {
+                  result.toxic.push("bio");
+
+                  tempProfiles.push(result);
+                }
+              } catch (error) {
+                console.log(error);
+                tempProfiles.push(result);
+                setModelLoading(false);
+              }
+            }
             let links = [];
             if (result.socials.length > 0) {
               links = result.socials;
@@ -88,33 +105,29 @@ const adminPeople = () => {
             if (result.website !== "") {
               links = [...links, result.website];
             }
-            // console.log(links);
             if (links.length > 0) {
               try {
-                handleCheckLinks(links);
+                const toxicLink = await handleCheckLinks(links, result);
+
+                if (toxicLink && !tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
               } catch (error) {
                 console.log(error);
+                tempProfiles.push(result);
+                setModelLoading(false);
               }
             }
-            // try {
-            //   const toxic = await useToxicity(model, result.bio);
-
-            //   if (toxic) {
-            //     setToxicProfiles([...toxicProfiles, result]);
-            //   } else {
-            //     handleUpdatePerson(result, "true");
-            //   }
-            // } catch (error) {
-            //   console.log(error);
-            //   setModelLoading(false);
-            // }
+            if (result.toxic.length === 0) {
+              handleUpdatePerson(result, "true");
+            }
           }
           setModelLoading(false);
+          setToxicProfiles(tempProfiles);
         }
       }
     };
     moderate();
-    console.log(results);
   }, [results, model]);
 
   useEffect(() => {
@@ -135,10 +148,18 @@ const adminPeople = () => {
   const handleCheckLinks = async (links, result) => {
     try {
       const badLinks = await checkLinks(links);
-      console.log(badLinks);
+
+      if (Object.keys(badLinks).length > 0) {
+        badLinks.matches?.forEach((match) => {
+          result.toxic.push(match.threat.url);
+        });
+
+        return result;
+      }
     } catch (error) {
       console.log(error);
-      setToxicProfiles([...toxicProfiles, result]);
+
+      throw new Error("failed to check links");
     }
   };
 
@@ -151,7 +172,7 @@ const adminPeople = () => {
 
     const userResponse = await updateUser(submission, "admin");
     if (!userResponse.ok) {
-      setToxicProfiles([...toxicProfiles, result]);
+      throw new Error("failed to update user");
     }
   };
 
@@ -197,7 +218,7 @@ const adminPeople = () => {
           <>
             {toxicProfiles.length > 0 && (
               <List>
-                {results.map((result) => {
+                {toxicProfiles.map((result) => {
                   return (
                     <>
                       <ListItem
@@ -222,7 +243,15 @@ const adminPeople = () => {
                             {result.name}
                           </Link>
 
-                          <Typography>bio: {result.bio}</Typography>
+                          <Typography
+                            sx={{
+                              border: result.toxic.includes("bio")
+                                ? `1px solid ${theme.palette.error.main}`
+                                : "none",
+                            }}
+                          >
+                            bio: {result.bio}
+                          </Typography>
                           <Typography sx={{ overflowWrap: "anywhere" }}>
                             email: {result.email}
                           </Typography>
@@ -233,6 +262,11 @@ const adminPeople = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                               underline="hover"
+                              sx={{
+                                border: result.toxic.includes(result.website)
+                                  ? `1px solid ${theme.palette.error.main}`
+                                  : "none",
+                              }}
                             >
                               {result.website}
                             </Link>
@@ -246,6 +280,11 @@ const adminPeople = () => {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   underline="hover"
+                                  sx={{
+                                    border: result.toxic.includes(social)
+                                      ? `1px solid ${theme.palette.error.main}`
+                                      : "none",
+                                  }}
                                 >
                                   {social}
                                 </Link>

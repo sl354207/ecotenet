@@ -91,6 +91,8 @@ export const checkLinks = async (links) => {
       }
     );
 
+    // returns empty object if no matches
+    // returns object with 'matches' key containing an array of objects if matches
     const response = await res.json();
     // console.log(response);
     return response;
