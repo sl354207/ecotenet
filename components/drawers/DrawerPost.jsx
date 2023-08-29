@@ -36,8 +36,30 @@ import { useRouter } from "next/router";
 import { useEffect, useReducer, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
+const slatePlugin = slate((slateDef) => ({
+  ...slateDef,
+  plugins: {
+    ...slateDef.plugins,
+    link: {
+      // we can customize the h1 by providing a transform function
+      link: slateDef.plugins.link.link((linkDef) => ({
+        ...linkDef, // spread it, so that the new config contains all defaults
+        Component: ({ style, children, ...props }) => (
+          <a
+            {...props}
+            target={props.openInNewWindow ? "_blank" : undefined}
+            style={{ ...style, color: "#c8fcff" }}
+          >
+            {children}
+          </a>
+        ),
+      })),
+    },
+  },
+}));
+
 // Define which plugins we want to use.
-const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
+const cellPlugins = [slatePlugin, customImage, customVideo, spacer, divider];
 
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,

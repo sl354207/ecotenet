@@ -52,6 +52,31 @@ const getPosts = async (status, approved) => {
     throw new Error(error);
   }
 };
+const getAdminPosts = async (status, approved) => {
+  try {
+    const db = await connectToDatabase();
+
+    const posts = await db
+      .collection("posts")
+      .find({ status: status, approved: approved })
+      .project({
+        approved: 1,
+        title: 1,
+        description: 1,
+        name: 1,
+        id: 1,
+        version: 1,
+        rows: 1,
+        tags: 1,
+        originalUrl: 1,
+      })
+      .toArray();
+
+    return posts;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const getPostsByCategoryAndRegion = async (category, ecoregion) => {
   try {
     const db = await connectToDatabase();
@@ -1059,6 +1084,7 @@ module.exports = {
   connectToDatabase,
   createPost,
   getPosts,
+  getAdminPosts,
   getPostsByCategoryAndRegion,
   getFeatures,
   getFeatureCandidates,

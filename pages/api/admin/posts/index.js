@@ -1,4 +1,7 @@
-import { getFeatureCandidates, getPosts } from "@utils/mongodb/mongoHelpers";
+import {
+  getAdminPosts,
+  getFeatureCandidates,
+} from "@utils/mongodb/mongoHelpers";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
@@ -26,7 +29,7 @@ export default async function handler(req, res) {
         (approved === "true" || approved === "false" || approved === "pending")
       ) {
         try {
-          const posts = await getPosts(status, approved);
+          const posts = await getAdminPosts(status, approved);
 
           return res.status(200).json(posts);
         } catch (err) {

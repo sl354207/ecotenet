@@ -10,11 +10,30 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import { getTextContents } from "@react-page/editor";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
+
+import customImage from "@plugins/customImage";
+import customVideo from "@plugins/customVideo";
+// The editor core
+// import Editor from "@react-page/editor";
+import "@react-page/editor/lib/index.css";
+import divider from "@react-page/plugins-divider";
+import "@react-page/plugins-image/lib/index.css";
+import slate from "@react-page/plugins-slate";
+import "@react-page/plugins-slate/lib/index.css";
+import spacer from "@react-page/plugins-spacer";
+import "@react-page/plugins-spacer/lib/index.css";
+import "@react-page/plugins-video/lib/index.css";
+import { checkLinks, loadToxicity, useToxicity } from "@utils/moderation";
+import Pusher from "pusher-js";
+import { useEffect, useState } from "react";
+
+const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
 
 const adminPosts = () => {
   const router = useRouter();
@@ -27,6 +46,287 @@ const adminPosts = () => {
   } = useSWR("/api/admin/posts?q1=published&q2=pending", fetcher, {
     shouldRetryOnError: false,
   });
+
+  console.log(results);
+
+  const [notifications, setNotifications] = useState(0);
+  const [model, setModel] = useState();
+  const [modelLoading, setModelLoading] = useState(false);
+  const [pusher, setPusher] = useState();
+  const [toxicPosts, setToxicPosts] = useState([]);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      setModelLoading(true);
+      try {
+        const model = await loadToxicity(0.7);
+
+        if (model) {
+          setModel(model);
+          setModelLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+
+        setModelLoading(false);
+      }
+    };
+    loadModel();
+    setPusher(
+      new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
+        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+      })
+    );
+  }, []);
+
+  // useEffect(() => {
+  //   if (results) {
+
+  //   }
+  // }, [results]);
+
+  useEffect(() => {
+    const moderate = async () => {
+      if (model && modelLoading === false) {
+        if (results && results.length > 0) {
+          setModelLoading(true);
+          let tempProfiles = [];
+
+          for (const result of results) {
+            result.toxic = [];
+
+            try {
+              const toxicTitle = await useToxicity(model, result.title);
+
+              if (toxicTitle) {
+                result.toxic.push("title");
+
+                tempProfiles.push(result);
+              }
+            } catch (error) {
+              console.log(error);
+              tempProfiles.push(result);
+              setModelLoading(false);
+            }
+            try {
+              const toxicDescription = await useToxicity(
+                model,
+                result.description
+              );
+
+              if (toxicDescription) {
+                result.toxic.push("description");
+
+                tempProfiles.push(result);
+              }
+            } catch (error) {
+              console.log(error);
+              tempProfiles.push(result);
+              setModelLoading(false);
+            }
+            if (result.tags.length > 0) {
+              for (const tag of result.tags) {
+                try {
+                  const toxicTag = await useToxicity(model, tag);
+
+                  if (toxicTag) {
+                    result.toxic.push("tag");
+
+                    tempProfiles.push(result);
+                    break;
+                  }
+                } catch (error) {
+                  console.log(error);
+                  tempProfiles.push(result);
+                  setModelLoading(false);
+                }
+              }
+            }
+
+            const textContents = getTextContents(result, {
+              lang: "en",
+              cellPlugins: cellPlugins,
+            });
+            if (textContents.length > 0) {
+              for (const line of textContents) {
+                try {
+                  const toxicText = await useToxicity(model, line);
+
+                  if (toxicText) {
+                    result.toxic.push("text");
+
+                    tempProfiles.push(result);
+                    break;
+                  }
+                } catch (error) {
+                  console.log(error);
+                  tempProfiles.push(result);
+                  setModelLoading(false);
+                }
+              }
+            }
+            // console.log(textContents);
+            if (result.originalUrl && result.originalUrl !== "") {
+              try {
+                const toxicLink = await handleCheckLinks(
+                  [result.originalUrl],
+                  result
+                );
+
+                if (toxicLink) {
+                  tempProfiles.push(result);
+                }
+              } catch (error) {
+                console.log(error);
+                tempProfiles.push(result);
+                setModelLoading(false);
+              }
+            }
+            if (result.rows.length > 0) {
+              const flattened = flat(result.rows);
+              // for (const row of result.rows) {
+              //   const flattenedRow = flattenObject(row);
+              //   // console.log(typeof row);
+              //   // const flattenedRow = row.flat();
+              console.log(flattened);
+              // }
+            }
+          }
+          // contents.push(result.title, result.description, ...result.tags);
+          setModelLoading(false);
+          setToxicPosts(tempProfiles);
+        }
+        // let tempProfiles = [];
+        // for (const result of results) {
+        //   result.toxic = [];
+        //   if (result.bio !== "") {
+        //     try {
+        //       const toxicBio = await useToxicity(model, result.bio);
+
+        //       if (toxicBio) {
+        //         result.toxic.push("bio");
+
+        //         tempProfiles.push(result);
+        //       }
+        //     } catch (error) {
+        //       console.log(error);
+        //       tempProfiles.push(result);
+        //       setModelLoading(false);
+        //     }
+        //   }
+        //   let links = [];
+        //   if (result.socials.length > 0) {
+        //     links = result.socials;
+        //   }
+        //   if (result.website !== "") {
+        //     links = [...links, result.website];
+        //   }
+        //   if (links.length > 0) {
+        //     try {
+        //       const toxicLink = await handleCheckLinks(links, result);
+
+        //       if (toxicLink && !tempProfiles.includes(result)) {
+        //         tempProfiles.push(result);
+        //       }
+        //     } catch (error) {
+        //       console.log(error);
+        //       tempProfiles.push(result);
+        //       setModelLoading(false);
+        //     }
+        //   }
+        //   if (result.toxic.length === 0) {
+        //     handleUpdatePerson(result, "true");
+        //   }
+        // }
+      }
+    };
+
+    moderate();
+  }, [results, model]);
+
+  useEffect(() => {
+    if (pusher) {
+      const channel = pusher.subscribe("ecotenet");
+
+      channel.bind("post", () => {
+        setNotifications(notifications + 1);
+      });
+      mutate("/api/admin/posts?q1=published&q2=pending");
+
+      return () => {
+        pusher.unsubscribe("ecotenet");
+      };
+    }
+  }, [notifications]);
+
+  const handleCheckLinks = async (links, result) => {
+    try {
+      const badLinks = await checkLinks(links);
+
+      if (Object.keys(badLinks).length > 0) {
+        return result;
+      }
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("failed to check links");
+    }
+  };
+
+  const flattenObject = (obj) => {
+    const flattened = {};
+
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+
+      if (typeof value === "object" && value !== null) {
+        Object.assign(flattened, flattenObject(value));
+      } else if (Array.isArray(value)) {
+        const arr = flatten([], value);
+        Object.assign(flattened, flattenObject(arr));
+      } else {
+        flattened[key] = value;
+      }
+    });
+
+    return flattened;
+  };
+  // const flattenObject = (obj) => {
+  //   const flattened = {};
+
+  //   Object.keys(obj).forEach((key) => {
+  //     const value = obj[key];
+
+  //     if (typeof value === "object" && value !== null) {
+  //       Object.assign(flattened, flattenObject(value));
+  //     } else if (Array.isArray(value)) {
+  //       const arr = flatten({}, value);
+  //       Object.assign(flattened, flattenObject(arr));
+  //     } else {
+  //       flattened[key] = value;
+  //     }
+  //   });
+
+  //   return flattened;
+  // };
+
+  function flatten(into, node) {
+    if (node == null) return into;
+    if (Array.isArray(node)) return node.reduce(flatten, into);
+    into.push(node);
+    return flatten(into, node.children);
+  }
+
+  function flat(array) {
+    var result = [];
+    array.forEach(function (a) {
+      result.push(a);
+      if (Array.isArray(a.children)) {
+        result = result.concat(flat(a.children));
+      }
+    });
+    return result;
+  }
 
   let list;
 
@@ -67,44 +367,53 @@ const adminPosts = () => {
         );
       } else {
         list = (
-          <List>
-            {results.map((result) => {
-              return (
-                <>
-                  <ListItemButton
-                    key={result._id}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "start",
-                      textTransform: "none",
-                      border: `1px solid ${alpha(
-                        theme.palette.secondary.main,
-                        1
-                      )}`,
-                      margin: "20px auto",
-                      borderRadius: "10px",
-                    }}
-                    onClick={() => router.push(`/admin/posts/${result._id}`)}
-                  >
-                    <div style={{ display: "flow-root", flexGrow: 1 }}>
-                      <Link
-                        href={`/admin/people/${result.name}`}
-                        underline="hover"
+          <>
+            {toxicPosts.length > 0 && (
+              <List>
+                {toxicPosts.map((result) => {
+                  return (
+                    <>
+                      <ListItemButton
+                        key={result._id}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "start",
+                          textTransform: "none",
+                          border: `1px solid ${alpha(
+                            theme.palette.secondary.main,
+                            1
+                          )}`,
+                          margin: "20px auto",
+                          borderRadius: "10px",
+                        }}
+                        onClick={() =>
+                          router.push(`/admin/posts/${result._id}`)
+                        }
                       >
-                        {result.name}
-                      </Link>
+                        <div style={{ display: "flow-root", flexGrow: 1 }}>
+                          <Link
+                            href={`/admin/people/${result.name}`}
+                            underline="hover"
+                          >
+                            {result.name}
+                          </Link>
 
-                      <ListItemText primary={result.title}></ListItemText>
-                    </div>
+                          <ListItemText primary={result.title}></ListItemText>
+                        </div>
 
-                    <Link href={`/admin/posts/${result._id}`} underline="hover">
-                      View Post
-                    </Link>
-                  </ListItemButton>
-                </>
-              );
-            })}
-          </List>
+                        <Link
+                          href={`/admin/posts/${result._id}`}
+                          underline="hover"
+                        >
+                          View Post
+                        </Link>
+                      </ListItemButton>
+                    </>
+                  );
+                })}
+              </List>
+            )}
+          </>
         );
       }
     }
@@ -122,6 +431,9 @@ const adminPosts = () => {
         <AdminDrawer />
         <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
           <Header title="Posts" />
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            Moderating: {modelLoading ? "True" : "False"}
+          </Typography>
           {list}
         </div>
       </div>
