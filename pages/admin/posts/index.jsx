@@ -30,6 +30,7 @@ import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
 import { checkLinks, loadToxicity, useToxicity } from "@utils/moderation";
+import { validURL } from "@utils/validationHelpers";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 
@@ -78,12 +79,6 @@ const adminPosts = () => {
       })
     );
   }, []);
-
-  // useEffect(() => {
-  //   if (results) {
-
-  //   }
-  // }, [results]);
 
   useEffect(() => {
     const moderate = async () => {
@@ -174,6 +169,7 @@ const adminPosts = () => {
                 );
 
                 if (toxicLink) {
+                  result.toxic.push("originalUrl");
                   tempProfiles.push(result);
                 }
               } catch (error) {
@@ -183,13 +179,37 @@ const adminPosts = () => {
               }
             }
             if (result.rows.length > 0) {
-              const flattened = flat(result.rows);
-              // for (const row of result.rows) {
-              //   const flattenedRow = flattenObject(row);
-              //   // console.log(typeof row);
-              //   // const flattenedRow = row.flat();
-              console.log(flattened);
-              // }
+              const validLinks = [];
+              for (const row of result.rows) {
+                const postLinks = findPostLinks(row, []);
+                for (const link of postLinks) {
+                  if (validURL(link)) {
+                    validLinks.push(link);
+                  } else {
+                    result.toxic.push("invalidLink");
+                    tempProfiles.push(result);
+                  }
+                }
+                // console.log(postLinks);
+              }
+              // console.log(validLinks);
+
+              if (validLinks.length > 0) {
+                // let validLinks = true;
+
+                try {
+                  const toxicLink = await handleCheckLinks(validLinks, result);
+
+                  if (toxicLink) {
+                    result.toxic.push("toxicLink");
+                    tempProfiles.push(result);
+                  }
+                } catch (error) {
+                  console.log(error);
+                  tempProfiles.push(result);
+                  setModelLoading(false);
+                }
+              }
             }
           }
           // contents.push(result.title, result.description, ...result.tags);
@@ -273,60 +293,20 @@ const adminPosts = () => {
     }
   };
 
-  const flattenObject = (obj) => {
-    const flattened = {};
-
+  const findPostLinks = (obj, arr) => {
     Object.keys(obj).forEach((key) => {
       const value = obj[key];
+      if (value === "LINK/LINK" && !arr.includes(obj.data.href)) {
+        arr.push(obj.data.href);
+      }
 
       if (typeof value === "object" && value !== null) {
-        Object.assign(flattened, flattenObject(value));
-      } else if (Array.isArray(value)) {
-        const arr = flatten([], value);
-        Object.assign(flattened, flattenObject(arr));
-      } else {
-        flattened[key] = value;
+        findPostLinks(value, arr);
       }
     });
 
-    return flattened;
+    return arr;
   };
-  // const flattenObject = (obj) => {
-  //   const flattened = {};
-
-  //   Object.keys(obj).forEach((key) => {
-  //     const value = obj[key];
-
-  //     if (typeof value === "object" && value !== null) {
-  //       Object.assign(flattened, flattenObject(value));
-  //     } else if (Array.isArray(value)) {
-  //       const arr = flatten({}, value);
-  //       Object.assign(flattened, flattenObject(arr));
-  //     } else {
-  //       flattened[key] = value;
-  //     }
-  //   });
-
-  //   return flattened;
-  // };
-
-  function flatten(into, node) {
-    if (node == null) return into;
-    if (Array.isArray(node)) return node.reduce(flatten, into);
-    into.push(node);
-    return flatten(into, node.children);
-  }
-
-  function flat(array) {
-    var result = [];
-    array.forEach(function (a) {
-      result.push(a);
-      if (Array.isArray(a.children)) {
-        result = result.concat(flat(a.children));
-      }
-    });
-    return result;
-  }
 
   let list;
 
@@ -399,6 +379,14 @@ const adminPosts = () => {
                           </Link>
 
                           <ListItemText primary={result.title}></ListItemText>
+                          {result.toxic.length > 0 && (
+                            <Typography>
+                              toxic:{" "}
+                              {result.toxic.map((reason) => (
+                                <>{reason}, </>
+                              ))}
+                            </Typography>
+                          )}
                         </div>
 
                         <Link
