@@ -85,11 +85,11 @@ export function validEmail(string) {
 
 export function validImagePluginURL(string) {
   if (typeof string === "string" && /^blob:https?:\/\//.test(string)) {
-    // console.log("true blob");
     return true;
   } else {
     const regex =
       /^https[^\?]*.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)(\?(.*))?$/gim;
+
     return regex.test(string);
   }
 }

@@ -29,8 +29,13 @@ import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
-import { checkLinks, loadToxicity, useToxicity } from "@utils/moderation";
-import { validURL } from "@utils/validationHelpers";
+import {
+  checkLinks,
+  loadToxicity,
+  useImageClassifier,
+  useToxicity,
+} from "@utils/moderation";
+import { validImagePluginURL, validURL } from "@utils/validationHelpers";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 
@@ -180,6 +185,7 @@ const adminPosts = () => {
             }
             if (result.rows.length > 0) {
               const validLinks = [];
+              const validPhotos = [];
               for (const row of result.rows) {
                 const postLinks = findPostLinks(row, []);
                 for (const link of postLinks) {
@@ -190,8 +196,19 @@ const adminPosts = () => {
                     tempProfiles.push(result);
                   }
                 }
-                // console.log(postLinks);
+
+                const postPhotos = findPostPhotos(row, []);
+                for (const link of postPhotos) {
+                  if (validImagePluginURL(link)) {
+                    validPhotos.push(link);
+                  } else {
+                    result.toxic.push("invalidPhoto");
+                    tempProfiles.push(result);
+                  }
+                }
+                // console.log(postPhotos);
               }
+              // console.log(validPhotos);
               // console.log(validLinks);
 
               if (validLinks.length > 0) {
@@ -208,6 +225,23 @@ const adminPosts = () => {
                   console.log(error);
                   tempProfiles.push(result);
                   setModelLoading(false);
+                }
+              }
+              if (validPhotos.length > 0) {
+                for (const link of validPhotos) {
+                  try {
+                    const toxicPhoto = await handleCheckPhoto(link, result);
+                    console.log(toxicPhoto);
+
+                    if (toxicPhoto) {
+                      result.toxic.push("toxicPhoto");
+                      tempProfiles.push(result);
+                    }
+                  } catch (error) {
+                    console.log(error);
+                    tempProfiles.push(result);
+                    setModelLoading(false);
+                  }
                 }
               }
             }
@@ -292,6 +326,40 @@ const adminPosts = () => {
       throw new Error("failed to check links");
     }
   };
+  const handleCheckPhoto = async (link, result) => {
+    const classifyImg = new Image();
+    classifyImg.src = link;
+
+    classifyImg.onload = async () => {
+      classifyImg.crossOrigin = "anonymous";
+
+      if (classifyImg.complete) {
+        try {
+          const inappropriateImage = await useImageClassifier(
+            model,
+            classifyImg
+          );
+
+          return inappropriateImage;
+        } catch (error) {
+          console.log(error);
+
+          throw new Error("failed to check photo");
+        }
+      }
+    };
+    // try {
+    //   const badLinks = await checkLinks(link);
+
+    //   if (Object.keys(badLinks).length > 0) {
+    //     return result;
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+
+    //   throw new Error("failed to check links");
+    // }
+  };
 
   const findPostLinks = (obj, arr) => {
     Object.keys(obj).forEach((key) => {
@@ -302,6 +370,27 @@ const adminPosts = () => {
 
       if (typeof value === "object" && value !== null) {
         findPostLinks(value, arr);
+      }
+    });
+
+    return arr;
+  };
+  const findPostPhotos = (obj, arr) => {
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+      if (
+        obj.plugin &&
+        obj.plugin.id === "customImage" &&
+        !arr.includes(obj.dataI18n.default.image.url)
+      ) {
+        arr.push(obj.dataI18n.default.image.url);
+      }
+      // if (value === "LINK/LINK" && !arr.includes(obj.data.href)) {
+      //   arr.push(obj.data.href);
+      // }
+
+      if (typeof value === "object" && value !== null) {
+        findPostPhotos(value, arr);
       }
     });
 

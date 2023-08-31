@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useImageClassifier } from "@utils/moderation";
 import theme from "@utils/theme";
+import { validImagePluginURL } from "@utils/validationHelpers";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { connectField } from "uniforms";
@@ -139,35 +140,42 @@ function ImageUploadField({ onChange, value }) {
     }
   };
   const handleImageUrl = async (e, newValue) => {
+    if (newValue === null) {
+      onChange({ url: undefined, saved: false, file: {} });
+      setImage({ url: undefined, saved: false, file: {} });
+    }
     if (newValue && newValue !== null) {
       const imageUrl = newValue.inputValue;
-      setState({ ...state, isUploading: true });
-      // convert img from File to Image type for classification
-      const classifyImg = new Image();
-      // console.log(classifyImg);
-      // const objectUrl = URL.createObjectURL(file);
-      classifyImg.onload = async () => {
-        console.log(classifyImg);
-        classifyImg.crossOrigin = "anonymous";
-        // classifyImg.width = await this.naturalWidth;
-        // classifyImg.height = await this.naturalHeight;
-        const inappropriateImage = await useImageClassifier(model, classifyImg);
-        // console.log(inappropriateImage);
+      if (!validImagePluginURL(imageUrl)) {
+        setState({ ...state, isUploading: false });
+        handleError(INAPPROPRIATE_ERROR_CODE);
+      } else {
+        setState({ ...state, isUploading: true });
+        // convert img from File to Image type for classification
 
-        if (inappropriateImage) {
-          setState({ ...state, isUploading: false });
-          handleError(INAPPROPRIATE_ERROR_CODE);
-        } else {
-          // const imageUrl = URL.createObjectURL(file);
+        const classifyImg = new Image();
+        classifyImg.src = imageUrl;
 
-          setImage({ url: imageUrl, saved: false, file: {} });
-          onChange({ url: imageUrl, saved: false, file: {} });
-          setState({ ...state, isUploading: false });
-        }
+        classifyImg.onload = async () => {
+          classifyImg.crossOrigin = "anonymous";
 
-        // URL.revokeObjectURL(objectUrl);
-      };
-      classifyImg.src = imageUrl;
+          if (classifyImg.complete) {
+            const inappropriateImage = await useImageClassifier(
+              model,
+              classifyImg
+            );
+
+            if (inappropriateImage) {
+              setState({ ...state, isUploading: false });
+              handleError(INAPPROPRIATE_ERROR_CODE);
+            } else {
+              setImage({ url: imageUrl, saved: false, file: {} });
+              onChange({ url: imageUrl, saved: false, file: {} });
+              setState({ ...state, isUploading: false });
+            }
+          }
+        };
+      }
     }
   };
 
@@ -455,49 +463,6 @@ function ImageUploadField({ onChange, value }) {
         <Typography variant="body1" sx={{ margin: "20px 16px 0 16px" }}>
           or
         </Typography>
-        {/* <TextField
-          placeholder="http://example.com/image.png"
-          label="Existing image URL"
-          name="url"
-          id="url"
-          sx={{
-            display: "flex",
-            flexGrow: 1,
-            marginBottom: "5px",
-            width: "300px",
-            [theme.breakpoints.down("md")]: {
-              width: "250px",
-              display: "flex",
-              marginBottom: "5px",
-            },
-            [theme.breakpoints.down("sm")]: {
-              width: "150px",
-              display: "flex",
-              marginBottom: "5px",
-            },
-          }}
-          value={
-            value.url &&
-            (value.url.startsWith("blob:") ||
-              value.url.startsWith("https://eco-media-bucket.s3"))
-              ? ""
-              : value.url || ""
-          }
-          inputProps={{ type: "url", maxLength: 100 }}
-          disabled={
-            (value.url && value.url.startsWith("blob:")) ||
-            (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
-              ? true
-              : false
-          }
-          onChange={(e) => {
-            const imageUrl = e.target.value;
-            console.log(imageUrl);
-            setImage({ url: imageUrl, saved: false, file: {} });
-            onChange({ url: imageUrl, saved: false, file: {} });
-          }}
-          
-        /> */}
         <Autocomplete
           value={
             value.url &&

@@ -43,6 +43,7 @@ export const loadImageClassifier = async () => {
 
 export const useImageClassifier = async (model, img) => {
   tf.enableProdMode();
+  // console.log(img);
 
   try {
     const predictions = await model.classify(img);
@@ -53,6 +54,7 @@ export const useImageClassifier = async (model, img) => {
           p.className === "Porn" ||
           p.className === "Hentai")
     );
+    // console.log(predictions);
 
     return prediction.length > 0;
   } catch (error) {
