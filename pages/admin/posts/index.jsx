@@ -31,6 +31,7 @@ import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
 import {
   checkLinks,
+  loadImageClassifier,
   loadToxicity,
   useImageClassifier,
   useToxicity,
@@ -56,7 +57,8 @@ const adminPosts = () => {
   console.log(results);
 
   const [notifications, setNotifications] = useState(0);
-  const [model, setModel] = useState();
+  const [textModel, setTextModel] = useState();
+  const [imageModel, setImageModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
   const [pusher, setPusher] = useState();
   const [toxicPosts, setToxicPosts] = useState([]);
@@ -65,10 +67,15 @@ const adminPosts = () => {
     const loadModel = async () => {
       setModelLoading(true);
       try {
-        const model = await loadToxicity(0.7);
+        const textModel = await loadToxicity(0.7);
+        const imageModel = await loadImageClassifier();
 
-        if (model) {
-          setModel(model);
+        if (textModel) {
+          setTextModel(textModel);
+          setModelLoading(false);
+        }
+        if (imageModel) {
+          setImageModel(imageModel);
           setModelLoading(false);
         }
       } catch (error) {
@@ -83,11 +90,12 @@ const adminPosts = () => {
         cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
       })
     );
+    // THINK ABOUT IF MODEL DOESN'T LOAD
   }, []);
 
   useEffect(() => {
     const moderate = async () => {
-      if (model && modelLoading === false) {
+      if (textModel && imageModel && modelLoading === false) {
         if (results && results.length > 0) {
           setModelLoading(true);
           let tempProfiles = [];
@@ -96,7 +104,7 @@ const adminPosts = () => {
             result.toxic = [];
 
             try {
-              const toxicTitle = await useToxicity(model, result.title);
+              const toxicTitle = await useToxicity(textModel, result.title);
 
               if (toxicTitle) {
                 result.toxic.push("title");
@@ -110,7 +118,7 @@ const adminPosts = () => {
             }
             try {
               const toxicDescription = await useToxicity(
-                model,
+                textModel,
                 result.description
               );
 
@@ -127,7 +135,7 @@ const adminPosts = () => {
             if (result.tags.length > 0) {
               for (const tag of result.tags) {
                 try {
-                  const toxicTag = await useToxicity(model, tag);
+                  const toxicTag = await useToxicity(textModel, tag);
 
                   if (toxicTag) {
                     result.toxic.push("tag");
@@ -150,7 +158,7 @@ const adminPosts = () => {
             if (textContents.length > 0) {
               for (const line of textContents) {
                 try {
-                  const toxicText = await useToxicity(model, line);
+                  const toxicText = await useToxicity(textModel, line);
 
                   if (toxicText) {
                     result.toxic.push("text");
@@ -166,7 +174,11 @@ const adminPosts = () => {
               }
             }
             // console.log(textContents);
-            if (result.originalUrl && result.originalUrl !== "") {
+            if (
+              result.originalUrl &&
+              result.originalUrl !== "" &&
+              validURL(result.originalUrl)
+            ) {
               try {
                 const toxicLink = await handleCheckLinks(
                   [result.originalUrl],
@@ -174,7 +186,7 @@ const adminPosts = () => {
                 );
 
                 if (toxicLink) {
-                  result.toxic.push("originalUrl");
+                  result.toxic.push("toxicOriginalUrl");
                   tempProfiles.push(result);
                 }
               } catch (error) {
@@ -182,12 +194,16 @@ const adminPosts = () => {
                 tempProfiles.push(result);
                 setModelLoading(false);
               }
+            } else {
+              result.toxic.push("invalidOriginalUrl");
+              tempProfiles.push(result);
             }
             if (result.rows.length > 0) {
               const validLinks = [];
               const validPhotos = [];
               for (const row of result.rows) {
                 const postLinks = findPostLinks(row, []);
+                // console.log(postLinks);
                 for (const link of postLinks) {
                   if (validURL(link)) {
                     validLinks.push(link);
@@ -230,8 +246,8 @@ const adminPosts = () => {
               if (validPhotos.length > 0) {
                 for (const link of validPhotos) {
                   try {
-                    const toxicPhoto = await handleCheckPhoto(link, result);
-                    console.log(toxicPhoto);
+                    const toxicPhoto = await handleCheckPhoto(link);
+                    // console.log(toxicPhoto);
 
                     if (toxicPhoto) {
                       result.toxic.push("toxicPhoto");
@@ -245,58 +261,19 @@ const adminPosts = () => {
                 }
               }
             }
+            // if (result.toxic.length === 0) {
+            //     handleUpdatePerson(result, "true");
+            //   }
           }
-          // contents.push(result.title, result.description, ...result.tags);
+
           setModelLoading(false);
           setToxicPosts(tempProfiles);
         }
-        // let tempProfiles = [];
-        // for (const result of results) {
-        //   result.toxic = [];
-        //   if (result.bio !== "") {
-        //     try {
-        //       const toxicBio = await useToxicity(model, result.bio);
-
-        //       if (toxicBio) {
-        //         result.toxic.push("bio");
-
-        //         tempProfiles.push(result);
-        //       }
-        //     } catch (error) {
-        //       console.log(error);
-        //       tempProfiles.push(result);
-        //       setModelLoading(false);
-        //     }
-        //   }
-        //   let links = [];
-        //   if (result.socials.length > 0) {
-        //     links = result.socials;
-        //   }
-        //   if (result.website !== "") {
-        //     links = [...links, result.website];
-        //   }
-        //   if (links.length > 0) {
-        //     try {
-        //       const toxicLink = await handleCheckLinks(links, result);
-
-        //       if (toxicLink && !tempProfiles.includes(result)) {
-        //         tempProfiles.push(result);
-        //       }
-        //     } catch (error) {
-        //       console.log(error);
-        //       tempProfiles.push(result);
-        //       setModelLoading(false);
-        //     }
-        //   }
-        //   if (result.toxic.length === 0) {
-        //     handleUpdatePerson(result, "true");
-        //   }
-        // }
       }
     };
 
     moderate();
-  }, [results, model]);
+  }, [results, textModel, imageModel]);
 
   useEffect(() => {
     if (pusher) {
@@ -326,39 +303,33 @@ const adminPosts = () => {
       throw new Error("failed to check links");
     }
   };
-  const handleCheckPhoto = async (link, result) => {
-    const classifyImg = new Image();
-    classifyImg.src = link;
 
-    classifyImg.onload = async () => {
-      classifyImg.crossOrigin = "anonymous";
+  const handleCheckPhoto = async (url) => {
+    try {
+      const img = await loadImage(url);
 
-      if (classifyImg.complete) {
-        try {
-          const inappropriateImage = await useImageClassifier(
-            model,
-            classifyImg
-          );
+      const inappropriateImage = await useImageClassifier(imageModel, img);
 
-          return inappropriateImage;
-        } catch (error) {
-          console.log(error);
+      return inappropriateImage;
+    } catch (error) {
+      console.log(error);
 
-          throw new Error("failed to check photo");
-        }
-      }
-    };
-    // try {
-    //   const badLinks = await checkLinks(link);
+      throw new Error("failed to check photo");
+    }
+  };
 
-    //   if (Object.keys(badLinks).length > 0) {
-    //     return result;
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-
-    //   throw new Error("failed to check links");
-    // }
+  const loadImage = (path) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous"; // to avoid CORS if used with Canvas
+      img.src = path;
+      img.onload = () => {
+        resolve(img);
+      };
+      img.onerror = (e) => {
+        reject(e);
+      };
+    });
   };
 
   const findPostLinks = (obj, arr) => {
