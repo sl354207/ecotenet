@@ -29,6 +29,7 @@ import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
+import { updatePost } from "@utils/apiHelpers";
 import {
   checkLinks,
   loadImageClassifier,
@@ -54,12 +55,11 @@ const adminPosts = () => {
     shouldRetryOnError: false,
   });
 
-  console.log(results);
-
   const [notifications, setNotifications] = useState(0);
   const [textModel, setTextModel] = useState();
   const [imageModel, setImageModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
+  const [modelError, setModelError] = useState(false);
   const [pusher, setPusher] = useState();
   const [toxicPosts, setToxicPosts] = useState([]);
 
@@ -80,7 +80,7 @@ const adminPosts = () => {
         }
       } catch (error) {
         console.log(error);
-
+        setModelError(true);
         setModelLoading(false);
       }
     };
@@ -109,11 +109,16 @@ const adminPosts = () => {
               if (toxicTitle) {
                 result.toxic.push("title");
 
-                tempProfiles.push(result);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
               }
             } catch (error) {
               console.log(error);
-              tempProfiles.push(result);
+              if (!tempProfiles.includes(result)) {
+                tempProfiles.push(result);
+              }
+              setModelError(true);
               setModelLoading(false);
             }
             try {
@@ -125,11 +130,16 @@ const adminPosts = () => {
               if (toxicDescription) {
                 result.toxic.push("description");
 
-                tempProfiles.push(result);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
               }
             } catch (error) {
               console.log(error);
-              tempProfiles.push(result);
+              if (!tempProfiles.includes(result)) {
+                tempProfiles.push(result);
+              }
+              setModelError(true);
               setModelLoading(false);
             }
             if (result.tags.length > 0) {
@@ -140,12 +150,17 @@ const adminPosts = () => {
                   if (toxicTag) {
                     result.toxic.push("tag");
 
-                    tempProfiles.push(result);
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
                     break;
                   }
                 } catch (error) {
                   console.log(error);
-                  tempProfiles.push(result);
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
+                  setModelError(true);
                   setModelLoading(false);
                 }
               }
@@ -163,22 +178,29 @@ const adminPosts = () => {
                   if (toxicText) {
                     result.toxic.push("text");
 
-                    tempProfiles.push(result);
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
                     break;
                   }
                 } catch (error) {
                   console.log(error);
-                  tempProfiles.push(result);
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
+                  setModelError(true);
                   setModelLoading(false);
                 }
               }
             }
-            // console.log(textContents);
-            if (
-              result.originalUrl &&
-              result.originalUrl !== "" &&
-              validURL(result.originalUrl)
-            ) {
+
+            if (result.originalUrl && result.originalUrl !== "") {
+              if (!validURL(result.originalUrl)) {
+                result.toxic.push("invalidOriginalUrl");
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
+              }
               try {
                 const toxicLink = await handleCheckLinks(
                   [result.originalUrl],
@@ -187,29 +209,32 @@ const adminPosts = () => {
 
                 if (toxicLink) {
                   result.toxic.push("toxicOriginalUrl");
-                  tempProfiles.push(result);
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
                 }
               } catch (error) {
                 console.log(error);
-                tempProfiles.push(result);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
                 setModelLoading(false);
               }
-            } else {
-              result.toxic.push("invalidOriginalUrl");
-              tempProfiles.push(result);
             }
             if (result.rows.length > 0) {
               const validLinks = [];
               const validPhotos = [];
               for (const row of result.rows) {
                 const postLinks = findPostLinks(row, []);
-                // console.log(postLinks);
+
                 for (const link of postLinks) {
                   if (validURL(link)) {
                     validLinks.push(link);
                   } else {
                     result.toxic.push("invalidLink");
-                    tempProfiles.push(result);
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
                   }
                 }
 
@@ -219,27 +244,28 @@ const adminPosts = () => {
                     validPhotos.push(link);
                   } else {
                     result.toxic.push("invalidPhoto");
-                    tempProfiles.push(result);
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
                   }
                 }
-                // console.log(postPhotos);
               }
-              // console.log(validPhotos);
-              // console.log(validLinks);
 
               if (validLinks.length > 0) {
-                // let validLinks = true;
-
                 try {
                   const toxicLink = await handleCheckLinks(validLinks, result);
 
                   if (toxicLink) {
                     result.toxic.push("toxicLink");
-                    tempProfiles.push(result);
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
                   }
                 } catch (error) {
                   console.log(error);
-                  tempProfiles.push(result);
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
                   setModelLoading(false);
                 }
               }
@@ -247,23 +273,34 @@ const adminPosts = () => {
                 for (const link of validPhotos) {
                   try {
                     const toxicPhoto = await handleCheckPhoto(link);
-                    // console.log(toxicPhoto);
 
                     if (toxicPhoto) {
                       result.toxic.push("toxicPhoto");
-                      tempProfiles.push(result);
+                      if (!tempProfiles.includes(result)) {
+                        tempProfiles.push(result);
+                      }
                     }
                   } catch (error) {
                     console.log(error);
-                    tempProfiles.push(result);
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
+                    setModelError(true);
                     setModelLoading(false);
                   }
                 }
               }
             }
-            // if (result.toxic.length === 0) {
-            //     handleUpdatePerson(result, "true");
-            //   }
+            if (result.toxic.length === 0) {
+              try {
+                handleUpdatePost(result, "true");
+              } catch (error) {
+                console.log(error);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
+              }
+            }
           }
 
           setModelLoading(false);
@@ -356,9 +393,6 @@ const adminPosts = () => {
       ) {
         arr.push(obj.dataI18n.default.image.url);
       }
-      // if (value === "LINK/LINK" && !arr.includes(obj.data.href)) {
-      //   arr.push(obj.data.href);
-      // }
 
       if (typeof value === "object" && value !== null) {
         findPostPhotos(value, arr);
@@ -366,6 +400,20 @@ const adminPosts = () => {
     });
 
     return arr;
+  };
+
+  const handleUpdatePost = async (result, approved) => {
+    const submission = {
+      _id: result._id,
+      approved: approved,
+      feature: "false",
+    };
+
+    const postResponse = await updatePost(submission, "admin");
+
+    if (!postResponse.ok) {
+      throw new Error("failed to update post");
+    }
   };
 
   let list;
@@ -482,6 +530,11 @@ const adminPosts = () => {
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             Moderating: {modelLoading ? "True" : "False"}
           </Typography>
+          {modelError && (
+            <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+              Model Error
+            </Typography>
+          )}
           {list}
         </div>
       </div>

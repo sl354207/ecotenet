@@ -48,6 +48,7 @@ const adminPeople = () => {
   const [notifications, setNotifications] = useState(0);
   const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
+  const [modelError, setModelError] = useState(false);
   const [pusher, setPusher] = useState();
   const [toxicProfiles, setToxicProfiles] = useState([]);
 
@@ -63,7 +64,7 @@ const adminPeople = () => {
         }
       } catch (error) {
         console.log(error);
-
+        setModelError(true);
         setModelLoading(false);
       }
     };
@@ -89,12 +90,16 @@ const adminPeople = () => {
 
                 if (toxicBio) {
                   result.toxic.push("bio");
-
-                  tempProfiles.push(result);
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
                 }
               } catch (error) {
                 console.log(error);
-                tempProfiles.push(result);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
+                setModelError(true);
                 setModelLoading(false);
               }
             }
@@ -114,12 +119,21 @@ const adminPeople = () => {
                 }
               } catch (error) {
                 console.log(error);
-                tempProfiles.push(result);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
                 setModelLoading(false);
               }
             }
             if (result.toxic.length === 0) {
-              handleUpdatePerson(result, "true");
+              try {
+                handleUpdatePerson(result, "true");
+              } catch (error) {
+                console.log(error);
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
+              }
             }
           }
           setModelLoading(false);
@@ -358,6 +372,11 @@ const adminPeople = () => {
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             Moderating: {modelLoading ? "True" : "False"}
           </Typography>
+          {modelError && (
+            <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+              Model Error
+            </Typography>
+          )}
           {list}
           <AdminDialog
             contentType={action.type}

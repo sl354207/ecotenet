@@ -119,24 +119,33 @@ function ImageUploadField({ onChange, value }) {
       // convert img from File to Image type for classification
       const classifyImg = new Image();
       const objectUrl = URL.createObjectURL(file);
+      classifyImg.src = objectUrl;
       classifyImg.onload = async () => {
-        const inappropriateImage = await useImageClassifier(model, classifyImg);
+        try {
+          const inappropriateImage = await useImageClassifier(
+            model,
+            classifyImg
+          );
 
-        if (inappropriateImage) {
-          setState({ ...state, isUploading: false });
-          handleError(INAPPROPRIATE_ERROR_CODE);
-        } else {
-          const imageUrl = URL.createObjectURL(file);
+          if (inappropriateImage) {
+            setState({ ...state, isUploading: false });
+            handleError(INAPPROPRIATE_ERROR_CODE);
+          } else {
+            const imageUrl = URL.createObjectURL(file);
 
-          setImage({ url: "blob", saved: false, file: file });
+            setImage({ url: "blob", saved: false, file: file });
 
-          onChange({ url: imageUrl, saved: false, file: file });
+            onChange({ url: imageUrl, saved: false, file: file });
+            setState({ ...state, isUploading: false });
+          }
+
+          URL.revokeObjectURL(objectUrl);
+        } catch (error) {
+          console.log(error);
+          handleError(UPLOADING_ERROR_CODE);
           setState({ ...state, isUploading: false });
         }
-
-        URL.revokeObjectURL(objectUrl);
       };
-      classifyImg.src = objectUrl;
     }
   };
   const handleImageUrl = async (e, newValue) => {
@@ -152,7 +161,6 @@ function ImageUploadField({ onChange, value }) {
       } else {
         setState({ ...state, isUploading: true });
         // convert img from File to Image type for classification
-
         const classifyImg = new Image();
         classifyImg.src = imageUrl;
 
@@ -160,17 +168,23 @@ function ImageUploadField({ onChange, value }) {
           classifyImg.crossOrigin = "anonymous";
 
           if (classifyImg.complete) {
-            const inappropriateImage = await useImageClassifier(
-              model,
-              classifyImg
-            );
+            try {
+              const inappropriateImage = await useImageClassifier(
+                model,
+                classifyImg
+              );
 
-            if (inappropriateImage) {
-              setState({ ...state, isUploading: false });
-              handleError(INAPPROPRIATE_ERROR_CODE);
-            } else {
-              setImage({ url: imageUrl, saved: false, file: {} });
-              onChange({ url: imageUrl, saved: false, file: {} });
+              if (inappropriateImage) {
+                setState({ ...state, isUploading: false });
+                handleError(INAPPROPRIATE_ERROR_CODE);
+              } else {
+                setImage({ url: imageUrl, saved: false, file: {} });
+                onChange({ url: imageUrl, saved: false, file: {} });
+                setState({ ...state, isUploading: false });
+              }
+            } catch (error) {
+              console.log(error);
+              handleError(UPLOADING_ERROR_CODE);
               setState({ ...state, isUploading: false });
             }
           }

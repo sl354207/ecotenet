@@ -52,6 +52,7 @@ const adminComments = () => {
   const [notifications, setNotifications] = useState(0);
   const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
+  const [modelError, setModelError] = useState(false);
   const [pusher, setPusher] = useState();
   const [toxicComments, setToxicComments] = useState([]);
 
@@ -67,6 +68,7 @@ const adminComments = () => {
         }
       } catch (error) {
         console.log(error);
+        setModelError(true);
 
         setModelLoading(false);
       }
@@ -95,6 +97,7 @@ const adminComments = () => {
               }
             } catch (error) {
               console.log(error);
+              setModelError(true);
               setModelLoading(false);
             }
           }
@@ -303,6 +306,12 @@ const adminComments = () => {
           <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
             Moderating: {modelLoading ? "True" : "False"}
           </Typography>
+          {modelError && (
+            <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+              Model Error
+            </Typography>
+          )}
+
           {list}
           <AdminDialog
             contentType={action.type}
