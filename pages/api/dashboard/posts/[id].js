@@ -7,6 +7,7 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 import { validID, validURL } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
+import * as Pusher from "pusher";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -57,6 +58,18 @@ export default async function handler(req, res) {
               data.date = new Date();
               data.feature = "false";
               const update = await updatePost(_id, data);
+              if (data.status === "published") {
+                const pusher = new Pusher({
+                  appId: process.env.PUSHER_APP_ID,
+                  key: process.env.NEXT_PUBLIC_PUSHER_KEY,
+                  secret: process.env.PUSHER_SECRET_KEY,
+                  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+                });
+
+                pusher.trigger("ecotenet", "post", {
+                  type: "post",
+                });
+              }
 
               // console.log(update);
               return res.status(200).json(update);
