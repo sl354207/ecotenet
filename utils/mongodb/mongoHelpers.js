@@ -1079,6 +1079,36 @@ const getEcoregionById = async (id) => {
     throw new Error(error);
   }
 };
+const getDistinctCategory = async (category) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("species").distinct(category);
+    // .project({ unique_id: 1, name: 1, coordinates: 1, url: 1 })
+    // .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFilteredStats = async (v1, v2) => {
+  try {
+    const db = await connectToDatabase();
+    // const query = {}
+    // query[v1] = v2
+
+    const response = await db
+      .collection("species")
+      .find({ [v1]: v2 })
+      .project({ unique_id: 1, scientific_name: 1, [v1]: 1 })
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   connectToDatabase,
@@ -1130,4 +1160,6 @@ module.exports = {
   checkName,
   getEcoregions,
   getEcoregionById,
+  getDistinctCategory,
+  getFilteredStats,
 };

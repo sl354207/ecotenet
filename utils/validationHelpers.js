@@ -123,3 +123,24 @@ export function validURL(url) {
     return true;
   }
 }
+export function validStatInputs(v1, v2) {
+  const options = [
+    "kingdom",
+    "phylum",
+    "class",
+    "order",
+    "family",
+    "genus",
+    "species_type",
+  ];
+
+  if (v2 === undefined) {
+    return options.includes(v1);
+  } else {
+    // if(options.includes(v1) && typeof v2 === 'string'){
+    //   return true
+    // } else {
+    return options.includes(v1) && typeof v2 === "string";
+    // }
+  }
+}
