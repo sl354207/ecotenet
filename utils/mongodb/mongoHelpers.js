@@ -428,7 +428,6 @@ const getAllSpecies = async () => {
       .collection("species")
       .find({})
       .project({ _id: 1 })
-
       .toArray();
 
     return species;
@@ -1109,6 +1108,21 @@ const getFilteredStats = async (v1, v2) => {
     throw new Error(error);
   }
 };
+const getAllStatSpecies = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("species")
+      .find()
+      .project({ unique_id: 1 })
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   connectToDatabase,
@@ -1162,4 +1176,5 @@ module.exports = {
   getEcoregionById,
   getDistinctCategory,
   getFilteredStats,
+  getAllStatSpecies,
 };

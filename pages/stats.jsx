@@ -4,11 +4,11 @@ import Link from "@components/layouts/Link";
 import {
   Autocomplete,
   Button,
+  CircularProgress,
   Container,
   FormControl,
   List,
   ListItem,
-  ListItemText,
   TextField,
   Typography,
   alpha,
@@ -20,80 +20,149 @@ import { CollectionPageJsonLd, NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
+const options1 = [
+  "Kingdom",
+  "Phylum",
+  "Class",
+  "Order",
+  "Family",
+  "Genus",
+  "Category",
+  "All Species",
+];
+
 const stats = ({ ecoregions }) => {
   const { mutate } = useSWRConfig();
 
   const [value1, setValue1] = useState();
   const [value2, setValue2] = useState();
   const [options2, setOptions2] = useState();
+  const [rendered, setRendered] = useState();
   const [go, setGo] = useState(false);
-  const [rank, setRank] = useState();
+  const [ranked, setRanked] = useState();
+  const [loading, setLoading] = useState(false);
+  const [allSpecies, setAllSpecies] = useState(false);
 
   const {
     data: results,
     isLoading,
     error,
-  } = useSWR(value1 ? `/api/rank?v1=${value1}&v2=${value2}` : null, fetcher, {
-    shouldRetryOnError: false,
-  });
+  } = useSWR(
+    (value1 && !allSpecies) || (value1 && allSpecies && go)
+      ? `/api/rank?v1=${value1}&v2=${value2}`
+      : null,
+    fetcher,
+    {
+      shouldRetryOnError: false,
+    }
+  );
 
   useEffect(() => {
-    if (results && results.length > 0) {
-      const index = results.indexOf(null);
+    if (value1 !== "all species") {
+      if (results && results.length > 0) {
+        if (results.includes(null)) {
+          const index = results.indexOf(null);
 
-      results.splice(index, 1);
-      if (results.every((i) => typeof i === "string")) {
-        setOptions2(results);
-        console.log(results);
+          results.splice(index, 1);
+        }
+
+        if (results.every((i) => typeof i === "string")) {
+          if (results.includes("tree_shrub")) {
+            const index = results.indexOf("tree_shrub");
+            results[index] = "tree/shrub";
+            const mapped = results.map((result) => {
+              if (result.includes("_")) {
+                return result.replace(/_/g, " ");
+              } else {
+                return result;
+              }
+            });
+            // console.log(mapped);
+            setOptions2(mapped);
+          } else {
+            setOptions2(results);
+          }
+          // console.log(results);
+        }
+        // setAllSpecies(false);
       }
+      // console.log("test");
+      // setAllSpecies(true);
+      // if (results && results.length > 0) {
+      //   const index = results.indexOf(null);
+
+      //   results.splice(index, 1);
+      // }
     }
-    // console.log(results);
-  }, [results]);
+    // else {
+
+    // }
+  }, [results, value1]);
   useEffect(() => {
     if (go) {
-      console.log(results);
-      const rankedArray = [];
-      for (const result of results) {
-        const rankedResult = result.unique_id.reduce((acc, curr) => {
-          acc[curr] = (acc[curr] || 0) + 1;
-          return acc;
-        }, {});
+      // console.log(results);
+      setLoading(true);
 
-        rankedArray.push(rankedResult);
-      }
+      if (results && results.length > 0) {
+        const rankedArray = [];
+        for (const result of results) {
+          const rankedResult = result.unique_id.reduce((acc, curr) => {
+            acc[curr] = (acc[curr] || 0) + 1;
+            return acc;
+          }, {});
 
-      const testObject = {};
-      rankedArray.forEach((item) => {
-        for (const key in item) {
-          if (!testObject[key]) {
-            testObject[key] = item[key];
+          rankedArray.push(rankedResult);
+        }
+
+        const rankedObject = {};
+        rankedArray.forEach((item) => {
+          for (const key in item) {
+            if (!rankedObject[key]) {
+              rankedObject[key] = item[key];
+            } else {
+              rankedObject[key] += item[key];
+            }
+          }
+        });
+
+        for (const ecoregion of ecoregions) {
+          if (rankedObject[ecoregion.unique_id] === undefined) {
+            ecoregion["rank"] = 0;
           } else {
-            testObject[key] += item[key];
+            ecoregion["rank"] = rankedObject[ecoregion.unique_id];
+          }
+
+          // console.log(ecoregion);
+        }
+
+        const sorted = ecoregions.sort(function (a, b) {
+          return b.rank - a.rank;
+        });
+
+        setRanked(sorted);
+        if (value1 === "all species") {
+          setRendered(value1);
+        } else {
+          if (value2) {
+            if (value2 === "tree_shrub") {
+              setRendered("tree/shrub");
+            } else if (value2.includes("_")) {
+              setRendered(value2.replace(/_/g, " "));
+            } else {
+              setRendered(value2);
+            }
           }
         }
-      });
 
-      for (const ecoregion of ecoregions) {
-        ecoregion["rank"] = testObject[ecoregion.unique_id];
-        console.log(ecoregion);
+        // console.log(rankedObject);
+        // console.log(ecoregions);
+
+        // console.log(sorted);
+        setGo(false);
+        setLoading(false);
       }
-
-      const sorted = ecoregions.sort(function (a, b) {
-        return a.rank - b.rank;
-      });
-
-      setRank(sorted);
-      console.log(testObject);
-      console.log(ecoregions);
-
-      console.log(sorted);
-      setGo(false);
     }
-  }, [go]);
-
-  //   const sorted = ecoregions.sort(function (a, b) {
-  //     return a.unique_id - b.unique_id;
-  //   });
+  }, [go, results]);
 
   const ecoregionsSEO = ecoregions.map((eco) => {
     const seo = {
@@ -101,20 +170,6 @@ const stats = ({ ecoregions }) => {
     };
     return seo;
   });
-
-  const options1 = [
-    "Kingdom",
-    "Phylum",
-    "Class",
-    "Order",
-    "Family",
-    "Genus",
-    "Category",
-  ];
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   return (
     <>
@@ -192,16 +247,24 @@ const stats = ({ ecoregions }) => {
               id="category-auto"
               name="category"
               onChange={(event, newValue) => {
-                // console.log(newValue);
                 if (newValue === "Category") {
                   setValue1("species_type");
+                  setAllSpecies(false);
                 } else if (!newValue) {
                   setValue1(newValue);
+                  setValue2(undefined);
+                  setAllSpecies(false);
                 } else {
                   setValue1(newValue.toLowerCase());
+                  if (newValue === "All Species") {
+                    setAllSpecies(true);
+                    // setOptions2(null);
+                    setValue2(undefined);
+                  } else {
+                    setAllSpecies(false);
+                  }
                 }
               }}
-              //   defaultValue={value || ""}
               value={value1}
               options={options1}
               noOptionsText={
@@ -211,7 +274,6 @@ const stats = ({ ecoregions }) => {
                   no options
                 </Typography>
               }
-              //   groupBy={(option) => option}
               getOptionLabel={(option) => {
                 if (option && option) {
                   return option;
@@ -286,12 +348,19 @@ const stats = ({ ecoregions }) => {
               name="category"
               onChange={(event, newValue) => {
                 // console.log(newValue);
-                setValue2(newValue);
+                if (!newValue) {
+                  setValue2(newValue);
+                } else if (newValue === "tree/shrub") {
+                  setValue2("tree_shrub");
+                } else if (newValue.includes(" ")) {
+                  setValue2(newValue.replace(/ /g, "_"));
+                } else {
+                  setValue2(newValue);
+                }
               }}
-              //   defaultValue={value || ""}
               value={value2}
               options={options2}
-              disabled={!value1}
+              disabled={!value1 || !options2 || allSpecies}
               noOptionsText={
                 <Typography
                   sx={{ color: alpha(theme.palette.text.primary, 0.6) }}
@@ -334,47 +403,75 @@ const stats = ({ ecoregions }) => {
             disabled={
               value1 === undefined ||
               value1 === null ||
-              value2 === undefined ||
-              value2 === null
+              ((value2 === undefined || value2 === null) && !allSpecies) ||
+              isLoading ||
+              loading
             }
           >
             GO
           </Button>
         </div>
 
-        <List>
-          {rank && (
-            <>
-              {rank.map((ecoregion) => {
-                return (
-                  <ListItem key={ecoregion.unique_id}>
-                    Eco-{ecoregion.unique_id}:{" "}
-                    <Link
-                      sx={{ marginLeft: "5px" }}
-                      href={`/ecoregions/${ecoregion.unique_id}`}
+        {loading || isLoading ? (
+          <CircularProgress
+            color="secondary"
+            size={100}
+            disableShrink={true}
+            sx={{
+              margin: "100px auto",
+              display: "flex",
+              justifySelf: "center",
+            }}
+          />
+        ) : (
+          <List>
+            {ranked && (
+              <>
+                {ranked.map((ecoregion, index) => {
+                  // console.log(ecoregion);
+                  return (
+                    <div
+                      key={ecoregion.unique_id}
+                      style={{
+                        border: `1px solid ${alpha(
+                          theme.palette.secondary.main,
+                          1
+                        )}`,
+                        marginBlock: "5px",
+
+                        borderRadius: "10px",
+                        display: "flex",
+                      }}
                     >
-                      {ecoregion.name}
-                    </Link>
-                    <ListItemText>{ecoregion.rank}</ListItemText>
-                  </ListItem>
-                );
-              })}
-            </>
-          )}
-          {/* {sorted.map((ecoregion) => {
-            return (
-              <ListItem key={ecoregion.unique_id}>
-                Eco-{ecoregion.unique_id}:{" "}
-                <Link
-                  sx={{ marginLeft: "5px" }}
-                  href={`/ecoregions/${ecoregion.unique_id}`}
-                >
-                  {ecoregion.name}
-                </Link>
-              </ListItem>
-            );
-          })} */}
-        </List>
+                      <Typography
+                        variant="h6"
+                        sx={{ marginBlock: "auto", paddingLeft: "16px" }}
+                      >
+                        {index + 1}
+                      </Typography>
+                      <div display="block">
+                        <ListItem key={ecoregion.unique_id}>
+                          Eco-{ecoregion.unique_id}:{" "}
+                          <Link
+                            sx={{ marginLeft: "5px" }}
+                            href={`/ecoregions/${ecoregion.unique_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {ecoregion.name}
+                          </Link>
+                        </ListItem>
+                        <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                          {rendered} species count: {ecoregion.rank}
+                        </Typography>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </List>
+        )}
       </Container>
       <Footer />
     </>

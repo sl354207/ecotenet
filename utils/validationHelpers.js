@@ -132,6 +132,7 @@ export function validStatInputs(v1, v2) {
     "family",
     "genus",
     "species_type",
+    "all species",
   ];
 
   if (v2 === undefined) {
