@@ -40,8 +40,7 @@ const stats = ({ ecoregions }) => {
   const [options2, setOptions2] = useState();
   const [rendered, setRendered] = useState();
   const [go, setGo] = useState(false);
-  const [ranked, setRanked] = useState();
-  const [loading, setLoading] = useState(false);
+
   const [allSpecies, setAllSpecies] = useState(false);
 
   const {
@@ -85,68 +84,30 @@ const stats = ({ ecoregions }) => {
         }
       }
     }
+    if (value1 === "all species") {
+      setRendered(value1);
+    } else {
+      if (value2) {
+        if (value2 === "tree_shrub") {
+          setRendered("tree/shrub");
+        } else if (value2.includes("_")) {
+          setRendered(value2.replace(/_/g, " "));
+        } else {
+          setRendered(value2);
+        }
+      }
+    }
+    // setRanked(results)
+    console.log(results);
   }, [results, value1]);
   useEffect(() => {
     if (go) {
-      setLoading(true);
-
-      if (results && results.length > 0) {
-        const rankedArray = [];
-        for (const result of results) {
-          const rankedResult = result.unique_id.reduce((acc, curr) => {
-            acc[curr] = (acc[curr] || 0) + 1;
-            return acc;
-          }, {});
-
-          rankedArray.push(rankedResult);
-        }
-
-        const rankedObject = {};
-        rankedArray.forEach((item) => {
-          for (const key in item) {
-            if (!rankedObject[key]) {
-              rankedObject[key] = item[key];
-            } else {
-              rankedObject[key] += item[key];
-            }
-          }
-        });
-
-        for (const ecoregion of ecoregions) {
-          if (rankedObject[ecoregion.unique_id] === undefined) {
-            ecoregion["rank"] = 0;
-          } else {
-            ecoregion["rank"] = rankedObject[ecoregion.unique_id];
-          }
-        }
-
-        const sorted = ecoregions.sort(function (a, b) {
-          return b.rank - a.rank;
-        });
-
-        setRanked(sorted);
-        if (value1 === "all species") {
-          setRendered(value1);
-        } else {
-          if (value2) {
-            if (value2 === "tree_shrub") {
-              setRendered("tree/shrub");
-            } else if (value2.includes("_")) {
-              setRendered(value2.replace(/_/g, " "));
-            } else {
-              setRendered(value2);
-            }
-          }
-        }
-        setGo(false);
-        setLoading(false);
-      }
     }
   }, [go]);
 
   let list;
 
-  if (isLoading || loading) {
+  if (isLoading) {
     list = (
       <CircularProgress
         color="secondary"
@@ -188,20 +149,17 @@ const stats = ({ ecoregions }) => {
       } else {
         list = (
           <List>
-            {ranked && (
+            {results && go && (
               <>
-                <Typography
+                {/* <Typography
                   variant="h6"
                   align="center"
                   sx={{ marginTop: "20px" }}
                 >
-                  {value1 === "all species" ? (
-                    `${value1} count: ${results.length}`
-                  ) : (
-                    <>{value2 && `${value2} count: ${results.length}`}</>
-                  )}
-                </Typography>
-                {ranked.map((ecoregion, index) => {
+                  {rendered} count: {results.length}
+                </Typography> */}
+
+                {results.map((ecoregion, index) => {
                   return (
                     <div
                       key={ecoregion.unique_id}
@@ -349,8 +307,8 @@ const stats = ({ ecoregions }) => {
               id="category-auto"
               name="category"
               onChange={(event, newValue) => {
-                setRanked(undefined);
                 setValue2(undefined);
+                setGo(false);
                 if (newValue === "Category") {
                   setValue1("species_type");
                   setAllSpecies(false);
@@ -454,7 +412,7 @@ const stats = ({ ecoregions }) => {
               id="category-auto"
               name="category"
               onChange={(event, newValue) => {
-                setRanked(undefined);
+                setGo(false);
                 if (!newValue) {
                   setValue2(newValue);
                 } else if (newValue === "tree/shrub") {
@@ -514,7 +472,7 @@ const stats = ({ ecoregions }) => {
               value1 === null ||
               ((value2 === undefined || value2 === null) && !allSpecies) ||
               isLoading ||
-              loading
+              error
             }
           >
             GO

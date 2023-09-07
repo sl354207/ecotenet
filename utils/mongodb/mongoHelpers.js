@@ -1100,7 +1100,7 @@ const getFilteredStats = async (v1, v2) => {
     const response = await db
       .collection("species")
       .find({ [v1]: v2 })
-      .project({ unique_id: 1, scientific_name: 1, [v1]: 1 })
+      .project({ unique_id: 1, _id: 0 })
       .toArray();
 
     return response;
@@ -1115,7 +1115,23 @@ const getAllStatSpecies = async () => {
     const response = await db
       .collection("species")
       .find()
-      .project({ unique_id: 1 })
+      .project({ unique_id: 1, _id: 0 })
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getStatsEcoregions = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("ecoregions")
+      .find({})
+      .project({ unique_id: 1, name: 1, _id: 0 })
       .toArray();
 
     return response;
@@ -1177,4 +1193,5 @@ module.exports = {
   getDistinctCategory,
   getFilteredStats,
   getAllStatSpecies,
+  getStatsEcoregions,
 };
