@@ -3,6 +3,7 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import {
   Autocomplete,
+  Box,
   Button,
   CircularProgress,
   Container,
@@ -48,7 +49,7 @@ const stats = ({ ecoregions }) => {
     isLoading,
     error,
   } = useSWR(
-    (value1 && !allSpecies) || (value1 && allSpecies && go)
+    (value1 && !allSpecies && value2 !== null) || (value1 && allSpecies && go)
       ? `/api/rank?v1=${value1}&v2=${value2}`
       : null,
     fetcher,
@@ -62,7 +63,6 @@ const stats = ({ ecoregions }) => {
       if (results && results.length > 0) {
         if (results.includes(null)) {
           const index = results.indexOf(null);
-
           results.splice(index, 1);
         }
 
@@ -77,30 +77,17 @@ const stats = ({ ecoregions }) => {
                 return result;
               }
             });
-            // console.log(mapped);
+
             setOptions2(mapped);
           } else {
             setOptions2(results);
           }
-          // console.log(results);
         }
-        // setAllSpecies(false);
       }
-      // console.log("test");
-      // setAllSpecies(true);
-      // if (results && results.length > 0) {
-      //   const index = results.indexOf(null);
-
-      //   results.splice(index, 1);
-      // }
     }
-    // else {
-
-    // }
   }, [results, value1]);
   useEffect(() => {
     if (go) {
-      // console.log(results);
       setLoading(true);
 
       if (results && results.length > 0) {
@@ -131,8 +118,6 @@ const stats = ({ ecoregions }) => {
           } else {
             ecoregion["rank"] = rankedObject[ecoregion.unique_id];
           }
-
-          // console.log(ecoregion);
         }
 
         const sorted = ecoregions.sort(function (a, b) {
@@ -153,16 +138,115 @@ const stats = ({ ecoregions }) => {
             }
           }
         }
-
-        // console.log(rankedObject);
-        // console.log(ecoregions);
-
-        // console.log(sorted);
         setGo(false);
         setLoading(false);
       }
     }
-  }, [go, results]);
+  }, [go]);
+
+  let list;
+
+  if (isLoading || loading) {
+    list = (
+      <CircularProgress
+        color="secondary"
+        size={100}
+        disableShrink={true}
+        sx={{
+          margin: "50px auto",
+          display: "flex",
+          justifySelf: "center",
+        }}
+      />
+    );
+  } else {
+    if (error) {
+      list = (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => mutate(`/api/rank?v1=${value1}&v2=${value2}`)}
+          >
+            Error Loading. Retry
+          </Button>
+        </div>
+      );
+    } else {
+      if (Array.isArray(results) && results.length === 0) {
+        list = (
+          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+            no results
+          </Typography>
+        );
+      } else {
+        list = (
+          <List>
+            {ranked && (
+              <>
+                <Typography
+                  variant="h6"
+                  align="center"
+                  sx={{ marginTop: "20px" }}
+                >
+                  {value1 === "all species" ? (
+                    `${value1} count: ${results.length}`
+                  ) : (
+                    <>{value2 && `${value2} count: ${results.length}`}</>
+                  )}
+                </Typography>
+                {ranked.map((ecoregion, index) => {
+                  return (
+                    <div
+                      key={ecoregion.unique_id}
+                      style={{
+                        border: `1px solid ${alpha(
+                          theme.palette.secondary.main,
+                          1
+                        )}`,
+                        marginBlock: "5px",
+                        borderRadius: "10px",
+                        display: "flex",
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{ marginBlock: "auto", paddingLeft: "16px" }}
+                      >
+                        {index + 1}
+                      </Typography>
+                      <div display="block">
+                        <ListItem key={ecoregion.unique_id}>
+                          Eco-{ecoregion.unique_id}:{" "}
+                          <Link
+                            sx={{ marginLeft: "5px" }}
+                            href={`/ecoregions/${ecoregion.unique_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {ecoregion.name}
+                          </Link>
+                        </ListItem>
+                        <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                          {rendered} species count: {ecoregion.rank}
+                        </Typography>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </List>
+        );
+      }
+    }
+  }
 
   const ecoregionsSEO = ecoregions.map((eco) => {
     const seo = {
@@ -195,12 +279,30 @@ const stats = ({ ecoregions }) => {
       <CollectionPageJsonLd name="Stats" hasPart={ecoregionsSEO} />
       <Container>
         <Header title="Stats" />
-        <div style={{ display: "flex" }}>
-          <Typography variant="h6" sx={{ marginBlock: "auto" }}>
+        <Box
+          sx={{
+            display: { xs: "grid", md: "flex" },
+            justifyContent: "center",
+            marginTop: "20px",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              marginBlock: "auto",
+              marginInline: { xs: "auto", md: "inherit" },
+            }}
+          >
             Rank ecoregions by:{" "}
           </Typography>
 
-          <FormControl sx={{ marginLeft: "10px", minWidth: "200px" }}>
+          <FormControl
+            sx={{
+              marginLeft: { xs: "0px", md: "10px" },
+              minWidth: "200px",
+              marginBlock: { xs: "5px", md: "0px" },
+            }}
+          >
             <Autocomplete
               sx={{
                 "& .MuiAutocomplete-inputRoot": {
@@ -247,19 +349,18 @@ const stats = ({ ecoregions }) => {
               id="category-auto"
               name="category"
               onChange={(event, newValue) => {
+                setRanked(undefined);
+                setValue2(undefined);
                 if (newValue === "Category") {
                   setValue1("species_type");
                   setAllSpecies(false);
                 } else if (!newValue) {
                   setValue1(newValue);
-                  setValue2(undefined);
                   setAllSpecies(false);
                 } else {
                   setValue1(newValue.toLowerCase());
                   if (newValue === "All Species") {
                     setAllSpecies(true);
-                    // setOptions2(null);
-                    setValue2(undefined);
                   } else {
                     setAllSpecies(false);
                   }
@@ -300,7 +401,13 @@ const stats = ({ ecoregions }) => {
             />
           </FormControl>
 
-          <FormControl sx={{ marginLeft: "10px", minWidth: "200px" }}>
+          <FormControl
+            sx={{
+              marginLeft: { xs: "0px", md: "10px" },
+              minWidth: "250px",
+              marginBlock: { xs: "5px", md: "0px" },
+            }}
+          >
             <Autocomplete
               sx={{
                 "& .MuiAutocomplete-inputRoot": {
@@ -347,7 +454,7 @@ const stats = ({ ecoregions }) => {
               id="category-auto"
               name="category"
               onChange={(event, newValue) => {
-                // console.log(newValue);
+                setRanked(undefined);
                 if (!newValue) {
                   setValue2(newValue);
                 } else if (newValue === "tree/shrub") {
@@ -368,7 +475,6 @@ const stats = ({ ecoregions }) => {
                   no options
                 </Typography>
               }
-              //   groupBy={(option) => option}
               getOptionLabel={(option) => {
                 if (option && option) {
                   return option;
@@ -399,7 +505,10 @@ const stats = ({ ecoregions }) => {
             color="secondary"
             variant="contained"
             onClick={() => setGo(true)}
-            sx={{ marginLeft: "10px" }}
+            sx={{
+              marginLeft: { xs: "0px", md: "10px" },
+              marginBlock: { xs: "5px", md: "0px" },
+            }}
             disabled={
               value1 === undefined ||
               value1 === null ||
@@ -410,68 +519,8 @@ const stats = ({ ecoregions }) => {
           >
             GO
           </Button>
-        </div>
-
-        {loading || isLoading ? (
-          <CircularProgress
-            color="secondary"
-            size={100}
-            disableShrink={true}
-            sx={{
-              margin: "100px auto",
-              display: "flex",
-              justifySelf: "center",
-            }}
-          />
-        ) : (
-          <List>
-            {ranked && (
-              <>
-                {ranked.map((ecoregion, index) => {
-                  // console.log(ecoregion);
-                  return (
-                    <div
-                      key={ecoregion.unique_id}
-                      style={{
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          1
-                        )}`,
-                        marginBlock: "5px",
-
-                        borderRadius: "10px",
-                        display: "flex",
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{ marginBlock: "auto", paddingLeft: "16px" }}
-                      >
-                        {index + 1}
-                      </Typography>
-                      <div display="block">
-                        <ListItem key={ecoregion.unique_id}>
-                          Eco-{ecoregion.unique_id}:{" "}
-                          <Link
-                            sx={{ marginLeft: "5px" }}
-                            href={`/ecoregions/${ecoregion.unique_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {ecoregion.name}
-                          </Link>
-                        </ListItem>
-                        <Typography sx={{ padding: "0px 0px 8px 16px" }}>
-                          {rendered} species count: {ecoregion.rank}
-                        </Typography>
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </List>
-        )}
+        </Box>
+        {list}
       </Container>
       <Footer />
     </>
