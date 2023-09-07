@@ -1,8 +1,7 @@
 {
     "functions": {
-      "api/rank.js": {
-        "memory": 3008,
-        "maxDuration": 30
+      "pages/api/rank.js": {
+        "memory": 3008
       }
     }
   }
