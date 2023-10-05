@@ -59,8 +59,14 @@ const EcoDist = ({
 
   const handleSubmit = (event, newValue) => {
     if (newValue !== null) {
-      const dash = newValue.indexOf("-");
-      const name = newValue.slice(0, dash - 1);
+      let name;
+      if (newValue.includes("-")) {
+        const dash = newValue.indexOf("-");
+        name = newValue.slice(0, dash - 1);
+      } else {
+        name = newValue;
+      }
+
       for (const result of dist) {
         if (result.scientific_name === name) {
           switch (distributionState[0].count) {
@@ -225,7 +231,9 @@ const EcoDist = ({
                   <Typography>
                     {distributionState[1].scientific_name}
                   </Typography>
-                  <Typography>{distributionState[1].common_name}</Typography>
+                  {distributionState[1].common_name && (
+                    <Typography>{distributionState[1].common_name}</Typography>
+                  )}
                 </>
               ) : (
                 "post"
@@ -262,7 +270,9 @@ const EcoDist = ({
                   <Typography>
                     {distributionState[2].scientific_name}
                   </Typography>
-                  <Typography>{distributionState[2].common_name}</Typography>
+                  {distributionState[2].common_name && (
+                    <Typography>{distributionState[2].common_name}</Typography>
+                  )}
                 </>
               ) : (
                 "post"
@@ -299,7 +309,9 @@ const EcoDist = ({
                   <Typography>
                     {distributionState[3].scientific_name}
                   </Typography>
-                  <Typography>{distributionState[3].common_name}</Typography>
+                  {distributionState[3].common_name && (
+                    <Typography>{distributionState[3].common_name}</Typography>
+                  )}
                 </>
               ) : (
                 "post"

@@ -311,7 +311,11 @@ const species = ({ species, wiki }) => {
                 }}
               ></div>
               <Header
-                title={`${species.scientific_name}: ${species.common_name}`}
+                title={
+                  species.common_name
+                    ? `${species.scientific_name}: ${species.common_name}`
+                    : `${species.scientific_name}`
+                }
               />
               <IconButton
                 sx={{
