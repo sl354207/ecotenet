@@ -273,13 +273,24 @@ const DrawerSpecies = ({ species, handleClose }) => {
                       minWidth: "30px",
                     }}
                   ></div>
-                  <Typography
-                    variant="h4"
-                    align="center"
-                    sx={{ marginBottom: "5px" }}
-                  >
-                    {species.scientific_name}: {species.common_name}
-                  </Typography>
+                  {species.common_name ? (
+                    <Typography
+                      variant="h4"
+                      align="center"
+                      sx={{ marginBottom: "5px" }}
+                    >
+                      {species.scientific_name}: {species.common_name}
+                    </Typography>
+                  ) : (
+                    <Typography
+                      variant="h4"
+                      align="center"
+                      sx={{ marginBottom: "5px" }}
+                    >
+                      {species.scientific_name}
+                    </Typography>
+                  )}
+
                   <div>
                     <IconButton
                       sx={{ marginLeft: 2 }}

@@ -183,8 +183,13 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
   const handleSubmit = (event, newValue) => {
     if (newValue !== null) {
-      const dash = newValue.indexOf("-");
-      const name = newValue.slice(0, dash - 1);
+      let name;
+      if (newValue.includes("-")) {
+        const dash = newValue.indexOf("-");
+        name = newValue.slice(0, dash - 1);
+      } else {
+        name = newValue;
+      }
 
       for (const result of results) {
         if (result.scientific_name === name) {
@@ -353,7 +358,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         <div style={{ display: "inline-grid", marginTop: "5px" }}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <CustomChip
-              label={`${state[1].scientific_name} - ${state[1].common_name}`}
+              label={
+                state[1].common_name
+                  ? `${state[1].scientific_name} - ${state[1].common_name}`
+                  : `${state[1].scientific_name}`
+              }
               onClick={() => {
                 window.open(
                   `/species/${state[1]._id}`,
@@ -372,7 +381,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           )}
           {Array.isArray(state[2].regions) && state[2].regions.length ? (
             <CustomChip
-              label={`${state[2].scientific_name} - ${state[2].common_name}`}
+              label={
+                state[2].common_name
+                  ? `${state[2].scientific_name} - ${state[1].common_name}`
+                  : `${state[2].scientific_name}`
+              }
               onClick={() => {
                 window.open(
                   `/species/${state[2]._id}`,
@@ -391,7 +404,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           )}
           {Array.isArray(state[3].regions) && state[3].regions.length ? (
             <CustomChip
-              label={`${state[3].scientific_name} - ${state[3].common_name}`}
+              label={
+                state[3].common_name
+                  ? `${state[3].scientific_name} - ${state[1].common_name}`
+                  : `${state[3].scientific_name}`
+              }
               onClick={() => {
                 window.open(
                   `/species/${state[3]._id}`,
@@ -413,7 +430,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         <div style={{ marginTop: "5px" }}>
           {Array.isArray(state[1].regions) && state[1].regions.length ? (
             <CustomChip
-              label={`${state[1].scientific_name} - ${state[1].common_name}`}
+              label={
+                state[1].common_name
+                  ? `${state[1].scientific_name} - ${state[1].common_name}`
+                  : `${state[1].scientific_name}`
+              }
               onClick={() => {
                 window.open(
                   `/species/${state[1]._id}`,
@@ -432,7 +453,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           )}
           {Array.isArray(state[2].regions) && state[2].regions.length ? (
             <CustomChip
-              label={`${state[2].scientific_name} - ${state[2].common_name}`}
+              label={
+                state[2].common_name
+                  ? `${state[2].scientific_name} - ${state[1].common_name}`
+                  : `${state[2].scientific_name}`
+              }
               onClick={() => {
                 window.open(
                   `/species/${state[2]._id}`,
@@ -451,7 +476,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           )}
           {Array.isArray(state[3].regions) && state[3].regions.length ? (
             <CustomChip
-              label={`${state[3].scientific_name} - ${state[3].common_name}`}
+              label={
+                state[3].common_name
+                  ? `${state[3].scientific_name} - ${state[1].common_name}`
+                  : `${state[3].scientific_name}`
+              }
               onClick={() => {
                 window.open(
                   `/species/${state[3]._id}`,
