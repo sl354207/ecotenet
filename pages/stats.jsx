@@ -15,7 +15,7 @@ import {
   alpha,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
-import { getEcoregions } from "@utils/mongodb/mongoHelpers";
+import { getStatsEcoregions } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { CollectionPageJsonLd, NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
@@ -42,13 +42,14 @@ const stats = ({ ecoregions }) => {
   const [go, setGo] = useState(false);
 
   const [allSpecies, setAllSpecies] = useState(false);
+  const [allSpeciesRanked, setAllSpeciesRanked] = useState();
 
   const {
     data: results,
     isLoading,
     error,
   } = useSWR(
-    (value1 && !allSpecies && value2 !== null) || (value1 && allSpecies && go)
+    value1 && !allSpecies && value2 !== null
       ? `/api/rank?v1=${value1}&v2=${value2}`
       : null,
     fetcher,
@@ -98,10 +99,16 @@ const stats = ({ ecoregions }) => {
       }
     }
     // setRanked(results)
-    console.log(results);
+    // console.log(results);
   }, [results, value1]);
   useEffect(() => {
-    if (go) {
+    if (go && allSpecies) {
+      const sorted = ecoregions.sort(function (a, b) {
+        return b.species_count - a.species_count;
+      });
+      setAllSpeciesRanked(sorted);
+    } else {
+      setAllSpeciesRanked(undefined);
     }
   }, [go]);
 
@@ -146,19 +153,57 @@ const stats = ({ ecoregions }) => {
             no results
           </Typography>
         );
+      } else if (allSpeciesRanked) {
+        list = (
+          <List>
+            <>
+              {allSpeciesRanked.map((ecoregion, index) => {
+                return (
+                  <div
+                    key={ecoregion.unique_id}
+                    style={{
+                      border: `1px solid ${alpha(
+                        theme.palette.secondary.main,
+                        1
+                      )}`,
+                      marginBlock: "5px",
+                      borderRadius: "10px",
+                      display: "flex",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{ marginBlock: "auto", paddingLeft: "16px" }}
+                    >
+                      {index + 1}
+                    </Typography>
+                    <div display="block">
+                      <ListItem key={ecoregion.unique_id}>
+                        Eco-{ecoregion.unique_id}:{" "}
+                        <Link
+                          sx={{ marginLeft: "5px" }}
+                          href={`/ecoregions/${ecoregion.unique_id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {ecoregion.name}
+                        </Link>
+                      </ListItem>
+                      <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                        {rendered} species count: {ecoregion.species_count}
+                      </Typography>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          </List>
+        );
       } else {
         list = (
           <List>
             {results && go && (
               <>
-                {/* <Typography
-                  variant="h6"
-                  align="center"
-                  sx={{ marginTop: "20px" }}
-                >
-                  {rendered} count: {results.length}
-                </Typography> */}
-
                 {results.map((ecoregion, index) => {
                   return (
                     <div
@@ -486,7 +531,7 @@ const stats = ({ ecoregions }) => {
 };
 
 export const getStaticProps = async () => {
-  const ecoregions = await getEcoregions();
+  const ecoregions = await getStatsEcoregions();
 
   return {
     props: {
