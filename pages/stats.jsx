@@ -1,6 +1,7 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
+import MapStats from "@components/maps/MapStats";
 import {
   Autocomplete,
   Box,
@@ -523,6 +524,7 @@ const stats = ({ ecoregions }) => {
             GO
           </Button>
         </Box>
+        <MapStats ecoregions={ecoregions} />
         {list}
       </Container>
       <Footer />
