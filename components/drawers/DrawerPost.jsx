@@ -317,7 +317,7 @@ const DrawerPost = ({ id, handleClose }) => {
                         <div
                           style={{
                             display: "flex",
-                            marginRight: "auto",
+                            // marginRight: "auto",
                             visibility: "hidden",
                             minWidth: "30px",
                           }}
