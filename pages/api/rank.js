@@ -49,17 +49,26 @@ export default async function handler(req, res) {
 
           for (const ecoregion of ecoregions) {
             if (rankedObject[ecoregion.unique_id] === undefined) {
-              ecoregion["rank"] = 0;
+              ecoregion["species_count"] = 0;
             } else {
-              ecoregion["rank"] = rankedObject[ecoregion.unique_id];
+              ecoregion["species_count"] = rankedObject[ecoregion.unique_id];
             }
           }
 
           const sorted = ecoregions.sort(function (a, b) {
-            return b.rank - a.rank;
+            return b.species_count - a.species_count;
           });
 
-          return res.status(200).json(sorted);
+          const ranked = sorted.map((ecoregion, index) => {
+            return {
+              unique_id: ecoregion.unique_id,
+              name: ecoregion.name,
+              species_count: ecoregion.species_count,
+              rank: index + 1,
+            };
+          });
+
+          return res.status(200).json(ranked);
         } else {
           return res.status(200).json([]);
         }

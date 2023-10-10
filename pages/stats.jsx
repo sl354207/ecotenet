@@ -107,7 +107,16 @@ const stats = ({ ecoregions }) => {
       const sorted = ecoregions.sort(function (a, b) {
         return b.species_count - a.species_count;
       });
-      setAllSpeciesRanked(sorted);
+      const ranked = sorted.map((ecoregion, index) => {
+        return {
+          unique_id: ecoregion.unique_id,
+          name: ecoregion.name,
+          coordinates: ecoregion.coordinates,
+          species_count: ecoregion.species_count,
+          rank: index + 1,
+        };
+      });
+      setAllSpeciesRanked(ranked);
     } else {
       setAllSpeciesRanked(undefined);
     }
@@ -238,7 +247,7 @@ const stats = ({ ecoregions }) => {
                           </Link>
                         </ListItem>
                         <Typography sx={{ padding: "0px 0px 8px 16px" }}>
-                          {rendered} species count: {ecoregion.rank}
+                          {rendered} species count: {ecoregion.species_count}
                         </Typography>
                       </div>
                     </div>

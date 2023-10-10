@@ -18,7 +18,7 @@ const MapStats = ({ isMobile, ecoregions }) => {
       "fill-opacity": 0,
     },
   };
-  // hover layer
+  // click layer
   const ecoFill1 = {
     id: "eco-fill1",
     type: "fill",
@@ -45,12 +45,8 @@ const MapStats = ({ isMobile, ecoregions }) => {
         ["get", "species_count"],
         0,
         "#c8fcff",
-        100,
-        "#c8fcff",
-        1000,
-        "#94c9ff",
         10000,
-        "#94c9ff",
+        "#0071e4",
       ],
       "circle-opacity": 0.6,
       "circle-radius": [
@@ -59,12 +55,8 @@ const MapStats = ({ isMobile, ecoregions }) => {
         ["get", "species_count"],
         0,
         2,
-        100,
-        5,
-        1000,
-        10,
         10000,
-        20,
+        30,
       ],
     },
   };
@@ -82,6 +74,39 @@ const MapStats = ({ isMobile, ecoregions }) => {
     },
     paint: {
       "text-color": "rgba(255,255,255,1)",
+    },
+  };
+
+  // hover layer
+  const ecoStatsHover = {
+    id: "eco-stats-hover",
+    type: "circle",
+    source: "data",
+    // "source-layer": "ecomap-tiles",
+    paint: {
+      "circle-color": [
+        "case",
+        ["boolean", ["feature-state", "hover"], true],
+        [
+          "interpolate",
+          ["linear"],
+          ["get", "species_count"],
+          0,
+          "#c8fcff",
+          10000,
+          "#0071e4",
+        ],
+        "#fff",
+      ],
+      "circle-stroke-color": "#000",
+      "circle-stroke-width": 3,
+      "circle-opacity": 0.6,
+      "circle-radius": [
+        "case",
+        ["boolean", ["feature-state", "hover"], true],
+        ["interpolate", ["linear"], ["get", "species_count"], 0, 2, 10000, 30],
+        0,
+      ],
     },
   };
 
@@ -103,18 +128,18 @@ const MapStats = ({ isMobile, ecoregions }) => {
     },
   };
 
-  const [hoverInfo, setHoverInfo] = useState(null);
+  const [clickInfo, setClickInfo] = useState(null);
 
   const [showPopup, setShowPopup] = useState(true);
 
-  // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
-  const onHover = useCallback(
+  // set click info when clicking over map. useCallback memoizes function so it isn't recalled every time user clicks over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
+  const onClick = useCallback(
     (event) => {
       setShowPopup(true);
       const region = event.features && event.features[0];
 
       if (region.properties.unique_id !== "<NA>") {
-        setHoverInfo({
+        setClickInfo({
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
           regionName: region && region.properties.name,
@@ -122,15 +147,15 @@ const MapStats = ({ isMobile, ecoregions }) => {
         });
       }
     },
-    [hoverInfo]
+    [clickInfo]
   );
 
-  const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
+  const selectedRegion = (clickInfo && clickInfo.regionNum) || "";
 
-  const ecoName = (hoverInfo && hoverInfo.regionName) || "";
+  const ecoName = (clickInfo && clickInfo.regionName) || "";
 
   // check layer and style expressions in mapbox docs for array setup. useMemo memoizes the return value of a function(useCallback memoizes the function not the return value) so the return value can be reused between re-renders. Function is re-ran when value of selectedRegion changes.
-  const filter = useMemo(
+  const clickFilter = useMemo(
     () => ["in", "unique_id", selectedRegion],
     [selectedRegion]
   );
@@ -142,6 +167,32 @@ const MapStats = ({ isMobile, ecoregions }) => {
   //             }
   // }
   //   console.log(ecoregions);
+
+  const [hoverInfo, setHoverInfo] = useState(null);
+
+  const selectedHover = (hoverInfo && hoverInfo.species_count) || "";
+
+  const hoverFilter = useMemo(
+    () => ["in", "species_count", selectedHover],
+    [selectedHover]
+  );
+
+  const onHover = useCallback(
+    (event) => {
+      // setShowPopup(true);
+      const species_count = event.features && event.features[0];
+      if (event && event.features[0]?.layer.id !== "eco-fill") {
+        console.log(event.features);
+      }
+
+      setHoverInfo({
+        species_count: species_count && species_count.properties.species_count,
+        // regionName: region && region.properties.name,
+        // regionNum: region && region.properties.unique_id,
+      });
+    },
+    [hoverInfo]
+  );
 
   const data = {};
   data.type = "FeatureCollection";
@@ -181,17 +232,18 @@ const MapStats = ({ isMobile, ecoregions }) => {
         touchPitch={false}
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs"
         mapboxAccessToken={mapBox}
-        interactiveLayerIds={["eco-fill"]}
-        onClick={onHover}
+        interactiveLayerIds={["eco-fill", "eco-stats-bubble"]}
+        onClick={onClick}
+        onMouseMove={onHover}
       >
         <Source id="eco-map" type="vector" url="mapbox://sl354207.ecomap-tiles">
           <Layer id="base" beforeId="waterway-label" {...ecoFill} />
 
           <Layer
-            id="hover"
+            id="click"
             beforeId="waterway-label"
             {...ecoFill1}
-            filter={filter}
+            filter={clickFilter}
           />
 
           <Layer beforeId="waterway-label" {...ecoLine} />
@@ -202,18 +254,26 @@ const MapStats = ({ isMobile, ecoregions }) => {
             beforeId="waterway-label"
             {...ecoStatsBubble}
             // filter={clickFilter}
+            // filter={hoverFilter}
+          />
+
+          <Layer
+            id="eco-stats-hover"
+            beforeId="waterway-label"
+            {...ecoStatsHover}
+            filter={hoverFilter}
           />
           <Layer
             id="eco-stats-text"
             beforeId="waterway-label"
             {...ecoStatsText}
-            // filter={clickFilter}
+            // filter={hoverFilter}
           />
         </Source>
         {selectedRegion && showPopup && (
           <Popup
-            longitude={hoverInfo.longitude}
-            latitude={hoverInfo.latitude}
+            longitude={clickInfo.longitude}
+            latitude={clickInfo.latitude}
             closeOnClick={false}
             // onClose={() => setShowPopup(false)}
             maxWidth="500px"
