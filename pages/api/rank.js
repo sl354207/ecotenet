@@ -63,6 +63,7 @@ export default async function handler(req, res) {
             return {
               unique_id: ecoregion.unique_id,
               name: ecoregion.name,
+              coordinates: ecoregion.coordinates,
               species_count: ecoregion.species_count,
               rank: index + 1,
             };

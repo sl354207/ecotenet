@@ -1,13 +1,18 @@
-import { Button, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
+const MapStats = ({ isMobile, ecoregions, isLoading }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  // console.log()
+  // console.log(ecoregions);
 
   const [data, setData] = useState();
+
+  const [display, setDisplay] = useState();
+  const [min, setMin] = useState();
+  const [max, setMax] = useState();
+
   // console.log(data);
   const [hoverInfo, setHoverInfo] = useState(null);
   const selectedHover = (hoverInfo && hoverInfo.species_count) || "";
@@ -24,7 +29,7 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
       const species_count = event.features && event.features[0];
       // console.log(species_count);
       if (event && event.features[0]?.layer.id == "eco-stats-bubble") {
-        console.log(event.features);
+        // console.log(event.features);
         const properties = event.features[0].properties;
         setDisplay({
           name: properties.name,
@@ -60,8 +65,19 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
         };
       });
       setData(dataTemp);
+      // find the min and max values of the species_count in ecoregions
+      setMin(
+        Math.min(...ecoregions.map((ecoregion) => ecoregion.species_count))
+      );
+      setMax(
+        Math.max(...ecoregions.map((ecoregion) => ecoregion.species_count))
+      );
+
+      // console.log(dataTemp);
     }
   }, [ecoregions]);
+  // console.log(min);
+  // console.log(max);
 
   // base layer
   const ecoFill = {
@@ -100,9 +116,9 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
         "interpolate",
         ["linear"],
         ["get", "species_count"],
-        0,
+        min,
         "#c8fcff",
-        10000,
+        max,
         "#0071e4",
       ],
       "circle-opacity": 0.6,
@@ -110,9 +126,9 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
         "interpolate",
         ["linear"],
         ["get", "species_count"],
-        0,
-        2,
-        10000,
+        min,
+        10,
+        max,
         30,
       ],
     },
@@ -149,9 +165,9 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
           "interpolate",
           ["linear"],
           ["get", "species_count"],
-          0,
+          min,
           "#c8fcff",
-          10000,
+          max,
           "#0071e4",
         ],
         "#fff",
@@ -162,30 +178,11 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
       "circle-radius": [
         "case",
         ["boolean", ["feature-state", "hover"], true],
-        ["interpolate", ["linear"], ["get", "species_count"], 0, 2, 10000, 30],
+        ["interpolate", ["linear"], ["get", "species_count"], min, 10, max, 30],
         0,
       ],
     },
   };
-  // const ecoStatsHoverText = {
-  //   id: "eco-stats-hover-text",
-  //   type: "symbol",
-  //   source: "data",
-  //   // "source-layer": "ecomap-tiles",
-  //   layout: {
-  //     "text-field": ["to-string", ["get", "rank"]],
-  //     "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-  //     "text-size": 20,
-  //   },
-  //   paint: {
-  //     "text-color": [
-  //       "case",
-  //       ["boolean", ["feature-state", "hover"], true],
-  //       "rgba(255,255,255,1)",
-  //       "rgba(0,0,0,0)",
-  //     ],
-  //   },
-  // };
 
   // outline layer
   const ecoLine = {
@@ -237,29 +234,51 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
     [selectedRegion]
   );
 
-  //   {type: "feature",
-  //   geometry: {type : "Point", coordinates: [] },
-  //   properties: {name    : "",
-  //             category: ""
-  //             }
-  // }
-  //   console.log(ecoregions);
-
-  // const data = {};
-  // data.type = "FeatureCollection";
-  // data.features = ecoregions.map((ecoregion) => {
-  //   return {
-  //     type: "feature",
-  //     geometry: { type: "Point", coordinates: ecoregion.coordinates },
-  //     properties: {
-  //       name: ecoregion.name,
-  //       unique_id: ecoregion.unique_id,
-  //       species_count: ecoregion.species_count,
-  //     },
-  //   };
-  // });
   return (
     <>
+      {display && (
+        <div
+          style={{
+            position: "absolute",
+            top: 250,
+            left: 200,
+            maxWidth: "320px",
+            background: "#fff",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+            padding: "12px 24px",
+            margin: "20px",
+            fontSize: "13px",
+            lineHeight: "2",
+            color: "#6b6b76",
+            textTransform: "uppercase",
+            outline: "none",
+            zIndex: 1,
+          }}
+        >
+          <Typography>
+            eco-{display.unique_id}: {display.name}
+          </Typography>
+          <Typography>species count: {display.species_count}</Typography>
+          <Typography>rank: {display.rank}</Typography>
+        </div>
+      )}
+      {/* {isLoading && (
+        <CircularProgress
+          color="secondary"
+          size={100}
+          disableShrink={true}
+          sx={{
+            // margin: "50px auto",
+            display: "flex",
+            justifySelf: "center",
+            position: "absolute",
+            top: 250,
+            left: 200,
+            zIndex: 1,
+          }}
+        />
+      )} */}
+
       <Map
         reuseMaps
         style={{
@@ -334,12 +353,6 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
               {...ecoStatsText}
               // filter={hoverFilter}
             />
-            {/* <Layer
-              id="eco-stats-hover-text"
-              beforeId="waterway-label"
-              {...ecoStatsHoverText}
-              filter={hoverFilter}
-            /> */}
           </Source>
         )}
 
@@ -384,6 +397,22 @@ const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
               x
             </Button>
           </Popup>
+        )}
+        {isLoading && (
+          <CircularProgress
+            color="secondary"
+            size={100}
+            disableShrink={true}
+            sx={{
+              margin: "200px auto",
+              display: "flex",
+              justifySelf: "center",
+              // position: "absolute",
+              // top: 250,
+              // left: 200,
+              zIndex: 1,
+            }}
+          />
         )}
       </Map>
     </>
