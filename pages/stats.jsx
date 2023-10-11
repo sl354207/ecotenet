@@ -102,6 +102,7 @@ const stats = ({ ecoregions }) => {
     // setRanked(results)
     // console.log(results);
   }, [results, value1]);
+
   useEffect(() => {
     if (go && allSpecies) {
       const sorted = ecoregions.sort(function (a, b) {
@@ -116,11 +117,14 @@ const stats = ({ ecoregions }) => {
           rank: index + 1,
         };
       });
+
       setAllSpeciesRanked(ranked);
     } else {
       setAllSpeciesRanked(undefined);
     }
   }, [go]);
+
+  const [display, setDisplay] = useState();
 
   let list;
 
@@ -533,7 +537,39 @@ const stats = ({ ecoregions }) => {
             GO
           </Button>
         </Box>
-        <MapStats ecoregions={ecoregions} />
+        <MapStats
+          ecoregions={allSpeciesRanked}
+          // hoverInfo={hoverInfo}
+          // setHoverInfo={setHoverInfo}
+          setDisplay={setDisplay}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: 250,
+            left: 200,
+            maxWidth: "320px",
+            background: "#fff",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
+            padding: "12px 24px",
+            margin: "20px",
+            fontSize: "13px",
+            lineHeight: "2",
+            color: "#6b6b76",
+            textTransform: "uppercase",
+            outline: "none",
+          }}
+        >
+          {display && (
+            <>
+              <Typography>
+                eco-{display.unique_id}: {display.name}
+              </Typography>
+              <Typography>species count: {display.species_count}</Typography>
+              <Typography>rank: {display.rank}</Typography>
+            </>
+          )}
+        </div>
         {list}
       </Container>
       <Footer />

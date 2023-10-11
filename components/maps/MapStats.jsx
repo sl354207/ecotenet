@@ -1,10 +1,67 @@
 import { Button, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Map, { Layer, Popup, Source } from "react-map-gl";
 
-const MapStats = ({ isMobile, ecoregions }) => {
+const MapStats = ({ isMobile, ecoregions, setDisplay }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
+  // console.log()
+
+  const [data, setData] = useState();
+  // console.log(data);
+  const [hoverInfo, setHoverInfo] = useState(null);
+  const selectedHover = (hoverInfo && hoverInfo.species_count) || "";
+
+  const hoverFilter = useMemo(
+    () => ["in", "species_count", selectedHover],
+    [selectedHover]
+  );
+
+  const onHover = useCallback(
+    (event) => {
+      // setShowPopup(true);
+      // UPDATE
+      const species_count = event.features && event.features[0];
+      // console.log(species_count);
+      if (event && event.features[0]?.layer.id == "eco-stats-bubble") {
+        console.log(event.features);
+        const properties = event.features[0].properties;
+        setDisplay({
+          name: properties.name,
+          unique_id: properties.unique_id,
+          species_count: properties.species_count,
+          rank: properties.rank,
+        });
+      }
+
+      setHoverInfo({
+        species_count: species_count && species_count.properties.species_count,
+        // regionName: region && region.properties.name,
+        // regionNum: region && region.properties.unique_id,
+      });
+    },
+    [hoverInfo]
+  );
+
+  useEffect(() => {
+    if (ecoregions) {
+      const dataTemp = {};
+      dataTemp.type = "FeatureCollection";
+      dataTemp.features = ecoregions.map((ecoregion) => {
+        return {
+          type: "feature",
+          geometry: { type: "Point", coordinates: ecoregion.coordinates },
+          properties: {
+            name: ecoregion.name,
+            unique_id: ecoregion.unique_id,
+            species_count: ecoregion.species_count,
+            rank: ecoregion.rank,
+          },
+        };
+      });
+      setData(dataTemp);
+    }
+  }, [ecoregions]);
 
   // base layer
   const ecoFill = {
@@ -68,7 +125,7 @@ const MapStats = ({ isMobile, ecoregions }) => {
     source: "data",
     // "source-layer": "ecomap-tiles",
     layout: {
-      "text-field": ["concat", ["to-string", ["get", "species_count"]]],
+      "text-field": ["to-string", ["get", "rank"]],
       "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
       "text-size": 12,
     },
@@ -83,6 +140,7 @@ const MapStats = ({ isMobile, ecoregions }) => {
     type: "circle",
     source: "data",
     // "source-layer": "ecomap-tiles",
+
     paint: {
       "circle-color": [
         "case",
@@ -109,6 +167,25 @@ const MapStats = ({ isMobile, ecoregions }) => {
       ],
     },
   };
+  // const ecoStatsHoverText = {
+  //   id: "eco-stats-hover-text",
+  //   type: "symbol",
+  //   source: "data",
+  //   // "source-layer": "ecomap-tiles",
+  //   layout: {
+  //     "text-field": ["to-string", ["get", "rank"]],
+  //     "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+  //     "text-size": 20,
+  //   },
+  //   paint: {
+  //     "text-color": [
+  //       "case",
+  //       ["boolean", ["feature-state", "hover"], true],
+  //       "rgba(255,255,255,1)",
+  //       "rgba(0,0,0,0)",
+  //     ],
+  //   },
+  // };
 
   // outline layer
   const ecoLine = {
@@ -168,45 +245,19 @@ const MapStats = ({ isMobile, ecoregions }) => {
   // }
   //   console.log(ecoregions);
 
-  const [hoverInfo, setHoverInfo] = useState(null);
-
-  const selectedHover = (hoverInfo && hoverInfo.species_count) || "";
-
-  const hoverFilter = useMemo(
-    () => ["in", "species_count", selectedHover],
-    [selectedHover]
-  );
-
-  const onHover = useCallback(
-    (event) => {
-      // setShowPopup(true);
-      const species_count = event.features && event.features[0];
-      if (event && event.features[0]?.layer.id !== "eco-fill") {
-        console.log(event.features);
-      }
-
-      setHoverInfo({
-        species_count: species_count && species_count.properties.species_count,
-        // regionName: region && region.properties.name,
-        // regionNum: region && region.properties.unique_id,
-      });
-    },
-    [hoverInfo]
-  );
-
-  const data = {};
-  data.type = "FeatureCollection";
-  data.features = ecoregions.map((ecoregion) => {
-    return {
-      type: "feature",
-      geometry: { type: "Point", coordinates: ecoregion.coordinates },
-      properties: {
-        name: ecoregion.name,
-        unique_id: ecoregion.unique_id,
-        species_count: ecoregion.species_count,
-      },
-    };
-  });
+  // const data = {};
+  // data.type = "FeatureCollection";
+  // data.features = ecoregions.map((ecoregion) => {
+  //   return {
+  //     type: "feature",
+  //     geometry: { type: "Point", coordinates: ecoregion.coordinates },
+  //     properties: {
+  //       name: ecoregion.name,
+  //       unique_id: ecoregion.unique_id,
+  //       species_count: ecoregion.species_count,
+  //     },
+  //   };
+  // });
   return (
     <>
       <Map
@@ -232,7 +283,13 @@ const MapStats = ({ isMobile, ecoregions }) => {
         touchPitch={false}
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs"
         mapboxAccessToken={mapBox}
-        interactiveLayerIds={["eco-fill", "eco-stats-bubble"]}
+        interactiveLayerIds={[
+          "eco-fill",
+          "eco-stats-bubble",
+          "eco-stats-text",
+          "eco-stats-hover",
+          "eco-stats-hover-text",
+        ]}
         onClick={onClick}
         onMouseMove={onHover}
       >
@@ -248,28 +305,44 @@ const MapStats = ({ isMobile, ecoregions }) => {
 
           <Layer beforeId="waterway-label" {...ecoLine} />
         </Source>
-        <Source id="eco-stats" type="geojson" data={data}>
-          <Layer
-            id="eco-stats-bubble"
-            beforeId="waterway-label"
-            {...ecoStatsBubble}
-            // filter={clickFilter}
-            // filter={hoverFilter}
-          />
+        {data && (
+          <Source
+            id="eco-stats"
+            type="geojson"
+            data={data && data}
+            // tolerance={0}
+            // maxzoom={24}
+          >
+            <Layer
+              id="eco-stats-bubble"
+              beforeId="waterway-label"
+              {...ecoStatsBubble}
+              // filter={clickFilter}
+              // filter={hoverFilter}
+            />
 
-          <Layer
-            id="eco-stats-hover"
-            beforeId="waterway-label"
-            {...ecoStatsHover}
-            filter={hoverFilter}
-          />
-          <Layer
-            id="eco-stats-text"
-            beforeId="waterway-label"
-            {...ecoStatsText}
-            // filter={hoverFilter}
-          />
-        </Source>
+            <Layer
+              id="eco-stats-hover"
+              beforeId="waterway-label"
+              {...ecoStatsHover}
+              filter={hoverFilter}
+            />
+
+            <Layer
+              id="eco-stats-text"
+              beforeId="waterway-label"
+              {...ecoStatsText}
+              // filter={hoverFilter}
+            />
+            {/* <Layer
+              id="eco-stats-hover-text"
+              beforeId="waterway-label"
+              {...ecoStatsHoverText}
+              filter={hoverFilter}
+            /> */}
+          </Source>
+        )}
+
         {selectedRegion && showPopup && (
           <Popup
             longitude={clickInfo.longitude}
