@@ -6,7 +6,6 @@ import {
   Autocomplete,
   Box,
   Button,
-  CircularProgress,
   Container,
   FormControl,
   List,
@@ -134,50 +133,83 @@ const stats = ({ ecoregions }) => {
 
   let list;
 
-  if (isLoading) {
+  if (error) {
     list = (
-      <CircularProgress
-        color="secondary"
-        size={100}
-        disableShrink={true}
-        sx={{
-          margin: "50px auto",
+      <div
+        style={{
           display: "flex",
-          justifySelf: "center",
+          justifyContent: "center",
+          marginTop: "20px",
         }}
-      />
+      >
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => mutate(`/api/rank?v1=${value1}&v2=${value2}`)}
+        >
+          Error Loading. Retry
+        </Button>
+      </div>
     );
   } else {
-    if (error) {
+    if (Array.isArray(results) && results.length === 0) {
       list = (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => mutate(`/api/rank?v1=${value1}&v2=${value2}`)}
-          >
-            Error Loading. Retry
-          </Button>
-        </div>
+        <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+          no results
+        </Typography>
+      );
+    } else if (allSpeciesRanked) {
+      list = (
+        <List>
+          <>
+            {allSpeciesRanked.map((ecoregion, index) => {
+              return (
+                <div
+                  key={ecoregion.unique_id}
+                  style={{
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      1
+                    )}`,
+                    marginBlock: "5px",
+                    borderRadius: "10px",
+                    display: "flex",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ marginBlock: "auto", paddingLeft: "16px" }}
+                  >
+                    {index + 1}
+                  </Typography>
+                  <div display="block">
+                    <ListItem key={ecoregion.unique_id}>
+                      Eco-{ecoregion.unique_id}:{" "}
+                      <Link
+                        sx={{ marginLeft: "5px" }}
+                        href={`/ecoregions/${ecoregion.unique_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {ecoregion.name}
+                      </Link>
+                    </ListItem>
+                    <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                      {rendered} species count: {ecoregion.species_count}
+                    </Typography>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        </List>
       );
     } else {
-      if (Array.isArray(results) && results.length === 0) {
-        list = (
-          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-            no results
-          </Typography>
-        );
-      } else if (allSpeciesRanked) {
-        list = (
-          <List>
+      list = (
+        <List>
+          {results && go && (
             <>
-              {allSpeciesRanked.map((ecoregion, index) => {
+              {results.map((ecoregion, index) => {
                 return (
                   <div
                     key={ecoregion.unique_id}
@@ -217,57 +249,9 @@ const stats = ({ ecoregions }) => {
                 );
               })}
             </>
-          </List>
-        );
-      } else {
-        list = (
-          <List>
-            {results && go && (
-              <>
-                {results.map((ecoregion, index) => {
-                  return (
-                    <div
-                      key={ecoregion.unique_id}
-                      style={{
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          1
-                        )}`,
-                        marginBlock: "5px",
-                        borderRadius: "10px",
-                        display: "flex",
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{ marginBlock: "auto", paddingLeft: "16px" }}
-                      >
-                        {index + 1}
-                      </Typography>
-                      <div display="block">
-                        <ListItem key={ecoregion.unique_id}>
-                          Eco-{ecoregion.unique_id}:{" "}
-                          <Link
-                            sx={{ marginLeft: "5px" }}
-                            href={`/ecoregions/${ecoregion.unique_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {ecoregion.name}
-                          </Link>
-                        </ListItem>
-                        <Typography sx={{ padding: "0px 0px 8px 16px" }}>
-                          {rendered} species count: {ecoregion.species_count}
-                        </Typography>
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </List>
-        );
-      }
+          )}
+        </List>
+      );
     }
   }
 
@@ -543,13 +527,7 @@ const stats = ({ ecoregions }) => {
             GO
           </Button>
         </Box>
-        <MapStats
-          ecoregions={mapRanks && mapRanks}
-          isLoading={isLoading}
-          // hoverInfo={hoverInfo}
-          // setHoverInfo={setHoverInfo}
-          // setDisplay={setDisplay}
-        />
+        <MapStats ecoregions={mapRanks && mapRanks} isLoading={isLoading} />
 
         {list}
       </Container>
