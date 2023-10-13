@@ -14,11 +14,12 @@ import {
   Typography,
   alpha,
 } from "@mui/material";
+import { createFilterOptions } from "@mui/material/Autocomplete";
 import fetcher from "@utils/fetcher";
 import { getStatsEcoregions } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { CollectionPageJsonLd, NextSeo } from "next-seo";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 const options1 = [
@@ -99,8 +100,6 @@ const stats = ({ ecoregions }) => {
         }
       }
     }
-    // setRanked(results)
-    // console.log(results);
   }, [results, value1]);
 
   useEffect(() => {
@@ -130,6 +129,29 @@ const stats = ({ ecoregions }) => {
       setMapRanks(undefined);
     }
   }, [go]);
+
+  const mapRef = useRef();
+
+  const onSelectEcoregion = useCallback((ecoregion) => {
+    const longitude = ecoregion.coordinates[0];
+    const latitude = ecoregion.coordinates[1];
+    mapRef.current?.easeTo({
+      center: [longitude, latitude],
+      duration: 1000,
+      zoom: 5,
+    });
+
+    window.scrollTo({
+      top: 150,
+      left: 100,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    limit: 100,
+  });
 
   let list;
 
@@ -184,20 +206,28 @@ const stats = ({ ecoregions }) => {
                   </Typography>
                   <div display="block">
                     <ListItem key={ecoregion.unique_id}>
-                      Eco-{ecoregion.unique_id}:{" "}
-                      <Link
-                        sx={{ marginLeft: "5px" }}
-                        href={`/ecoregions/${ecoregion.unique_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {ecoregion.name}
-                      </Link>
+                      Eco-{ecoregion.unique_id}: {ecoregion.name}
                     </ListItem>
                     <Typography sx={{ padding: "0px 0px 8px 16px" }}>
                       {rendered} species count: {ecoregion.species_count}
                     </Typography>
                   </div>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ marginLeft: "auto", marginBlock: "auto" }}
+                    onClick={() => onSelectEcoregion(ecoregion)}
+                  >
+                    Find
+                  </Button>
+                  <Link
+                    sx={{ marginInline: "10px", marginBlock: "auto" }}
+                    href={`/ecoregions/${ecoregion.unique_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    visit
+                  </Link>
                 </div>
               );
             })}
@@ -231,20 +261,28 @@ const stats = ({ ecoregions }) => {
                     </Typography>
                     <div display="block">
                       <ListItem key={ecoregion.unique_id}>
-                        Eco-{ecoregion.unique_id}:{" "}
-                        <Link
-                          sx={{ marginLeft: "5px" }}
-                          href={`/ecoregions/${ecoregion.unique_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {ecoregion.name}
-                        </Link>
+                        Eco-{ecoregion.unique_id}: {ecoregion.name}
                       </ListItem>
                       <Typography sx={{ padding: "0px 0px 8px 16px" }}>
                         {rendered} species count: {ecoregion.species_count}
                       </Typography>
                     </div>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      sx={{ marginLeft: "auto", marginBlock: "auto" }}
+                      onClick={() => onSelectEcoregion(ecoregion)}
+                    >
+                      Find
+                    </Button>
+                    <Link
+                      sx={{ marginInline: "10px", marginBlock: "auto" }}
+                      href={`/ecoregions/${ecoregion.unique_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      visit
+                    </Link>
                   </div>
                 );
               })}
@@ -460,6 +498,7 @@ const stats = ({ ecoregions }) => {
               autoHighlight
               id="category-auto"
               name="category"
+              filterOptions={filterOptions}
               onChange={(event, newValue) => {
                 setGo(false);
                 if (!newValue) {
@@ -527,7 +566,11 @@ const stats = ({ ecoregions }) => {
             GO
           </Button>
         </Box>
-        <MapStats ecoregions={mapRanks && mapRanks} isLoading={isLoading} />
+        <MapStats
+          ecoregions={mapRanks && mapRanks}
+          isLoading={isLoading}
+          mapRef={mapRef}
+        />
 
         {list}
       </Container>

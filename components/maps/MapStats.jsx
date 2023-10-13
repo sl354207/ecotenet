@@ -3,9 +3,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Map, { Layer, Source } from "react-map-gl";
 
-const MapStats = ({ isMobile, ecoregions, isLoading }) => {
+const MapStats = ({ isMobile, ecoregions, isLoading, mapRef }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
-  // console.log(ecoregions);
 
   const [data, setData] = useState();
 
@@ -13,7 +12,8 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
   const [min, setMin] = useState();
   const [max, setMax] = useState();
 
-  // console.log(data);
+  const [clickInfo, setClickInfo] = useState(null);
+  const [hoverInfo, setHoverInfo] = useState(null);
 
   useEffect(() => {
     if (ecoregions) {
@@ -39,12 +39,13 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
       setMax(
         Math.max(...ecoregions.map((ecoregion) => ecoregion.species_count))
       );
-
-      // console.log(dataTemp);
+    } else {
+      setData(undefined);
+      setDisplay(undefined);
+      setHoverInfo(null);
+      setClickInfo(null);
     }
   }, [ecoregions]);
-  // console.log(min);
-  // console.log(max);
 
   // base layer
   const ecoFill = {
@@ -169,12 +170,6 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
     },
   };
 
-  const [clickInfo, setClickInfo] = useState(null);
-
-  const [hoverInfo, setHoverInfo] = useState(null);
-
-  const [showPopup, setShowPopup] = useState(true);
-
   // set click info when clicking over map. useCallback memoizes function so it isn't recalled every time user clicks over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   const onClick = useCallback(
     (event) => {
@@ -198,6 +193,7 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
         }
         if (region?.layer.id == "eco-fill") {
           const properties = region.properties;
+
           if (
             data &&
             data.features.some(
@@ -224,7 +220,7 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
         }
       }
     },
-    [hoverInfo]
+    [hoverInfo, data]
   );
 
   const selectedRegion = (clickInfo && clickInfo.regionNum) || "";
@@ -263,8 +259,6 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
         <div
           style={{
             position: "absolute",
-            top: 250,
-            left: 200,
             maxWidth: "320px",
             background: "#fff",
             boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
@@ -279,15 +273,20 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
           }}
         >
           <Typography>
-            eco-{display.unique_id}: {display.name}
+            <b>eco-{display.unique_id}</b>: {display.name}
           </Typography>
-          <Typography>species count: {display.species_count}</Typography>
-          <Typography>rank: {display.rank}</Typography>
+          <Typography>
+            <b>rank</b>: {display.rank}
+          </Typography>
+          <Typography>
+            <b>species count</b>: {display.species_count}
+          </Typography>
         </div>
       )}
 
       <Map
         reuseMaps
+        ref={mapRef}
         style={{
           width: "auto",
           height: "80vh",
@@ -330,8 +329,7 @@ const MapStats = ({ isMobile, ecoregions, isLoading }) => {
             id="eco-stats"
             type="geojson"
             data={data && data}
-            // tolerance={0}
-            // maxzoom={24}
+            tolerance={0}
           >
             <Layer
               id="eco-stats-bubble"
