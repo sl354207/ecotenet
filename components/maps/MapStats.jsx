@@ -1,9 +1,9 @@
 import { CircularProgress, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Map, { Layer, Source } from "react-map-gl";
+import Map, { AttributionControl, Layer, Source } from "react-map-gl";
 
-const MapStats = ({ isMobile, ecoregions, isLoading, mapRef }) => {
+const MapStats = ({ ecoregions, isLoading, mapRef }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   const [data, setData] = useState();
@@ -311,6 +311,7 @@ const MapStats = ({ isMobile, ecoregions, isLoading, mapRef }) => {
         interactiveLayerIds={["eco-fill", "eco-stats-bubble"]}
         onClick={onClick}
         onMouseMove={onHover}
+        attributionControl={false}
       >
         <Source id="eco-map" type="vector" url="mapbox://sl354207.ecomap-tiles">
           <Layer id="base" beforeId="waterway-label" {...ecoFill} />
@@ -351,6 +352,16 @@ const MapStats = ({ isMobile, ecoregions, isLoading, mapRef }) => {
             />
           </Source>
         )}
+        <AttributionControl
+          compact={true}
+          customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
+            World. GIS layers developed by The Nature Conservancy with multiple partners,
+            combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK):
+            The Nature Conservancy. DOIs: 10.1641/B570707;
+            10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-
+            wcmc.org/datasets/38"
+          style={{ color: "black" }}
+        />
 
         {isLoading && (
           <CircularProgress

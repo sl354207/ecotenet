@@ -573,6 +573,13 @@ const stats = ({ ecoregions }) => {
         />
 
         {list}
+        <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
+          *It&apos;s helpful to remember that these statistics may be more
+          representative of our dataset than the real world at times. The data
+          tends to skew towards more developed areas that have more publicly
+          available data especially for categories with a smaller number of
+          species.
+        </Typography>
       </Container>
       <Footer />
     </>

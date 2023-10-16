@@ -300,7 +300,6 @@ const MapPage = ({ ecoregions }) => {
                 flexShrink: 0,
                 top: top,
                 overflow: "visible",
-                zIndex: 1100,
                 "& .MuiDrawer-paper": {
                   width: "100%",
                   backgroundColor: theme.palette.primary.light,
@@ -467,6 +466,7 @@ const MapPage = ({ ecoregions }) => {
                   width: drawerWidth,
                   overflow: "visible",
                   top: 60,
+                  zIndex: 1000,
                 },
                 width: drawerWidth,
               }}
