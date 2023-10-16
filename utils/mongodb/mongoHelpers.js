@@ -1116,7 +1116,7 @@ const getStatsAPIEcoregions = async () => {
     const response = await db
       .collection("ecoregions")
       .find({})
-      .project({ unique_id: 1, name: 1, _id: 0 })
+      .project({ unique_id: 1, name: 1, coordinates: 1, _id: 0 })
       .toArray();
 
     return response;

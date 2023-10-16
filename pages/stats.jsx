@@ -1,11 +1,11 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
+import MapStats from "@components/maps/MapStats";
 import {
   Autocomplete,
   Box,
   Button,
-  CircularProgress,
   Container,
   FormControl,
   List,
@@ -14,11 +14,12 @@ import {
   Typography,
   alpha,
 } from "@mui/material";
+import { createFilterOptions } from "@mui/material/Autocomplete";
 import fetcher from "@utils/fetcher";
 import { getStatsEcoregions } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
 import { CollectionPageJsonLd, NextSeo } from "next-seo";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 const options1 = [
@@ -43,6 +44,7 @@ const stats = ({ ecoregions }) => {
 
   const [allSpecies, setAllSpecies] = useState(false);
   const [allSpeciesRanked, setAllSpeciesRanked] = useState();
+  const [mapRanks, setMapRanks] = useState();
 
   const {
     data: results,
@@ -98,66 +100,146 @@ const stats = ({ ecoregions }) => {
         }
       }
     }
-    // setRanked(results)
-    // console.log(results);
   }, [results, value1]);
+
   useEffect(() => {
-    if (go && allSpecies) {
-      const sorted = ecoregions.sort(function (a, b) {
-        return b.species_count - a.species_count;
-      });
-      setAllSpeciesRanked(sorted);
+    if (go) {
+      if (allSpecies) {
+        const sorted = ecoregions.sort(function (a, b) {
+          return b.species_count - a.species_count;
+        });
+        const ranked = sorted.map((ecoregion, index) => {
+          return {
+            unique_id: ecoregion.unique_id,
+            name: ecoregion.name,
+            coordinates: ecoregion.coordinates,
+            species_count: ecoregion.species_count,
+            rank: index + 1,
+          };
+        });
+
+        setAllSpeciesRanked(ranked);
+        setMapRanks(ranked);
+      }
+      if (results && results.length > 0) {
+        setMapRanks(results);
+      }
     } else {
       setAllSpeciesRanked(undefined);
+      setMapRanks(undefined);
     }
   }, [go]);
 
+  const mapRef = useRef();
+
+  const onSelectEcoregion = useCallback((ecoregion) => {
+    const longitude = ecoregion.coordinates[0];
+    const latitude = ecoregion.coordinates[1];
+    mapRef.current?.easeTo({
+      center: [longitude, latitude],
+      duration: 1000,
+      zoom: 5,
+    });
+
+    window.scrollTo({
+      top: 150,
+      left: 100,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "start",
+    limit: 100,
+  });
+
   let list;
 
-  if (isLoading) {
+  if (error) {
     list = (
-      <CircularProgress
-        color="secondary"
-        size={100}
-        disableShrink={true}
-        sx={{
-          margin: "50px auto",
+      <div
+        style={{
           display: "flex",
-          justifySelf: "center",
+          justifyContent: "center",
+          marginTop: "20px",
         }}
-      />
+      >
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => mutate(`/api/rank?v1=${value1}&v2=${value2}`)}
+        >
+          Error Loading. Retry
+        </Button>
+      </div>
     );
   } else {
-    if (error) {
+    if (Array.isArray(results) && results.length === 0) {
       list = (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => mutate(`/api/rank?v1=${value1}&v2=${value2}`)}
-          >
-            Error Loading. Retry
-          </Button>
-        </div>
+        <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
+          no results
+        </Typography>
+      );
+    } else if (allSpeciesRanked) {
+      list = (
+        <List>
+          <>
+            {allSpeciesRanked.map((ecoregion, index) => {
+              return (
+                <div
+                  key={ecoregion.unique_id}
+                  style={{
+                    border: `1px solid ${alpha(
+                      theme.palette.secondary.main,
+                      1
+                    )}`,
+                    marginBlock: "5px",
+                    borderRadius: "10px",
+                    display: "flex",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ marginBlock: "auto", paddingLeft: "16px" }}
+                  >
+                    {index + 1}
+                  </Typography>
+                  <div display="block">
+                    <ListItem key={ecoregion.unique_id}>
+                      Eco-{ecoregion.unique_id}: {ecoregion.name}
+                    </ListItem>
+                    <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                      {rendered} species count: {ecoregion.species_count}
+                    </Typography>
+                  </div>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ marginLeft: "auto", marginBlock: "auto" }}
+                    onClick={() => onSelectEcoregion(ecoregion)}
+                  >
+                    Find
+                  </Button>
+                  <Link
+                    sx={{ marginInline: "10px", marginBlock: "auto" }}
+                    href={`/ecoregions/${ecoregion.unique_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    visit
+                  </Link>
+                </div>
+              );
+            })}
+          </>
+        </List>
       );
     } else {
-      if (Array.isArray(results) && results.length === 0) {
-        list = (
-          <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
-            no results
-          </Typography>
-        );
-      } else if (allSpeciesRanked) {
-        list = (
-          <List>
+      list = (
+        <List>
+          {results && go && (
             <>
-              {allSpeciesRanked.map((ecoregion, index) => {
+              {results.map((ecoregion, index) => {
                 return (
                   <div
                     key={ecoregion.unique_id}
@@ -179,75 +261,35 @@ const stats = ({ ecoregions }) => {
                     </Typography>
                     <div display="block">
                       <ListItem key={ecoregion.unique_id}>
-                        Eco-{ecoregion.unique_id}:{" "}
-                        <Link
-                          sx={{ marginLeft: "5px" }}
-                          href={`/ecoregions/${ecoregion.unique_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {ecoregion.name}
-                        </Link>
+                        Eco-{ecoregion.unique_id}: {ecoregion.name}
                       </ListItem>
                       <Typography sx={{ padding: "0px 0px 8px 16px" }}>
                         {rendered} species count: {ecoregion.species_count}
                       </Typography>
                     </div>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      sx={{ marginLeft: "auto", marginBlock: "auto" }}
+                      onClick={() => onSelectEcoregion(ecoregion)}
+                    >
+                      Find
+                    </Button>
+                    <Link
+                      sx={{ marginInline: "10px", marginBlock: "auto" }}
+                      href={`/ecoregions/${ecoregion.unique_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      visit
+                    </Link>
                   </div>
                 );
               })}
             </>
-          </List>
-        );
-      } else {
-        list = (
-          <List>
-            {results && go && (
-              <>
-                {results.map((ecoregion, index) => {
-                  return (
-                    <div
-                      key={ecoregion.unique_id}
-                      style={{
-                        border: `1px solid ${alpha(
-                          theme.palette.secondary.main,
-                          1
-                        )}`,
-                        marginBlock: "5px",
-                        borderRadius: "10px",
-                        display: "flex",
-                      }}
-                    >
-                      <Typography
-                        variant="h6"
-                        sx={{ marginBlock: "auto", paddingLeft: "16px" }}
-                      >
-                        {index + 1}
-                      </Typography>
-                      <div display="block">
-                        <ListItem key={ecoregion.unique_id}>
-                          Eco-{ecoregion.unique_id}:{" "}
-                          <Link
-                            sx={{ marginLeft: "5px" }}
-                            href={`/ecoregions/${ecoregion.unique_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {ecoregion.name}
-                          </Link>
-                        </ListItem>
-                        <Typography sx={{ padding: "0px 0px 8px 16px" }}>
-                          {rendered} species count: {ecoregion.rank}
-                        </Typography>
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </List>
-        );
-      }
+          )}
+        </List>
+      );
     }
   }
 
@@ -456,6 +498,7 @@ const stats = ({ ecoregions }) => {
               autoHighlight
               id="category-auto"
               name="category"
+              filterOptions={filterOptions}
               onChange={(event, newValue) => {
                 setGo(false);
                 if (!newValue) {
@@ -523,7 +566,20 @@ const stats = ({ ecoregions }) => {
             GO
           </Button>
         </Box>
+        <MapStats
+          ecoregions={mapRanks && mapRanks}
+          isLoading={isLoading}
+          mapRef={mapRef}
+        />
+
         {list}
+        <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
+          *It&apos;s helpful to remember that these statistics may be more
+          representative of our dataset than the real world at times. The data
+          tends to skew towards more developed areas that have more publicly
+          available data especially for categories with a smaller number of
+          species.
+        </Typography>
       </Container>
       <Footer />
     </>
