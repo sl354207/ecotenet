@@ -205,10 +205,18 @@ const stats = ({ ecoregions }) => {
                     {index + 1}
                   </Typography>
                   <div display="block">
-                    <ListItem key={ecoregion.unique_id}>
+                    <ListItem
+                      key={ecoregion.unique_id}
+                      sx={{ wordBreak: "break-word" }}
+                    >
                       Eco-{ecoregion.unique_id}: {ecoregion.name}
                     </ListItem>
-                    <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                    <Typography
+                      sx={{
+                        padding: "0px 0px 8px 16px",
+                        wordBreak: "break-word",
+                      }}
+                    >
                       {rendered} species count: {ecoregion.species_count}
                     </Typography>
                   </div>
@@ -260,10 +268,18 @@ const stats = ({ ecoregions }) => {
                       {index + 1}
                     </Typography>
                     <div display="block">
-                      <ListItem key={ecoregion.unique_id}>
+                      <ListItem
+                        key={ecoregion.unique_id}
+                        sx={{ wordBreak: "break-word" }}
+                      >
                         Eco-{ecoregion.unique_id}: {ecoregion.name}
                       </ListItem>
-                      <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                      <Typography
+                        sx={{
+                          padding: "0px 0px 8px 16px",
+                          wordBreak: "break-word",
+                        }}
+                      >
                         {rendered} species count: {ecoregion.species_count}
                       </Typography>
                     </div>

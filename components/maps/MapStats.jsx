@@ -262,7 +262,7 @@ const MapStats = ({ ecoregions, isLoading, mapRef }) => {
             maxWidth: "320px",
             background: "#fff",
             boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
-            padding: "12px 24px",
+            padding: "12px 12px",
             margin: "20px",
             fontSize: "13px",
             lineHeight: "2",
@@ -272,7 +272,7 @@ const MapStats = ({ ecoregions, isLoading, mapRef }) => {
             zIndex: 1,
           }}
         >
-          <Typography>
+          <Typography sx={{ wordBreak: "break-word" }}>
             <b>eco-{display.unique_id}</b>: {display.name}
           </Typography>
           <Typography>
