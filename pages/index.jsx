@@ -216,7 +216,7 @@ const MapPage = ({ ecoregions }) => {
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   return (
-    <div id="map-main">
+    <>
       <MapProvider>
         <MapMain
           isMobile={isMobile}
@@ -596,7 +596,7 @@ const MapPage = ({ ecoregions }) => {
         )}
       </MapProvider>
       {!visited && <DynamicWelcomeDialog />}
-    </div>
+    </>
   );
 };
 

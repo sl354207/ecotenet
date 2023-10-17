@@ -1,9 +1,10 @@
 import { CircularProgress, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Map, { AttributionControl, Layer, Source } from "react-map-gl";
 
-const MapStats = ({ ecoregions, isLoading, mapRef }) => {
+const MapStats = ({ ecoregions, isLoading, mapRef, loading, setLoading }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   const [data, setData] = useState();
@@ -19,32 +20,60 @@ const MapStats = ({ ecoregions, isLoading, mapRef }) => {
     if (ecoregions) {
       const dataTemp = {};
       dataTemp.type = "FeatureCollection";
-      dataTemp.features = ecoregions.map((ecoregion) => {
-        return {
-          type: "feature",
-          geometry: { type: "Point", coordinates: ecoregion.coordinates },
-          properties: {
-            name: ecoregion.name,
-            unique_id: ecoregion.unique_id,
-            species_count: ecoregion.species_count,
-            rank: ecoregion.rank,
-          },
-        };
-      });
+      if (ecoregions.ranked) {
+        dataTemp.features = ecoregions.ranked.map((ecoregion) => {
+          return {
+            type: "feature",
+            geometry: { type: "Point", coordinates: ecoregion.coordinates },
+            properties: {
+              name: ecoregion.name,
+              unique_id: ecoregion.unique_id,
+              species_count: ecoregion.species_count,
+              rank: ecoregion.rank,
+            },
+          };
+        });
+        // find the min and max values of the species_count in ecoregions
+        setMin(
+          Math.min(
+            ...ecoregions.ranked.map((ecoregion) => ecoregion.species_count)
+          )
+        );
+        setMax(
+          Math.max(
+            ...ecoregions.ranked.map((ecoregion) => ecoregion.species_count)
+          )
+        );
+      } else {
+        dataTemp.features = ecoregions.map((ecoregion) => {
+          return {
+            type: "feature",
+            geometry: { type: "Point", coordinates: ecoregion.coordinates },
+            properties: {
+              name: ecoregion.name,
+              unique_id: ecoregion.unique_id,
+              species_count: ecoregion.species_count,
+              rank: ecoregion.rank,
+            },
+          };
+        });
+        // find the min and max values of the species_count in ecoregions
+        setMin(
+          Math.min(...ecoregions.map((ecoregion) => ecoregion.species_count))
+        );
+        setMax(
+          Math.max(...ecoregions.map((ecoregion) => ecoregion.species_count))
+        );
+      }
+
       setData(dataTemp);
-      // find the min and max values of the species_count in ecoregions
-      setMin(
-        Math.min(...ecoregions.map((ecoregion) => ecoregion.species_count))
-      );
-      setMax(
-        Math.max(...ecoregions.map((ecoregion) => ecoregion.species_count))
-      );
     } else {
       setData(undefined);
       setDisplay(undefined);
       setHoverInfo(null);
       setClickInfo(null);
     }
+    setLoading(false);
   }, [ecoregions]);
 
   // base layer
@@ -264,21 +293,37 @@ const MapStats = ({ ecoregions, isLoading, mapRef }) => {
             boxShadow: "0 2px 4px rgba(0,0,0,0.3)",
             padding: "12px 12px",
             margin: "20px",
-            fontSize: "13px",
-            lineHeight: "2",
-            color: "#6b6b76",
+            marginRight: "35px",
             textTransform: "uppercase",
             outline: "none",
             zIndex: 1,
           }}
         >
-          <Typography sx={{ wordBreak: "break-word" }}>
+          <Typography
+            sx={{
+              wordBreak: "break-word",
+              color: theme.palette.text.secondary,
+              fontSize: { xs: "11px", md: "13px" },
+            }}
+          >
             <b>eco-{display.unique_id}</b>: {display.name}
           </Typography>
-          <Typography>
+          <Typography
+            sx={{
+              wordBreak: "break-word",
+              color: theme.palette.text.secondary,
+              fontSize: { xs: "11px", md: "13px" },
+            }}
+          >
             <b>rank</b>: {display.rank}
           </Typography>
-          <Typography>
+          <Typography
+            sx={{
+              wordBreak: "break-word",
+              color: theme.palette.text.secondary,
+              fontSize: { xs: "11px", md: "13px" },
+            }}
+          >
             <b>species count</b>: {display.species_count}
           </Typography>
         </div>
@@ -352,6 +397,7 @@ const MapStats = ({ ecoregions, isLoading, mapRef }) => {
             />
           </Source>
         )}
+
         <AttributionControl
           compact={true}
           customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
@@ -363,7 +409,7 @@ const MapStats = ({ ecoregions, isLoading, mapRef }) => {
           style={{ color: "black" }}
         />
 
-        {isLoading && (
+        {(isLoading || loading) && (
           <CircularProgress
             color="secondary"
             size={100}

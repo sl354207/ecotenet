@@ -21,11 +21,11 @@ const EcoRegions = ({
   });
 
   // for map context provider
-  const { mapA } = useMap();
+  const { mapMain } = useMap();
 
   const ecoClick = useCallback(
     (ecoregion) => {
-      if (mapA) {
+      if (mapMain) {
         setShowPopup(true);
 
         setHoverInfo({
@@ -44,14 +44,14 @@ const EcoRegions = ({
         }
         setClick(true);
 
-        mapA.easeTo({
+        mapMain.easeTo({
           center: ecoregion.coordinates,
           duration: 3000,
           zoom: 3.5,
         });
       }
     },
-    [mapA, ecoMove]
+    [mapMain, ecoMove]
   );
 
   return (

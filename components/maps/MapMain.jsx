@@ -252,7 +252,7 @@ const MapMain = ({
   return (
     <>
       <Map
-        id="mapA"
+        id="mapMain"
         reuseMaps
         style={{ width: "auto", height: isMobile ? "85vh" : "90vh" }}
         {...viewState}
