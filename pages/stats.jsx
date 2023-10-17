@@ -45,6 +45,7 @@ const stats = ({ ecoregions }) => {
   const [allSpecies, setAllSpecies] = useState(false);
   const [allSpeciesRanked, setAllSpeciesRanked] = useState();
   const [mapRanks, setMapRanks] = useState();
+  const [loading, setLoading] = useState(false);
 
   const {
     data: results,
@@ -104,6 +105,7 @@ const stats = ({ ecoregions }) => {
 
   useEffect(() => {
     if (go) {
+      setLoading(true);
       if (allSpecies) {
         const sorted = ecoregions.sort(function (a, b) {
           return b.species_count - a.species_count;
@@ -121,7 +123,7 @@ const stats = ({ ecoregions }) => {
         setAllSpeciesRanked(ranked);
         setMapRanks(ranked);
       }
-      if (results && results.length > 0) {
+      if (results && results.ranked.length > 0) {
         setMapRanks(results);
       }
     } else {
@@ -174,7 +176,11 @@ const stats = ({ ecoregions }) => {
       </div>
     );
   } else {
-    if (Array.isArray(results) && results.length === 0) {
+    if (
+      results &&
+      Array.isArray(results.ranked) &&
+      results.ranked.length === 0
+    ) {
       list = (
         <Typography variant="h6" align="center" sx={{ marginTop: "20px" }}>
           no results
@@ -205,10 +211,18 @@ const stats = ({ ecoregions }) => {
                     {index + 1}
                   </Typography>
                   <div display="block">
-                    <ListItem key={ecoregion.unique_id}>
+                    <ListItem
+                      key={ecoregion.unique_id}
+                      sx={{ wordBreak: "break-word" }}
+                    >
                       Eco-{ecoregion.unique_id}: {ecoregion.name}
                     </ListItem>
-                    <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                    <Typography
+                      sx={{
+                        padding: "0px 0px 8px 16px",
+                        wordBreak: "break-word",
+                      }}
+                    >
                       {rendered} species count: {ecoregion.species_count}
                     </Typography>
                   </div>
@@ -237,9 +251,9 @@ const stats = ({ ecoregions }) => {
     } else {
       list = (
         <List>
-          {results && go && (
+          {results && results.ranked && go && (
             <>
-              {results.map((ecoregion, index) => {
+              {results.ranked.map((ecoregion, index) => {
                 return (
                   <div
                     key={ecoregion.unique_id}
@@ -260,10 +274,18 @@ const stats = ({ ecoregions }) => {
                       {index + 1}
                     </Typography>
                     <div display="block">
-                      <ListItem key={ecoregion.unique_id}>
+                      <ListItem
+                        key={ecoregion.unique_id}
+                        sx={{ wordBreak: "break-word" }}
+                      >
                         Eco-{ecoregion.unique_id}: {ecoregion.name}
                       </ListItem>
-                      <Typography sx={{ padding: "0px 0px 8px 16px" }}>
+                      <Typography
+                        sx={{
+                          padding: "0px 0px 8px 16px",
+                          wordBreak: "break-word",
+                        }}
+                      >
                         {rendered} species count: {ecoregion.species_count}
                       </Typography>
                     </div>
@@ -566,10 +588,38 @@ const stats = ({ ecoregions }) => {
             GO
           </Button>
         </Box>
+        {go && mapRanks && !loading && (
+          <>
+            {allSpecies ? (
+              // UPDATE ON SPECIES COLLECTION UPDATE
+              <Typography
+                align="center"
+                variant="h6"
+                sx={{ marginTop: "10px" }}
+              >
+                Total species count: 350961
+              </Typography>
+            ) : (
+              <Typography
+                align="center"
+                variant="h6"
+                sx={{ marginTop: "10px" }}
+              >
+                Total {rendered} species count: {mapRanks.total_species_count}
+              </Typography>
+            )}
+
+            <Typography align="center" sx={{ marginBottom: "-10px" }}>
+              Click on ecoregion or bubble to display stats
+            </Typography>
+          </>
+        )}
         <MapStats
           ecoregions={mapRanks && mapRanks}
           isLoading={isLoading}
           mapRef={mapRef}
+          loading={loading}
+          setLoading={setLoading}
         />
 
         {list}

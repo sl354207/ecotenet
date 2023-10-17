@@ -69,7 +69,9 @@ export default async function handler(req, res) {
             };
           });
 
-          return res.status(200).json(ranked);
+          return res
+            .status(200)
+            .json({ ranked: ranked, total_species_count: results.length });
         } else {
           return res.status(200).json([]);
         }
