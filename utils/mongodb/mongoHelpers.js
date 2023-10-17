@@ -484,11 +484,31 @@ const searchAllPosts = async (query) => {
                 },
               ],
               filter: [
+                // {
+                //   compound: {
+                //     must: [
+                //       {
+                //         text: {
+                //           query: "published",
+                //           path: "status",
+                //         },
+                //       },
+                //       {
+                //         text: {
+                //           query: "true",
+                //           path: "approved",
+                //         },
+                //       },
+                //     ],
+                //   },
+                // },
                 {
                   text: {
                     query: "published",
                     path: "status",
                   },
+                },
+                {
                   text: {
                     query: "true",
                     path: "approved",
@@ -593,6 +613,8 @@ const searchEcoPosts = async (query, eco) => {
                     query: "published",
                     path: "status",
                   },
+                },
+                {
                   text: {
                     query: "true",
                     path: "approved",
