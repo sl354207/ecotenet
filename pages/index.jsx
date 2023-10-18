@@ -193,7 +193,25 @@ const MapPage = ({ ecoregions }) => {
 
   const [dist, setDist] = useState([]);
 
-  const handleChange = (event, newValue) => {
+  const handleMobileTabChange = (event, newValue) => {
+    switch (newValue) {
+      case 0:
+        setTab({ id: newValue, label: "Ecoregions" });
+
+        break;
+      case 1:
+        setTab({ id: newValue, label: "Summary" });
+
+        break;
+      case 2:
+        setTab({ id: newValue, label: "Distributions" });
+        break;
+
+      default:
+        break;
+    }
+  };
+  const handleDesktopTabChange = (event, newValue) => {
     switch (newValue) {
       case 0:
         setTab({ id: newValue, label: "Ecoregions" });
@@ -247,7 +265,7 @@ const MapPage = ({ ecoregions }) => {
               <Toolbar sx={{ display: "grid" }}>
                 <Tabs
                   value={tab.id}
-                  onChange={handleChange}
+                  onChange={handleMobileTabChange}
                   aria-label="Vertical tabs example"
                   textColor="inherit"
                   indicatorColor="secondary"
@@ -296,6 +314,7 @@ const MapPage = ({ ecoregions }) => {
               onClose={handleEcoClose}
               hideBackdrop
               sx={{
+                position: "relative",
                 width: "100%",
                 flexShrink: 0,
                 top: top,
@@ -500,7 +519,7 @@ const MapPage = ({ ecoregions }) => {
                 <Tabs
                   orientation="vertical"
                   value={tab.id}
-                  onChange={handleChange}
+                  onChange={handleDesktopTabChange}
                   aria-label="Vertical tabs example"
                   sx={{
                     "& .MuiTabs-indicator": {
@@ -517,11 +536,17 @@ const MapPage = ({ ecoregions }) => {
                       borderBottom: "2px solid #1890ff",
                       borderTop: "2px solid #1890ff",
                     }}
+                    onClick={() => {
+                      setEcoOpen(true);
+                    }}
                   />
                   <CustomTab
                     label="Summary"
                     {...a11yProps(1)}
                     sx={{ borderBottom: "2px solid #1890ff" }}
+                    onClick={() => {
+                      setEcoOpen(true);
+                    }}
                   />
                   <CustomTab
                     label="Distributions"
@@ -533,6 +558,9 @@ const MapPage = ({ ecoregions }) => {
                         fontWeight: theme.typography.fontWeightMedium,
                         borderBottomLeftRadius: 8,
                       },
+                    }}
+                    onClick={() => {
+                      setEcoOpen(true);
                     }}
                   />
                 </Tabs>

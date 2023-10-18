@@ -1,4 +1,4 @@
-import { getApprovedPostById } from "@utils/mongodb/mongoHelpers";
+import { getPublishedApprovedPostById } from "@utils/mongodb/mongoHelpers";
 import { validID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   if (validID(id)) {
     try {
-      const results = await getApprovedPostById(id);
+      const results = await getPublishedApprovedPostById(id);
 
       return res.status(200).json(results);
     } catch (err) {

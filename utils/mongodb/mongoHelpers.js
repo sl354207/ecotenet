@@ -167,13 +167,14 @@ const getPostById = async (_id) => {
   }
 };
 // retrieve single post by id from database
-const getApprovedPostById = async (_id) => {
+const getPublishedApprovedPostById = async (_id) => {
   try {
     const db = await connectToDatabase();
     // POTENTIALLY UPDATE RETURNING VOTERS
 
     const post = await db.collection("posts").findOne({
       _id: new ObjectId(_id),
+      status: "published",
       approved: "true",
     });
 
@@ -1181,7 +1182,7 @@ module.exports = {
   getProfilePosts,
   getComments,
   getPostById,
-  getApprovedPostById,
+  getPublishedApprovedPostById,
   updatePost,
   updateVote,
   deletePost,

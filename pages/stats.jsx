@@ -597,7 +597,7 @@ const stats = ({ ecoregions }) => {
                 variant="h6"
                 sx={{ marginTop: "10px" }}
               >
-                Total species count: 350961
+                Total species count: 350823
               </Typography>
             ) : (
               <Typography
