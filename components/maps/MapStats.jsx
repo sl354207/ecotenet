@@ -345,8 +345,8 @@ const MapStats = ({ ecoregions, isLoading, mapRef, loading, setLoading }) => {
           bearing: 0,
           pitch: 0,
         }}
-        minZoom={2}
-        maxZoom={9}
+        minZoom={1}
+        maxZoom={10}
         doubleClickZoom={false}
         boxZoom={false}
         dragRotate={false}
