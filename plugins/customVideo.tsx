@@ -1,4 +1,5 @@
 import VideoRender from '@components/editorPlugins/VideoRender';
+import VideoUploadField from '@components/editorPlugins/VideoUploadField';
 import { CellPlugin, lazyLoad } from '@react-page/editor';
 
 const PlayArrow = lazyLoad(() => import('@mui/icons-material/PlayArrow'));
@@ -14,13 +15,13 @@ const customVideo: CellPlugin<Data> = {
   ),
   id: 'customVideo',
   title: 'Video',
-  description: 'Include a video from Youtube',
+  description: 'Include a video from Youtube or similar platforms.',
   version: 1,
   isInlineable: true,
   icon: <PlayArrow />,
   controls: {
     type: 'autoform',
-
+    columnCount: 1,
     schema: {
       required: ['src'],
       type: 'object',
@@ -28,8 +29,9 @@ const customVideo: CellPlugin<Data> = {
         src: {
           type: 'string',
           uniforms: {
-            label: 'Video location (YouTube url)',
+            component: VideoUploadField
           },
+          
         },
       },
     },

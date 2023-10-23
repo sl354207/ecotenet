@@ -2,17 +2,23 @@ import PlayArrow from "@mui/icons-material/PlayArrow";
 import { Typography } from "@mui/material";
 
 import { lazyLoad } from "@react-page/editor";
+import theme from "@utils/theme";
 import { validVideoPluginURL } from "@utils/validationHelpers";
 
 // react player is big, better lazy load it.
 const ReactPlayer = lazyLoad(() => import("react-player"));
 
 const VideoRender = ({ data, preview }) => {
+  // console.log(data);
   return (
     <>
-      {data?.src ? (
+      {data?.src && validVideoPluginURL(data?.src) ? (
         <div
-          style={{ position: "relative", height: 0, paddingBottom: "65.25%" }}
+          style={{
+            position: "relative",
+            height: 0,
+            paddingBottom: "65.25%",
+          }}
         >
           {preview ? null : (
             <div
@@ -26,44 +32,71 @@ const VideoRender = ({ data, preview }) => {
               }}
             />
           )}
-          {validVideoPluginURL(data?.src) ? (
-            <ReactPlayer
-              url={data?.src}
-              height="100%"
-              width="100%"
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-              }}
-            />
-          ) : (
-            <Typography
+          {/* {validVideoPluginURL(data?.src) ? ( */}
+          <ReactPlayer
+            url={data?.src}
+            height="100%"
+            width="100%"
+            controls
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+          {/* ) : ( */}
+          {/* <Typography
               variant="h6"
               align="center"
               sx={{ position: "relative", marginTop: "100px" }}
             >
               Must be a Youtube url
-            </Typography>
-          )}
+            </Typography> */}
+          {/* )} */}
         </div>
       ) : (
-        <div
-          style={{ position: "relative", width: "100%", textAlign: "center" }}
-        >
-          <PlayArrow
-            sx={{
-              width: "100%",
-              height: "auto",
-              padding: "0",
-              color: "#aaa",
-              textAlign: "center",
-              minWidth: 64,
-              minHeight: 64,
-              maxHeight: 256,
-            }}
-          />
-        </div>
+        <>
+          {data?.src ? (
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                textAlign: "center",
+                border: `2px solid ${theme.palette.error.main}`,
+                borderRadius: "4px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                align="center"
+                sx={{ position: "relative", marginBlock: "100px" }}
+              >
+                Invalid Video
+              </Typography>
+            </div>
+          ) : (
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              <PlayArrow
+                sx={{
+                  width: "100%",
+                  height: "auto",
+                  padding: "0",
+                  color: "#aaa",
+                  textAlign: "center",
+                  minWidth: 64,
+                  minHeight: 64,
+                  maxHeight: 256,
+                }}
+              />
+            </div>
+          )}
+        </>
       )}
     </>
   );
