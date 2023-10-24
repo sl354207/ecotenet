@@ -94,8 +94,26 @@ export function validImagePluginURL(string) {
   }
 }
 export function validVideoPluginURL(string) {
-  const regex = /https:\/{2}(m\.|www\.)?(youtube\.com|youtu\.be)/gim;
-  if (typeof string === "string" && regex.test(string)) {
+  const youtube =
+    /https:\/{2}(m\.|www\.)?(youtube(?:-nocookie|education)?\.com|youtu\.be)\//;
+
+  const vimeo = /https:\/{2}(www\.|player\.)?vimeo.com\//;
+
+  const facebook =
+    /https:\/{2}(www\.)?(fb\.watch|facebook.com)(\/)(video(s)?|watch|story)?(\/)?/;
+
+  const twitch = /https:\/{2}(www\.|go|clips\.)?twitch\.tv(\/)/;
+
+  const dailymotion = /https:\/{2}(www\.)?(dai.ly|dailymotion.com)(\/)/;
+
+  if (
+    typeof string === "string" &&
+    (youtube.test(string) ||
+      vimeo.test(string) ||
+      facebook.test(string) ||
+      twitch.test(string) ||
+      dailymotion.test(string))
+  ) {
     return true;
   } else {
     return false;

@@ -14,20 +14,16 @@ function ImageCitation({ onChange, value }) {
         flexGrow: 1,
         width: "450px",
         marginBottom: "5px",
-        [theme.breakpoints.down("lg")]: {
-          width: "400px",
-          // marginBottom: 5,
-        },
         [theme.breakpoints.down("md")]: {
           width: "250px",
           display: "flex",
           marginBottom: "5px",
         },
-        [theme.breakpoints.down("sm")]: {
-          width: "150px",
-          display: "flex",
-          marginBottom: "5px",
-        },
+        // [theme.breakpoints.down("sm")]: {
+        //   width: "150px",
+        //   display: "flex",
+        //   marginBottom: "5px",
+        // },
       }}
       value={value || ""}
       inputProps={{ type: "text", maxLength: 200 }}

@@ -1,5 +1,4 @@
 import { TextField } from "@mui/material";
-import theme from "@utils/theme";
 import { connectField } from "uniforms";
 
 function ImageWidth({ onChange, value }) {
@@ -17,16 +16,17 @@ function ImageWidth({ onChange, value }) {
           display: "flex",
           flexGrow: 1,
           marginBottom: "5px",
-          [theme.breakpoints.down("md")]: {
-            width: "250px",
-            display: "flex",
-            marginBottom: "5px",
-          },
-          [theme.breakpoints.down("sm")]: {
-            width: "150px",
-            display: "flex",
-            marginBottom: "5px",
-          },
+          marginRight: "5px",
+          // [theme.breakpoints.down("md")]: {
+          //   width: "250px",
+          //   display: "flex",
+          //   marginBottom: "5px",
+          // },
+          // [theme.breakpoints.down("sm")]: {
+          //   width: "150px",
+          //   display: "flex",
+          //   marginBottom: "5px",
+          // },
         }}
         value={value || ""}
         onChange={(e) => {

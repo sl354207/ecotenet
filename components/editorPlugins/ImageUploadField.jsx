@@ -462,6 +462,7 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.hasError ? "error" : "primary"}
           component="label"
+          size={isMobile ? "small" : "medium"}
         >
           {uploadInside}
 
@@ -529,7 +530,7 @@ function ImageUploadField({ onChange, value }) {
                 flexGrow: 1,
                 marginBottom: "5px",
                 marginRight: "5px",
-                width: "300px",
+                width: "350px",
                 [theme.breakpoints.down("md")]: {
                   width: "250px",
                   display: "flex",
@@ -564,6 +565,7 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.errorText === "Error uploading" ? "error" : "warning"}
           fullWidth
+          size={isMobile ? "small" : "medium"}
           sx={{
             marginRight: "5px",
           }}
@@ -585,6 +587,7 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.errorText === "Error deleting" ? "error" : "primary"}
           fullWidth
+          size={isMobile ? "small" : "medium"}
           sx={{ marginLeft: "5px" }}
           onClick={() => deleteImage(value)}
           disabled={

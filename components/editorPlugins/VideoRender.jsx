@@ -1,18 +1,27 @@
 import PlayArrow from "@mui/icons-material/PlayArrow";
 import { Typography } from "@mui/material";
 
-import { lazyLoad } from "@react-page/editor";
+// import { lazyLoad } from "@react-page/editor";
 import theme from "@utils/theme";
 import { validVideoPluginURL } from "@utils/validationHelpers";
+import ReactPlayer from "react-player/lazy";
 
 // react player is big, better lazy load it.
-const ReactPlayer = lazyLoad(() => import("react-player"));
+// const ReactPlayer = lazyLoad(() => import("react-player"));
 
 const VideoRender = ({ data, preview }) => {
   // console.log(data);
+  // console.log(ReactPlayer.canPlay(data?.src));
+  // const [error, setError] = useState(false);
+
+  // const onError = (e) => {
+  //   setError(true);
+  // };
   return (
     <>
-      {data?.src && validVideoPluginURL(data?.src) ? (
+      {data?.src &&
+      validVideoPluginURL(data?.src) &&
+      ReactPlayer.canPlay(data?.src) ? (
         <div
           style={{
             position: "relative",
@@ -43,6 +52,7 @@ const VideoRender = ({ data, preview }) => {
               width: "100%",
               height: "100%",
             }}
+            // onError={(e) => onError(e)}
           />
           {/* ) : ( */}
           {/* <Typography
@@ -57,6 +67,7 @@ const VideoRender = ({ data, preview }) => {
       ) : (
         <>
           {data?.src ? (
+            // || error
             <div
               style={{
                 position: "relative",
@@ -69,9 +80,17 @@ const VideoRender = ({ data, preview }) => {
               <Typography
                 variant="h6"
                 align="center"
-                sx={{ position: "relative", marginBlock: "100px" }}
+                sx={{ position: "relative", marginTop: "100px" }}
               >
-                Invalid Video
+                Sorry there was a problem. We cannot play this video
+              </Typography>
+              <Typography
+                variant="h6"
+                align="center"
+                sx={{ position: "relative", marginBottom: "100px" }}
+              >
+                (known issues: Youtube live, Twitch clips, and Dailymotion embed
+                urls)
               </Typography>
             </div>
           ) : (

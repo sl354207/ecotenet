@@ -1,5 +1,4 @@
 import { TextField } from "@mui/material";
-import theme from "@utils/theme";
 import { connectField } from "uniforms";
 
 function ImageHeight({ onChange, value }) {
@@ -13,16 +12,17 @@ function ImageHeight({ onChange, value }) {
         display: "flex",
         flexGrow: 1,
         marginBottom: "5px",
-        [theme.breakpoints.down("md")]: {
-          width: "250px",
-          display: "flex",
-          marginBottom: "5px",
-        },
-        [theme.breakpoints.down("sm")]: {
-          width: "150px",
-          display: "flex",
-          marginBottom: "5px",
-        },
+        marginRight: "5px",
+        // [theme.breakpoints.down("md")]: {
+        //   width: "250px",
+        //   display: "flex",
+        //   marginBottom: "5px",
+        // },
+        // [theme.breakpoints.down("sm")]: {
+        //   width: "150px",
+        //   display: "flex",
+        //   marginBottom: "5px",
+        // },
       }}
       // type="number"
       inputProps={{ type: "number", max: 1000, min: 1 }}
