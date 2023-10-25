@@ -1,5 +1,5 @@
 import PlayArrow from "@mui/icons-material/PlayArrow";
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery } from "@mui/material";
 
 // import { lazyLoad } from "@react-page/editor";
 import theme from "@utils/theme";
@@ -10,6 +10,7 @@ import ReactPlayer from "react-player/lazy";
 // const ReactPlayer = lazyLoad(() => import("react-player"));
 
 const VideoRender = ({ data, preview }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // console.log(data);
   // console.log(ReactPlayer.canPlay(data?.src));
   // const [error, setError] = useState(false);
@@ -41,7 +42,7 @@ const VideoRender = ({ data, preview }) => {
               }}
             />
           )}
-          {/* {validVideoPluginURL(data?.src) ? ( */}
+
           <ReactPlayer
             url={data?.src}
             height="100%"
@@ -52,22 +53,21 @@ const VideoRender = ({ data, preview }) => {
               width: "100%",
               height: "100%",
             }}
+            config={{
+              facebook: {
+                attributes: {
+                  // "data-width": "-webkit-fill-available",
+                  "data-height": isMobile ? 250 : 650,
+                },
+              },
+            }}
+
             // onError={(e) => onError(e)}
           />
-          {/* ) : ( */}
-          {/* <Typography
-              variant="h6"
-              align="center"
-              sx={{ position: "relative", marginTop: "100px" }}
-            >
-              Must be a Youtube url
-            </Typography> */}
-          {/* )} */}
         </div>
       ) : (
         <>
           {data?.src ? (
-            // || error
             <div
               style={{
                 position: "relative",
