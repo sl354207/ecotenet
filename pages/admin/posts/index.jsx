@@ -37,7 +37,11 @@ import {
   useImageClassifier,
   useToxicity,
 } from "@utils/moderation";
-import { validImagePluginURL, validURL } from "@utils/validationHelpers";
+import {
+  validImagePluginURL,
+  validURL,
+  validVideoPluginURL,
+} from "@utils/validationHelpers";
 import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 
@@ -224,6 +228,7 @@ const adminPosts = () => {
             if (result.rows.length > 0) {
               const validLinks = [];
               const validPhotos = [];
+              const validVideos = [];
               for (const row of result.rows) {
                 const postLinks = findPostLinks(row, []);
 
@@ -244,6 +249,17 @@ const adminPosts = () => {
                     validPhotos.push(link);
                   } else {
                     result.toxic.push("invalidPhoto");
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
+                  }
+                }
+                const postVideos = findPostVideoUrls(row, []);
+                for (const link of postVideos) {
+                  if (validVideoPluginURL(link)) {
+                    validVideos.push(link);
+                  } else {
+                    result.toxic.push("invalidVideo");
                     if (!tempProfiles.includes(result)) {
                       tempProfiles.push(result);
                     }
@@ -288,6 +304,24 @@ const adminPosts = () => {
                     setModelError(true);
                     setModelLoading(false);
                   }
+                }
+              }
+              if (validVideos.length > 0) {
+                try {
+                  const toxicLink = await handleCheckLinks(validVideos, result);
+
+                  if (toxicLink) {
+                    result.toxic.push("toxicVideoLink");
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
+                  }
+                } catch (error) {
+                  console.log(error);
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
+                  setModelLoading(false);
                 }
               }
             }
@@ -396,6 +430,24 @@ const adminPosts = () => {
 
       if (typeof value === "object" && value !== null) {
         findPostPhotos(value, arr);
+      }
+    });
+
+    return arr;
+  };
+  const findPostVideoUrls = (obj, arr) => {
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+      if (
+        obj.plugin &&
+        obj.plugin.id === "customVideo" &&
+        !arr.includes(obj.dataI18n.default.src)
+      ) {
+        arr.push(obj.dataI18n.default.src);
+      }
+
+      if (typeof value === "object" && value !== null) {
+        findPostVideoUrls(value, arr);
       }
     });
 
