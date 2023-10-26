@@ -99,8 +99,8 @@ export function validVideoPluginURL(string) {
 
   const vimeo = /https:\/{2}(www\.|player\.)?vimeo.com\//;
 
-  const facebook =
-    /https:\/{2}(www\.)?(fb\.watch|facebook.com)(\/)(video(s)?|watch|story)?(\/)?/;
+  // const facebook =
+  //   /https:\/{2}(www\.)?(fb\.watch|facebook.com)(\/)(video(s)?|watch|story)?(\/)?/;
 
   const twitch = /https:\/{2}(www\.|go|clips\.)?twitch\.tv(\/)/;
 
@@ -110,7 +110,7 @@ export function validVideoPluginURL(string) {
     typeof string === "string" &&
     (youtube.test(string) ||
       vimeo.test(string) ||
-      facebook.test(string) ||
+      // facebook.test(string) ||
       twitch.test(string) ||
       dailymotion.test(string))
   ) {

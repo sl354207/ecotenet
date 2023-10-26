@@ -1,5 +1,5 @@
 import PlayArrow from "@mui/icons-material/PlayArrow";
-import { Typography, useMediaQuery } from "@mui/material";
+import { Typography } from "@mui/material";
 
 // import { lazyLoad } from "@react-page/editor";
 import theme from "@utils/theme";
@@ -10,7 +10,7 @@ import ReactPlayer from "react-player/lazy";
 // const ReactPlayer = lazyLoad(() => import("react-player"));
 
 const VideoRender = ({ data, preview }) => {
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   // console.log(data);
   // console.log(ReactPlayer.canPlay(data?.src));
   // const [error, setError] = useState(false);
@@ -53,14 +53,14 @@ const VideoRender = ({ data, preview }) => {
               width: "100%",
               height: "100%",
             }}
-            config={{
-              facebook: {
-                attributes: {
-                  // "data-width": "-webkit-fill-available",
-                  "data-height": isMobile ? 250 : 650,
-                },
-              },
-            }}
+            // config={{
+            //   facebook: {
+            //     attributes: {
+            //       // "data-width": "-webkit-fill-available",
+            //       "data-height": isMobile ? 200 : 700,
+            //     },
+            //   },
+            // }}
 
             // onError={(e) => onError(e)}
           />
