@@ -112,7 +112,7 @@ function VideoUploadField({ onChange, value }) {
         >
           {error
             ? "Invalid Video URL"
-            : "Supported Platforms: Youtube, Vimeo, Dailymotion, Facebook, Twitch"}
+            : "Supported Platforms: Youtube, Vimeo, Dailymotion, Twitch"}
         </FormHelperText>
       </FormControl>
       <Typography></Typography>
