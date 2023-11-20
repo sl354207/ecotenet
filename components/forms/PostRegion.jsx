@@ -383,7 +383,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             <CustomChip
               label={
                 state[2].common_name
-                  ? `${state[2].scientific_name} - ${state[1].common_name}`
+                  ? `${state[2].scientific_name} - ${state[2].common_name}`
                   : `${state[2].scientific_name}`
               }
               onClick={() => {
@@ -406,7 +406,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             <CustomChip
               label={
                 state[3].common_name
-                  ? `${state[3].scientific_name} - ${state[1].common_name}`
+                  ? `${state[3].scientific_name} - ${state[3].common_name}`
                   : `${state[3].scientific_name}`
               }
               onClick={() => {
@@ -455,7 +455,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             <CustomChip
               label={
                 state[2].common_name
-                  ? `${state[2].scientific_name} - ${state[1].common_name}`
+                  ? `${state[2].scientific_name} - ${state[2].common_name}`
                   : `${state[2].scientific_name}`
               }
               onClick={() => {
@@ -478,7 +478,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             <CustomChip
               label={
                 state[3].common_name
-                  ? `${state[3].scientific_name} - ${state[1].common_name}`
+                  ? `${state[3].scientific_name} - ${state[3].common_name}`
                   : `${state[3].scientific_name}`
               }
               onClick={() => {

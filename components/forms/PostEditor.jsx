@@ -51,7 +51,7 @@ const PostEditor = ({ value, setPostValue }) => {
       <Description
         description="This is where the body of your post is created. Using the editor you can
         add blocks of text, images and video. The layout of your post can be
-        adjusted by using moving and resizing blocks as well as by adding
+        adjusted by moving and resizing blocks as well as by adding
         dividers and spacers wherever necessary. You can also preview what the
         body of your post will look like once it is published. If working on
         desktop you may want to adjust your browser window size to see how your

@@ -462,7 +462,8 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.hasError ? "error" : "primary"}
           component="label"
-          size={isMobile ? "small" : "medium"}
+          // size={isMobile ? "small" : "medium"}
+          size="small"
         >
           {uploadInside}
 

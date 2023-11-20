@@ -1,6 +1,8 @@
+import { useMediaQuery } from "@mui/material";
 import theme from "@utils/theme";
 
 const EditorLayout = ({ children }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <div
       style={{
@@ -8,6 +10,7 @@ const EditorLayout = ({ children }) => {
         backgroundColor: theme.palette.primary.light,
         maxWidth: "1280px",
         margin: "auto",
+        marginBottom: isMobile ? "500px" : "300px",
       }}
     >
       {children}
