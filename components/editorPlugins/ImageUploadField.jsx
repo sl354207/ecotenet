@@ -213,8 +213,6 @@ function ImageUploadField({ onChange, value }) {
               handleError(UPLOADING_ERROR_CODE);
               setState({ ...state, isUploading: false });
             }
-          } else {
-            console.log(classifyImg);
           }
         };
       }
