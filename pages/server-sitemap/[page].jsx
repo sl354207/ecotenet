@@ -32,7 +32,7 @@ export const getServerSideProps = async (ctx) => {
       if (species.length / page < URLS_PER_SITEMAP) {
         const slice = species.slice((page - 1) * URLS_PER_SITEMAP);
         fields = slice?.map((data) => ({
-          loc: `${SITE_URL}/species/${data._id.toString()}`,
+          loc: `${SITE_URL}/species/${data.scientific_name.replace(/ /g, "_")}`,
           changefreq: "monthly",
           priority: 0.7,
           lastmod: new Date().toISOString(),
@@ -43,7 +43,7 @@ export const getServerSideProps = async (ctx) => {
           page * URLS_PER_SITEMAP
         );
         fields = slice?.map((data) => ({
-          loc: `${SITE_URL}/species/${data._id.toString()}`,
+          loc: `${SITE_URL}/species/${data.scientific_name.replace(/ /g, "_")}`,
           changefreq: "monthly",
           priority: 0.7,
           lastmod: new Date().toISOString(),

@@ -45,7 +45,9 @@ const SpeciesItem = ({ result, handleClose }) => {
             });
             setTab({ id: 2, label: "Distributions" });
           } else {
-            router.push(`/species/${result._id}`);
+            router.push(
+              `/species/${result.scientific_name.replace(/ /g, "_")}`
+            );
             handleClose();
           }
         }}

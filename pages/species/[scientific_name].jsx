@@ -15,9 +15,9 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { getSpeciesById } from "@utils/mongodb/mongoHelpers";
+import { getSpeciesByScientificName } from "@utils/mongodb/mongoHelpers";
 import theme from "@utils/theme";
-import { validID } from "@utils/validationHelpers";
+import { validScientificName } from "@utils/validationHelpers";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import { signIn } from "next-auth/react";
@@ -256,7 +256,9 @@ const species = ({ species, wiki }) => {
             openGraph={{
               title: species.scientific_name,
               description: `General information about ${species.scientific_name} and the ecoregions it inhabits`,
-              url: `https://www.ecotenet.org/species/${species._id}`,
+              url: `https://www.ecotenet.org/species/${
+                species.scientific_name.toLowerCase().split(" ")[0]
+              }_${species.scientific_name.toLowerCase().split(" ")[1]}`,
               siteName: "Ecotenet",
               type: "article",
               article: {
@@ -275,7 +277,9 @@ const species = ({ species, wiki }) => {
           />
           <ArticleJsonLd
             // type="BlogPosting"
-            url={`https://www.ecotenet.org/species/${species._id}`}
+            url={`https://www.ecotenet.org/species/${
+              species.scientific_name.toLowerCase().split(" ")[0]
+            }_${species.scientific_name.toLowerCase().split(" ")[1]}`}
             title={species.scientific_name}
             // images={[
             //   'https://example.com/photos/1x1/photo.jpg',
@@ -442,11 +446,10 @@ const species = ({ species, wiki }) => {
                   <ListItem key={"inat"}>
                     <Link
                       variant="h6"
-                      href={`https://www.inaturalist.org/search?q=${
-                        species.scientific_name.toLowerCase().split(" ")[0]
-                      }%20${
-                        species.scientific_name.toLowerCase().split(" ")[1]
-                      }`}
+                      href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
+                        / /g,
+                        "+"
+                      )}`}
                       color="secondary"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -458,11 +461,10 @@ const species = ({ species, wiki }) => {
                   <ListItem key={"wiki"}>
                     <Link
                       variant="h6"
-                      href={`https://commons.wikimedia.org/w/index.php?search=${
-                        species.scientific_name.toLowerCase().split(" ")[0]
-                      }+${
-                        species.scientific_name.toLowerCase().split(" ")[1]
-                      }&title=Special:MediaSearch&go=Go&type=image`}
+                      href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
+                        / /g,
+                        "+"
+                      )}&title=Special:MediaSearch&go=Go&type=image`}
                       color="secondary"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -474,11 +476,10 @@ const species = ({ species, wiki }) => {
                   <ListItem key={"iucn"}>
                     <Link
                       variant="h6"
-                      href={`https://www.iucnredlist.org/search?query=${
-                        species.scientific_name.toLowerCase().split(" ")[0]
-                      }%20${
-                        species.scientific_name.toLowerCase().split(" ")[1]
-                      }&searchType=species`}
+                      href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
+                        / /g,
+                        "+"
+                      )}&searchType=species`}
                       color="secondary"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -509,11 +510,13 @@ const species = ({ species, wiki }) => {
 
 export const getServerSideProps = async (context) => {
   const { res, params } = context;
-  const speciesId = params.id;
+  const scientificName = params.scientific_name;
 
-  if (validID(speciesId)) {
+  if (validScientificName(scientificName)) {
     try {
-      const species = await getSpeciesById(speciesId);
+      const species = await getSpeciesByScientificName(
+        scientificName.replace(/_/g, " ")
+      );
 
       if (species === null) {
         return {
@@ -521,11 +524,7 @@ export const getServerSideProps = async (context) => {
         };
       } else {
         const wikiRes = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/segments/${
-            species.scientific_name.toLowerCase().split(" ")[0]
-          }_${
-            species.scientific_name.toLowerCase().split(" ")[1]
-          }?redirect=true`,
+          `https://en.wikipedia.org/api/rest_v1/page/segments/${scientificName}?redirect=true`,
           {
             method: "GET",
             headers: {
@@ -534,8 +533,23 @@ export const getServerSideProps = async (context) => {
           }
         );
         let wiki;
+
         if (wikiRes.ok) {
           wiki = await wikiRes.json();
+          res.setHeader(
+            "Cache-Control",
+            "public, s-maxage=604800, stale-while-revalidate=59"
+          );
+          return {
+            props: {
+              species: JSON.parse(JSON.stringify(species)),
+              wiki:
+                wiki === undefined || wiki.title === "Not found."
+                  ? null
+                  : JSON.parse(JSON.stringify(wiki)),
+            },
+          };
+        } else if (wikiRes.status === 404) {
           res.setHeader(
             "Cache-Control",
             "public, s-maxage=604800, stale-while-revalidate=59"
@@ -572,8 +586,6 @@ export const getServerSideProps = async (context) => {
       notFound: true,
     };
   }
-
-  // console.log(species);
 };
 
 export default species;

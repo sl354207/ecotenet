@@ -159,7 +159,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
   const handleChange = async (e) => {
     if (e.target.value) {
-      const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+      const regex = /[`!@#$%^&*()_+=\[\]{};:"\\\|,.<>\/?~]/;
       if (!regex.test(e.target.value)) {
         const res = await fetch(`/api/search/auto?q=${e.target.value}`, {
           method: "GET",
@@ -184,9 +184,9 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   const handleSubmit = (event, newValue) => {
     if (newValue !== null) {
       let name;
-      if (newValue.includes("-")) {
-        const dash = newValue.indexOf("-");
-        name = newValue.slice(0, dash - 1);
+      if (newValue.includes(" - ")) {
+        const dash = newValue.indexOf(" - ");
+        name = newValue.slice(0, dash);
       } else {
         name = newValue;
       }
@@ -365,7 +365,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               }
               onClick={() => {
                 window.open(
-                  `/species/${state[1]._id}`,
+                  `/species/${state[1].scientific_name.replace(/ /g, "_")}`,
                   "_blank",
                   "noopener,noreferrer"
                 );
@@ -388,7 +388,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               }
               onClick={() => {
                 window.open(
-                  `/species/${state[2]._id}`,
+                  `/species/${state[2].scientific_name.replace(/ /g, "_")}`,
                   "_blank",
                   "noopener,noreferrer"
                 );
@@ -411,7 +411,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               }
               onClick={() => {
                 window.open(
-                  `/species/${state[3]._id}`,
+                  `/species/${state[3].scientific_name.replace(/ /g, "_")}`,
                   "_blank",
                   "noopener,noreferrer"
                 );
@@ -437,7 +437,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               }
               onClick={() => {
                 window.open(
-                  `/species/${state[1]._id}`,
+                  `/species/${state[1].scientific_name.replace(/ /g, "_")}`,
                   "_blank",
                   "noopener,noreferrer"
                 );
@@ -460,7 +460,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               }
               onClick={() => {
                 window.open(
-                  `/species/${state[2]._id}`,
+                  `/species/${state[2].scientific_name.replace(/ /g, "_")}`,
                   "_blank",
                   "noopener,noreferrer"
                 );
@@ -483,7 +483,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               }
               onClick={() => {
                 window.open(
-                  `/species/${state[3]._id}`,
+                  `/species/${state[3].scientific_name.replace(/ /g, "_")}`,
                   "_blank",
                   "noopener,noreferrer"
                 );
