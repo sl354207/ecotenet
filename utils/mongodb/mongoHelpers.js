@@ -428,7 +428,7 @@ const getAllSpecies = async () => {
     const species = await db
       .collection("species")
       .find({})
-      .project({ _id: 1 })
+      .project({ scientific_name: 1, _id: 0 })
       .toArray();
 
     return species;
@@ -438,13 +438,23 @@ const getAllSpecies = async () => {
 };
 
 // retrieve single mammal by id from database
-const getSpeciesById = async (id) => {
+const getSpeciesByScientificName = async (name) => {
   try {
     const db = await connectToDatabase();
 
-    const species = await db.collection("species").findOne({
-      _id: new ObjectId(id),
-    });
+    const species = await db.collection("species").findOne(
+      {
+        scientific_name: name,
+      },
+      {
+        projection: {
+          scientific_name: 1,
+          common_name: 1,
+          unique_id: 1,
+          species_type: 1,
+        },
+      }
+    );
 
     return species;
   } catch (error) {
@@ -1193,7 +1203,7 @@ module.exports = {
   deleteComment,
   getSpecies,
   getAllSpecies,
-  getSpeciesById,
+  getSpeciesByScientificName,
   searchAllPosts,
   searchAllSpecies,
   searchEcoPosts,

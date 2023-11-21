@@ -56,9 +56,23 @@ export function validName(string) {
     return false;
   }
 }
+export function validScientificName(string) {
+  // no special characters
+  const regex = /[`!@#$%^&*()+=\[\]{};:"\\\|,.<>\/?~]/;
+  if (
+    typeof string === "string" &&
+    string.length <= 60 &&
+    string.length > 1 &&
+    !regex.test(string)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
 export function validSearch(string) {
   // no special characters
-  const regex = /[`!@#$%^&*()_+\-=\[\]{};:"\\\|,.<>\/?~]/;
+  const regex = /[`!@#$%^&*()_+=\[\]{};:"\\\|,.<>\/?~]/;
   if (
     typeof string === "string" &&
     string.length <= 100 &&

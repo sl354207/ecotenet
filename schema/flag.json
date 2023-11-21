@@ -1,79 +1,82 @@
 {
-    "type": "object",
-    "properties": {
-        "name": {
-            "type": "string",
-            "maxLength": 60,
-            "description": "must be a string"
-          },
-          "flagged": {
-            "type": "string",
-            "maxLength": 60,
-            "description": "must be a string"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "post",
-              "comment",
-              "profile",
-              "species",
-              "ecoregion"
-            ],
-            "description": "must be a string"
-          },
-          "text": {
-            "type": "string",
-            "maxLength": 200,
-            "description": "must be a string"
-          },
-          "content_id": {
-            "oneOf": [
-              {"type": "string",
-              "minLength": 24,
-              "maxLength": 24,
-              "description": "must be a string",
-              "pattern": "^[A-Za-z0-9]*$"
-              },
-              {"type": "string",
-              "minLength": 1,
-              "maxLength": 4,
-              "description": "must be a string",
-              "pattern": "^\\d+$"
-              },
-              {"type": "string",
-              "const": "",
-              "description": "must be an empty string"
-              }
-            ]
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "resolved",
-              "pending"
-            ],
-            "description": "must be a string"
-          },
-          "ref": {
-            "oneOf": [
-              {"type": "string",
-              "minLength": 24,
-              "maxLength": 24,
-              "description": "must be a string",
-              "pattern": "^[A-Za-z0-9]*$"
-              },
-              {"type": "string",
-              "const": "",
-              "description": "must be an empty string"
-              }
-            ]
-          },
-      "date": {
-        "type": "string",
-        "format": "date-time",
-        "description": "must be a date"
-      }
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "must be a string"
     },
-    "additionalProperties": false
+    "flagged": {
+      "type": "string",
+      "maxLength": 60,
+      "description": "must be a string"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["post", "comment", "profile", "species", "ecoregion"],
+      "description": "must be a string"
+    },
+    "text": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "must be a string"
+    },
+    "content_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 24,
+          "maxLength": 24,
+          "description": "must be a string",
+          "pattern": "^[A-Za-z0-9]*$"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4,
+          "description": "must be a string",
+          "pattern": "^\\d+$"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "must be a string",
+          "pattern": "^[A-Za-z ]*$"
+        },
+        {
+          "type": "string",
+          "const": "",
+          "description": "must be an empty string"
+        }
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["resolved", "pending"],
+      "description": "must be a string"
+    },
+    "ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 24,
+          "maxLength": 24,
+          "description": "must be a string",
+          "pattern": "^[A-Za-z0-9]*$"
+        },
+        {
+          "type": "string",
+          "const": "",
+          "description": "must be an empty string"
+        }
+      ]
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "must be a date"
+    }
+  },
+  "additionalProperties": false
 }

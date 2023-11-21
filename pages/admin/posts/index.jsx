@@ -42,7 +42,6 @@ import {
   validURL,
   validVideoPluginURL,
 } from "@utils/validationHelpers";
-import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 
 const cellPlugins = [slate(), customImage, customVideo, spacer, divider];
@@ -59,12 +58,10 @@ const adminPosts = () => {
     shouldRetryOnError: false,
   });
 
-  const [notifications, setNotifications] = useState(0);
   const [textModel, setTextModel] = useState();
   const [imageModel, setImageModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
   const [modelError, setModelError] = useState(false);
-  const [pusher, setPusher] = useState();
   const [toxicPosts, setToxicPosts] = useState([]);
 
   useEffect(() => {
@@ -89,11 +86,7 @@ const adminPosts = () => {
       }
     };
     loadModel();
-    setPusher(
-      new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      })
-    );
+
     // THINK ABOUT IF MODEL DOESN'T LOAD
   }, []);
 
@@ -345,21 +338,6 @@ const adminPosts = () => {
 
     moderate();
   }, [results, textModel, imageModel]);
-
-  useEffect(() => {
-    if (pusher) {
-      const channel = pusher.subscribe("ecotenet");
-
-      channel.bind("post", () => {
-        setNotifications(notifications + 1);
-      });
-      mutate("/api/admin/posts?q1=published&q2=pending");
-
-      return () => {
-        pusher.unsubscribe("ecotenet");
-      };
-    }
-  }, [notifications]);
 
   const handleCheckLinks = async (links, result) => {
     try {

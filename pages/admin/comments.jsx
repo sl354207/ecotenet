@@ -16,7 +16,6 @@ import { updateComment } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
 import { loadToxicity, useToxicity } from "@utils/moderation";
 import { NextSeo } from "next-seo";
-import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -49,11 +48,9 @@ const adminComments = () => {
     shouldRetryOnError: false,
   });
 
-  const [notifications, setNotifications] = useState(0);
   const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
   const [modelError, setModelError] = useState(false);
-  const [pusher, setPusher] = useState();
   const [toxicComments, setToxicComments] = useState([]);
 
   useEffect(() => {
@@ -74,11 +71,6 @@ const adminComments = () => {
       }
     };
     loadModel();
-    setPusher(
-      new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      })
-    );
   }, []);
 
   useEffect(() => {
@@ -107,21 +99,6 @@ const adminComments = () => {
     };
     moderate();
   }, [results, model]);
-
-  useEffect(() => {
-    if (pusher) {
-      const channel = pusher.subscribe("ecotenet");
-
-      channel.bind("comment", () => {
-        setNotifications(notifications + 1);
-      });
-      mutate("/api/admin/comments");
-
-      return () => {
-        pusher.unsubscribe("ecotenet");
-      };
-    }
-  }, [notifications]);
 
   const handleUpdateComment = async (result, approved) => {
     const submission = {

@@ -15,7 +15,6 @@ import fetcher from "@utils/fetcher";
 import { checkLinks, loadToxicity, useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
-import Pusher from "pusher-js";
 import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
@@ -45,11 +44,9 @@ const adminPeople = () => {
     shouldRetryOnError: false,
   });
 
-  const [notifications, setNotifications] = useState(0);
   const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
   const [modelError, setModelError] = useState(false);
-  const [pusher, setPusher] = useState();
   const [toxicProfiles, setToxicProfiles] = useState([]);
 
   useEffect(() => {
@@ -69,11 +66,6 @@ const adminPeople = () => {
       }
     };
     loadModel();
-    setPusher(
-      new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      })
-    );
   }, []);
 
   useEffect(() => {
@@ -143,21 +135,6 @@ const adminPeople = () => {
     };
     moderate();
   }, [results, model]);
-
-  useEffect(() => {
-    if (pusher) {
-      const channel = pusher.subscribe("ecotenet");
-
-      channel.bind("profile", () => {
-        setNotifications(notifications + 1);
-      });
-      mutate("/api/admin/users");
-
-      return () => {
-        pusher.unsubscribe("ecotenet");
-      };
-    }
-  }, [notifications]);
 
   const handleCheckLinks = async (links, result) => {
     try {
