@@ -42,7 +42,7 @@
           "minLength": 1,
           "maxLength": 60,
           "description": "must be a string",
-          "pattern": "^[A-Za-z ]*$"
+          "pattern": "^[A-Za-z -]*$"
         },
         {
           "type": "string",
