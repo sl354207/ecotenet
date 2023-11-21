@@ -214,6 +214,8 @@ const PostDetails = ({
                     color="secondary"
                     underline="hover"
                     sx={{ paddingRight: "100px" }}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     category
                   </Link>

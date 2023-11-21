@@ -26,6 +26,7 @@ const TOO_BIG_ERROR_CODE = 3;
 const UPLOADING_ERROR_CODE = 4;
 const DELETING_ERROR_CODE = 5;
 const INAPPROPRIATE_ERROR_CODE = 6;
+const BAD_LINK_ERROR_CODE = 7;
 
 function ImageUploadField({ onChange, value }) {
   const { user } = useUserContext();
@@ -86,6 +87,10 @@ function ImageUploadField({ onChange, value }) {
         errorText = "Inappropriate content";
 
         break;
+      case BAD_LINK_ERROR_CODE:
+        errorText = "Invalid link";
+
+        break;
       default:
         errorText = "Unknown error";
 
@@ -120,6 +125,16 @@ function ImageUploadField({ onChange, value }) {
       const classifyImg = new Image();
       const objectUrl = URL.createObjectURL(file);
       classifyImg.src = objectUrl;
+      classifyImg.onerror = async (error) => {
+        console.log(error);
+
+        handleError(UPLOADING_ERROR_CODE);
+
+        setTimeout(
+          () => setState({ ...state, hasError: false, errorText: "" }),
+          3000
+        );
+      };
       classifyImg.onload = async () => {
         try {
           const inappropriateImage = await useImageClassifier(
@@ -157,17 +172,28 @@ function ImageUploadField({ onChange, value }) {
       const imageUrl = newValue.inputValue;
       if (!validImagePluginURL(imageUrl)) {
         setState({ ...state, isUploading: false });
-        handleError(INAPPROPRIATE_ERROR_CODE);
+        handleError(BAD_LINK_ERROR_CODE);
       } else {
         setState({ ...state, isUploading: true });
         // convert img from File to Image type for classification
         const classifyImg = new Image();
         classifyImg.src = imageUrl;
+        classifyImg.onerror = async (error) => {
+          console.log(error);
+
+          handleError(BAD_LINK_ERROR_CODE);
+
+          setTimeout(
+            () => setState({ ...state, hasError: false, errorText: "" }),
+            3000
+          );
+        };
 
         classifyImg.onload = async () => {
           classifyImg.crossOrigin = "anonymous";
 
           if (classifyImg.complete) {
+            // console.log(classifyImg);
             try {
               const inappropriateImage = await useImageClassifier(
                 model,
@@ -404,6 +430,16 @@ function ImageUploadField({ onChange, value }) {
         );
         deleteInside = <>delete image</>;
         break;
+      case "Invalid link":
+        saveInside = <>save image</>;
+        uploadInside = (
+          <>
+            {state.errorText}
+            <ErrorIcon sx={{ marginLeft: "8px" }} />
+          </>
+        );
+        deleteInside = <>delete image</>;
+        break;
       case "Unknown error":
         saveInside = (
           <>
@@ -462,7 +498,8 @@ function ImageUploadField({ onChange, value }) {
           variant="contained"
           color={state.hasError ? "error" : "primary"}
           component="label"
-          size={isMobile ? "small" : "medium"}
+          // size={isMobile ? "small" : "medium"}
+          size="small"
         >
           {uploadInside}
 
