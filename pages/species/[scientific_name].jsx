@@ -39,7 +39,17 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && (
+        <Box
+          p={3}
+          sx={{
+            backgroundColor: theme.palette.primary.light,
+            borderRadius: "10px",
+          }}
+        >
+          {children}
+        </Box>
+      )}
     </div>
   );
 }
@@ -241,7 +251,14 @@ const species = ({ species, wiki }) => {
     <>
       {!species || wiki === "error" ? (
         <>
-          <Container>
+          <Container
+            sx={{
+              backgroundColor: theme.palette.primary.light,
+              paddingBottom: "20px",
+              paddingTop: "5px",
+              marginBlock: "20px",
+            }}
+          >
             <Header title="Something went wrong. Please try again later" />
           </Container>
           <Footer />
@@ -304,7 +321,14 @@ const species = ({ species, wiki }) => {
             isAccessibleForFree={true}
           />
 
-          <Container>
+          <Container
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              // paddingBottom: "20px",
+              // paddingTop: "5px",
+              // marginBlock: "20px",
+            }}
+          >
             <div style={{ display: "flex", justifyContent: "center" }}>
               <div
                 style={{

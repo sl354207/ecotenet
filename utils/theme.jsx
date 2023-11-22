@@ -48,6 +48,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           minHeight: "60vh",
+          borderRadius: "10px",
         },
       },
     },
@@ -113,6 +114,15 @@ const theme = createTheme({
           },
           "&.Mui-focused fieldset": {
             borderWidth: "1px",
+          },
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          "&.MuiTypography-h6": {
+            fontWeight: "400",
           },
         },
       },

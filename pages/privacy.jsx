@@ -1,6 +1,7 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 const privacy = () => {
@@ -25,7 +26,14 @@ const privacy = () => {
           ],
         }}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Privacy Policy" />
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
           Details coming Soon

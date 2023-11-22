@@ -11,6 +11,7 @@ const EditorLayout = ({ children }) => {
         maxWidth: "1280px",
         margin: "auto",
         marginBottom: isMobile ? "500px" : "300px",
+        borderRadius: "10px",
       }}
     >
       {children}

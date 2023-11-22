@@ -2,6 +2,7 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { Container, Divider, List, ListItem, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 const data = () => {
@@ -26,10 +27,70 @@ const data = () => {
           ],
         }}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Datasets" />
         <Divider sx={{ marginTop: "20px" }} />
         <List>
+          <ListItem divider key={"gbif"}>
+            <Typography variant="h6">
+              <Link
+                href="https://www.gbif.org/occurrence/download/0083459-230530130749713"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Global Biodiversity Information Facility:
+              </Link>{" "}
+              GBIF is an international network and data infrastructure aimed at
+              providing anyone, anywhere, open access to data about all types of
+              life on Earth. We use two different datasets that aggregate data
+              from many sources including the iNaturalist Research-grade
+              Observations dataset. These datasets can be found{" "}
+              <Link
+                href="https://doi.org/10.15468/dl.hjpkwr"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="https://doi.org/10.15468/dl.pxqgjf"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here
+              </Link>
+              . GBIF.org (11 July 2023) GBIF Occurrence Download.
+            </Typography>
+          </ListItem>
+
+          <ListItem divider key={"obis"}>
+            <Typography variant="h6">
+              <Link
+                href="https://obis.org/data/access/"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ocean Biodiversity Information System:
+              </Link>{" "}
+              OBIS is a global open-access data and information clearing-house
+              on marine biodiversity for science, conservation and sustainable
+              development. OBIS (2023) Ocean Biodiversity Information System.
+              Intergovernmental Oceanographic Commission of UNESCO.
+              www.obis.org.
+            </Typography>
+          </ListItem>
           <ListItem divider key={"wwf"}>
             <Typography variant="h6">
               <Link
@@ -42,35 +103,6 @@ const data = () => {
               </Link>{" "}
               World Wildlife Fund. 2006. WildFinder: Online database of species
               distributions, ver. Jan-06. www.worldwildlife.org/WildFinder
-            </Typography>
-          </ListItem>
-          <ListItem divider key={"inat"}>
-            <Typography variant="h6">
-              <Link
-                href="https://www.gbif.org/dataset/50c9509d-22c7-4a22-a47d-8c48425ef4a7"
-                underline="hover"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                iNaturalist Research-grade Observations:
-              </Link>{" "}
-              GBIF.org (20 November 2021) GBIF Occurrence Download
-              https://doi.org/10.15468/dl.nuajth
-            </Typography>
-          </ListItem>
-          <ListItem divider key={"obis"}>
-            <Typography variant="h6">
-              <Link
-                href="https://obis.org/data/access/"
-                underline="hover"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ocean Biodiversity Information System:
-              </Link>{" "}
-              OBIS (2021) Ocean Biodiversity Information System.
-              Intergovernmental Oceanographic Commission of UNESCO.
-              www.obis.org.
             </Typography>
           </ListItem>
           <ListItem divider key={"usda"}>

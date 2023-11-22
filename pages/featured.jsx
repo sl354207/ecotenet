@@ -47,7 +47,14 @@ const featured = ({ featured }) => {
         }}
       />
       <CollectionPageJsonLd name="Featured Posts" hasPart={featureSEO} />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Featured Posts" />
         <Typography variant="body1" align="center" sx={{ marginBlock: "10px" }}>
           Pinned
