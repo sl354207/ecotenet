@@ -344,7 +344,7 @@ const post = () => {
                     </div>
                   )}
                 </div>
-                <EditorLayout>
+                <EditorLayout readOnly={true}>
                   <Editor cellPlugins={cellPlugins} value={post} readOnly />
                 </EditorLayout>
               </Container>
