@@ -228,6 +228,27 @@ const privacy = () => {
           (https://www.ecotenet.org/privacy). Ecotenet may change how it
           announces changes in a future version of these questions and answers.
         </Typography>
+        <Typography variant="subtitle2" sx={{ marginTop: "20px" }}>
+          This Privacy Policy has been adapted from{" "}
+          <Link
+            href="https://www.freecodecamp.org/news/privacy-policy/"
+            underline="hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            freecodecamp
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="https://www.inaturalist.org/pages/privacy"
+            underline="hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            iNaturalist
+          </Link>
+          .
+        </Typography>
       </Container>
       <Footer />
     </>
