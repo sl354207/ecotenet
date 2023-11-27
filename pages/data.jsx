@@ -41,7 +41,7 @@ const data = () => {
           <ListItem divider key={"gbif"}>
             <Typography variant="h6">
               <Link
-                href="https://www.gbif.org/occurrence/download/0083459-230530130749713"
+                href="https://www.gbif.org/"
                 underline="hover"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -94,7 +94,7 @@ const data = () => {
           <ListItem divider key={"wwf"}>
             <Typography variant="h6">
               <Link
-                href="https://www.worldwildlife.org/pages/wildfinder-database"
+                href="https://www.worldwildlife.org/publications/wildfinder-database"
                 underline="hover"
                 target="_blank"
                 rel="noopener noreferrer"

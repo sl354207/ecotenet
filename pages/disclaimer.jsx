@@ -44,7 +44,7 @@ const disclaimer = () => {
           <b>WEBSITE DISCLAIMER:</b> The information provided by Ecotenet
           (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) on
           https://www.ecotenet.org (the &quot;Site&quot;), or any subdomain, is
-          for general informational purposes only. All information on the site
+          for general informational purposes only. All information on the Site
           is provided in good faith, however we make no representation or
           warranty of any kind, express or implied, regarding the accuracy,
           adequacy, validity, reliability, availability, or completeness of any
