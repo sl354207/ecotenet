@@ -591,7 +591,7 @@ const post = ({ post }) => {
             </div>
           </>
         )}
-        <EditorLayout>
+        <EditorLayout readOnly={true}>
           {(post.category.sub === "Edible" ||
             post.category.sub === "Medicinal") && (
             <Typography sx={{ paddingTop: "16px" }}>

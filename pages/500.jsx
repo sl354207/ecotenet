@@ -2,13 +2,21 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { Button, Container, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { useRouter } from "next/router";
 
 export default function Custom500() {
   const router = useRouter();
   return (
     <>
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="500 - Internal Server Error" />
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
           Sorry, something went wrong

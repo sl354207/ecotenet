@@ -2,6 +2,7 @@ import Description from "@components/layouts/Description";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 const category = () => {
@@ -26,7 +27,14 @@ const category = () => {
           ],
         }}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Category Breakdown" />
         <Description
           description="This is a general breakdown of the categories that may be selected when creating a post. Each category has a brief description of the types of possible posts that should be included in that category"

@@ -3,6 +3,7 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { CircularProgress, Container, Typography } from "@mui/material";
 import { fetchGetJSON } from "@utils/stripe/stripeApiHelpers";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 import { useRouter } from "next/router";
@@ -19,7 +20,14 @@ const approved = () => {
   return (
     <>
       <NextSeo noindex={true} nofollow={true} />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Checkout Results" />
 
         {data || (data && data.status !== "open") ? (

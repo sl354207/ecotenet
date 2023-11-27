@@ -1,6 +1,7 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 const ideas = () => {
@@ -25,7 +26,14 @@ const ideas = () => {
           ],
         }}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Ideas behind Ecotenet" />
         <Typography align="center" variant="h5" sx={{ marginBlock: "10px" }}>
           Ecotenet Origins

@@ -40,8 +40,9 @@ const Footer = () => {
       <Divider />
       <Container sx={{ minHeight: "fit-content", marginTop: "20px" }}>
         <Typography variant="body2" align="center" gutterBottom>
-          Copyright &#169; Ecotenet 2023. We are 501(c)(3) nonprofit
-          organization
+          Copyright &#169; Ecotenet 2023. We are donor-supported tax-exempt
+          501(c)(3) nonprofit organization. (United States Federal Tax
+          Identification Number: 93-1918021)
         </Typography>
         <div
           style={{

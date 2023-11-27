@@ -59,7 +59,7 @@ const PostEditor = ({ value, setPostValue }) => {
         align="left"
       />
 
-      <EditorLayout>
+      <EditorLayout readOnly={false}>
         <Editor
           cellPlugins={cellPlugins}
           value={value}

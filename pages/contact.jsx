@@ -6,6 +6,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { Container, IconButton, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 const TikTokIcon = ({ color = "#000000", width = "1em", height = "1em" }) => {
@@ -44,7 +45,14 @@ const contact = () => {
           ],
         }}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Contact Us" />
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
           For general support you can contact us through the forum at{" "}

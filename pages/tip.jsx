@@ -1,6 +1,7 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Container, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 
@@ -11,7 +12,14 @@ const tip = () => {
   return (
     <>
       <NextSeo noindex={true} nofollow={true} />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         {name && (
           <>
             <Header title="Tipping" />

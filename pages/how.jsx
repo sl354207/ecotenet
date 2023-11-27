@@ -1,6 +1,7 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import { Box, Container } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo, VideoJsonLd } from "next-seo";
 
 const how = () => {
@@ -33,7 +34,14 @@ const how = () => {
         uploadDate="2022-12-21T22:04:11Z"
         duration="PT17M"
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="How to Create a Post" />
         <Box
           sx={{
