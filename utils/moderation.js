@@ -32,7 +32,10 @@ export const useToxicity = async (model, text) => {
 export const loadImageClassifier = async () => {
   tf.enableProdMode();
   try {
-    const model = await nsfwjs.load();
+    const model = await nsfwjs.load(
+      `${process.env.NEXT_PUBLIC_AWS_MODEL_URL}`,
+      { type: "graph" }
+    );
 
     return model;
   } catch (error) {
