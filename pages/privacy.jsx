@@ -126,8 +126,9 @@ const privacy = () => {
         </Typography>
         <Typography variant="h6">
           We don&apos;t sell your data to anyone. In order to provide service to
-          you, your data does pass through some other services. All of these
-          companies are based in the United States.
+          you, your data does pass through some other services.
+          {/* All of these
+          companies are based in the United States. */}
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           We use Amazon Web Services, DigitalOcean, and MongoDB Atlas for our
@@ -222,9 +223,9 @@ const privacy = () => {
           <b>How can I find out about changes?</b>
         </Typography>
         <Typography variant="h6">
-          This version of Ecotenet’s privacy questions and answers took effect
-          on November 27, 2023. Ecotenet may update its contact information in
-          these questions and answers by updating this page
+          This version of Ecotenet&apos;s privacy questions and answers took
+          effect on November 27, 2023. Ecotenet may update its contact
+          information in these questions and answers by updating this page
           (https://www.ecotenet.org/privacy). Ecotenet may change how it
           announces changes in a future version of these questions and answers.
         </Typography>

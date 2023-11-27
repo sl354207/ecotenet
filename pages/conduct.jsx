@@ -119,6 +119,27 @@ const conduct = () => {
           please assume people have made an honest mistake unless you have
           evidence to the contrary.
         </Typography>
+        <Typography variant="subtitle2" sx={{ marginTop: "20px" }}>
+          This Code of Conduct has been adapted from{" "}
+          <Link
+            href="https://www.freecodecamp.org/news/code-of-conduct/"
+            underline="hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            freecodecamp
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="https://www.inaturalist.org/pages/community+guidelines"
+            underline="hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            iNaturalist
+          </Link>
+          .
+        </Typography>
       </Container>
       <Footer />
     </>

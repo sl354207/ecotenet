@@ -14,7 +14,7 @@ const terms = () => {
         defaultTitle="Ecotenet"
         // description="Ideas on the purpose of Ecotenet and the possible vision for the future"
         openGraph={{
-          type: "website",
+          type: "Site",
           url: "https://www.ecotenet.org/terms",
           siteName: "Ecotenet",
           images: [
@@ -39,25 +39,25 @@ const terms = () => {
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           Welcome to the Ecotenet website (or the &quot;Site&quot;). The
           following Terms of Service govern use of the website
-          https://www.ecotenet.org and any subdomains. To use the website, you
-          must agree to these terms with Ecotenet, the nonprofit company that
-          runs the website. The company may offer other products and services,
-          under different terms. These terms apply only to use of the website.
+          https://www.ecotenet.org and any subdomains. To use the Site, you must
+          agree to these terms with Ecotenet, the nonprofit company that runs
+          the Site. Ecotenet may offer other products and services, under
+          different terms. These terms apply only to use of the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
-          <b>Your Permission to Use the Website</b>
+          <b>Your Permission to Use the Site</b>
         </Typography>
         <Typography variant="h6">
-          Subject to these terms, the company gives you permission to use the
-          website. That permission isn&apos;t exclusive to you, and you
-          can&apos;t transfer it to anyone else. Others need to agree to these
-          terms for themselves to use the website.
+          Subject to these terms, Ecotenet gives you permission to use the Site.
+          That permission isn&apos;t exclusive to you, and you can&apos;t
+          transfer it to anyone else. Others need to agree to these terms for
+          themselves to use the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
-          <b>Conditions for Use of the Website</b>
+          <b>Conditions for Use of the Site</b>
         </Typography>
         <Typography variant="h6">
-          Your permission to use the website is subject to the following
+          Your permission to use the Site is subject to the following
           conditions:
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
@@ -65,93 +65,93 @@ const terms = () => {
           obtained.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may no longer use the website if the company contacts you directly
-          to say that you may not.
+          You may no longer use the Site if Ecotenet contacts you directly to
+          say that you may not.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You must use the website in accordance with Acceptable Use and Content
+          You must use the Site in accordance with Acceptable Use and Content
           Standards.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>Acceptable Use</b>
         </Typography>
         <Typography variant="h6">
-          You may not break the law using the website.
+          You may not break the law using the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not use or try to use another&apos;s account on the website
+          You may not use or try to use another&apos;s account on the Site
           without their specific permission.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You may not buy, sell, or otherwise trade in user names or other
-          unique identifiers on the website.
+          unique identifiers on the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You may not send advertisements, chain letters, or other solicitations
-          through the website, or use the website to gather addresses for
-          commercial mailing lists.
+          through the Site, or use the Site to gather addresses for commercial
+          mailing lists.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not automate access to the website, or monitor the website,
-          such as with a web crawler, browser plug-in or add-on, or other
-          computer program that is not a web browser. You may crawl the website
-          to index it for a publicly available search engine.
+          You may not automate access to the Site, or monitor the Site, such as
+          with a web crawler, browser plug-in or add-on, or other computer
+          program that is not a web browser. You may crawl the Site to index it
+          for a publicly available search engine.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not use the website to send e-mail to distribution lists,
+          You may not use the Site to send e-mail to distribution lists,
           newsgroups, or group mail aliases.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You may not falsely imply that you&apos;re affiliated with or endorsed
-          by the company.
+          by Ecotenet.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You may not remove any marks showing proprietary ownership from
-          materials you download from the website.
+          materials you download from the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not show any part of the website on other websites with using
+          You may not show any part of the Site on other Sites with using
           iframes.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You may not disable, avoid, or circumvent any security or access
-          restrictions of the website.
+          restrictions of the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not strain infrastructure of the website with an unreasonable
+          You may not strain infrastructure of the Site with an unreasonable
           volume of requests, or requests designed to impose an unreasonable
-          load on information systems underlying the website.
+          load on information systems underlying the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You may not encourage or help anyone in violation of these terms.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not impersonate others through the website.
+          You may not impersonate others through the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>Content Standards</b>
         </Typography>
         <Typography variant="h6">
-          You may not submit content to the website that is illegal, offensive,
-          or otherwise harmful to others. This includes content that is
-          harassing, inappropriate, or abusive.
+          You may not submit content to the Site that is illegal, offensive, or
+          otherwise harmful to others. This includes content that is harassing,
+          inappropriate, or abusive.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not submit content to the website that violates the law,
+          You may not submit content to the Site that violates the law,
           infringes anyone&apos;s intellectual property rights, violates
           anyone&apos;s privacy, or breaches agreements you have with others.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not submit content to the website containing malicious
-          computer code, such as computer viruses or spyware.
+          You may not submit content to the Site containing malicious computer
+          code, such as computer viruses or spyware.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not submit content to the website as a mere placeholder, to
-          hold a particular address, user name, or other unique identifier.
+          You may not submit content to the Site as a mere placeholder, to hold
+          a particular address, user name, or other unique identifier.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You may not use the website to disclose information that you
-          don&apos;t have the right to disclose, like others&apos; confidential
+          You may not use the Site to disclose information that you don&apos;t
+          have the right to disclose, like others&apos; confidential
           information.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
@@ -165,8 +165,8 @@ const terms = () => {
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           Ecotenet reserves the right to change, redact, and delete content on
-          the website for any reason. If you believe someone has submitted
-          content to the website in violation of these terms, please contact us
+          the Site for any reason. If you believe someone has submitted content
+          to the Site in violation of these terms, please contact us
           immediately.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
@@ -174,7 +174,7 @@ const terms = () => {
         </Typography>
         <Typography variant="h6">
           You must create and log into an account to use some features of the
-          website.
+          Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           To create an account, you must provide some information about
@@ -191,44 +191,44 @@ const terms = () => {
           compromised.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          Ecotenet may restrict, suspend, or close your account on the website
-          at any time, without notice to you, if Ecotenet reasonably believes
-          that you&apos;ve breached these terms.
+          Ecotenet may restrict, suspend, or close your account on the Site at
+          any time, without notice to you, if Ecotenet reasonably believes that
+          you&apos;ve breached these terms.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>Your Content</b>
         </Typography>
         <Typography variant="h6">
           Nothing in these terms gives Ecotenet any ownership rights in
-          intellectual property that you share with the website, such as your
-          account information or other content you submit to the website.
-          Nothing in these terms gives you any ownership rights in
-          Ecotenet&apos;s intellectual property, either.
+          intellectual property that you share with the Site, such as your
+          account information or other content you submit to the Site. Nothing
+          in these terms gives you any ownership rights in Ecotenet&apos;s
+          intellectual property, either.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           Between you and Ecotenet, you remain solely responsible for content
-          you submit to the website. You agree not to wrongly imply that content
-          you submit to the website is sponsored or approved by Ecotenet. These
+          you submit to the Site. You agree not to wrongly imply that content
+          you submit to the Site is sponsored or approved by Ecotenet. These
           terms do not obligate Ecotenet to store, maintain, or provide copies
           of content you submit.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          Content you submit to the website belongs to you, and you decide what
+          Content you submit to the Site belongs to you, and you decide what
           permission to give others for it. But at a minimum, you license
-          Ecotenet to provide content that you submit to the website to other
-          users of the website. That special license allows Ecotenet to copy,
-          publish, and analyze content you submit to the website.
+          Ecotenet to provide content that you submit to the Site to other users
+          of the Site. That special license allows Ecotenet to copy, publish,
+          and analyze content you submit to the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          When content you submit is removed from the website, whether by you or
-          by Ecotenet, Ecotenet&apos;s special license ends when the last copy
+          When content you submit is removed from the Site, whether by you or by
+          Ecotenet, Ecotenet&apos;s special license ends when the last copy
           disappears from Ecotenet&apos;s backups, caches, and other systems.
           Other licenses you apply to content you submit may continue after your
           content is removed. Those licenses may give others, or Ecotenet
-          itself, the right to share your content through the website again.
+          itself, the right to share your content through the Site again.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          Others who receive content you submit to the website may violate the
+          Others who receive content you submit to the Site may violate the
           terms on which you license your content. You agree that Ecotenet will
           not be liable to you for those violations or their consequences.
         </Typography>
@@ -238,13 +238,15 @@ const terms = () => {
         <Typography variant="h6">
           You agree to indemnify Ecotenet from legal claims by others related to
           your breach of these terms, or breach of these terms by others using
-          your account on the website. Both you and Ecotenet agree to notify the
+          your account on the Site. Both you and Ecotenet agree to notify the
           other side of any legal claims for which you might have to indemnify
-          Ecotenet as soon as possible. If Ecotenet fails to notify you of a
+          Ecotenet as soon as possible.
+          {/* If Ecotenet fails to notify you of a
           legal claim promptly, you won&apos;t have to indemnify Ecotenet for
           damages that you could have defended against or mitigated with prompt
-          notice. You agree to allow Ecotenet to control investigation, defense,
-          and settlement of legal claims for which you would have to indemnify
+          notice.  */}
+          You agree to allow Ecotenet to control investigation, defense, and
+          settlement of legal claims for which you would have to indemnify
           Ecotenet, and to cooperate with those efforts. Ecotenet agrees not to
           agree to any settlement that admits fault for you or imposes
           obligations on you without your prior agreement.
@@ -253,22 +255,21 @@ const terms = () => {
           <b>Disclaimers</b>
         </Typography>
         <Typography variant="h6">
-          You accept all risk of using the website and content on the website.
-          As far as the law allows, Ecotenet provides the website as is, without
-          any warranty whatsoever.
+          You accept all risk of using the Site and content on the Site. As far
+          as the law allows, Ecotenet provides the Site as is, without any
+          warranty whatsoever.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          The website may hyperlink to and integrate websites and services run
-          by others. Ecotenet does not make any warranty about services run by
+          The Site may hyperlink to and integrate Sites and services run by
+          others. Ecotenet does not make any warranty about services run by
           others, or content they may provide. Use of services run by others may
           be governed by other terms between you and the one running the
           service.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           A more detailed disclaimer regarding the accuracy, adequacy, validity,
-          reliability, availability, or completeness of any of the
-          website&apos;s content or any external links they may contain can be
-          found{" "}
+          reliability, availability, or completeness of any of the Site&apos;s
+          content or any external links they may contain can be found{" "}
           <Link
             href="https://www.ecotenet.org/dislaimer"
             underline="hover"
@@ -287,11 +288,11 @@ const terms = () => {
           Ecotenet personnel could not have reasonably foreseen when you agreed
           to these terms.
         </Typography>
-        <Typography variant="h6" sx={{ marginTop: "10px" }}>
+        {/* <Typography variant="h6" sx={{ marginTop: "10px" }}>
           As far as the law allows, Ecotenet&apos;s total liability to you for
-          claims of any kind that are related to the website or content on the
-          website will be limited to $50.
-        </Typography>
+          claims of any kind that are related to the Site or content on the
+          Site will be limited to $50.
+        </Typography> */}
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           In no event will Ecotenet be liable with respect to any subject matter
           of this Terms of Service under any contract, negligence, strict
@@ -309,8 +310,8 @@ const terms = () => {
           You agree to indemnify and hold harmless Ecotenet, their contractors,
           licensors, and their respective directors, officers, employees and
           agents from and against any and all claims and expenses, including
-          attorneys&apos; fees, arising out of your use of the website,
-          including but not limited to your violation of this Terms of Service.
+          attorneys&apos; fees, arising out of your use of the Site, including
+          but not limited to your violation of this Terms of Service.
         </Typography>
         {/* UPDATE */}
         {/* <Typography variant="h6" sx={{ marginTop: "20px" }}>
@@ -323,8 +324,8 @@ const terms = () => {
           <b>Feedback</b>
         </Typography>
         <Typography variant="h6">
-          Ecotenet welcomes your feedback and suggestions for the website. See
-          the Contact section below for ways to get in touch with us.
+          Ecotenet welcomes your feedback and suggestions for the Site. See the
+          Contact section below for ways to get in touch with us.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           You agree that Ecotenet will be free to act on feedback and
@@ -339,24 +340,24 @@ const terms = () => {
         <Typography variant="h6">
           Either you or Ecotenet may end the agreement written out in these
           terms at any time. When our agreement ends, your permission to use the
-          website also ends.
+          Site also ends.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           The following provisions survive the end of our agreement: Your
           Content, Feedback, Your Responsibility, Disclaimers, Limits on
           Liability, and General Terms.
         </Typography>
-        <Typography variant="h6" sx={{ marginTop: "20px" }}>
+        {/* <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>Disputes</b>
         </Typography>
         <Typography variant="h6">
           Ohio law will govern any dispute, including any legal proceedings,
-          related to these terms or your use of the website.
+          related to these terms or your use of the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
-          You and the company agree to seek injunctions related to these terms
-          only in state or federal court in Athens, Ohio. Neither you nor the
-          company will object to jurisdiction, forum, or venue in those courts.
+          You and Ecotenet agree to seek injunctions related to these terms only
+          in state or federal court in Athens, Ohio. Neither you nor Ecotenet
+          will object to jurisdiction, forum, or venue in those courts.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           Other than to seek an injunction or for claims under the Computer
@@ -374,7 +375,7 @@ const terms = () => {
           reasonable attorneys&apos; fees, and reasonable costs for witnesses.
           You or Ecotenet may enter arbitration awards in any court with
           jurisdiction.
-        </Typography>
+        </Typography> */}
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>General Terms</b>
         </Typography>
@@ -388,8 +389,8 @@ const terms = () => {
           You may not assign your agreement with Ecotenet. Ecotenet may assign
           your agreement to any affiliate of Ecotenet, any other company that
           obtains control of Ecotenet, or any other company that buys assets of
-          Ecotenet related to the website. Any attempted assignment against
-          these terms has no legal effect.
+          Ecotenet related to the Site. Any attempted assignment against these
+          terms has no legal effect.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           Neither the exercise of any right under this Agreement, nor waiver of
@@ -398,36 +399,36 @@ const terms = () => {
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           These terms embody all the terms of agreement between you and Ecotenet
-          about use of the website. These terms entirely replace any other
-          agreements about your use of the website, written or not.
+          about use of the Site. These terms entirely replace any other
+          agreements about your use of the Site, written or not.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>Contact</b>
         </Typography>
         <Typography variant="h6">
-          You may notify the company under these terms, and send questions to
-          the company, at{" "}
+          You may notify Ecotenet under these terms, and send questions to
+          Ecotenet, at{" "}
           <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           Ecotenet may notify you under these terms using the e-mail address you
-          provide for your account on the website, or by posting a message on
-          the website or in your dashboard notifications.
+          provide for your account on the Site, or by posting a message on the
+          Site or in your dashboard notifications.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           <b>Changes</b>
         </Typography>
         <Typography variant="h6">
           Ecotenet last updated these terms on November 27, 2023, and may update
-          these terms again. Ecotenet will post all updates to the website. For
+          these terms again. Ecotenet will post all updates to the Site. For
           updates that contain substantial changes, Ecotenet agrees to e-mail
           you, if you&apos;ve created an account and provided a valid e-mail
           address. Ecotenet may also announce updates with special messages or
-          alerts on the website.
+          alerts on the Site.
         </Typography>
         <Typography variant="h6" sx={{ marginTop: "10px" }}>
           Once you get notice of an update to these terms, you must agree to the
-          new terms in order to keep using the website.
+          new terms in order to keep using the Site.
         </Typography>
         <Typography variant="subtitle2" sx={{ marginTop: "20px" }}>
           This Terms of Service has been adapted from{" "}
