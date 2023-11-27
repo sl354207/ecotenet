@@ -2,6 +2,7 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import { Box, Container, Divider, Typography } from "@mui/material";
+import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
 const about = () => {
@@ -26,7 +27,14 @@ const about = () => {
           ],
         }}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <Header title="Ecotenet Mission" />
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           Our goal at Ecotenet is to help people learn and share nature-based
@@ -141,6 +149,15 @@ const about = () => {
           sources and we will continue to add more. We use data that has
           location coordinates which are then mapped to the proper ecoregions.
           We currently use data from the{" "}
+          <Link
+            href="https://www.gbif.org/"
+            underline="hover"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Global Biodiversity Information Facility
+          </Link>
+          ,{" "}
           <Link
             href="https://www.worldwildlife.org/"
             underline="hover"

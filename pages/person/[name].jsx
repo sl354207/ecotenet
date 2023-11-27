@@ -11,6 +11,7 @@ import {
   getPerson,
   getProfilePosts,
 } from "@utils/mongodb/mongoHelpers";
+import theme from "@utils/theme";
 import { validName } from "@utils/validationHelpers";
 import { signIn } from "next-auth/react";
 import { NextSeo, SocialProfileJsonLd } from "next-seo";
@@ -74,7 +75,14 @@ const person = ({ person, posts }) => {
         url={`https://www.ecotenet.org/person/${person.name}`}
         sameAs={person.socials}
       />
-      <Container>
+      <Container
+        sx={{
+          backgroundColor: theme.palette.primary.light,
+          paddingBottom: "20px",
+          paddingTop: "5px",
+          marginBlock: "20px",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div
             style={{

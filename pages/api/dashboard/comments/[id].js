@@ -3,7 +3,6 @@ import { ajv } from "@schema/validation";
 import { deleteComment, updateComment } from "@utils/mongodb/mongoHelpers";
 import { validID } from "@utils/validationHelpers";
 import { getServerSession } from "next-auth/next";
-import * as Pusher from "pusher";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
@@ -23,17 +22,6 @@ export default async function handler(req, res) {
               data.approved = "pending";
               data.updated = true;
               const updatedComment = await updateComment(id, data);
-
-              const pusher = new Pusher({
-                appId: process.env.PUSHER_APP_ID,
-                key: process.env.NEXT_PUBLIC_PUSHER_KEY,
-                secret: process.env.PUSHER_SECRET_KEY,
-                cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-              });
-
-              pusher.trigger("ecotenet", "comment", {
-                type: "comment",
-              });
 
               return res.status(200).json(updatedComment);
             } catch (err) {

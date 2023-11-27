@@ -55,9 +55,10 @@ const DrawerSpecies = ({ species, handleClose }) => {
     error,
   } = useSWR(
     species
-      ? `https://en.wikipedia.org/api/rest_v1/page/segments/${
-          species.scientific_name.toLowerCase().split(" ")[0]
-        }_${species.scientific_name.toLowerCase().split(" ")[1]}?redirect=true`
+      ? `https://en.wikipedia.org/api/rest_v1/page/segments/${species.scientific_name.replace(
+          / /g,
+          "_"
+        )}?redirect=true`
       : null,
     fetcher,
     {
@@ -241,11 +242,10 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 color="error"
                 onClick={() =>
                   mutate(
-                    `https://en.wikipedia.org/api/rest_v1/page/segments/${
-                      species.scientific_name.toLowerCase().split(" ")[0]
-                    }_${
-                      species.scientific_name.toLowerCase().split(" ")[1]
-                    }?redirect=true`
+                    `https://en.wikipedia.org/api/rest_v1/page/segments/${species.scientific_name.replace(
+                      / /g,
+                      "_"
+                    )}?redirect=true`
                   )
                 }
               >
@@ -259,7 +259,10 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   variant="contained"
                   color="secondary"
                   sx={{ marginBlock: "15px" }}
-                  href={`/species/${species._id}`}
+                  href={`/species/${species.scientific_name.replace(
+                    / /g,
+                    "_"
+                  )}`}
                 >
                   view full page
                 </Button>
@@ -371,9 +374,10 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 <ListItem key={"inat"}>
                   <Link
                     variant="h6"
-                    href={`https://www.inaturalist.org/search?q=${
-                      species.scientific_name.toLowerCase().split(" ")[0]
-                    }%20${species.scientific_name.toLowerCase().split(" ")[1]}`}
+                    href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
+                      / /g,
+                      "+"
+                    )}`}
                     color="secondary"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -385,11 +389,10 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 <ListItem key={"wiki"}>
                   <Link
                     variant="h6"
-                    href={`https://commons.wikimedia.org/w/index.php?search=${
-                      species.scientific_name.toLowerCase().split(" ")[0]
-                    }+${
-                      species.scientific_name.toLowerCase().split(" ")[1]
-                    }&title=Special:MediaSearch&go=Go&type=image`}
+                    href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
+                      / /g,
+                      "+"
+                    )}&title=Special:MediaSearch&go=Go&type=image`}
                     color="secondary"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -401,11 +404,10 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 <ListItem key={"iucn"}>
                   <Link
                     variant="h6"
-                    href={`https://www.iucnredlist.org/search?query=${
-                      species.scientific_name.toLowerCase().split(" ")[0]
-                    }%20${
-                      species.scientific_name.toLowerCase().split(" ")[1]
-                    }&searchType=species`}
+                    href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
+                      / /g,
+                      "+"
+                    )}&searchType=species`}
                     color="secondary"
                     target="_blank"
                     rel="noopener noreferrer"
