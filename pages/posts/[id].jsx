@@ -33,7 +33,6 @@ import "@react-page/plugins-video/lib/index.css";
 
 import { updatePost } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
-import { loadToxicity } from "@utils/moderation";
 import {
   getPosts,
   getPublishedApprovedPostById,
@@ -166,9 +165,9 @@ const post = ({ post }) => {
     }
   }, [isVisible]);
 
-  const [model, setModel] = useState();
+  // const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
-  const [modelError, setModelError] = useState(false);
+  // const [modelError, setModelError] = useState(false);
 
   useEffect(() => {
     if (loadComments && comments) {
@@ -177,24 +176,24 @@ const post = ({ post }) => {
       });
       dispatch({ type: "load", payload: comments });
     }
-    if (loadComments && comments && user.status === "authenticated") {
-      const loadModel = async () => {
-        setModelLoading(true);
-        try {
-          // Loading model
-          const model = await loadToxicity(0.7);
-          if (model) {
-            setModel(model);
-            setModelLoading(false);
-          }
-        } catch (error) {
-          console.log(error);
-          setModelError(true);
-          setModelLoading(false);
-        }
-      };
-      loadModel();
-    }
+    // if (loadComments && comments && user.status === "authenticated") {
+    //   const loadModel = async () => {
+    //     setModelLoading(true);
+    //     try {
+    //       // Loading model
+    //       const model = await loadToxicity(0.7);
+    //       if (model) {
+    //         setModel(model);
+    //         setModelLoading(false);
+    //       }
+    //     } catch (error) {
+    //       console.log(error);
+    //       setModelError(true);
+    //       setModelLoading(false);
+    //     }
+    //   };
+    //   loadModel();
+    // }
   }, [comments]);
 
   const handleOpenDialog = (action, result) => {
@@ -667,11 +666,11 @@ const post = ({ post }) => {
           mutate={mutate}
           setVote={setVote}
           setLimit={setLimit}
-          model={model}
+          // model={model}
           modelLoading={modelLoading}
           setModelLoading={setModelLoading}
-          modelError={modelError}
-          setModelError={setModelError}
+          // modelError={modelError}
+          // setModelError={setModelError}
         />
       )}
 

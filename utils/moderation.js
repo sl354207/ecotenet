@@ -4,46 +4,11 @@ import * as nsfwjs from "nsfwjs";
 
 export const loadToxicity = async (threshold = 0.85) => {
   tf.enableProdMode();
-  const dbName = "tensorflowjs";
-  const objectStoreName = "model_info_store";
-  const key = "text-model";
+
   try {
-    const db = await openDatabase(dbName);
-    const exists = await checkObjectStoreExists(db, objectStoreName);
+    const model = await toxicity.load(threshold);
 
-    if (exists) {
-      console.log("Object store exists in IndexedDB");
-
-      const objectStore = getObjectStore(db, objectStoreName);
-      const keys = await getObjectStoreKeys(objectStore);
-      // console.log(keys);
-
-      if (keys.includes(key)) {
-        const model = await toxicity.load(threshold);
-        // return model;
-
-        // const model = await tf.loadGraphModel("indexeddb://text-model");
-        console.log(model);
-
-        return model;
-      } else {
-        console.log("Text model does not exist in IndexedDB");
-        const initialLoad = await toxicity.load(threshold);
-
-        await initialLoad.model.save("indexeddb://text-model");
-        return initialLoad;
-      }
-
-      //
-    } else {
-      console.log("Object store does not exist in IndexedDB");
-      // Load the model from another source and save it to IndexedDB
-
-      const initialLoad = await toxicity.load(threshold);
-
-      await initialLoad.model.save("indexeddb://text-model");
-      return initialLoad;
-    }
+    return model;
   } catch (error) {
     console.log(error);
     throw new Error("failed to load model");
