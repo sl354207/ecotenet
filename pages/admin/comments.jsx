@@ -78,12 +78,15 @@ const adminComments = () => {
       if (model && modelLoading === false) {
         if (results && results.length > 0) {
           setModelLoading(true);
+          let tempComments = [];
           for (const result of results) {
             try {
               const toxic = await useToxicity(model, result.text);
 
               if (toxic) {
-                setToxicComments([...toxicComments, result]);
+                if (!tempComments.includes(result)) {
+                  tempComments.push(result);
+                }
               } else {
                 handleUpdateComment(result, "true");
               }
@@ -94,6 +97,7 @@ const adminComments = () => {
             }
           }
           setModelLoading(false);
+          setToxicComments(tempComments);
         }
       }
     };
@@ -180,6 +184,14 @@ const adminComments = () => {
                           </Link>
 
                           <ListItemText primary={result.text}></ListItemText>
+                          <Link
+                            href={`/posts/${result.post_id}`}
+                            underline="hover"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {result.post_id}
+                          </Link>
                         </div>
 
                         {isMobile ? (
