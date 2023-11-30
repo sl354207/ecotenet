@@ -122,45 +122,49 @@ function ImageUploadField({ onChange, value }) {
     } else {
       setState({ ...state, isUploading: true });
       // convert img from File to Image type for classification
-      const classifyImg = new Image();
-      const objectUrl = URL.createObjectURL(file);
-      classifyImg.src = objectUrl;
-      classifyImg.onerror = async (error) => {
-        console.log(error);
-
+      if (!model) {
         handleError(UPLOADING_ERROR_CODE);
+      } else {
+        const classifyImg = new Image();
+        const objectUrl = URL.createObjectURL(file);
+        classifyImg.src = objectUrl;
+        classifyImg.onerror = async (error) => {
+          console.log(error);
 
-        setTimeout(
-          () => setState({ ...state, hasError: false, errorText: "" }),
-          3000
-        );
-      };
-      classifyImg.onload = async () => {
-        try {
-          const inappropriateImage = await useImageClassifier(
-            model,
-            classifyImg
+          handleError(UPLOADING_ERROR_CODE);
+
+          setTimeout(
+            () => setState({ ...state, hasError: false, errorText: "" }),
+            3000
           );
+        };
+        classifyImg.onload = async () => {
+          try {
+            const inappropriateImage = await useImageClassifier(
+              model,
+              classifyImg
+            );
 
-          if (inappropriateImage) {
-            setState({ ...state, isUploading: false });
-            handleError(INAPPROPRIATE_ERROR_CODE);
-          } else {
-            const imageUrl = URL.createObjectURL(file);
+            if (inappropriateImage) {
+              setState({ ...state, isUploading: false });
+              handleError(INAPPROPRIATE_ERROR_CODE);
+            } else {
+              const imageUrl = URL.createObjectURL(file);
 
-            setImage({ url: "blob", saved: false, file: file });
+              setImage({ url: "blob", saved: false, file: file });
 
-            onChange({ url: imageUrl, saved: false, file: file });
+              onChange({ url: imageUrl, saved: false, file: file });
+              setState({ ...state, isUploading: false });
+            }
+
+            URL.revokeObjectURL(objectUrl);
+          } catch (error) {
+            console.log(error);
+            handleError(UPLOADING_ERROR_CODE);
             setState({ ...state, isUploading: false });
           }
-
-          URL.revokeObjectURL(objectUrl);
-        } catch (error) {
-          console.log(error);
-          handleError(UPLOADING_ERROR_CODE);
-          setState({ ...state, isUploading: false });
-        }
-      };
+        };
+      }
     }
   };
   const handleImageUrl = async (e, newValue) => {
@@ -175,46 +179,50 @@ function ImageUploadField({ onChange, value }) {
         handleError(BAD_LINK_ERROR_CODE);
       } else {
         setState({ ...state, isUploading: true });
-        // convert img from File to Image type for classification
-        const classifyImg = new Image();
-        classifyImg.src = imageUrl;
-        classifyImg.onerror = async (error) => {
-          console.log(error);
+        if (!model) {
+          handleError(UPLOADING_ERROR_CODE);
+        } else {
+          // convert img from File to Image type for classification
+          const classifyImg = new Image();
+          classifyImg.src = imageUrl;
+          classifyImg.onerror = async (error) => {
+            console.log(error);
 
-          handleError(BAD_LINK_ERROR_CODE);
+            handleError(BAD_LINK_ERROR_CODE);
 
-          setTimeout(
-            () => setState({ ...state, hasError: false, errorText: "" }),
-            3000
-          );
-        };
+            setTimeout(
+              () => setState({ ...state, hasError: false, errorText: "" }),
+              3000
+            );
+          };
 
-        classifyImg.onload = async () => {
-          classifyImg.crossOrigin = "anonymous";
+          classifyImg.onload = async () => {
+            classifyImg.crossOrigin = "anonymous";
 
-          if (classifyImg.complete) {
-            // console.log(classifyImg);
-            try {
-              const inappropriateImage = await useImageClassifier(
-                model,
-                classifyImg
-              );
+            if (classifyImg.complete) {
+              // console.log(classifyImg);
+              try {
+                const inappropriateImage = await useImageClassifier(
+                  model,
+                  classifyImg
+                );
 
-              if (inappropriateImage) {
-                setState({ ...state, isUploading: false });
-                handleError(INAPPROPRIATE_ERROR_CODE);
-              } else {
-                setImage({ url: imageUrl, saved: false, file: {} });
-                onChange({ url: imageUrl, saved: false, file: {} });
+                if (inappropriateImage) {
+                  setState({ ...state, isUploading: false });
+                  handleError(INAPPROPRIATE_ERROR_CODE);
+                } else {
+                  setImage({ url: imageUrl, saved: false, file: {} });
+                  onChange({ url: imageUrl, saved: false, file: {} });
+                  setState({ ...state, isUploading: false });
+                }
+              } catch (error) {
+                console.log(error);
+                handleError(UPLOADING_ERROR_CODE);
                 setState({ ...state, isUploading: false });
               }
-            } catch (error) {
-              console.log(error);
-              handleError(UPLOADING_ERROR_CODE);
-              setState({ ...state, isUploading: false });
             }
-          }
-        };
+          };
+        }
       }
     }
   };
@@ -389,17 +397,11 @@ function ImageUploadField({ onChange, value }) {
         deleteInside = <>delete image</>;
         break;
       case "Error uploading":
-        saveInside = (
+        saveInside = <>save image</>;
+        uploadInside = (
           <>
             {state.errorText}
             <ErrorIcon sx={{ marginLeft: "8px" }} />
-          </>
-        );
-        uploadInside = (
-          <>
-            {" "}
-            Upload Image
-            <CloudUploadIcon sx={{ marginLeft: "8px" }} />
           </>
         );
         deleteInside = <>delete image</>;

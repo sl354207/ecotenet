@@ -9,8 +9,6 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { createComment, updateVote } from "@utils/apiHelpers";
-import { useToxicity } from "@utils/moderation";
-import { useEffect, useState } from "react";
 
 const ClientDialog = ({
   open,
@@ -23,11 +21,7 @@ const ClientDialog = ({
   name,
   setVote,
   setLimit,
-  model,
   modelLoading,
-  setModelLoading,
-  modelError,
-  setModelError,
 }) => {
   const { snackbar, setSnackbar } = useSnackbarContext();
 
@@ -48,36 +42,36 @@ const ClientDialog = ({
       break;
   }
 
-  const [toxic, setToxic] = useState(false);
-  const [spinner, setSpinner] = useState(true);
+  // const [toxic, setToxic] = useState(false);
+  // const [spinner, setSpinner] = useState(true);
 
-  useEffect(() => {
-    if (result.text) {
-      const getToxic = async () => {
-        setModelLoading(true);
-        // console.log(model);
-        try {
-          // Get toxicity of message
-          const classification = await useToxicity(model, result.text);
-          // Save toxicity into state
-          setToxic(classification);
-          setModelError(false);
-          setTimeout(() => {
-            setModelLoading(false);
-            setSpinner(false);
-          }, 1000);
-        } catch (error) {
-          console.log(error);
-          setModelError(true);
-          setModelLoading(false);
-          setSpinner(false);
-        }
-      };
-      getToxic();
-    }
+  // useEffect(() => {
+  //   if (result.text) {
+  //     const getToxic = async () => {
+  //       setModelLoading(true);
+  //       // console.log(model);
+  //       try {
+  //         // Get toxicity of message
+  //         const classification = await useToxicity(model, result.text);
+  //         // Save toxicity into state
+  //         setToxic(classification);
+  //         setModelError(false);
+  //         setTimeout(() => {
+  //           setModelLoading(false);
+  //           setSpinner(false);
+  //         }, 1000);
+  //       } catch (error) {
+  //         console.log(error);
+  //         setModelError(true);
+  //         setModelLoading(false);
+  //         setSpinner(false);
+  //       }
+  //     };
+  //     getToxic();
+  //   }
 
-    // console.log("test");
-  }, [result]);
+  //   // console.log("test");
+  // }, [result]);
 
   const handleCommentSubmit = async () => {
     const submission = {
@@ -176,7 +170,8 @@ const ClientDialog = ({
             <>Are you sure you want to submit {item}?</>
           ) : (
             <>
-              {modelLoading || spinner ? (
+              {modelLoading ? (
+                // || spinner
                 <CircularProgress
                   color="secondary"
                   size={40}
@@ -189,19 +184,19 @@ const ClientDialog = ({
                   }}
                 />
               ) : (
-                <>
-                  {modelError ? (
-                    <>Sorry there was an error please try again later</>
-                  ) : (
-                    <>
-                      {toxic ? (
-                        <>Sorry this comment was found to be inappropriate</>
-                      ) : (
-                        <>Are you sure you want to submit {item}?</>
-                      )}
-                    </>
-                  )}
-                </>
+                // <>
+                //   {modelError ? (
+                //     <>Sorry there was an error please try again later</>
+                //   ) : (
+                // <>
+                //   {toxic ? (
+                //     <>Sorry this comment was found to be inappropriate</>
+                //   ) : (
+                <>Are you sure you want to submit {item}?</>
+                //       )}
+                //     </>
+                //   )}
+                // </>
               )}
             </>
           )}
@@ -225,7 +220,10 @@ const ClientDialog = ({
           color="secondary"
           variant="outlined"
           disabled={
-            contentType === "Comment" && (toxic || modelLoading || modelError)
+            contentType === "Comment" &&
+            // toxic ||
+            modelLoading
+            // || modelError
           }
         >
           {contentType}

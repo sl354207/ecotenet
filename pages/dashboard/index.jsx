@@ -22,9 +22,8 @@ import {
 import { alpha } from "@mui/material/styles";
 import { updateNotification, updateUser } from "@utils/apiHelpers";
 import fetcher from "@utils/fetcher";
-import { loadToxicity, useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
-import { validEmail, validURL } from "@utils/validationHelpers";
+import { validURL } from "@utils/validationHelpers";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
@@ -78,33 +77,33 @@ export default function Dashboard() {
 
   const [fetchApi, setFetchApi] = useState();
 
-  const [model, setModel] = useState();
+  // const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
 
   useEffect(() => {
     if (user && user.status === "authenticated") {
       setFetchApi(`/api/dashboard/users/${user.name}`);
 
-      const loadModel = async () => {
-        setModelLoading(true);
-        try {
-          // Loading model
-          const model = await loadToxicity(0.7);
-          // await model.model.save("indexeddb://model");
-          // const modelNew = await model("indexeddb://model");
-          // console.log(model);
-          // console.log(`modelNew: ${modelNew}`);
-          if (model) {
-            setModel(model);
-            setModelLoading(false);
-          }
-        } catch (error) {
-          console.log(error);
+      // const loadModel = async () => {
+      //   setModelLoading(true);
+      //   try {
+      //     // Loading model
+      //     const model = await loadToxicity(0.7);
+      //     // await model.model.save("indexeddb://model");
+      //     // const modelNew = await model("indexeddb://model");
+      //     // console.log(model);
+      //     // console.log(`modelNew: ${modelNew}`);
+      //     if (model) {
+      //       setModel(model);
+      //       setModelLoading(false);
+      //     }
+      //   } catch (error) {
+      //     console.log(error);
 
-          setModelLoading(false);
-        }
-      };
-      loadModel();
+      //     setModelLoading(false);
+      //   }
+      // };
+      // loadModel();
     }
   }, [user]);
 
@@ -136,7 +135,7 @@ export default function Dashboard() {
     approved: "",
   });
 
-  const [email, setEmail] = useState(user && user.email);
+  // const [email, setEmail] = useState(user && user.email);
 
   useEffect(() => {
     if (results) {
@@ -230,25 +229,24 @@ export default function Dashboard() {
     }
 
     if (results.bio !== profile.bio) {
-      setModelLoading(true);
-      try {
-        // Get toxicity of message
-        toxicBio = await useToxicity(model, profile.bio);
-      } catch (error) {
-        console.log(error);
-        modelError = true;
-        setModelLoading(false);
-        setSnackbar({
-          ...snackbar,
-          open: true,
-          vertical: "bottom",
-          horizontal: "left",
-          severity: "error",
-          message: "There was a problem saving profile. Please try again later",
-        });
-      }
+      // try {
+      //   // Get toxicity of message
+      //   toxicBio = await useToxicity(model, profile.bio);
+      // } catch (error) {
+      //   console.log(error);
+      //   modelError = true;
+      //   setModelLoading(false);
+      //   setSnackbar({
+      //     ...snackbar,
+      //     open: true,
+      //     vertical: "bottom",
+      //     horizontal: "left",
+      //     severity: "error",
+      //     message: "There was a problem saving profile. Please try again later",
+      //   });
+      // }
     }
-    setTimeout(() => setModelLoading(false), 1000);
+    // setTimeout(() => setModelLoading(false), 1000);
     setError({
       bio: toxicBio,
       website: !validWebsite,
@@ -292,53 +290,54 @@ export default function Dashboard() {
         });
       }
     }
+    setModelLoading(false);
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  // const handleEmailChange = (e) => {
+  //   setEmail(e.target.value);
+  // };
 
   // UPDATE ONCE MUTATE USER SESSION IS IMPLEMENTED IN NEXT AUTH OR CHANGE UPDATE PERSON FUNCTIONALITY
-  const handleEmailUpdate = async () => {
-    if (!validEmail(email)) {
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        vertical: "bottom",
-        horizontal: "left",
-        severity: "error",
-        message: "Invalid Email",
-      });
-    } else {
-      const value = {
-        name: user.name,
-        email: email,
-      };
-      const emailUpdate = await updateUser(value, "dashboard");
+  // const handleEmailUpdate = async () => {
+  //   if (!validEmail(email)) {
+  //     setSnackbar({
+  //       ...snackbar,
+  //       open: true,
+  //       vertical: "bottom",
+  //       horizontal: "left",
+  //       severity: "error",
+  //       message: "Invalid Email",
+  //     });
+  //   } else {
+  //     const value = {
+  //       name: user.name,
+  //       email: email,
+  //     };
+  //     const emailUpdate = await updateUser(value, "dashboard");
 
-      if (emailUpdate.ok) {
-        mutate(fetchApi);
-        setSnackbar({
-          ...snackbar,
-          open: true,
-          vertical: "bottom",
-          horizontal: "left",
-          severity: "success",
-          message: "Email changed successfully",
-        });
-      }
-      if (!emailUpdate.ok) {
-        setSnackbar({
-          ...snackbar,
-          open: true,
-          vertical: "bottom",
-          horizontal: "left",
-          severity: "error",
-          message: "There was a problem changing email. Please try again later",
-        });
-      }
-    }
-  };
+  //     if (emailUpdate.ok) {
+  //       mutate(fetchApi);
+  //       setSnackbar({
+  //         ...snackbar,
+  //         open: true,
+  //         vertical: "bottom",
+  //         horizontal: "left",
+  //         severity: "success",
+  //         message: "Email changed successfully",
+  //       });
+  //     }
+  //     if (!emailUpdate.ok) {
+  //       setSnackbar({
+  //         ...snackbar,
+  //         open: true,
+  //         vertical: "bottom",
+  //         horizontal: "left",
+  //         severity: "error",
+  //         message: "There was a problem changing email. Please try again later",
+  //       });
+  //     }
+  //   }
+  // };
 
   const handleOpenDialog = (action, type, result) => {
     setDialogItem(result);
@@ -706,7 +705,7 @@ export default function Dashboard() {
                                     setSnackbar={setSnackbar}
                                     mutate={mutate}
                                     name={user && user.name}
-                                    model={model}
+                                    // model={model}
                                     modelLoading={modelLoading}
                                     setModelLoading={setModelLoading}
                                   />

@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { updateComment } from "@utils/apiHelpers";
-import { useToxicity } from "@utils/moderation";
 import theme from "@utils/theme";
 import { useState } from "react";
 
@@ -22,7 +21,7 @@ const DashboardComment = ({
   snackbar,
   setSnackbar,
   name,
-  model,
+  // model,
   modelLoading,
   setModelLoading,
 }) => {
@@ -43,24 +42,24 @@ const DashboardComment = ({
     let toxicComment = false;
     let modelError = false;
     setModelLoading(true);
-    try {
-      // Get toxicity of message
-      toxicComment = await useToxicity(model, commentValue);
+    // try {
+    //   // Get toxicity of message
+    //   toxicComment = await useToxicity(model, commentValue);
 
-      setTimeout(() => setModelLoading(false), 1000);
-    } catch (error) {
-      console.log(error);
-      modelError = true;
-      setModelLoading(false);
-      setSnackbar({
-        ...snackbar,
-        open: true,
-        vertical: "bottom",
-        horizontal: "left",
-        severity: "error",
-        message: "There was a problem saving comment. Please try again later",
-      });
-    }
+    //   setTimeout(() => setModelLoading(false), 1000);
+    // } catch (error) {
+    //   console.log(error);
+    //   modelError = true;
+    //   setModelLoading(false);
+    //   setSnackbar({
+    //     ...snackbar,
+    //     open: true,
+    //     vertical: "bottom",
+    //     horizontal: "left",
+    //     severity: "error",
+    //     message: "There was a problem saving comment. Please try again later",
+    //   });
+    // }
 
     if (toxicComment) {
       setError(true);
@@ -98,6 +97,7 @@ const DashboardComment = ({
         });
       }
     }
+    setModelLoading(false);
   };
 
   return (

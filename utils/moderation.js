@@ -4,6 +4,7 @@ import * as nsfwjs from "nsfwjs";
 
 export const loadToxicity = async (threshold = 0.85) => {
   tf.enableProdMode();
+
   try {
     const model = await toxicity.load(threshold);
 
@@ -31,14 +32,96 @@ export const useToxicity = async (model, text) => {
 
 export const loadImageClassifier = async () => {
   tf.enableProdMode();
-  try {
-    const model = await nsfwjs.load();
 
-    return model;
+  const dbName = "tensorflowjs";
+  const objectStoreName = "model_info_store";
+  const key = "image-model";
+  try {
+    const db = await openDatabase(dbName);
+    const exists = await checkObjectStoreExists(db, objectStoreName);
+
+    if (exists) {
+      console.log("Object store exists in IndexedDB");
+
+      const objectStore = getObjectStore(db, objectStoreName);
+      const keys = await getObjectStoreKeys(objectStore);
+      // console.log(keys);
+
+      if (keys.includes(key)) {
+        const model = await nsfwjs.load("indexeddb://image-model", {
+          type: "graph",
+        });
+
+        return model;
+      } else {
+        console.log("Image model does not exist in IndexedDB");
+        const initialLoad = await nsfwjs.load(
+          `${process.env.NEXT_PUBLIC_AWS_MODEL_URL}`,
+          { type: "graph" }
+        );
+
+        await initialLoad.model.save("indexeddb://image-model");
+        return initialLoad;
+      }
+
+      //
+    } else {
+      console.log("Object store does not exist in IndexedDB");
+      // Load the model from another source and save it to IndexedDB
+
+      const initialLoad = await nsfwjs.load(
+        `${process.env.NEXT_PUBLIC_AWS_MODEL_URL}`,
+        { type: "graph" }
+      );
+
+      await initialLoad.model.save("indexeddb://image-model");
+      return initialLoad;
+    }
   } catch (error) {
     console.log(error);
     throw new Error("failed to load model");
   }
+};
+
+const openDatabase = (dbName) => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(dbName);
+
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+
+    request.onsuccess = (event) => {
+      resolve(event.target.result);
+    };
+  });
+};
+
+const getObjectStore = (db, objectStoreName) => {
+  return db
+    .transaction(objectStoreName, "readwrite")
+    .objectStore(objectStoreName);
+};
+const getObjectStoreKeys = (objectStore) => {
+  const request = objectStore.getAllKeys();
+
+  return new Promise((resolve, reject) => {
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+
+    request.onsuccess = (event) => {
+      const keys = event.target.result;
+      // console.log(keys);
+
+      resolve(keys);
+    };
+  });
+};
+
+const checkObjectStoreExists = async (db, objectStoreName) => {
+  const objectStoreNames = db.objectStoreNames;
+  return objectStoreNames.contains(objectStoreName);
 };
 
 export const useImageClassifier = async (model, img) => {
