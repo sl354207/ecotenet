@@ -16,6 +16,7 @@ export const ImageClassifyProvider = ({ children }) => {
       try {
         // Loading model
         const model = await loadImageClassifier();
+        console.log(model);
         if (model) {
           setModel(model);
           setModelLoading(false);
