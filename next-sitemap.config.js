@@ -42,6 +42,10 @@ module.exports = {
         disallow: exclude.concat(NEXT_SSG_FILES),
       },
       {
+        userAgent: "SemrushBot",
+        disallow: exclude.concat(NEXT_SSG_FILES),
+      },
+      {
         userAgent: "*",
         allow: "/",
       },

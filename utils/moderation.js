@@ -30,55 +30,122 @@ export const useToxicity = async (model, text) => {
   }
 };
 
+// export const loadImageClassifier = async () => {
+//   tf.enableProdMode();
+//   const databaseName = "tensorflowjs";
+//   const objectStoreName = "model_info_store";
+//   const modelKey = "image-model";
+
+//   let model;
+
+//   try {
+//     // const databaseExists = await checkDatabaseExists(databaseName);
+
+//     // if (databaseExists) {
+//     //   const db = await openDatabase(databaseName);
+//     //   const objectStoreExists = await checkObjectStoreExists(
+//     //     db,
+//     //     objectStoreName
+//     //   );
+
+//     //   if (objectStoreExists) {
+//     //     const objectStore = getObjectStore(db, objectStoreName);
+//     //     const keys = await getObjectStoreKeys(objectStore);
+
+//     //     if (keys.includes(modelKey)) {
+//     //       model = await nsfwjs.load("indexeddb://image-model", {
+//     //         type: "graph",
+//     //       });
+//     //     } else {
+//     //       const initialLoad = await loadModelFromUrl();
+//     //       await initialLoad.model.save("indexeddb://image-model");
+
+//     //       model = initialLoad;
+//     //     }
+//     //   } else {
+//     //     const initialLoad = await loadModelFromUrl();
+//     //     await initialLoad.model.save("indexeddb://image-model");
+
+//     //     model = initialLoad;
+//     //   }
+//     // } else {
+//     //   const initialLoad = await loadModelFromUrl();
+//     //   await initialLoad.model.save("indexeddb://image-model");
+
+//     //   model = initialLoad;
+//     // }
+//     model = await nsfwjs.load("indexeddb://image-model", {
+//       type: "graph",
+//     });
+//     // console.log(model);
+
+//     return model;
+//   } catch (error) {
+//     try {
+//       model = await loadModelFromUrl();
+//       await model.model.save("indexeddb://image-model");
+//       return model;
+//     } catch (error) {
+//       console.log(error);
+//       //  throw new Error("failed to load model");
+//     }
+//     console.log(error);
+//     throw new Error("failed to load model");
+//   }
+// };
+
+// export const loadImageClassifier2 = async () => {
+//   tf.enableProdMode();
+//   const databaseName = "tensorflowjs";
+//   const objectStoreName = "model_info_store";
+//   const modelKey = "image-model";
+
+//   let model;
+
+//   // try to load model from indexeddb. If not found, load from url and save to indexeddb
+//   try {
+//     model = await nsfwjs.load("indexeddb://image-model", {
+//       type: "graph",
+//     });
+//     // console.log(model);
+//     return model;
+//   } catch (error) {
+//     try {
+//       model = await loadModelFromUrl();
+//       await model.model.save("indexeddb://image-model");
+//       return model;
+//     } catch (error) {
+//       console.log(error);
+//       //  throw new Error("failed to load model");
+//     }
+//     console.log(error);
+//     throw new Error("failed to load model");
+//   }
+
+// };
+
 export const loadImageClassifier = async () => {
   tf.enableProdMode();
-  const databaseName = "tensorflowjs";
-  const objectStoreName = "model_info_store";
-  const modelKey = "image-model";
-
-  let model;
 
   try {
-    const databaseExists = await checkDatabaseExists(databaseName);
-
-    if (databaseExists) {
-      const db = await openDatabase(databaseName);
-      const objectStoreExists = await checkObjectStoreExists(
-        db,
-        objectStoreName
-      );
-
-      if (objectStoreExists) {
-        const objectStore = getObjectStore(db, objectStoreName);
-        const keys = await getObjectStoreKeys(objectStore);
-
-        if (keys.includes(modelKey)) {
-          model = await nsfwjs.load("indexeddb://image-model", {
-            type: "graph",
-          });
-        } else {
-          const initialLoad = await loadModelFromUrl();
-          await initialLoad.model.save("indexeddb://image-model");
-
-          model = initialLoad;
-        }
-      } else {
-        const initialLoad = await loadModelFromUrl();
-        await initialLoad.model.save("indexeddb://image-model");
-
-        model = initialLoad;
-      }
-    } else {
-      const initialLoad = await loadModelFromUrl();
-      await initialLoad.model.save("indexeddb://image-model");
-
-      model = initialLoad;
-    }
+    const model = await nsfwjs.load("indexeddb://image-model", {
+      type: "graph",
+    });
 
     return model;
   } catch (error) {
-    console.log(error);
-    throw new Error("failed to load model");
+    console.log("Failed to load model from IndexedDB:", error);
+
+    // Load the model from an external URL
+    const initialLoad = await loadModelFromUrl();
+
+    try {
+      await initialLoad.model.save("indexeddb://image-model");
+    } catch (error) {
+      console.log("Failed to open IndexedDB:", error);
+    }
+
+    return initialLoad;
   }
 };
 
