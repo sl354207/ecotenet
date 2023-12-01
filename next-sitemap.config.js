@@ -35,15 +35,15 @@ module.exports = {
       },
       {
         userAgent: "AdsBot-Google-Mobile",
-        disallow: exclude.concat(NEXT_SSG_FILES),
+        disallow: "/",
       },
       {
         userAgent: "AdsBot-Google",
-        disallow: exclude.concat(NEXT_SSG_FILES),
+        disallow: "/",
       },
       {
         userAgent: "SemrushBot",
-        disallow: exclude.concat(NEXT_SSG_FILES),
+        disallow: "/",
       },
       {
         userAgent: "*",
