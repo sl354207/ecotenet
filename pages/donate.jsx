@@ -2,6 +2,7 @@ import DonateForm from "@components/forms/DonateForm";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
+import CheckIcon from "@mui/icons-material/Check";
 import {
   Box,
   CircularProgress,
@@ -28,6 +29,11 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 const donate = () => {
+  const monthlyServer = 75;
+  const monthlyLabor = 800;
+  const monthlyServerMin = monthlyServer * 0.05;
+  const monthlyLaborMin = monthlyLabor * 0.05;
+
   const [serverProgress, setServerProgress] = useState(5);
   const [laborProgress, setLaborProgress] = useState(5);
 
@@ -40,19 +46,39 @@ const donate = () => {
   });
 
   useEffect(() => {
-    if (results) {
-      if (results[0].server_monthly < 5) {
-        setServerProgress(5);
+    if (results && results.length > 0) {
+      const monthly = results[0].monthly;
+      const oneTime = results[0].one_time;
+      const total = monthly + oneTime;
+
+      console.log(total);
+      if (total > monthlyServer + monthlyLabor) {
+        setServerProgress(100);
+        setLaborProgress(100);
+        console.log(100);
+        console.log(100);
+      } else if (total > monthlyServer) {
+        setServerProgress(100);
+        if (total > monthlyServer + monthlyLaborMin) {
+          setLaborProgress(((total - monthlyServer) / monthlyLabor) * 100);
+          console.log(((total - monthlyServer) / monthlyLabor) * 100);
+        } else {
+          setLaborProgress(5);
+          console.log(5);
+        }
+        console.log(100);
       } else {
-        setServerProgress(results[0].server_monthly);
-      }
-      if (results[0].labor_monthly < 5) {
+        if (total > monthlyServerMin) {
+          setServerProgress((total / monthlyServer) * 100);
+          console.log((total / monthlyServer) * 100);
+        } else {
+          setServerProgress(5);
+          console.log(5);
+        }
         setLaborProgress(5);
-      } else {
-        setLaborProgress(results[0].labor_monthly);
+        console.log(5);
       }
     }
-    console.log(results);
   }, [results]);
 
   let progress;
@@ -103,11 +129,21 @@ const donate = () => {
               sx={{
                 marginBlock: "auto",
                 marginLeft: "10px",
-                minWidth: "160px",
+                minWidth: "100px",
               }}
             >
-              $75/month
+              ${monthlyServer}/month
             </Typography>
+            {serverProgress === 100 && (
+              <CheckIcon
+                sx={{
+                  marginBlock: "auto",
+                  marginLeft: "10px",
+                  color: "#07fb13",
+                }}
+                fontSize="large"
+              />
+            )}
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Typography
@@ -131,11 +167,21 @@ const donate = () => {
               sx={{
                 marginBlock: "auto",
                 marginLeft: "10px",
-                minWidth: "160px",
+                minWidth: "100px",
               }}
             >
-              $1000/month
+              ${monthlyLabor}/month
             </Typography>
+            {laborProgress === 100 && (
+              <CheckIcon
+                sx={{
+                  marginBlock: "auto",
+                  marginLeft: "10px",
+                  color: "#07fb13",
+                }}
+                fontSize="large"
+              />
+            )}
           </Box>
         </>
       );
