@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
             break;
           case 5:
-            priceID = "price_1NbT6mIxZCxSXd1ih0AnXYqN";
+            priceID = "price_1KyfgSIxZCxSXd1iyenrfWb5";
 
             break;
           case 10:
