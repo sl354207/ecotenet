@@ -5,7 +5,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   // https://github.com/stripe/stripe-node#configuration
   apiVersion: "2022-11-15",
 });
-// console.log(stripe);
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -49,7 +48,7 @@ export default async function handler(req, res) {
             break;
         }
         // Create Checkout Sessions from body params.
-        // const priceID = req.body.priceID;
+
         params = {
           mode: "subscription",
           // payment_method_types: ["card"],
@@ -71,16 +70,11 @@ export default async function handler(req, res) {
           // payment_method_types: ["card"],
           line_items: [
             {
-              // name: "Donation",
-              // amount: formatAmountForStripe(amount, "usd"),
-              // currency: "usd",
               price_data: {
                 currency: "usd",
                 unit_amount: formatAmountForStripe(amount, "usd"),
                 product_data: {
                   name: "Donation",
-                  // description: 'Comfortable cotton t-shirt',
-                  // images: ['https://example.com/t-shirt.png'],
                 },
               },
               quantity: 1,

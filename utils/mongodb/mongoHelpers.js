@@ -392,7 +392,7 @@ const deleteComment = async (_id) => {
       {
         _id: new ObjectId(_id),
       },
-      { $set: { text: "Comment deleted", name: "" } }
+      { $set: { text: "Comment deleted", name: "", approved: "false" } }
     );
 
     return deleted;
@@ -1179,6 +1179,40 @@ const getStatsEcoregions = async () => {
   }
 };
 
+const getDonations = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("donations")
+      .find({})
+      .project({ _id: 0 })
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const updateDonations = async (data) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("donations").updateOne(
+      {
+        _id: new ObjectId("656a49cf9e6b898802592941"),
+      },
+      {
+        $inc: data,
+      }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -1233,4 +1267,6 @@ module.exports = {
   getFilteredStats,
   getStatsAPIEcoregions,
   getStatsEcoregions,
+  getDonations,
+  updateDonations,
 };

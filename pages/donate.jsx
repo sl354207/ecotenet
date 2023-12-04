@@ -2,10 +2,191 @@ import DonateForm from "@components/forms/DonateForm";
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
-import { Container, Typography } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  LinearProgress,
+  Typography,
+  linearProgressClasses,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import fetcher from "@utils/fetcher";
 import { NextSeo } from "next-seo";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: theme.palette.grey[800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.secondary.dark,
+  },
+}));
 const donate = () => {
+  const monthlyServer = 75;
+  const monthlyLabor = 800;
+  const monthlyServerMin = monthlyServer * 0.05;
+  const monthlyLaborMin = monthlyLabor * 0.05;
+
+  const [serverProgress, setServerProgress] = useState(5);
+  const [laborProgress, setLaborProgress] = useState(5);
+
+  const {
+    data: results,
+    isLoading,
+    error,
+  } = useSWR("/api/donations", fetcher, {
+    shouldRetryOnError: false,
+  });
+
+  useEffect(() => {
+    if (results && results.length > 0) {
+      const monthly = results[0].monthly;
+      const oneTime = results[0].one_time;
+      const total = monthly + oneTime;
+
+      console.log(total);
+      if (total > monthlyServer + monthlyLabor) {
+        setServerProgress(100);
+        setLaborProgress(100);
+        console.log(100);
+        console.log(100);
+      } else if (total > monthlyServer) {
+        setServerProgress(100);
+        if (total > monthlyServer + monthlyLaborMin) {
+          setLaborProgress(((total - monthlyServer) / monthlyLabor) * 100);
+          console.log(((total - monthlyServer) / monthlyLabor) * 100);
+        } else {
+          setLaborProgress(5);
+          console.log(5);
+        }
+        console.log(100);
+      } else {
+        if (total > monthlyServerMin) {
+          setServerProgress((total / monthlyServer) * 100);
+          console.log((total / monthlyServer) * 100);
+        } else {
+          setServerProgress(5);
+          console.log(5);
+        }
+        setLaborProgress(5);
+        console.log(5);
+      }
+    }
+  }, [results]);
+
+  let progress;
+
+  if (isLoading) {
+    progress = (
+      <CircularProgress
+        color="secondary"
+        size={100}
+        disableShrink={true}
+        sx={{
+          margin: "20px auto",
+          display: "flex",
+          justifySelf: "center",
+        }}
+      />
+    );
+  } else {
+    if (error) {
+      progress = <></>;
+    } else {
+      progress = (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "20px",
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{
+                marginBlock: "auto",
+                marginRight: "10px",
+                minWidth: "160px",
+              }}
+            >
+              Hosting/Server Costs:
+            </Typography>
+            <BorderLinearProgress
+              variant="determinate"
+              value={serverProgress}
+              sx={{ width: "100%", marginBlock: "auto" }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                marginBlock: "auto",
+                marginLeft: "10px",
+                minWidth: "100px",
+              }}
+            >
+              ${monthlyServer}/month
+            </Typography>
+            {serverProgress === 100 && (
+              <CheckIcon
+                sx={{
+                  marginBlock: "auto",
+                  marginLeft: "10px",
+                  color: "#07fb13",
+                }}
+                fontSize="large"
+              />
+            )}
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Typography
+              variant="body1"
+              align="right"
+              sx={{
+                marginBlock: "auto",
+                marginRight: "10px",
+                minWidth: "160px",
+              }}
+            >
+              Labor Costs:
+            </Typography>
+            <BorderLinearProgress
+              variant="determinate"
+              value={laborProgress}
+              sx={{ width: "100%", marginBlock: "auto" }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                marginBlock: "auto",
+                marginLeft: "10px",
+                minWidth: "100px",
+              }}
+            >
+              ${monthlyLabor}/month
+            </Typography>
+            {laborProgress === 100 && (
+              <CheckIcon
+                sx={{
+                  marginBlock: "auto",
+                  marginLeft: "10px",
+                  color: "#07fb13",
+                }}
+                fontSize="large"
+              />
+            )}
+          </Box>
+        </>
+      );
+    }
+  }
   return (
     <>
       <NextSeo
@@ -30,6 +211,10 @@ const donate = () => {
       <Container maxWidth="sm">
         <Header title="Donations" />
         <DonateForm />
+      </Container>
+      <Container>
+        <Box sx={{ width: "100%" }}>{progress}</Box>
+
         <Typography variant="body1" align="center" sx={{ marginTop: "20px" }}>
           Ecotenet is 501(c)(3) nonprofit organization. We rely on donations
           from people like you to keep running and growing.
