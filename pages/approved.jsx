@@ -21,7 +21,6 @@ const approved = () => {
       revalidateOnReconnect: false,
     }
   );
-  // console.log(data);
 
   return (
     <>
