@@ -131,6 +131,8 @@ const adminPeople = () => {
           setModelLoading(false);
           setToxicProfiles(tempProfiles);
         }
+      } else {
+        setToxicProfiles(results);
       }
     };
     moderate();
@@ -207,7 +209,7 @@ const adminPeople = () => {
       } else {
         list = (
           <>
-            {toxicProfiles.length > 0 && (
+            {!modelLoading && toxicProfiles && toxicProfiles.length > 0 && (
               <List>
                 {toxicProfiles.map((result) => {
                   return (
@@ -236,9 +238,12 @@ const adminPeople = () => {
 
                           <Typography
                             sx={{
-                              border: result.toxic.includes("bio")
-                                ? `1px solid ${theme.palette.error.main}`
-                                : "none",
+                              border:
+                                result &&
+                                result.toxic &&
+                                result.toxic.includes("bio")
+                                  ? `1px solid ${theme.palette.error.main}`
+                                  : "none",
                             }}
                           >
                             bio: {result.bio}
@@ -254,9 +259,12 @@ const adminPeople = () => {
                               rel="noopener noreferrer"
                               underline="hover"
                               sx={{
-                                border: result.toxic.includes(result.website)
-                                  ? `1px solid ${theme.palette.error.main}`
-                                  : "none",
+                                border:
+                                  result &&
+                                  result.toxic &&
+                                  result.toxic.includes(result.website)
+                                    ? `1px solid ${theme.palette.error.main}`
+                                    : "none",
                               }}
                             >
                               {result.website}
@@ -272,9 +280,12 @@ const adminPeople = () => {
                                   rel="noopener noreferrer"
                                   underline="hover"
                                   sx={{
-                                    border: result.toxic.includes(social)
-                                      ? `1px solid ${theme.palette.error.main}`
-                                      : "none",
+                                    border:
+                                      result &&
+                                      result.toxic &&
+                                      result.toxic.includes(social)
+                                        ? `1px solid ${theme.palette.error.main}`
+                                        : "none",
                                   }}
                                 >
                                   {social}

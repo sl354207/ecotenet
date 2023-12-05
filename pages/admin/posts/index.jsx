@@ -92,7 +92,12 @@ const adminPosts = () => {
 
   useEffect(() => {
     const moderate = async () => {
-      if (textModel && imageModel && modelLoading === false) {
+      if (
+        textModel &&
+        imageModel &&
+        modelLoading === false &&
+        modelError === false
+      ) {
         if (results && results.length > 0) {
           setModelLoading(true);
           let tempProfiles = [];
@@ -237,6 +242,12 @@ const adminPosts = () => {
                 }
 
                 const postPhotos = findPostPhotos(row, []);
+                if (postPhotos.length > 0) {
+                  result.toxic.push("photo");
+                  if (!tempProfiles.includes(result)) {
+                    tempProfiles.push(result);
+                  }
+                }
                 for (const link of postPhotos) {
                   if (validImagePluginURL(link)) {
                     validPhotos.push(link);
@@ -333,6 +344,9 @@ const adminPosts = () => {
           setModelLoading(false);
           setToxicPosts(tempProfiles);
         }
+      } else {
+        setToxicPosts(results);
+        console.log(results);
       }
     };
 
@@ -486,7 +500,7 @@ const adminPosts = () => {
       } else {
         list = (
           <>
-            {toxicPosts.length > 0 && (
+            {!modelLoading && toxicPosts && toxicPosts.length > 0 && (
               <List>
                 {toxicPosts.map((result) => {
                   return (
@@ -517,14 +531,16 @@ const adminPosts = () => {
                           </Link>
 
                           <ListItemText primary={result.title}></ListItemText>
-                          {result.toxic.length > 0 && (
-                            <Typography>
-                              toxic:{" "}
-                              {result.toxic.map((reason) => (
-                                <>{reason}, </>
-                              ))}
-                            </Typography>
-                          )}
+                          {result &&
+                            result.toxic &&
+                            result.toxic.length > 0 && (
+                              <Typography>
+                                toxic:{" "}
+                                {result.toxic.map((reason) => (
+                                  <>{reason}, </>
+                                ))}
+                              </Typography>
+                            )}
                         </div>
 
                         <Link

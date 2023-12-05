@@ -20,27 +20,27 @@ export default async function handler(req, res) {
       if (subscription) {
         switch (amount) {
           case 2:
-            priceID = "price_1NbT6xIxZCxSXd1iyxci5HUa";
+            priceID = process.env.STRIPE_2;
 
             break;
           case 5:
-            priceID = "price_1NbT6mIxZCxSXd1ih0AnXYqN";
+            priceID = process.env.STRIPE_5;
 
             break;
           case 10:
-            priceID = "price_1NbT6ZIxZCxSXd1ilKl6mfc5";
+            priceID = process.env.STRIPE_10;
 
             break;
           case 20:
-            priceID = "price_1NbT6LIxZCxSXd1iRbAGz00E";
+            priceID = process.env.STRIPE_20;
 
             break;
           case 50:
-            priceID = "price_1NbT5uIxZCxSXd1iPxt05Qz4";
+            priceID = process.env.STRIPE_50;
 
             break;
           case 100:
-            priceID = "price_1NbT4MIxZCxSXd1iGAxKDrdQ";
+            priceID = process.env.STRIPE_100;
 
             break;
 
