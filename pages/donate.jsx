@@ -51,32 +51,23 @@ const donate = () => {
       const oneTime = results[0].one_time;
       const total = monthly + oneTime;
 
-      console.log(total);
       if (total > monthlyServer + monthlyLabor) {
         setServerProgress(100);
         setLaborProgress(100);
-        console.log(100);
-        console.log(100);
       } else if (total > monthlyServer) {
         setServerProgress(100);
         if (total > monthlyServer + monthlyLaborMin) {
           setLaborProgress(((total - monthlyServer) / monthlyLabor) * 100);
-          console.log(((total - monthlyServer) / monthlyLabor) * 100);
         } else {
           setLaborProgress(5);
-          console.log(5);
         }
-        console.log(100);
       } else {
         if (total > monthlyServerMin) {
           setServerProgress((total / monthlyServer) * 100);
-          console.log((total / monthlyServer) * 100);
         } else {
           setServerProgress(5);
-          console.log(5);
         }
         setLaborProgress(5);
-        console.log(5);
       }
     }
   }, [results]);

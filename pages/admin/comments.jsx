@@ -99,6 +99,8 @@ const adminComments = () => {
           setModelLoading(false);
           setToxicComments(tempComments);
         }
+      } else {
+        setToxicComments(results);
       }
     };
     moderate();
@@ -156,7 +158,7 @@ const adminComments = () => {
       } else {
         list = (
           <>
-            {toxicComments.length > 0 && (
+            {!modelLoading && toxicComments && toxicComments.length > 0 && (
               <List>
                 {toxicComments.map((result) => {
                   return (
