@@ -56,7 +56,9 @@ const contact = () => {
         <Header title="Contact Us" />
         <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
           For general support you can contact us through the forum at{" "}
-          <Link href="https://forum.ecotenet.org/category/3/support">
+          <Link
+            href={process.env.NEXT_PUBLIC_FORUM_URL + "/category/5/support"}
+          >
             Support.
           </Link>
         </Typography>
