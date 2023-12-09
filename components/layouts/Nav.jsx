@@ -360,7 +360,7 @@ const Nav = () => {
             onClick={
               status === "authenticated" && user.name === undefined
                 ? () => router.push("/auth/new-user")
-                : () => router.push("https://forum.ecotenet.org")
+                : () => router.push(process.env.NEXT_PUBLIC_FORUM_URL)
             }
           >
             Forum
@@ -552,7 +552,9 @@ const Nav = () => {
                                 }
                               : () => {
                                   setPopper(false);
-                                  router.push("https://forum.ecotenet.org");
+                                  router.push(
+                                    process.env.NEXT_PUBLIC_FORUM_URL
+                                  );
                                 }
                           }
                           sx={{

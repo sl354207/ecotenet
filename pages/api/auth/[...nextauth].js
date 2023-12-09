@@ -82,7 +82,7 @@ export const authOptions = {
               <table width="100%" border="0" cellspacing="20" cellpadding="0" style="background: "#ffffff"; max-width: 600px; margin: auto; border-radius: 10px;">
                 <tr>
                   <td align="center" style="padding: 10px 0px 0px 0px; font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: "#444444";">
-                    Sign in as <strong>${identifier}</strong>
+                    Sign in by entering the following code:
                   </td>
                 </tr>
                 <tr>
