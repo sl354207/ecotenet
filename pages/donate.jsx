@@ -31,8 +31,6 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 const donate = () => {
   const [serverProgress, setServerProgress] = useState(5);
   const [laborProgress, setLaborProgress] = useState(5);
-  const [monthlyServer, setMonthlyServer] = useState();
-  const [monthlyLabor, setMonthlyLabor] = useState();
 
   const {
     data: results,
@@ -44,10 +42,11 @@ const donate = () => {
 
   useEffect(() => {
     if (results && results.length > 0) {
-      setMonthlyServer(results[0].server_cost);
-      setMonthlyLabor(results[0].labor_cost);
+      const monthlyServer = results[0].server_cost;
+      const monthlyLabor = results[0].labor_cost;
       const monthlyServerMin = monthlyServer * 0.05;
       const monthlyLaborMin = monthlyLabor * 0.05;
+
       const monthly = results[0].monthly;
       const oneTime = results[0].one_time;
       const total = monthly + oneTime;
@@ -124,7 +123,7 @@ const donate = () => {
                 minWidth: "100px",
               }}
             >
-              ${monthlyServer}/month
+              ${results && results[0].server_cost}/month
             </Typography>
             {serverProgress === 100 && (
               <CheckIcon
@@ -162,7 +161,7 @@ const donate = () => {
                 minWidth: "100px",
               }}
             >
-              ${monthlyLabor}/month
+              ${results && results[0].labor_cost}/month
             </Typography>
             {laborProgress === 100 && (
               <CheckIcon
