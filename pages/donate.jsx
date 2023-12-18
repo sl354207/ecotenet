@@ -29,13 +29,10 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 const donate = () => {
-  const monthlyServer = 75;
-  const monthlyLabor = 800;
-  const monthlyServerMin = monthlyServer * 0.05;
-  const monthlyLaborMin = monthlyLabor * 0.05;
-
   const [serverProgress, setServerProgress] = useState(5);
   const [laborProgress, setLaborProgress] = useState(5);
+  const [monthlyServer, setMonthlyServer] = useState();
+  const [monthlyLabor, setMonthlyLabor] = useState();
 
   const {
     data: results,
@@ -47,6 +44,10 @@ const donate = () => {
 
   useEffect(() => {
     if (results && results.length > 0) {
+      setMonthlyServer(results[0].server_cost);
+      setMonthlyLabor(results[0].labor_cost);
+      const monthlyServerMin = monthlyServer * 0.05;
+      const monthlyLaborMin = monthlyLabor * 0.05;
       const monthly = results[0].monthly;
       const oneTime = results[0].one_time;
       const total = monthly + oneTime;
