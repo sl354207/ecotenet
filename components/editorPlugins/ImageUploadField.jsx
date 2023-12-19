@@ -521,13 +521,13 @@ function ImageUploadField({ onChange, value }) {
           value={
             value.url &&
             (value.url.startsWith("blob:") ||
-              value.url.startsWith("https://eco-media-bucket.s3"))
+              value.url.startsWith("https://eco-media"))
               ? ""
               : value.url || ""
           }
           disabled={
             (value.url && value.url.startsWith("blob:")) ||
-            (value.url && value.url.startsWith("https://eco-media-bucket.s3"))
+            (value.url && value.url.startsWith("https://eco-media"))
               ? true
               : false
           }
@@ -636,7 +636,7 @@ function ImageUploadField({ onChange, value }) {
             image.url === undefined ||
             image.url === "" ||
             (image.url !== "blob" &&
-              !image.url.startsWith("https://eco-media-bucket.s3") &&
+              !image.url.startsWith("https://eco-media") &&
               !image.url.startsWith("blob:"))
           }
         >
