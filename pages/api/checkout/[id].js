@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   // https://github.com/stripe/stripe-node#configuration
-  apiVersion: "2022-11-15",
+  apiVersion: "2023-10-16",
 });
 
 export default async function handler(req, res) {
@@ -17,13 +17,11 @@ export default async function handler(req, res) {
     const checkout_session = await stripe.checkout.sessions.retrieve(id);
     const { status, payment_intent, subscription } = checkout_session;
 
-    return res
-      .status(200)
-      .json({
-        status: status,
-        payment_intent: payment_intent,
-        subscription: subscription,
-      });
+    return res.status(200).json({
+      status: status,
+      payment_intent: payment_intent,
+      subscription: subscription,
+    });
   } catch (err) {
     const errorMessage =
       err instanceof Error ? err.message : "Internal server error";
