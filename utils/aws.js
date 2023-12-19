@@ -9,10 +9,10 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
 import { promisify } from "util";
 
-const { AWS_ID, AWS_KEY } = process.env;
+const { AWS_ID, AWS_KEY, AWS_MEDIA_BUCKET } = process.env;
 
 const region = "us-east-2";
-const bucketName = "eco-media-bucket";
+const bucketName = AWS_MEDIA_BUCKET;
 const accessKeyId = AWS_ID;
 const secretAccessKey = AWS_KEY;
 
