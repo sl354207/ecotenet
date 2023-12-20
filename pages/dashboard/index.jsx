@@ -79,6 +79,7 @@ export default function Dashboard() {
 
   // const [model, setModel] = useState();
   const [modelLoading, setModelLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (user && user.status === "authenticated") {
@@ -783,6 +784,8 @@ export default function Dashboard() {
             mutate={mutate}
             name={user && user.name}
             fetchApi={fetchApi}
+            loading={loading}
+            setLoading={setLoading}
           />
         )}
       </Container>

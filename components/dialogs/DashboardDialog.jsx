@@ -75,7 +75,7 @@ const DashboardDialog = ({
         if (mutate) {
           mutate(fetchApi);
         }
-        setLoading(false);
+
         handleClose();
         setSnackbar({
           ...snackbar,
@@ -96,7 +96,6 @@ const DashboardDialog = ({
           severity: "error",
           message: `There was a problem deleting post. Please try again later`,
         });
-        setLoading(false);
       }
     }
     if (!mediaResponse.ok) {
@@ -108,8 +107,8 @@ const DashboardDialog = ({
         severity: "error",
         message: `There was a problem deleting post media. Please try again later`,
       });
-      setLoading(false);
     }
+    setLoading(false);
   };
   const handleDeleteComment = async () => {
     setLoading(true);
@@ -124,7 +123,7 @@ const DashboardDialog = ({
       if (mutate) {
         mutate(fetchApi);
       }
-      setLoading(false);
+
       handleClose();
       setSnackbar({
         ...snackbar,
@@ -145,8 +144,8 @@ const DashboardDialog = ({
         severity: "error",
         message: `There was a problem deleting comment. Please try again later`,
       });
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   // UPDATE
