@@ -392,7 +392,7 @@ const deleteComment = async (_id) => {
       {
         _id: new ObjectId(_id),
       },
-      { $set: { text: "Comment deleted", name: "", approved: "false" } }
+      { $set: { text: "Comment deleted", name: "", approved: "true" } }
     );
 
     return deleted;
