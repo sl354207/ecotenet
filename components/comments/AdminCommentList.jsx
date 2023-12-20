@@ -110,7 +110,7 @@ const AdminCommentList = ({
                         color="secondary"
                         sx={{ marginTop: "4px" }}
                         onClick={() =>
-                          handleOpenDialog("Deny", "comment", comment)
+                          handleOpenDialog("Deny", "Comment", comment)
                         }
                       >
                         Deny
@@ -121,7 +121,7 @@ const AdminCommentList = ({
                         color="secondary"
                         sx={{ marginTop: "4px" }}
                         onClick={() =>
-                          handleOpenDialog("Delete", "comment", comment)
+                          handleOpenDialog("Delete", "Comment", comment)
                         }
                       >
                         Delete
@@ -135,7 +135,7 @@ const AdminCommentList = ({
                             variant="outlined"
                             color="secondary"
                             onClick={() =>
-                              handleOpenDialog("Deny", "comment", comment)
+                              handleOpenDialog("Deny", "Comment", comment)
                             }
                           >
                             Deny
@@ -146,7 +146,7 @@ const AdminCommentList = ({
                             color="secondary"
                             sx={{ marginTop: "4px" }}
                             onClick={() =>
-                              handleOpenDialog("Delete", "comment", comment)
+                              handleOpenDialog("Delete", "Comment", comment)
                             }
                           >
                             Delete
