@@ -139,6 +139,7 @@ const person = ({ person, posts }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   href={`${person.website}`}
+                  sx={{ overflowWrap: "anywhere" }}
                 >
                   {person.website}
                 </Link>
@@ -154,6 +155,7 @@ const person = ({ person, posts }) => {
                     href={`${social}`}
                     underline="hover"
                     key={social}
+                    sx={{ overflowWrap: "anywhere" }}
                   >
                     {social}
                   </Link>

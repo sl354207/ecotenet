@@ -51,7 +51,7 @@ const Resolve = ({ open, handleClose, name, ID, mutate, route }) => {
           ref: ID,
         };
 
-        const notifyResponse = await createNotification(notify);
+        const notifyResponse = await createNotification(notify, "admin");
 
         if (notifyResponse.ok) {
           setSnackbar({
