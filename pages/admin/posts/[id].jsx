@@ -422,6 +422,7 @@ const post = () => {
         handleClose={handleCloseDialog}
         result={item}
         mutate={mutate}
+        ID={flag}
       />
       <Resolve
         open={resolve}

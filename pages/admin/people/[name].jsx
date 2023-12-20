@@ -177,6 +177,7 @@ const person = () => {
           open={dialog}
           handleClose={handleCloseDialog}
           result={item}
+          ID={flag}
         />
         <Resolve
           open={resolve}

@@ -175,7 +175,10 @@ const adminFlags = () => {
                           <Button
                             variant="outlined"
                             color="secondary"
-                            href={`/species/${result.content_id}`}
+                            href={`/species/${result.content_id.replace(
+                              / /g,
+                              "_"
+                            )}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
