@@ -19,11 +19,11 @@ function ImageCaption({ onChange, value }) {
           display: "flex",
           marginBottom: "5px",
         },
-        // [theme.breakpoints.down("sm")]: {
-        //   width: "150px",
-        //   display: "flex",
-        //   marginBottom: "5px",
-        // },
+        [theme.breakpoints.down("sm")]: {
+          width: "150px",
+          display: "flex",
+          marginBottom: "5px",
+        },
       }}
       value={value || ""}
       inputProps={{ type: "text", maxLength: 100 }}
