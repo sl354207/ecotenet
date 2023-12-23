@@ -191,7 +191,7 @@ const donate = () => {
           siteName: "Ecotenet",
           images: [
             {
-              url: "https://www.ecotenet.org/logo.svg",
+              url: "https://www.ecotenet.org/logo_social.png",
               width: 1200,
               height: 630,
               alt: "Ecotenet logo",

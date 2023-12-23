@@ -284,7 +284,7 @@ const species = ({ species, wiki }) => {
               },
               // images: [
               //   {
-              //     url: "https://www.ecotenet.org/logo.svg",
+              //     url: "https://www.ecotenet.org/logo_social.png",
               //     width: 1200,
               //     height: 630,
               //     alt: "Ecotenet logo",
@@ -317,7 +317,7 @@ const species = ({ species, wiki }) => {
               },
             ]}
             publisherName="Ecotenet"
-            publisherLogo="https://www.ecotenet.org/logo.svg"
+            publisherLogo="https://www.ecotenet.org/logo_social.png"
             isAccessibleForFree={true}
           />
 
