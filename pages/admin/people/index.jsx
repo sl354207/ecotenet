@@ -95,7 +95,7 @@ const adminPeople = () => {
                 setModelLoading(false);
               }
             }
-            // let links = [];
+
             if (result.socials.length > 0) {
               const socialLinks = result.socials;
               try {
@@ -136,23 +136,7 @@ const adminPeople = () => {
                 setModelLoading(false);
               }
             }
-            // if (links.length > 0) {
-            //   console.log(links);
-            //   try {
-            //     const toxicLink = await handleCheckLinks(links, result);
 
-            //     if (toxicLink && !tempProfiles.includes(result)) {
-            //       tempProfiles.push(result);
-            //     }
-            //   } catch (error) {
-            //     console.log(error);
-            //     if (!tempProfiles.includes(result)) {
-            //       tempProfiles.push(result);
-            //     }
-            //     setModelLoading(false);
-            //   }
-            // }
-            console.log(result.toxic);
             if (result.toxic.length === 0) {
               try {
                 handleUpdatePerson(result, "true");
@@ -164,7 +148,7 @@ const adminPeople = () => {
               }
             }
           }
-          console.log(tempProfiles);
+
           setModelLoading(false);
           setToxicProfiles(tempProfiles);
         }
