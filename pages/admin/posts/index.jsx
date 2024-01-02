@@ -202,25 +202,27 @@ const adminPosts = () => {
                 if (!tempProfiles.includes(result)) {
                   tempProfiles.push(result);
                 }
-              }
-              try {
-                const toxicLink = await handleCheckLinks(
-                  [result.originalUrl],
-                  result
-                );
+              } else {
+                try {
+                  const toxicLink = await handleCheckLinks(
+                    [result.originalUrl],
+                    result
+                  );
 
-                if (toxicLink) {
+                  if (toxicLink) {
+                    result.toxic.push("toxicOriginalUrl");
+                    if (!tempProfiles.includes(result)) {
+                      tempProfiles.push(result);
+                    }
+                  }
+                } catch (error) {
+                  console.log(error);
                   result.toxic.push("toxicOriginalUrl");
                   if (!tempProfiles.includes(result)) {
                     tempProfiles.push(result);
                   }
+                  setModelLoading(false);
                 }
-              } catch (error) {
-                console.log(error);
-                if (!tempProfiles.includes(result)) {
-                  tempProfiles.push(result);
-                }
-                setModelLoading(false);
               }
             }
             if (result.rows.length > 0) {
@@ -283,6 +285,7 @@ const adminPosts = () => {
                   }
                 } catch (error) {
                   console.log(error);
+                  result.toxic.push("toxicLink");
                   if (!tempProfiles.includes(result)) {
                     tempProfiles.push(result);
                   }
@@ -322,6 +325,7 @@ const adminPosts = () => {
                   }
                 } catch (error) {
                   console.log(error);
+                  result.toxic.push("toxicVideoLink");
                   if (!tempProfiles.includes(result)) {
                     tempProfiles.push(result);
                   }
@@ -356,13 +360,19 @@ const adminPosts = () => {
     try {
       const badLinks = await checkLinks(links);
 
-      if (Object.keys(badLinks).length > 0) {
+      if (badLinks.matches || badLinks.error) {
         return result;
+      } else {
+        return false;
       }
+
+      // if (Object.keys(badLinks).length > 0) {
+      //   return result;
+      // }
     } catch (error) {
       console.log(error);
 
-      throw new Error("failed to check links");
+      throw new Error("failed to handle links");
     }
   };
 
