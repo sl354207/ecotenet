@@ -111,13 +111,40 @@ const AdminDialog = ({
       if (postResponse.ok) {
         const notifyResponse = await handleNotify("post", "deleted");
         if (notifyResponse.ok) {
-          const flag = {
-            id: ID,
-            status: "resolved",
-          };
+          if (ID) {
+            const flag = {
+              id: ID,
+              status: "resolved",
+            };
 
-          const flagResponse = await updateFlag(flag);
-          if (flagResponse.ok) {
+            const flagResponse = await updateFlag(flag);
+            if (flagResponse.ok) {
+              handleClose();
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "success",
+                message: `Post deleted successfully`,
+              });
+              if (router.query.flag) {
+                router.push("/admin/flags");
+              } else {
+                router.push("/admin/posts");
+              }
+            }
+            if (!flagResponse.ok) {
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "error",
+                message: `There was a problem resolving flag but post was deleted`,
+              });
+            }
+          } else {
             handleClose();
             setSnackbar({
               ...snackbar,
@@ -132,16 +159,6 @@ const AdminDialog = ({
             } else {
               router.push("/admin/posts");
             }
-          }
-          if (!flagResponse.ok) {
-            setSnackbar({
-              ...snackbar,
-              open: true,
-              vertical: "bottom",
-              horizontal: "left",
-              severity: "error",
-              message: `There was a problem resolving flag but post was deleted`,
-            });
           }
         }
         if (!notifyResponse.ok) {
@@ -189,13 +206,40 @@ const AdminDialog = ({
       const notifyResponse = await handleNotify("comment", "deleted");
 
       if (notifyResponse.ok) {
-        const flag = {
-          id: ID,
-          status: "resolved",
-        };
+        if (ID) {
+          const flag = {
+            id: ID,
+            status: "resolved",
+          };
 
-        const flagResponse = await updateFlag(flag);
-        if (flagResponse.ok) {
+          const flagResponse = await updateFlag(flag);
+          if (flagResponse.ok) {
+            handleClose();
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "success",
+              message: `Comment deleted successfully`,
+            });
+            if (router.query.flag) {
+              router.push("/admin/flags");
+            } else {
+              mutate("/api/admin/comments");
+            }
+          }
+          if (!flagResponse.ok) {
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "error",
+              message: `There was a problem resolving flag but comment was deleted`,
+            });
+          }
+        } else {
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -210,16 +254,6 @@ const AdminDialog = ({
           } else {
             mutate("/api/admin/comments");
           }
-        }
-        if (!flagResponse.ok) {
-          setSnackbar({
-            ...snackbar,
-            open: true,
-            vertical: "bottom",
-            horizontal: "left",
-            severity: "error",
-            message: `There was a problem resolving flag but comment was deleted`,
-          });
         }
       }
       if (!notifyResponse.ok) {
@@ -253,13 +287,40 @@ const AdminDialog = ({
       const userResponse = await deleteUser(deletion, "admin");
 
       if (userResponse.ok) {
-        const flag = {
-          id: ID,
-          status: "resolved",
-        };
+        if (ID) {
+          const flag = {
+            id: ID,
+            status: "resolved",
+          };
 
-        const flagResponse = await updateFlag(flag);
-        if (flagResponse.ok) {
+          const flagResponse = await updateFlag(flag);
+          if (flagResponse.ok) {
+            handleClose();
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "success",
+              message: `Account deleted successfully`,
+            });
+            if (router.query.flag) {
+              router.push("/admin/flags");
+            } else {
+              mutate("/api/admin/users");
+            }
+          }
+          if (!flagResponse.ok) {
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "error",
+              message: `There was a problem resolving flag but account was deleted`,
+            });
+          }
+        } else {
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -274,16 +335,6 @@ const AdminDialog = ({
           } else {
             mutate("/api/admin/users");
           }
-        }
-        if (!flagResponse.ok) {
-          setSnackbar({
-            ...snackbar,
-            open: true,
-            vertical: "bottom",
-            horizontal: "left",
-            severity: "error",
-            message: `There was a problem resolving flag but account was deleted`,
-          });
         }
       }
       if (!userResponse.ok) {
@@ -324,13 +375,40 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("post", "denied");
 
         if (notifyResponse.ok) {
-          const flag = {
-            id: ID,
-            status: "resolved",
-          };
+          if (ID) {
+            const flag = {
+              id: ID,
+              status: "resolved",
+            };
 
-          const flagResponse = await updateFlag(flag);
-          if (flagResponse.ok) {
+            const flagResponse = await updateFlag(flag);
+            if (flagResponse.ok) {
+              handleClose();
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "success",
+                message: `Post denied successfully`,
+              });
+              if (router.query.flag) {
+                router.push("/admin/flags");
+              } else {
+                router.push("/admin/posts");
+              }
+            }
+            if (!flagResponse.ok) {
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "error",
+                message: `There was a problem resolving flag but post was denied`,
+              });
+            }
+          } else {
             handleClose();
             setSnackbar({
               ...snackbar,
@@ -345,16 +423,6 @@ const AdminDialog = ({
             } else {
               router.push("/admin/posts");
             }
-          }
-          if (!flagResponse.ok) {
-            setSnackbar({
-              ...snackbar,
-              open: true,
-              vertical: "bottom",
-              horizontal: "left",
-              severity: "error",
-              message: `There was a problem resolving flag but post was denied`,
-            });
           }
         }
         if (!notifyResponse.ok) {
@@ -380,13 +448,40 @@ const AdminDialog = ({
       }
     } else {
       if (postResponse.ok) {
-        const flag = {
-          id: ID,
-          status: "resolved",
-        };
+        if (ID) {
+          const flag = {
+            id: ID,
+            status: "resolved",
+          };
 
-        const flagResponse = await updateFlag(flag);
-        if (flagResponse.ok) {
+          const flagResponse = await updateFlag(flag);
+          if (flagResponse.ok) {
+            handleClose();
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "success",
+              message: `Post approved successfully`,
+            });
+            if (router.query.flag) {
+              router.push("/admin/flags");
+            } else {
+              router.push("/admin/posts");
+            }
+          }
+          if (!flagResponse.ok) {
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "error",
+              message: `There was a problem resolving flag but post was approved`,
+            });
+          }
+        } else {
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -401,16 +496,6 @@ const AdminDialog = ({
           } else {
             router.push("/admin/posts");
           }
-        }
-        if (!flagResponse.ok) {
-          setSnackbar({
-            ...snackbar,
-            open: true,
-            vertical: "bottom",
-            horizontal: "left",
-            severity: "error",
-            message: `There was a problem resolving flag but post was approved`,
-          });
         }
       }
       if (!postResponse.ok) {
@@ -438,13 +523,40 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("comment", "denied");
 
         if (notifyResponse.ok) {
-          const flag = {
-            id: ID,
-            status: "resolved",
-          };
+          if (ID) {
+            const flag = {
+              id: ID,
+              status: "resolved",
+            };
 
-          const flagResponse = await updateFlag(flag);
-          if (flagResponse.ok) {
+            const flagResponse = await updateFlag(flag);
+            if (flagResponse.ok) {
+              handleClose();
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "success",
+                message: `Comment denied successfully`,
+              });
+              if (router.query.flag) {
+                router.push("/admin/flags");
+              } else {
+                mutate("/api/admin/comments");
+              }
+            }
+            if (!flagResponse.ok) {
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "error",
+                message: `There was a problem resolving flag but comment was denied`,
+              });
+            }
+          } else {
             handleClose();
             setSnackbar({
               ...snackbar,
@@ -459,16 +571,6 @@ const AdminDialog = ({
             } else {
               mutate("/api/admin/comments");
             }
-          }
-          if (!flagResponse.ok) {
-            setSnackbar({
-              ...snackbar,
-              open: true,
-              vertical: "bottom",
-              horizontal: "left",
-              severity: "error",
-              message: `There was a problem resolving flag but comment was denied`,
-            });
           }
         }
         if (!notifyResponse.ok) {
@@ -494,13 +596,40 @@ const AdminDialog = ({
       }
     } else {
       if (commentResponse.ok) {
-        const flag = {
-          id: ID,
-          status: "resolved",
-        };
+        if (ID) {
+          const flag = {
+            id: ID,
+            status: "resolved",
+          };
 
-        const flagResponse = await updateFlag(flag);
-        if (flagResponse.ok) {
+          const flagResponse = await updateFlag(flag);
+          if (flagResponse.ok) {
+            handleClose();
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "success",
+              message: `Comment approved successfully`,
+            });
+            if (router.query.flag) {
+              router.push("/admin/flags");
+            } else {
+              mutate("/api/admin/comments");
+            }
+          }
+          if (!flagResponse.ok) {
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "error",
+              message: `There was a problem resolving flag but comment was approved`,
+            });
+          }
+        } else {
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -515,16 +644,6 @@ const AdminDialog = ({
           } else {
             mutate("/api/admin/comments");
           }
-        }
-        if (!flagResponse.ok) {
-          setSnackbar({
-            ...snackbar,
-            open: true,
-            vertical: "bottom",
-            horizontal: "left",
-            severity: "error",
-            message: `There was a problem resolving flag but comment was approved`,
-          });
         }
       }
       if (!commentResponse.ok) {
@@ -554,13 +673,40 @@ const AdminDialog = ({
         const notifyResponse = await handleNotify("profile item", "denied");
 
         if (notifyResponse.ok) {
-          const flag = {
-            id: ID,
-            status: "resolved",
-          };
+          if (ID) {
+            const flag = {
+              id: ID,
+              status: "resolved",
+            };
 
-          const flagResponse = await updateFlag(flag);
-          if (flagResponse.ok) {
+            const flagResponse = await updateFlag(flag);
+            if (flagResponse.ok) {
+              handleClose();
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "success",
+                message: `Profile denied successfully`,
+              });
+              if (router.query.flag) {
+                router.push("/admin/flags");
+              } else {
+                mutate("/api/admin/users");
+              }
+            }
+            if (!flagResponse.ok) {
+              setSnackbar({
+                ...snackbar,
+                open: true,
+                vertical: "bottom",
+                horizontal: "left",
+                severity: "error",
+                message: `There was a problem resolving flag but profile was denied`,
+              });
+            }
+          } else {
             handleClose();
             setSnackbar({
               ...snackbar,
@@ -575,16 +721,6 @@ const AdminDialog = ({
             } else {
               mutate("/api/admin/users");
             }
-          }
-          if (!flagResponse.ok) {
-            setSnackbar({
-              ...snackbar,
-              open: true,
-              vertical: "bottom",
-              horizontal: "left",
-              severity: "error",
-              message: `There was a problem resolving flag but profile was denied`,
-            });
           }
         }
         if (!notifyResponse.ok) {
@@ -610,13 +746,40 @@ const AdminDialog = ({
       }
     } else {
       if (userResponse.ok) {
-        const flag = {
-          id: ID,
-          status: "resolved",
-        };
+        if (ID) {
+          const flag = {
+            id: ID,
+            status: "resolved",
+          };
 
-        const flagResponse = await updateFlag(flag);
-        if (flagResponse.ok) {
+          const flagResponse = await updateFlag(flag);
+          if (flagResponse.ok) {
+            handleClose();
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "success",
+              message: `Profile approved successfully`,
+            });
+            if (router.query.flag) {
+              router.push("/admin/flags");
+            } else {
+              mutate("/api/admin/users");
+            }
+          }
+          if (!flagResponse.ok) {
+            setSnackbar({
+              ...snackbar,
+              open: true,
+              vertical: "bottom",
+              horizontal: "left",
+              severity: "error",
+              message: `There was a problem resolving flag but profile was approved`,
+            });
+          }
+        } else {
           handleClose();
           setSnackbar({
             ...snackbar,
@@ -631,16 +794,6 @@ const AdminDialog = ({
           } else {
             mutate("/api/admin/users");
           }
-        }
-        if (!flagResponse.ok) {
-          setSnackbar({
-            ...snackbar,
-            open: true,
-            vertical: "bottom",
-            horizontal: "left",
-            severity: "error",
-            message: `There was a problem resolving flag but profile was approved`,
-          });
         }
       }
       if (!userResponse.ok) {

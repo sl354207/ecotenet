@@ -346,7 +346,6 @@ const adminPosts = () => {
         }
       } else {
         setToxicPosts(results);
-        console.log(results);
       }
     };
 
