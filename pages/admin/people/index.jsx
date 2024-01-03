@@ -95,28 +95,48 @@ const adminPeople = () => {
                 setModelLoading(false);
               }
             }
-            let links = [];
+
             if (result.socials.length > 0) {
-              links = result.socials;
-            }
-            if (result.website !== "") {
-              links = [...links, result.website];
-            }
-            if (links.length > 0) {
+              const socialLinks = result.socials;
               try {
-                const toxicLink = await handleCheckLinks(links, result);
+                const toxicLink = await handleCheckLinks(socialLinks, result);
 
                 if (toxicLink && !tempProfiles.includes(result)) {
                   tempProfiles.push(result);
                 }
               } catch (error) {
                 console.log(error);
+                socialLinks.forEach((link) => {
+                  result.toxic.push(link);
+                });
                 if (!tempProfiles.includes(result)) {
                   tempProfiles.push(result);
                 }
                 setModelLoading(false);
               }
             }
+            if (result.website !== "") {
+              try {
+                const toxicLink = await handleCheckLinks(
+                  [result.website],
+                  result
+                );
+
+                if (toxicLink && !tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
+              } catch (error) {
+                console.log(error);
+
+                result.toxic.push(result.website);
+
+                if (!tempProfiles.includes(result)) {
+                  tempProfiles.push(result);
+                }
+                setModelLoading(false);
+              }
+            }
+
             if (result.toxic.length === 0) {
               try {
                 handleUpdatePerson(result, "true");
@@ -128,6 +148,7 @@ const adminPeople = () => {
               }
             }
           }
+
           setModelLoading(false);
           setToxicProfiles(tempProfiles);
         }
@@ -142,17 +163,19 @@ const adminPeople = () => {
     try {
       const badLinks = await checkLinks(links);
 
-      if (Object.keys(badLinks).length > 0) {
-        badLinks.matches?.forEach((match) => {
+      if (badLinks.error) {
+        links.forEach((link) => {
+          result.toxic.push(link);
+        });
+      } else if (badLinks.matches) {
+        badLinks.matches.forEach((match) => {
           result.toxic.push(match.threat.url);
         });
-
-        return result;
       }
-    } catch (error) {
-      console.log(error);
 
-      throw new Error("failed to check links");
+      return result;
+    } catch (error) {
+      throw new Error("Failed to handle links");
     }
   };
 

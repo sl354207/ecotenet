@@ -60,7 +60,7 @@ const SigninPage = ({ providers, isLoggedIn }) => {
         {!isLoggedIn ? (
           <>
             <Header title="Email Sign in" />
-            <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes" />
+            <Description description="Enter your email and we will send you a one time passcode that is only valid for 5 minutes. Be sure to check you spam/junk email folder." />
 
             {emailProvider.map((provider) => (
               <EmailInput
