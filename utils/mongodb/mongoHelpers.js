@@ -1213,6 +1213,43 @@ const updateDonations = async (data) => {
   }
 };
 
+const getLatestPosts = async (page, pageSize) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("posts")
+      .aggregate([
+        {
+          $facet: {
+            data: [
+              { $match: { status: "published", approved: "true" } },
+              { $sort: { date: -1 } },
+              { $skip: (page - 1) * pageSize },
+              { $limit: pageSize },
+
+              {
+                $project: {
+                  title: 1,
+                  description: 1,
+                  name: 1,
+                  count: 1,
+                  category: 1,
+                },
+              },
+            ],
+          },
+        },
+      ])
+      // .pretty();
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -1269,4 +1306,5 @@ module.exports = {
   getStatsEcoregions,
   getDonations,
   updateDonations,
+  getLatestPosts,
 };
