@@ -9,10 +9,10 @@ import useSWRInfinite from "swr/infinite";
 // UPDATE
 const PAGE_SIZE = 2;
 const latest = () => {
-  const { data, size, setSize, isLoading } = useSWRInfinite(
+  const { data, error, mutate, size, setSize, isLoading } = useSWRInfinite(
     (index) => `/api/latest?page=${index + 1}`,
     fetcher,
-    { revalidateFirstPage: false }
+    { revalidateFirstPage: false, shouldRetryOnError: false }
   );
 
   const posts = data ? [].concat(...data) : [];
@@ -22,6 +22,45 @@ const latest = () => {
   const underPageSize = data && data?.[size - 1]?.length < PAGE_SIZE;
 
   const isReachingEnd = isEmpty || underPageSize;
+
+  let list;
+
+  if (error) {
+    list = (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "20px",
+        }}
+      >
+        <Button variant="outlined" color="error" onClick={() => mutate()}>
+          Error Loading. Retry
+        </Button>
+      </div>
+    );
+  } else {
+    list = (
+      <>
+        {data && <PostList posts={data && posts} />}
+        <Button
+          disabled={isLoading || isReachingEnd}
+          onClick={() => {
+            setSize(size + 1);
+          }}
+          variant="outlined"
+          color="secondary"
+          sx={{ display: "block", margin: "auto" }}
+        >
+          {isLoading
+            ? "loading..."
+            : isReachingEnd
+            ? "no more posts"
+            : "load more"}
+        </Button>
+      </>
+    );
+  }
 
   return (
     <>
@@ -54,23 +93,7 @@ const latest = () => {
         }}
       >
         <Header title="Latest Posts" />
-
-        {data && <PostList posts={data && posts} />}
-        <Button
-          disabled={isLoading || isReachingEnd}
-          onClick={() => {
-            setSize(size + 1);
-          }}
-          variant="outlined"
-          color="secondary"
-          sx={{ display: "block", margin: "auto" }}
-        >
-          {isLoading
-            ? "loading..."
-            : isReachingEnd
-            ? "no more posts"
-            : "load more"}
-        </Button>
+        {list}
       </Container>
       <Footer />
     </>

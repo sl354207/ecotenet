@@ -5,13 +5,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ msg: "Method not allowed" });
   }
 
-  //   const page = 2;
-  //   console.log(req.query.page);
   const page = req.query.page;
   const pageSize = 2;
   try {
     const results = await getLatestPosts(page, pageSize);
-    // console.log(results[0].data);
 
     return res.status(200).json(results[0].data);
   } catch (err) {
