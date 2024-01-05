@@ -355,7 +355,7 @@ const Nav = () => {
               marginLeft: "5px",
             }}
           >
-            {isTab ? "Featured" : "Featured Posts"}
+            {isTab ? "Featured 5" : "Featured 5"}
           </Button>
           <Button
             sx={{
@@ -529,7 +529,7 @@ const Nav = () => {
                             display: { xs: "flex", md: "none" },
                           }}
                         >
-                          Featured Posts
+                          Featured 5
                         </MenuItem>
                         <MenuItem
                           onClick={

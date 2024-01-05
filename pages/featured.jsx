@@ -28,10 +28,10 @@ const featured = ({ featured }) => {
   return (
     <>
       <NextSeo
-        title="Featured Posts"
+        title="Featured 5"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
-        description="These are currently our favorite posts that people have shared on the site"
+        description="These are currently our 5 favorite posts that people have shared on the site"
         openGraph={{
           type: "website",
           url: "https://www.ecotenet.org/featured",
@@ -46,7 +46,7 @@ const featured = ({ featured }) => {
           ],
         }}
       />
-      <CollectionPageJsonLd name="Featured Posts" hasPart={featureSEO} />
+      <CollectionPageJsonLd name="Featured 5" hasPart={featureSEO} />
       <Container
         sx={{
           backgroundColor: theme.palette.primary.light,
@@ -55,7 +55,7 @@ const featured = ({ featured }) => {
           marginBlock: "20px",
         }}
       >
-        <Header title="Featured Posts" />
+        <Header title="Featured 5" />
         <Typography variant="body1" align="center" sx={{ marginBlock: "10px" }}>
           Pinned
         </Typography>
@@ -95,8 +95,8 @@ const featured = ({ featured }) => {
         </List>
 
         <Typography variant="body1" align="center" sx={{ marginBlock: "10px" }}>
-          These are currently our favorite posts that people have shared on the
-          site
+          These are currently our 5 favorite posts that people have shared on
+          the site
         </Typography>
         <PostList posts={featured} />
       </Container>

@@ -68,7 +68,7 @@ const latest = () => {
         title="Latest Posts"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
-        description="These are the latest posts that people have shared on the site"
+        description="List of latest posts that people have shared on the site"
         openGraph={{
           type: "website",
           url: "https://www.ecotenet.org/latest",

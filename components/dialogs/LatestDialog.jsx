@@ -87,16 +87,9 @@ const LatestDialog = ({ latest, setLatest }) => {
         "&.MuiModal-root": {
           top: "30px",
           bottom: 0,
-          //   bottom:
-          //     (Array.isArray(data[0]) && data?.[size - 1]?.length === 0) ||
-          //     !data ||
-          //     (Array.isArray(data[0]) && data?.[size - 1]?.length < 5)
-          //       ? "auto"
-          //       : 0,
         },
         "&.MuiDialog-root": {
           top: "30px",
-          // bottom: 0,
         },
       }}
     >
