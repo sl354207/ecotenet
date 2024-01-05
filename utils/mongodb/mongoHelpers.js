@@ -1235,6 +1235,7 @@ const getLatestPosts = async (page, pageSize) => {
                   name: 1,
                   count: 1,
                   category: 1,
+                  ecoregions: 1,
                 },
               },
             ],

@@ -49,6 +49,12 @@ const DynamicFeatureDialog = dynamic(
     ssr: false,
   }
 );
+const DynamicLatestDialog = dynamic(
+  () => import("@components/dialogs/LatestDialog"),
+  {
+    ssr: false,
+  }
+);
 
 const Nav = () => {
   const { user } = useUserContext();
@@ -81,6 +87,7 @@ const Nav = () => {
 
   const [search, setSearch] = useState(false);
   const [feature, setFeature] = useState(false);
+  const [latest, setLatest] = useState(false);
 
   const handleClickSearch = () => {
     setSearch(true);
@@ -415,24 +422,6 @@ const Nav = () => {
           >
             <SearchIcon sx={{ fontSize: isTab ? "1.8rem" : "2rem" }} />
           </IconButton>
-          {search && (
-            <DynamicSearchDialog
-              search={search}
-              setSearch={setSearch}
-              ecoFilter={ecoFilter && ecoFilter}
-            />
-          )}
-
-          {router.pathname === "/" && (
-            <>
-              {feature && (
-                <DynamicFeatureDialog
-                  feature={feature}
-                  setFeature={setFeature}
-                />
-              )}
-            </>
-          )}
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {status === "authenticated" && (
@@ -590,11 +579,15 @@ const Nav = () => {
                         <MenuItem
                           onClick={() => {
                             setPopper(false);
-                            router.push("/about");
+                            if (router.pathname === "/") {
+                              setLatest(true);
+                            } else {
+                              router.push("/latest");
+                            }
                           }}
                           sx={{ color: theme.palette.secondary.main }}
                         >
-                          About
+                          Latest Posts
                         </MenuItem>
                         <MenuItem
                           onClick={() => {
@@ -604,6 +597,15 @@ const Nav = () => {
                           sx={{ color: theme.palette.secondary.main }}
                         >
                           Stats
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setPopper(false);
+                            router.push("/about");
+                          }}
+                          sx={{ color: theme.palette.secondary.main }}
+                        >
+                          About
                         </MenuItem>
 
                         {status === "authenticated" && (
@@ -699,6 +701,27 @@ const Nav = () => {
               drawerHeight={drawerHeight}
               setDrawerHeight={setDrawerHeight}
             />
+          )}
+          {search && (
+            <DynamicSearchDialog
+              search={search}
+              setSearch={setSearch}
+              ecoFilter={ecoFilter && ecoFilter}
+            />
+          )}
+
+          {router.pathname === "/" && (
+            <>
+              {feature && (
+                <DynamicFeatureDialog
+                  feature={feature}
+                  setFeature={setFeature}
+                />
+              )}
+              {latest && (
+                <DynamicLatestDialog latest={latest} setLatest={setLatest} />
+              )}
+            </>
           )}
         </Toolbar>
       </AppBar>

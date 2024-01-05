@@ -85,7 +85,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
           bottom:
             (Array.isArray(results) && results.length === 0) ||
             !results ||
-            (Array.isArray(results) && results.length < 5)
+            (Array.isArray(results) && results.length < 2)
               ? "auto"
               : 0,
         },
