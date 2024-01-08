@@ -5,13 +5,15 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   IconButton,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
+import theme from "@utils/theme";
 import useSWRInfinite from "swr/infinite";
 
 // UPDATE
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 10;
 const LatestDialog = ({ latest, setLatest }) => {
   const handleCloseDialog = () => {
     setLatest(false);
@@ -107,6 +109,7 @@ const LatestDialog = ({ latest, setLatest }) => {
         >
           Latest Posts
         </DialogTitle>
+
         <IconButton
           sx={{ marginLeft: "auto" }}
           color="secondary"
@@ -115,6 +118,13 @@ const LatestDialog = ({ latest, setLatest }) => {
           <CloseIcon />
         </IconButton>
       </div>
+      <Divider
+        variant="middle"
+        sx={{
+          marginTop: "16px",
+          color: theme.palette.secondary.main,
+        }}
+      />
 
       <DialogContent>{list}</DialogContent>
     </Dialog>

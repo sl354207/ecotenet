@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   IconButton,
   List,
   ListItemButton,
@@ -116,7 +117,13 @@ const FeatureDialog = ({ feature, setFeature }) => {
           <CloseIcon />
         </IconButton>
       </div>
-
+      <Divider
+        variant="middle"
+        sx={{
+          marginTop: "16px",
+          color: theme.palette.secondary.main,
+        }}
+      />
       <DialogContent>
         <Typography variant="body1" align="center">
           Pinned

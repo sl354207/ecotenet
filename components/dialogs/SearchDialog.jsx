@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   FormControl,
   FormHelperText,
   IconButton,
@@ -176,7 +177,13 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
           <CloseIcon />
         </IconButton>
       </div>
-
+      <Divider
+        variant="middle"
+        sx={{
+          marginTop: "16px",
+          color: theme.palette.secondary.main,
+        }}
+      />
       <DialogContent>
         <FormControl
           sx={{ display: "flex", flexGrow: 1, margin: "10px 0 10px 0" }}
