@@ -85,13 +85,12 @@ const FeatureDialog = ({ feature, setFeature }) => {
           bottom:
             (Array.isArray(results) && results.length === 0) ||
             !results ||
-            (Array.isArray(results) && results.length < 5)
+            (Array.isArray(results) && results.length < 2)
               ? "auto"
               : 0,
         },
         "&.MuiDialog-root": {
           top: "30px",
-          // bottom: 0,
         },
       }}
     >
@@ -107,7 +106,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
           sx={{ paddingBottom: "0px", position: "fixed" }}
           variant="h5"
         >
-          Featured Posts
+          Featured 5
         </DialogTitle>
         <IconButton
           sx={{ marginLeft: "auto" }}
@@ -159,8 +158,8 @@ const FeatureDialog = ({ feature, setFeature }) => {
           </ListItemButton>
         </List>
         <Typography variant="body1" align="center">
-          These are currently our favorite posts that people have shared on the
-          site
+          These are currently our 5 favorite posts that people have shared on
+          the site
         </Typography>
         {list}
       </DialogContent>
