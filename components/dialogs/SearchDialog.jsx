@@ -180,7 +180,6 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
       <Divider
         variant="middle"
         sx={{
-          marginTop: "16px",
           color: theme.palette.secondary.main,
         }}
       />
