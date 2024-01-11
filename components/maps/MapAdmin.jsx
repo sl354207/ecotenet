@@ -1,10 +1,10 @@
 import Coords from "@data/eco_coord.json";
 import { Button, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
-const MapAdmin = ({ clickInfo, state, handleDblClick }) => {
+const MapAdmin = ({ clickInfo, initialEcoregions, handleDblClick }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   // base layer
@@ -110,29 +110,42 @@ const MapAdmin = ({ clickInfo, state, handleDblClick }) => {
     [selectedRegion]
   );
 
-  const clickedRegions = clickInfo;
+  // const clickedRegions = clickInfo;
 
-  const clickFilter = ["in", "unique_id", ...clickedRegions];
+  // const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  const speciesRegions1 = state[1].regions;
+  const speciesRegions1 = clickInfo;
 
   const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
 
   const mapRef = useRef();
 
-  const onMove = useCallback(() => {
-    if (speciesRegions1.length > 0) {
-      const coord = Coords.filter(
-        (region) => region.unique_id === speciesRegions1[0]
-      );
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }
 
-      mapRef.current?.flyTo({
-        center: coord[0].coordinates,
-        duration: 2000,
-        zoom: 3.5,
-      });
-    }
-  }, [speciesRegions1]);
+  const prevCount1 = usePrevious(initialEcoregions);
+
+  const onMove = useCallback(
+    (prevCount1) => {
+      if (initialEcoregions.length > 0 && prevCount1 !== initialEcoregions) {
+        const coord = Coords.filter(
+          (region) => region.unique_id === initialEcoregions[0]
+        );
+
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
+    },
+    [initialEcoregions]
+  );
 
   //
   return (
@@ -164,7 +177,7 @@ const MapAdmin = ({ clickInfo, state, handleDblClick }) => {
         onClick={onHover}
         onDblClick={handleDblClick}
         ref={mapRef}
-        onSourceData={onMove()}
+        onSourceData={onMove(prevCount1)}
         attributionControl={false}
       >
         <Source id="eco-map" type="vector" url="mapbox://sl354207.ecomap-tiles">
@@ -185,12 +198,12 @@ const MapAdmin = ({ clickInfo, state, handleDblClick }) => {
           />
 
           <Layer beforeId="waterway-label" {...ecoLine} />
-          <Layer
+          {/* <Layer
             id="click"
             beforeId="waterway-label"
             {...ecoFill2}
             filter={clickFilter}
-          />
+          /> */}
         </Source>
         <AttributionControl
           compact={true}
