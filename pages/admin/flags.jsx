@@ -175,24 +175,12 @@ const adminFlags = () => {
                           <Button
                             variant="outlined"
                             color="secondary"
-                            href={`/species/${result.content_id.replace(
+                            href={`/admin/species?name=${result.content_id.replace(
                               / /g,
                               "_"
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            )}&flag=${result._id}&flagee=${result.name}`}
                           >
-                            View Page
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            sx={{ marginTop: "4px" }}
-                            onClick={() =>
-                              handleOpenResolve(result.name, result._id)
-                            }
-                          >
-                            Resolve
+                            View Species
                           </Button>
                         </>
                       )}
