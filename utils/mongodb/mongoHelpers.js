@@ -1292,6 +1292,23 @@ const getLatestPosts = async (page, pageSize) => {
   }
 };
 
+const updateSpecies = async (data) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("species").updateOne(
+      {
+        scientific_name: data.scientific_name,
+      },
+      { $set: data }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -1350,4 +1367,5 @@ module.exports = {
   getDonations,
   updateDonations,
   getLatestPosts,
+  updateSpecies,
 };

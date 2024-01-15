@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "required": ["scientific_name", "unique_id", "species_type"],
+  "properties": {
+    "kingdom": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "phylum": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "class": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "order": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "family": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "genus": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "scientific_name": {
+      "type": "string",
+      "description": "must be a string"
+    },
+    "common_name": {
+      "type": "string",
+      "nullable": true,
+      "description": "must be a string"
+    },
+    "species_type": {
+      "type": "string",
+      "enum": [
+        "mammal",
+        "reptile",
+        "amphibian",
+        "bird",
+        "fish",
+        "arthropod",
+        "mollusk",
+        "cnidaria",
+        "worm",
+        "other_animals",
+        "tree_shrub",
+        "vine",
+        "wildflower",
+        "water_master",
+        "graminoid",
+        "other_plants",
+        "uncategorized_plants",
+        "gill_fungi",
+        "non_gilled_fungi",
+        "gasteroid_fungi",
+        "other_fungi",
+        "uncategorized_fungi",
+        "bacteria",
+        "virus",
+        "protozoa",
+        "chromista",
+        "archaea",
+        "algae",
+        "ciliate"
+      ],
+      "description": "must be a string"
+    },
+    "rights": {
+      "type": "array",
+      "description": "must be an array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "license": {
+            "type": "string",
+            "nullable": true,
+            "description": "must be a string"
+          },
+          "rightsHolder": {
+            "type": "string",
+            "nullable": true,
+            "description": "must be a string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "unique_id": {
+      "type": "array",
+      "description": "must be an array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4,
+        "pattern": "^\\d+$"
+      }
+    }
+  },
+  "additionalProperties": false
+}

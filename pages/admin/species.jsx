@@ -1,3 +1,4 @@
+import { useSnackbarContext } from "@components/context/SnackbarContext";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import MapAdmin from "@components/maps/MapAdmin";
@@ -7,12 +8,13 @@ import {
   Container,
   FormControl,
   InputLabel,
+  List,
+  ListItem,
   TextField,
   Typography,
 } from "@mui/material";
 import { alpha, useTheme } from "@mui/material/styles";
 import { useCallback, useState } from "react";
-
 const speciesTypeOptions = [
   "mammal",
   "reptile",
@@ -47,15 +49,13 @@ const speciesTypeOptions = [
 
 const adminSpecies = () => {
   const theme = useTheme();
+  const { snackbar, setSnackbar } = useSnackbarContext();
 
   const [results, setResults] = useState([]);
   const [species, setSpecies] = useState();
   const [speciesType, setSpeciesType] = useState();
   const [initialEcoregions, setInitialEcoregions] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
-
-  console.log(speciesType);
-  console.log(species);
 
   const handleSearchChange = async (e) => {
     if (e.target.value) {
@@ -128,19 +128,62 @@ const adminSpecies = () => {
     [clickInfo]
   );
 
+  const handleUpdate = async () => {
+    if (species) {
+      const data = {
+        scientific_name: species.scientific_name,
+        species_type: speciesType,
+        unique_id: clickInfo,
+      };
+      const res = await fetch(
+        `/api/admin/species/${species.scientific_name.replace(/ /g, "_")}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (res.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          vertical: "bottom",
+          horizontal: "left",
+          severity: "success",
+          message: "Species updated successfully",
+        });
+      }
+
+      if (!res.ok) {
+        setSnackbar({
+          ...snackbar,
+          open: true,
+          vertical: "bottom",
+          horizontal: "left",
+          severity: "error",
+          message:
+            "There was a problem updating species. Please try again later",
+        });
+      }
+    }
+  };
+
   return (
     <Container>
       <Header title="Species Update" />
       <Button
         variant="outlined"
         color="secondary"
-        // sx={{ marginRight: "5px", marginBottom: "10px" }}
         disabled={
           !speciesType ||
           (species &&
             species.species_type === speciesType &&
             initialEcoregions === clickInfo)
         }
+        onClick={() => handleUpdate()}
       >
         Update
       </Button>
@@ -292,6 +335,75 @@ const adminSpecies = () => {
           )}
         />
       </FormControl>
+      {species && (
+        <>
+          <Typography variant="h6" align="left">
+            Resources:
+          </Typography>
+          <List>
+            <ListItem key={"wiki"}>
+              <Link
+                variant="h6"
+                href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                  / /g,
+                  "_"
+                )}`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                Wikipedia
+              </Link>
+            </ListItem>
+            <ListItem key={"inat"}>
+              <Link
+                variant="h6"
+                href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
+                  / /g,
+                  "+"
+                )}`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                iNaturalist
+              </Link>
+            </ListItem>
+            <ListItem key={"wiki_commons"}>
+              <Link
+                variant="h6"
+                href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
+                  / /g,
+                  "+"
+                )}&title=Special:MediaSearch&go=Go&type=image`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                Wikimedia Commons
+              </Link>
+            </ListItem>
+            <ListItem key={"iucn"}>
+              <Link
+                variant="h6"
+                href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
+                  / /g,
+                  "+"
+                )}&searchType=species`}
+                color="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="hover"
+              >
+                IUCN Red List
+              </Link>
+            </ListItem>
+          </List>
+        </>
+      )}
 
       <Typography variant="h6" align="left">
         Ecoregions:{" "}
