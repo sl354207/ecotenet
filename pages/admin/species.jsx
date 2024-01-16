@@ -198,36 +198,51 @@ const adminSpecies = () => {
   return (
     <>
       <NextSeo noindex={true} nofollow={true} />
-      {router.query.name && (
-        <>
-          <Link
-            href="/admin/flags"
-            underline="hover"
-            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
-          >
-            <ArrowBackIcon fontSize="small" />
-            Flags
-          </Link>
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ marginTop: "10px", marginLeft: "10px" }}
-            disabled={!species}
-            onClick={() => handleOpenResolve()}
-          >
-            Resolve
-          </Button>
-          <Resolve
-            open={resolve}
-            handleClose={handleCloseResolve}
-            name={flagee}
-            ID={flag}
-            route="species"
-          />
-        </>
-      )}
+      <div style={{ display: "inline-block", alignItems: "center" }}>
+        <Link
+          href="/admin"
+          underline="hover"
+          style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+        >
+          <ArrowBackIcon fontSize="small" />
+          Admin
+        </Link>
 
-      <Container>
+        {router.query.name && (
+          <>
+            <Link
+              href="/admin/flags"
+              underline="hover"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: "10px",
+              }}
+            >
+              <ArrowBackIcon fontSize="small" />
+              Flags
+            </Link>
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ marginTop: "10px", marginLeft: "10px" }}
+              disabled={!species}
+              onClick={() => handleOpenResolve()}
+            >
+              Resolve
+            </Button>
+            <Resolve
+              open={resolve}
+              handleClose={handleCloseResolve}
+              name={flagee}
+              ID={flag}
+              route="species"
+            />
+          </>
+        )}
+      </div>
+
+      <Container sx={{ marginBottom: "20px" }}>
         <Header title="Species Update" />
         <Button
           variant="outlined"
