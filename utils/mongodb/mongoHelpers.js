@@ -735,6 +735,51 @@ const autoSpecies = async (query) => {
     throw new Error(error);
   }
 };
+const adminAutoSpecies = async (query) => {
+  try {
+    const db = await connectToDatabase();
+
+    const results = await db
+      .collection("species")
+      .aggregate([
+        {
+          $search: {
+            index: "autoSpecies",
+            compound: {
+              should: [
+                {
+                  autocomplete: {
+                    query: `${query}`,
+                    path: "scientific_name",
+                  },
+                },
+                {
+                  autocomplete: {
+                    query: `${query}`,
+                    path: "common_name",
+                  },
+                },
+              ],
+            },
+          },
+        },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            unique_id: 1,
+            species_type: 1,
+          },
+        },
+      ])
+      .limit(50)
+      .toArray();
+
+    return results;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const getStats = async () => {
   try {
@@ -1116,8 +1161,6 @@ const getDistinctCategory = async (category) => {
     const db = await connectToDatabase();
 
     const response = await db.collection("species").distinct(category);
-    // .project({ unique_id: 1, name: 1, coordinates: 1, url: 1 })
-    // .toArray();
 
     return response;
   } catch (error) {
@@ -1127,8 +1170,6 @@ const getDistinctCategory = async (category) => {
 const getFilteredStats = async (v1, v2) => {
   try {
     const db = await connectToDatabase();
-    // const query = {}
-    // query[v1] = v2
 
     const response = await db
       .collection("species")
@@ -1242,8 +1283,25 @@ const getLatestPosts = async (page, pageSize) => {
           },
         },
       ])
-      // .pretty();
+
       .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const updateSpecies = async (data) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("species").updateOne(
+      {
+        scientific_name: data.scientific_name,
+      },
+      { $set: data }
+    );
 
     return response;
   } catch (error) {
@@ -1281,6 +1339,7 @@ module.exports = {
   searchEcoPosts,
   searchEcoSpecies,
   autoSpecies,
+  adminAutoSpecies,
   getStats,
   getSitemapStats,
   getPeople,
@@ -1308,4 +1367,5 @@ module.exports = {
   getDonations,
   updateDonations,
   getLatestPosts,
+  updateSpecies,
 };

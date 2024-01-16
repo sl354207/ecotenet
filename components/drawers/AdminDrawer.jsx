@@ -29,7 +29,6 @@ const AdminDrawer = () => {
           </ListItemButton>
           <ListItemButton
             key="people"
-            // onClick={() => router.push("/admin/people")}
             href="/admin/people"
             target="_blank"
             rel="noopener noreferrer"
@@ -38,7 +37,6 @@ const AdminDrawer = () => {
           </ListItemButton>
           <ListItemButton
             key="posts"
-            // onClick={() => router.push("/admin/posts")}
             href="/admin/posts"
             target="_blank"
             rel="noopener noreferrer"
@@ -47,7 +45,6 @@ const AdminDrawer = () => {
           </ListItemButton>
           <ListItemButton
             key="comments"
-            // onClick={() => router.push("/admin/comments")}
             href="/admin/comments"
             target="_blank"
             rel="noopener noreferrer"
@@ -56,7 +53,6 @@ const AdminDrawer = () => {
           </ListItemButton>
           <ListItemButton
             key="flags"
-            // onClick={() => router.push("/admin/flags")}
             href="/admin/flags"
             target="_blank"
             rel="noopener noreferrer"
@@ -65,12 +61,14 @@ const AdminDrawer = () => {
           </ListItemButton>
           <ListItemButton
             key="notifications"
-            // onClick={() => router.push("/admin/notifications")}
             href="/admin/notifications"
             target="_blank"
             rel="noopener noreferrer"
           >
             <ListItemText primary="Notifications" />
+          </ListItemButton>
+          <ListItemButton key="species" href="/admin/species">
+            <ListItemText primary="Species" />
           </ListItemButton>
         </List>
         <Divider />
