@@ -6,7 +6,8 @@ export default async function handler(req, res) {
   }
 
   const page = req.query.page;
-  const pageSize = 10;
+  // UPDATE
+  const pageSize = 2;
   try {
     const results = await getLatestPosts(page, pageSize);
 
