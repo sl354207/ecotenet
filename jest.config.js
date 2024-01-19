@@ -20,8 +20,8 @@ const customJestConfig = {
     "^@pages/(.*)$": "<rootDir>/pages/$1",
   },
   // COMMENT OUT NEXT TWO LINES WHEN RUNNING NON MONGODB TESTS
-  // preset: "@shelf/jest-mongodb",
-  // watchPathIgnorePatterns: ["globalConfig"],
+  preset: "@shelf/jest-mongodb",
+  watchPathIgnorePatterns: ["globalConfig"],
   // if using TypeScript with a baseUrl set to the root directory then you need the below for alias' to work
   moduleDirectories: ["node_modules", "<rootDir>/"],
 
