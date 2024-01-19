@@ -23,13 +23,6 @@ const eco = ({ wiki, eco, id }) => {
   const router = useRouter();
   const { user } = useUserContext();
 
-  let status;
-  if (user === undefined) {
-    status = "loading";
-  } else {
-    status = user.status;
-  }
-
   const { setEcoFilter } = useHomepageContext();
 
   useEffect(() => {
@@ -343,7 +336,6 @@ const eco = ({ wiki, eco, id }) => {
 
 // CHANGE to static potentially
 export const getServerSideProps = async (context) => {
-  // console.log(context);
   const { res, params } = context;
   const id = params.eco;
 
@@ -356,7 +348,11 @@ export const getServerSideProps = async (context) => {
           notFound: true,
         };
       } else {
-        const unSlug = eco.name.replace(/ /g, "_");
+        const corrections = { " ": "_", "/": "%2F" };
+        const unSlug = eco.name.replace(
+          / |\//g,
+          (matched) => corrections[matched]
+        );
 
         let wikiRes;
         let wiki;
@@ -372,12 +368,15 @@ export const getServerSideProps = async (context) => {
                 },
               }
             );
+
             if (wikiRes.ok) {
               wiki = await wikiRes.json();
               res.setHeader(
                 "Cache-Control",
                 "public, s-maxage=604800, stale-while-revalidate=59"
               );
+            } else if (wikiRes.status === 404) {
+              wiki = undefined;
             } else {
               wiki = "error";
             }
@@ -391,8 +390,8 @@ export const getServerSideProps = async (context) => {
           default:
             wikiRes = await fetch(
               `https://en.wikipedia.org/api/rest_v1/page/segments/${eco.url.replace(
-                / /g,
-                "_"
+                / |\//g,
+                (matched) => corrections[matched]
               )}?redirect=true`,
               {
                 method: "GET",
@@ -408,6 +407,8 @@ export const getServerSideProps = async (context) => {
                 "Cache-Control",
                 "public, s-maxage=604800, stale-while-revalidate=59"
               );
+            } else if (wikiRes.status === 404) {
+              wiki = undefined;
             } else {
               wiki = "error";
             }

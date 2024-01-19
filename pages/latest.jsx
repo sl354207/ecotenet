@@ -7,8 +7,8 @@ import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 import useSWRInfinite from "swr/infinite";
 // UPDATE
-const PAGE_SIZE = 10;
-const latest = () => {
+const PAGE_SIZE = 2;
+const Latest = () => {
   const { data, error, mutate, size, setSize, isLoading } = useSWRInfinite(
     (index) => `/api/latest?page=${index + 1}`,
     fetcher,
@@ -100,4 +100,4 @@ const latest = () => {
   );
 };
 
-export default latest;
+export default Latest;

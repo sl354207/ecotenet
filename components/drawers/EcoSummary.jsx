@@ -24,9 +24,11 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   if (wiki) {
     switch (wiki.url) {
       case undefined:
+        const corrections = { " ": "_", "/": "%2F" };
+
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.name.replace(
-          / /g,
-          "_"
+          / |\//g,
+          (matched) => corrections[matched]
         )}?redirect=true`;
 
         break;
@@ -38,8 +40,8 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
 
       default:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.url.replace(
-          / /g,
-          "_"
+          / |\//g,
+          (matched) => corrections[matched]
         )}?redirect=true`;
         break;
     }
