@@ -6,7 +6,7 @@ import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 import useSWRInfinite from "swr/infinite";
-// UPDATE
+
 const PAGE_SIZE = 10;
 const Latest = () => {
   const { data, error, mutate, size, setSize, isLoading } = useSWRInfinite(
