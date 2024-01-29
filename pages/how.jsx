@@ -4,7 +4,7 @@ import { Box, Container } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo, VideoJsonLd } from "next-seo";
 
-const how = () => {
+const How = () => {
   return (
     <>
       <NextSeo
@@ -87,4 +87,4 @@ const how = () => {
   );
 };
 
-export default how;
+export default How;
