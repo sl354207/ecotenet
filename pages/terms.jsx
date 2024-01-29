@@ -5,14 +5,13 @@ import { Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const terms = () => {
+const Terms = () => {
   return (
     <>
       <NextSeo
         title="Terms of Service"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
-        // description="Ideas on the purpose of Ecotenet and the possible vision for the future"
         openGraph={{
           type: "Site",
           url: "https://www.ecotenet.org/terms",
@@ -457,4 +456,4 @@ const terms = () => {
   );
 };
 
-export default terms;
+export default Terms;
