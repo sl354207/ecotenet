@@ -5,7 +5,7 @@ import { Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const conduct = () => {
+const Conduct = () => {
   return (
     <>
       <NextSeo
@@ -146,4 +146,4 @@ const conduct = () => {
   );
 };
 
-export default conduct;
+export default Conduct;
