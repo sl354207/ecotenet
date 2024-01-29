@@ -105,7 +105,6 @@ describe("latest posts page", () => {
         expect(screen.queryByText("title 11")).not.toBeInTheDocument()
       );
 
-      expect;
       expect(screen.getByText(/mocked footer/i)).toBeInTheDocument();
     });
   });

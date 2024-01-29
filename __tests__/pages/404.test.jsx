@@ -23,9 +23,10 @@ useRouter.mockReturnValue({
 
 describe("404 page", () => {
   describe("render", () => {
-    it("should render header", () => {
+    it("should render header and footer", () => {
       render(<Custom404 />);
       expect(screen.getByText(/404 - Page Not Found/i)).toBeInTheDocument();
+      expect(screen.getByText(/mocked footer/i)).toBeInTheDocument();
     });
     it("should render buttons", () => {
       render(<Custom404 />);

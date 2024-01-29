@@ -5,7 +5,7 @@ import { Box, Container, Divider, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const about = () => {
+const About = () => {
   return (
     <>
       <NextSeo
@@ -214,4 +214,4 @@ const about = () => {
   );
 };
 
-export default about;
+export default About;

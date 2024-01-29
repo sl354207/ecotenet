@@ -23,11 +23,12 @@ useRouter.mockReturnValue({
 
 describe("500 page", () => {
   describe("render", () => {
-    it("should render header", () => {
+    it("should render header and footer", () => {
       render(<Custom500 />);
       expect(
         screen.getByText(/500 - Internal Server Error/i)
       ).toBeInTheDocument();
+      expect(screen.getByText(/mocked footer/i)).toBeInTheDocument();
     });
     it("should render buttons", () => {
       render(<Custom500 />);
