@@ -71,7 +71,7 @@ const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
 });
 
-const species = ({ species, wiki }) => {
+const Species = ({ species, wiki }) => {
   const router = useRouter();
   const { user } = useUserContext();
 
@@ -324,9 +324,6 @@ const species = ({ species, wiki }) => {
           <Container
             sx={{
               backgroundColor: theme.palette.primary.main,
-              // paddingBottom: "20px",
-              // paddingTop: "5px",
-              // marginBlock: "20px",
             }}
           >
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -612,4 +609,4 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-export default species;
+export default Species;
