@@ -8,13 +8,14 @@ const how = () => {
   return (
     <>
       <NextSeo
-        title="How to create a post"
+        title="How-to Videos"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
-        description="Video showing how to create, save and submit a post"
+        description="Videos showing how to use different features of Ecotenet"
         openGraph={{
-          title: "How to create a post on Ecotenet",
-          description: "Video showing how to create, save and submit a post",
+          title: "How-to Videos",
+          description:
+            "Videos showing how to use different features of Ecotenet",
           url: "https://www.ecotenet.org/how",
           type: "video.movie",
           video: {
