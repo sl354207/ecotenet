@@ -1,6 +1,6 @@
 import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Divider, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo, VideoJsonLd } from "next-seo";
 
@@ -42,7 +42,19 @@ const how = () => {
           marginBlock: "20px",
         }}
       >
-        <Header title="How to Create a Post" />
+        <Header title="How-to Videos for Ecotenet" />
+        <Divider sx={{ marginTop: "20px", marginBottom: "20px" }} />
+        <Typography
+          align="center"
+          variant="h5"
+          sx={{
+            marginTop: "20px",
+            marginBottom: "20px",
+            textDecoration: "underline",
+          }}
+        >
+          How to Create a Post
+        </Typography>
         <Box
           sx={{
             overflow: "hidden",
@@ -63,6 +75,207 @@ const how = () => {
             }}
             src="https://www.youtube-nocookie.com/embed/Ll2A6GenqM4?rel=0"
             title="Creating a Post on Ecotenet"
+            allow="fullscreen;
+            accelerometer 'none';	
+            ambient-light-sensor 'none';	
+            autoplay 'none';	
+            battery 'none';	
+            camera 'none';	
+            geolocation 'none';	
+            gyroscope	'none';
+            magnetometer 'none';	 
+            microphone 'none';	
+            midi 'none';	
+            payment 'none';	
+            usb 'none';	
+            vibrate 'none';"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+        </Box>
+
+        <Typography
+          align="center"
+          variant="h5"
+          sx={{
+            marginTop: "40px",
+            marginBottom: "20px",
+            textDecoration: "underline",
+          }}
+        >
+          Species Distributions Overlay
+        </Typography>
+
+        <Box
+          sx={{
+            overflow: "hidden",
+            /* 16:9 aspect ratio */
+            paddingTop: "56.25%",
+            position: "relative",
+            marginTop: "20px",
+          }}
+        >
+          <iframe
+            style={{
+              border: 0,
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+            }}
+            src="https://www.youtube-nocookie.com/embed/H1sFXE2MwXs?rel=0"
+            title="Feature Highlight | Species Distributions Overlay"
+            allow="fullscreen;
+            accelerometer 'none';	
+            ambient-light-sensor 'none';	
+            autoplay 'none';	
+            battery 'none';	
+            camera 'none';	
+            geolocation 'none';	
+            gyroscope	'none';
+            magnetometer 'none';	 
+            microphone 'none';	
+            midi 'none';	
+            payment 'none';	
+            usb 'none';	
+            vibrate 'none';"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+        </Box>
+
+        <Typography
+          align="center"
+          variant="h5"
+          sx={{
+            marginTop: "40px",
+            marginBottom: "20px",
+            textDecoration: "underline",
+          }}
+        >
+          Ecoregion Filter
+        </Typography>
+        <Box
+          sx={{
+            overflow: "hidden",
+            /* 16:9 aspect ratio */
+            paddingTop: "56.25%",
+            position: "relative",
+            marginTop: "20px",
+          }}
+        >
+          <iframe
+            style={{
+              border: 0,
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+            }}
+            src="https://www.youtube-nocookie.com/embed/Xwa6HilvPaM?rel=0"
+            title="Feature Highlight | Ecoregion Filter"
+            allow="fullscreen;
+            accelerometer 'none';	
+            ambient-light-sensor 'none';	
+            autoplay 'none';	
+            battery 'none';	
+            camera 'none';	
+            geolocation 'none';	
+            gyroscope	'none';
+            magnetometer 'none';	 
+            microphone 'none';	
+            midi 'none';	
+            payment 'none';	
+            usb 'none';	
+            vibrate 'none';"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+        </Box>
+
+        <Typography
+          align="center"
+          variant="h5"
+          sx={{
+            marginTop: "40px",
+            marginBottom: "20px",
+            textDecoration: "underline",
+          }}
+        >
+          Flagging System
+        </Typography>
+        <Box
+          sx={{
+            overflow: "hidden",
+            /* 16:9 aspect ratio */
+            paddingTop: "56.25%",
+            position: "relative",
+            marginTop: "20px",
+          }}
+        >
+          <iframe
+            style={{
+              border: 0,
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+            }}
+            src="https://www.youtube-nocookie.com/embed/ypbFw0jG3Qs?rel=0"
+            title="Feature Highlight | Flagging System"
+            allow="fullscreen;
+            accelerometer 'none';	
+            ambient-light-sensor 'none';	
+            autoplay 'none';	
+            battery 'none';	
+            camera 'none';	
+            geolocation 'none';	
+            gyroscope	'none';
+            magnetometer 'none';	 
+            microphone 'none';	
+            midi 'none';	
+            payment 'none';	
+            usb 'none';	
+            vibrate 'none';"
+            allowFullScreen
+            loading="lazy"
+          ></iframe>
+        </Box>
+
+        <Typography
+          align="center"
+          variant="h5"
+          sx={{
+            marginTop: "40px",
+            marginBottom: "20px",
+            textDecoration: "underline",
+          }}
+        >
+          Stats Page
+        </Typography>
+        <Box
+          sx={{
+            overflow: "hidden",
+            /* 16:9 aspect ratio */
+            paddingTop: "56.25%",
+            position: "relative",
+            marginTop: "20px",
+          }}
+        >
+          <iframe
+            style={{
+              border: 0,
+              height: "100%",
+              left: 0,
+              position: "absolute",
+              top: 0,
+              width: "100%",
+            }}
+            src="https://www.youtube-nocookie.com/embed/qXuGMnt7S6I?rel=0"
+            title="Feature Highlight | Ecoregion Stats Page"
             allow="fullscreen;
             accelerometer 'none';	
             ambient-light-sensor 'none';	
