@@ -57,11 +57,11 @@ export default function MyApp(props) {
                       },
                     ],
                   }}
-                  // twitter={{
-                  //   handle: "@handle",
-                  //   site: "@site",
-                  //   cardType: "summary_large_image",
-                  // }}
+                  twitter={{
+                    // handle: "@ecotenet_org",
+                    site: "@ecotenet_org",
+                    cardType: "summary_large_image",
+                  }}
                 />
                 <Component key={router.asPath} {...pageProps} />
               </MainLayout>
