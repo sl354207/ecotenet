@@ -44,7 +44,7 @@ const about = () => {
           There is a lot of great information out there about the species on
           this planet, and there is a lot of great information on how we as
           people interact with our environment. But we find this information to
-          largely be separated from each other, and to us, how we interact with
+          largely be separated from each other. And to us, how we interact with
           our environment is too intertwined with the species <em>within</em>{" "}
           that environment to keep them separate.
         </Typography>
