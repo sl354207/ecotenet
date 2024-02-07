@@ -105,7 +105,6 @@ const about = () => {
           How to Create a Post
         </Typography>
 
-        {/* <Header title="How to Create a Post" /> */}
         <Box
           sx={{
             overflow: "hidden",
