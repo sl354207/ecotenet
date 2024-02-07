@@ -8,12 +8,12 @@ const how = () => {
   return (
     <>
       <NextSeo
-        title="How-to Videos"
+        title="How-to videos"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
         description="Videos showing how to use different features of Ecotenet"
         openGraph={{
-          title: "How-to Videos",
+          title: "How-to videos",
           description:
             "Videos showing how to use different features of Ecotenet",
           url: "https://www.ecotenet.org/how",
@@ -43,15 +43,14 @@ const how = () => {
           marginBlock: "20px",
         }}
       >
-        <Header title="How-to Videos for Ecotenet" />
-        <Divider sx={{ marginTop: "20px", marginBottom: "20px" }} />
+        <Header title="How-to videos for Ecotenet" />
+        <Divider sx={{ marginBlock: "20px" }} />
         <Typography
           align="center"
           variant="h5"
           sx={{
             marginTop: "20px",
             marginBottom: "20px",
-            textDecoration: "underline",
           }}
         >
           How to Create a Post
@@ -94,14 +93,13 @@ const how = () => {
             loading="lazy"
           ></iframe>
         </Box>
-
+        <Divider sx={{ marginTop: "30px", marginBottom: "20px" }} />
         <Typography
           align="center"
           variant="h5"
           sx={{
-            marginTop: "40px",
+            marginTop: "20px",
             marginBottom: "20px",
-            textDecoration: "underline",
           }}
         >
           Species Distributions Overlay
@@ -146,13 +144,13 @@ const how = () => {
           ></iframe>
         </Box>
 
+        <Divider sx={{ marginTop: "30px", marginBottom: "20px" }} />
         <Typography
           align="center"
           variant="h5"
           sx={{
-            marginTop: "40px",
+            marginTop: "20px",
             marginBottom: "20px",
-            textDecoration: "underline",
           }}
         >
           Ecoregion Filter
@@ -196,13 +194,13 @@ const how = () => {
           ></iframe>
         </Box>
 
+        <Divider sx={{ marginTop: "30px", marginBottom: "20px" }} />
         <Typography
           align="center"
           variant="h5"
           sx={{
-            marginTop: "40px",
+            marginTop: "20px",
             marginBottom: "20px",
-            textDecoration: "underline",
           }}
         >
           Flagging System
@@ -246,13 +244,13 @@ const how = () => {
           ></iframe>
         </Box>
 
+        <Divider sx={{ marginTop: "30px", marginBottom: "20px" }} />
         <Typography
           align="center"
           variant="h5"
           sx={{
-            marginTop: "40px",
+            marginTop: "20px",
             marginBottom: "20px",
-            textDecoration: "underline",
           }}
         >
           Stats Page
