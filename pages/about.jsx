@@ -35,7 +35,11 @@ const about = () => {
           marginBlock: "20px",
         }}
       >
-        <Header title="Ecotenet Mission" />
+        <Header title="About Ecotenet" />
+        <Divider sx={{ marginBlock: "20px" }} />
+        <Typography variant="h5" align="center">
+          Mission
+        </Typography>
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           Our goal at Ecotenet is to help people learn and share nature-based
           knowledge that is connected to place.
@@ -62,8 +66,10 @@ const about = () => {
           </b>{" "}
           environment
         </Typography>
-        <Divider />
-        <Header title="Ecoregions" />
+        <Divider sx={{ marginBlock: "20px" }} />
+        <Typography variant="h5" align="center">
+          Ecoregions
+        </Typography>
 
         <Typography variant="h6" align="left" sx={{ marginTop: "20px" }}>
           &quot;Biodiversity is not spread evenly across the Earth but follows
@@ -94,9 +100,12 @@ const about = () => {
             Learn more here.
           </Link>
         </Typography>
-        <Divider />
+        <Divider sx={{ marginBlock: "20px" }} />
+        <Typography variant="h5" align="center">
+          How to Create a Post
+        </Typography>
 
-        <Header title="How to Create a Post" />
+        {/* <Header title="How to Create a Post" /> */}
         <Box
           sx={{
             overflow: "hidden",
@@ -137,8 +146,10 @@ const about = () => {
           ></iframe>
         </Box>
 
-        <Divider />
-        <Header title="Our Data" />
+        <Divider sx={{ marginBlock: "20px" }} />
+        <Typography variant="h5" align="center">
+          Our Data
+        </Typography>
         <Typography variant="h6" align="left" sx={{ marginTop: "10px" }}>
           Post Data: {"  "}Posts are uploaded by anybody who wants to share
           their knowledge about the environment. And without people like you
