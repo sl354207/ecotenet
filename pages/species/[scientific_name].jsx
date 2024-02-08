@@ -35,8 +35,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`species-tabpanel-${index}`}
+      aria-labelledby={`species-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -62,8 +62,8 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `species-tab-${index}`,
+    "aria-controls": `species-tabpanel-${index}`,
   };
 }
 
@@ -396,7 +396,7 @@ const Species = ({ species, wiki }) => {
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label="simple tabs example"
+                  aria-label="species tabs"
                   centered
                   indicatorColor="secondary"
                   textColor="inherit"

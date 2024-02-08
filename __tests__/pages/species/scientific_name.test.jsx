@@ -2,7 +2,10 @@
  * @jest-environment jsdom
  */
 import Species from "@pages/species/[scientific_name]";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { rest } from "msw";
+import { setupServer } from "msw/node";
 import { useRouter } from "next/router";
 
 jest.mock("../../../components/layouts/Footer");
@@ -17,6 +20,20 @@ jest.mock("../../../components/context/UserContext", () => ({
       role: "user",
       status: "authenticated",
     },
+  })),
+}));
+jest.mock("../../../components/context/SnackbarContext", () => ({
+  useSnackbarContext: jest.fn(() => ({
+    snackbar: jest.fn(),
+    setSnackbar: jest.fn(() => {
+      return {
+        open: true,
+        vertical: "bottom",
+        horizontal: "left",
+        severity: "success",
+        message: "Flag submitted successfully",
+      };
+    }),
   })),
 }));
 
@@ -45,6 +62,16 @@ useRouter.mockReturnValue({
   query: {},
   push: pushMock,
 });
+
+const server = setupServer(
+  rest.post("/api/dashboard/flags", (req, res, ctx) => {
+    return res(ctx.delay(100), ctx.status(200), ctx.json("success"));
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 describe("Species page", () => {
   describe("rendering", () => {
@@ -99,15 +126,103 @@ describe("Species page", () => {
 
       expect(screen.getByText(/test content/i)).toBeInTheDocument();
     });
+    it("should render no wiki data message", () => {
+      render(<Species species={species} wiki={null} />);
+      expect(
+        screen.getByText(/We currently don't have a summary of this species/i)
+      ).toBeInTheDocument();
+    });
     it("should render flag button", () => {
       render(<Species species={species} wiki={wiki} />);
       expect(screen.getByRole("button", { name: /flag/i })).toBeInTheDocument();
     });
   });
-  // describe('behavior', () => {
-  //   it('should', () => {
-  //     render(<Species species={species} wiki={wiki} />);
-  //     expect(screen.getByRole('button', { name: /flag/i })).toBeInTheDocument();
-  //   });
-  // });
+  describe("behavior", () => {
+    const user = userEvent.setup();
+    it("should toggle between tabs", async () => {
+      render(<Species species={species} wiki={wiki} />);
+
+      user.click(screen.getByRole("tab", { name: /additional resources/i }));
+      await waitFor(() => {
+        expect(
+          screen.getByRole("link", { name: /inaturalist/i })
+        ).toHaveAttribute(
+          "href",
+          "https://www.inaturalist.org/search?q=test+scientific+name"
+        );
+      });
+
+      user.click(screen.getByRole("tab", { name: /general info/i }));
+      await waitFor(() => {
+        expect(screen.getByText(/test content/i)).toBeInTheDocument();
+      });
+    });
+    describe("flagging", () => {
+      it("should open flag dialog", async () => {
+        openDialog(user);
+        await waitFor(() => {
+          expect(screen.getByText(/flag species/i)).toBeInTheDocument();
+        });
+        await waitFor(() => {
+          expect(
+            screen.getByRole("button", { name: /cancel/i })
+          ).toBeInTheDocument();
+        });
+        await waitFor(() => {
+          expect(
+            screen.getByRole("button", { name: /submit/i })
+          ).toBeDisabled();
+        });
+      });
+      it('should close flag dialog if "cancel" is clicked', async () => {
+        openDialog(user);
+
+        await waitFor(() => {
+          expect(
+            screen.getByRole("button", { name: /cancel/i })
+          ).toBeInTheDocument();
+        });
+
+        user.click(screen.getByRole("button", { name: /cancel/i }));
+
+        await waitFor(() => {
+          expect(screen.queryByText(/flag species/i)).not.toBeInTheDocument();
+        });
+        await waitFor(() => {
+          expect(screen.getByText(/test content/i)).toBeInTheDocument();
+        });
+      });
+
+      it("should submit flag if 'submit' is clicked", async () => {
+        openDialog(user);
+        await waitFor(() => {
+          expect(
+            screen.getByRole("button", { name: /submit/i })
+          ).toBeInTheDocument();
+        });
+        user.type(screen.getByRole("textbox"), "test flag");
+        await waitFor(() => {
+          expect(screen.getByRole("button", { name: /submit/i })).toBeEnabled();
+        });
+        user.click(screen.getByRole("button", { name: /submit/i }));
+
+        await waitFor(() => {
+          expect(screen.getByText(/test content/i)).toBeInTheDocument();
+        });
+        await waitFor(() => {
+          expect(screen.queryByText(/flag species/i)).not.toBeInTheDocument();
+        });
+        await waitFor(() => {
+          expect(
+            screen.getByText(/flag submitted successfully/i)
+          ).toBeInTheDocument();
+        });
+      });
+    });
+  });
 });
+
+function openDialog(user) {
+  render(<Species species={species} wiki={wiki} />);
+  user.click(screen.getByRole("button", { name: /flag/i }));
+}
