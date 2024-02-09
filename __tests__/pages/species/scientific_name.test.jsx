@@ -2,11 +2,13 @@
  * @jest-environment jsdom
  */
 import { SnackbarProvider } from "@components/context/SnackbarContext";
+import { useUserContext } from "@components/context/UserContext";
 import Species from "@pages/species/[scientific_name]";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 
 jest.mock("../../../components/layouts/Footer");
@@ -23,6 +25,8 @@ jest.mock("../../../components/context/UserContext", () => ({
     },
   })),
 }));
+
+jest.spyOn(require("next-auth/react"), "signIn");
 
 const species = {
   scientific_name: "test scientific name",
@@ -234,6 +238,41 @@ describe("Species page", () => {
               "There was a problem submitting flag. Please try again later"
             )
           ).toBeInTheDocument();
+        });
+      });
+      describe("user not authenticated properly", () => {
+        it("should push to sign in if user is not authenticated", async () => {
+          server.use(
+            rest.get("/api/auth/providers", (req, res, ctx) => {
+              return res(ctx.delay(100), ctx.status(200), ctx.json([]));
+            })
+          );
+          useUserContext.mockReturnValueOnce({
+            user: {
+              email: null,
+              name: null,
+              role: null,
+              status: "unauthenticated",
+            },
+          });
+          openDialog(user);
+          await waitFor(() => {
+            expect(signIn).toHaveBeenCalled();
+          });
+        });
+        it("should push to new user if user is authenticated but no name", async () => {
+          useUserContext.mockReturnValueOnce({
+            user: {
+              email: null,
+              name: null,
+              role: null,
+              status: "authenticated",
+            },
+          });
+          openDialog(user);
+          await waitFor(() => {
+            expect(pushMock).toHaveBeenCalledWith("/auth/new-user");
+          });
         });
       });
     });
