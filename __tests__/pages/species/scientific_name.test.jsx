@@ -150,58 +150,27 @@ describe("Species page", () => {
     describe("flagging", () => {
       it("should open flag dialog", async () => {
         openDialog(user);
-        await waitFor(() => {
-          expect(screen.getByText(/flag species/i)).toBeInTheDocument();
-        });
-        await waitFor(() => {
-          expect(
-            screen.getByRole("button", { name: /cancel/i })
-          ).toBeInTheDocument();
-        });
-        await waitFor(() => {
-          expect(
-            screen.getByRole("button", { name: /submit/i })
-          ).toBeDisabled();
-        });
+
+        await loadDialog();
       });
       it('should close flag dialog if "cancel" is clicked', async () => {
         openDialog(user);
-
-        await waitFor(() => {
-          expect(
-            screen.getByRole("button", { name: /cancel/i })
-          ).toBeInTheDocument();
-        });
+        await loadDialog();
 
         user.click(screen.getByRole("button", { name: /cancel/i }));
 
-        await waitFor(() => {
-          expect(screen.queryByText(/flag species/i)).not.toBeInTheDocument();
-        });
-        await waitFor(() => {
-          expect(screen.getByText(/test content/i)).toBeInTheDocument();
-        });
+        await testDialogClosed();
       });
 
       it("should submit flag if 'submit' is clicked", async () => {
         openDialog(user);
-        await waitFor(() => {
-          expect(
-            screen.getByRole("button", { name: /submit/i })
-          ).toBeInTheDocument();
-        });
-        user.type(screen.getByRole("textbox"), "test flag");
-        await waitFor(() => {
-          expect(screen.getByRole("button", { name: /submit/i })).toBeEnabled();
-        });
-        user.click(screen.getByRole("button", { name: /submit/i }));
+        await loadDialog();
 
-        await waitFor(() => {
-          expect(screen.getByText(/test content/i)).toBeInTheDocument();
-        });
-        await waitFor(() => {
-          expect(screen.queryByText(/flag species/i)).not.toBeInTheDocument();
-        });
+        await submitFlag(user);
+
+        await testDialogClosed();
+
+        // check snackbar
         await waitFor(() => {
           expect(
             screen.getByText(/flag submitted successfully/i)
@@ -215,23 +184,13 @@ describe("Species page", () => {
           })
         );
         openDialog(user);
-        await waitFor(() => {
-          expect(
-            screen.getByRole("button", { name: /submit/i })
-          ).toBeInTheDocument();
-        });
-        user.type(screen.getByRole("textbox"), "test flag");
-        await waitFor(() => {
-          expect(screen.getByRole("button", { name: /submit/i })).toBeEnabled();
-        });
-        user.click(screen.getByRole("button", { name: /submit/i }));
+        await loadDialog();
 
-        await waitFor(() => {
-          expect(screen.getByText(/test content/i)).toBeInTheDocument();
-        });
-        await waitFor(() => {
-          expect(screen.queryByText(/flag species/i)).not.toBeInTheDocument();
-        });
+        await submitFlag(user);
+
+        await testDialogClosed();
+
+        // check snackbar
         await waitFor(() => {
           expect(
             screen.getByText(
@@ -286,4 +245,33 @@ function openDialog(user) {
     </SnackbarProvider>
   );
   user.click(screen.getByRole("button", { name: /flag/i }));
+}
+
+async function loadDialog() {
+  await waitFor(() => {
+    expect(screen.getByText(/flag species/i)).toBeInTheDocument();
+  });
+  await waitFor(() => {
+    expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
+  });
+  await waitFor(() => {
+    expect(screen.getByRole("button", { name: /submit/i })).toBeDisabled();
+  });
+}
+
+async function testDialogClosed() {
+  await waitFor(() => {
+    expect(screen.getByText(/test content/i)).toBeInTheDocument();
+  });
+  await waitFor(() => {
+    expect(screen.queryByText(/flag species/i)).not.toBeInTheDocument();
+  });
+}
+
+async function submitFlag(user) {
+  user.type(screen.getByRole("textbox"), "test flag");
+  await waitFor(() => {
+    expect(screen.getByRole("button", { name: /submit/i })).toBeEnabled();
+  });
+  user.click(screen.getByRole("button", { name: /submit/i }));
 }
