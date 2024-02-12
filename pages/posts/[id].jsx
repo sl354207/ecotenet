@@ -82,7 +82,7 @@ const DynamicClientDialog = dynamic(
   }
 );
 
-const post = ({ post }) => {
+const Post = ({ post }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
@@ -732,4 +732,4 @@ export const getStaticPaths = async () => {
   };
 };
 
-export default post;
+export default Post;
