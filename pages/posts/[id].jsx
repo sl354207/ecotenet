@@ -612,7 +612,7 @@ const Post = ({ post }) => {
         <Typography variant="h6" sx={{ marginTop: "20px" }}>
           Comments:
         </Typography>
-        <div ref={ref}>
+        <div ref={ref} data-testid="comments-container">
           {commentLoading ? (
             <Typography>loading...</Typography>
           ) : (

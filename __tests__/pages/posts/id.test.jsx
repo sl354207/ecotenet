@@ -4,7 +4,7 @@
 import { SnackbarProvider } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
 import Post from "@pages/posts/[id]";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 // import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -39,6 +39,8 @@ jest.mock("../../../components/context/UserContext", () => ({
     },
   })),
 }));
+
+// jest.spyOn(require("swr"), "default");
 
 let post = {
   _id: "1",
@@ -106,7 +108,7 @@ const handlers = [
       ctx.json([
         {
           _id: "1",
-          ref: "1",
+          comment_ref: "1",
           date: "1234-12-12T12:12:12.000Z",
           name: "test-name",
           comment: "test 1",
@@ -116,7 +118,7 @@ const handlers = [
 
         {
           _id: "2",
-          ref: "",
+          comment_ref: "",
           date: "1234-12-12T12:12:12.000Z",
           name: "test-name",
           comment: "test 2",
@@ -134,16 +136,46 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+const observerMap = new Map();
+const instanceMap = new Map();
+
 describe("Post page", () => {
+  // beforeEach(() => {
+  //   // IntersectionObserver isn't available in test environment
+  //   const mockIntersectionObserver = jest.fn();
+  //   mockIntersectionObserver.mockReturnValue({
+  //     observe: () => null,
+  //     unobserve: () => null,
+  //     disconnect: () => null,
+  //   });
+  //   window.IntersectionObserver = mockIntersectionObserver;
+  // });
   beforeEach(() => {
     // IntersectionObserver isn't available in test environment
-    const mockIntersectionObserver = jest.fn();
-    mockIntersectionObserver.mockReturnValue({
-      observe: () => null,
-      unobserve: () => null,
-      disconnect: () => null,
+    global.IntersectionObserver = jest.fn((cb, options = {}) => {
+      const instance = {
+        thresholds: Array.isArray(options.threshold)
+          ? options.threshold
+          : [options.threshold],
+        root: options.root,
+        rootMargin: options.rootMargin,
+        observe: jest.fn((element) => {
+          instanceMap.set(element, instance);
+          observerMap.set(element, cb);
+        }),
+        unobserve: jest.fn((element) => {
+          instanceMap.delete(element);
+          observerMap.delete(element);
+        }),
+        disconnect: jest.fn(),
+      };
+      return instance;
     });
-    window.IntersectionObserver = mockIntersectionObserver;
+  });
+  afterEach(() => {
+    global.IntersectionObserver.mockReset();
+    instanceMap.clear();
+    observerMap.clear();
   });
   describe("rendering initial", () => {
     it("should render header, footer and flag", () => {
@@ -221,7 +253,20 @@ describe("Post page", () => {
         ).toBeInTheDocument();
       });
     });
-    it.todo("should render comments");
+    it("should render comment component", async () => {
+      customSWRRender(initialComponent(post));
+      // trigger intersection observer callback to show comments
+      act(() => {
+        intersect(screen.getByTestId("comments-container"), true);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText("loading...")).toBeInTheDocument();
+      });
+      // await waitFor(() => {
+      //   expect(useSWR).toHaveBeenCalledWith("/api/comments/1");
+      // });
+    });
   });
 });
 
@@ -231,4 +276,21 @@ function initialComponent(post) {
       <Post post={post} />
     </SnackbarProvider>
   );
+}
+
+function intersect(element, isIntersecting) {
+  const cb = observerMap.get(element);
+  if (cb) {
+    cb([
+      {
+        isIntersecting,
+        target: element,
+        intersectionRatio: isIntersecting ? 1 : -1,
+      },
+    ]);
+  }
+}
+
+function getObserverOf(element) {
+  return instanceMap.get(element);
 }
