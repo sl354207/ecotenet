@@ -4,7 +4,13 @@
 import { SnackbarProvider } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
 import Post from "@pages/posts/[id]";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 // import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -39,8 +45,6 @@ jest.mock("../../../components/context/UserContext", () => ({
     },
   })),
 }));
-
-// jest.spyOn(require("swr"), "default");
 
 let post = {
   _id: "1",
@@ -111,7 +115,7 @@ const handlers = [
           comment_ref: "1",
           date: "1234-12-12T12:12:12.000Z",
           name: "test-name",
-          comment: "test 1",
+          text: "test 1",
           approved: "true",
           updated: true,
         },
@@ -121,7 +125,7 @@ const handlers = [
           comment_ref: "",
           date: "1234-12-12T12:12:12.000Z",
           name: "test-name",
-          comment: "test 2",
+          text: "test 2",
           approved: "true",
           updated: false,
         },
@@ -140,16 +144,6 @@ const observerMap = new Map();
 const instanceMap = new Map();
 
 describe("Post page", () => {
-  // beforeEach(() => {
-  //   // IntersectionObserver isn't available in test environment
-  //   const mockIntersectionObserver = jest.fn();
-  //   mockIntersectionObserver.mockReturnValue({
-  //     observe: () => null,
-  //     unobserve: () => null,
-  //     disconnect: () => null,
-  //   });
-  //   window.IntersectionObserver = mockIntersectionObserver;
-  // });
   beforeEach(() => {
     // IntersectionObserver isn't available in test environment
     global.IntersectionObserver = jest.fn((cb, options = {}) => {
@@ -211,6 +205,7 @@ describe("Post page", () => {
       render(initialComponent(post));
       expect(screen.getByText(/test body text/i)).toBeInTheDocument();
     });
+    it.todo("should render disclaimer");
     it("should not render original url if not available", () => {
       post.originalUrl = null;
       render(initialComponent(post));
@@ -253,21 +248,51 @@ describe("Post page", () => {
         ).toBeInTheDocument();
       });
     });
-    it("should render comment component", async () => {
+    it("should render comments component", async () => {
       customSWRRender(initialComponent(post));
       // trigger intersection observer callback to show comments
       act(() => {
         intersect(screen.getByTestId("comments-container"), true);
+        intersect(screen.getByTestId("comments-container"), false);
+        intersect(screen.getByTestId("comments-container"), true);
       });
 
       await waitFor(() => {
+        expect(IntersectionObserver).toHaveBeenCalledTimes(1);
+
         expect(screen.getByText("loading...")).toBeInTheDocument();
       });
-      // await waitFor(() => {
-      //   expect(useSWR).toHaveBeenCalledWith("/api/comments/1");
-      // });
+
+      await waitForElementToBeRemoved(() => screen.queryByText("loading..."));
+
+      await waitFor(() => {
+        expect(screen.getByText("test 1")).toBeInTheDocument();
+        expect(screen.getByText("test 2")).toBeInTheDocument();
+      });
+    });
+    it("should render error button if comments request fails", async () => {
+      server.use(
+        rest.get("/api/comments/1", (req, res, ctx) => {
+          return res(ctx.delay(100), ctx.status(500));
+        })
+      );
+      customSWRRender(initialComponent(post));
+
+      // trigger intersection observer callback to show comments
+      act(() => {
+        intersect(screen.getByTestId("comments-container"), true);
+        intersect(screen.getByTestId("comments-container"), false);
+        intersect(screen.getByTestId("comments-container"), true);
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole("button", { name: /error loading. retry/i })
+        ).toBeInTheDocument();
+      });
     });
   });
+  describe("behavior", () => {});
 });
 
 function initialComponent(post) {
@@ -289,8 +314,4 @@ function intersect(element, isIntersecting) {
       },
     ]);
   }
-}
-
-function getObserverOf(element) {
-  return instanceMap.get(element);
 }
