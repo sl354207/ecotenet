@@ -103,24 +103,26 @@ const person = ({ person, posts }) => {
             <FlagIcon />
           </IconButton>
         </div>
-        <Button
-          href={`/tip?q=${person.name}`}
-          color="secondary"
-          variant="outlined"
-          sx={{
-            display: "flex",
-            marginInline: "auto",
-            marginTop: "10px",
-            maxWidth: "fit-content",
-            "& .MuiButton-startIcon": {
-              marginRight: "0px",
-            },
-          }}
-          size="medium"
-          startIcon={<AttachMoneyIcon />}
-        >
-          tip
-        </Button>
+        {person.name !== "Ecotenet" && (
+          <Button
+            href={`/tip?q=${person.name}`}
+            color="secondary"
+            variant="outlined"
+            sx={{
+              display: "flex",
+              marginInline: "auto",
+              marginTop: "10px",
+              maxWidth: "fit-content",
+              "& .MuiButton-startIcon": {
+                marginRight: "0px",
+              },
+            }}
+            size="medium"
+            startIcon={<AttachMoneyIcon />}
+          >
+            tip
+          </Button>
+        )}
 
         {person.approved === "true" && (
           <div style={{ margin: "16px" }}>

@@ -424,21 +424,23 @@ const post = ({ post }) => {
                     {post.name}
                   </Link>
                 </Typography>
-                <Button
-                  href={`/tip?q=${post.name}`}
-                  color="secondary"
-                  variant="outlined"
-                  sx={{
-                    marginLeft: "10px",
-                    "& .MuiButton-startIcon": {
-                      marginRight: "0px",
-                    },
-                  }}
-                  size="small"
-                  startIcon={<AttachMoneyIcon />}
-                >
-                  tip
-                </Button>
+                {post.name !== "Ecotenet" && (
+                  <Button
+                    href={`/tip?q=${post.name}`}
+                    color="secondary"
+                    variant="outlined"
+                    sx={{
+                      marginLeft: "10px",
+                      "& .MuiButton-startIcon": {
+                        marginRight: "0px",
+                      },
+                    }}
+                    size="small"
+                    startIcon={<AttachMoneyIcon />}
+                  >
+                    tip
+                  </Button>
+                )}
               </div>
             </Box>
             <Typography
@@ -592,7 +594,8 @@ const post = ({ post }) => {
         )}
         <EditorLayout readOnly={true}>
           {(post.category.sub === "Edible" ||
-            post.category.sub === "Medicinal") && (
+            post.category.sub === "Medicinal" ||
+            post.category.sub === "Cooking/Recipes") && (
             <Typography sx={{ paddingTop: "16px" }}>
               <em>
                 Disclaimer: This content is for educational purposes only.

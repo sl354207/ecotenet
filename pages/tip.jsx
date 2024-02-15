@@ -24,8 +24,8 @@ const tip = () => {
           <>
             <Header title="Tipping" />
             <Typography align="center" variant="h6" sx={{ marginTop: "20px" }}>
-              We are currently working on adding the ability to tip people in
-              cryptocurrencies...more to come.
+              We are currently working on adding the ability to tip
+              people...more to come.
             </Typography>
           </>
         )}
