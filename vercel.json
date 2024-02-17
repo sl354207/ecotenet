@@ -1,8 +1,11 @@
 {
-    "functions": {
-      "pages/api/rank.js": {
-        "memory": 3008,
-        "maxDuration": 120
-      }
+  "functions": {
+    "pages/api/rank.js": {
+      "memory": 3008,
+      "maxDuration": 120
+    },
+    "pages/posts/[id].jsx": {
+      "maxDuration": 120
     }
   }
+}
