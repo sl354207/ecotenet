@@ -392,21 +392,15 @@ const post = ({ post }) => {
             </IconButton>
           </div>
         </div>
+
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
-          <div
-            style={{
-              flexDirection: "column",
-              maxWidth: "800px",
-              flexGrow: 1,
-              marginLeft: "20px",
-            }}
-          >
+          <div>
             <Box
               sx={{
                 display: "flex",
@@ -461,43 +455,13 @@ const post = ({ post }) => {
                 </>
               )}
             </Typography>
-            <Typography variant="h6">
+            <Typography variant="h6" sx={{ overflowWrap: "anywhere" }}>
               Category: {post.category.title}
               {" >> "}
               {post.category.sub}
             </Typography>
-
-            <Typography variant="h6">
-              Ecoregions:{" "}
-              {post.ecoregions.map((ecoregion) => (
-                <Link
-                  href={`/ecoregions/${ecoregion}`}
-                  color="secondary"
-                  underline="hover"
-                  key={ecoregion}
-                >
-                  Eco-{ecoregion},{" "}
-                </Link>
-              ))}
-            </Typography>
-            {post.originalUrl && (
-              <Typography
-                variant="body1"
-                sx={{ marginBlock: "10px", overflowWrap: "anywhere" }}
-              >
-                Originally posted on:{" "}
-                <Link
-                  href={post.originalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="secondary"
-                  underline="hover"
-                >
-                  {post.originalUrl}
-                </Link>
-              </Typography>
-            )}
           </div>
+
           {!isMobile && (
             <>
               {voteLoading ? (
@@ -541,6 +505,37 @@ const post = ({ post }) => {
             </>
           )}
         </div>
+        <Typography variant="h6">
+          Ecoregions:{" "}
+          {post.ecoregions.map((ecoregion) => (
+            <Link
+              href={`/ecoregions/${ecoregion}`}
+              color="secondary"
+              underline="hover"
+              key={ecoregion}
+            >
+              Eco-{ecoregion},{" "}
+            </Link>
+          ))}
+        </Typography>
+        {post.originalUrl && (
+          <Typography
+            variant="body1"
+            sx={{ marginBlock: "5px", overflowWrap: "anywhere" }}
+          >
+            Originally posted on:{" "}
+            <Link
+              href={post.originalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              color="secondary"
+              underline="hover"
+            >
+              {post.originalUrl}
+            </Link>
+          </Typography>
+        )}
+
         {isMobile && (
           <>
             <Divider sx={{ marginTop: "10px" }} />
