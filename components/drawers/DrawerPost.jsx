@@ -422,7 +422,7 @@ const DrawerPost = ({ id, handleClose }) => {
                     {post.originalUrl && (
                       <Typography
                         variant="body1"
-                        sx={{ marginBlock: "10px", overflowWrap: "anywhere" }}
+                        sx={{ marginBlock: "5px", overflowWrap: "anywhere" }}
                       >
                         Originally posted on:{" "}
                         <Link
