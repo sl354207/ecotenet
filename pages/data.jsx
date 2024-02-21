@@ -5,7 +5,7 @@ import { Container, Divider, List, ListItem, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const data = () => {
+const Data = () => {
   return (
     <>
       <NextSeo
@@ -126,4 +126,4 @@ const data = () => {
   );
 };
 
-export default data;
+export default Data;

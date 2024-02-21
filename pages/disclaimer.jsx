@@ -4,14 +4,13 @@ import { Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const disclaimer = () => {
+const Disclaimer = () => {
   return (
     <>
       <NextSeo
         title="Disclaimer"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
-        // description="Ideas on the purpose of Ecotenet and the possible vision for the future"
         openGraph={{
           type: "website",
           url: "https://www.ecotenet.org/disclaimer",
@@ -73,4 +72,4 @@ const disclaimer = () => {
   );
 };
 
-export default disclaimer;
+export default Disclaimer;

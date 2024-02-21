@@ -35,8 +35,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`species-tabpanel-${index}`}
+      aria-labelledby={`species-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -62,8 +62,8 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `species-tab-${index}`,
+    "aria-controls": `species-tabpanel-${index}`,
   };
 }
 
@@ -71,7 +71,7 @@ const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
 });
 
-const species = ({ species, wiki }) => {
+const Species = ({ species, wiki }) => {
   const router = useRouter();
   const { user } = useUserContext();
 
@@ -324,9 +324,6 @@ const species = ({ species, wiki }) => {
           <Container
             sx={{
               backgroundColor: theme.palette.primary.main,
-              // paddingBottom: "20px",
-              // paddingTop: "5px",
-              // marginBlock: "20px",
             }}
           >
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -399,7 +396,7 @@ const species = ({ species, wiki }) => {
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label="simple tabs example"
+                  aria-label="species tabs"
                   centered
                   indicatorColor="secondary"
                   textColor="inherit"
@@ -612,4 +609,4 @@ export const getServerSideProps = async (context) => {
   }
 };
 
-export default species;
+export default Species;

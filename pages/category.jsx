@@ -5,7 +5,7 @@ import { Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const category = () => {
+const Category = () => {
   return (
     <>
       <NextSeo
@@ -357,4 +357,4 @@ const category = () => {
   );
 };
 
-export default category;
+export default Category;

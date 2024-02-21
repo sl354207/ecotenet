@@ -23,7 +23,7 @@ const TikTokIcon = ({ color = "#000000", width = "1em", height = "1em" }) => {
   );
 };
 
-const contact = () => {
+const Contact = () => {
   return (
     <>
       <NextSeo
@@ -133,4 +133,4 @@ const contact = () => {
   );
 };
 
-export default contact;
+export default Contact;

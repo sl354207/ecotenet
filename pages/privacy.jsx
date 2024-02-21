@@ -5,14 +5,13 @@ import { Container, Typography } from "@mui/material";
 import theme from "@utils/theme";
 import { NextSeo } from "next-seo";
 
-const privacy = () => {
+const Privacy = () => {
   return (
     <>
       <NextSeo
         title="Privacy Policy"
         titleTemplate="%s | Ecotenet"
         defaultTitle="Ecotenet"
-        // description="Ideas on the purpose of Ecotenet and the possible vision for the future"
         openGraph={{
           type: "website",
           url: "https://www.ecotenet.org/privacy",
@@ -256,4 +255,4 @@ const privacy = () => {
   );
 };
 
-export default privacy;
+export default Privacy;
