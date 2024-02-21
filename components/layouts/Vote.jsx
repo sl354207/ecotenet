@@ -11,7 +11,15 @@ import theme from "@utils/theme";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-const Vote = ({ handleOpenDialog, id, limit, setLimit, vote, setVote }) => {
+const Vote = ({
+  handleOpenDialog,
+  id,
+  limit,
+  setLimit,
+  vote,
+  setVote,
+  isMobile,
+}) => {
   //set count value for voting
   const [count, setCount] = useState(0);
 
@@ -27,8 +35,9 @@ const Vote = ({ handleOpenDialog, id, limit, setLimit, vote, setVote }) => {
   useEffect(() => {
     if (votes && votes.count) {
       setCount(votes.count);
+      setLimit(0);
     }
-  }, [votes]);
+  }, [votes, isMobile]);
 
   const handleCountUp = () => {
     if (limit === 1) {
