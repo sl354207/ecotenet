@@ -31,7 +31,6 @@ import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
 
 import { updatePost } from "@utils/apiHelpers";
-import fetcher from "@utils/fetcher";
 import {
   getPosts,
   getPublishedApprovedPostById,
@@ -43,8 +42,8 @@ import { signIn } from "next-auth/react";
 import { ArticleJsonLd, NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useReducer, useRef, useState } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import { useEffect, useRef, useState } from "react";
+import { useSWRConfig } from "swr";
 
 const slatePlugin = slate((slateDef) => ({
   ...slateDef,
@@ -98,57 +97,21 @@ const Post = ({ post }) => {
   const [action, setAction] = useState("");
   const [item, setItem] = useState("");
 
-  const [showForm, setShowForm] = useState(false);
-
   const [loadComments, setLoadComments] = useState(false);
 
   const { mutate } = useSWRConfig();
-
-  const {
-    data: comments,
-    isLoading: commentLoading,
-    error: commentError,
-  } = useSWR(loadComments ? `/api/comments/${post._id}` : null, fetcher, {
-    shouldRetryOnError: false,
-  });
 
   //set limits for vote counter
   const [limit, setLimit] = useState(0);
   // set vote status
   const [vote, setVote] = useState(0);
 
-  const reducer = (comments, toggle) => {
-    if (toggle.type === "load") {
-      return toggle.payload;
-    }
-    if (toggle.type === "open") {
-      return comments.map((comment) => {
-        if (comment._id === toggle.payload) {
-          comment.open = true;
-        }
+  const [commentForm, setCommentForm] = useState({
+    type: "",
+    payload: "",
+  });
 
-        return comment;
-      });
-    }
-    if (toggle.type === "close") {
-      return comments.map((comment) => {
-        if (comment._id === toggle.payload) {
-          comment.open = false;
-        }
-
-        return comment;
-      });
-    }
-    if (toggle.type === "all") {
-      return comments.map((comment) => {
-        comment.open = false;
-
-        return comment;
-      });
-    }
-  };
-
-  const [state, dispatch] = useReducer(reducer, comments);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
@@ -160,32 +123,32 @@ const Post = ({ post }) => {
   const [modelLoading, setModelLoading] = useState(false);
   // const [modelError, setModelError] = useState(false);
 
-  useEffect(() => {
-    if (loadComments && comments) {
-      comments.forEach((reply) => {
-        reply.open = false;
-      });
-      dispatch({ type: "load", payload: comments });
-    }
-    // if (loadComments && comments && user.status === "authenticated") {
-    //   const loadModel = async () => {
-    //     setModelLoading(true);
-    //     try {
-    //       // Loading model
-    //       const model = await loadToxicity(0.7);
-    //       if (model) {
-    //         setModel(model);
-    //         setModelLoading(false);
-    //       }
-    //     } catch (error) {
-    //       console.log(error);
-    //       setModelError(true);
-    //       setModelLoading(false);
-    //     }
-    //   };
-    //   loadModel();
-    // }
-  }, [comments]);
+  // useEffect(() => {
+  //   if (loadComments && comments) {
+  //     comments.forEach((reply) => {
+  //       reply.open = false;
+  //     });
+  //     dispatch({ type: "load", payload: comments });
+  //   }
+  //   // if (loadComments && comments && user.status === "authenticated") {
+  //   //   const loadModel = async () => {
+  //   //     setModelLoading(true);
+  //   //     try {
+  //   //       // Loading model
+  //   //       const model = await loadToxicity(0.7);
+  //   //       if (model) {
+  //   //         setModel(model);
+  //   //         setModelLoading(false);
+  //   //       }
+  //   //     } catch (error) {
+  //   //       console.log(error);
+  //   //       setModelError(true);
+  //   //       setModelLoading(false);
+  //   //     }
+  //   //   };
+  //   //   loadModel();
+  //   // }
+  // }, [comments]);
 
   const handleOpenDialog = (action, result) => {
     if (user.status === "unauthenticated" || user.status === "loading") {
@@ -199,7 +162,7 @@ const Post = ({ post }) => {
         setAction(action);
         setDialog(true);
         if (action === "Comment") {
-          dispatch({ type: "open", payload: result.comment_ref });
+          setCommentForm({ type: "open", payload: result.comment_ref });
         }
       }
     }
@@ -209,10 +172,10 @@ const Post = ({ post }) => {
     setDialog(false);
 
     if (reply === "reply") {
-      dispatch({ type: "all" });
+      setCommentForm({ type: "all", payload: "" });
     }
     if (reply && reply !== "reply" && reply !== "") {
-      dispatch({ type: "open", payload: reply });
+      setCommentForm({ type: "open", payload: reply });
     }
   };
 
@@ -247,18 +210,6 @@ const Post = ({ post }) => {
     }
   };
 
-  const toggleForm = () => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        setShowForm(!showForm);
-      }
-    }
-  };
   const closeForm = () => {
     setShowForm(false);
   };
@@ -280,19 +231,6 @@ const Post = ({ post }) => {
 
   const handleCloseFlag = () => {
     setFlag(false);
-  };
-
-  const handleReply = (toggle, ID) => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        dispatch({ type: toggle, payload: ID });
-      }
-    }
   };
 
   const date = new Date(post.date);
@@ -545,44 +483,20 @@ const Post = ({ post }) => {
           Comments:
         </Typography>
         <div ref={ref} data-testid="comments-container">
-          {commentLoading ? (
-            <Typography>loading...</Typography>
-          ) : (
-            <>
-              {commentError ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "20px",
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => mutate(`/api/comments/${post._id}`)}
-                  >
-                    Error Loading. Retry
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  {comments && (
-                    <CommentList
-                      comments={comments}
-                      post_id={post._id}
-                      handleOpenDialog={handleOpenDialog}
-                      handleOpenFlag={handleOpenFlag}
-                      showForm={showForm}
-                      handleForm={toggleForm}
-                      handleReply={handleReply}
-                      modelLoading={modelLoading}
-                    />
-                  )}
-                </>
-              )}
-            </>
-          )}
+          <CommentList
+            // comments={comments}
+            commentForm={commentForm}
+            loadComments={loadComments}
+            post_id={post._id}
+            handleOpenDialog={handleOpenDialog}
+            handleOpenFlag={handleOpenFlag}
+            showForm={showForm}
+            setShowForm={setShowForm}
+            // handleForm={toggleForm}
+            // handleReply={handleReply}
+            modelLoading={modelLoading}
+            user={user}
+          />
         </div>
       </Container>
 
