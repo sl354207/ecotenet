@@ -35,8 +35,8 @@ const Vote = ({
   useEffect(() => {
     if (votes && votes.count) {
       setCount(votes.count);
-      setLimit(0);
     }
+    setLimit(0);
   }, [votes, isMobile]);
 
   const handleCountUp = () => {
