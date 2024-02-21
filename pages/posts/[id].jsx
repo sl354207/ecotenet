@@ -497,6 +497,7 @@ const Post = ({ post }) => {
                 limit={limit}
                 setLimit={setLimit}
                 id={post._id}
+                isMobile={isMobile}
               />
             </>
           )}
