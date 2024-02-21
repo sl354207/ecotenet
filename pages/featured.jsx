@@ -14,7 +14,7 @@ import theme from "@utils/theme";
 import { CollectionPageJsonLd, NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 
-const featured = ({ featured }) => {
+const Featured = ({ featured }) => {
   const router = useRouter();
 
   const featureSEO = featured.map((post) => {
@@ -116,4 +116,4 @@ export const getStaticProps = async () => {
   };
 };
 
-export default featured;
+export default Featured;

@@ -3,7 +3,7 @@ export default function PostList({ posts }) {
     <div>
       <ul>
         {posts.map((post) => (
-          <li key={post._id}>{post.title}</li>
+          <li key={post.id}>{post.title}</li>
         ))}
       </ul>
     </div>

@@ -103,18 +103,11 @@ const DrawerPost = ({ id, handleClose }) => {
     shouldRetryOnError: false,
   });
 
-  //set limit for vote count
+  //set limits for vote counter
   const [limit, setLimit] = useState(0);
+
   // set vote status
   const [vote, setVote] = useState(0);
-
-  const {
-    data: votes,
-    isLoading: voteLoading,
-    error: voteError,
-  } = useSWR(`/api/votes/${id}`, fetcher, {
-    shouldRetryOnError: false,
-  });
 
   const reducer = (comments, toggle) => {
     if (toggle.type === "load") {
@@ -445,44 +438,15 @@ const DrawerPost = ({ id, handleClose }) => {
                         marginTop: "20px",
                       }}
                     >
-                      {voteLoading ? (
-                        <CircularProgress size={19} color="secondary" />
-                      ) : (
-                        <>
-                          {voteError ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                marginTop: "20px",
-                              }}
-                            >
-                              <Button
-                                variant="outlined"
-                                color="error"
-                                onClick={() => mutate(`/api/votes/${id}`)}
-                              >
-                                Error Loading. Retry
-                              </Button>
-                            </div>
-                          ) : (
-                            <>
-                              {votes && (
-                                <Vote
-                                  post_count={votes && votes.count}
-                                  handleOpenDialog={handleOpenDialog}
-                                  name={user && user.name}
-                                  voters={votes && votes.voters}
-                                  vote={vote}
-                                  setVote={setVote}
-                                  limit={limit}
-                                  setLimit={setLimit}
-                                />
-                              )}
-                            </>
-                          )}
-                        </>
-                      )}
+                      <Vote
+                        handleOpenDialog={handleOpenDialog}
+                        name={user && user.name}
+                        vote={vote}
+                        setVote={setVote}
+                        limit={limit}
+                        setLimit={setLimit}
+                        id={post._id}
+                      />
                     </div>
                   </Container>
                   <div style={{ marginInline: "10px" }}>
