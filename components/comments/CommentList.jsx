@@ -10,36 +10,6 @@ import { signIn } from "next-auth/react";
 import { useEffect, useReducer, useState } from "react";
 import useSWR from "swr";
 
-const reducer = (comments, toggle) => {
-  if (toggle.type === "load") {
-    return toggle.payload;
-  }
-  if (toggle.type === "open") {
-    return comments.map((comment) => {
-      if (comment._id === toggle.payload) {
-        comment.open = true;
-      }
-
-      return comment;
-    });
-  }
-  if (toggle.type === "close") {
-    return comments.map((comment) => {
-      if (comment._id === toggle.payload) {
-        comment.open = false;
-      }
-
-      return comment;
-    });
-  }
-  if (toggle.type === "all") {
-    return comments.map((comment) => {
-      comment.open = false;
-
-      return comment;
-    });
-  }
-};
 //pass in comments and post id from parent post
 const CommentList = ({
   commentForm,
@@ -61,6 +31,37 @@ const CommentList = ({
   } = useSWR(loadComments ? `/api/comments/${post_id}` : null, fetcher, {
     shouldRetryOnError: false,
   });
+
+  const reducer = (comments, toggle) => {
+    if (toggle.type === "load") {
+      return toggle.payload;
+    }
+    if (toggle.type === "open") {
+      return comments.map((comment) => {
+        if (comment._id === toggle.payload) {
+          comment.open = true;
+        }
+
+        return comment;
+      });
+    }
+    if (toggle.type === "close") {
+      return comments.map((comment) => {
+        if (comment._id === toggle.payload) {
+          comment.open = false;
+        }
+
+        return comment;
+      });
+    }
+    if (toggle.type === "all") {
+      return comments.map((comment) => {
+        comment.open = false;
+
+        return comment;
+      });
+    }
+  };
 
   const [state, dispatch] = useReducer(reducer, comments);
 
