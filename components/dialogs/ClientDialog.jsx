@@ -16,7 +16,7 @@ const ClientDialog = ({
   contentType,
   result,
   mutate,
-  closeForm,
+  closeCommentForm,
   post_id,
   name,
   setVote,
@@ -85,8 +85,8 @@ const ClientDialog = ({
     handleClose("reply");
 
     if (createResponse.ok) {
-      if (closeForm) {
-        closeForm();
+      if (closeCommentForm) {
+        closeCommentForm();
       }
 
       setSnackbar({
