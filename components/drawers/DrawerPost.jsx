@@ -32,7 +32,7 @@ import { useOnScreenClient } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 const slatePlugin = slate((slateDef) => ({
@@ -91,56 +91,20 @@ const DrawerPost = ({ id, handleClose }) => {
   const [action, setAction] = useState("");
   const [item, setItem] = useState("");
 
-  const [showForm, setShowForm] = useState(false);
-
-  const [loadComments, setLoadComments] = useState(false);
-
-  const {
-    data: comments,
-    isLoading: commentLoading,
-    error: commentError,
-  } = useSWR(loadComments ? `/api/comments/${post._id}` : null, fetcher, {
-    shouldRetryOnError: false,
-  });
-
   //set limits for vote counter
   const [limit, setLimit] = useState(0);
 
   // set vote status
   const [vote, setVote] = useState(0);
 
-  const reducer = (comments, toggle) => {
-    if (toggle.type === "load") {
-      return toggle.payload;
-    }
-    if (toggle.type === "open") {
-      return comments.map((comment) => {
-        if (comment._id === toggle.payload) {
-          comment.open = true;
-        }
+  const [loadComments, setLoadComments] = useState(false);
 
-        return comment;
-      });
-    }
-    if (toggle.type === "close") {
-      return comments.map((comment) => {
-        if (comment._id === toggle.payload) {
-          comment.open = false;
-        }
+  const [commentForm, setCommentForm] = useState({
+    type: "",
+    payload: "",
+  });
 
-        return comment;
-      });
-    }
-    if (toggle.type === "all") {
-      return comments.map((comment) => {
-        comment.open = false;
-
-        return comment;
-      });
-    }
-  };
-
-  const [state, dispatch] = useReducer(reducer, comments);
+  const [showCommentForm, setShowCommentForm] = useState(false);
 
   useEffect(() => {
     if (entry.isIntersecting) {
@@ -152,32 +116,26 @@ const DrawerPost = ({ id, handleClose }) => {
   const [modelLoading, setModelLoading] = useState(false);
   // const [modelError, setModelError] = useState(false);
 
-  useEffect(() => {
-    if (loadComments && comments) {
-      comments.forEach((reply) => {
-        reply.open = false;
-      });
-      dispatch({ type: "load", payload: comments });
-    }
-    // if (loadComments && comments && user.status === "authenticated") {
-    // const loadModel = async () => {
-    //   setModelLoading(true);
-    //   try {
-    //     // Loading model
-    //     const model = await loadToxicity(0.7);
-    //     if (model) {
-    //       setModel(model);
-    //       setModelLoading(false);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //     setModelError(true);
-    //     setModelLoading(false);
-    //   }
-    // };
-    // loadModel();
-    // }
-  }, [comments]);
+  // useEffect(() => {
+  // if (loadComments && comments && user.status === "authenticated") {
+  // const loadModel = async () => {
+  //   setModelLoading(true);
+  //   try {
+  //     // Loading model
+  //     const model = await loadToxicity(0.7);
+  //     if (model) {
+  //       setModel(model);
+  //       setModelLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     setModelError(true);
+  //     setModelLoading(false);
+  //   }
+  // };
+  // loadModel();
+  // }
+  // }, [comments]);
 
   const handleOpenDialog = (action, result) => {
     if (user.status === "unauthenticated" || user.status === "loading") {
@@ -189,11 +147,9 @@ const DrawerPost = ({ id, handleClose }) => {
       } else {
         setItem(result);
         setAction(action);
-
         setDialog(true);
-
         if (action === "Comment") {
-          dispatch({ type: "open", payload: result.comment_ref });
+          setCommentForm({ type: "open", payload: result.comment_ref });
         }
       }
     }
@@ -203,27 +159,15 @@ const DrawerPost = ({ id, handleClose }) => {
     setDialog(false);
 
     if (reply === "reply") {
-      dispatch({ type: "all" });
+      setCommentForm({ type: "all", payload: "" });
     }
     if (reply && reply !== "reply" && reply !== "") {
-      dispatch({ type: "open", payload: reply });
+      setCommentForm({ type: "open", payload: reply });
     }
   };
 
-  const toggleForm = () => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        setShowForm(!showForm);
-      }
-    }
-  };
-  const closeForm = () => {
-    setShowForm(false);
+  const closeCommentForm = () => {
+    setShowCommentForm(false);
   };
 
   const handleOpenFlag = (action, result) => {
@@ -243,19 +187,6 @@ const DrawerPost = ({ id, handleClose }) => {
 
   const handleCloseFlag = () => {
     setFlag(false);
-  };
-
-  const handleReply = (toggle, ID) => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        dispatch({ type: toggle, payload: ID });
-      }
-    }
   };
 
   return (
@@ -472,46 +403,19 @@ const DrawerPost = ({ id, handleClose }) => {
                     </Typography>
 
                     <div ref={ref}>
-                      {commentLoading ? (
-                        <Typography>loading...</Typography>
-                      ) : (
-                        <>
-                          {commentError ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                marginTop: "20px",
-                              }}
-                            >
-                              <Button
-                                variant="outlined"
-                                color="error"
-                                onClick={() =>
-                                  mutate(`/api/comments/${post._id}`)
-                                }
-                              >
-                                Error Loading. Retry
-                              </Button>
-                            </div>
-                          ) : (
-                            <>
-                              {comments && (
-                                <CommentList
-                                  comments={comments}
-                                  post_id={post._id}
-                                  handleOpenDialog={handleOpenDialog}
-                                  handleOpenFlag={handleOpenFlag}
-                                  showForm={showForm}
-                                  handleForm={toggleForm}
-                                  handleReply={handleReply}
-                                  drawer={true}
-                                  modelLoading={modelLoading}
-                                />
-                              )}
-                            </>
-                          )}
-                        </>
+                      {loadComments && (
+                        <CommentList
+                          commentForm={commentForm}
+                          loadComments={loadComments}
+                          post_id={post._id}
+                          handleOpenDialog={handleOpenDialog}
+                          handleOpenFlag={handleOpenFlag}
+                          showForm={showCommentForm}
+                          setShowForm={setShowCommentForm}
+                          modelLoading={modelLoading}
+                          user={user}
+                          drawer={true}
+                        />
                       )}
                     </div>
                   </Container>
@@ -523,7 +427,7 @@ const DrawerPost = ({ id, handleClose }) => {
                       handleClose={handleCloseDialog}
                       post_id={post._id}
                       result={item}
-                      closeForm={closeForm}
+                      closeCommentForm={closeCommentForm}
                       name={user && user.name}
                       mutate={mutate}
                       setVote={setVote}

@@ -52,14 +52,18 @@ const Comment = ({
                 )}
 
                 <Typography
-                  sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                  sx={{
+                    marginLeft: "20px",
+                    marginTop: "4px",
+                    fontStyle: "italic",
+                  }}
                   align="left"
-                  variant="body1"
+                  variant="body2"
                 >
                   {comment.updated ? (
                     //
                     <>
-                      Updated:{" "}
+                      Update:{" "}
                       {isMobile || drawer
                         ? comment.date.toLocaleDateString()
                         : comment.date.toDateString()}
@@ -167,14 +171,18 @@ const Comment = ({
                 </Typography>
               )}
               <Typography
-                sx={{ marginLeft: "20px", fontStyle: "italic" }}
+                sx={{
+                  marginLeft: "20px",
+                  marginTop: "4px",
+                  fontStyle: "italic",
+                }}
                 align="left"
-                variant="body1"
+                variant="body2"
               >
                 {comment.updated ? (
                   //
                   <>
-                    Updated on{" "}
+                    Update:{" "}
                     {isMobile || drawer
                       ? comment.date.toLocaleDateString()
                       : comment.date.toDateString()}

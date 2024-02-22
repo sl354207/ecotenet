@@ -42,15 +42,12 @@ const reducer = (comments, toggle) => {
 };
 //pass in comments and post id from parent post
 const CommentList = ({
-  // comments,
   commentForm,
   post_id,
   showForm,
   setShowForm,
-  handleForm,
   handleOpenDialog,
   handleOpenFlag,
-  // handleReply,
   drawer,
   modelLoading,
   loadComments,
@@ -70,7 +67,7 @@ const CommentList = ({
   const [sortedComments, setSortedComments] = useState();
 
   useEffect(() => {
-    if (comments) {
+    if (comments && !commentError) {
       //if comment doesn't have a ref(initial comment) than make ref same as comment id. Convert comment date from string to date object
       const dateComments = comments.map((comment) => {
         if (comment.comment_ref === "") {
@@ -105,7 +102,7 @@ const CommentList = ({
         dispatch({ type: "load", payload: comments });
       }
     }
-  }, [comments]);
+  }, [comments, commentError]);
 
   useEffect(() => {
     dispatch(commentForm);
@@ -123,9 +120,6 @@ const CommentList = ({
       }
     }
   };
-  // const closeForm = () => {
-  //   setShowForm(false);
-  // };
 
   const handleReply = (toggle, ID) => {
     if (user.status === "unauthenticated" || user.status === "loading") {

@@ -84,6 +84,7 @@ const Post = ({ post }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { snackbar, setSnackbar } = useSnackbarContext();
+  const { mutate } = useSWRConfig();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const ref = useRef();
@@ -97,21 +98,19 @@ const Post = ({ post }) => {
   const [action, setAction] = useState("");
   const [item, setItem] = useState("");
 
-  const [loadComments, setLoadComments] = useState(false);
-
-  const { mutate } = useSWRConfig();
-
   //set limits for vote counter
   const [limit, setLimit] = useState(0);
   // set vote status
   const [vote, setVote] = useState(0);
+
+  const [loadComments, setLoadComments] = useState(false);
 
   const [commentForm, setCommentForm] = useState({
     type: "",
     payload: "",
   });
 
-  const [showForm, setShowForm] = useState(false);
+  const [showCommentForm, setShowCommentForm] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
@@ -124,12 +123,6 @@ const Post = ({ post }) => {
   // const [modelError, setModelError] = useState(false);
 
   // useEffect(() => {
-  //   if (loadComments && comments) {
-  //     comments.forEach((reply) => {
-  //       reply.open = false;
-  //     });
-  //     dispatch({ type: "load", payload: comments });
-  //   }
   //   // if (loadComments && comments && user.status === "authenticated") {
   //   //   const loadModel = async () => {
   //   //     setModelLoading(true);
@@ -179,6 +172,10 @@ const Post = ({ post }) => {
     }
   };
 
+  const closeCommentForm = () => {
+    setShowCommentForm(false);
+  };
+
   const handleAddFeature = async () => {
     const submission = {
       _id: post._id,
@@ -208,10 +205,6 @@ const Post = ({ post }) => {
           "There was a problem submitting feature. Please try again later",
       });
     }
-  };
-
-  const closeForm = () => {
-    setShowForm(false);
   };
 
   const handleOpenFlag = (action, result) => {
@@ -483,20 +476,19 @@ const Post = ({ post }) => {
           Comments:
         </Typography>
         <div ref={ref} data-testid="comments-container">
-          <CommentList
-            // comments={comments}
-            commentForm={commentForm}
-            loadComments={loadComments}
-            post_id={post._id}
-            handleOpenDialog={handleOpenDialog}
-            handleOpenFlag={handleOpenFlag}
-            showForm={showForm}
-            setShowForm={setShowForm}
-            // handleForm={toggleForm}
-            // handleReply={handleReply}
-            modelLoading={modelLoading}
-            user={user}
-          />
+          {loadComments && (
+            <CommentList
+              commentForm={commentForm}
+              loadComments={loadComments}
+              post_id={post._id}
+              handleOpenDialog={handleOpenDialog}
+              handleOpenFlag={handleOpenFlag}
+              showForm={showCommentForm}
+              setShowForm={setShowCommentForm}
+              modelLoading={modelLoading}
+              user={user}
+            />
+          )}
         </div>
       </Container>
 
@@ -507,7 +499,7 @@ const Post = ({ post }) => {
           handleClose={handleCloseDialog}
           post_id={post._id}
           result={item}
-          closeForm={closeForm}
+          closeCommentForm={closeCommentForm}
           name={user && user.name}
           mutate={mutate}
           setVote={setVote}
