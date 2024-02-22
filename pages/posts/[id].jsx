@@ -32,6 +32,12 @@ import "@react-page/plugins-video/lib/index.css";
 
 import { updatePost } from "@utils/apiHelpers";
 import {
+  handleClosePostDialog,
+  handleClosePostFlag,
+  handleOpenPostDialog,
+  handleOpenPostFlag,
+} from "@utils/dialogHelpers";
+import {
   getPosts,
   getPublishedApprovedPostById,
 } from "@utils/mongodb/mongoHelpers";
@@ -143,33 +149,39 @@ const Post = ({ post }) => {
   //   // }
   // }, [comments]);
 
-  const handleOpenDialog = (action, result) => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        setItem(result);
-        setAction(action);
-        setDialog(true);
-        if (action === "Comment") {
-          setCommentForm({ type: "open", payload: result.comment_ref });
-        }
-      }
-    }
+  const handleOpenPostDialogWrapper = (action, result) => {
+    handleOpenPostDialog(
+      action,
+      result,
+      user,
+      signIn,
+      router,
+      setItem,
+      setAction,
+      setDialog,
+      setCommentForm
+    );
   };
 
-  const handleCloseDialog = (reply) => {
-    setDialog(false);
+  const handleClosePostDialogWrapper = (reply) => {
+    handleClosePostDialog(reply, setDialog, setCommentForm);
+  };
 
-    if (reply === "reply") {
-      setCommentForm({ type: "all", payload: "" });
-    }
-    if (reply && reply !== "reply" && reply !== "") {
-      setCommentForm({ type: "open", payload: reply });
-    }
+  const handleOpenPostFlagWrapper = (action, result) => {
+    handleOpenPostFlag(
+      action,
+      result,
+      user,
+      signIn,
+      router,
+      setItem,
+      setAction,
+      setFlag
+    );
+  };
+
+  const handleClosePostFlagWrapper = () => {
+    handleClosePostFlag(setFlag);
   };
 
   const closeCommentForm = () => {
@@ -205,25 +217,6 @@ const Post = ({ post }) => {
           "There was a problem submitting feature. Please try again later",
       });
     }
-  };
-
-  const handleOpenFlag = (action, result) => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        setItem(result);
-        setAction(action);
-        setFlag(true);
-      }
-    }
-  };
-
-  const handleCloseFlag = () => {
-    setFlag(false);
   };
 
   const date = new Date(post.date);
@@ -308,7 +301,7 @@ const Post = ({ post }) => {
               color="inherit"
               aria-label="flag"
               size="small"
-              onClick={() => handleOpenFlag("post", post)}
+              onClick={() => handleOpenPostFlagWrapper("post", post)}
             >
               <FlagIcon />
             </IconButton>
@@ -387,7 +380,7 @@ const Post = ({ post }) => {
           {!isMobile && (
             <>
               <Vote
-                handleOpenDialog={handleOpenDialog}
+                handleOpenDialog={handleOpenPostDialogWrapper}
                 name={user && user.name}
                 vote={vote}
                 setVote={setVote}
@@ -441,7 +434,7 @@ const Post = ({ post }) => {
               }}
             >
               <Vote
-                handleOpenDialog={handleOpenDialog}
+                handleOpenDialog={handleOpenPostDialogWrapper}
                 name={user && user.name}
                 vote={vote}
                 setVote={setVote}
@@ -481,8 +474,8 @@ const Post = ({ post }) => {
               commentForm={commentForm}
               loadComments={loadComments}
               post_id={post._id}
-              handleOpenDialog={handleOpenDialog}
-              handleOpenFlag={handleOpenFlag}
+              handleOpenDialog={handleOpenPostDialogWrapper}
+              handleOpenFlag={handleOpenPostFlagWrapper}
               showForm={showCommentForm}
               setShowForm={setShowCommentForm}
               modelLoading={modelLoading}
@@ -496,7 +489,7 @@ const Post = ({ post }) => {
         <DynamicClientDialog
           contentType={action}
           open={dialog}
-          handleClose={handleCloseDialog}
+          handleClose={handleClosePostDialogWrapper}
           post_id={post._id}
           result={item}
           closeCommentForm={closeCommentForm}
@@ -515,7 +508,7 @@ const Post = ({ post }) => {
       {flag && (
         <DynamicFlag
           open={flag}
-          handleClose={handleCloseFlag}
+          handleClose={handleClosePostFlagWrapper}
           contentType={action}
           result={item}
           name={user && user.name}
