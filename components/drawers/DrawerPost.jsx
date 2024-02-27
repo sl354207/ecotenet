@@ -27,6 +27,12 @@ import "@react-page/plugins-slate/lib/index.css";
 import spacer from "@react-page/plugins-spacer";
 import "@react-page/plugins-spacer/lib/index.css";
 import "@react-page/plugins-video/lib/index.css";
+import {
+  handleClosePostDialog,
+  handleClosePostFlag,
+  handleOpenPostDialog,
+  handleOpenPostFlag,
+} from "@utils/dialogHelpers";
 import fetcher from "@utils/fetcher";
 import { useOnScreenClient } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
@@ -137,56 +143,43 @@ const DrawerPost = ({ id, handleClose }) => {
   // }
   // }, [comments]);
 
-  const handleOpenDialog = (action, result) => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        setItem(result);
-        setAction(action);
-        setDialog(true);
-        if (action === "Comment") {
-          setCommentForm({ type: "open", payload: result.comment_ref });
-        }
-      }
-    }
+  const handleOpenPostDialogWrapper = (action, result) => {
+    handleOpenPostDialog(
+      action,
+      result,
+      user,
+      signIn,
+      router,
+      setItem,
+      setAction,
+      setDialog,
+      setCommentForm
+    );
   };
 
-  const handleCloseDialog = (reply) => {
-    setDialog(false);
+  const handleClosePostDialogWrapper = (reply) => {
+    handleClosePostDialog(reply, setDialog, setCommentForm);
+  };
 
-    if (reply === "reply") {
-      setCommentForm({ type: "all", payload: "" });
-    }
-    if (reply && reply !== "reply" && reply !== "") {
-      setCommentForm({ type: "open", payload: reply });
-    }
+  const handleOpenPostFlagWrapper = (action, result) => {
+    handleOpenPostFlag(
+      action,
+      result,
+      user,
+      signIn,
+      router,
+      setItem,
+      setAction,
+      setFlag
+    );
+  };
+
+  const handleClosePostFlagWrapper = () => {
+    handleClosePostFlag(setFlag);
   };
 
   const closeCommentForm = () => {
     setShowCommentForm(false);
-  };
-
-  const handleOpenFlag = (action, result) => {
-    if (user.status === "unauthenticated" || user.status === "loading") {
-      signIn();
-    }
-    if (user.status === "authenticated") {
-      if (user.name === null || user.name === "" || user.name === undefined) {
-        router.push("/auth/new-user");
-      } else {
-        setItem(result);
-        setAction(action);
-        setFlag(true);
-      }
-    }
-  };
-
-  const handleCloseFlag = () => {
-    setFlag(false);
   };
 
   return (
@@ -264,7 +257,9 @@ const DrawerPost = ({ id, handleClose }) => {
                             color="inherit"
                             aria-label="flag"
                             size="small"
-                            onClick={() => handleOpenFlag("post", post)}
+                            onClick={() =>
+                              handleOpenPostFlagWrapper("post", post)
+                            }
                           >
                             <FlagIcon />
                           </IconButton>
@@ -370,7 +365,7 @@ const DrawerPost = ({ id, handleClose }) => {
                       }}
                     >
                       <Vote
-                        handleOpenDialog={handleOpenDialog}
+                        handleOpenDialog={handleOpenPostDialogWrapper}
                         name={user && user.name}
                         vote={vote}
                         setVote={setVote}
@@ -408,8 +403,8 @@ const DrawerPost = ({ id, handleClose }) => {
                           commentForm={commentForm}
                           loadComments={loadComments}
                           post_id={post._id}
-                          handleOpenDialog={handleOpenDialog}
-                          handleOpenFlag={handleOpenFlag}
+                          handleOpenDialog={handleOpenPostDialogWrapper}
+                          handleOpenFlag={handleOpenPostFlagWrapper}
                           showForm={showCommentForm}
                           setShowForm={setShowCommentForm}
                           modelLoading={modelLoading}
@@ -424,7 +419,7 @@ const DrawerPost = ({ id, handleClose }) => {
                     <DynamicClientDialog
                       contentType={action}
                       open={dialog}
-                      handleClose={handleCloseDialog}
+                      handleClose={handleClosePostDialogWrapper}
                       post_id={post._id}
                       result={item}
                       closeCommentForm={closeCommentForm}
@@ -443,7 +438,7 @@ const DrawerPost = ({ id, handleClose }) => {
                   {flag && (
                     <DynamicFlag
                       open={flag}
-                      handleClose={handleCloseFlag}
+                      handleClose={handleClosePostFlagWrapper}
                       contentType={action}
                       result={item}
                       name={user && user.name}
