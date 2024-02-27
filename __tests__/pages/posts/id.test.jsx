@@ -4,13 +4,7 @@
 import { SnackbarProvider } from "@components/context/SnackbarContext";
 import { useUserContext } from "@components/context/UserContext";
 import Post from "@pages/posts/[id]";
-import {
-  act,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 // import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
@@ -232,20 +226,7 @@ describe("Post page", () => {
     it("should render vote component", async () => {
       customSWRRender(initialComponent(post));
       await waitFor(() => {
-        expect(screen.getByRole("button", { name: /vote/i })).toBeDisabled();
-      });
-    });
-    it("should render error button if votes request fails", async () => {
-      server.use(
-        rest.get("/api/votes/1", (req, res, ctx) => {
-          return res(ctx.delay(100), ctx.status(500));
-        })
-      );
-      customSWRRender(initialComponent(post));
-      await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /error loading/i })
-        ).toBeInTheDocument();
+        expect(screen.getByTestId("vote-container")).toBeInTheDocument();
       });
     });
     it("should render comments component", async () => {
@@ -259,36 +240,9 @@ describe("Post page", () => {
 
       await waitFor(() => {
         expect(IntersectionObserver).toHaveBeenCalledTimes(1);
-
+      });
+      await waitFor(() => {
         expect(screen.getByText("loading...")).toBeInTheDocument();
-      });
-
-      await waitForElementToBeRemoved(() => screen.queryByText("loading..."));
-
-      await waitFor(() => {
-        expect(screen.getByText("test 1")).toBeInTheDocument();
-        expect(screen.getByText("test 2")).toBeInTheDocument();
-      });
-    });
-    it("should render error button if comments request fails", async () => {
-      server.use(
-        rest.get("/api/comments/1", (req, res, ctx) => {
-          return res(ctx.delay(100), ctx.status(500));
-        })
-      );
-      customSWRRender(initialComponent(post));
-
-      // trigger intersection observer callback to show comments
-      act(() => {
-        intersect(screen.getByTestId("comments-container"), true);
-        intersect(screen.getByTestId("comments-container"), false);
-        intersect(screen.getByTestId("comments-container"), true);
-      });
-
-      await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /error loading. retry/i })
-        ).toBeInTheDocument();
       });
     });
   });

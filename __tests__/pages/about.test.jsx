@@ -19,7 +19,7 @@ describe("About page", () => {
   describe("render", () => {
     it("should render header and footer", () => {
       render(<About />);
-      expect(screen.getByText(/ecotenet mission/i)).toBeInTheDocument();
+      expect(screen.getByText(/about ecotenet/i)).toBeInTheDocument();
       expect(screen.getByText(/mocked footer/i)).toBeInTheDocument();
     });
   });
