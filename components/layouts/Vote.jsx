@@ -64,7 +64,7 @@ const Vote = ({
     }
   };
   return (
-    <>
+    <div data-testid="vote-container">
       {voteLoading ? (
         <CircularProgress size={19} color="secondary" />
       ) : (
@@ -153,7 +153,7 @@ const Vote = ({
           )}
         </>
       )}
-    </>
+    </div>
   );
 };
 
