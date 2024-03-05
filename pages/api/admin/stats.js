@@ -1,4 +1,4 @@
-import { getStats } from "@utils/mongodb/mongoHelpers";
+import { getAdminPending, getStats } from "@utils/mongodb/mongoHelpers";
 
 // api endpoint to get all posts from database
 export default async function handler(req, res) {
@@ -9,7 +9,14 @@ export default async function handler(req, res) {
   try {
     const stats = await getStats();
 
-    return res.status(200).json(stats);
+    const pending = await getAdminPending();
+
+    const response = {
+      stats: stats,
+      pending: pending,
+    };
+
+    return res.status(200).json(response);
   } catch (err) {
     console.error(err);
 
