@@ -23,7 +23,7 @@ const admin = () => {
   const { mutate } = useSWRConfig();
 
   const {
-    data: stats,
+    data,
     isLoading: statLoading,
     error: statError,
   } = useSWR("/api/admin/stats", fetcher, {
@@ -464,10 +464,12 @@ const admin = () => {
     } else {
       statSection = (
         <>
-          <Typography align="center">Species: {stats.species}</Typography>
-          <Typography align="center">People: {stats.people}</Typography>
-          <Typography align="center">Posts: {stats.posts}</Typography>
-          <Typography align="center">Comments: {stats.comments}</Typography>
+          <Typography align="center">Species: {data.stats.species}</Typography>
+          <Typography align="center">People: {data.stats.people}</Typography>
+          <Typography align="center">Posts: {data.stats.posts}</Typography>
+          <Typography align="center">
+            Comments: {data.stats.comments}
+          </Typography>
         </>
       );
     }
@@ -477,7 +479,7 @@ const admin = () => {
     <>
       <NextSeo noindex={true} nofollow={true} />
       <div style={{ display: "flex" }}>
-        <AdminDrawer />
+        <AdminDrawer home={true} pending={data && data.pending} />
         <div style={{ flexGrow: 1, padding: theme.spacing(3) }}>
           <Header title="Stats" />
           {statSection}

@@ -1309,6 +1309,38 @@ const updateSpecies = async (data) => {
   }
 };
 
+const getAdminPending = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const posts = await db
+      .collection("posts")
+      .count({ status: "published", approved: "pending" });
+
+    const comments = await db
+      .collection("comments")
+      .count({ approved: "pending" });
+
+    const people = await db.collection("users").count({ approved: "pending" });
+
+    const flags = await db.collection("flags").count({ status: "pending" });
+
+    const notifications = await db
+      .collection("notifications")
+      .count({ reason: "admin", viewed: false });
+
+    return {
+      posts: posts,
+      comments: comments,
+      people: people,
+      flags: flags,
+      notifications: notifications,
+    };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   connectToDatabase,
   createPost,
@@ -1368,4 +1400,5 @@ module.exports = {
   updateDonations,
   getLatestPosts,
   updateSpecies,
+  getAdminPending,
 };
