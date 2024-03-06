@@ -1,4 +1,4 @@
-import { jwtVerify } from "jose";
+import { importSPKI, jwtVerify } from "jose";
 import { withAuth } from "next-auth/middleware";
 // More on how NextAuth.js middleware works: https://next-auth.js.org/configuration/nextjs#middleware
 
@@ -14,14 +14,9 @@ export default withAuth({
 
     decode: async ({ token }) => {
       if (!token) return null;
-      // const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
+      const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, "RS512");
 
-      // const { payload } = await jwtVerify(token, publicKey, {
-      //   clockTolerance: 15,
-      // });
-
-      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-      const { payload } = await jwtVerify(token, secret, {
+      const { payload } = await jwtVerify(token, publicKey, {
         issuer: "https://www.ecotenet.org",
         audience: [
           "https://www.ecotenet.org",
@@ -29,7 +24,19 @@ export default withAuth({
           "https://www.forum.ecotenet.org",
           "https://forum.ecotenet.org",
         ],
+        clockTolerance: 15,
       });
+
+      // const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      // const { payload } = await jwtVerify(token, secret, {
+      //   issuer: "https://www.ecotenet.org",
+      //   audience: [
+      //     "https://www.ecotenet.org",
+      //     "https://ecotenet.org",
+      //     "https://www.forum.ecotenet.org",
+      //     "https://forum.ecotenet.org",
+      //   ],
+      // });
 
       // console.log(protectedHeader);
       // console.log(payload);

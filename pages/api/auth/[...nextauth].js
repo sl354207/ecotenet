@@ -2,7 +2,7 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import { clientPromise } from "@utils/mongodb/mongoPromise";
 import { validEmail, validName } from "@utils/validationHelpers";
 import { randomBytes, randomUUID } from "crypto";
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT, importPKCS8, importSPKI, jwtVerify } from "jose";
 import NextAuth from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
@@ -148,18 +148,10 @@ export const authOptions = {
     // You can define your own encode/decode functions for signing and encryption
     // if you want to override the default behaviour.
     encode: async ({ token = {}, maxAge = DEFAULT_MAX_AGE }) => {
-      // const privateKey = await importPKCS8(process.env.JWT_SECRET, alg);
-
-      // const jwt = await new SignJWT(token)
-      //   .setProtectedHeader({ alg })
-      //   .setIssuedAt()
-      //   .setExpirationTime(now() + maxAge)
-      //   .setJti(randomUUID())
-      //   .sign(privateKey);
-      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      const privateKey = await importPKCS8(process.env.JWT_PRIVATE, "RS512");
 
       const jwt = await new SignJWT(token)
-        .setProtectedHeader({ alg: "HS512", typ: "JWT" })
+        .setProtectedHeader({ alg: "RS512", typ: "JWT" })
         .setIssuedAt()
         .setIssuer("https://www.ecotenet.org")
         .setAudience([
@@ -170,21 +162,33 @@ export const authOptions = {
         ])
         .setExpirationTime(now() + maxAge)
         .setJti(randomUUID())
-        .sign(secret);
+        .sign(privateKey);
+
+      // const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+
+      // const jwt = await new SignJWT(token)
+      //   .setProtectedHeader({ alg: "HS512", typ: "JWT" })
+      //   .setIssuedAt()
+      //   .setIssuer("https://www.ecotenet.org")
+      //   .setAudience([
+      //     "https://www.ecotenet.org",
+      //     "https://ecotenet.org",
+      //     "https://www.forum.ecotenet.org",
+      //     "https://forum.ecotenet.org",
+      //   ])
+      //   .setExpirationTime(now() + maxAge)
+      //   .setJti(randomUUID())
+      //   .sign(secret);
+
       // console.log(jwt);
 
       return jwt;
     },
     decode: async ({ token }) => {
       if (!token) return null;
-      // const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, alg);
+      const publicKey = await importSPKI(process.env.NEXTAUTH_SECRET, "RS512");
 
-      // const { payload } = await jwtVerify(token, publicKey, {
-      //   clockTolerance: 15,
-      // });
-
-      const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
-      const { payload } = await jwtVerify(token, secret, {
+      const { payload } = await jwtVerify(token, publicKey, {
         issuer: "https://www.ecotenet.org",
         audience: [
           "https://www.ecotenet.org",
@@ -192,7 +196,19 @@ export const authOptions = {
           "https://www.forum.ecotenet.org",
           "https://forum.ecotenet.org",
         ],
+        clockTolerance: 15,
       });
+
+      // const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+      // const { payload } = await jwtVerify(token, secret, {
+      //   issuer: "https://www.ecotenet.org",
+      //   audience: [
+      //     "https://www.ecotenet.org",
+      //     "https://ecotenet.org",
+      //     "https://www.forum.ecotenet.org",
+      //     "https://forum.ecotenet.org",
+      //   ],
+      // });
 
       // console.log(protectedHeader);
       // console.log(payload);
