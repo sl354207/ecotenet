@@ -2,7 +2,7 @@ import Link from "@components/layouts/Link";
 import { Button, FormControl, FormHelperText, InputLabel } from "@mui/material";
 import theme from "@utils/theme";
 import { signIn } from "next-auth/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TextBox from "./TextBox";
 
 /**
@@ -13,6 +13,26 @@ const VerificationStep = ({ email, callbackUrl }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [resend, setResend] = useState(false);
+
+  const [resendDisabledForTime, setResendDisabledForTime] = useState(true);
+  const [remainingTime, setRemainingTime] = useState(60); // 60 seconds
+
+  // Set a timeout to enable the resend button after 1 minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRemainingTime((prevTime) => prevTime - 1);
+    }, 1000); // Update the remaining time every second
+
+    const timeout = setTimeout(() => {
+      setResendDisabledForTime(false);
+      clearInterval(interval); // Clear the interval when the timeout is reached
+    }, 60000); // 1 minute in milliseconds
+
+    return () => {
+      clearInterval(interval); // Cleanup the interval when the component unmounts
+      clearTimeout(timeout); // Cleanup the timeout when the component unmounts
+    };
+  }, []);
 
   const handleChange = (e) => {
     setCode(e.target.value);
@@ -71,7 +91,11 @@ const VerificationStep = ({ email, callbackUrl }) => {
           error={error}
         />
         <FormHelperText
-          sx={{ color: theme.palette.text.primary, fontSize: 16 }}
+          sx={{
+            color: theme.palette.text.primary,
+            fontSize: 16,
+            marginTop: "10px",
+          }}
           id="component-error-text"
         >
           {error ? (
@@ -83,11 +107,14 @@ const VerificationStep = ({ email, callbackUrl }) => {
                   If you did not receive an email:{" "}
                   <Button
                     onClick={handleResend}
-                    variant="text"
+                    variant="outlined"
                     color="secondary"
-                    disabled={loading}
+                    // sx={{ marginTop: "5px" }}
+                    disabled={loading || resendDisabledForTime}
                   >
-                    Resend
+                    {resendDisabledForTime
+                      ? `Resend ${remainingTime}`
+                      : "Resend"}
                   </Button>
                 </>
               ) : (
