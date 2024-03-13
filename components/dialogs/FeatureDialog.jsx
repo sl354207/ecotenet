@@ -161,7 +161,7 @@ const FeatureDialog = ({ feature, setFeature }) => {
               marginLeft: "5px",
             }}
           >
-            <ListItemText align="center">How to Create a Post</ListItemText>
+            <ListItemText align="center">How-to Videos</ListItemText>
           </ListItemButton>
         </List>
         <Typography variant="body1" align="center">
