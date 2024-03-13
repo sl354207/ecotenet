@@ -43,7 +43,7 @@ const How = () => {
           marginBlock: "20px",
         }}
       >
-        <Header title="How-to videos for Ecotenet" />
+        <Header title="How-to Videos for Ecotenet" />
         <Divider sx={{ marginBlock: "20px" }} />
         <Typography
           align="center"
