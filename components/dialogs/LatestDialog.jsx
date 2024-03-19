@@ -1,4 +1,5 @@
 import PostList from "@components/layouts/PostList";
+import CategoriesAutoComplete from "@data/categories_autocomplete.json";
 import ecoregions from "@data/eco_coord.json";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -25,7 +26,7 @@ import useSWRInfinite from "swr/infinite";
 
 const PAGE_SIZE = 10;
 
-const autoOptions = ecoregions
+const ecoOptions = ecoregions
   .map((ecoregion) => {
     const eco = {
       name: ecoregion.name,
@@ -38,12 +39,22 @@ const autoOptions = ecoregions
     return a.id - b.id;
   });
 
+const categoryOptions = CategoriesAutoComplete;
 const LatestDialog = ({ latest, setLatest }) => {
   const [radio, setRadio] = useState("All Posts");
   const [ecoregion, setEcoregion] = useState();
+  const [category, setCategory] = useState({
+    title: undefined,
+    sub: undefined,
+  });
   const { data, error, mutate, size, setSize, isLoading } = useSWRInfinite(
-    radio === "All Posts" || (radio === "Eco-ID" && ecoregion)
-      ? (index) => `/api/latest?page=${index + 1}&id=${ecoregion}`
+    radio === "All Posts" ||
+      (radio === "Eco-ID" && ecoregion) ||
+      (radio === "Category" && category.title)
+      ? (index) =>
+          `/api/latest?page=${index + 1}&ecoregion=${ecoregion}&title=${
+            category.title
+          }&sub=${category.sub}`
       : null,
     fetcher,
     { revalidateFirstPage: false, shouldRetryOnError: false }
@@ -64,6 +75,21 @@ const LatestDialog = ({ latest, setLatest }) => {
     setAutoValue();
 
     if (event.target.value === "All Posts") {
+      setEcoregion();
+      setCategory({
+        title: undefined,
+        sub: undefined,
+      });
+    }
+
+    if (event.target.value === "Eco-ID") {
+      setCategory({
+        title: undefined,
+        sub: undefined,
+      });
+    }
+
+    if (event.target.value === "Category") {
       setEcoregion();
     }
   };
@@ -92,35 +118,33 @@ const LatestDialog = ({ latest, setLatest }) => {
     list = (
       <>
         {data && posts.length > 0 ? (
-          <PostList
-            posts={data && posts}
-            handleClose={handleCloseDialog}
-            search={true}
-          />
+          <div style={{ minHeight: `calc(100vh - 328px)` }}>
+            <PostList
+              posts={data && posts}
+              handleClose={handleCloseDialog}
+              search={true}
+            />
+          </div>
         ) : (
           <div style={{ height: `calc(100vh - 328px)` }}>
-            {ecoregion && posts.length === 0 && (
-              // <div
-              //   style={{
-              //     display: "flex",
-              //     justifyContent: "center",
-              //     marginTop: "20px",
-              //   }}
-              // >
-              <Typography
-                variant="h6"
-                align="center"
-                sx={{ paddingTop: "20px" }}
-              >
-                No posts found
-              </Typography>
-              // </div>
-            )}
+            {(ecoregion && posts.length === 0) ||
+              (category.title && posts.length === 0 && (
+                <Typography
+                  variant="h6"
+                  align="center"
+                  sx={{ paddingTop: "20px" }}
+                >
+                  No posts found
+                </Typography>
+              ))}
           </div>
         )}
         <Button
           disabled={
-            isLoading || isReachingEnd || (!ecoregion && radio === "Eco-ID")
+            isLoading ||
+            isReachingEnd ||
+            (!ecoregion && radio === "Eco-ID") ||
+            (!category.title && radio === "Category")
           }
           onClick={() => {
             setSize(size + 1);
@@ -224,6 +248,18 @@ const LatestDialog = ({ latest, setLatest }) => {
               }
               label="Eco-ID"
             />
+            <FormControlLabel
+              value="Category"
+              control={
+                <Radio
+                  color="secondary"
+                  sx={{
+                    color: `${theme.palette.secondary.main}!important`,
+                  }}
+                />
+              }
+              label="Category"
+            />
           </RadioGroup>
         </FormControl>
         <FormControl sx={{ display: "flex", flexGrow: 1 }}>
@@ -275,15 +311,28 @@ const LatestDialog = ({ latest, setLatest }) => {
             name="eco"
             onChange={(event, newValue) => {
               if (newValue && newValue !== null && newValue !== "") {
-                setEcoregion(newValue.id);
+                if (newValue.id) {
+                  setEcoregion(newValue.id);
+                }
+                if (newValue["sub"]) {
+                  setCategory({
+                    title: newValue["title"],
+                    sub: newValue["sub"],
+                  });
+                }
+
                 setAutoValue(newValue);
               } else {
                 setEcoregion();
+                setCategory({
+                  title: undefined,
+                  sub: undefined,
+                });
                 setAutoValue();
               }
             }}
             value={autoValue || ""}
-            options={autoOptions}
+            options={radio === "Eco-ID" ? ecoOptions : categoryOptions}
             noOptionsText={
               <Typography
                 sx={{ color: alpha(theme.palette.text.primary, 0.6) }}
@@ -291,8 +340,15 @@ const LatestDialog = ({ latest, setLatest }) => {
                 no options
               </Typography>
             }
+            groupBy={(option) => {
+              if (option && option.title) {
+                return option.title;
+              }
+            }}
             getOptionLabel={(option) => {
-              if (option) {
+              if (option && option["sub"]) {
+                return option["sub"];
+              } else if (option && option.id) {
                 return `Eco-${option.id}: ${option.name}`;
               } else {
                 return "";
