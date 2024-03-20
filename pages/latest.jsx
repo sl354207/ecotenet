@@ -127,7 +127,7 @@ const Latest = () => {
                 align="center"
                 sx={{ paddingTop: "20px" }}
               >
-                No posts yet
+                {!isLoading && "No posts yet"}
               </Typography>
             )}
           </div>
