@@ -121,7 +121,7 @@ const LatestDialog = ({ latest, setLatest }) => {
     list = (
       <>
         {data && posts.length > 0 ? (
-          <div style={{ minHeight: `65vh` }}>
+          <div style={{ minHeight: isMobile ? `50vh` : `60vh` }}>
             <PostList
               posts={data && posts}
               handleClose={handleCloseDialog}
@@ -129,7 +129,7 @@ const LatestDialog = ({ latest, setLatest }) => {
             />
           </div>
         ) : (
-          <div style={{ height: `65vh` }}>
+          <div style={{ height: isMobile ? `50vh` : `60vh` }}>
             {((ecoregion && posts.length === 0) ||
               (category.title && posts.length === 0)) && (
               <Typography
