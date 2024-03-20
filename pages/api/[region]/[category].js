@@ -4,6 +4,7 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 
 import { ajv } from "@schema/validation";
+import { validEco } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -25,7 +26,6 @@ export default async function handler(req, res) {
 
   // console.log(categorySub);
   const dataCheck = {
-    id: id,
     title: categoryQuery,
     sub: categorySub !== "undefined" ? categorySub : null,
   };
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
   const validate = ajv.getSchema("category");
   const valid = validate(dataCheck);
 
-  if (valid) {
+  if (valid && validEco(id)) {
     if (categorySub === "undefined") {
       try {
         const category = await getSpecies(categoryQuery, id);

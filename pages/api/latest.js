@@ -1,3 +1,4 @@
+import { ajv } from "@schema/validation";
 import {
   getLatestCategoryPosts,
   getLatestEcoPosts,
@@ -15,6 +16,11 @@ export default async function handler(req, res) {
   const category = { title: req.query.title, sub: req.query.sub };
 
   const pageSize = 10;
+
+  const regex = /^\d+$/;
+  if (typeof page !== "string" || !regex.test(page)) {
+    return res.status(403).json({ msg: "Forbidden" });
+  }
 
   if (
     ecoregion !== "undefined" &&
@@ -40,15 +46,20 @@ export default async function handler(req, res) {
     category.sub !== "undefined"
   ) {
     // ADD CATEGORY VALIDATION
+    const validate = ajv.getSchema("category");
+    const validCategory = validate(category);
+    if (validCategory) {
+      try {
+        const results = await getLatestCategoryPosts(category, page, pageSize);
 
-    try {
-      const results = await getLatestCategoryPosts(category, page, pageSize);
+        return res.status(200).json(results[0].data);
+      } catch (err) {
+        console.error(err);
 
-      return res.status(200).json(results[0].data);
-    } catch (err) {
-      console.error(err);
-
-      res.status(500).json({ msg: "Something went wrong." });
+        res.status(500).json({ msg: "Something went wrong." });
+      }
+    } else {
+      return res.status(403).json({ msg: "Forbidden" });
     }
   } else {
     try {

@@ -127,16 +127,16 @@ const LatestDialog = ({ latest, setLatest }) => {
           </div>
         ) : (
           <div style={{ height: `calc(100vh - 328px)` }}>
-            {(ecoregion && posts.length === 0) ||
-              (category.title && posts.length === 0 && (
-                <Typography
-                  variant="h6"
-                  align="center"
-                  sx={{ paddingTop: "20px" }}
-                >
-                  No posts found
-                </Typography>
-              ))}
+            {((ecoregion && posts.length === 0) ||
+              (category.title && posts.length === 0)) && (
+              <Typography
+                variant="h6"
+                align="center"
+                sx={{ paddingTop: "20px" }}
+              >
+                No posts yet
+              </Typography>
+            )}
           </div>
         )}
         <Button
