@@ -1291,6 +1291,92 @@ const getLatestPosts = async (page, pageSize) => {
     throw new Error(error);
   }
 };
+const getLatestEcoPosts = async (ecoregion, page, pageSize) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("posts")
+      .aggregate([
+        {
+          $facet: {
+            data: [
+              {
+                $match: {
+                  status: "published",
+                  approved: "true",
+                  ecoregions: ecoregion,
+                },
+              },
+              { $sort: { date: -1 } },
+              { $skip: (page - 1) * pageSize },
+              { $limit: pageSize },
+
+              {
+                $project: {
+                  title: 1,
+                  description: 1,
+                  name: 1,
+                  count: 1,
+                  category: 1,
+                  ecoregions: 1,
+                },
+              },
+            ],
+          },
+        },
+      ])
+
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getLatestCategoryPosts = async (category, page, pageSize) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("posts")
+      .aggregate([
+        {
+          $facet: {
+            data: [
+              {
+                $match: {
+                  status: "published",
+                  approved: "true",
+                  category: category,
+                },
+              },
+              { $sort: { date: -1 } },
+              { $skip: (page - 1) * pageSize },
+              { $limit: pageSize },
+
+              {
+                $project: {
+                  title: 1,
+                  description: 1,
+                  name: 1,
+                  count: 1,
+                  category: 1,
+                  ecoregions: 1,
+                },
+              },
+            ],
+          },
+        },
+      ])
+
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const updateSpecies = async (data) => {
   try {
@@ -1399,6 +1485,8 @@ module.exports = {
   getDonations,
   updateDonations,
   getLatestPosts,
+  getLatestEcoPosts,
+  getLatestCategoryPosts,
   updateSpecies,
   getAdminPending,
 };
