@@ -18,6 +18,7 @@ import {
   TextField,
   Typography,
   alpha,
+  useMediaQuery,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
@@ -41,6 +42,8 @@ const ecoOptions = ecoregions
 
 const categoryOptions = CategoriesAutoComplete;
 const LatestDialog = ({ latest, setLatest }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [radio, setRadio] = useState("All Posts");
   const [ecoregion, setEcoregion] = useState();
   const [category, setCategory] = useState({
@@ -118,7 +121,7 @@ const LatestDialog = ({ latest, setLatest }) => {
     list = (
       <>
         {data && posts.length > 0 ? (
-          <div style={{ minHeight: `calc(100vh - 328px)` }}>
+          <div style={{ minHeight: `65vh` }}>
             <PostList
               posts={data && posts}
               handleClose={handleCloseDialog}
@@ -126,7 +129,7 @@ const LatestDialog = ({ latest, setLatest }) => {
             />
           </div>
         ) : (
-          <div style={{ height: `calc(100vh - 328px)` }}>
+          <div style={{ height: `65vh` }}>
             {((ecoregion && posts.length === 0) ||
               (category.title && posts.length === 0)) && (
               <Typography
@@ -232,9 +235,10 @@ const LatestDialog = ({ latest, setLatest }) => {
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
-              label="All Posts"
+              label={isMobile ? "All" : "All Posts"}
             />
             <FormControlLabel
               value="Eco-ID"
@@ -244,6 +248,7 @@ const LatestDialog = ({ latest, setLatest }) => {
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
               label="Eco-ID"
@@ -256,6 +261,7 @@ const LatestDialog = ({ latest, setLatest }) => {
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
               label="Category"

@@ -15,6 +15,7 @@ import {
   TextField,
   Typography,
   alpha,
+  useMediaQuery,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
@@ -39,6 +40,7 @@ const ecoOptions = ecoregions
 
 const categoryOptions = CategoriesAutoComplete;
 const Latest = () => {
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [radio, setRadio] = useState("All Posts");
   const [ecoregion, setEcoregion] = useState();
   const [category, setCategory] = useState({
@@ -204,9 +206,10 @@ const Latest = () => {
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
-              label="All Posts"
+              label={isMobile ? "All" : "All Posts"}
             />
             <FormControlLabel
               value="Eco-ID"
@@ -216,6 +219,7 @@ const Latest = () => {
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
               label="Eco-ID"
@@ -228,6 +232,7 @@ const Latest = () => {
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
+                  size={isMobile ? "small" : "medium"}
                 />
               }
               label="Category"
