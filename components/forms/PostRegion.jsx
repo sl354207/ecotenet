@@ -6,6 +6,12 @@ import {
   Button,
   Chip,
   Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
   useMediaQuery,
@@ -31,123 +37,22 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const speciesChips = [
-  { count: 0 },
-  {
-    id: 1,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    _id: "",
-    open: false,
-  },
-  {
-    id: 2,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    _id: "",
-    open: false,
-  },
-  {
-    id: 3,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    _id: "",
-    open: false,
-  },
-];
-
-// reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
-const reducer = (speciesChips, action) => {
-  if (action.type === "remove") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = speciesChips[2].open;
-        speciesChips[1].regions = speciesChips[2].regions;
-        speciesChips[1].scientific_name = speciesChips[2].scientific_name;
-        speciesChips[1].common_name = speciesChips[2].common_name;
-        speciesChips[1]._id = speciesChips[2]._id;
-
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
-        speciesChips[2]._id = speciesChips[3]._id;
-
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      case 2:
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
-        speciesChips[2]._id = speciesChips[3]._id;
-
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      case 3:
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      default:
-        throw new Error();
-    }
-  }
-  if (action.type === "add") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = true;
-        speciesChips[1].regions = action.value;
-        speciesChips[1].scientific_name = action.s_name;
-        speciesChips[1].common_name = action.c_name;
-        speciesChips[1]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 2:
-        speciesChips[2].open = true;
-        speciesChips[2].regions = action.value;
-        speciesChips[2].scientific_name = action.s_name;
-        speciesChips[2].common_name = action.c_name;
-        speciesChips[2]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 3:
-        speciesChips[3].open = true;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      default:
-        throw new Error();
-    }
-  }
+const initialState = {
+  items: [],
 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "ADD_ITEM":
+      return { items: [...state.items, action.payload] };
+    case "REMOVE_ITEM":
+      return { items: state.items.filter((item) => item !== action.payload) };
+    case "SELECT_ALL":
+      return { items: action.payload };
+    default:
+      return state;
+  }
+}
 
 //pass in and destructure props.
 const PostRegion = ({ clickInfo, setClickInfo }) => {
@@ -157,7 +62,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
   const [results, setResults] = useState([]);
 
-  const handleChange = async (e) => {
+  const handleAutoChange = async (e) => {
     if (e.target.value) {
       const regex = /[`!@#$%^&*()_+=\[\]{};:"\\\|,.<>\/?~]/;
       if (!regex.test(e.target.value)) {
@@ -177,11 +82,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     }
   };
 
-  const [state, dispatch] = useReducer(reducer, speciesChips);
-  // console.log(state);
-  // console.log(clickInfo);
-
-  const handleSubmit = (event, newValue) => {
+  const handleAutoSubmit = (event, newValue) => {
     if (newValue !== null) {
       let name;
       if (newValue.includes(" - ")) {
@@ -193,41 +94,12 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
       for (const result of results) {
         if (result.scientific_name === name) {
-          switch (state[0].count) {
-            case 0:
-              dispatch({
-                type: "add",
-                payload: 1,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-            case 1:
-              dispatch({
-                type: "add",
-                payload: 2,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-            case 2:
-              dispatch({
-                type: "add",
-                payload: 3,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-
-            default:
-              throw new Error();
-          }
+          setClickInfo((clickInfo) => [...clickInfo, result.unique_id]);
+          console.log(name);
+          console.log(result);
+          dispatch({ type: "ADD_ITEM", payload: result });
+        } else {
+          setClickInfo([]);
         }
       }
 
@@ -251,15 +123,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     }
   }, []);
 
-  const handleRemoveChip = (id) => {
-    dispatch({
-      type: "remove",
-      payload: id,
-      value: [],
-      s_name: "",
-      c_name: "",
-      _id: "",
-    });
+  const handleRemoveChip = (item) => {
+    dispatch({ type: "REMOVE_ITEM", payload: item });
   };
   const selectInterSecting = (first, second, third) => {
     let rest = [];
@@ -276,6 +141,27 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     setClickInfo(intersecting);
   };
 
+  const [radioValue, setRadioValue] = useState();
+
+  const handleRadioChange = (event) => {
+    setRadioValue(event.target.value);
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  console.log(state);
+
+  const handleAddItem = (item) => {
+    dispatch({ type: "ADD_ITEM", payload: item });
+  };
+
+  const handleRemoveItem = (item) => {
+    dispatch({ type: "REMOVE_ITEM", payload: item });
+  };
+
+  const handleSelectAll = () => {
+    const allItems = ["item1", "item2", "item3"]; // Example items
+    dispatch({ type: "SELECT_ALL", payload: allItems });
+  };
   return (
     <Container>
       <Header title="Select Ecoregions" />
@@ -295,257 +181,172 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       <Typography variant="body1" align="left" sx={{ marginTop: "20px" }}>
         *denotes required field
       </Typography>
-      <Autocomplete
-        sx={{
-          "& .MuiAutocomplete-inputRoot": {
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.8),
-            },
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.8),
-            },
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#94c9ff",
-            },
-            "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.3),
-            },
-            "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.3),
-            },
-            "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#e57373",
-            },
-            "&.Mui-error .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#e57373",
-            },
-          },
-        }}
-        autoHighlight
-        onChange={(event, newValue) => handleSubmit(event, newValue)}
-        selectOnFocus
-        clearOnBlur
-        handleHomeEndKeys
-        id="region-auto"
-        options={
-          results
-            ? results.map((obj) => {
-                if (obj.common_name) {
-                  return `${obj.scientific_name} - ${obj.common_name}`;
-                } else {
-                  return `${obj.scientific_name}`;
-                }
-              })
-            : []
-        }
-        filterOptions={(x) => x}
-        freeSolo
-        renderInput={(params) => (
-          // ...params is causing error check dashboard index on how to log params
-          <TextField
-            {...params}
-            id="region"
-            placeholder="Search…"
-            variant="outlined"
-            ref={params.InputProps.ref}
-            inputProps={{ ...params.inputProps, type: "text", maxLength: 100 }}
-            onChange={(e) => handleChange(e)}
-            InputLabelProps={{ shrink: true }}
-          />
-        )}
-      />
-      {isMobile ? (
-        <div style={{ display: "inline-grid", marginTop: "5px" }}>
-          {Array.isArray(state[1].regions) && state[1].regions.length ? (
-            <CustomChip
-              label={
-                state[1].common_name
-                  ? `${state[1].scientific_name} - ${state[1].common_name}`
-                  : `${state[1].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[1].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(1)}
-              variant="outlined"
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Autocomplete
               sx={{
-                borderColor: "#ff00ff",
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                },
               }}
-            ></CustomChip>
-          ) : (
-            <CustomChip sx={{ visibility: "hidden" }}></CustomChip>
-          )}
-          {Array.isArray(state[2].regions) && state[2].regions.length ? (
-            <CustomChip
-              label={
-                state[2].common_name
-                  ? `${state[2].scientific_name} - ${state[2].common_name}`
-                  : `${state[2].scientific_name}`
+              autoHighlight
+              onChange={(event, newValue) => handleAutoSubmit(event, newValue)}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              id="region-auto"
+              options={
+                results
+                  ? results.map((obj) => {
+                      if (obj.common_name) {
+                        return `${obj.scientific_name} - ${obj.common_name}`;
+                      } else {
+                        return `${obj.scientific_name}`;
+                      }
+                    })
+                  : []
               }
-              onClick={() => {
-                window.open(
-                  `/species/${state[2].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(2)}
+              filterOptions={(x) => x}
+              freeSolo
+              renderInput={(params) => (
+                // ...params is causing error check dashboard index on how to log params
+                <TextField
+                  {...params}
+                  id="region"
+                  placeholder="Search…"
+                  variant="outlined"
+                  ref={params.InputProps.ref}
+                  inputProps={{
+                    ...params.inputProps,
+                    type: "text",
+                    maxLength: 100,
+                  }}
+                  onChange={(e) => handleAutoChange(e)}
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+            />
+            <Button
               variant="outlined"
-              sx={{
-                borderColor: "#ffff00",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-          {Array.isArray(state[3].regions) && state[3].regions.length ? (
-            <CustomChip
-              label={
-                state[3].common_name
-                  ? `${state[3].scientific_name} - ${state[3].common_name}`
-                  : `${state[3].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[3].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(3)}
+              color="secondary"
+              sx={{ marginRight: "5px", marginBlock: "10px" }}
+              disabled={state.items.length === 0}
+              // onClick={() => {
+              //   setClickInfo(
+              //     state[1].regions.concat(state[2].regions, state[3].regions)
+              //   );
+              // }}
+            >
+              Select All
+            </Button>
+            <Button
               variant="outlined"
-              sx={{
-                borderColor: "#00ffff",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-        </div>
-      ) : (
-        <div style={{ marginTop: "5px" }}>
-          {Array.isArray(state[1].regions) && state[1].regions.length ? (
-            <CustomChip
-              label={
-                state[1].common_name
-                  ? `${state[1].scientific_name} - ${state[1].common_name}`
-                  : `${state[1].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[1].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(1)}
+              color="secondary"
+              sx={{ marginRight: "5px", marginBottom: "10px" }}
+              disabled={state.items.length === 0}
+              onClick={() => setClickInfo([])}
+            >
+              Clear All
+            </Button>
+            <Button
               variant="outlined"
-              sx={{
-                borderColor: "#ff00ff",
-              }}
-            ></CustomChip>
-          ) : (
-            <Chip sx={{ visibility: "hidden" }}></Chip>
-          )}
-          {Array.isArray(state[2].regions) && state[2].regions.length ? (
-            <CustomChip
-              label={
-                state[2].common_name
-                  ? `${state[2].scientific_name} - ${state[2].common_name}`
-                  : `${state[2].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[2].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(2)}
-              variant="outlined"
-              sx={{
-                borderColor: "#ffff00",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-          {Array.isArray(state[3].regions) && state[3].regions.length ? (
-            <CustomChip
-              label={
-                state[3].common_name
-                  ? `${state[3].scientific_name} - ${state[3].common_name}`
-                  : `${state[3].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[3].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(3)}
-              variant="outlined"
-              sx={{
-                borderColor: "#00ffff",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-        </div>
-      )}
+              color="secondary"
+              sx={{ marginBottom: "10px" }}
+              // onClick={() =>
+              //   selectInterSecting(
+              //     state[1].regions,
+              //     state[2].regions,
+              //     state[3].regions
+              //   )
+              // }
+              disabled={state.items.length <= 1}
+            >
+              Select Intersecting
+            </Button>
+          </div>
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <FormControl sx={{ display: "flex", justifyContent: "center" }}>
+            <FormLabel id="radio-buttons-group-label"></FormLabel>
+            <RadioGroup
+              aria-labelledby="radio-buttons-group-label"
+              defaultValue="All Posts"
+              value={radioValue}
+              onChange={handleRadioChange}
+              name="radio-buttons-group"
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              {state.items.map((item) => (
+                <FormControlLabel
+                  key={item.scientific_name}
+                  value={item.scientific_name}
+                  control={
+                    <Radio
+                      sx={{
+                        color: `${theme.palette.secondary.main}!important`,
+                      }}
+                    />
+                  }
+                  label={
+                    <CustomChip
+                      label={
+                        item.common_name
+                          ? `${item.scientific_name} - ${item.common_name}`
+                          : `${item.scientific_name}`
+                      }
+                      onClick={() => {
+                        window.open(
+                          `/species/${item.scientific_name.replace(/ /g, "_")}`,
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      onDelete={() => handleRemoveChip(item)}
+                      variant="outlined"
+                      sx={{
+                        borderColor: "#ff00ff",
+                      }}
+                    ></CustomChip>
+                  }
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+
+          {/* <button onClick={handleSelectAll}>Select All</button> */}
+        </Grid>
+      </Grid>
+
       <Typography variant="h6" align="left">
         Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
       </Typography>
 
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ marginRight: "5px", marginBottom: "10px" }}
-        disabled={state[0].count === 0}
-        onClick={() => {
-          setClickInfo(
-            state[1].regions.concat(state[2].regions, state[3].regions)
-          );
-        }}
-      >
-        Select All
-      </Button>
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ marginRight: "5px", marginBottom: "10px" }}
-        disabled={Array.isArray(clickInfo) && !clickInfo.length}
-        onClick={() => setClickInfo([])}
-      >
-        Clear All
-      </Button>
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ marginBottom: "10px" }}
-        onClick={() =>
-          selectInterSecting(
-            state[1].regions,
-            state[2].regions,
-            state[3].regions
-          )
-        }
-        disabled={state[0].count <= 1}
-      >
-        Select Intersecting
-      </Button>
-
       <MapEditor
         clickInfo={clickInfo}
         handleDblClick={handleMapClick}
-        state={state}
-        // zoom={isMobile ? 3 : 4}
+        // state={state}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
         A species distribution often does not align perfectly with ecoregion
