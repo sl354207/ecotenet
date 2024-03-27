@@ -2,22 +2,40 @@ import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
 import MapEditor from "@components/maps/MapEditor";
 import {
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+
+import {
+  SortableContext,
+  arrayMove as dndKitArrayMove,
+  rectSortingStrategy,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from "@dnd-kit/sortable";
+
+import { CSS } from "@dnd-kit/utilities";
+import {
   Autocomplete,
   Button,
   Chip,
   Container,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Grid,
-  Radio,
-  RadioGroup,
+  List,
+  ListItem,
   TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import { alpha, styled, useTheme } from "@mui/material/styles";
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useState } from "react";
 
 const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   borderWidth: 2,
@@ -37,22 +55,17 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const initialState = {
-  items: [],
+const removeAtIndex = (array, index) => {
+  return [...array.slice(0, index), ...array.slice(index + 1)];
 };
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "ADD_ITEM":
-      return { items: [...state.items, action.payload] };
-    case "REMOVE_ITEM":
-      return { items: state.items.filter((item) => item !== action.payload) };
-    case "SELECT_ALL":
-      return { items: action.payload };
-    default:
-      return state;
-  }
-}
+const insertAtIndex = (array, index, item) => {
+  return [...array.slice(0, index), item, ...array.slice(index)];
+};
+
+const arrayMove = (array, oldIndex, newIndex) => {
+  return dndKitArrayMove(array, oldIndex, newIndex);
+};
 
 //pass in and destructure props.
 const PostRegion = ({ clickInfo, setClickInfo }) => {
@@ -95,9 +108,18 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       for (const result of results) {
         if (result.scientific_name === name) {
           setClickInfo((clickInfo) => [...clickInfo, result.unique_id]);
-          console.log(name);
-          console.log(result);
-          dispatch({ type: "ADD_ITEM", payload: result });
+
+          if (itemGroups.group1.length <= 3) {
+            setItemGroups({
+              group1: [...itemGroups.group1, result],
+              group2: [],
+            });
+          } else {
+            setItemGroups({
+              group1: [...itemGroups.group1],
+              group2: [...itemGroups.group2, result],
+            });
+          }
         } else {
           setClickInfo([]);
         }
@@ -124,7 +146,13 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   }, []);
 
   const handleRemoveChip = (item) => {
-    dispatch({ type: "REMOVE_ITEM", payload: item });
+    // dispatch({ type: "REMOVE_ITEM", payload: item });
+    // remove item from itemsGroups
+
+    setItemGroups({
+      group1: itemGroups.group1.filter((i) => i !== item),
+      group2: [...itemGroups.group2],
+    });
   };
   const selectInterSecting = (first, second, third) => {
     let rest = [];
@@ -141,26 +169,233 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     setClickInfo(intersecting);
   };
 
-  const [radioValue, setRadioValue] = useState();
+  //
+  //
+  //
 
-  const handleRadioChange = (event) => {
-    setRadioValue(event.target.value);
+  const Item = ({ id, items, dragOverlay }) => {
+    const style = {
+      cursor: dragOverlay ? "grabbing" : "grab",
+    };
+
+    return (
+      // <ListItemText
+      //   // style={style}
+      //   sx={{ cursor: dragOverlay ? "grabbing" : "grab" }}
+      // >
+      //   Item {id}
+      // </ListItemText>
+      <CustomChip
+        label={
+          id.common_name
+            ? `${id.scientific_name} - ${id.common_name}`
+            : id.scientific_name
+        }
+        onClick={() => {
+          window.open(
+            `/species/${id.scientific_name.replace(/ /g, "_")}`,
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }}
+        onDelete={() => handleRemoveChip(id)}
+        variant="outlined"
+        sx={{
+          borderColor:
+            items && items.indexOf(id) === 0
+              ? "#ff00ff"
+              : items && items.indexOf(id) === 1
+              ? "yellow"
+              : items && items.indexOf(id) === 2
+              ? "cyan"
+              : "white",
+          // cursor: dragOverlay ? "grabbing" : "grab",
+          // width: "fit-content",
+        }}
+      ></CustomChip>
+    );
   };
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-  console.log(state);
+  const SortableItem = ({ id, items }) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+    } = useSortable({ id });
 
-  const handleAddItem = (item) => {
-    dispatch({ type: "ADD_ITEM", payload: item });
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+      opacity: isDragging ? 0.5 : 1,
+
+      // background-color: white;
+    };
+    // console.log(items);
+
+    return (
+      <ListItem
+        style={style}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          boxSizing: "border-box",
+          // width: "110px",
+          // height: "30px",
+          // marginBottom: "5px",
+          // paddingLeft: "5px",
+          // border: "1px solid #ff00ff",
+          padding: "0px",
+          borderRadius: "5px",
+          userSelect: "none",
+        }}
+      >
+        {items.indexOf(id)}
+        <DragIndicatorIcon
+          sx={{
+            cursor: "grab",
+          }}
+          ref={setNodeRef}
+          {...attributes}
+          {...listeners}
+        ></DragIndicatorIcon>
+        <Item id={id} items={items} />
+      </ListItem>
+    );
   };
 
-  const handleRemoveItem = (item) => {
-    dispatch({ type: "REMOVE_ITEM", payload: item });
+  const Droppable = ({ id, items }) => {
+    const { setNodeRef } = useDroppable({ id });
+
+    return (
+      <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
+        <List
+          sx={{
+            minWidth: "110px",
+            padding: "20px 10px",
+            border: "1px solid white",
+            borderRadius: "5px",
+            listStyleType: "none",
+            marginRight: "5px",
+            minHeight: "150px",
+          }}
+          ref={setNodeRef}
+        >
+          {items.map((item) => (
+            <SortableItem key={item} id={item} items={items} />
+          ))}
+        </List>
+      </SortableContext>
+    );
   };
 
-  const handleSelectAll = () => {
-    const allItems = ["item1", "item2", "item3"]; // Example items
-    dispatch({ type: "SELECT_ALL", payload: allItems });
+  const [itemGroups, setItemGroups] = useState({
+    group1: [],
+    group2: [],
+  });
+  const [activeId, setActiveId] = useState(null);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragStart = ({ active }) => setActiveId(active.id);
+
+  const handleDragCancel = () => setActiveId(null);
+
+  const handleDragOver = ({ active, over }) => {
+    const overId = over?.id;
+
+    if (!overId) {
+      return;
+    }
+
+    const activeContainer = active.data.current.sortable.containerId;
+    const overContainer = over.data.current?.sortable.containerId || over.id;
+
+    if (activeContainer !== overContainer) {
+      setItemGroups((itemGroups) => {
+        const activeIndex = active.data.current.sortable.index;
+        const overIndex =
+          over.id in itemGroups
+            ? itemGroups[overContainer].length + 1
+            : over.data.current.sortable.index;
+
+        return moveBetweenContainers(
+          itemGroups,
+          activeContainer,
+          activeIndex,
+          overContainer,
+          overIndex,
+          active.id
+        );
+      });
+    }
+  };
+
+  const handleDragEnd = ({ active, over }) => {
+    if (!over) {
+      setActiveId(null);
+      return;
+    }
+
+    if (active.id !== over.id) {
+      const activeContainer = active.data.current.sortable.containerId;
+      const overContainer = over.data.current?.sortable.containerId || over.id;
+      const activeIndex = active.data.current.sortable.index;
+      const overIndex =
+        over.id in itemGroups
+          ? itemGroups[overContainer].length + 1
+          : over.data.current.sortable.index;
+
+      setItemGroups((itemGroups) => {
+        let newItems;
+        if (activeContainer === overContainer) {
+          newItems = {
+            ...itemGroups,
+            [overContainer]: arrayMove(
+              itemGroups[overContainer],
+              activeIndex,
+              overIndex
+            ),
+          };
+        } else {
+          newItems = moveBetweenContainers(
+            itemGroups,
+            activeContainer,
+            activeIndex,
+            overContainer,
+            overIndex,
+            active.id
+          );
+        }
+
+        return newItems;
+      });
+    }
+
+    setActiveId(null);
+  };
+
+  const moveBetweenContainers = (
+    items,
+    activeContainer,
+    activeIndex,
+    overContainer,
+    overIndex,
+    item
+  ) => {
+    return {
+      ...items,
+      [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
+      [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
+    };
   };
   return (
     <Container>
@@ -251,7 +486,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               variant="outlined"
               color="secondary"
               sx={{ marginRight: "5px", marginBlock: "10px" }}
-              disabled={state.items.length === 0}
+              // disabled={state.items.length === 0}
               // onClick={() => {
               //   setClickInfo(
               //     state[1].regions.concat(state[2].regions, state[3].regions)
@@ -264,7 +499,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               variant="outlined"
               color="secondary"
               sx={{ marginRight: "5px", marginBottom: "10px" }}
-              disabled={state.items.length === 0}
+              // disabled={state.items.length === 0}
               onClick={() => setClickInfo([])}
             >
               Clear All
@@ -280,7 +515,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               //     state[3].regions
               //   )
               // }
-              disabled={state.items.length <= 1}
+              // disabled={state.items.length <= 1}
             >
               Select Intersecting
             </Button>
@@ -288,54 +523,32 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <FormControl sx={{ display: "flex", justifyContent: "center" }}>
-            <FormLabel id="radio-buttons-group-label"></FormLabel>
-            <RadioGroup
-              aria-labelledby="radio-buttons-group-label"
-              defaultValue="All Posts"
-              value={radioValue}
-              onChange={handleRadioChange}
-              name="radio-buttons-group"
-              sx={{ display: "flex", justifyContent: "center" }}
+          <DndContext
+            sensors={sensors}
+            onDragStart={handleDragStart}
+            onDragCancel={handleDragCancel}
+            onDragOver={handleDragOver}
+            onDragEnd={handleDragEnd}
+          >
+            <div
+              style={{
+                // display: "flex",
+                marginLeft: "10px",
+              }}
             >
-              {state.items.map((item) => (
-                <FormControlLabel
-                  key={item.scientific_name}
-                  value={item.scientific_name}
-                  control={
-                    <Radio
-                      sx={{
-                        color: `${theme.palette.secondary.main}!important`,
-                      }}
-                    />
-                  }
-                  label={
-                    <CustomChip
-                      label={
-                        item.common_name
-                          ? `${item.scientific_name} - ${item.common_name}`
-                          : `${item.scientific_name}`
-                      }
-                      onClick={() => {
-                        window.open(
-                          `/species/${item.scientific_name.replace(/ /g, "_")}`,
-                          "_blank",
-                          "noopener,noreferrer"
-                        );
-                      }}
-                      onDelete={() => handleRemoveChip(item)}
-                      variant="outlined"
-                      sx={{
-                        borderColor: "#ff00ff",
-                      }}
-                    ></CustomChip>
-                  }
+              {Object.keys(itemGroups).map((group) => (
+                <Droppable
+                  id={group}
+                  items={itemGroups[group]}
+                  activeId={activeId}
+                  key={group}
                 />
               ))}
-            </RadioGroup>
-          </FormControl>
-
-          {/* <button onClick={handleSelectAll}>Select All</button> */}
+            </div>
+            <DragOverlay>
+              {activeId ? <Item id={activeId} dragOverlay /> : null}
+            </DragOverlay>
+          </DndContext>
         </Grid>
       </Grid>
 
