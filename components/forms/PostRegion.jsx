@@ -178,7 +178,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         <ListItem
           sx={{
             display: "flex",
-
             flexGrow: "1",
             alignItems: "center",
             padding: "0px",
@@ -198,6 +197,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     return (
       <DragIndicatorIcon
         sx={{
+          marginRight: "5px",
           cursor: "grab",
         }}
         {...attributes}
@@ -274,7 +274,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             role="application"
           >
             {items.map((item, index) => (
-              <div key={item.id}>
+              <div style={{ paddingRight: "30px" }} key={item.id}>
                 {renderItem(item)}
                 {items && items.length > 3 && index === 2 && (
                   <Divider sx={{ marginTop: "10px" }} />
@@ -343,6 +343,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               selectOnFocus
               clearOnBlur
               handleHomeEndKeys
+              disabled={items.length === 15}
               id="region-auto"
               options={
                 results
@@ -411,44 +412,42 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           </div>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <div style={{ maxWidth: 400, margin: "30px auto" }}>
-            <SortableList
-              items={items}
-              onChange={setItems}
-              renderItem={(item) => (
-                <SortableItem id={item.id}>
-                  <DragHandle />
-                  <CustomChip
-                    label={
-                      item.common_name
-                        ? `${item.scientific_name} - ${item.common_name}`
-                        : item.scientific_name
-                    }
-                    onClick={() => {
-                      window.open(
-                        `/species/${item.scientific_name.replace(/ /g, "_")}`,
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
-                    }}
-                    onDelete={() => handleRemoveChip(item)}
-                    variant="outlined"
-                    sx={{
-                      borderColor:
-                        items && items.indexOf(item) === 0
-                          ? "#ff00ff"
-                          : items && items.indexOf(item) === 1
-                          ? "yellow"
-                          : items && items.indexOf(item) === 2
-                          ? "cyan"
-                          : theme.palette.secondary.main,
-                    }}
-                  ></CustomChip>
-                </SortableItem>
-              )}
-            />
-          </div>
+        <Grid item xs={12} md={6}>
+          <SortableList
+            items={items}
+            onChange={setItems}
+            renderItem={(item) => (
+              <SortableItem id={item.id}>
+                <DragHandle />
+                <CustomChip
+                  label={
+                    item.common_name
+                      ? `${item.scientific_name} - ${item.common_name}`
+                      : item.scientific_name
+                  }
+                  onClick={() => {
+                    window.open(
+                      `/species/${item.scientific_name.replace(/ /g, "_")}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }}
+                  onDelete={() => handleRemoveChip(item)}
+                  variant="outlined"
+                  sx={{
+                    borderColor:
+                      items && items.indexOf(item) === 0
+                        ? "#ff00ff"
+                        : items && items.indexOf(item) === 1
+                        ? "yellow"
+                        : items && items.indexOf(item) === 2
+                        ? "cyan"
+                        : theme.palette.secondary.main,
+                  }}
+                ></CustomChip>
+              </SortableItem>
+            )}
+          />
         </Grid>
       </Grid>
 
