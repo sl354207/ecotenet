@@ -3,8 +3,10 @@ import Header from "@components/layouts/Header";
 import MapEditor from "@components/maps/MapEditor";
 import {
   DndContext,
+  DragOverlay,
   KeyboardSensor,
   PointerSensor,
+  defaultDropAnimationSideEffects,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -16,10 +18,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-
-import { DragOverlay, defaultDropAnimationSideEffects } from "@dnd-kit/core";
-
-// import { CSS } from "@dnd-kit/utilities";
 import {
   Autocomplete,
   Button,
@@ -34,7 +32,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { alpha, styled, useTheme } from "@mui/material/styles";
-// import { forwardRef, useCallback, useState } from "react";
 import {
   createContext,
   useCallback,
@@ -61,19 +58,6 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const removeAtIndex = (array, index) => {
-  return [...array.slice(0, index), ...array.slice(index + 1)];
-};
-
-const insertAtIndex = (array, index, item) => {
-  return [...array.slice(0, index), item, ...array.slice(index)];
-};
-
-// const arrayMove = (array, oldIndex, newIndex) => {
-//   return dndKitArrayMove(array, oldIndex, newIndex);
-// };
-
-//pass in and destructure props.
 const PostRegion = ({ clickInfo, setClickInfo }) => {
   const theme = useTheme();
 
@@ -115,18 +99,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         if (result.scientific_name === name) {
           setClickInfo((clickInfo) => [...clickInfo, result.unique_id]);
 
-          // if (itemGroups.group1.length < 3) {
-          //   setItemGroups({
-          //     group1: [...itemGroups.group1, result],
-          //     group2: [],
-          //   });
-          // } else {
-          //   setItemGroups({
-          //     group1: [...itemGroups.group1],
-          //     group2: [...itemGroups.group2, result],
-          //   });
-          // }
-          result.id = items.length;
+          result.id = result.scientific_name;
           setItems([...items, result]);
         } else {
           setClickInfo([]);
@@ -154,14 +127,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   }, []);
 
   const handleRemoveChip = (item) => {
-    // dispatch({ type: "REMOVE_ITEM", payload: item });
-    // remove item from itemsGroups
-
-    // setItemGroups({
-    //   group1: itemGroups.group1.filter((i) => i !== item),
-    //   group2: itemGroups.group2.filter((i) => i !== item),
-    // });
-
     setItems((items) => items.filter((i) => i !== item));
   };
   const selectInterSecting = (first, second, third) => {
@@ -178,10 +143,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     const intersecting = first.filter((e) => rest.every((set) => set.has(e)));
     setClickInfo(intersecting);
   };
-
-  // import "./styles.css";
-
-  // import "../src/components/SortableList/components/SortableItem/SortableItem.css";
 
   const [items, setItems] = useState([]);
 
@@ -201,8 +162,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       transform,
       transition,
     } = useSortable({ id });
-    console.log(children);
-    console.log(id);
+
     const context = useMemo(
       () => ({
         attributes,
@@ -220,27 +180,12 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     return (
       <SortableItemContext.Provider value={context}>
         <ListItem
-          // className="SortableItem"
           sx={{
             display: "flex",
-            // justifyContent: "space-between",
+
             flexGrow: "1",
             alignItems: "center",
             padding: "0px",
-
-            // borderBottom:
-            //   items && items.indexOf(id) === id ? "2px solid red" : "none",
-
-            // backgroundColor: "#fff",
-            // boxShadow: '0 0 0 calc(1px / var(--scale-x, 1)) rgba(63, 63, 68, 0.05),
-            //   0 1px calc(3px / var(--scale-x, 1)) 0 rgba(34, 33, 81, 0.15)'
-            // borderRadius: "calc(4px / var(--scale-x, 1))",
-            // boxSizing: "border-box",
-            // listStyle: "none",
-            // color: "#333",
-            // font-weight: 400;
-            // font-size: 1rem;
-            // font-family: sans-serif;
           }}
           ref={setNodeRef}
           style={style}
@@ -255,19 +200,10 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     const { attributes, listeners, ref } = useContext(SortableItemContext);
 
     return (
-      // <button className="DragHandle" {...attributes} {...listeners} ref={ref}>
-      //   <svg viewBox="0 0 20 20" width="12">
-      //     <path d="M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z"></path>
-      //   </svg>
-      // </button>
       <DragIndicatorIcon
         sx={{
           cursor: "grab",
-          // color: theme.palette.secondary.light,
         }}
-        // ref={setNodeRef}
-        // {...attributes}
-        // {...listeners}
         {...attributes}
         {...listeners}
         ref={ref}
@@ -290,8 +226,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       <DragOverlay dropAnimation={dropAnimationConfig}>{children}</DragOverlay>
     );
   }
-
-  // import "../src/components/SortableList/SortableList.css";
 
   function SortableList({ items, onChange, renderItem }) {
     const [active, setActive] = useState(null);
@@ -360,298 +294,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     );
   }
 
-  //
-  //
-  //
-
-  // const Item = ({ id, items, group, dragOverlay }) => {
-  //   const style = {
-  //     cursor: dragOverlay ? "grabbing" : "grab",
-  //   };
-
-  //   return (
-  //     // <ListItemText
-  //     //   // style={style}
-  //     //   sx={{ cursor: dragOverlay ? "grabbing" : "grab" }}
-  //     // >
-  //     //   Item {id}
-  //     // </ListItemText>
-  //     <CustomChip
-  //       label={
-  //         id.common_name
-  //           ? `${id.scientific_name} - ${id.common_name}`
-  //           : id.scientific_name
-  //       }
-  //       onClick={() => {
-  //         window.open(
-  //           `/species/${id.scientific_name.replace(/ /g, "_")}`,
-  //           "_blank",
-  //           "noopener,noreferrer"
-  //         );
-  //       }}
-  //       onDelete={() => handleRemoveChip(id)}
-  //       variant="outlined"
-  //       sx={{
-  //         borderColor:
-  //           group === "group1"
-  //             ? items && items.indexOf(id) === 0
-  //               ? "#ff00ff"
-  //               : items && items.indexOf(id) === 1
-  //               ? "yellow"
-  //               : items && items.indexOf(id) === 2
-  //               ? "cyan"
-  //               : theme.palette.text.primary
-  //             : theme.palette.text.primary,
-
-  //         // cursor: dragOverlay ? "grabbing" : "grab",
-  //         // width: "fit-content",
-  //       }}
-  //     ></CustomChip>
-  //   );
-  // };
-
-  // const Item = forwardRef(({ id, ...props }, ref) => {
-  //   return (
-  //     <div {...props} ref={ref}>
-  //       {id}
-  //     </div>
-  //   );
-  // });
-
-  // const SortableItem = ({ id, items, group }) => {
-  //   const {
-  //     attributes,
-  //     listeners,
-  //     setNodeRef,
-  //     transform,
-  //     transition,
-  //     isDragging,
-  //   } = useSortable({ id });
-
-  //   const style = {
-  //     transform: CSS.Transform.toString(transform),
-  //     transition,
-  //     opacity: isDragging ? 0.5 : 1,
-
-  //     // background-color: white;
-  //   };
-  //   // console.log(items);
-
-  //   return (
-  //     <ListItem
-  //       style={style}
-  //       sx={{
-  //         display: "flex",
-  //         alignItems: "center",
-  //         boxSizing: "border-box",
-  //         // width: "110px",
-  //         // height: "30px",
-  //         // marginBottom: "5px",
-  //         // paddingLeft: "5px",
-  //         borderBottom: items.indexOf(id) === 2 ? "1px solid #ff00ff" : "none",
-  //         padding: "0px",
-  //         borderRadius: "5px",
-  //         userSelect: "none",
-  //       }}
-  //     >
-  //       {items.indexOf(id)}
-  //       <DragIndicatorIcon
-  //         sx={{
-  //           cursor: "grab",
-  //         }}
-  //         ref={setNodeRef}
-  //         {...attributes}
-  //         {...listeners}
-  //       ></DragIndicatorIcon>
-  //       <Item id={id} items={items} group={group} />
-  //     </ListItem>
-  //   );
-  // };
-
-  // const SortableItem = (props) => {
-  //   const { value } = props;
-  //   const { attributes, listeners, setNodeRef, transform, transition } =
-  //     useSortable({ id: props.id });
-
-  //   const style = {
-  //     transform: CSS.Transform.toString(transform),
-  //     transition,
-  //   };
-
-  //   return (
-  //     <Item ref={setNodeRef} style={style} {...attributes} {...listeners}>
-  //       {value}
-  //     </Item>
-  //   );
-  // };
-
-  // const Droppable = ({ id, items, group }) => {
-  //   const { setNodeRef } = useDroppable({ id });
-
-  //   return (
-  //     <SortableContext
-  //       id={id}
-  //       items={items}
-  //       group={group}
-  //       strategy={rectSortingStrategy}
-  //     >
-  //       <List
-  //         sx={{
-  //           minWidth: "110px",
-  //           padding: "20px 10px",
-  //           border: "1px solid white",
-  //           borderRadius: "5px",
-  //           listStyleType: "none",
-  //           marginRight: "5px",
-  //           minHeight: "150px",
-  //         }}
-  //         ref={setNodeRef}
-  //       >
-  //         {items.map((item) => (
-  //           <SortableItem key={item} id={item} items={items} group={group} />
-  //         ))}
-  //       </List>
-  //     </SortableContext>
-  //   );
-  // };
-
-  // const [itemGroups, setItemGroups] = useState({
-  //   group1: [],
-  //   group2: [],
-  // });
-  // const [activeId, setActiveId] = useState(null);
-
-  // const sensors = useSensors(
-  //   useSensor(MouseSensor),
-  //   useSensor(TouchSensor),
-  //   useSensor(KeyboardSensor, {
-  //     coordinateGetter: sortableKeyboardCoordinates,
-  //   })
-  // );
-
-  // const handleDragStart = ({ active }) => setActiveId(active.id);
-
-  // const handleDragCancel = () => setActiveId(null);
-
-  // const handleDragOver = ({ active, over }) => {
-  //   const overId = over?.id;
-
-  //   if (!overId) {
-  //     return;
-  //   }
-
-  //   const activeContainer = active.data.current.sortable.containerId;
-  //   const overContainer = over.data.current?.sortable.containerId || over.id;
-
-  //   if (activeContainer !== overContainer) {
-  //     setItemGroups((itemGroups) => {
-  //       const activeIndex = active.data.current.sortable.index;
-  //       const overIndex =
-  //         over.id in itemGroups
-  //           ? itemGroups[overContainer].length + 1
-  //           : over.data.current.sortable.index;
-
-  //       return moveBetweenContainers(
-  //         itemGroups,
-  //         activeContainer,
-  //         activeIndex,
-  //         overContainer,
-  //         overIndex,
-  //         active.id
-  //       );
-  //     });
-  //   }
-  // };
-
-  // const handleDragEnd = ({ active, over }) => {
-  //   if (!over) {
-  //     setActiveId(null);
-  //     return;
-  //   }
-
-  //   if (active.id !== over.id) {
-  //     const activeContainer = active.data.current.sortable.containerId;
-  //     const overContainer = over.data.current?.sortable.containerId || over.id;
-  //     const activeIndex = active.data.current.sortable.index;
-  //     const overIndex =
-  //       over.id in itemGroups
-  //         ? itemGroups[overContainer].length + 1
-  //         : over.data.current.sortable.index;
-
-  //     setItemGroups((itemGroups) => {
-  //       let newItems;
-  //       if (activeContainer === overContainer) {
-  //         newItems = {
-  //           ...itemGroups,
-  //           [overContainer]: arrayMove(
-  //             itemGroups[overContainer],
-  //             activeIndex,
-  //             overIndex
-  //           ),
-  //         };
-  //       } else {
-  //         newItems = moveBetweenContainers(
-  //           itemGroups,
-  //           activeContainer,
-  //           activeIndex,
-  //           overContainer,
-  //           overIndex,
-  //           active.id
-  //         );
-  //       }
-
-  //       return newItems;
-  //     });
-  //   }
-
-  //   setActiveId(null);
-  // };
-
-  // const moveBetweenContainers = (
-  //   items,
-  //   activeContainer,
-  //   activeIndex,
-  //   overContainer,
-  //   overIndex,
-  //   item
-  // ) => {
-  //   return {
-  //     ...items,
-  //     [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
-  //     [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
-  //   };
-  // };
-
-  // const [activeId, setActiveId] = useState(null);
-  // const [items, setItems] = useState(["1", "2", "3"]);
-  // const sensors = useSensors(
-  //   useSensor(PointerSensor),
-  //   useSensor(KeyboardSensor, {
-  //     coordinateGetter: sortableKeyboardCoordinates,
-  //   })
-  // );
-  // function handleDragStart(event) {
-  //   const { active } = event;
-
-  //   setActiveId(active.id);
-  // }
-
-  // function handleDragEnd(event) {
-  //   const { active, over } = event;
-
-  //   if (active.id !== over.id) {
-  //     setItems((items) => {
-  //       const oldIndex = items.indexOf(active.id);
-  //       const newIndex = items.indexOf(over.id);
-
-  //       return arrayMove(items, oldIndex, newIndex);
-  //     });
-  //   }
-
-  //   setActiveId(null);
-  // }
-
-  // const [items, setItems] = useState([{ id: 1 }, { id: 2 }, { id: 3 }]);
   return (
     <Container>
       <Header title="Select Ecoregions" />
@@ -778,52 +420,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          {/* <DndContext
-            sensors={sensors}
-            onDragStart={handleDragStart}
-            onDragCancel={handleDragCancel}
-            onDragOver={handleDragOver}
-            onDragEnd={handleDragEnd}
-          >
-            <div
-              style={{
-                // display: "flex",
-                marginLeft: "10px",
-              }}
-            >
-              {Object.keys(itemGroups).map((group) => (
-                <Droppable
-                  id={group}
-                  items={itemGroups[group]}
-                  activeId={activeId}
-                  key={group}
-                  group={group}
-                />
-              ))}
-
-            </div>
-            <DragOverlay>
-              {activeId ? <Item id={activeId} dragOverlay /> : null}
-            </DragOverlay>
-          </DndContext> */}
-          {/* <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={items}
-              strategy={verticalListSortingStrategy}
-            >
-              {items.map((id) => (
-                <SortableItem key={id} id={id} />
-              ))}
-            </SortableContext>
-            <DragOverlay>
-              {activeId ? <Item id={activeId} /> : null}
-            </DragOverlay>
-          </DndContext> */}
           <div style={{ maxWidth: 400, margin: "30px auto" }}>
             <SortableList
               items={items}
@@ -855,18 +451,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                           : items && items.indexOf(item) === 2
                           ? "cyan"
                           : theme.palette.secondary.main,
-                      // borderColor:
-                      //   group === "group1"
-                      //     ? items && items.indexOf(id) === 0
-                      //       ? "#ff00ff"
-                      //       : items && items.indexOf(id) === 1
-                      //       ? "yellow"
-                      //       : items && items.indexOf(id) === 2
-                      //       ? "cyan"
-                      //       : theme.palette.text.primary
-                      //     : theme.palette.text.primary,
-                      // cursor: dragOverlay ? "grabbing" : "grab",
-                      // width: "fit-content",
                     }}
                   ></CustomChip>
                 </SortableItem>
@@ -883,7 +467,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       <MapEditor
         clickInfo={clickInfo}
         handleDblClick={handleMapClick}
-        // state={state}
+        state={items}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
         A species distribution often does not align perfectly with ecoregion

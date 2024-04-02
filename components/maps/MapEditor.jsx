@@ -1,9 +1,11 @@
+import Coords from "@data/eco_coord.json";
 import { Button, Typography } from "@mui/material";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
 const MapEditor = ({ clickInfo, state, handleDblClick }) => {
+  // console.log(state);
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   // base layer
@@ -139,70 +141,90 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  // const speciesRegions1 = state[1].regions;
+  // const speciesRegions1 = [];
+  const speciesRegions1 = state[0] && state[0].unique_id;
 
-  // const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  const speciesFilter1 = state[0]
+    ? ["in", "unique_id", ...speciesRegions1]
+    : ["in", "unique_id"];
+  // console.log(speciesFilter1);
 
-  // const speciesRegions2 = state[2].regions;
+  const speciesRegions2 = state[1] && state[1].unique_id;
 
-  // const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
+  const speciesFilter2 = state[1]
+    ? ["in", "unique_id", ...speciesRegions2]
+    : ["in", "unique_id"];
 
-  // const speciesRegions3 = state[3].regions;
+  const speciesRegions3 = state[2] && state[2].unique_id;
 
-  // const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
+  const speciesFilter3 = state[2]
+    ? ["in", "unique_id", ...speciesRegions3]
+    : ["in", "unique_id"];
 
-  // const mapRef = useRef();
+  const mapRef = useRef();
 
-  // function usePrevious(value) {
-  //   const ref = useRef();
-  //   useEffect(() => {
-  //     ref.current = value;
-  //   }, [value]);
-  //   return ref.current;
-  // }
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
+  }
 
-  // const prevCount1 = usePrevious(speciesRegions1);
-  // const prevCount2 = usePrevious(speciesRegions2);
-  // const prevCount3 = usePrevious(speciesRegions3);
+  const prevCount1 = usePrevious(speciesRegions1);
+  const prevCount2 = usePrevious(speciesRegions2);
+  const prevCount3 = usePrevious(speciesRegions3);
 
-  // const onMove = useCallback(
-  //   (prevCount1, prevCount2, prevCount3) => {
-  //     if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
-  //       const coord = Coords.filter(
-  //         (region) => region.unique_id === speciesRegions1[0]
-  //       );
+  const onMove = useCallback(
+    (prevCount1, prevCount2, prevCount3) => {
+      if (
+        speciesRegions1 &&
+        speciesRegions1.length > 0 &&
+        prevCount1 !== speciesRegions1
+      ) {
+        const coord = Coords.filter(
+          (region) => region.unique_id === speciesRegions1[0]
+        );
 
-  //       mapRef.current?.flyTo({
-  //         center: coord[0].coordinates,
-  //         duration: 2000,
-  //         zoom: 3.5,
-  //       });
-  //     }
-  //     if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
-  //       const coord = Coords.filter(
-  //         (region) => region.unique_id === speciesRegions2[0]
-  //       );
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
+      if (
+        speciesRegions2 &&
+        speciesRegions2.length > 0 &&
+        prevCount2 !== speciesRegions2
+      ) {
+        const coord = Coords.filter(
+          (region) => region.unique_id === speciesRegions2[0]
+        );
 
-  //       mapRef.current?.flyTo({
-  //         center: coord[0].coordinates,
-  //         duration: 2000,
-  //         zoom: 3.5,
-  //       });
-  //     }
-  //     if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
-  //       const coord = Coords.filter(
-  //         (region) => region.unique_id === speciesRegions3[0]
-  //       );
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
+      if (
+        speciesRegions3 &&
+        speciesRegions3.length > 0 &&
+        prevCount3 !== speciesRegions3
+      ) {
+        const coord = Coords.filter(
+          (region) => region.unique_id === speciesRegions3[0]
+        );
 
-  //       mapRef.current?.flyTo({
-  //         center: coord[0].coordinates,
-  //         duration: 2000,
-  //         zoom: 3.5,
-  //       });
-  //     }
-  //   },
-  //   [speciesRegions1, speciesRegions2, speciesRegions3]
-  // );
+        mapRef.current?.flyTo({
+          center: coord[0].coordinates,
+          duration: 2000,
+          zoom: 3.5,
+        });
+      }
+    },
+    [speciesRegions1, speciesRegions2, speciesRegions3]
+  );
 
   //
   return (
@@ -233,8 +255,8 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
         interactiveLayerIds={["eco-fill"]}
         onClick={onHover}
         onDblClick={handleDblClick}
-        // ref={mapRef}
-        // onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
+        ref={mapRef}
+        onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         attributionControl={false}
       >
         <Source id="eco-map" type="vector" url="mapbox://sl354207.ecomap-tiles">
@@ -243,18 +265,18 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           <Layer
             beforeId="waterway-label"
             {...ecoFill5}
-            // filter={speciesFilter3}
+            filter={speciesFilter3}
           />
           <Layer
             beforeId="waterway-label"
             {...ecoFill4}
-            // filter={speciesFilter2}
+            filter={speciesFilter2}
           />
           <Layer
             id="species1"
             beforeId="waterway-label"
             {...ecoFill3}
-            // filter={speciesFilter1}
+            filter={speciesFilter1}
           />
 
           <Layer
@@ -287,7 +309,6 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
             closeOnClick={false}
-            // onClose={() => setShowPopup(false)}
             maxWidth="500px"
             focusAfterOpen={false}
             closeButton={false}
