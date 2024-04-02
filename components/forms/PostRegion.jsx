@@ -97,12 +97,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
       for (const result of results) {
         if (result.scientific_name === name) {
-          setClickInfo((clickInfo) => [...clickInfo, result.unique_id]);
-
           result.id = result.scientific_name;
           setItems([...items, result]);
-        } else {
-          setClickInfo([]);
         }
       }
 
@@ -129,19 +125,19 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
   const handleRemoveChip = (item) => {
     setItems((items) => items.filter((i) => i !== item));
   };
-  const selectInterSecting = (first, second, third) => {
-    let rest = [];
-    if (second.length !== 0) {
-      rest = [...rest, second];
-    }
-    if (third.length !== 0) {
-      rest = [...rest, third];
-    }
 
-    rest = rest.map((array) => new Set(array));
+  const selectInterSecting = (items) => {
+    // Get all arrays of numbers
+    const arraysOfNumbers = items.map((obj) => obj.unique_id);
 
-    const intersecting = first.filter((e) => rest.every((set) => set.has(e)));
-    setClickInfo(intersecting);
+    // Find the intersection of all arrays
+    const sharedNumbers = arraysOfNumbers.reduce(
+      (accumulator, currentArray) => {
+        return accumulator.filter((value) => currentArray.includes(value));
+      }
+    );
+
+    setClickInfo(sharedNumbers);
   };
 
   const [items, setItems] = useState([]);
@@ -383,12 +379,14 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               variant="outlined"
               color="secondary"
               sx={{ marginRight: "5px", marginBlock: "10px" }}
-              // disabled={state.items.length === 0}
-              // onClick={() => {
-              //   setClickInfo(
-              //     state[1].regions.concat(state[2].regions, state[3].regions)
-              //   );
-              // }}
+              disabled={items.length === 0}
+              onClick={() => {
+                setClickInfo(
+                  items
+                    .map((item) => item.unique_id)
+                    .reduce((acc, id) => acc.concat(id), [])
+                );
+              }}
             >
               Select All
             </Button>
@@ -396,7 +394,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               variant="outlined"
               color="secondary"
               sx={{ marginRight: "5px", marginBottom: "10px" }}
-              // disabled={state.items.length === 0}
+              disabled={clickInfo.length === 0}
               onClick={() => setClickInfo([])}
             >
               Clear All
@@ -405,14 +403,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               variant="outlined"
               color="secondary"
               sx={{ marginBottom: "10px" }}
-              // onClick={() =>
-              //   selectInterSecting(
-              //     state[1].regions,
-              //     state[2].regions,
-              //     state[3].regions
-              //   )
-              // }
-              // disabled={state.items.length <= 1}
+              onClick={() => selectInterSecting(items)}
+              disabled={items.length <= 1}
             >
               Select Intersecting
             </Button>
