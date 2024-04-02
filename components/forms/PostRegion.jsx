@@ -25,6 +25,7 @@ import {
   Button,
   Chip,
   Container,
+  Divider,
   Grid,
   List,
   ListItem,
@@ -125,7 +126,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           //     group2: [...itemGroups.group2, result],
           //   });
           // }
-          result.id = result.scientific_name;
+          result.id = items.length;
           setItems([...items, result]);
         } else {
           setClickInfo([]);
@@ -200,6 +201,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       transform,
       transition,
     } = useSortable({ id });
+    console.log(children);
+    console.log(id);
     const context = useMemo(
       () => ({
         attributes,
@@ -224,6 +227,10 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             flexGrow: "1",
             alignItems: "center",
             padding: "0px",
+
+            // borderBottom:
+            //   items && items.indexOf(id) === id ? "2px solid red" : "none",
+
             // backgroundColor: "#fff",
             // boxShadow: '0 0 0 calc(1px / var(--scale-x, 1)) rgba(63, 63, 68, 0.05),
             //   0 1px calc(3px / var(--scale-x, 1)) 0 rgba(34, 33, 81, 0.15)'
@@ -327,11 +334,22 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
               padding: 0,
               listStyle: "none",
               marginLeft: "10px",
+              padding: "10px",
+              borderRadius: "10px",
+              border:
+                items && items.length > 0
+                  ? `1px solid ${theme.palette.divider}`
+                  : "none",
             }}
             role="application"
           >
-            {items.map((item) => (
-              <div key={item.id}>{renderItem(item)}</div>
+            {items.map((item, index) => (
+              <div key={item.id}>
+                {renderItem(item)}
+                {items && items.length > 3 && index === 2 && (
+                  <Divider sx={{ marginTop: "10px" }} />
+                )}
+              </div>
             ))}
           </List>
         </SortableContext>
