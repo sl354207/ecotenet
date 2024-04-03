@@ -1,5 +1,6 @@
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
 import MapEditor from "@components/maps/MapEditor";
 import {
   DndContext,
@@ -18,6 +19,9 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import InfoIcon from "@mui/icons-material/Info";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
   Autocomplete,
   Button,
@@ -27,9 +31,11 @@ import {
   Divider,
   FormControlLabel,
   Grid,
+  IconButton,
   List,
   ListItem,
   TextField,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -106,6 +112,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           result.checked = true;
           setItems([...items, result]);
           setTiedSpecies([...tiedSpecies, result.scientific_name]);
+
+          setToggleSpecies(true);
         }
       }
 
@@ -126,12 +134,14 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           return [...clickInfo];
         }
       });
+      setToggleEcoregions(true);
     }
   }, []);
 
   const handleRemoveChip = (item) => {
     setItems((items) => items.filter((i) => i !== item));
     setTiedSpecies(tiedSpecies.filter((i) => i !== item.id));
+    setToggleSpecies(true);
   };
 
   const selectInterSecting = (items) => {
@@ -146,6 +156,8 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     );
 
     setClickInfo(sharedNumbers);
+
+    setToggleEcoregions(true);
   };
 
   const [items, setItems] = useState([]);
@@ -312,6 +324,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     if (tiedSpecies.includes(id)) {
       setTiedSpecies(tiedSpecies.filter((item) => item !== id));
     }
+    setToggleSpecies(true);
   };
 
   const handleRemoveTiedSpecies = (id) => {
@@ -323,7 +336,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
         )
       );
     }
+    setToggleSpecies(true);
   };
+
+  const [toggleSpecies, setToggleSpecies] = useState(true);
+  const [toggleEcoregions, setToggleEcoregions] = useState(true);
 
   return (
     <Container>
@@ -422,6 +439,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                     .map((item) => item.unique_id)
                     .reduce((acc, id) => acc.concat(id), [])
                 );
+                setToggleEcoregions(true);
               }}
             >
               Select All
@@ -504,23 +522,89 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
       <Divider sx={{ marginBlock: "10px" }} />
       <Typography variant="h6" align="left">
-        Tied Species:{" "}
-        {tiedSpecies.map((id) => (
-          <CustomChip
-            key={id}
-            label={id}
-            onDelete={() => handleRemoveTiedSpecies(id)}
-            variant="outlined"
-            sx={{
-              borderColor: theme.palette.secondary.main,
-              marginRight: "5px",
-            }}
-          ></CustomChip>
-        ))}
+        Tied Species
+        <Tooltip
+          enterTouchDelay={100}
+          leaveTouchDelay={5000}
+          arrow
+          title={
+            <>
+              <Typography color="inherit" variant="h6">
+                Tied species are the species that are particularly relevant to
+                this post. When your post is published they will be displayed
+                similarly to the list of relevant ecoregions. Tying species to a
+                post is not required (but is helpful!) and may not be relevant
+                for all posts
+              </Typography>
+            </>
+          }
+        >
+          {/* <IconButton edge="start" size="small"> */}
+          <InfoIcon fontSize="small"></InfoIcon>
+          {/* </IconButton> */}
+        </Tooltip>
+        :{" "}
+        {tiedSpecies.length > 0 ? (
+          <>
+            {toggleSpecies ? (
+              <>
+                <IconButton onClick={() => setToggleSpecies(false)}>
+                  <KeyboardDoubleArrowLeftIcon />
+                </IconButton>
+
+                {tiedSpecies.map((id) => (
+                  <CustomChip
+                    key={id}
+                    label={id}
+                    onDelete={() => handleRemoveTiedSpecies(id)}
+                    variant="outlined"
+                    sx={{
+                      borderColor: theme.palette.secondary.main,
+                      marginRight: "5px",
+                    }}
+                  ></CustomChip>
+                ))}
+              </>
+            ) : (
+              <IconButton onClick={() => setToggleSpecies(true)}>
+                <KeyboardDoubleArrowRightIcon />
+              </IconButton>
+            )}
+          </>
+        ) : (
+          <div style={{ minHeight: "45px" }}></div>
+        )}
       </Typography>
 
       <Typography variant="h6" align="left">
-        Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
+        Ecoregions:*{" "}
+        {clickInfo.length > 0 && (
+          <>
+            {toggleEcoregions ? (
+              <>
+                <IconButton onClick={() => setToggleEcoregions(false)}>
+                  <KeyboardDoubleArrowLeftIcon />
+                </IconButton>
+                {clickInfo.map((ecoregion) => (
+                  <Link
+                    href={`/ecoregions/${ecoregion}`}
+                    color="secondary"
+                    underline="hover"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={ecoregion}
+                  >
+                    Eco-{ecoregion},{" "}
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <IconButton onClick={() => setToggleEcoregions(true)}>
+                <KeyboardDoubleArrowRightIcon />
+              </IconButton>
+            )}
+          </>
+        )}
       </Typography>
 
       <MapEditor
