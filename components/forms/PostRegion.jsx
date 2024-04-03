@@ -21,9 +21,11 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import {
   Autocomplete,
   Button,
+  Checkbox,
   Chip,
   Container,
   Divider,
+  FormControlLabel,
   Grid,
   List,
   ListItem,
@@ -96,9 +98,14 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       }
 
       for (const result of results) {
-        if (result.scientific_name === name) {
+        if (
+          result.scientific_name === name &&
+          !items.find((item) => item.scientific_name === result.scientific_name)
+        ) {
           result.id = result.scientific_name;
+          result.checked = true;
           setItems([...items, result]);
+          setTiedSpecies([...tiedSpecies, result.scientific_name]);
         }
       }
 
@@ -124,6 +131,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
   const handleRemoveChip = (item) => {
     setItems((items) => items.filter((i) => i !== item));
+    setTiedSpecies(tiedSpecies.filter((i) => i !== item.id));
   };
 
   const selectInterSecting = (items) => {
@@ -290,6 +298,33 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     );
   }
 
+  const [tiedSpecies, setTiedSpecies] = useState([]);
+
+  const handleCheckboxChange = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, checked: !item.checked } : item
+      )
+    );
+    if (!tiedSpecies.includes(id)) {
+      setTiedSpecies([...tiedSpecies, id]);
+    }
+    if (tiedSpecies.includes(id)) {
+      setTiedSpecies(tiedSpecies.filter((item) => item !== id));
+    }
+  };
+
+  const handleRemoveTiedSpecies = (id) => {
+    setTiedSpecies(tiedSpecies.filter((item) => item !== id));
+    if (items.find((item) => item.id === id)) {
+      setItems(
+        items.map((item) =>
+          item.id === id ? { ...item, checked: !item.checked } : item
+        )
+      );
+    }
+  };
+
   return (
     <Container>
       <Header title="Select Ecoregions" />
@@ -445,11 +480,44 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                         : theme.palette.secondary.main,
                   }}
                 ></CustomChip>
+                <FormControlLabel
+                  key={item.id}
+                  sx={{ marginLeft: "0px" }}
+                  control={
+                    <Checkbox
+                      sx={{
+                        color: theme.palette.secondary.main,
+                        "&.Mui-checked": {
+                          color: theme.palette.secondary.main,
+                        },
+                      }}
+                      checked={item.checked}
+                      onChange={() => handleCheckboxChange(item.id)}
+                    />
+                  }
+                />
               </SortableItem>
             )}
           />
         </Grid>
       </Grid>
+
+      <Divider sx={{ marginBlock: "10px" }} />
+      <Typography variant="h6" align="left">
+        Tied Species:{" "}
+        {tiedSpecies.map((id) => (
+          <CustomChip
+            key={id}
+            label={id}
+            onDelete={() => handleRemoveTiedSpecies(id)}
+            variant="outlined"
+            sx={{
+              borderColor: theme.palette.secondary.main,
+              marginRight: "5px",
+            }}
+          ></CustomChip>
+        ))}
+      </Typography>
 
       <Typography variant="h6" align="left">
         Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
