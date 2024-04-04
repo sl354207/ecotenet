@@ -12,6 +12,7 @@ const CreatePostButton = ({ name, snackbar, setSnackbar, nav, isTab }) => {
       category: { title: "", sub: "" },
       originalUrl: null,
       tags: [],
+      species: [],
       ecoregions: [],
       id: "",
       name: name,

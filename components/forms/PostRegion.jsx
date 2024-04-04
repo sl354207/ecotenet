@@ -66,7 +66,12 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const PostRegion = ({ clickInfo, setClickInfo }) => {
+const PostRegion = ({
+  clickInfo,
+  setClickInfo,
+  tiedSpecies,
+  setTiedSpecies,
+}) => {
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
@@ -111,9 +116,11 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           result.id = result.scientific_name;
           result.checked = true;
           setItems([...items, result]);
-          setTiedSpecies([...tiedSpecies, result.scientific_name]);
-
           setToggleSpecies(true);
+
+          if (!tiedSpecies.includes(result.scientific_name)) {
+            setTiedSpecies([...tiedSpecies, result.scientific_name]);
+          }
         }
       }
 
@@ -310,8 +317,6 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     );
   }
 
-  const [tiedSpecies, setTiedSpecies] = useState([]);
-
   const handleCheckboxChange = (id) => {
     setItems(
       items.map((item) =>
@@ -348,15 +353,15 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
       <Description
         description="To help determine which ecoregions your post applies to you can add single or multiple species distributions to the map. These distributions may help you determine relevant ecoregions for your post. You may add or delete
-        ecoregions by double clicking on the map. A single click highlights the
-        ecoregion and displays the Eco-ID and ecoregion name"
+        ecoregions by double clicking on the map or using the selection buttons. A single click highlights the
+        ecoregion and displays the Eco-ID and ecoregion name."
         align="left"
       />
 
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
-        distribution on the map. A maximum of three species can be mapped at the
-        same time
+        distribution on the map. A maximum of 3 species can be visualized on the
+        map at the same time, but up to 15 species can be added and manipulated.
       </Typography>
       <Typography variant="body1" align="left" sx={{ marginTop: "20px" }}>
         *denotes required field
@@ -442,7 +447,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                 setToggleEcoregions(true);
               }}
             >
-              Select All
+              {isMobile ? "Select All" : "Select All Ecoregions"}
             </Button>
             <Button
               variant="outlined"
@@ -453,15 +458,40 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             >
               Clear All
             </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              sx={{ marginBottom: "10px" }}
-              onClick={() => selectInterSecting(items)}
-              disabled={items.length <= 1}
-            >
-              Select Intersecting
-            </Button>
+            <div style={{ display: "flex", paddingRight: "5px" }}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ marginBottom: "10px", flexGrow: 1 }}
+                onClick={() => selectInterSecting(items)}
+                disabled={items.length <= 1}
+              >
+                {isMobile
+                  ? "Select Intersecting"
+                  : "Select Intersecting Ecoregions"}
+              </Button>
+              <Tooltip
+                enterTouchDelay={100}
+                leaveTouchDelay={5000}
+                arrow
+                title={
+                  <>
+                    <Typography color="inherit" variant="h6">
+                      This selects the ecoregions that are shared by ALL of the
+                      species listed. This includes when they are not one of the
+                      3 visible species on the map and when they are not
+                      selected as a tied species. If all species do not share at
+                      least one ecoregion, then no ecoregions will be selected.
+                    </Typography>
+                  </>
+                }
+              >
+                <InfoIcon
+                  fontSize="small"
+                  sx={{ marginBottom: "15px" }}
+                ></InfoIcon>
+              </Tooltip>
+            </div>
           </div>
         </Grid>
 
@@ -521,7 +551,14 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       </Grid>
 
       <Divider sx={{ marginBlock: "10px" }} />
-      <Typography variant="h6" align="left">
+      <Typography
+        variant="h6"
+        align="left"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         Tied Species
         <Tooltip
           enterTouchDelay={100}
@@ -539,12 +576,10 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             </>
           }
         >
-          {/* <IconButton edge="start" size="small"> */}
-          <InfoIcon fontSize="small"></InfoIcon>
-          {/* </IconButton> */}
+          <InfoIcon fontSize="small" sx={{ marginBottom: "15px" }}></InfoIcon>
         </Tooltip>
         :{" "}
-        {tiedSpecies.length > 0 ? (
+        {tiedSpecies && tiedSpecies.length > 0 ? (
           <>
             {toggleSpecies ? (
               <>
@@ -552,18 +587,19 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
                   <KeyboardDoubleArrowLeftIcon />
                 </IconButton>
 
-                {tiedSpecies.map((id) => (
-                  <CustomChip
-                    key={id}
-                    label={id}
-                    onDelete={() => handleRemoveTiedSpecies(id)}
-                    variant="outlined"
-                    sx={{
-                      borderColor: theme.palette.secondary.main,
-                      marginRight: "5px",
-                    }}
-                  ></CustomChip>
-                ))}
+                {tiedSpecies &&
+                  tiedSpecies.map((id) => (
+                    <CustomChip
+                      key={id}
+                      label={id}
+                      onDelete={() => handleRemoveTiedSpecies(id)}
+                      variant="outlined"
+                      sx={{
+                        borderColor: theme.palette.secondary.main,
+                        marginRight: "5px",
+                      }}
+                    ></CustomChip>
+                  ))}
               </>
             ) : (
               <IconButton onClick={() => setToggleSpecies(true)}>
@@ -572,7 +608,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
             )}
           </>
         ) : (
-          <div style={{ minHeight: "45px" }}></div>
+          <div style={{ minHeight: "40px" }}></div>
         )}
       </Typography>
 
