@@ -2,11 +2,14 @@ import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import MapEditor from "@components/maps/MapEditor";
+// import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+// import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import {
   DndContext,
   DragOverlay,
   KeyboardSensor,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   defaultDropAnimationSideEffects,
   useSensor,
   useSensors,
@@ -257,7 +260,8 @@ const PostRegion = ({
       [active, items]
     );
     const sensors = useSensors(
-      useSensor(PointerSensor),
+      useSensor(MouseSensor),
+      useSensor(TouchSensor),
       useSensor(KeyboardSensor, {
         coordinateGetter: sortableKeyboardCoordinates,
       })
@@ -526,6 +530,7 @@ const PostRegion = ({
                         : items && items.indexOf(item) === 2
                         ? "cyan"
                         : theme.palette.secondary.main,
+                    maxWidth: isMobile ? "88%" : "95%",
                   }}
                 ></CustomChip>
                 <FormControlLabel
@@ -551,21 +556,19 @@ const PostRegion = ({
       </Grid>
 
       <Divider sx={{ marginBlock: "10px" }} />
-      <Typography
-        variant="h6"
-        align="left"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        Tied Species
-        <Tooltip
-          enterTouchDelay={100}
-          leaveTouchDelay={5000}
-          arrow
-          title={
-            <>
+
+      <div style={{ display: "flex" }}>
+        <Typography
+          variant="h6"
+          align="left"
+          sx={{ minWidth: "fit-content", minHeight: "44px" }}
+        >
+          {isMobile ? "Species" : "Tied Species"}
+          <Tooltip
+            enterTouchDelay={100}
+            leaveTouchDelay={5000}
+            arrow
+            title={
               <Typography color="inherit" variant="h6">
                 Tied species are the species that are particularly relevant to
                 this post. When your post is published they will be displayed
@@ -573,46 +576,57 @@ const PostRegion = ({
                 post is not required (but is helpful!) and may not be relevant
                 for all posts
               </Typography>
-            </>
-          }
-        >
-          <InfoIcon fontSize="small" sx={{ marginBottom: "15px" }}></InfoIcon>
-        </Tooltip>
-        :{" "}
-        {tiedSpecies && tiedSpecies.length > 0 ? (
-          <>
-            {toggleSpecies ? (
-              <>
+            }
+          >
+            <InfoIcon fontSize="small" sx={{ marginBottom: "6px" }}></InfoIcon>
+          </Tooltip>
+          :{" "}
+          {tiedSpecies && tiedSpecies.length > 0 ? (
+            <>
+              {toggleSpecies ? (
                 <IconButton onClick={() => setToggleSpecies(false)}>
                   <KeyboardDoubleArrowLeftIcon />
                 </IconButton>
-
-                {tiedSpecies &&
-                  tiedSpecies.map((id) => (
-                    <CustomChip
-                      key={id}
-                      label={id}
-                      onDelete={() => handleRemoveTiedSpecies(id)}
-                      variant="outlined"
-                      sx={{
-                        borderColor: theme.palette.secondary.main,
-                        marginRight: "5px",
-                      }}
-                    ></CustomChip>
-                  ))}
-              </>
-            ) : (
-              <IconButton onClick={() => setToggleSpecies(true)}>
-                <KeyboardDoubleArrowRightIcon />
-              </IconButton>
-            )}
-          </>
-        ) : (
-          <div style={{ minHeight: "40px" }}></div>
+              ) : (
+                <IconButton onClick={() => setToggleSpecies(true)}>
+                  <KeyboardDoubleArrowRightIcon />
+                </IconButton>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+        </Typography>
+        {tiedSpecies && tiedSpecies.length > 0 && toggleSpecies && (
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {tiedSpecies &&
+              tiedSpecies.map((id) => (
+                <CustomChip
+                  key={id}
+                  label={id}
+                  onDelete={() => handleRemoveTiedSpecies(id)}
+                  variant="outlined"
+                  sx={{
+                    borderColor: theme.palette.secondary.main,
+                    marginRight: "5px",
+                    marginBottom: "4px",
+                  }}
+                ></CustomChip>
+              ))}
+          </div>
         )}
-      </Typography>
+      </div>
 
-      <Typography variant="h6" align="left">
+      <Typography
+        variant="h6"
+        align="left"
+        sx={{
+          minWidth: "fit-content",
+          minHeight: "44px",
+          marginTop: clickInfo.length > 0 ? "0px" : "4px",
+          marginBottom: clickInfo.length > 0 ? "4px" : "0px",
+        }}
+      >
         Ecoregions:*{" "}
         {clickInfo.length > 0 && (
           <>
@@ -629,6 +643,12 @@ const PostRegion = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     key={ecoregion}
+                    sx={{
+                      alignContent: "center",
+                      fontSize: "1.25rem",
+                      fontWeight: "400",
+                      marginBottom: "3px",
+                    }}
                   >
                     Eco-{ecoregion},{" "}
                   </Link>
