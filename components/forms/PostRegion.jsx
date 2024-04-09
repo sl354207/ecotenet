@@ -2,8 +2,7 @@ import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import MapEditor from "@components/maps/MapEditor";
-// import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
-// import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+
 import {
   DndContext,
   DragOverlay,
@@ -610,6 +609,8 @@ const PostRegion = ({
                     borderColor: theme.palette.secondary.main,
                     marginRight: "5px",
                     marginBottom: "4px",
+                    userSelect: "auto",
+                    cursor: "text",
                   }}
                 ></CustomChip>
               ))}

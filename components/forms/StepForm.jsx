@@ -74,8 +74,6 @@ const StepForm = ({ post, user }) => {
 
   // set species state
   const [tiedSpecies, setTiedSpecies] = useState(species ? species : []);
-  console.log(species);
-  console.log(tiedSpecies);
 
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });

@@ -34,6 +34,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     },
   };
 
+  // selected ecoregion layer
   const ecoFill2 = {
     id: "eco-fill2",
     type: "fill",
@@ -42,12 +43,10 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     paint: {
       "fill-outline-color": "rgba(255,255,255,1)",
       "fill-color": "#dddddd",
-      "fill-opacity": 0.8,
-      // "fill-extrusion-height": 200000,
-      // "fill-extrusion-base": 0,
+      "fill-opacity": 0.6,
     },
   };
-  // selected layer
+  // 1st selected species
   const ecoFill3 = {
     id: "eco-fill3",
     type: "fill",
@@ -60,7 +59,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
       "fill-opacity": 0.4,
     },
   };
-  // selected layer
+  // 2nd selected species
   const ecoFill4 = {
     id: "eco-fill4",
     type: "fill",
@@ -73,7 +72,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
       "fill-opacity": 0.6,
     },
   };
-  // selected layer
+  // 3rd selected species
   const ecoFill5 = {
     id: "eco-fill5",
     type: "fill",

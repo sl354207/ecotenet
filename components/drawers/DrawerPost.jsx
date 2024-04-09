@@ -4,6 +4,8 @@ import Link from "@components/layouts/Link";
 import Vote from "@components/layouts/Vote";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 
 import {
   Box,
@@ -34,6 +36,7 @@ import {
   handleOpenPostFlag,
 } from "@utils/dialogHelpers";
 import fetcher from "@utils/fetcher";
+import theme from "@utils/theme";
 import { useOnScreenClient } from "@utils/useOnScreen";
 import { signIn } from "next-auth/react";
 import dynamic from "next/dynamic";
@@ -182,6 +185,9 @@ const DrawerPost = ({ id, handleClose }) => {
     setShowCommentForm(false);
   };
 
+  const [toggleSpecies, setToggleSpecies] = useState(false);
+  const [toggleEcoregions, setToggleEcoregions] = useState(false);
+
   return (
     <>
       {postLoading ? (
@@ -233,15 +239,14 @@ const DrawerPost = ({ id, handleClose }) => {
                         <div
                           style={{
                             display: "flex",
-                            // marginRight: "auto",
                             visibility: "hidden",
                             minWidth: "30px",
                           }}
                         ></div>
                         <Typography
-                          variant="h4"
+                          variant="h5"
                           align="center"
-                          sx={{ marginBottom: "5px" }}
+                          sx={{ marginBottom: "5px", marginLeft: "auto" }}
                         >
                           {post.title}
                         </Typography>
@@ -305,12 +310,111 @@ const DrawerPost = ({ id, handleClose }) => {
                         )}
                       </div>
                     </Box>
+
+                    <Typography variant="h6">
+                      Category:{" "}
+                      <b
+                        style={{
+                          fontWeight: 500,
+                          fontSize: "1rem",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {post.category.title} {" >> "}
+                        {post.category.sub}
+                      </b>
+                    </Typography>
+
+                    {post.species && (
+                      <Typography variant="h6">
+                        Tied Species:
+                        {toggleSpecies ? (
+                          <>
+                            <IconButton
+                              onClick={() => setToggleSpecies(false)}
+                              size="small"
+                            >
+                              <KeyboardDoubleArrowLeftIcon
+                                sx={{ color: theme.palette.secondary.main }}
+                              />
+                            </IconButton>
+                            {post.species.map((species) => (
+                              <Link
+                                href={`/species/${species.replace(/ /g, "_")}`}
+                                color="secondary"
+                                underline="hover"
+                                key={species}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                sx={{
+                                  fontSize: "1rem",
+                                  fontWeight: 500,
+                                  lineHeight: 1.5,
+                                }}
+                              >
+                                {species},{" "}
+                              </Link>
+                            ))}
+                          </>
+                        ) : (
+                          <IconButton
+                            onClick={() => setToggleSpecies(true)}
+                            size="small"
+                          >
+                            <KeyboardDoubleArrowRightIcon
+                              sx={{ color: theme.palette.secondary.main }}
+                            />
+                          </IconButton>
+                        )}
+                      </Typography>
+                    )}
+                    <Typography variant="h6">
+                      Ecoregions:
+                      {toggleEcoregions ? (
+                        <>
+                          <IconButton
+                            onClick={() => setToggleEcoregions(false)}
+                            size="small"
+                          >
+                            <KeyboardDoubleArrowLeftIcon
+                              sx={{ color: theme.palette.secondary.main }}
+                            />
+                          </IconButton>
+                          {post.ecoregions.map((ecoregion) => (
+                            <Link
+                              href={`/ecoregions/${ecoregion}`}
+                              color="secondary"
+                              underline="hover"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              key={ecoregion}
+                              sx={{
+                                fontSize: "1rem",
+                                fontWeight: 500,
+                                lineHeight: 1.5,
+                              }}
+                            >
+                              Eco-{ecoregion},{" "}
+                            </Link>
+                          ))}
+                        </>
+                      ) : (
+                        <IconButton
+                          onClick={() => setToggleEcoregions(true)}
+                          size="small"
+                        >
+                          <KeyboardDoubleArrowRightIcon
+                            sx={{ color: theme.palette.secondary.main }}
+                          />
+                        </IconButton>
+                      )}
+                    </Typography>
                     <Typography
                       sx={{
                         fontStyle: "italic",
                       }}
                       align="left"
-                      variant="h6"
+                      variant="body1"
                     >
                       <>
                         {" "}
@@ -318,26 +422,7 @@ const DrawerPost = ({ id, handleClose }) => {
                         {new Date(post.date).toLocaleDateString()}
                       </>
                     </Typography>
-                    <Typography variant="h6">
-                      Category: {post.category.title} {" >> "}
-                      {post.category.sub}
-                    </Typography>
-                    <Typography variant="h6">
-                      Ecoregions:{" "}
-                      {post.ecoregions.map((ecoregion) => (
-                        <Link
-                          href={`/ecoregions/${ecoregion}`}
-                          color="secondary"
-                          underline="hover"
-                          key={ecoregion}
-                          onClick={(event) => {
-                            handleClose(event);
-                          }}
-                        >
-                          Eco-{ecoregion},{" "}
-                        </Link>
-                      ))}
-                    </Typography>
+
                     {post.originalUrl && (
                       <Typography
                         variant="body1"

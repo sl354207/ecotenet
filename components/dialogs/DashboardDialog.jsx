@@ -223,6 +223,7 @@ const DashboardDialog = ({
       category: result.category,
       tags: result.tags,
       originalUrl: result.originalUrl,
+      species: result.species,
       ecoregions: result.ecoregions,
       _id: result._id,
       id: result.id,
