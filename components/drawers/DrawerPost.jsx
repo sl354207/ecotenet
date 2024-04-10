@@ -311,7 +311,7 @@ const DrawerPost = ({ id, handleClose }) => {
                       </div>
                     </Box>
 
-                    <Typography variant="h6">
+                    <Typography variant="h6" sx={{ overflowWrap: "anywhere" }}>
                       Category:{" "}
                       <b
                         style={{

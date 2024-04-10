@@ -215,11 +215,11 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
             >
               view full page
             </Button>
-            <Typography variant={isMobile ? "h5" : "h4"} align="center">
+            <Typography variant="h5" align="center">
               Eco-{ecoFilter.unique_id}
             </Typography>
             <Typography
-              variant={isMobile ? "h5" : "h4"}
+              variant="h5"
               align="center"
               sx={{ marginBottom: "15px" }}
             >
@@ -272,10 +272,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                     </Typography>
                   ) : (
                     <>
-                      <Typography
-                        variant={isMobile ? "h6" : "h5"}
-                        sx={{ marginTop: "10px" }}
-                      >
+                      <Typography variant="h6" sx={{ marginTop: "10px" }}>
                         Source:{" "}
                         <Link
                           href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
