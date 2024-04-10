@@ -76,7 +76,7 @@ const PostRegion = ({
 }) => {
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [results, setResults] = useState([]);
 
@@ -116,7 +116,8 @@ const PostRegion = ({
           !items.find((item) => item.scientific_name === result.scientific_name)
         ) {
           result.id = result.scientific_name;
-          result.checked = true;
+          result.tied = true;
+          result.select = true;
           setItems([...items, result]);
           setToggleSpecies(true);
 
@@ -153,9 +154,23 @@ const PostRegion = ({
     setToggleSpecies(true);
   };
 
+  const selectAll = (items) => {
+    setClickInfo([]);
+    const selected = items.filter((item) => item.select === true);
+    const arraysOfNumbers = selected.map((obj) => obj.unique_id);
+    // find all of the unique numbers in arraysOfNumbers
+    const uniqueNumbers = Array.from(new Set(arraysOfNumbers.flat()));
+    setClickInfo(uniqueNumbers);
+
+    setToggleEcoregions(true);
+  };
+
   const selectInterSecting = (items) => {
+    setClickInfo([]);
+    // Get all selected items
+    const selected = items.filter((item) => item.select === true);
     // Get all arrays of numbers
-    const arraysOfNumbers = items.map((obj) => obj.unique_id);
+    const arraysOfNumbers = selected.map((obj) => obj.unique_id);
 
     // Find the intersection of all arrays
     const sharedNumbers = arraysOfNumbers.reduce(
@@ -304,7 +319,10 @@ const PostRegion = ({
             role="application"
           >
             {items.map((item, index) => (
-              <div style={{ paddingRight: "30px" }} key={item.id}>
+              <div
+                // style={{ paddingRight: "30px" }}
+                key={item.id}
+              >
                 {renderItem(item)}
                 {items && items.length > 3 && index === 2 && (
                   <Divider sx={{ marginTop: "10px" }} />
@@ -320,10 +338,10 @@ const PostRegion = ({
     );
   }
 
-  const handleCheckboxChange = (id) => {
+  const handleTiedCheckboxChange = (id) => {
     setItems(
       items.map((item) =>
-        item.id === id ? { ...item, checked: !item.checked } : item
+        item.id === id ? { ...item, tied: !item.tied } : item
       )
     );
     if (!tiedSpecies.includes(id)) {
@@ -335,12 +353,20 @@ const PostRegion = ({
     setToggleSpecies(true);
   };
 
+  const handleSelectCheckboxChange = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, select: !item.select } : item
+      )
+    );
+  };
+
   const handleRemoveTiedSpecies = (id) => {
     setTiedSpecies(tiedSpecies.filter((item) => item !== id));
     if (items.find((item) => item.id === id)) {
       setItems(
         items.map((item) =>
-          item.id === id ? { ...item, checked: !item.checked } : item
+          item.id === id ? { ...item, tied: !item.tied } : item
         )
       );
     }
@@ -441,14 +467,7 @@ const PostRegion = ({
               color="secondary"
               sx={{ marginRight: "5px", marginBlock: "10px" }}
               disabled={items.length === 0}
-              onClick={() => {
-                setClickInfo(
-                  items
-                    .map((item) => item.unique_id)
-                    .reduce((acc, id) => acc.concat(id), [])
-                );
-                setToggleEcoregions(true);
-              }}
+              onClick={() => selectAll(items)}
             >
               {isMobile ? "Select All" : "Select All Ecoregions"}
             </Button>
@@ -461,44 +480,66 @@ const PostRegion = ({
             >
               Clear All
             </Button>
-            <div style={{ display: "flex", paddingRight: "5px" }}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={{ marginBottom: "10px", flexGrow: 1 }}
-                onClick={() => selectInterSecting(items)}
-                disabled={items.length <= 1}
-              >
-                {isMobile
-                  ? "Select Intersecting"
-                  : "Select Intersecting Ecoregions"}
-              </Button>
-              <Tooltip
-                enterTouchDelay={100}
-                leaveTouchDelay={5000}
-                arrow
-                title={
-                  <>
-                    <Typography color="inherit" variant="h6">
-                      This selects the ecoregions that are shared by ALL of the
-                      species listed. This includes when they are not one of the
-                      3 visible species on the map and when they are not
-                      selected as a tied species. If all species do not share at
-                      least one ecoregion, then no ecoregions will be selected.
-                    </Typography>
-                  </>
-                }
-              >
-                <InfoIcon
-                  fontSize="small"
-                  sx={{ marginBottom: "15px" }}
-                ></InfoIcon>
-              </Tooltip>
-            </div>
+
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ marginBottom: "10px", flexGrow: 1 }}
+              onClick={() => selectInterSecting(items)}
+              disabled={
+                items.length <= 1 || items.filter((i) => i.select).length <= 1
+              }
+            >
+              {isMobile
+                ? "Select Intersecting"
+                : "Select Intersecting Ecoregions"}
+            </Button>
           </div>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ marginTop: isMobile ? "24px" : "0px" }}>
+          <div
+            style={{
+              display: "flex",
+              visibility: items.length === 0 ? "hidden" : "visible",
+            }}
+          >
+            <Tooltip
+              enterTouchDelay={100}
+              leaveTouchDelay={5000}
+              arrow
+              title={
+                <>
+                  <Typography color="inherit" variant="h6">
+                    Toggle which species are included when using the
+                    &apos;Select All&apos; and &apos;Select Intersecting&apos;
+                    buttons. This includes species that are not one of the 3
+                    visible species on the map and when they are not selected as
+                    a tied species. If using &apos;Select Intersecting&apos; and
+                    the selected species do not share at least one ecoregion,
+                    then no ecoregions will be selected.
+                  </Typography>
+                </>
+              }
+            >
+              <InfoIcon
+                fontSize="small"
+                sx={{ marginTop: "-28px", marginLeft: "auto" }}
+              ></InfoIcon>
+            </Tooltip>
+            <Typography sx={{ marginTop: "-24px" }}>Select</Typography>
+
+            <Typography
+              sx={{
+                marginTop: "-24px",
+                marginLeft: "10px",
+                marginRight: "20px",
+              }}
+            >
+              Tied
+            </Typography>
+          </div>
+
           <SortableList
             items={items}
             onChange={setItems}
@@ -529,12 +570,12 @@ const PostRegion = ({
                         : items && items.indexOf(item) === 2
                         ? "cyan"
                         : theme.palette.secondary.main,
-                    maxWidth: isMobile ? "88%" : "95%",
+                    maxWidth: "68%",
                   }}
                 ></CustomChip>
                 <FormControlLabel
-                  key={item.id}
-                  sx={{ marginLeft: "0px" }}
+                  key={`select-${item.id}`}
+                  sx={{ marginLeft: "auto", marginRight: "0px" }}
                   control={
                     <Checkbox
                       sx={{
@@ -543,8 +584,24 @@ const PostRegion = ({
                           color: theme.palette.secondary.main,
                         },
                       }}
-                      checked={item.checked}
-                      onChange={() => handleCheckboxChange(item.id)}
+                      checked={item.select}
+                      onChange={() => handleSelectCheckboxChange(item.id)}
+                    />
+                  }
+                />
+                <FormControlLabel
+                  key={`tied-${item.id}`}
+                  sx={{ marginLeft: "10px", marginRight: "0px" }}
+                  control={
+                    <Checkbox
+                      sx={{
+                        color: theme.palette.secondary.main,
+                        "&.Mui-checked": {
+                          color: theme.palette.secondary.main,
+                        },
+                      }}
+                      checked={item.tied}
+                      onChange={() => handleTiedCheckboxChange(item.id)}
                     />
                   }
                 />
@@ -584,11 +641,15 @@ const PostRegion = ({
             <>
               {toggleSpecies ? (
                 <IconButton onClick={() => setToggleSpecies(false)}>
-                  <KeyboardDoubleArrowLeftIcon />
+                  <KeyboardDoubleArrowLeftIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
                 </IconButton>
               ) : (
                 <IconButton onClick={() => setToggleSpecies(true)}>
-                  <KeyboardDoubleArrowRightIcon />
+                  <KeyboardDoubleArrowRightIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
                 </IconButton>
               )}
             </>
@@ -634,7 +695,9 @@ const PostRegion = ({
             {toggleEcoregions ? (
               <>
                 <IconButton onClick={() => setToggleEcoregions(false)}>
-                  <KeyboardDoubleArrowLeftIcon />
+                  <KeyboardDoubleArrowLeftIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
                 </IconButton>
                 {clickInfo.map((ecoregion) => (
                   <Link
@@ -657,7 +720,9 @@ const PostRegion = ({
               </>
             ) : (
               <IconButton onClick={() => setToggleEcoregions(true)}>
-                <KeyboardDoubleArrowRightIcon />
+                <KeyboardDoubleArrowRightIcon
+                  sx={{ color: theme.palette.secondary.main }}
+                />
               </IconButton>
             )}
           </>
