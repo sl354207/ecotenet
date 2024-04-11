@@ -396,7 +396,7 @@ const PostRegion = ({
                         : items && items.indexOf(item) === 2
                         ? "cyan"
                         : theme.palette.secondary.main,
-                    maxWidth: "68%",
+                    maxWidth: isMobile ? "60%" : "70%",
                   }}
                 ></CustomChip>
                 <FormControlLabel
