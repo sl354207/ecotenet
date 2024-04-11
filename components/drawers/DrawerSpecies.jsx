@@ -1,6 +1,8 @@
 import { useUserContext } from "@components/context/UserContext";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
   Button,
   CircularProgress,
@@ -65,6 +67,8 @@ const DrawerSpecies = ({ species, handleClose }) => {
       shouldRetryOnError: false,
     }
   );
+
+  const [toggleEcoregions, setToggleEcoregions] = useState(false);
 
   const options = {
     replace: (domNode) => {
@@ -278,7 +282,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   ></div>
                   {species.common_name ? (
                     <Typography
-                      variant="h4"
+                      variant="h5"
                       align="center"
                       sx={{ marginBottom: "5px" }}
                     >
@@ -286,7 +290,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                     </Typography>
                   ) : (
                     <Typography
-                      variant="h4"
+                      variant="h5"
                       align="center"
                       sx={{ marginBottom: "5px" }}
                     >
@@ -308,27 +312,46 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 </div>
               </div>
 
-              <Typography
-                variant="h6"
-                sx={{
-                  marginBottom: "20px",
-                }}
-              >
-                Ecoregions:{" "}
-                {species.unique_id.map((id) => (
-                  <Link
-                    href={`/ecoregions/${id}`}
-                    color="secondary"
-                    underline="hover"
-                    key={id}
-                    onClick={(event) => {
-                      handleClose(event);
-                    }}
+              <Typography variant="h6">
+                Ecoregions:
+                {toggleEcoregions ? (
+                  <>
+                    <IconButton
+                      onClick={() => setToggleEcoregions(false)}
+                      size="small"
+                    >
+                      <KeyboardDoubleArrowLeftIcon
+                        sx={{ color: theme.palette.secondary.main }}
+                      />
+                    </IconButton>
+                    {species.unique_id.map((id) => (
+                      <Link
+                        href={`/ecoregions/${id}`}
+                        color="secondary"
+                        underline="hover"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        key={id}
+                        sx={{
+                          fontSize: "1rem",
+                          fontWeight: 500,
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        Eco-{id},{" "}
+                      </Link>
+                    ))}
+                  </>
+                ) : (
+                  <IconButton
+                    onClick={() => setToggleEcoregions(true)}
+                    size="small"
                   >
-                    Eco-{id}
-                    {", "}
-                  </Link>
-                ))}
+                    <KeyboardDoubleArrowRightIcon
+                      sx={{ color: theme.palette.secondary.main }}
+                    />
+                  </IconButton>
+                )}
               </Typography>
 
               <div
@@ -350,7 +373,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   </Typography>
                 ) : (
                   <>
-                    <Typography variant="h5" sx={{ marginTop: "10px" }}>
+                    <Typography variant="h6" sx={{ marginTop: "5px" }}>
                       Source:{" "}
                       <Link
                         href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(

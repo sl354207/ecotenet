@@ -202,7 +202,6 @@ const Latest = () => {
               value="All Posts"
               control={
                 <Radio
-                  color="secondary"
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
@@ -215,7 +214,6 @@ const Latest = () => {
               value="Eco-ID"
               control={
                 <Radio
-                  color="secondary"
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
@@ -228,7 +226,6 @@ const Latest = () => {
               value="Category"
               control={
                 <Radio
-                  color="secondary"
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}

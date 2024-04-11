@@ -1,23 +1,38 @@
 import Description from "@components/layouts/Description";
 import Header from "@components/layouts/Header";
+import Link from "@components/layouts/Link";
+import {
+  DragHandle,
+  SortableItem,
+  SortableList,
+} from "@components/layouts/draggable";
 import MapEditor from "@components/maps/MapEditor";
+import InfoIcon from "@mui/icons-material/Info";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
   Autocomplete,
   Button,
+  Checkbox,
   Chip,
   Container,
+  Divider,
+  FormControlLabel,
+  Grid,
+  IconButton,
   TextField,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import { alpha, styled, useTheme } from "@mui/material/styles";
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useState } from "react";
 
 const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   borderWidth: 2,
   color: theme.palette.text.primary,
   height: 40,
-  margin: "0px 5px 10px 5px",
+  margin: "0px 0px 0px 0px",
 
   "& .MuiChip-deleteIcon": {
     WebkitTapHighlightColor: "transparent",
@@ -31,133 +46,19 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
   },
 }));
 
-const speciesChips = [
-  { count: 0 },
-  {
-    id: 1,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    _id: "",
-    open: false,
-  },
-  {
-    id: 2,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    _id: "",
-    open: false,
-  },
-  {
-    id: 3,
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    _id: "",
-    open: false,
-  },
-];
-
-// reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
-const reducer = (speciesChips, action) => {
-  if (action.type === "remove") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = speciesChips[2].open;
-        speciesChips[1].regions = speciesChips[2].regions;
-        speciesChips[1].scientific_name = speciesChips[2].scientific_name;
-        speciesChips[1].common_name = speciesChips[2].common_name;
-        speciesChips[1]._id = speciesChips[2]._id;
-
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
-        speciesChips[2]._id = speciesChips[3]._id;
-
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      case 2:
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
-        speciesChips[2]._id = speciesChips[3]._id;
-
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      case 3:
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      default:
-        throw new Error();
-    }
-  }
-  if (action.type === "add") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = true;
-        speciesChips[1].regions = action.value;
-        speciesChips[1].scientific_name = action.s_name;
-        speciesChips[1].common_name = action.c_name;
-        speciesChips[1]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 2:
-        speciesChips[2].open = true;
-        speciesChips[2].regions = action.value;
-        speciesChips[2].scientific_name = action.s_name;
-        speciesChips[2].common_name = action.c_name;
-        speciesChips[2]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 3:
-        speciesChips[3].open = true;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      default:
-        throw new Error();
-    }
-  }
-};
-
-//pass in and destructure props.
-const PostRegion = ({ clickInfo, setClickInfo }) => {
+const PostRegion = ({
+  clickInfo,
+  setClickInfo,
+  tiedSpecies,
+  setTiedSpecies,
+}) => {
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [results, setResults] = useState([]);
 
-  const handleChange = async (e) => {
+  const handleAutoChange = async (e) => {
     if (e.target.value) {
       const regex = /[`!@#$%^&*()_+=\[\]{};:"\\\|,.<>\/?~]/;
       if (!regex.test(e.target.value)) {
@@ -177,11 +78,7 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
     }
   };
 
-  const [state, dispatch] = useReducer(reducer, speciesChips);
-  // console.log(state);
-  // console.log(clickInfo);
-
-  const handleSubmit = (event, newValue) => {
+  const handleAutoSubmit = (event, newValue) => {
     if (newValue !== null) {
       let name;
       if (newValue.includes(" - ")) {
@@ -192,41 +89,18 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
       }
 
       for (const result of results) {
-        if (result.scientific_name === name) {
-          switch (state[0].count) {
-            case 0:
-              dispatch({
-                type: "add",
-                payload: 1,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-            case 1:
-              dispatch({
-                type: "add",
-                payload: 2,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-            case 2:
-              dispatch({
-                type: "add",
-                payload: 3,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
+        if (
+          result.scientific_name === name &&
+          !items.find((item) => item.scientific_name === result.scientific_name)
+        ) {
+          result.id = result.scientific_name;
+          result.tied = true;
+          result.select = true;
+          setItems([...items, result]);
+          setToggleSpecies(true);
 
-            default:
-              throw new Error();
+          if (!tiedSpecies.includes(result.scientific_name)) {
+            setTiedSpecies([...tiedSpecies, result.scientific_name]);
           }
         }
       }
@@ -248,33 +122,85 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
           return [...clickInfo];
         }
       });
+      setToggleEcoregions(true);
     }
   }, []);
 
-  const handleRemoveChip = (id) => {
-    dispatch({
-      type: "remove",
-      payload: id,
-      value: [],
-      s_name: "",
-      c_name: "",
-      _id: "",
-    });
+  const handleRemoveChip = (item) => {
+    setItems((items) => items.filter((i) => i !== item));
+    setTiedSpecies(tiedSpecies.filter((i) => i !== item.id));
+    setToggleSpecies(true);
   };
-  const selectInterSecting = (first, second, third) => {
-    let rest = [];
-    if (second.length !== 0) {
-      rest = [...rest, second];
-    }
-    if (third.length !== 0) {
-      rest = [...rest, third];
-    }
 
-    rest = rest.map((array) => new Set(array));
+  const selectAll = (items) => {
+    setClickInfo([]);
+    const selected = items.filter((item) => item.select === true);
+    const arraysOfNumbers = selected.map((obj) => obj.unique_id);
+    // find all of the unique numbers in arraysOfNumbers
+    const uniqueNumbers = Array.from(new Set(arraysOfNumbers.flat()));
+    setClickInfo(uniqueNumbers);
 
-    const intersecting = first.filter((e) => rest.every((set) => set.has(e)));
-    setClickInfo(intersecting);
+    setToggleEcoregions(true);
   };
+
+  const selectInterSecting = (items) => {
+    setClickInfo([]);
+    // Get all selected items
+    const selected = items.filter((item) => item.select === true);
+    // Get all arrays of numbers
+    const arraysOfNumbers = selected.map((obj) => obj.unique_id);
+
+    // Find the intersection of all arrays
+    const sharedNumbers = arraysOfNumbers.reduce(
+      (accumulator, currentArray) => {
+        return accumulator.filter((value) => currentArray.includes(value));
+      }
+    );
+
+    setClickInfo(sharedNumbers);
+
+    setToggleEcoregions(true);
+  };
+
+  const [items, setItems] = useState([]);
+
+  const handleTiedCheckboxChange = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, tied: !item.tied } : item
+      )
+    );
+    if (!tiedSpecies.includes(id)) {
+      setTiedSpecies([...tiedSpecies, id]);
+    }
+    if (tiedSpecies.includes(id)) {
+      setTiedSpecies(tiedSpecies.filter((item) => item !== id));
+    }
+    setToggleSpecies(true);
+  };
+
+  const handleSelectCheckboxChange = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, select: !item.select } : item
+      )
+    );
+  };
+
+  const handleRemoveTiedSpecies = (id) => {
+    setTiedSpecies(tiedSpecies.filter((item) => item !== id));
+    if (items.find((item) => item.id === id)) {
+      setItems(
+        items.map((item) =>
+          item.id === id ? { ...item, tied: !item.tied } : item
+        )
+      );
+    }
+    setToggleSpecies(true);
+  };
+
+  const [toggleSpecies, setToggleSpecies] = useState(true);
+  const [toggleEcoregions, setToggleEcoregions] = useState(true);
 
   return (
     <Container>
@@ -282,270 +208,357 @@ const PostRegion = ({ clickInfo, setClickInfo }) => {
 
       <Description
         description="To help determine which ecoregions your post applies to you can add single or multiple species distributions to the map. These distributions may help you determine relevant ecoregions for your post. You may add or delete
-        ecoregions by double clicking on the map. A single click highlights the
-        ecoregion and displays the Eco-ID and ecoregion name"
+        ecoregions by double clicking on the map or using the selection buttons. A single click highlights the
+        ecoregion and displays the Eco-ID and ecoregion name."
         align="left"
       />
 
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
-        distribution on the map. A maximum of three species can be mapped at the
-        same time
+        distribution on the map. A maximum of 3 species can be visualized on the
+        map at the same time, but up to 15 species can be added and manipulated.
       </Typography>
       <Typography variant="body1" align="left" sx={{ marginTop: "20px" }}>
         *denotes required field
       </Typography>
-      <Autocomplete
-        sx={{
-          "& .MuiAutocomplete-inputRoot": {
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.8),
-            },
-            "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.8),
-            },
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#94c9ff",
-            },
-            "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.3),
-            },
-            "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: alpha("#94c9ff", 0.3),
-            },
-            "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#e57373",
-            },
-            "&.Mui-error .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#e57373",
-            },
-          },
-        }}
-        autoHighlight
-        onChange={(event, newValue) => handleSubmit(event, newValue)}
-        selectOnFocus
-        clearOnBlur
-        handleHomeEndKeys
-        id="region-auto"
-        options={
-          results
-            ? results.map((obj) => {
-                if (obj.common_name) {
-                  return `${obj.scientific_name} - ${obj.common_name}`;
-                } else {
-                  return `${obj.scientific_name}`;
-                }
-              })
-            : []
-        }
-        filterOptions={(x) => x}
-        freeSolo
-        renderInput={(params) => (
-          // ...params is causing error check dashboard index on how to log params
-          <TextField
-            {...params}
-            id="region"
-            placeholder="Search…"
-            variant="outlined"
-            ref={params.InputProps.ref}
-            inputProps={{ ...params.inputProps, type: "text", maxLength: 100 }}
-            onChange={(e) => handleChange(e)}
-            InputLabelProps={{ shrink: true }}
-          />
-        )}
-      />
-      {isMobile ? (
-        <div style={{ display: "inline-grid", marginTop: "5px" }}>
-          {Array.isArray(state[1].regions) && state[1].regions.length ? (
-            <CustomChip
-              label={
-                state[1].common_name
-                  ? `${state[1].scientific_name} - ${state[1].common_name}`
-                  : `${state[1].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[1].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(1)}
-              variant="outlined"
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Autocomplete
               sx={{
-                borderColor: "#ff00ff",
+                "& .MuiAutocomplete-inputRoot": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.8),
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#94c9ff",
+                  },
+                  "&.Mui-disabled .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-disabled:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: alpha("#94c9ff", 0.3),
+                  },
+                  "&.Mui-error:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                  "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#e57373",
+                  },
+                },
               }}
-            ></CustomChip>
-          ) : (
-            <CustomChip sx={{ visibility: "hidden" }}></CustomChip>
-          )}
-          {Array.isArray(state[2].regions) && state[2].regions.length ? (
-            <CustomChip
-              label={
-                state[2].common_name
-                  ? `${state[2].scientific_name} - ${state[2].common_name}`
-                  : `${state[2].scientific_name}`
+              autoHighlight
+              onChange={(event, newValue) => handleAutoSubmit(event, newValue)}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              disabled={items.length === 15}
+              id="region-auto"
+              options={
+                results
+                  ? results.map((obj) => {
+                      if (obj.common_name) {
+                        return `${obj.scientific_name} - ${obj.common_name}`;
+                      } else {
+                        return `${obj.scientific_name}`;
+                      }
+                    })
+                  : []
               }
-              onClick={() => {
-                window.open(
-                  `/species/${state[2].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(2)}
+              filterOptions={(x) => x}
+              freeSolo
+              renderInput={(params) => (
+                // ...params is causing error check dashboard index on how to log params
+                <TextField
+                  {...params}
+                  id="region"
+                  placeholder="Search…"
+                  variant="outlined"
+                  ref={params.InputProps.ref}
+                  inputProps={{
+                    ...params.inputProps,
+                    type: "text",
+                    maxLength: 100,
+                  }}
+                  onChange={(e) => handleAutoChange(e)}
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+            />
+            <Button
               variant="outlined"
-              sx={{
-                borderColor: "#ffff00",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-          {Array.isArray(state[3].regions) && state[3].regions.length ? (
-            <CustomChip
-              label={
-                state[3].common_name
-                  ? `${state[3].scientific_name} - ${state[3].common_name}`
-                  : `${state[3].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[3].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(3)}
+              color="secondary"
+              sx={{ marginRight: "5px", marginBlock: "10px" }}
+              disabled={items.length === 0}
+              onClick={() => selectAll(items)}
+            >
+              {isMobile ? "Select All" : "Select All Ecoregions"}
+            </Button>
+            <Button
               variant="outlined"
-              sx={{
-                borderColor: "#00ffff",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-        </div>
-      ) : (
-        <div style={{ marginTop: "5px" }}>
-          {Array.isArray(state[1].regions) && state[1].regions.length ? (
-            <CustomChip
-              label={
-                state[1].common_name
-                  ? `${state[1].scientific_name} - ${state[1].common_name}`
-                  : `${state[1].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[1].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(1)}
-              variant="outlined"
-              sx={{
-                borderColor: "#ff00ff",
-              }}
-            ></CustomChip>
-          ) : (
-            <Chip sx={{ visibility: "hidden" }}></Chip>
-          )}
-          {Array.isArray(state[2].regions) && state[2].regions.length ? (
-            <CustomChip
-              label={
-                state[2].common_name
-                  ? `${state[2].scientific_name} - ${state[2].common_name}`
-                  : `${state[2].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[2].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(2)}
-              variant="outlined"
-              sx={{
-                borderColor: "#ffff00",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-          {Array.isArray(state[3].regions) && state[3].regions.length ? (
-            <CustomChip
-              label={
-                state[3].common_name
-                  ? `${state[3].scientific_name} - ${state[3].common_name}`
-                  : `${state[3].scientific_name}`
-              }
-              onClick={() => {
-                window.open(
-                  `/species/${state[3].scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              onDelete={() => handleRemoveChip(3)}
-              variant="outlined"
-              sx={{
-                borderColor: "#00ffff",
-              }}
-            ></CustomChip>
-          ) : (
-            <></>
-          )}
-        </div>
-      )}
-      <Typography variant="h6" align="left">
-        Ecoregions:* {clickInfo.map((region) => `Eco-${region}, `)}
-      </Typography>
+              color="secondary"
+              sx={{ marginRight: "5px", marginBottom: "10px" }}
+              disabled={clickInfo.length === 0}
+              onClick={() => setClickInfo([])}
+            >
+              Clear All
+            </Button>
 
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ marginRight: "5px", marginBottom: "10px" }}
-        disabled={state[0].count === 0}
-        onClick={() => {
-          setClickInfo(
-            state[1].regions.concat(state[2].regions, state[3].regions)
-          );
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ marginBottom: "10px", flexGrow: 1 }}
+              onClick={() => selectInterSecting(items)}
+              disabled={
+                items.length <= 1 || items.filter((i) => i.select).length <= 1
+              }
+            >
+              {isMobile
+                ? "Select Intersecting"
+                : "Select Intersecting Ecoregions"}
+            </Button>
+          </div>
+        </Grid>
+
+        <Grid item xs={12} md={6} sx={{ marginTop: isMobile ? "24px" : "0px" }}>
+          <div
+            style={{
+              display: "flex",
+              visibility: items.length === 0 ? "hidden" : "visible",
+            }}
+          >
+            <Tooltip
+              enterTouchDelay={100}
+              leaveTouchDelay={5000}
+              arrow
+              title={
+                <>
+                  <Typography color="inherit" variant="h6">
+                    Toggle which species are included when using the
+                    &apos;Select All&apos; and &apos;Select Intersecting&apos;
+                    buttons. This includes species that are not one of the 3
+                    visible species on the map and when they are not selected as
+                    a tied species. If using &apos;Select Intersecting&apos; and
+                    the selected species do not share at least one ecoregion,
+                    then no ecoregions will be selected.
+                  </Typography>
+                </>
+              }
+            >
+              <InfoIcon
+                fontSize="small"
+                sx={{ marginTop: "-28px", marginLeft: "auto" }}
+              ></InfoIcon>
+            </Tooltip>
+            <Typography sx={{ marginTop: "-24px" }}>Select</Typography>
+
+            <Typography
+              sx={{
+                marginTop: "-24px",
+                marginLeft: "10px",
+                marginRight: "20px",
+              }}
+            >
+              Tied
+            </Typography>
+          </div>
+
+          <SortableList
+            items={items}
+            onChange={setItems}
+            renderItem={(item) => (
+              <SortableItem id={item.id}>
+                <DragHandle />
+                <CustomChip
+                  label={
+                    item.common_name
+                      ? `${item.scientific_name} - ${item.common_name}`
+                      : item.scientific_name
+                  }
+                  onClick={() => {
+                    window.open(
+                      `/species/${item.scientific_name.replace(/ /g, "_")}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }}
+                  onDelete={() => handleRemoveChip(item)}
+                  variant="outlined"
+                  sx={{
+                    borderColor:
+                      items && items.indexOf(item) === 0
+                        ? "#ff00ff"
+                        : items && items.indexOf(item) === 1
+                        ? "yellow"
+                        : items && items.indexOf(item) === 2
+                        ? "cyan"
+                        : theme.palette.secondary.main,
+                    maxWidth: "68%",
+                  }}
+                ></CustomChip>
+                <FormControlLabel
+                  key={`select-${item.id}`}
+                  sx={{ marginLeft: "auto", marginRight: "0px" }}
+                  control={
+                    <Checkbox
+                      sx={{
+                        color: theme.palette.secondary.main,
+                        "&.Mui-checked": {
+                          color: theme.palette.secondary.main,
+                        },
+                      }}
+                      checked={item.select}
+                      onChange={() => handleSelectCheckboxChange(item.id)}
+                    />
+                  }
+                />
+                <FormControlLabel
+                  key={`tied-${item.id}`}
+                  sx={{ marginLeft: "10px", marginRight: "0px" }}
+                  control={
+                    <Checkbox
+                      sx={{
+                        color: theme.palette.secondary.main,
+                        "&.Mui-checked": {
+                          color: theme.palette.secondary.main,
+                        },
+                      }}
+                      checked={item.tied}
+                      onChange={() => handleTiedCheckboxChange(item.id)}
+                    />
+                  }
+                />
+              </SortableItem>
+            )}
+          />
+        </Grid>
+      </Grid>
+
+      <Divider sx={{ marginBlock: "10px" }} />
+
+      <div style={{ display: "flex" }}>
+        <Typography
+          variant="h6"
+          align="left"
+          sx={{ minWidth: "fit-content", minHeight: "44px" }}
+        >
+          {isMobile ? "Species" : "Tied Species"}
+          <Tooltip
+            enterTouchDelay={100}
+            leaveTouchDelay={5000}
+            arrow
+            title={
+              <Typography color="inherit" variant="h6">
+                Tied species are the species that are particularly relevant to
+                this post. When your post is published they will be displayed
+                similarly to the list of relevant ecoregions. Tying species to a
+                post is not required (but is helpful!) and may not be relevant
+                for all posts
+              </Typography>
+            }
+          >
+            <InfoIcon fontSize="small" sx={{ marginBottom: "6px" }}></InfoIcon>
+          </Tooltip>
+          :{" "}
+          {tiedSpecies && tiedSpecies.length > 0 ? (
+            <>
+              {toggleSpecies ? (
+                <IconButton onClick={() => setToggleSpecies(false)}>
+                  <KeyboardDoubleArrowLeftIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              ) : (
+                <IconButton onClick={() => setToggleSpecies(true)}>
+                  <KeyboardDoubleArrowRightIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+        </Typography>
+        {tiedSpecies && tiedSpecies.length > 0 && toggleSpecies && (
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {tiedSpecies &&
+              tiedSpecies.map((id) => (
+                <CustomChip
+                  key={id}
+                  label={id}
+                  onDelete={() => handleRemoveTiedSpecies(id)}
+                  variant="outlined"
+                  sx={{
+                    borderColor: theme.palette.secondary.main,
+                    marginRight: "5px",
+                    marginBottom: "4px",
+                    userSelect: "auto",
+                    cursor: "text",
+                  }}
+                ></CustomChip>
+              ))}
+          </div>
+        )}
+      </div>
+
+      <Typography
+        variant="h6"
+        align="left"
+        sx={{
+          minWidth: "fit-content",
+          minHeight: "44px",
+          marginTop: clickInfo.length > 0 ? "0px" : "4px",
+          marginBottom: clickInfo.length > 0 ? "4px" : "0px",
         }}
       >
-        Select All
-      </Button>
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ marginRight: "5px", marginBottom: "10px" }}
-        disabled={Array.isArray(clickInfo) && !clickInfo.length}
-        onClick={() => setClickInfo([])}
-      >
-        Clear All
-      </Button>
-      <Button
-        variant="outlined"
-        color="secondary"
-        sx={{ marginBottom: "10px" }}
-        onClick={() =>
-          selectInterSecting(
-            state[1].regions,
-            state[2].regions,
-            state[3].regions
-          )
-        }
-        disabled={state[0].count <= 1}
-      >
-        Select Intersecting
-      </Button>
+        Ecoregions:*{" "}
+        {clickInfo.length > 0 && (
+          <>
+            {toggleEcoregions ? (
+              <>
+                <IconButton onClick={() => setToggleEcoregions(false)}>
+                  <KeyboardDoubleArrowLeftIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+                {clickInfo.map((ecoregion) => (
+                  <Link
+                    href={`/ecoregions/${ecoregion}`}
+                    color="secondary"
+                    underline="hover"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={ecoregion}
+                    sx={{
+                      alignContent: "center",
+                      fontSize: "1.25rem",
+                      fontWeight: "400",
+                      marginBottom: "3px",
+                    }}
+                  >
+                    Eco-{ecoregion},{" "}
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <IconButton onClick={() => setToggleEcoregions(true)}>
+                <KeyboardDoubleArrowRightIcon
+                  sx={{ color: theme.palette.secondary.main }}
+                />
+              </IconButton>
+            )}
+          </>
+        )}
+      </Typography>
 
       <MapEditor
         clickInfo={clickInfo}
         handleDblClick={handleMapClick}
-        state={state}
-        // zoom={isMobile ? 3 : 4}
+        state={items}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
         A species distribution often does not align perfectly with ecoregion

@@ -231,7 +231,6 @@ const LatestDialog = ({ latest, setLatest }) => {
               value="All Posts"
               control={
                 <Radio
-                  color="secondary"
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
@@ -244,7 +243,6 @@ const LatestDialog = ({ latest, setLatest }) => {
               value="Eco-ID"
               control={
                 <Radio
-                  color="secondary"
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}
@@ -257,7 +255,6 @@ const LatestDialog = ({ latest, setLatest }) => {
               value="Category"
               control={
                 <Radio
-                  color="secondary"
                   sx={{
                     color: `${theme.palette.secondary.main}!important`,
                   }}

@@ -3,6 +3,8 @@ import Footer from "@components/layouts/Footer";
 import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import FlagIcon from "@mui/icons-material/Flag";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
   AppBar,
   Box,
@@ -99,6 +101,8 @@ const Species = ({ species, wiki }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [toggleEcoregions, setToggleEcoregions] = useState(true);
 
   const options = {
     replace: (domNode) => {
@@ -364,18 +368,45 @@ const Species = ({ species, wiki }) => {
                 marginBottom: "20px",
               }}
             >
-              Ecoregions:{" "}
-              {species.unique_id.map((id) => (
-                <Link
-                  href={`/ecoregions/${id}`}
-                  color="secondary"
-                  underline="hover"
-                  key={id}
+              Ecoregions:
+              {toggleEcoregions ? (
+                <>
+                  <IconButton
+                    onClick={() => setToggleEcoregions(false)}
+                    size="small"
+                  >
+                    <KeyboardDoubleArrowLeftIcon
+                      sx={{ color: theme.palette.secondary.main }}
+                    />
+                  </IconButton>
+                  {species.unique_id.map((id) => (
+                    <Link
+                      href={`/ecoregions/${id}`}
+                      color="secondary"
+                      underline="hover"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      key={id}
+                      sx={{
+                        fontSize: "1rem",
+                        fontWeight: 500,
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      Eco-{id},{" "}
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <IconButton
+                  onClick={() => setToggleEcoregions(true)}
+                  size="small"
                 >
-                  Eco-{id}
-                  {", "}
-                </Link>
-              ))}
+                  <KeyboardDoubleArrowRightIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              )}
             </Typography>
 
             <div

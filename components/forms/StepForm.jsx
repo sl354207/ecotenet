@@ -36,6 +36,7 @@ const StepForm = ({ post, user }) => {
     category,
     originalUrl,
     tags,
+    species,
     ecoregions,
     id,
     version,
@@ -71,6 +72,9 @@ const StepForm = ({ post, user }) => {
   // set map state
   const [clickInfo, setClickInfo] = useState(initialMapState);
 
+  // set species state
+  const [tiedSpecies, setTiedSpecies] = useState(species ? species : []);
+
   const [dialog, setDialog] = useState(false);
   const [action, setAction] = useState({ action: "", type: "" });
   const [item, setItem] = useState("");
@@ -84,12 +88,14 @@ const StepForm = ({ post, user }) => {
       setSaved(false);
     } else if (!isEqual(initialDetailsState, details)) {
       setSaved(false);
-    } else if (initialMapState !== clickInfo) {
+    } else if (!isEqual(initialMapState, clickInfo)) {
+      setSaved(false);
+    } else if (!isEqual(species, tiedSpecies)) {
       setSaved(false);
     } else {
       setSaved(true);
     }
-  }, [postValue, details, clickInfo]);
+  }, [postValue, details, clickInfo, tiedSpecies]);
 
   // If user tries to leave page without saving show a dialog box warning them
   useEffect(() => {
@@ -120,13 +126,21 @@ const StepForm = ({ post, user }) => {
     };
   }, [saved]);
 
-  const handleOpenDialog = (action, type, postValue, details, clickInfo) => {
+  const handleOpenDialog = (
+    action,
+    type,
+    postValue,
+    details,
+    clickInfo,
+    tiedSpecies
+  ) => {
     const result = {
       title: details.title,
       description: details.description,
       category: details.category,
       originalUrl: details.originalUrl,
       tags: details.tags,
+      species: tiedSpecies,
       ecoregions: clickInfo,
       _id: post._id,
       id: postValue.id,
@@ -170,9 +184,10 @@ const StepForm = ({ post, user }) => {
   };
 
   // function to create a new draft. Takes in form values and editor value.
-  const updateDraft = async (postValue, details, clickInfo) => {
+  const updateDraft = async (postValue, details, clickInfo, tiedSpecies) => {
     setLoading(true);
     const ecoObject = {
+      species: tiedSpecies,
       ecoregions: clickInfo,
     };
 
@@ -258,7 +273,9 @@ const StepForm = ({ post, user }) => {
 
               <>
                 <Button
-                  onClick={() => updateDraft(postValue, details, clickInfo)}
+                  onClick={() =>
+                    updateDraft(postValue, details, clickInfo, tiedSpecies)
+                  }
                   variant="contained"
                   color="secondary"
                   disabled={saved || loading}
@@ -277,7 +294,8 @@ const StepForm = ({ post, user }) => {
                       "Post",
                       postValue,
                       details,
-                      clickInfo
+                      clickInfo,
+                      tiedSpecies
                     )
                   }
                   variant="contained"
@@ -325,7 +343,9 @@ const StepForm = ({ post, user }) => {
 
               <>
                 <Button
-                  onClick={() => updateDraft(postValue, details, clickInfo)}
+                  onClick={() =>
+                    updateDraft(postValue, details, clickInfo, tiedSpecies)
+                  }
                   variant="contained"
                   color="secondary"
                   disabled={saved || loading}
@@ -344,7 +364,8 @@ const StepForm = ({ post, user }) => {
                       "Post",
                       postValue,
                       details,
-                      clickInfo
+                      clickInfo,
+                      tiedSpecies
                     )
                   }
                   variant="contained"
@@ -386,7 +407,9 @@ const StepForm = ({ post, user }) => {
 
               <>
                 <Button
-                  onClick={() => updateDraft(postValue, details, clickInfo)}
+                  onClick={() =>
+                    updateDraft(postValue, details, clickInfo, tiedSpecies)
+                  }
                   variant="contained"
                   color="secondary"
                   disabled={saved || loading}
@@ -405,7 +428,8 @@ const StepForm = ({ post, user }) => {
                       "Post",
                       postValue,
                       details,
-                      clickInfo
+                      clickInfo,
+                      tiedSpecies
                     )
                   }
                   variant="contained"
@@ -433,7 +457,12 @@ const StepForm = ({ post, user }) => {
                 Next
               </Button>
             </div>
-            <PostRegion clickInfo={clickInfo} setClickInfo={setClickInfo} />
+            <PostRegion
+              clickInfo={clickInfo}
+              setClickInfo={setClickInfo}
+              tiedSpecies={tiedSpecies}
+              setTiedSpecies={setTiedSpecies}
+            />
           </>
         );
 

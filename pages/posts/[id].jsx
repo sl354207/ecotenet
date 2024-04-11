@@ -8,6 +8,8 @@ import Link from "@components/layouts/Link";
 import Vote from "@components/layouts/Vote";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import FlagIcon from "@mui/icons-material/Flag";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
   Box,
   Button,
@@ -219,6 +221,9 @@ const Post = ({ post }) => {
     }
   };
 
+  const [toggleSpecies, setToggleSpecies] = useState(true);
+  const [toggleEcoregions, setToggleEcoregions] = useState(true);
+
   const date = new Date(post.date);
 
   return (
@@ -352,28 +357,19 @@ const Post = ({ post }) => {
                 )}
               </div>
             </Box>
-            <Typography
-              sx={{
-                fontStyle: "italic",
-              }}
-              align="left"
-              variant="h6"
-            >
-              {isMobile ? (
-                <>
-                  {" "}
-                  {post.updated && "Updated:"} {date.toLocaleDateString()}
-                </>
-              ) : (
-                <>
-                  {post.updated && "Updated:"} {date.toDateString()}
-                </>
-              )}
-            </Typography>
+
             <Typography variant="h6" sx={{ overflowWrap: "anywhere" }}>
-              Category: {post.category.title}
-              {" >> "}
-              {post.category.sub}
+              Category:{" "}
+              <b
+                style={{
+                  fontWeight: 500,
+                  fontSize: "1rem",
+                  lineHeight: 1.5,
+                }}
+              >
+                {post.category.title} {" >> "}
+                {post.category.sub}
+              </b>
             </Typography>
           </div>
 
@@ -392,18 +388,102 @@ const Post = ({ post }) => {
             </>
           )}
         </div>
+        {post.species && (
+          <Typography variant="h6">
+            Tied Species:
+            {toggleSpecies ? (
+              <>
+                <IconButton
+                  onClick={() => setToggleSpecies(false)}
+                  size="small"
+                >
+                  <KeyboardDoubleArrowLeftIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+                {post.species.map((species) => (
+                  <Link
+                    href={`/species/${species.replace(/ /g, "_")}`}
+                    color="secondary"
+                    underline="hover"
+                    key={species}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      fontSize: "1rem",
+                      fontWeight: 500,
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {species},{" "}
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <IconButton onClick={() => setToggleSpecies(true)} size="small">
+                <KeyboardDoubleArrowRightIcon
+                  sx={{ color: theme.palette.secondary.main }}
+                />
+              </IconButton>
+            )}
+          </Typography>
+        )}
+
         <Typography variant="h6">
-          Ecoregions:{" "}
-          {post.ecoregions.map((ecoregion) => (
-            <Link
-              href={`/ecoregions/${ecoregion}`}
-              color="secondary"
-              underline="hover"
-              key={ecoregion}
-            >
-              Eco-{ecoregion},{" "}
-            </Link>
-          ))}
+          Ecoregions:
+          {toggleEcoregions ? (
+            <>
+              <IconButton
+                onClick={() => setToggleEcoregions(false)}
+                size="small"
+              >
+                <KeyboardDoubleArrowLeftIcon
+                  sx={{ color: theme.palette.secondary.main }}
+                />
+              </IconButton>
+              {post.ecoregions.map((ecoregion) => (
+                <Link
+                  href={`/ecoregions/${ecoregion}`}
+                  color="secondary"
+                  underline="hover"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={ecoregion}
+                  sx={{
+                    fontSize: "1rem",
+                    fontWeight: 500,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  Eco-{ecoregion},{" "}
+                </Link>
+              ))}
+            </>
+          ) : (
+            <IconButton onClick={() => setToggleEcoregions(true)} size="small">
+              <KeyboardDoubleArrowRightIcon
+                sx={{ color: theme.palette.secondary.main }}
+              />
+            </IconButton>
+          )}
+        </Typography>
+        <Typography
+          sx={{
+            fontStyle: "italic",
+          }}
+          align="left"
+          variant="body1"
+        >
+          {isMobile ? (
+            <>
+              {" "}
+              {post.updated && "Updated:"} {date.toLocaleDateString()}
+            </>
+          ) : (
+            <>
+              {post.updated && "Updated:"} {date.toDateString()}
+            </>
+          )}
         </Typography>
         {post.originalUrl && (
           <Typography

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
 const MapEditor = ({ clickInfo, state, handleDblClick }) => {
+  // console.log(state);
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   // base layer
@@ -33,6 +34,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     },
   };
 
+  // selected ecoregion layer
   const ecoFill2 = {
     id: "eco-fill2",
     type: "fill",
@@ -41,12 +43,10 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
     paint: {
       "fill-outline-color": "rgba(255,255,255,1)",
       "fill-color": "#dddddd",
-      "fill-opacity": 0.8,
-      // "fill-extrusion-height": 200000,
-      // "fill-extrusion-base": 0,
+      "fill-opacity": 0.6,
     },
   };
-  // selected layer
+  // 1st selected species
   const ecoFill3 = {
     id: "eco-fill3",
     type: "fill",
@@ -59,7 +59,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
       "fill-opacity": 0.4,
     },
   };
-  // selected layer
+  // 2nd selected species
   const ecoFill4 = {
     id: "eco-fill4",
     type: "fill",
@@ -72,7 +72,7 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
       "fill-opacity": 0.6,
     },
   };
-  // selected layer
+  // 3rd selected species
   const ecoFill5 = {
     id: "eco-fill5",
     type: "fill",
@@ -140,17 +140,25 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  const speciesRegions1 = state[1].regions;
+  // const speciesRegions1 = [];
+  const speciesRegions1 = state[0] && state[0].unique_id;
 
-  const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  const speciesFilter1 = state[0]
+    ? ["in", "unique_id", ...speciesRegions1]
+    : ["in", "unique_id"];
+  // console.log(speciesFilter1);
 
-  const speciesRegions2 = state[2].regions;
+  const speciesRegions2 = state[1] && state[1].unique_id;
 
-  const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
+  const speciesFilter2 = state[1]
+    ? ["in", "unique_id", ...speciesRegions2]
+    : ["in", "unique_id"];
 
-  const speciesRegions3 = state[3].regions;
+  const speciesRegions3 = state[2] && state[2].unique_id;
 
-  const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
+  const speciesFilter3 = state[2]
+    ? ["in", "unique_id", ...speciesRegions3]
+    : ["in", "unique_id"];
 
   const mapRef = useRef();
 
@@ -168,7 +176,11 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const onMove = useCallback(
     (prevCount1, prevCount2, prevCount3) => {
-      if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
+      if (
+        speciesRegions1 &&
+        speciesRegions1.length > 0 &&
+        prevCount1 !== speciesRegions1
+      ) {
         const coord = Coords.filter(
           (region) => region.unique_id === speciesRegions1[0]
         );
@@ -179,7 +191,11 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           zoom: 3.5,
         });
       }
-      if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
+      if (
+        speciesRegions2 &&
+        speciesRegions2.length > 0 &&
+        prevCount2 !== speciesRegions2
+      ) {
         const coord = Coords.filter(
           (region) => region.unique_id === speciesRegions2[0]
         );
@@ -190,7 +206,11 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
           zoom: 3.5,
         });
       }
-      if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
+      if (
+        speciesRegions3 &&
+        speciesRegions3.length > 0 &&
+        prevCount3 !== speciesRegions3
+      ) {
         const coord = Coords.filter(
           (region) => region.unique_id === speciesRegions3[0]
         );
@@ -288,7 +308,6 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
             closeOnClick={false}
-            // onClose={() => setShowPopup(false)}
             maxWidth="500px"
             focusAfterOpen={false}
             closeButton={false}
