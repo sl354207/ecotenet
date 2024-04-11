@@ -307,7 +307,8 @@ const StepForm = ({ post, user }) => {
                       details.category.sub === "") ||
                     clickInfo.length === 0 ||
                     postValue === null ||
-                    (postValue && postValue.rows.length <= 0)
+                    (postValue && postValue.rows.length <= 0) ||
+                    (post.status === "published" && saved)
                   }
                 >
                   Publish
@@ -377,7 +378,8 @@ const StepForm = ({ post, user }) => {
                       details.category.sub === "") ||
                     clickInfo.length === 0 ||
                     postValue === null ||
-                    (postValue && postValue.rows.length <= 0)
+                    (postValue && postValue.rows.length <= 0) ||
+                    (post.status === "published" && saved)
                   }
                 >
                   Publish
@@ -441,7 +443,8 @@ const StepForm = ({ post, user }) => {
                       details.category.sub === "") ||
                     clickInfo.length === 0 ||
                     postValue === null ||
-                    (postValue && postValue.rows.length <= 0)
+                    (postValue && postValue.rows.length <= 0) ||
+                    (post.status === "published" && saved)
                   }
                 >
                   Publish
