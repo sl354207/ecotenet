@@ -242,6 +242,29 @@ const getProfilePosts = async (name) => {
     throw new Error(error);
   }
 };
+const getTiedPosts = async (species) => {
+  try {
+    const db = await connectToDatabase();
+
+    const posts = await db
+      .collection("posts")
+      .find({ status: "published", approved: "true", species: species })
+      .project({
+        title: 1,
+        description: 1,
+        category: 1,
+        name: 1,
+        count: 1,
+        ecoregions: 1,
+      })
+      .sort({ count: -1 })
+      .toArray();
+
+    return posts;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 // update a post
 const updatePost = async (_id, data) => {
@@ -1441,6 +1464,7 @@ module.exports = {
   getComments,
   getPostById,
   getPublishedApprovedPostById,
+  getTiedPosts,
   updatePost,
   updateVote,
   deletePost,

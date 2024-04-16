@@ -27,12 +27,20 @@ import useSWR, { useSWRConfig } from "swr";
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
 });
+const DynamicTiedPostDialog = dynamic(
+  () => import("@components/dialogs/TiedPostDialog"),
+  {
+    ssr: false,
+  }
+);
 const DrawerSpecies = ({ species, handleClose }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { mutate } = useSWRConfig();
 
   const [dialog, setDialog] = useState(false);
+
+  const [tiedPostDialog, setTiedPostDialog] = useState(false);
 
   const handleOpenDialog = () => {
     if (user.status === "unauthenticated" || user.status === "loading") {
@@ -275,7 +283,6 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   <div
                     style={{
                       display: "flex",
-                      // marginRight: "auto",
                       visibility: "hidden",
                       minWidth: "30px",
                     }}
@@ -353,6 +360,15 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   </IconButton>
                 )}
               </Typography>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => {
+                  setTiedPostDialog(true);
+                }}
+              >
+                Tied Posts
+              </Button>
 
               <div
                 style={{
@@ -447,6 +463,13 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   contentType="species"
                   result={species}
                   name={user && user.name}
+                />
+              )}
+              {tiedPostDialog && (
+                <DynamicTiedPostDialog
+                  species={species.scientific_name}
+                  tiedPostDialog={tiedPostDialog}
+                  setTiedPostDialog={setTiedPostDialog}
                 />
               )}
             </>

@@ -8,6 +8,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import {
   AppBar,
   Box,
+  Button,
   Container,
   IconButton,
   List,
@@ -72,6 +73,12 @@ function a11yProps(index) {
 const DynamicFlag = dynamic(() => import("@components/dialogs/Flag"), {
   ssr: false,
 });
+const DynamicTiedPostDialog = dynamic(
+  () => import("@components/dialogs/TiedPostDialog"),
+  {
+    ssr: false,
+  }
+);
 
 const Species = ({ species, wiki }) => {
   const router = useRouter();
@@ -80,6 +87,7 @@ const Species = ({ species, wiki }) => {
   const [value, setValue] = useState(0);
 
   const [dialog, setDialog] = useState(false);
+  const [tiedPostDialog, setTiedPostDialog] = useState(false);
 
   const handleOpenDialog = () => {
     if (user.status === "unauthenticated" || user.status === "loading") {
@@ -365,7 +373,7 @@ const Species = ({ species, wiki }) => {
               variant="h6"
               sx={{
                 marginTop: "20px",
-                marginBottom: "20px",
+                marginBottom: "5px",
               }}
             >
               Ecoregions:
@@ -408,7 +416,18 @@ const Species = ({ species, wiki }) => {
                 </IconButton>
               )}
             </Typography>
-
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{
+                marginBottom: "10px",
+              }}
+              onClick={() => {
+                setTiedPostDialog(true);
+              }}
+            >
+              Tied Posts
+            </Button>
             <div
               style={{
                 flexGrow: 1,
@@ -550,6 +569,13 @@ const Species = ({ species, wiki }) => {
                 contentType="species"
                 result={species}
                 name={user && user.name}
+              />
+            )}
+            {tiedPostDialog && (
+              <DynamicTiedPostDialog
+                species={species.scientific_name}
+                tiedPostDialog={tiedPostDialog}
+                setTiedPostDialog={setTiedPostDialog}
               />
             )}
           </Container>
