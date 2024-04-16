@@ -1,11 +1,16 @@
 import {
-  alpha,
+  DragHandle,
+  SortableItem,
+  SortableList,
+} from "@components/layouts/draggable";
+import {
   Autocomplete,
   Chip,
   FormControl,
   FormHelperText,
   TextField,
   Typography,
+  alpha,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import theme from "@utils/theme";
@@ -31,10 +36,12 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
 }));
 
 const EcoDist = ({
-  dist,
-  setDist,
+  ecoDistResults,
+  setEcoDistResults,
   distributionState,
   distributionDispatch,
+  ecoChips,
+  setEcoChips,
   isMobile,
 }) => {
   const handleChange = async (e) => {
@@ -51,7 +58,7 @@ const EcoDist = ({
         if (res.ok) {
           const data = await res.json();
 
-          setDist(data);
+          setEcoDistResults(data);
         }
       }
     }
@@ -67,59 +74,70 @@ const EcoDist = ({
         name = newValue;
       }
 
-      for (const result of dist) {
-        if (result.scientific_name === name) {
-          switch (distributionState[0].count) {
-            case 0:
-              distributionDispatch({
-                type: "add",
-                payload: 1,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-            case 1:
-              distributionDispatch({
-                type: "add",
-                payload: 2,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
-            case 2:
-              distributionDispatch({
-                type: "add",
-                payload: 3,
-                value: result.unique_id,
-                s_name: result.scientific_name,
-                c_name: result.common_name,
-                _id: result._id,
-              });
-              break;
+      for (const result of ecoDistResults) {
+        // if (result.scientific_name === name) {
+        //   switch (distributionState[0].count) {
+        //     case 0:
+        //       distributionDispatch({
+        //         type: "add",
+        //         payload: 1,
+        //         value: result.unique_id,
+        //         s_name: result.scientific_name,
+        //         c_name: result.common_name,
+        //         _id: result._id,
+        //       });
+        //       break;
+        //     case 1:
+        //       distributionDispatch({
+        //         type: "add",
+        //         payload: 2,
+        //         value: result.unique_id,
+        //         s_name: result.scientific_name,
+        //         c_name: result.common_name,
+        //         _id: result._id,
+        //       });
+        //       break;
+        //     case 2:
+        //       distributionDispatch({
+        //         type: "add",
+        //         payload: 3,
+        //         value: result.unique_id,
+        //         s_name: result.scientific_name,
+        //         c_name: result.common_name,
+        //         _id: result._id,
+        //       });
+        //       break;
 
-            default:
-            //   throw new Error();
-          }
+        //     default:
+        //     //   throw new Error();
+        //   }
+        // }
+        if (
+          result.scientific_name === name &&
+          !ecoChips.find(
+            (item) => item.scientific_name === result.scientific_name
+          )
+        ) {
+          result.id = result.scientific_name;
+
+          setEcoChips([...ecoChips, result]);
         }
       }
 
-      setDist([]);
+      setEcoDistResults([]);
     }
   };
 
-  const handleRemoveChip = (id) => {
-    distributionDispatch({
-      type: "remove",
-      payload: id,
-      value: [],
-      s_name: "",
-      c_name: "",
-      _id: "",
-    });
+  const handleRemoveChip = (ecoChip) => {
+    // distributionDispatch({
+    //   type: "remove",
+    //   payload: id,
+    //   value: [],
+    //   s_name: "",
+    //   c_name: "",
+    //   _id: "",
+    // });
+    setEcoChips((ecoChips) => ecoChips.filter((i) => i !== ecoChip));
   };
   return (
     <>
@@ -135,8 +153,8 @@ const EcoDist = ({
 
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
-        distribution on the map. A maximum of three species can be mapped at the
-        same time
+        distribution on the map. A maximum of 3 species can be visualized on the
+        map at the same time, but up to 6 species can be added and manipulated.
       </Typography>
       <FormControl sx={{ display: "flex" }}>
         <Autocomplete
@@ -174,8 +192,8 @@ const EcoDist = ({
           id="dist-auto"
           fullWidth
           options={
-            dist
-              ? dist.map((obj) => {
+            ecoDistResults
+              ? ecoDistResults.map((obj) => {
                   if (obj.common_name) {
                     return `${obj.scientific_name} - ${obj.common_name}`;
                   } else {
@@ -216,12 +234,48 @@ const EcoDist = ({
           <FormHelperText
             sx={{ color: theme.palette.text.primary, marginBottom: "5px" }}
           >
-            (Filter drawer must be closed to search)
+            (EcoFilter must be closed to search)
           </FormHelperText>
         )}
       </FormControl>
+      <SortableList
+        items={ecoChips}
+        onChange={setEcoChips}
+        main={true}
+        renderItem={(ecoChip) => (
+          <SortableItem id={ecoChip.id}>
+            <DragHandle />
+            <CustomChip
+              label={
+                ecoChip.common_name
+                  ? `${ecoChip.scientific_name} - ${ecoChip.common_name}`
+                  : ecoChip.scientific_name
+              }
+              onClick={() => {
+                window.open(
+                  `/species/${ecoChip.scientific_name.replace(/ /g, "_")}`,
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
+              onDelete={() => handleRemoveChip(ecoChip)}
+              variant="outlined"
+              sx={{
+                borderColor:
+                  ecoChips && ecoChips.indexOf(ecoChip) === 0
+                    ? "#ff00ff"
+                    : ecoChips && ecoChips.indexOf(ecoChip) === 1
+                    ? "#ffff00"
+                    : ecoChips && ecoChips.indexOf(ecoChip) === 2
+                    ? "#00ffff"
+                    : theme.palette.secondary.main,
+              }}
+            ></CustomChip>
+          </SortableItem>
+        )}
+      />
 
-      <div style={{ display: "inline-grid", width: "100%" }}>
+      {/* <div style={{ display: "inline-grid", width: "100%" }}>
         {Array.isArray(distributionState[1].regions) &&
         distributionState[1].regions.length ? (
           <CustomChip
@@ -348,7 +402,7 @@ const EcoDist = ({
         ) : (
           <></>
         )}
-      </div>
+      </div> */}
 
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
         *A species distribution often does not align perfectly with ecoregion

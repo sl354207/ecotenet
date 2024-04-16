@@ -180,6 +180,8 @@ export const HomepageProvider = ({ children }) => {
     speciesChips
   );
 
+  const [ecoChips, setEcoChips] = useState([]);
+
   return (
     <HomepageContext.Provider
       value={{
@@ -199,6 +201,8 @@ export const HomepageProvider = ({ children }) => {
         setFSOpen,
         distributionState,
         distributionDispatch,
+        ecoChips,
+        setEcoChips,
       }}
     >
       {children}

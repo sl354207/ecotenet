@@ -117,6 +117,8 @@ const MapPage = ({ ecoregions }) => {
     setTab,
     distributionState,
     distributionDispatch,
+    ecoChips,
+    setEcoChips,
   } = useHomepageContext();
 
   const drawerWidth = 350;
@@ -191,7 +193,7 @@ const MapPage = ({ ecoregions }) => {
     }
   };
 
-  const [dist, setDist] = useState([]);
+  const [ecoDistResults, setEcoDistResults] = useState([]);
 
   const handleMobileTabChange = (event, newValue) => {
     switch (newValue) {
@@ -245,6 +247,7 @@ const MapPage = ({ ecoregions }) => {
           click={click}
           setClick={setClick}
           distributionState={distributionState}
+          ecoChips={ecoChips}
           coords={coords}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
@@ -448,10 +451,12 @@ const MapPage = ({ ecoregions }) => {
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
                     <EcoDist
-                      dist={dist}
-                      setDist={setDist}
                       distributionState={distributionState}
                       distributionDispatch={distributionDispatch}
+                      ecoChips={ecoChips}
+                      setEcoChips={setEcoChips}
+                      ecoDistResults={ecoDistResults}
+                      setEcoDistResults={setEcoDistResults}
                       isMobile={isMobile}
                     />
                   </TabPanel>
@@ -599,10 +604,12 @@ const MapPage = ({ ecoregions }) => {
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
                     <EcoDist
-                      dist={dist}
-                      setDist={setDist}
                       distributionState={distributionState}
                       distributionDispatch={distributionDispatch}
+                      ecoChips={ecoChips}
+                      setEcoChips={setEcoChips}
+                      ecoDistResults={ecoDistResults}
+                      setEcoDistResults={setEcoDistResults}
                     />
                   </TabPanel>
                 </>
