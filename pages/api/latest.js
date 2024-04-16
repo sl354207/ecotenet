@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     return res.status(403).json({ msg: "Forbidden" });
   }
 
-  if (species !== "undefined") {
+  if (species) {
     if (validScientificName(species)) {
       try {
         const results = await getTiedPosts(species);
