@@ -16,11 +16,10 @@ const CategorySpeciesList = ({ category, setItemSelected, setItem }) => {
   // create object where keys equal uniqueFirstLetter value and values equal an object with key equal to current and value of undefined. useRef allows you to access specific dom elements and change their state without rerendering page.
   const refs = uniqueFirstLetter.reduce((acc, value) => {
     acc[value] = createRef();
-    // console.log(acc);
+
     return acc;
   }, {});
 
-  //   };
   return (
     <List>
       {uniqueFirstLetter.map((entry) => {

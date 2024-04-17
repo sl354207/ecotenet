@@ -2,7 +2,7 @@ import { useHomepageContext } from "@components/context/HomepageContext";
 import { Button, ListItem, Typography } from "@mui/material";
 
 const CategorySpeciesListItem = ({ result, setItemSelected, setItem }) => {
-  const { distributionDispatch, setTab } = useHomepageContext();
+  const { setEcoChips, setTab } = useHomepageContext();
   return (
     <ListItem>
       <Button
@@ -15,14 +15,9 @@ const CategorySpeciesListItem = ({ result, setItemSelected, setItem }) => {
           textTransform: "none",
         }}
         onClick={() => {
-          distributionDispatch({
-            type: "add",
-            payload: 0,
-            value: result.unique_id,
-            s_name: result.scientific_name,
-            c_name: result.common_name,
-            _id: result._id,
-          });
+          result.id = result.scientific_name;
+          setEcoChips([result]);
+
           setItemSelected(true);
           setItem(result);
           setTab({ id: 2, label: "Distributions" });

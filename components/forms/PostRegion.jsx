@@ -369,6 +369,7 @@ const PostRegion = ({
           <SortableList
             items={items}
             onChange={setItems}
+            isMobile={isMobile}
             renderItem={(item) => (
               <SortableItem id={item.id}>
                 <DragHandle />
@@ -392,9 +393,9 @@ const PostRegion = ({
                       items && items.indexOf(item) === 0
                         ? "#ff00ff"
                         : items && items.indexOf(item) === 1
-                        ? "yellow"
+                        ? "#ffff00"
                         : items && items.indexOf(item) === 2
-                        ? "cyan"
+                        ? "#00ffff"
                         : theme.palette.secondary.main,
                     maxWidth: isMobile ? "60%" : "70%",
                   }}

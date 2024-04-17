@@ -101,7 +101,7 @@ function SortableOverlay({ children }) {
   );
 }
 
-export function SortableList({ items, onChange, renderItem }) {
+export function SortableList({ items, onChange, renderItem, main, isMobile }) {
   const [active, setActive] = useState(null);
   const activeItem = useMemo(
     () => items.find((item) => item.id === active?.id),
@@ -139,27 +139,35 @@ export function SortableList({ items, onChange, renderItem }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: "10px",
-            padding: 0,
+            gap: main ? "0px" : "10px",
             listStyle: "none",
-            marginLeft: "10px",
+            marginLeft: main
+              ? isMobile
+                ? "-5px"
+                : "-25px"
+              : isMobile
+              ? "0px"
+              : "10px",
             padding: "10px",
+            paddingLeft: main ? "0px" : "10px",
             borderRadius: "10px",
             border:
-              items && items.length > 0
-                ? `1px solid ${theme.palette.divider}`
-                : "none",
+              main || (items && items.length === 0)
+                ? "none"
+                : `1px solid ${theme.palette.divider}`,
           }}
           role="application"
         >
           {items.map((item, index) => (
-            <div
-              // style={{ paddingRight: "30px" }}
-              key={item.id}
-            >
+            <div key={item.id}>
               {renderItem(item)}
               {items && items.length > 3 && index === 2 && (
-                <Divider sx={{ marginTop: "10px" }} />
+                <Divider
+                  sx={{
+                    marginTop: main ? "5px" : "10px",
+                    marginBottom: main ? "15px" : "0px",
+                  }}
+                />
               )}
             </div>
           ))}

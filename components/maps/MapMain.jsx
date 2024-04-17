@@ -10,7 +10,7 @@ const MapMain = ({
   setWiki,
   click,
   setClick,
-  distributionState,
+  ecoChips,
   coords,
   hoverInfo,
   setHoverInfo,
@@ -184,17 +184,23 @@ const MapMain = ({
     [selectedRegion]
   );
 
-  const speciesRegions1 = distributionState[1].regions;
+  const speciesRegions1 = ecoChips[0] && ecoChips[0].unique_id;
 
-  const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
+  const speciesFilter1 = ecoChips[0]
+    ? ["in", "unique_id", ...speciesRegions1]
+    : ["in", "unique_id"];
 
-  const speciesRegions2 = distributionState[2].regions;
+  const speciesRegions2 = ecoChips[1] && ecoChips[1].unique_id;
 
-  const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
+  const speciesFilter2 = ecoChips[1]
+    ? ["in", "unique_id", ...speciesRegions2]
+    : ["in", "unique_id"];
 
-  const speciesRegions3 = distributionState[3].regions;
+  const speciesRegions3 = ecoChips[2] && ecoChips[2].unique_id;
 
-  const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
+  const speciesFilter3 = ecoChips[2]
+    ? ["in", "unique_id", ...speciesRegions3]
+    : ["in", "unique_id"];
 
   const mapRef = useRef();
 
@@ -212,7 +218,11 @@ const MapMain = ({
 
   const onMove = useCallback(
     (prevCount1, prevCount2, prevCount3) => {
-      if (speciesRegions1.length > 0 && prevCount1 !== speciesRegions1) {
+      if (
+        speciesRegions1 &&
+        speciesRegions1.length > 0 &&
+        prevCount1 !== speciesRegions1
+      ) {
         const coord = coords.filter(
           (region) => region.unique_id === speciesRegions1[0]
         );
@@ -223,7 +233,11 @@ const MapMain = ({
           zoom: 3.5,
         });
       }
-      if (speciesRegions2.length > 0 && prevCount2 !== speciesRegions2) {
+      if (
+        speciesRegions2 &&
+        speciesRegions2.length > 0 &&
+        prevCount2 !== speciesRegions2
+      ) {
         const coord = coords.filter(
           (region) => region.unique_id === speciesRegions2[0]
         );
@@ -234,7 +248,11 @@ const MapMain = ({
           zoom: 3.5,
         });
       }
-      if (speciesRegions3.length > 0 && prevCount3 !== speciesRegions3) {
+      if (
+        speciesRegions3 &&
+        speciesRegions3.length > 0 &&
+        prevCount3 !== speciesRegions3
+      ) {
         const coord = coords.filter(
           (region) => region.unique_id === speciesRegions3[0]
         );
@@ -314,7 +332,6 @@ const MapMain = ({
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
             closeOnClick={false}
-            // onClose={() => setShowPopup(false)}
             maxWidth="500px"
             focusAfterOpen={false}
             closeButton={false}

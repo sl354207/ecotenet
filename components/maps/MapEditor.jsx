@@ -140,13 +140,11 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  // const speciesRegions1 = [];
   const speciesRegions1 = state[0] && state[0].unique_id;
 
   const speciesFilter1 = state[0]
     ? ["in", "unique_id", ...speciesRegions1]
     : ["in", "unique_id"];
-  // console.log(speciesFilter1);
 
   const speciesRegions2 = state[1] && state[1].unique_id;
 

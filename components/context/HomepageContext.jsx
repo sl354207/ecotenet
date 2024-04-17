@@ -1,146 +1,9 @@
 import { useRouter } from "next/router";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const HomepageContext = createContext();
 
 export const useHomepageContext = () => useContext(HomepageContext);
-
-const speciesChips = [
-  { count: 0 },
-  {
-    id: 1,
-    _id: "",
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-  {
-    id: 2,
-    _id: "",
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-  {
-    id: 3,
-    _id: "",
-    regions: [],
-    common_name: "",
-    scientific_name: "",
-    open: false,
-  },
-];
-
-// reducer function used by useReducer hook. Toggles the openList value from true to false in menuItems to open and close the correct dropdowns on the drawer
-const reducer = (speciesChips, action) => {
-  if (action.type === "remove") {
-    switch (action.payload) {
-      case 1:
-        speciesChips[1].open = speciesChips[2].open;
-        speciesChips[1].regions = speciesChips[2].regions;
-        speciesChips[1].scientific_name = speciesChips[2].scientific_name;
-        speciesChips[1].common_name = speciesChips[2].common_name;
-        speciesChips[1]._id = speciesChips[2]._id;
-
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
-        speciesChips[2]._id = speciesChips[3]._id;
-
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      case 2:
-        speciesChips[2].open = speciesChips[3].open;
-        speciesChips[2].regions = speciesChips[3].regions;
-        speciesChips[2].scientific_name = speciesChips[3].scientific_name;
-        speciesChips[2].common_name = speciesChips[3].common_name;
-        speciesChips[2]._id = speciesChips[3]._id;
-
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      case 3:
-        speciesChips[3].open = false;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-        speciesChips[0].count -= 1;
-        return { ...speciesChips };
-
-      default:
-        throw new Error();
-    }
-  }
-  if (action.type === "add") {
-    switch (action.payload) {
-      case 0:
-        speciesChips[1].open = true;
-        speciesChips[1].regions = action.value;
-        speciesChips[1].scientific_name = action.s_name;
-        speciesChips[1].common_name = action.c_name;
-        speciesChips[1]._id = action._id;
-        if (speciesChips[0].count === 0) {
-          speciesChips[0].count = 1;
-        } else {
-          speciesChips[0].count = speciesChips[0].count;
-        }
-
-        return { ...speciesChips };
-      case 1:
-        speciesChips[1].open = true;
-        speciesChips[1].regions = action.value;
-        speciesChips[1].scientific_name = action.s_name;
-        speciesChips[1].common_name = action.c_name;
-        speciesChips[1]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 2:
-        speciesChips[2].open = true;
-        speciesChips[2].regions = action.value;
-        speciesChips[2].scientific_name = action.s_name;
-        speciesChips[2].common_name = action.c_name;
-        speciesChips[2]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      case 3:
-        speciesChips[3].open = true;
-        speciesChips[3].regions = action.value;
-        speciesChips[3].scientific_name = action.s_name;
-        speciesChips[3].common_name = action.c_name;
-        speciesChips[3]._id = action._id;
-        speciesChips[0].count += 1;
-        return { ...speciesChips };
-
-      default:
-        throw new Error();
-    }
-  }
-};
 
 export const HomepageProvider = ({ children }) => {
   const router = useRouter();
@@ -164,21 +27,16 @@ export const HomepageProvider = ({ children }) => {
 
   useEffect(() => {
     let visitedHome = localStorage.getItem("visited");
-    // console.log(visitedHome);
 
     if (router.pathname === "/") {
       localStorage.setItem("visited", true);
       setVisited(visitedHome);
-      // console.log(visited);
     } else {
       setVisited(visitedHome);
     }
   }, [router.pathname]);
 
-  const [distributionState, distributionDispatch] = useReducer(
-    reducer,
-    speciesChips
-  );
+  const [ecoChips, setEcoChips] = useState([]);
 
   return (
     <HomepageContext.Provider
@@ -197,8 +55,8 @@ export const HomepageProvider = ({ children }) => {
         setFS,
         FSOpen,
         setFSOpen,
-        distributionState,
-        distributionDispatch,
+        ecoChips,
+        setEcoChips,
       }}
     >
       {children}
