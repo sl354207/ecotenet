@@ -7,14 +7,8 @@ const SpeciesItem = ({ result, handleClose }) => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const {
-    setFS,
-    setFSOpen,
-    setEcoOpen,
-    setFilterOpen,
-    distributionDispatch,
-    setTab,
-  } = useHomepageContext();
+  const { setFS, setFSOpen, setEcoOpen, setFilterOpen, setEcoChips, setTab } =
+    useHomepageContext();
   return (
     <ListItem>
       <Button
@@ -35,14 +29,10 @@ const SpeciesItem = ({ result, handleClose }) => {
               setEcoOpen(false);
             }
             setFSOpen(true);
-            distributionDispatch({
-              type: "add",
-              payload: 0,
-              value: result.unique_id,
-              s_name: result.scientific_name,
-              c_name: result.common_name,
-              _id: result._id,
-            });
+
+            result.id = result.scientific_name;
+            setEcoChips([result]);
+
             setTab({ id: 2, label: "Distributions" });
           } else {
             router.push(

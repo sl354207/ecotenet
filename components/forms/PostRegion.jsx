@@ -369,6 +369,7 @@ const PostRegion = ({
           <SortableList
             items={items}
             onChange={setItems}
+            isMobile={isMobile}
             renderItem={(item) => (
               <SortableItem id={item.id}>
                 <DragHandle />

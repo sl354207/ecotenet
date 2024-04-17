@@ -1,9 +1,8 @@
 import { useHomepageContext } from "@components/context/HomepageContext";
 import { Button, List, ListItem, Typography } from "@mui/material";
 
-// pass down posts from database to CategoryPostList as a prop
 const CategoryPostList = ({ posts, setItemSelected, setItem }) => {
-  const { distributionDispatch, setTab } = useHomepageContext();
+  const { setEcoChips, setTab } = useHomepageContext();
   return (
     <List>
       {posts.map((post) => {
@@ -19,12 +18,17 @@ const CategoryPostList = ({ posts, setItemSelected, setItem }) => {
                 textTransform: "none",
               }}
               onClick={() => {
-                distributionDispatch({
-                  type: "add",
-                  payload: 0,
-                  value: post.ecoregions,
-                  _id: post._id,
-                });
+                const result = { ...post };
+
+                result.unique_id = result.ecoregions;
+                result.id = result._id;
+                delete result.ecoregions;
+                delete result.count;
+                delete result.description;
+                delete result.name;
+
+                setEcoChips([result]);
+
                 setItemSelected(true);
                 setItem(post._id);
                 setTab({ id: 2, label: "Distributions" });

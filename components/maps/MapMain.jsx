@@ -10,7 +10,6 @@ const MapMain = ({
   setWiki,
   click,
   setClick,
-  distributionState,
   ecoChips,
   coords,
   hoverInfo,
@@ -185,18 +184,6 @@ const MapMain = ({
     [selectedRegion]
   );
 
-  // const speciesRegions1 = distributionState[1].regions;
-
-  // const speciesFilter1 = ["in", "unique_id", ...speciesRegions1];
-
-  // const speciesRegions2 = distributionState[2].regions;
-
-  // const speciesFilter2 = ["in", "unique_id", ...speciesRegions2];
-
-  // const speciesRegions3 = distributionState[3].regions;
-
-  // const speciesFilter3 = ["in", "unique_id", ...speciesRegions3];
-
   const speciesRegions1 = ecoChips[0] && ecoChips[0].unique_id;
 
   const speciesFilter1 = ecoChips[0]
@@ -345,7 +332,6 @@ const MapMain = ({
             longitude={hoverInfo.longitude}
             latitude={hoverInfo.latitude}
             closeOnClick={false}
-            // onClose={() => setShowPopup(false)}
             maxWidth="500px"
             focusAfterOpen={false}
             closeButton={false}

@@ -76,7 +76,13 @@ const TiedPostDialog = ({ species, tiedPostDialog, setTiedPostDialog }) => {
           </div>
         );
       } else {
-        list = <PostList posts={results} handleClose={handleCloseDialog} />;
+        list = (
+          <PostList
+            posts={results}
+            search={true}
+            handleClose={handleCloseDialog}
+          />
+        );
       }
     }
   }

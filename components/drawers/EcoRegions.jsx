@@ -59,9 +59,9 @@ const EcoRegions = ({
       <div style={{ display: "flex", flexDirection: "column" }}>
         {!isMobile && (
           <Typography
-            variant="h4"
+            variant="h5"
             align="center"
-            sx={{ marginBottom: "15px", paddingTop: 3 }}
+            sx={{ marginBottom: "4px", marginTop: "10px", fontWeight: 500 }}
           >
             Ecoregions
           </Typography>

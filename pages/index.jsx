@@ -115,8 +115,6 @@ const MapPage = ({ ecoregions }) => {
     setFSOpen,
     tab,
     setTab,
-    distributionState,
-    distributionDispatch,
     ecoChips,
     setEcoChips,
   } = useHomepageContext();
@@ -246,7 +244,6 @@ const MapPage = ({ ecoregions }) => {
           setWiki={setWiki}
           click={click}
           setClick={setClick}
-          distributionState={distributionState}
           ecoChips={ecoChips}
           coords={coords}
           hoverInfo={hoverInfo}
@@ -343,7 +340,6 @@ const MapPage = ({ ecoregions }) => {
                 }}
               >
                 <ButtonGroup
-                  // orientation="vertical"
                   aria-label="vertical outlined button group"
                   sx={{ marginLeft: "10px" }}
                 >
@@ -451,8 +447,6 @@ const MapPage = ({ ecoregions }) => {
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
                     <EcoDist
-                      distributionState={distributionState}
-                      distributionDispatch={distributionDispatch}
                       ecoChips={ecoChips}
                       setEcoChips={setEcoChips}
                       ecoDistResults={ecoDistResults}
@@ -604,8 +598,6 @@ const MapPage = ({ ecoregions }) => {
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
                     <EcoDist
-                      distributionState={distributionState}
-                      distributionDispatch={distributionDispatch}
                       ecoChips={ecoChips}
                       setEcoChips={setEcoChips}
                       ecoDistResults={ecoDistResults}

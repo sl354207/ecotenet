@@ -3,12 +3,14 @@ import {
   SortableItem,
   SortableList,
 } from "@components/layouts/draggable";
+import InfoIcon from "@mui/icons-material/Info";
 import {
   Autocomplete,
   Chip,
   FormControl,
   FormHelperText,
   TextField,
+  Tooltip,
   Typography,
   alpha,
 } from "@mui/material";
@@ -38,8 +40,6 @@ const CustomChip = styled((props) => <Chip {...props} />)(({ theme }) => ({
 const EcoDist = ({
   ecoDistResults,
   setEcoDistResults,
-  distributionState,
-  distributionDispatch,
   ecoChips,
   setEcoChips,
   isMobile,
@@ -75,43 +75,6 @@ const EcoDist = ({
       }
 
       for (const result of ecoDistResults) {
-        // if (result.scientific_name === name) {
-        //   switch (distributionState[0].count) {
-        //     case 0:
-        //       distributionDispatch({
-        //         type: "add",
-        //         payload: 1,
-        //         value: result.unique_id,
-        //         s_name: result.scientific_name,
-        //         c_name: result.common_name,
-        //         _id: result._id,
-        //       });
-        //       break;
-        //     case 1:
-        //       distributionDispatch({
-        //         type: "add",
-        //         payload: 2,
-        //         value: result.unique_id,
-        //         s_name: result.scientific_name,
-        //         c_name: result.common_name,
-        //         _id: result._id,
-        //       });
-        //       break;
-        //     case 2:
-        //       distributionDispatch({
-        //         type: "add",
-        //         payload: 3,
-        //         value: result.unique_id,
-        //         s_name: result.scientific_name,
-        //         c_name: result.common_name,
-        //         _id: result._id,
-        //       });
-        //       break;
-
-        //     default:
-        //     //   throw new Error();
-        //   }
-        // }
         if (
           result.scientific_name === name &&
           !ecoChips.find(
@@ -129,23 +92,15 @@ const EcoDist = ({
   };
 
   const handleRemoveChip = (ecoChip) => {
-    // distributionDispatch({
-    //   type: "remove",
-    //   payload: id,
-    //   value: [],
-    //   s_name: "",
-    //   c_name: "",
-    //   _id: "",
-    // });
     setEcoChips((ecoChips) => ecoChips.filter((i) => i !== ecoChip));
   };
   return (
     <>
       {!isMobile && (
         <Typography
-          variant="h4"
+          variant="h5"
           align="center"
-          sx={{ marginBottom: "15px", paddingTop: 3 }}
+          sx={{ marginBottom: "4px", marginTop: "10px", fontWeight: 500 }}
         >
           Species Map
         </Typography>
@@ -153,9 +108,25 @@ const EcoDist = ({
 
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
-        distribution on the map. A maximum of 3 species can be visualized on the
-        map at the same time, but up to 6 species can be added and manipulated.
+        distribution on the map.
+        <Tooltip
+          enterTouchDelay={100}
+          leaveTouchDelay={5000}
+          arrow
+          title={
+            <Typography color="inherit" variant="body1">
+              A maximum of 3 species can be visualized on the map at the same
+              time, but up to 5 species can be added and manipulated.
+            </Typography>
+          }
+        >
+          <InfoIcon
+            fontSize="small"
+            sx={{ marginLeft: "10px", marginBottom: "-5px" }}
+          ></InfoIcon>
+        </Tooltip>
       </Typography>
+
       <FormControl sx={{ display: "flex" }}>
         <Autocomplete
           sx={{
@@ -184,6 +155,7 @@ const EcoDist = ({
             },
           }}
           autoHighlight
+          disabled={ecoChips && ecoChips.length === 5}
           onChange={(event, newValue) => handleSubmit(event, newValue)}
           selectOnFocus
           clearOnBlur
@@ -242,21 +214,27 @@ const EcoDist = ({
         items={ecoChips}
         onChange={setEcoChips}
         main={true}
+        isMobile={isMobile}
         renderItem={(ecoChip) => (
           <SortableItem id={ecoChip.id}>
             <DragHandle />
             <CustomChip
               label={
-                ecoChip.common_name
+                ecoChip.title
+                  ? ecoChip.title
+                  : ecoChip.common_name
                   ? `${ecoChip.scientific_name} - ${ecoChip.common_name}`
                   : ecoChip.scientific_name
               }
+              clickable={ecoChip.scientific_name ? true : false}
               onClick={() => {
-                window.open(
-                  `/species/${ecoChip.scientific_name.replace(/ /g, "_")}`,
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                if (ecoChip.scientific_name) {
+                  window.open(
+                    `/species/${ecoChip.scientific_name.replace(/ /g, "_")}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+                }
               }}
               onDelete={() => handleRemoveChip(ecoChip)}
               variant="outlined"
@@ -269,147 +247,41 @@ const EcoDist = ({
                     : ecoChips && ecoChips.indexOf(ecoChip) === 2
                     ? "#00ffff"
                     : theme.palette.secondary.main,
+                maxWidth: isMobile ? "92%" : "100%",
               }}
             ></CustomChip>
           </SortableItem>
         )}
       />
-
-      {/* <div style={{ display: "inline-grid", width: "100%" }}>
-        {Array.isArray(distributionState[1].regions) &&
-        distributionState[1].regions.length ? (
-          <CustomChip
-            label={
-              distributionState[1].scientific_name ? (
-                <>
-                  <Typography>
-                    {distributionState[1].scientific_name}
-                  </Typography>
-                  {distributionState[1].common_name && (
-                    <Typography>{distributionState[1].common_name}</Typography>
-                  )}
-                </>
-              ) : (
-                "post"
-              )
-            }
-            onClick={() => {
-              distributionState[1].scientific_name
-                ? window.open(
-                    `/species/${distributionState[1].scientific_name.replace(
-                      / /g,
-                      "_"
-                    )}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                : window.open(
-                    `/posts/${distributionState[1]._id}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  );
-            }}
-            onDelete={() => handleRemoveChip(1)}
-            variant="outlined"
-            sx={{
-              borderColor: "#ff00ff",
-            }}
-          ></CustomChip>
-        ) : (
-          <CustomChip sx={{ visibility: "hidden" }}></CustomChip>
-        )}
-        {Array.isArray(distributionState[2].regions) &&
-        distributionState[2].regions.length ? (
-          <CustomChip
-            label={
-              distributionState[2].scientific_name ? (
-                <>
-                  <Typography>
-                    {distributionState[2].scientific_name}
-                  </Typography>
-                  {distributionState[2].common_name && (
-                    <Typography>{distributionState[2].common_name}</Typography>
-                  )}
-                </>
-              ) : (
-                "post"
-              )
-            }
-            onClick={() => {
-              distributionState[2].scientific_name
-                ? window.open(
-                    `/species/${distributionState[2].scientific_name.replace(
-                      / /g,
-                      "_"
-                    )}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                : window.open(
-                    `/posts/${distributionState[2]._id}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  );
-            }}
-            onDelete={() => handleRemoveChip(2)}
-            variant="outlined"
-            sx={{
-              borderColor: "#ffff00",
-            }}
-          ></CustomChip>
-        ) : (
-          <></>
-        )}
-        {Array.isArray(distributionState[3].regions) &&
-        distributionState[3].regions.length ? (
-          <CustomChip
-            label={
-              distributionState[3].scientific_name ? (
-                <>
-                  <Typography>
-                    {distributionState[3].scientific_name}
-                  </Typography>
-                  {distributionState[3].common_name && (
-                    <Typography>{distributionState[3].common_name}</Typography>
-                  )}
-                </>
-              ) : (
-                "post"
-              )
-            }
-            onClick={() => {
-              distributionState[3].scientific_name
-                ? window.open(
-                    `/species/${distributionState[3].scientific_name.replace(
-                      / /g,
-                      "_"
-                    )}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                : window.open(
-                    `/posts/${distributionState[3]._id}`,
-                    "_blank",
-                    "noopener,noreferrer"
-                  );
-            }}
-            onDelete={() => handleRemoveChip(3)}
-            variant="outlined"
-            sx={{
-              borderColor: "#00ffff",
-            }}
-          ></CustomChip>
-        ) : (
-          <></>
-        )}
-      </div> */}
-
-      <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
-        *A species distribution often does not align perfectly with ecoregion
-        boundaries, therefore a species may not be present throughout the entire
-        ecoregion but only in specific areas. A species may also be widespread
-        but in small numbers so rarely seen.
-      </Typography>
+      {isMobile ? (
+        <Tooltip
+          enterTouchDelay={100}
+          leaveTouchDelay={5000}
+          arrow
+          title={
+            <Typography color="inherit" variant="body1">
+              A species distribution often does not align perfectly with
+              ecoregion boundaries, therefore a species may not be present
+              throughout the entire ecoregion but only in specific areas. A
+              species may also be widespread but in small numbers so rarely
+              seen.
+            </Typography>
+          }
+        >
+          <InfoIcon fontSize="medium" sx={{ marginTop: "15px" }}></InfoIcon>
+        </Tooltip>
+      ) : (
+        <Typography
+          variant="subtitle2"
+          align="left"
+          sx={{ marginTop: "-10px", marginBottom: "0px" }}
+        >
+          *A species distribution often does not align perfectly with ecoregion
+          boundaries, therefore a species may not be present throughout the
+          entire ecoregion but only in specific areas. A species may also be
+          widespread but in small numbers so rarely seen.
+        </Typography>
+      )}
     </>
   );
 };

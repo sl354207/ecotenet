@@ -101,7 +101,7 @@ function SortableOverlay({ children }) {
   );
 }
 
-export function SortableList({ items, onChange, renderItem, main }) {
+export function SortableList({ items, onChange, renderItem, main, isMobile }) {
   const [active, setActive] = useState(null);
   const activeItem = useMemo(
     () => items.find((item) => item.id === active?.id),
@@ -141,7 +141,13 @@ export function SortableList({ items, onChange, renderItem, main }) {
             flexDirection: "column",
             gap: main ? "0px" : "10px",
             listStyle: "none",
-            marginLeft: main ? "-25px" : "10px",
+            marginLeft: main
+              ? isMobile
+                ? "-5px"
+                : "-25px"
+              : isMobile
+              ? "0px"
+              : "10px",
             padding: "10px",
             paddingLeft: main ? "0px" : "10px",
             borderRadius: "10px",
@@ -159,7 +165,7 @@ export function SortableList({ items, onChange, renderItem, main }) {
                 <Divider
                   sx={{
                     marginTop: main ? "5px" : "10px",
-                    marginBottom: main ? "10px" : "0px",
+                    marginBottom: main ? "15px" : "0px",
                   }}
                 />
               )}
