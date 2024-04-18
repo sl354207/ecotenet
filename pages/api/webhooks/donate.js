@@ -65,6 +65,16 @@ const webhookHandler = async (req, res) => {
           res.status(500).json({ msg: "Something went wrong." });
         }
       }
+    } else if (event.type === "customer.subscription.deleted") {
+      const subscriptionDeleted = event.data.object.plan;
+      const { amount } = subscriptionDeleted;
+      const dollars = amount / 100;
+      try {
+        await updateDonations({ monthly: -dollars });
+      } catch (error) {
+        console.error(err);
+        res.status(500).json({ msg: "Something went wrong." });
+      }
     } else {
       console.warn(`Unhandled event type: ${event.type}`);
     }
