@@ -245,6 +245,7 @@ const adminPosts = () => {
 
                 const postPhotos = findPostPhotos(row, []);
                 if (postPhotos.length > 0) {
+                  // ALL POSTS WITH PHOTOS ARE CURRENTLY ADDED FOR MANUAL REVIEW
                   result.toxic.push("photo");
                   if (!tempProfiles.includes(result)) {
                     tempProfiles.push(result);

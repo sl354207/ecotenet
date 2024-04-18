@@ -5,6 +5,7 @@ import Link from "@components/layouts/Link";
 import CheckIcon from "@mui/icons-material/Check";
 import {
   Box,
+  Button,
   CircularProgress,
   Container,
   LinearProgress,
@@ -14,6 +15,7 @@ import {
 import { styled } from "@mui/material/styles";
 import fetcher from "@utils/fetcher";
 import { NextSeo } from "next-seo";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
@@ -28,7 +30,11 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.dark,
   },
 }));
+
+const CANCEL_URL = process.env.NEXT_PUBLIC_STRIPE_CANCEL_URL;
+
 const donate = () => {
+  const router = useRouter();
   const [serverProgress, setServerProgress] = useState(5);
   const [laborProgress, setLaborProgress] = useState(5);
 
@@ -178,6 +184,7 @@ const donate = () => {
       );
     }
   }
+
   return (
     <>
       <NextSeo
@@ -217,6 +224,14 @@ const donate = () => {
           For donation related questions email us at{" "}
           <Link href="mailto:info@ecotenet.org">info@ecotenet.org</Link>
         </Typography>
+        <Button
+          variant="outlined"
+          color="secondary"
+          sx={{ marginTop: "20px", marginInline: "auto", display: "block" }}
+          onClick={() => router.push(CANCEL_URL)}
+        >
+          Cancel Subscription
+        </Button>
       </Container>
       <Footer />
     </>
