@@ -11,6 +11,7 @@ const MapMain = ({
   click,
   setClick,
   ecoChips,
+  native,
   coords,
   hoverInfo,
   setHoverInfo,
@@ -184,7 +185,10 @@ const MapMain = ({
     [selectedRegion]
   );
 
-  const speciesRegions1 = ecoChips[0] && ecoChips[0].unique_id;
+  const speciesRegions1 =
+    ecoChips[0] && ecoChips[0].unique_id && ecoChips[0].native === false
+      ? ecoChips[0] && ecoChips[0].unique_id
+      : ecoChips[0] && ecoChips[0].native_ecoregions;
 
   const speciesFilter1 = ecoChips[0]
     ? ["in", "unique_id", ...speciesRegions1]

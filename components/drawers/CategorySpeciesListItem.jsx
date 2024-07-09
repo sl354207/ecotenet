@@ -16,6 +16,7 @@ const CategorySpeciesListItem = ({ result, setItemSelected, setItem }) => {
         }}
         onClick={() => {
           result.id = result.scientific_name;
+          result.native = false;
           setEcoChips([result]);
 
           setItemSelected(true);

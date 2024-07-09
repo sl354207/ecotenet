@@ -435,7 +435,12 @@ const getSpecies = async (speciesType, unique_id) => {
         species_type: speciesType,
         unique_id: unique_id,
       })
-      .project({ scientific_name: 1, common_name: 1, unique_id: 1 })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        unique_id: 1,
+        native_ecoregions: 1,
+      })
       .sort({ scientific_name: 1 })
       .toArray();
 

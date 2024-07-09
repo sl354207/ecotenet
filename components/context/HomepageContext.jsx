@@ -38,6 +38,8 @@ export const HomepageProvider = ({ children }) => {
 
   const [ecoChips, setEcoChips] = useState([]);
 
+  const [native, setNative] = useState({});
+
   return (
     <HomepageContext.Provider
       value={{
@@ -57,6 +59,8 @@ export const HomepageProvider = ({ children }) => {
         setFSOpen,
         ecoChips,
         setEcoChips,
+        native,
+        setNative,
       }}
     >
       {children}

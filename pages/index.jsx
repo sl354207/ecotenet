@@ -4,7 +4,11 @@ import {
   ButtonGroup,
   Divider,
   Drawer,
+  FormControl,
+  FormControlLabel,
   IconButton,
+  Radio,
+  RadioGroup,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -233,9 +237,86 @@ const MapPage = ({ ecoregions }) => {
   const [top, setTop] = useState("50vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
+  const [nativeToggleValue, setNativeToggleValue] = useState("observed");
+  const handleNativeToggleChange = (event) => {
+    const scientificName =
+      ecoChips && ecoChips[0] && ecoChips[0].scientific_name;
+    if (scientificName) {
+      if (event.target.value === "observed") {
+        // change native value to false on ecoChips item at index 0
+        setEcoChips((prevState) =>
+          prevState.map((item) =>
+            item.scientific_name === scientificName
+              ? { ...item, native: false }
+              : item
+          )
+        );
+
+        setNativeToggleValue("observed");
+      } else {
+        setEcoChips((prevState) =>
+          prevState.map((item) =>
+            item.scientific_name === scientificName
+              ? { ...item, native: true }
+              : item
+          )
+        );
+        setNativeToggleValue("native");
+      }
+    }
+    // console.log(ecoChips);
+  };
+
   return (
     <>
       <MapProvider>
+        <FormControl
+          component="fieldset"
+          sx={{ display: ecoChips && ecoChips[0] ? "block" : "none" }}
+        >
+          <RadioGroup
+            aria-label="native-toggle"
+            name="native-toggle"
+            value={nativeToggleValue}
+            onChange={handleNativeToggleChange}
+            row
+          >
+            <FormControlLabel
+              value="observed"
+              control={
+                <Radio
+                  color="secondary"
+                  sx={{
+                    color: `${theme.palette.secondary.main}!important`,
+                  }}
+                />
+              }
+              label="observed"
+            />
+            <FormControlLabel
+              value="native"
+              // disabled={
+              //   ecoChips &&
+              //   ecoChips[0] &&
+              //   ecoChips[0].native_ecoregions.length === 0
+              // }
+              control={
+                <Radio
+                  color="secondary"
+                  sx={{
+                    color: `${theme.palette.secondary.main}!important`,
+                  }}
+                  // disabled={
+                  //   ecoChips &&
+                  //   ecoChips[0] &&
+                  //   ecoChips[0].native_ecoregions.length === 0
+                  // }
+                />
+              }
+              label="native"
+            />
+          </RadioGroup>
+        </FormControl>
         <MapMain
           isMobile={isMobile}
           ecoFilter={ecoFilter}
