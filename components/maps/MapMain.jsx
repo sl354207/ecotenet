@@ -1,4 +1,12 @@
-import { Button, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
+import theme from "@utils/theme";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
@@ -11,7 +19,7 @@ const MapMain = ({
   click,
   setClick,
   ecoChips,
-  native,
+  setEcoChips,
   coords,
   hoverInfo,
   setHoverInfo,
@@ -21,6 +29,8 @@ const MapMain = ({
   setTab,
   mapLoc,
   setMapLoc,
+  nativeToggleValue,
+  setNativeToggleValue,
 }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
   useEffect(() => {
@@ -271,8 +281,91 @@ const MapMain = ({
     [speciesRegions1, speciesRegions2, speciesRegions3]
   );
 
+  const handleNativeToggleChange = (event) => {
+    const scientificName =
+      ecoChips && ecoChips[0] && ecoChips[0].scientific_name;
+    if (scientificName) {
+      if (event.target.value === "observed") {
+        setEcoChips((prevState) =>
+          prevState.map((item) =>
+            item.scientific_name === scientificName
+              ? { ...item, native: false }
+              : item
+          )
+        );
+
+        setNativeToggleValue("observed");
+      } else {
+        setEcoChips((prevState) =>
+          prevState.map((item) =>
+            item.scientific_name === scientificName
+              ? { ...item, native: true }
+              : item
+          )
+        );
+        setNativeToggleValue("native");
+      }
+    }
+  };
+
   return (
     <>
+      <FormControl
+        component="fieldset"
+        sx={{
+          position: "absolute",
+          zIndex: 1,
+          display: ecoChips && ecoChips[0] ? "relative" : "none",
+        }}
+      >
+        <RadioGroup
+          aria-label="native-toggle"
+          name="native-toggle"
+          value={
+            (ecoChips &&
+              ecoChips[0] &&
+              ecoChips[0].native_ecoregions &&
+              ecoChips[0].native_ecoregions.length === 0) ||
+            (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+              ? "observed"
+              : nativeToggleValue
+          }
+          onChange={handleNativeToggleChange}
+          row
+        >
+          <FormControlLabel
+            value="observed"
+            control={
+              <Radio
+                color="secondary"
+                sx={{
+                  color: `${theme.palette.secondary.main}!important`,
+                }}
+              />
+            }
+            label="observed"
+          />
+          <FormControlLabel
+            value="native"
+            disabled={
+              (ecoChips &&
+                ecoChips[0] &&
+                ecoChips[0].native_ecoregions &&
+                ecoChips[0].native_ecoregions.length === 0) ||
+              (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+            }
+            control={
+              <Radio
+                color="secondary"
+                sx={{
+                  color: `${theme.palette.secondary.main}!important`,
+                }}
+              />
+            }
+            label="native"
+          />
+        </RadioGroup>
+      </FormControl>
       <Map
         id="mapMain"
         reuseMaps

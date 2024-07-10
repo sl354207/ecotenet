@@ -6,8 +6,10 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Autocomplete,
+  Checkbox,
   Chip,
   FormControl,
+  FormControlLabel,
   FormHelperText,
   TextField,
   Tooltip,
@@ -43,6 +45,8 @@ const EcoDist = ({
   ecoChips,
   setEcoChips,
   isMobile,
+  nativeToggleValue,
+  setNativeToggleValue,
 }) => {
   const handleChange = async (e) => {
     if (e.target.value) {
@@ -82,10 +86,13 @@ const EcoDist = ({
           )
         ) {
           result.id = result.scientific_name;
+          result.native = false;
 
           setEcoChips([...ecoChips, result]);
         }
       }
+
+      setNativeToggleValue("observed");
 
       setEcoDistResults([]);
     }
@@ -93,6 +100,24 @@ const EcoDist = ({
 
   const handleRemoveChip = (ecoChip) => {
     setEcoChips((ecoChips) => ecoChips.filter((i) => i !== ecoChip));
+  };
+
+  const handleSelectCheckboxChange = (id) => {
+    if (nativeToggleValue === "observed") {
+      setEcoChips((prevState) =>
+        prevState.map((item) =>
+          item.scientific_name === id ? { ...item, native: true } : item
+        )
+      );
+      setNativeToggleValue("native");
+    } else {
+      setEcoChips((prevState) =>
+        prevState.map((item) =>
+          item.scientific_name === id ? { ...item, native: false } : item
+        )
+      );
+      setNativeToggleValue("observed");
+    }
   };
   return (
     <>
@@ -210,6 +235,26 @@ const EcoDist = ({
           </FormHelperText>
         )}
       </FormControl>
+      <Typography sx={{ position: "absolute", marginLeft: "73%" }}>
+        N
+        <Tooltip
+          enterTouchDelay={100}
+          leaveTouchDelay={5000}
+          arrow
+          title={
+            <Typography color="inherit" variant="body1">
+              Toggle between Native and Observed ranges for a particular
+              species. Checkbox will be disabled if no native range is
+              available.
+            </Typography>
+          }
+        >
+          <InfoIcon
+            fontSize="small"
+            sx={{ marginLeft: "10px", marginBottom: "-5px" }}
+          ></InfoIcon>
+        </Tooltip>
+      </Typography>
       <SortableList
         items={ecoChips}
         onChange={setEcoChips}
@@ -247,9 +292,32 @@ const EcoDist = ({
                     : ecoChips && ecoChips.indexOf(ecoChip) === 2
                     ? "#00ffff"
                     : theme.palette.secondary.main,
-                maxWidth: isMobile ? "92%" : "100%",
+                maxWidth: isMobile ? "92%" : "80%",
               }}
             ></CustomChip>
+            <FormControlLabel
+              key={`select-${ecoChip.id}`}
+              sx={{ marginLeft: "auto", marginRight: "0px" }}
+              control={
+                <Checkbox
+                  sx={{
+                    color: theme.palette.secondary.main,
+                    "&.Mui-checked": {
+                      color: theme.palette.secondary.main,
+                    },
+                  }}
+                  checked={ecoChip.native}
+                  onChange={() => handleSelectCheckboxChange(ecoChip.id)}
+                  disabled={
+                    (ecoChips &&
+                      ecoChips[0] &&
+                      ecoChips[0].native_ecoregions &&
+                      ecoChips[0].native_ecoregions.length === 0) ||
+                    (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+                  }
+                />
+              }
+            />
           </SortableItem>
         )}
       />

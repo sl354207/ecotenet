@@ -4,11 +4,7 @@ import {
   ButtonGroup,
   Divider,
   Drawer,
-  FormControl,
-  FormControlLabel,
   IconButton,
-  Radio,
-  RadioGroup,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -238,85 +234,10 @@ const MapPage = ({ ecoregions }) => {
   const [drawerHeight, setDrawerHeight] = useState(1);
 
   const [nativeToggleValue, setNativeToggleValue] = useState("observed");
-  const handleNativeToggleChange = (event) => {
-    const scientificName =
-      ecoChips && ecoChips[0] && ecoChips[0].scientific_name;
-    if (scientificName) {
-      if (event.target.value === "observed") {
-        // change native value to false on ecoChips item at index 0
-        setEcoChips((prevState) =>
-          prevState.map((item) =>
-            item.scientific_name === scientificName
-              ? { ...item, native: false }
-              : item
-          )
-        );
-
-        setNativeToggleValue("observed");
-      } else {
-        setEcoChips((prevState) =>
-          prevState.map((item) =>
-            item.scientific_name === scientificName
-              ? { ...item, native: true }
-              : item
-          )
-        );
-        setNativeToggleValue("native");
-      }
-    }
-    // console.log(ecoChips);
-  };
 
   return (
     <>
       <MapProvider>
-        <FormControl
-          component="fieldset"
-          sx={{ display: ecoChips && ecoChips[0] ? "block" : "none" }}
-        >
-          <RadioGroup
-            aria-label="native-toggle"
-            name="native-toggle"
-            value={nativeToggleValue}
-            onChange={handleNativeToggleChange}
-            row
-          >
-            <FormControlLabel
-              value="observed"
-              control={
-                <Radio
-                  color="secondary"
-                  sx={{
-                    color: `${theme.palette.secondary.main}!important`,
-                  }}
-                />
-              }
-              label="observed"
-            />
-            <FormControlLabel
-              value="native"
-              // disabled={
-              //   ecoChips &&
-              //   ecoChips[0] &&
-              //   ecoChips[0].native_ecoregions.length === 0
-              // }
-              control={
-                <Radio
-                  color="secondary"
-                  sx={{
-                    color: `${theme.palette.secondary.main}!important`,
-                  }}
-                  // disabled={
-                  //   ecoChips &&
-                  //   ecoChips[0] &&
-                  //   ecoChips[0].native_ecoregions.length === 0
-                  // }
-                />
-              }
-              label="native"
-            />
-          </RadioGroup>
-        </FormControl>
         <MapMain
           isMobile={isMobile}
           ecoFilter={ecoFilter}
@@ -326,6 +247,7 @@ const MapPage = ({ ecoregions }) => {
           click={click}
           setClick={setClick}
           ecoChips={ecoChips}
+          setEcoChips={setEcoChips}
           coords={coords}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
@@ -335,6 +257,8 @@ const MapPage = ({ ecoregions }) => {
           setTab={setTab}
           mapLoc={mapLoc}
           setMapLoc={setMapLoc}
+          nativeToggleValue={nativeToggleValue}
+          setNativeToggleValue={setNativeToggleValue}
         />
         {isMobile ? (
           <>
@@ -533,6 +457,8 @@ const MapPage = ({ ecoregions }) => {
                       ecoDistResults={ecoDistResults}
                       setEcoDistResults={setEcoDistResults}
                       isMobile={isMobile}
+                      nativeToggleValue={nativeToggleValue}
+                      setNativeToggleValue={setNativeToggleValue}
                     />
                   </TabPanel>
                 </>
@@ -683,6 +609,8 @@ const MapPage = ({ ecoregions }) => {
                       setEcoChips={setEcoChips}
                       ecoDistResults={ecoDistResults}
                       setEcoDistResults={setEcoDistResults}
+                      nativeToggleValue={nativeToggleValue}
+                      setNativeToggleValue={setNativeToggleValue}
                     />
                   </TabPanel>
                 </>
