@@ -424,7 +424,6 @@ const deleteComment = async (_id) => {
   }
 };
 
-//get mammals by unique eco id
 const getSpecies = async (speciesType, unique_id) => {
   try {
     const db = await connectToDatabase();
@@ -449,6 +448,31 @@ const getSpecies = async (speciesType, unique_id) => {
     throw new Error(error);
   }
 };
+const getNativeSpecies = async (speciesType, native_ecoregions) => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db
+      .collection("species")
+      .find({
+        species_type: speciesType,
+        native_ecoregions: native_ecoregions,
+      })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        unique_id: 1,
+        native_ecoregions: 1,
+      })
+      .sort({ scientific_name: 1 })
+      .toArray();
+
+    return species;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const getAllSpecies = async () => {
   try {
     const db = await connectToDatabase();
@@ -1501,6 +1525,7 @@ module.exports = {
   updateComment,
   deleteComment,
   getSpecies,
+  getNativeSpecies,
   getAllSpecies,
   getSpeciesByScientificName,
   searchAllPosts,

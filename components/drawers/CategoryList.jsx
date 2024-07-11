@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import CategoryPostList from "./CategoryPostList";
 import CategorySpeciesList from "./CategorySpeciesList";
 import DrawerPost from "./DrawerPost";
@@ -23,17 +23,21 @@ const CategoryList = ({
   description,
   handleFilterClose,
 }) => {
+  const [nativeToggleValue, setNativeToggleValue] = useState("observed");
+
   const { data, isLoading, error } = useSWR(
     category
       ? category.title
         ? `/api/${ecoFilter.unique_id}/${category.title}?sub=${category.sub}`
-        : `/api/${ecoFilter.unique_id}/${category}`
+        : `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
       : null,
     fetcher,
     {
       shouldRetryOnError: false,
     }
   );
+
+  const { mutate } = useSWRConfig();
 
   const [itemSelected, setItemSelected] = useState(false);
   const [item, setItem] = useState(null);
@@ -207,21 +211,17 @@ const CategoryList = ({
                     <>
                       {data && data.category[0].scientific_name ? (
                         <>
-                          <Container sx={{ minHeight: "auto" }}>
-                            <Typography
-                              variant="body1"
-                              align="center"
-                              sx={{ marginTop: "20px" }}
-                            >
-                              *Eco-{ecoFilter.unique_id} {title} current species
-                              count: {data.category.length}
-                            </Typography>
-                          </Container>
-
                           <CategorySpeciesList
                             category={data && data.category}
                             setItemSelected={setItemSelected}
                             setItem={setItem}
+                            ecoFilter={ecoFilter && ecoFilter}
+                            apiQuery={category && category}
+                            mutate={mutate}
+                            nativeToggleValue={
+                              nativeToggleValue && nativeToggleValue
+                            }
+                            setNativeToggleValue={setNativeToggleValue}
                           />
                           <Container sx={{ minHeight: "auto" }}>
                             <Typography variant="subtitle2" align="left">
