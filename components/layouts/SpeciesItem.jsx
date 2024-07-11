@@ -31,6 +31,7 @@ const SpeciesItem = ({ result, handleClose }) => {
             setFSOpen(true);
 
             result.id = result.scientific_name;
+            result.native = false;
             setEcoChips([result]);
 
             setTab({ id: 2, label: "Distributions" });

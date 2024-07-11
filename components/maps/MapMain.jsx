@@ -204,13 +204,21 @@ const MapMain = ({
     ? ["in", "unique_id", ...speciesRegions1]
     : ["in", "unique_id"];
 
-  const speciesRegions2 = ecoChips[1] && ecoChips[1].unique_id;
+  // const speciesRegions2 = ecoChips[1] && ecoChips[1].unique_id;
+  const speciesRegions2 =
+    ecoChips[1] && ecoChips[1].unique_id && ecoChips[1].native === false
+      ? ecoChips[1] && ecoChips[1].unique_id
+      : ecoChips[1] && ecoChips[1].native_ecoregions;
 
   const speciesFilter2 = ecoChips[1]
     ? ["in", "unique_id", ...speciesRegions2]
     : ["in", "unique_id"];
 
-  const speciesRegions3 = ecoChips[2] && ecoChips[2].unique_id;
+  // const speciesRegions3 = ecoChips[2] && ecoChips[2].unique_id;
+  const speciesRegions3 =
+    ecoChips[2] && ecoChips[2].unique_id && ecoChips[2].native === false
+      ? ecoChips[2] && ecoChips[2].unique_id
+      : ecoChips[2] && ecoChips[2].native_ecoregions;
 
   const speciesFilter3 = ecoChips[2]
     ? ["in", "unique_id", ...speciesRegions3]
@@ -315,7 +323,7 @@ const MapMain = ({
         sx={{
           position: "absolute",
           zIndex: 1,
-          display: ecoChips && ecoChips[0] ? "relative" : "none",
+          display: ecoChips && ecoChips.length === 1 ? "relative" : "none",
         }}
       >
         <RadioGroup

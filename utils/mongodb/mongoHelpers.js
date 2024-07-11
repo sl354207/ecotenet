@@ -595,7 +595,14 @@ const searchAllSpecies = async (query) => {
             },
           },
         },
-        { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            unique_id: 1,
+            native_ecoregions: 1,
+          },
+        },
       ])
       .toArray();
 
@@ -715,7 +722,14 @@ const searchEcoSpecies = async (query, eco) => {
             },
           },
         },
-        { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            unique_id: 1,
+            native_ecoregions: 1,
+          },
+        },
       ])
       .toArray();
 
@@ -753,7 +767,14 @@ const autoSpecies = async (query) => {
             },
           },
         },
-        { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            unique_id: 1,
+            native_ecoregions: 1,
+          },
+        },
       ])
       .limit(50)
       .toArray();
@@ -796,6 +817,7 @@ const adminAutoSpecies = async (query) => {
             scientific_name: 1,
             common_name: 1,
             unique_id: 1,
+            native_ecoregions: 1,
             species_type: 1,
           },
         },

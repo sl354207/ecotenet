@@ -235,26 +235,29 @@ const EcoDist = ({
           </FormHelperText>
         )}
       </FormControl>
-      <Typography sx={{ position: "absolute", marginLeft: "73%" }}>
-        N
-        <Tooltip
-          enterTouchDelay={100}
-          leaveTouchDelay={5000}
-          arrow
-          title={
-            <Typography color="inherit" variant="body1">
-              Toggle between Native and Observed ranges for a particular
-              species. Checkbox will be disabled if no native range is
-              available.
-            </Typography>
-          }
-        >
-          <InfoIcon
-            fontSize="small"
-            sx={{ marginLeft: "10px", marginBottom: "-5px" }}
-          ></InfoIcon>
-        </Tooltip>
-      </Typography>
+      {ecoChips && ecoChips.length > 0 && (
+        <Typography sx={{ position: "absolute", marginLeft: "73%" }}>
+          N
+          <Tooltip
+            enterTouchDelay={100}
+            leaveTouchDelay={5000}
+            arrow
+            title={
+              <Typography color="inherit" variant="body1">
+                Toggle between Native and Observed ranges for a particular
+                species. Checkbox will be disabled if no native range is
+                available.
+              </Typography>
+            }
+          >
+            <InfoIcon
+              fontSize="small"
+              sx={{ marginLeft: "10px", marginBottom: "-5px" }}
+            ></InfoIcon>
+          </Tooltip>
+        </Typography>
+      )}
+
       <SortableList
         items={ecoChips}
         onChange={setEcoChips}
@@ -309,11 +312,10 @@ const EcoDist = ({
                   checked={ecoChip.native}
                   onChange={() => handleSelectCheckboxChange(ecoChip.id)}
                   disabled={
-                    (ecoChips &&
-                      ecoChips[0] &&
-                      ecoChips[0].native_ecoregions &&
-                      ecoChips[0].native_ecoregions.length === 0) ||
-                    (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+                    (ecoChip &&
+                      ecoChip.native_ecoregions &&
+                      ecoChip.native_ecoregions.length === 0) ||
+                    (ecoChip && !ecoChip.native_ecoregions)
                   }
                 />
               }
