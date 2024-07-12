@@ -1,16 +1,11 @@
 import {
   Container,
   Divider,
-  FormControl,
-  FormControlLabel,
   List,
   ListItem,
   ListItemText,
-  Radio,
-  RadioGroup,
   Typography,
 } from "@mui/material";
-import theme from "@utils/theme";
 import { createRef } from "react";
 import CategorySpeciesListItem from "./CategorySpeciesListItem";
 
@@ -20,10 +15,6 @@ const CategorySpeciesList = ({
   setItem,
   ecoFilter,
   title,
-  mutate,
-  apiQuery,
-  nativeToggleValue,
-  setNativeToggleValue,
 }) => {
   const uniqueFirstLetter = [
     ...new Set(category.map((item) => item.scientific_name[0])),
@@ -36,18 +27,6 @@ const CategorySpeciesList = ({
     return acc;
   }, {});
 
-  const handleNativeToggleChange = (event) => {
-    if (event.target.value === "observed") {
-      setNativeToggleValue("observed");
-      mutate(
-        `/api/${ecoFilter.unique_id}/${apiQuery}?native=${nativeToggleValue}`
-      );
-    } else {
-      setNativeToggleValue("native");
-      mutate(`/api/${ecoFilter.unique_id}/mammal?native=${nativeToggleValue}`);
-    }
-  };
-
   return (
     <>
       <Container sx={{ minHeight: "auto" }}>
@@ -56,53 +35,7 @@ const CategorySpeciesList = ({
           {category.length}
         </Typography>
       </Container>
-      <FormControl
-        component="fieldset"
-        sx={{
-          marginTop: "20px",
-          marginLeft: "80px",
-        }}
-      >
-        <RadioGroup
-          aria-label="native-toggle"
-          name="native-toggle"
-          value={nativeToggleValue}
-          onChange={handleNativeToggleChange}
-          row
-        >
-          <FormControlLabel
-            value="observed"
-            control={
-              <Radio
-                color="secondary"
-                sx={{
-                  color: `${theme.palette.secondary.main}!important`,
-                }}
-              />
-            }
-            label="observed"
-          />
-          <FormControlLabel
-            value="native"
-            // disabled={
-            //   (ecoChips &&
-            //     ecoChips[0] &&
-            //     ecoChips[0].native_ecoregions &&
-            //     ecoChips[0].native_ecoregions.length === 0) ||
-            //   (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
-            // }
-            control={
-              <Radio
-                color="secondary"
-                sx={{
-                  color: `${theme.palette.secondary.main}!important`,
-                }}
-              />
-            }
-            label="native"
-          />
-        </RadioGroup>
-      </FormControl>
+
       <List>
         {uniqueFirstLetter.map((entry) => {
           return (

@@ -4,9 +4,14 @@ import {
   Button,
   CircularProgress,
   Container,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
+import theme from "@utils/theme";
 import { useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import CategoryPostList from "./CategoryPostList";
@@ -41,6 +46,20 @@ const CategoryList = ({
 
   const [itemSelected, setItemSelected] = useState(false);
   const [item, setItem] = useState(null);
+
+  const handleNativeToggleChange = (event) => {
+    if (event.target.value === "observed") {
+      setNativeToggleValue("observed");
+      mutate(
+        `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
+      );
+    } else {
+      setNativeToggleValue("native");
+      mutate(
+        `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
+      );
+    }
+  };
 
   return (
     <>
@@ -189,13 +208,54 @@ const CategoryList = ({
                   {data && data.category.length === 0 ? (
                     <Container sx={{ minHeight: "auto" }}>
                       {data.tag === "species" ? (
-                        <Typography
-                          variant="h6"
-                          align="center"
-                          sx={{ marginTop: "20px" }}
-                        >
-                          We currently do not have data on this category
-                        </Typography>
+                        <>
+                          <FormControl
+                            component="fieldset"
+                            sx={{
+                              marginLeft: "56px",
+                            }}
+                          >
+                            <RadioGroup
+                              aria-label="native-toggle"
+                              name="native-toggle"
+                              value={nativeToggleValue}
+                              onChange={handleNativeToggleChange}
+                              row
+                            >
+                              <FormControlLabel
+                                value="observed"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="observed"
+                              />
+                              <FormControlLabel
+                                value="native"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="native"
+                              />
+                            </RadioGroup>
+                          </FormControl>
+                          <Typography
+                            variant="h6"
+                            align="center"
+                            sx={{ marginTop: "20px" }}
+                          >
+                            We currently do not have data on this category
+                          </Typography>
+                        </>
                       ) : (
                         <Typography
                           variant="h6"
@@ -211,17 +271,51 @@ const CategoryList = ({
                     <>
                       {data && data.category[0].scientific_name ? (
                         <>
+                          <FormControl
+                            component="fieldset"
+                            sx={{
+                              marginLeft: "80px",
+                            }}
+                          >
+                            <RadioGroup
+                              aria-label="native-toggle"
+                              name="native-toggle"
+                              value={nativeToggleValue}
+                              onChange={handleNativeToggleChange}
+                              row
+                            >
+                              <FormControlLabel
+                                value="observed"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="observed"
+                              />
+                              <FormControlLabel
+                                value="native"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="native"
+                              />
+                            </RadioGroup>
+                          </FormControl>
                           <CategorySpeciesList
                             category={data && data.category}
                             setItemSelected={setItemSelected}
                             setItem={setItem}
                             ecoFilter={ecoFilter && ecoFilter}
-                            apiQuery={category && category}
-                            mutate={mutate}
-                            nativeToggleValue={
-                              nativeToggleValue && nativeToggleValue
-                            }
-                            setNativeToggleValue={setNativeToggleValue}
+                            title={title}
                           />
                           <Container sx={{ minHeight: "auto" }}>
                             <Typography variant="subtitle2" align="left">
