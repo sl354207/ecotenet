@@ -48,13 +48,13 @@ const CategoryList = ({
   const [item, setItem] = useState(null);
 
   const handleNativeToggleChange = (event) => {
-    if (event.target.value === "observed") {
-      setNativeToggleValue("observed");
+    if (event.target.value === "native") {
+      setNativeToggleValue("native");
       mutate(
         `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
       );
     } else {
-      setNativeToggleValue("native");
+      setNativeToggleValue("observed");
       mutate(
         `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
       );
