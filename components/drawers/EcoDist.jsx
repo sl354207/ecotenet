@@ -236,26 +236,35 @@ const EcoDist = ({
         )}
       </FormControl>
       {ecoChips && ecoChips.length > 0 && (
-        <Typography sx={{ position: "absolute", marginLeft: "73%" }}>
-          N
+        <>
           <Tooltip
             enterTouchDelay={100}
             leaveTouchDelay={5000}
             arrow
             title={
-              <Typography color="inherit" variant="body1">
-                Toggle between Native and Observed ranges for a particular
-                species. Checkbox will be disabled if no native range is
-                available.
-              </Typography>
+              <>
+                <Typography color="inherit" variant="h6">
+                  Toggle between Native and Observed ranges for a particular
+                  species. Checkbox will be disabled if no native range is
+                  available.
+                </Typography>
+              </>
             }
           >
             <InfoIcon
               fontSize="small"
-              sx={{ marginLeft: "10px", marginBottom: "-5px" }}
+              sx={{ marginTop: "-28px", marginLeft: { xs: "98%", md: "100%" } }}
             ></InfoIcon>
           </Tooltip>
-        </Typography>
+          <Typography
+            sx={{
+              marginTop: "-24px",
+              marginLeft: { xs: "95%", sm: "96%", md: "95%" },
+            }}
+          >
+            N
+          </Typography>
+        </>
       )}
 
       <SortableList
@@ -295,12 +304,12 @@ const EcoDist = ({
                     : ecoChips && ecoChips.indexOf(ecoChip) === 2
                     ? "#00ffff"
                     : theme.palette.secondary.main,
-                maxWidth: isMobile ? "92%" : "80%",
+                maxWidth: isMobile ? "81%" : "80%",
               }}
             ></CustomChip>
             <FormControlLabel
               key={`select-${ecoChip.id}`}
-              sx={{ marginLeft: "auto", marginRight: "0px" }}
+              sx={{ marginLeft: "auto", marginRight: "-15px" }}
               control={
                 <Checkbox
                   sx={{

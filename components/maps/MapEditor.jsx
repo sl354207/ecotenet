@@ -1,10 +1,24 @@
 import Coords from "@data/eco_coord.json";
-import { Button, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
+import theme from "@utils/theme";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
-const MapEditor = ({ clickInfo, state, handleDblClick }) => {
+const MapEditor = ({
+  clickInfo,
+  state,
+  handleDblClick,
+  nativeToggleValue,
+  handleNativeToggleChange,
+}) => {
   // console.log(state);
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
@@ -140,19 +154,28 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
 
   const clickFilter = ["in", "unique_id", ...clickedRegions];
 
-  const speciesRegions1 = state[0] && state[0].unique_id;
+  const speciesRegions1 =
+    state[0] && state[0].native === true
+      ? state[0].native_ecoregions
+      : state[0] && state[0].unique_id;
 
   const speciesFilter1 = state[0]
     ? ["in", "unique_id", ...speciesRegions1]
     : ["in", "unique_id"];
 
-  const speciesRegions2 = state[1] && state[1].unique_id;
+  const speciesRegions2 =
+    state[1] && state[1].native === true
+      ? state[1].native_ecoregions
+      : state[1] && state[1].unique_id;
 
   const speciesFilter2 = state[1]
     ? ["in", "unique_id", ...speciesRegions2]
     : ["in", "unique_id"];
 
-  const speciesRegions3 = state[2] && state[2].unique_id;
+  const speciesRegions3 =
+    state[2] && state[2].native === true
+      ? state[2].native_ecoregions
+      : state[2] && state[2].unique_id;
 
   const speciesFilter3 = state[2]
     ? ["in", "unique_id", ...speciesRegions3]
@@ -226,6 +249,83 @@ const MapEditor = ({ clickInfo, state, handleDblClick }) => {
   //
   return (
     <div>
+      <FormControl
+        component="fieldset"
+        sx={{
+          position: "absolute",
+          zIndex: 1,
+          display: state && state.length === 1 ? "relative" : "none",
+          marginLeft: "20px",
+        }}
+      >
+        <RadioGroup
+          aria-label="native-toggle"
+          name="native-toggle"
+          value={
+            (state &&
+              state[0] &&
+              state[0].native_ecoregions &&
+              state[0].native_ecoregions.length === 0) ||
+            (state && state[0] && !state[0].native_ecoregions)
+              ? "observed"
+              : nativeToggleValue
+          }
+          onChange={handleNativeToggleChange}
+          row
+        >
+          <FormControlLabel
+            value="observed"
+            control={
+              <Radio
+                color="secondary"
+                sx={{
+                  color: `${theme.palette.secondary.main}!important`,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
+                  },
+                }}
+              />
+            }
+            sx={{
+              "& .MuiFormControlLabel-label": {
+                fontWeight: "900",
+                fontSize: "1.4rem",
+                "-webkit-text-stroke": "1px black",
+              },
+            }}
+            label="observed"
+          />
+          <FormControlLabel
+            value="native"
+            disabled={
+              (state &&
+                state[0] &&
+                state[0].native_ecoregions &&
+                state[0].native_ecoregions.length === 0) ||
+              (state && state[0] && !state[0].native_ecoregions)
+            }
+            control={
+              <Radio
+                color="secondary"
+                sx={{
+                  color: `${theme.palette.secondary.main}!important`,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
+                  },
+                }}
+              />
+            }
+            sx={{
+              "& .MuiFormControlLabel-label": {
+                fontWeight: "900",
+                fontSize: "1.4rem",
+                "-webkit-text-stroke": "1px black",
+              },
+            }}
+            label="native"
+          />
+        </RadioGroup>
+      </FormControl>
       <Map
         reuseMaps
         style={{

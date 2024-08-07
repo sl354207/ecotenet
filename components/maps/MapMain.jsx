@@ -348,9 +348,19 @@ const MapMain = ({
                 color="secondary"
                 sx={{
                   color: `${theme.palette.secondary.main}!important`,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
+                  },
                 }}
               />
             }
+            sx={{
+              "& .MuiFormControlLabel-label": {
+                fontWeight: "900",
+                fontSize: "1.4rem",
+                "-webkit-text-stroke": "1px black",
+              },
+            }}
             label="observed"
           />
           <FormControlLabel
@@ -367,9 +377,19 @@ const MapMain = ({
                 color="secondary"
                 sx={{
                   color: `${theme.palette.secondary.main}!important`,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
+                  },
                 }}
               />
             }
+            sx={{
+              "& .MuiFormControlLabel-label": {
+                fontWeight: "900",
+                fontSize: "1.4rem",
+                "-webkit-text-stroke": "1px black",
+              },
+            }}
             label="native"
           />
         </RadioGroup>
