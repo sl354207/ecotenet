@@ -4,8 +4,10 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import MapAdmin from "@components/maps/MapAdmin";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import {
   Autocomplete,
   Button,
@@ -74,6 +76,7 @@ const adminSpecies = () => {
   const [nativeStatus, setNativeStatus] = useState("native");
   const [toggleObserved, setToggleObserved] = useState(true);
   const [toggleNative, setToggleNative] = useState(true);
+  const [toggleResources, setToggleResources] = useState(true);
   const [resolve, setResolve] = useState(false);
 
   useEffect(() => {
@@ -488,84 +491,106 @@ const adminSpecies = () => {
           <>
             <Typography variant="h6" align="left">
               Resources:
+              {toggleResources ? (
+                <>
+                  <IconButton
+                    onClick={() => setToggleResources(false)}
+                    size="small"
+                  >
+                    <KeyboardDoubleArrowUpIcon
+                      sx={{ color: theme.palette.secondary.main }}
+                    />
+                  </IconButton>
+                  <List>
+                    <ListItem key={"wiki"}>
+                      <Link
+                        variant="h6"
+                        href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                          / /g,
+                          "_"
+                        )}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Wikipedia
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"inat"}>
+                      <Link
+                        variant="h6"
+                        href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
+                          / /g,
+                          "+"
+                        )}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        iNaturalist
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"wiki_commons"}>
+                      <Link
+                        variant="h6"
+                        href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
+                          / /g,
+                          "+"
+                        )}&title=Special:MediaSearch&go=Go&type=image`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Wikimedia Commons
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"iucn"}>
+                      <Link
+                        variant="h6"
+                        href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
+                          / /g,
+                          "+"
+                        )}&searchType=species`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        IUCN Red List
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"eco"}>
+                      <Link
+                        variant="h6"
+                        href={`https://www.ecotenet.org/species/${species.scientific_name.replace(
+                          / /g,
+                          "_"
+                        )}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Ecotenet
+                      </Link>
+                    </ListItem>
+                  </List>
+                </>
+              ) : (
+                <IconButton
+                  onClick={() => setToggleResources(true)}
+                  size="small"
+                >
+                  <KeyboardDoubleArrowDownIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              )}
             </Typography>
-            <List>
-              <ListItem key={"wiki"}>
-                <Link
-                  variant="h6"
-                  href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                    / /g,
-                    "_"
-                  )}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Wikipedia
-                </Link>
-              </ListItem>
-              <ListItem key={"inat"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
-                    / /g,
-                    "+"
-                  )}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  iNaturalist
-                </Link>
-              </ListItem>
-              <ListItem key={"wiki_commons"}>
-                <Link
-                  variant="h6"
-                  href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
-                    / /g,
-                    "+"
-                  )}&title=Special:MediaSearch&go=Go&type=image`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Wikimedia Commons
-                </Link>
-              </ListItem>
-              <ListItem key={"iucn"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
-                    / /g,
-                    "+"
-                  )}&searchType=species`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  IUCN Red List
-                </Link>
-              </ListItem>
-              <ListItem key={"eco"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.ecotenet.org/species/${species.scientific_name.replace(
-                    / /g,
-                    "_"
-                  )}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Ecotenet
-                </Link>
-              </ListItem>
-            </List>
+
             <Typography
               variant="h6"
               sx={{
