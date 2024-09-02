@@ -45,7 +45,8 @@ const PostList = ({ posts, search, handleClose }) => {
 
                   const result = { ...post };
 
-                  result.unique_id = result.ecoregions;
+                  result.observed_ecoregions = result.ecoregions;
+                  result.native = false;
                   result.id = result._id;
                   delete result.ecoregions;
                   delete result.count;

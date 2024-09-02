@@ -157,7 +157,7 @@ const MapEditor = ({
   const speciesRegions1 =
     state[0] && state[0].native === true
       ? state[0].native_ecoregions
-      : state[0] && state[0].unique_id;
+      : state[0] && state[0].observed_ecoregions;
 
   const speciesFilter1 = state[0]
     ? ["in", "unique_id", ...speciesRegions1]
@@ -166,7 +166,7 @@ const MapEditor = ({
   const speciesRegions2 =
     state[1] && state[1].native === true
       ? state[1].native_ecoregions
-      : state[1] && state[1].unique_id;
+      : state[1] && state[1].observed_ecoregions;
 
   const speciesFilter2 = state[1]
     ? ["in", "unique_id", ...speciesRegions2]
@@ -175,7 +175,7 @@ const MapEditor = ({
   const speciesRegions3 =
     state[2] && state[2].native === true
       ? state[2].native_ecoregions
-      : state[2] && state[2].unique_id;
+      : state[2] && state[2].observed_ecoregions;
 
   const speciesFilter3 = state[2]
     ? ["in", "unique_id", ...speciesRegions3]

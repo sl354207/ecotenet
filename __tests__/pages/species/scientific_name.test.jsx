@@ -31,7 +31,7 @@ jest.spyOn(require("next-auth/react"), "signIn");
 const species = {
   scientific_name: "test scientific name",
   common_name: "test-common-name",
-  unique_id: ["1", "2"],
+  observed_ecoregions: ["1", "2"],
 };
 
 const wiki = {

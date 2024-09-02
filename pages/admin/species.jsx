@@ -124,19 +124,19 @@ const adminSpecies = () => {
         if (result.scientific_name === name) {
           setSpecies(result);
           setSpeciesType(result.species_type);
-          setObservedEcoregions(result.unique_id);
+          setObservedEcoregions(result.observed_ecoregions);
           if (result.native_ecoregions) {
             setNativeEcoregions(result.native_ecoregions);
             setInitialEcoregions([
               ...result.native_ecoregions,
-              ...result.unique_id,
+              ...result.observed_ecoregions,
             ]);
           } else {
             setNativeEcoregions([]);
-            setInitialEcoregions([...result.unique_id]);
+            setInitialEcoregions([...result.observed_ecoregions]);
           }
 
-          setClickInfo(result.unique_id);
+          setClickInfo(result.observed_ecoregions);
           setNativeStatus("observed");
         }
       }
@@ -204,14 +204,14 @@ const adminSpecies = () => {
         data = {
           scientific_name: species.scientific_name,
           species_type: speciesType,
-          unique_id: observedEcoregions,
+          observed_ecoregions: observedEcoregions,
           native_ecoregions: nativeEcoregions,
         };
       } else {
         data = {
           scientific_name: species.scientific_name,
           species_type: speciesType,
-          unique_id: observedEcoregions,
+          observed_ecoregions: observedEcoregions,
         };
       }
 

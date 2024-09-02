@@ -141,7 +141,7 @@ const PostRegion = ({
     setClickInfo([]);
     const selected = items.filter((item) => item.select === true);
     const arraysOfNumbers = selected.map((obj) =>
-      obj.native === true ? obj.native_ecoregions : obj.unique_id
+      obj.native === true ? obj.native_ecoregions : obj.observed_ecoregions
     );
     // find all of the unique numbers in arraysOfNumbers
     const uniqueNumbers = Array.from(new Set(arraysOfNumbers.flat()));
@@ -156,7 +156,7 @@ const PostRegion = ({
     const selected = items.filter((item) => item.select === true);
     // Get all arrays of numbers
     const arraysOfNumbers = selected.map((obj) =>
-      obj.native === true ? obj.native_ecoregions : obj.unique_id
+      obj.native === true ? obj.native_ecoregions : obj.observed_ecoregions
     );
 
     // Find the intersection of all arrays

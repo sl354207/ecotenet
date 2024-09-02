@@ -387,7 +387,7 @@ const Species = ({ species, wiki }) => {
                       sx={{ color: theme.palette.secondary.main }}
                     />
                   </IconButton>
-                  {species.unique_id.map((id) => (
+                  {species.observed_ecoregions.map((id) => (
                     <Link
                       href={`/ecoregions/${id}`}
                       color="secondary"

@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "required": ["scientific_name", "unique_id", "species_type"],
+  "required": ["scientific_name", "observed_ecoregions", "species_type"],
   "properties": {
     "kingdom": {
       "type": "string",
@@ -96,7 +96,7 @@
         "additionalProperties": false
       }
     },
-    "unique_id": {
+    "observed_ecoregions": {
       "type": "array",
       "description": "must be an array",
       "minItems": 1,
