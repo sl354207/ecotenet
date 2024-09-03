@@ -254,7 +254,13 @@ const MapEditor = ({
         sx={{
           position: "absolute",
           zIndex: 1,
-          display: state && state.length === 1 ? "relative" : "none",
+          display:
+            state &&
+            state.length === 1 &&
+            state[0].native_ecoregions &&
+            state[0].native_ecoregions.length > 0
+              ? "block"
+              : "none",
           marginLeft: "20px",
         }}
       >
