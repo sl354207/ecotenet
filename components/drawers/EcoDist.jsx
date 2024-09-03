@@ -309,7 +309,10 @@ const EcoDist = ({
             ></CustomChip>
             <FormControlLabel
               key={`select-${ecoChip.id}`}
-              sx={{ marginLeft: "auto", marginRight: "-15px" }}
+              sx={{
+                marginLeft: "auto",
+                marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
+              }}
               control={
                 <Checkbox
                   sx={{

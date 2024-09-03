@@ -326,8 +326,16 @@ const MapMain = ({
         component="fieldset"
         sx={{
           position: "absolute",
+          bottom: { xs: "inherit", md: "10px" },
+          right: 0,
           zIndex: 1,
-          display: ecoChips && ecoChips.length === 1 ? "relative" : "none",
+          display:
+            ecoChips &&
+            ecoChips.length === 1 &&
+            ecoChips[0].native_ecoregions &&
+            ecoChips[0].native_ecoregions.length > 0
+              ? "block"
+              : "none",
         }}
       >
         <RadioGroup
@@ -448,13 +456,14 @@ const MapMain = ({
         </Source>
         <AttributionControl
           compact={true}
+          position="bottom-left"
           customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
             World. GIS layers developed by The Nature Conservancy with multiple partners,
             combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK):
             The Nature Conservancy. DOIs: 10.1641/B570707;
             10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-
             wcmc.org/datasets/38"
-          style={{ color: "black" }}
+          style={{ color: "black", marginLeft: "100px", marginBottom: "-20px" }}
         />
         {selectedRegion && showPopup && (
           <Popup

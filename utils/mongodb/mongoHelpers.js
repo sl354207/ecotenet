@@ -503,6 +503,7 @@ const getSpeciesByScientificName = async (name) => {
           scientific_name: 1,
           common_name: 1,
           observed_ecoregions: 1,
+          native_ecoregions: 1,
           species_type: 1,
         },
       }

@@ -76,7 +76,9 @@ const DrawerSpecies = ({ species, handleClose }) => {
     }
   );
 
-  const [toggleEcoregions, setToggleEcoregions] = useState(false);
+  const [toggleObservedEcoregions, setToggleObservedEcoregions] =
+    useState(false);
+  const [toggleNativeEcoregions, setToggleNativeEcoregions] = useState(false);
 
   const options = {
     replace: (domNode) => {
@@ -319,12 +321,16 @@ const DrawerSpecies = ({ species, handleClose }) => {
                 </div>
               </div>
 
-              <Typography variant="h6">
-                Ecoregions:
-                {toggleEcoregions ? (
+              <Typography variant="body1">
+                {species &&
+                species.native_ecoregions &&
+                species.native_ecoregions.length > 0
+                  ? "Observed Ecoregions:"
+                  : "Ecoregions:"}
+                {toggleObservedEcoregions ? (
                   <>
                     <IconButton
-                      onClick={() => setToggleEcoregions(false)}
+                      onClick={() => setToggleObservedEcoregions(false)}
                       size="small"
                     >
                       <KeyboardDoubleArrowLeftIcon
@@ -351,7 +357,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   </>
                 ) : (
                   <IconButton
-                    onClick={() => setToggleEcoregions(true)}
+                    onClick={() => setToggleObservedEcoregions(true)}
                     size="small"
                   >
                     <KeyboardDoubleArrowRightIcon
@@ -360,9 +366,55 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   </IconButton>
                 )}
               </Typography>
+              {species &&
+                species.native_ecoregions &&
+                species.native_ecoregions.length > 0 && (
+                  <Typography variant="body1">
+                    Native Ecoregions:
+                    {toggleNativeEcoregions ? (
+                      <>
+                        <IconButton
+                          onClick={() => setToggleNativeEcoregions(false)}
+                          size="small"
+                        >
+                          <KeyboardDoubleArrowLeftIcon
+                            sx={{ color: theme.palette.secondary.main }}
+                          />
+                        </IconButton>
+                        {species.native_ecoregions.map((id) => (
+                          <Link
+                            href={`/ecoregions/${id}`}
+                            color="secondary"
+                            underline="hover"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            key={id}
+                            sx={{
+                              fontSize: "1rem",
+                              fontWeight: 500,
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            Eco-{id},{" "}
+                          </Link>
+                        ))}
+                      </>
+                    ) : (
+                      <IconButton
+                        onClick={() => setToggleNativeEcoregions(true)}
+                        size="small"
+                      >
+                        <KeyboardDoubleArrowRightIcon
+                          sx={{ color: theme.palette.secondary.main }}
+                        />
+                      </IconButton>
+                    )}
+                  </Typography>
+                )}
               <Button
                 variant="outlined"
                 color="secondary"
+                sx={{ marginTop: "5px" }}
                 onClick={() => {
                   setTiedPostDialog(true);
                 }}

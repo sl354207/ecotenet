@@ -74,9 +74,9 @@ const adminSpecies = () => {
   const [nativeEcoregions, setNativeEcoregions] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
   const [nativeStatus, setNativeStatus] = useState("native");
-  const [toggleObserved, setToggleObserved] = useState(true);
-  const [toggleNative, setToggleNative] = useState(true);
-  const [toggleResources, setToggleResources] = useState(true);
+  const [toggleObserved, setToggleObserved] = useState(false);
+  const [toggleNative, setToggleNative] = useState(false);
+  const [toggleResources, setToggleResources] = useState(false);
   const [resolve, setResolve] = useState(false);
 
   useEffect(() => {
