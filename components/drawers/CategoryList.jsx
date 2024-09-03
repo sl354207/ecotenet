@@ -274,7 +274,8 @@ const CategoryList = ({
                           <FormControl
                             component="fieldset"
                             sx={{
-                              marginLeft: "80px",
+                              display: "flex",
+                              alignItems: "center",
                             }}
                           >
                             <RadioGroup
@@ -310,6 +311,17 @@ const CategoryList = ({
                               />
                             </RadioGroup>
                           </FormControl>
+                          {nativeToggleValue === "native" && (
+                            <Typography
+                              variant="subtitle2"
+                              align="center"
+                              sx={{ marginInline: "5px" }}
+                            >
+                              This is not by any means a complete list of native
+                              species for this region. It is only the native
+                              species that Ecotenet currently has data on.
+                            </Typography>
+                          )}
                           <CategorySpeciesList
                             category={data && data.category}
                             setItemSelected={setItemSelected}
