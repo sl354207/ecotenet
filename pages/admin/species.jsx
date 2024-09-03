@@ -4,14 +4,22 @@ import Header from "@components/layouts/Header";
 import Link from "@components/layouts/Link";
 import MapAdmin from "@components/maps/MapAdmin";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import {
   Autocomplete,
   Button,
   Container,
   FormControl,
+  FormControlLabel,
+  IconButton,
   InputLabel,
   List,
   ListItem,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
@@ -62,7 +70,13 @@ const adminSpecies = () => {
   const [species, setSpecies] = useState();
   const [speciesType, setSpeciesType] = useState();
   const [initialEcoregions, setInitialEcoregions] = useState([]);
+  const [observedEcoregions, setObservedEcoregions] = useState([]);
+  const [nativeEcoregions, setNativeEcoregions] = useState([]);
   const [clickInfo, setClickInfo] = useState([]);
+  const [nativeStatus, setNativeStatus] = useState("native");
+  const [toggleObserved, setToggleObserved] = useState(false);
+  const [toggleNative, setToggleNative] = useState(false);
+  const [toggleResources, setToggleResources] = useState(false);
   const [resolve, setResolve] = useState(false);
 
   useEffect(() => {
@@ -110,15 +124,30 @@ const adminSpecies = () => {
         if (result.scientific_name === name) {
           setSpecies(result);
           setSpeciesType(result.species_type);
-          setInitialEcoregions(result.unique_id);
-          setClickInfo(result.unique_id);
+          setObservedEcoregions(result.observed_ecoregions);
+          if (result.native_ecoregions) {
+            setNativeEcoregions(result.native_ecoregions);
+            setInitialEcoregions([
+              ...result.native_ecoregions,
+              ...result.observed_ecoregions,
+            ]);
+          } else {
+            setNativeEcoregions([]);
+            setInitialEcoregions([...result.observed_ecoregions]);
+          }
+
+          setClickInfo(result.observed_ecoregions);
+          setNativeStatus("observed");
         }
       }
     } else {
+      setObservedEcoregions([]);
+      setNativeEcoregions([]);
       setInitialEcoregions([]);
       setClickInfo([]);
       setSpecies(null);
       setSpeciesType(null);
+      setNativeStatus("native");
     }
 
     setResults([]);
@@ -134,10 +163,34 @@ const adminSpecies = () => {
             ...clickInfo,
             region.properties.unique_id,
           ]);
+          if (nativeStatus === "native") {
+            setNativeEcoregions((nativeEcoregions) => [
+              ...nativeEcoregions,
+              region.properties.unique_id,
+            ]);
+          } else {
+            setObservedEcoregions((observedEcoregions) => [
+              ...observedEcoregions,
+              region.properties.unique_id,
+            ]);
+          }
         } else {
           setClickInfo((clickInfo) =>
             clickInfo.filter((id) => id !== region.properties.unique_id)
           );
+          if (nativeStatus === "native") {
+            setNativeEcoregions((nativeEcoregions) =>
+              nativeEcoregions.filter(
+                (id) => id !== region.properties.unique_id
+              )
+            );
+          } else {
+            setObservedEcoregions((observedEcoregions) =>
+              observedEcoregions.filter(
+                (id) => id !== region.properties.unique_id
+              )
+            );
+          }
         }
       }
     },
@@ -146,11 +199,22 @@ const adminSpecies = () => {
 
   const handleUpdate = async () => {
     if (species) {
-      const data = {
-        scientific_name: species.scientific_name,
-        species_type: speciesType,
-        unique_id: clickInfo,
-      };
+      let data = {};
+      if (species.native_ecoregions) {
+        data = {
+          scientific_name: species.scientific_name,
+          species_type: speciesType,
+          observed_ecoregions: observedEcoregions,
+          native_ecoregions: nativeEcoregions,
+        };
+      } else {
+        data = {
+          scientific_name: species.scientific_name,
+          species_type: speciesType,
+          observed_ecoregions: observedEcoregions,
+        };
+      }
+
       const res = await fetch(
         `/api/admin/species/${species.scientific_name.replace(/ /g, "_")}`,
         {
@@ -193,6 +257,16 @@ const adminSpecies = () => {
 
   const handleCloseResolve = () => {
     setResolve(false);
+  };
+
+  const handleNativeStatusChange = (event) => {
+    if (event.target.value === "native") {
+      setNativeStatus("native");
+      setClickInfo(nativeEcoregions);
+    } else {
+      setNativeStatus("observed");
+      setClickInfo(observedEcoregions);
+    }
   };
 
   return (
@@ -251,7 +325,8 @@ const adminSpecies = () => {
             !speciesType ||
             (species &&
               species.species_type === speciesType &&
-              initialEcoregions === clickInfo)
+              observedEcoregions.length + nativeEcoregions.length ===
+                initialEcoregions.length)
           }
           onClick={() => handleUpdate()}
         >
@@ -377,6 +452,7 @@ const adminSpecies = () => {
               setSpeciesType(newValue);
             }}
             value={(speciesType && speciesType) || ""}
+            disabled={!species}
             options={speciesTypeOptions}
             noOptionsText={
               <Typography
@@ -415,108 +491,233 @@ const adminSpecies = () => {
           <>
             <Typography variant="h6" align="left">
               Resources:
+              {toggleResources ? (
+                <>
+                  <IconButton
+                    onClick={() => setToggleResources(false)}
+                    size="small"
+                  >
+                    <KeyboardDoubleArrowUpIcon
+                      sx={{ color: theme.palette.secondary.main }}
+                    />
+                  </IconButton>
+                  <List>
+                    <ListItem key={"wiki"}>
+                      <Link
+                        variant="h6"
+                        href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
+                          / /g,
+                          "_"
+                        )}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Wikipedia
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"inat"}>
+                      <Link
+                        variant="h6"
+                        href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
+                          / /g,
+                          "+"
+                        )}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        iNaturalist
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"wiki_commons"}>
+                      <Link
+                        variant="h6"
+                        href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
+                          / /g,
+                          "+"
+                        )}&title=Special:MediaSearch&go=Go&type=image`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Wikimedia Commons
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"iucn"}>
+                      <Link
+                        variant="h6"
+                        href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
+                          / /g,
+                          "+"
+                        )}&searchType=species`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        IUCN Red List
+                      </Link>
+                    </ListItem>
+                    <ListItem key={"eco"}>
+                      <Link
+                        variant="h6"
+                        href={`https://www.ecotenet.org/species/${species.scientific_name.replace(
+                          / /g,
+                          "_"
+                        )}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                      >
+                        Ecotenet
+                      </Link>
+                    </ListItem>
+                  </List>
+                </>
+              ) : (
+                <IconButton
+                  onClick={() => setToggleResources(true)}
+                  size="small"
+                >
+                  <KeyboardDoubleArrowDownIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              )}
             </Typography>
-            <List>
-              <ListItem key={"wiki"}>
-                <Link
-                  variant="h6"
-                  href={`https://en.wikipedia.org/wiki/${species.scientific_name.replace(
-                    / /g,
-                    "_"
-                  )}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
+
+            <Typography
+              variant="h6"
+              sx={{
+                marginTop: "5px",
+              }}
+            >
+              Observed:
+              {toggleObserved ? (
+                <>
+                  <IconButton
+                    onClick={() => setToggleObserved(false)}
+                    size="small"
+                  >
+                    <KeyboardDoubleArrowLeftIcon
+                      sx={{ color: theme.palette.secondary.main }}
+                    />
+                  </IconButton>
+                  {observedEcoregions.map((id) => (
+                    <Link
+                      href={`/ecoregions/${id}`}
+                      color="secondary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      underline="hover"
+                      key={id}
+                    >
+                      Eco-{id}
+                      {", "}
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <IconButton
+                  onClick={() => setToggleObserved(true)}
+                  size="small"
                 >
-                  Wikipedia
-                </Link>
-              </ListItem>
-              <ListItem key={"inat"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.inaturalist.org/search?q=${species.scientific_name.replace(
-                    / /g,
-                    "+"
-                  )}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  iNaturalist
-                </Link>
-              </ListItem>
-              <ListItem key={"wiki_commons"}>
-                <Link
-                  variant="h6"
-                  href={`https://commons.wikimedia.org/w/index.php?search=${species.scientific_name.replace(
-                    / /g,
-                    "+"
-                  )}&title=Special:MediaSearch&go=Go&type=image`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Wikimedia Commons
-                </Link>
-              </ListItem>
-              <ListItem key={"iucn"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.iucnredlist.org/search?query=${species.scientific_name.replace(
-                    / /g,
-                    "+"
-                  )}&searchType=species`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  IUCN Red List
-                </Link>
-              </ListItem>
-              <ListItem key={"eco"}>
-                <Link
-                  variant="h6"
-                  href={`https://www.ecotenet.org/species/${species.scientific_name.replace(
-                    / /g,
-                    "_"
-                  )}`}
-                  color="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="hover"
-                >
-                  Ecotenet
-                </Link>
-              </ListItem>
-            </List>
+                  <KeyboardDoubleArrowRightIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              )}
+            </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                marginBottom: "5px",
+              }}
+            >
+              Native:
+              {toggleNative ? (
+                <>
+                  <IconButton
+                    onClick={() => setToggleNative(false)}
+                    size="small"
+                  >
+                    <KeyboardDoubleArrowLeftIcon
+                      sx={{ color: theme.palette.secondary.main }}
+                    />
+                  </IconButton>
+                  {nativeEcoregions &&
+                    nativeEcoregions.map((id) => (
+                      <Link
+                        href={`/ecoregions/${id}`}
+                        color="secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                        key={id}
+                      >
+                        Eco-{id}
+                        {", "}
+                      </Link>
+                    ))}
+                </>
+              ) : (
+                <IconButton onClick={() => setToggleNative(true)} size="small">
+                  <KeyboardDoubleArrowRightIcon
+                    sx={{ color: theme.palette.secondary.main }}
+                  />
+                </IconButton>
+              )}
+            </Typography>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="native-toggle"
+                name="native-toggle"
+                value={nativeStatus}
+                onChange={handleNativeStatusChange}
+                row
+              >
+                <FormControlLabel
+                  value="observed"
+                  control={
+                    <Radio
+                      color="secondary"
+                      sx={{
+                        color: `${theme.palette.secondary.main}!important`,
+                      }}
+                    />
+                  }
+                  label="observed"
+                />
+                <FormControlLabel
+                  value="native"
+                  disabled={
+                    !nativeEcoregions ||
+                    (nativeEcoregions && nativeEcoregions.length === 0)
+                  }
+                  control={
+                    <Radio
+                      color="secondary"
+                      sx={{
+                        color: `${theme.palette.secondary.main}!important`,
+                      }}
+                    />
+                  }
+                  label="native"
+                />
+              </RadioGroup>
+            </FormControl>
           </>
         )}
-
-        <Typography variant="h6" align="left">
-          Ecoregions:{" "}
-          {clickInfo.map((id) => (
-            <Link
-              href={`/ecoregions/${id}`}
-              color="secondary"
-              target="_blank"
-              rel="noopener noreferrer"
-              underline="hover"
-              key={id}
-            >
-              Eco-{id}
-              {", "}
-            </Link>
-          ))}
-        </Typography>
 
         <MapAdmin
           clickInfo={clickInfo}
           handleDblClick={handleMapClick}
-          initialEcoregions={initialEcoregions}
+          nativeStatus={nativeStatus}
         />
       </Container>
     </>

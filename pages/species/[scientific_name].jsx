@@ -110,7 +110,9 @@ const Species = ({ species, wiki }) => {
     setValue(newValue);
   };
 
-  const [toggleEcoregions, setToggleEcoregions] = useState(true);
+  const [toggleObservedEcoregions, setToggleObservedEcoregions] =
+    useState(false);
+  const [toggleNativeEcoregions, setToggleNativeEcoregions] = useState(false);
 
   const options = {
     replace: (domNode) => {
@@ -373,21 +375,25 @@ const Species = ({ species, wiki }) => {
               variant="h6"
               sx={{
                 marginTop: "20px",
-                marginBottom: "5px",
+                marginBottom: "-5px",
               }}
             >
-              Ecoregions:
-              {toggleEcoregions ? (
+              {species &&
+              species.native_ecoregions &&
+              species.native_ecoregions.length > 0
+                ? "Observed Ecoregions:"
+                : "Ecoregions:"}
+              {toggleObservedEcoregions ? (
                 <>
                   <IconButton
-                    onClick={() => setToggleEcoregions(false)}
+                    onClick={() => setToggleObservedEcoregions(false)}
                     size="small"
                   >
                     <KeyboardDoubleArrowLeftIcon
                       sx={{ color: theme.palette.secondary.main }}
                     />
                   </IconButton>
-                  {species.unique_id.map((id) => (
+                  {species.observed_ecoregions.map((id) => (
                     <Link
                       href={`/ecoregions/${id}`}
                       color="secondary"
@@ -407,7 +413,7 @@ const Species = ({ species, wiki }) => {
                 </>
               ) : (
                 <IconButton
-                  onClick={() => setToggleEcoregions(true)}
+                  onClick={() => setToggleObservedEcoregions(true)}
                   size="small"
                 >
                   <KeyboardDoubleArrowRightIcon
@@ -416,11 +422,58 @@ const Species = ({ species, wiki }) => {
                 </IconButton>
               )}
             </Typography>
+            {species &&
+              species.native_ecoregions &&
+              species.native_ecoregions.length > 0 && (
+                <Typography variant="h6">
+                  Native Ecoregions:
+                  {toggleNativeEcoregions ? (
+                    <>
+                      <IconButton
+                        onClick={() => setToggleNativeEcoregions(false)}
+                        size="small"
+                      >
+                        <KeyboardDoubleArrowLeftIcon
+                          sx={{ color: theme.palette.secondary.main }}
+                        />
+                      </IconButton>
+                      {species.native_ecoregions.map((id) => (
+                        <Link
+                          href={`/ecoregions/${id}`}
+                          color="secondary"
+                          underline="hover"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          key={id}
+                          sx={{
+                            fontSize: "1rem",
+                            fontWeight: 500,
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          Eco-{id},{" "}
+                        </Link>
+                      ))}
+                    </>
+                  ) : (
+                    <IconButton
+                      onClick={() => setToggleNativeEcoregions(true)}
+                      size="small"
+                    >
+                      <KeyboardDoubleArrowRightIcon
+                        sx={{ color: theme.palette.secondary.main }}
+                      />
+                    </IconButton>
+                  )}
+                </Typography>
+              )}
+
             <Button
               variant="outlined"
               color="secondary"
               sx={{
                 marginBottom: "10px",
+                marginTop: "5px",
               }}
               onClick={() => {
                 setTiedPostDialog(true);

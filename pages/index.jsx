@@ -233,6 +233,8 @@ const MapPage = ({ ecoregions }) => {
   const [top, setTop] = useState("50vh");
   const [drawerHeight, setDrawerHeight] = useState(1);
 
+  const [nativeToggleValue, setNativeToggleValue] = useState("observed");
+
   return (
     <>
       <MapProvider>
@@ -245,6 +247,7 @@ const MapPage = ({ ecoregions }) => {
           click={click}
           setClick={setClick}
           ecoChips={ecoChips}
+          setEcoChips={setEcoChips}
           coords={coords}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
@@ -254,6 +257,8 @@ const MapPage = ({ ecoregions }) => {
           setTab={setTab}
           mapLoc={mapLoc}
           setMapLoc={setMapLoc}
+          nativeToggleValue={nativeToggleValue}
+          setNativeToggleValue={setNativeToggleValue}
         />
         {isMobile ? (
           <>
@@ -452,6 +457,8 @@ const MapPage = ({ ecoregions }) => {
                       ecoDistResults={ecoDistResults}
                       setEcoDistResults={setEcoDistResults}
                       isMobile={isMobile}
+                      nativeToggleValue={nativeToggleValue}
+                      setNativeToggleValue={setNativeToggleValue}
                     />
                   </TabPanel>
                 </>
@@ -602,6 +609,8 @@ const MapPage = ({ ecoregions }) => {
                       setEcoChips={setEcoChips}
                       ecoDistResults={ecoDistResults}
                       setEcoDistResults={setEcoDistResults}
+                      nativeToggleValue={nativeToggleValue}
+                      setNativeToggleValue={setNativeToggleValue}
                     />
                   </TabPanel>
                 </>

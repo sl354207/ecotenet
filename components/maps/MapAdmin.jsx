@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
 
-const MapAdmin = ({ clickInfo, initialEcoregions, handleDblClick }) => {
+const MapAdmin = ({ clickInfo, nativeStatus, handleDblClick }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
 
   // base layer
@@ -128,13 +128,13 @@ const MapAdmin = ({ clickInfo, initialEcoregions, handleDblClick }) => {
     return ref.current;
   }
 
-  const prevCount1 = usePrevious(initialEcoregions);
+  const prevCount1 = usePrevious(nativeStatus);
 
   const onMove = useCallback(
     (prevCount1) => {
-      if (initialEcoregions.length > 0 && prevCount1 !== initialEcoregions) {
+      if (clickInfo.length > 0 && prevCount1 !== nativeStatus) {
         const coord = Coords.filter(
-          (region) => region.unique_id === initialEcoregions[0]
+          (region) => region.unique_id === clickInfo[0]
         );
 
         mapRef.current?.flyTo({
@@ -144,7 +144,7 @@ const MapAdmin = ({ clickInfo, initialEcoregions, handleDblClick }) => {
         });
       }
     },
-    [initialEcoregions]
+    [nativeStatus]
   );
 
   //

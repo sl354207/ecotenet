@@ -424,8 +424,7 @@ const deleteComment = async (_id) => {
   }
 };
 
-//get mammals by unique eco id
-const getSpecies = async (speciesType, unique_id) => {
+const getSpecies = async (speciesType, observed_ecoregions) => {
   try {
     const db = await connectToDatabase();
 
@@ -433,9 +432,14 @@ const getSpecies = async (speciesType, unique_id) => {
       .collection("species")
       .find({
         species_type: speciesType,
-        unique_id: unique_id,
+        observed_ecoregions: observed_ecoregions,
       })
-      .project({ scientific_name: 1, common_name: 1, unique_id: 1 })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        observed_ecoregions: 1,
+        native_ecoregions: 1,
+      })
       .sort({ scientific_name: 1 })
       .toArray();
 
@@ -444,6 +448,31 @@ const getSpecies = async (speciesType, unique_id) => {
     throw new Error(error);
   }
 };
+const getNativeSpecies = async (speciesType, native_ecoregions) => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db
+      .collection("species")
+      .find({
+        species_type: speciesType,
+        native_ecoregions: native_ecoregions,
+      })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        observed_ecoregions: 1,
+        native_ecoregions: 1,
+      })
+      .sort({ scientific_name: 1 })
+      .toArray();
+
+    return species;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const getAllSpecies = async () => {
   try {
     const db = await connectToDatabase();
@@ -473,7 +502,8 @@ const getSpeciesByScientificName = async (name) => {
         projection: {
           scientific_name: 1,
           common_name: 1,
-          unique_id: 1,
+          observed_ecoregions: 1,
+          native_ecoregions: 1,
           species_type: 1,
         },
       }
@@ -506,13 +536,6 @@ const searchAllPosts = async (query) => {
                     fuzzy: {
                       maxEdits: 2,
                       maxExpansions: 20,
-                    },
-                    score: {
-                      function: {
-                        path: {
-                          value: "count",
-                        },
-                      },
                     },
                   },
                 },
@@ -590,7 +613,14 @@ const searchAllSpecies = async (query) => {
             },
           },
         },
-        { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            observed_ecoregions: 1,
+            native_ecoregions: 1,
+          },
+        },
       ])
       .toArray();
 
@@ -620,13 +650,6 @@ const searchEcoPosts = async (query, eco) => {
                     fuzzy: {
                       maxEdits: 2,
                       maxExpansions: 20,
-                    },
-                    score: {
-                      function: {
-                        path: {
-                          value: "count",
-                        },
-                      },
                     },
                   },
                 },
@@ -703,14 +726,21 @@ const searchEcoSpecies = async (query, eco) => {
                 {
                   text: {
                     query: `${eco}`,
-                    path: "unique_id",
+                    path: "observed_ecoregions",
                   },
                 },
               ],
             },
           },
         },
-        { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            observed_ecoregions: 1,
+            native_ecoregions: 1,
+          },
+        },
       ])
       .toArray();
 
@@ -748,7 +778,14 @@ const autoSpecies = async (query) => {
             },
           },
         },
-        { $project: { scientific_name: 1, common_name: 1, unique_id: 1 } },
+        {
+          $project: {
+            scientific_name: 1,
+            common_name: 1,
+            observed_ecoregions: 1,
+            native_ecoregions: 1,
+          },
+        },
       ])
       .limit(50)
       .toArray();
@@ -790,7 +827,8 @@ const adminAutoSpecies = async (query) => {
           $project: {
             scientific_name: 1,
             common_name: 1,
-            unique_id: 1,
+            observed_ecoregions: 1,
+            native_ecoregions: 1,
             species_type: 1,
           },
         },
@@ -1197,7 +1235,7 @@ const getFilteredStats = async (v1, v2) => {
     const response = await db
       .collection("species")
       .find({ [v1]: v2 })
-      .project({ unique_id: 1, _id: 0 })
+      .project({ observed_ecoregions: 1, _id: 0 })
       .toArray();
 
     return response;
@@ -1474,6 +1512,7 @@ module.exports = {
   updateComment,
   deleteComment,
   getSpecies,
+  getNativeSpecies,
   getAllSpecies,
   getSpeciesByScientificName,
   searchAllPosts,

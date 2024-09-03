@@ -55,6 +55,7 @@ const PostRegion = ({
   const theme = useTheme();
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobileNative = useMediaQuery(theme.breakpoints.down("lg"));
 
   const [results, setResults] = useState([]);
 
@@ -96,6 +97,10 @@ const PostRegion = ({
           result.id = result.scientific_name;
           result.tied = true;
           result.select = true;
+          result.native = false;
+          if (!result.native_ecoregions) {
+            result.native_ecoregions = [];
+          }
           setItems([...items, result]);
           setToggleSpecies(true);
 
@@ -135,7 +140,9 @@ const PostRegion = ({
   const selectAll = (items) => {
     setClickInfo([]);
     const selected = items.filter((item) => item.select === true);
-    const arraysOfNumbers = selected.map((obj) => obj.unique_id);
+    const arraysOfNumbers = selected.map((obj) =>
+      obj.native === true ? obj.native_ecoregions : obj.observed_ecoregions
+    );
     // find all of the unique numbers in arraysOfNumbers
     const uniqueNumbers = Array.from(new Set(arraysOfNumbers.flat()));
     setClickInfo(uniqueNumbers);
@@ -148,7 +155,9 @@ const PostRegion = ({
     // Get all selected items
     const selected = items.filter((item) => item.select === true);
     // Get all arrays of numbers
-    const arraysOfNumbers = selected.map((obj) => obj.unique_id);
+    const arraysOfNumbers = selected.map((obj) =>
+      obj.native === true ? obj.native_ecoregions : obj.observed_ecoregions
+    );
 
     // Find the intersection of all arrays
     const sharedNumbers = arraysOfNumbers.reduce(
@@ -185,6 +194,29 @@ const PostRegion = ({
         item.id === id ? { ...item, select: !item.select } : item
       )
     );
+  };
+
+  const handleNativeCheckboxChange = (id) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, native: !item.native } : item
+      )
+    );
+    setNativeToggleValue(
+      items.map((item) => (!item.native ? "native" : "observed"))
+    );
+  };
+
+  const [nativeToggleValue, setNativeToggleValue] = useState("observed");
+
+  const handleNativeToggleChange = (event) => {
+    if (event.target.value === "native") {
+      setNativeToggleValue("native");
+      setItems(items.map((item) => ({ ...item, native: true })));
+    } else {
+      setNativeToggleValue("observed");
+      setItems(items.map((item) => ({ ...item, native: false })));
+    }
   };
 
   const handleRemoveTiedSpecies = (id) => {
@@ -359,10 +391,38 @@ const PostRegion = ({
               sx={{
                 marginTop: "-24px",
                 marginLeft: "10px",
-                marginRight: "20px",
+                // marginRight: "20px",
               }}
             >
               Tied
+            </Typography>
+            <Tooltip
+              enterTouchDelay={100}
+              leaveTouchDelay={5000}
+              arrow
+              title={
+                <>
+                  <Typography color="inherit" variant="h6">
+                    Select checkbox to show native range of species. If no
+                    native range is available the checkbox will be disabled. If
+                    Native checkbox is selected these ecoregions will be used by
+                    Select All and Select Intersecting buttons.
+                  </Typography>
+                </>
+              }
+            >
+              <InfoIcon
+                fontSize="small"
+                sx={{ marginTop: "-28px", marginLeft: "10px" }}
+              ></InfoIcon>
+            </Tooltip>
+            <Typography
+              sx={{
+                marginTop: "-24px",
+                marginRight: { xs: "5px", sm: "15px", md: "10px", lg: "0px" },
+              }}
+            >
+              {isMobileNative ? "N" : "Native"}
             </Typography>
           </div>
 
@@ -397,7 +457,13 @@ const PostRegion = ({
                         : items && items.indexOf(item) === 2
                         ? "#00ffff"
                         : theme.palette.secondary.main,
-                    maxWidth: isMobile ? "60%" : "70%",
+                    // maxWidth: isMobile ? "60%" : "70%",
+                    maxWidth: {
+                      xs: "60%",
+                      sm: "70%",
+                      md: "60%",
+                      lg: "65%",
+                    },
                   }}
                 ></CustomChip>
                 <FormControlLabel
@@ -418,7 +484,10 @@ const PostRegion = ({
                 />
                 <FormControlLabel
                   key={`tied-${item.id}`}
-                  sx={{ marginLeft: "10px", marginRight: "0px" }}
+                  sx={{
+                    marginLeft: { xs: "2px", md: "2px", lg: "10px" },
+                    marginRight: "0px",
+                  }}
                   control={
                     <Checkbox
                       sx={{
@@ -429,6 +498,26 @@ const PostRegion = ({
                       }}
                       checked={item.tied}
                       onChange={() => handleTiedCheckboxChange(item.id)}
+                    />
+                  }
+                />
+                <FormControlLabel
+                  key={`native-${item.id}`}
+                  sx={{
+                    marginLeft: { xs: "2px", md: "2px", lg: "10px" },
+                    marginRight: "0px",
+                  }}
+                  disabled={item.native_ecoregions.length === 0}
+                  control={
+                    <Checkbox
+                      sx={{
+                        color: theme.palette.secondary.main,
+                        "&.Mui-checked": {
+                          color: theme.palette.secondary.main,
+                        },
+                      }}
+                      checked={item.native}
+                      onChange={() => handleNativeCheckboxChange(item.id)}
                     />
                   }
                 />
@@ -560,6 +649,8 @@ const PostRegion = ({
         clickInfo={clickInfo}
         handleDblClick={handleMapClick}
         state={items}
+        nativeToggleValue={nativeToggleValue}
+        handleNativeToggleChange={handleNativeToggleChange}
       />
       <Typography variant="subtitle2" align="left" sx={{ marginTop: "10px" }}>
         A species distribution often does not align perfectly with ecoregion

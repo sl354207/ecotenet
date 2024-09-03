@@ -1,4 +1,5 @@
 import {
+  getNativeSpecies,
   getPostsByCategoryAndRegion,
   getSpecies,
 } from "@utils/mongodb/mongoHelpers";
@@ -14,38 +15,52 @@ export default async function handler(req, res) {
   const id = req.query.region;
   let categoryQuery = req.query.category;
   let categorySub = req.query.sub;
+  let native = req.query.native;
 
   // catch malicious or improper encoding
   try {
     categoryQuery = decodeURIComponent(categoryQuery);
     categorySub = decodeURIComponent(categorySub);
+    native = decodeURIComponent(native);
   } catch (error) {
     console.error(error);
     return res.status(403).json({ msg: "Forbidden" });
   }
 
-  // console.log(categorySub);
   const dataCheck = {
     title: categoryQuery,
     sub: categorySub !== "undefined" ? categorySub : null,
   };
-  // console.log(categorySub);
 
   const validate = ajv.getSchema("category");
   const valid = validate(dataCheck);
 
   if (valid && validEco(id)) {
     if (categorySub === "undefined") {
-      try {
-        const category = await getSpecies(categoryQuery, id);
+      if (native === "native") {
+        try {
+          const category = await getNativeSpecies(categoryQuery, id);
 
-        return res.status(200).json({
-          tag: "species",
-          category: category,
-        });
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: "Something went wrong." });
+          return res.status(200).json({
+            tag: "species",
+            category: category,
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ msg: "Something went wrong." });
+        }
+      } else {
+        try {
+          const category = await getSpecies(categoryQuery, id);
+
+          return res.status(200).json({
+            tag: "species",
+            category: category,
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ msg: "Something went wrong." });
+        }
       }
     } else {
       try {

@@ -12,6 +12,7 @@ export default async function handler(req, res) {
 
   const v1 = req.query.v1;
   const v2 = req.query.v2;
+  console.log(v1, v2);
   if (validStatInputs(v1, v2)) {
     if (v2 === "undefined") {
       try {
@@ -24,14 +25,18 @@ export default async function handler(req, res) {
     } else {
       try {
         const results = await getFilteredStats(v1, v2);
+        console.log(results);
         const ecoregions = await getStatsAPIEcoregions();
         if (results.length > 0) {
           const rankedArray = [];
           for (const result of results) {
-            const rankedResult = result.unique_id.reduce((acc, curr) => {
-              acc[curr] = (acc[curr] || 0) + 1;
-              return acc;
-            }, {});
+            const rankedResult = result.observed_ecoregions.reduce(
+              (acc, curr) => {
+                acc[curr] = (acc[curr] || 0) + 1;
+                return acc;
+              },
+              {}
+            );
 
             rankedArray.push(rankedResult);
           }

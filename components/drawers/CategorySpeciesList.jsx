@@ -1,4 +1,5 @@
 import {
+  Container,
   Divider,
   List,
   ListItem,
@@ -8,7 +9,13 @@ import {
 import { createRef } from "react";
 import CategorySpeciesListItem from "./CategorySpeciesListItem";
 
-const CategorySpeciesList = ({ category, setItemSelected, setItem }) => {
+const CategorySpeciesList = ({
+  category,
+  setItemSelected,
+  setItem,
+  ecoFilter,
+  title,
+}) => {
   const uniqueFirstLetter = [
     ...new Set(category.map((item) => item.scientific_name[0])),
   ];
@@ -21,34 +28,43 @@ const CategorySpeciesList = ({ category, setItemSelected, setItem }) => {
   }, {});
 
   return (
-    <List>
-      {uniqueFirstLetter.map((entry) => {
-        return (
-          <>
-            <ListItem key={entry} ref={refs[entry]}>
-              <ListItemText>
-                <Typography variant="h5" color="secondary">
-                  {entry}
-                </Typography>
-              </ListItemText>
-            </ListItem>
-            {category.map((item) => {
-              if (item.scientific_name[0] === entry) {
-                return (
-                  <CategorySpeciesListItem
-                    result={item}
-                    setItemSelected={setItemSelected}
-                    setItem={setItem}
-                    key={item._id}
-                  />
-                );
-              }
-            })}
-            <Divider />
-          </>
-        );
-      })}
-    </List>
+    <>
+      <Container sx={{ minHeight: "auto" }}>
+        <Typography variant="body1" align="center" sx={{ marginTop: "20px" }}>
+          *Eco-{ecoFilter.unique_id} {title} current species count:{" "}
+          {category.length}
+        </Typography>
+      </Container>
+
+      <List>
+        {uniqueFirstLetter.map((entry) => {
+          return (
+            <>
+              <ListItem key={entry} ref={refs[entry]}>
+                <ListItemText>
+                  <Typography variant="h5" color="secondary">
+                    {entry}
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+              {category.map((item) => {
+                if (item.scientific_name[0] === entry) {
+                  return (
+                    <CategorySpeciesListItem
+                      result={item}
+                      setItemSelected={setItemSelected}
+                      setItem={setItem}
+                      key={item._id}
+                    />
+                  );
+                }
+              })}
+              <Divider />
+            </>
+          );
+        })}
+      </List>
+    </>
   );
 };
 

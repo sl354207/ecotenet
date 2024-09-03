@@ -1,4 +1,12 @@
-import { Button, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
+import theme from "@utils/theme";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Map, { AttributionControl, Layer, Popup, Source } from "react-map-gl";
@@ -11,6 +19,7 @@ const MapMain = ({
   click,
   setClick,
   ecoChips,
+  setEcoChips,
   coords,
   hoverInfo,
   setHoverInfo,
@@ -20,6 +29,8 @@ const MapMain = ({
   setTab,
   mapLoc,
   setMapLoc,
+  nativeToggleValue,
+  setNativeToggleValue,
 }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
   useEffect(() => {
@@ -184,19 +195,34 @@ const MapMain = ({
     [selectedRegion]
   );
 
-  const speciesRegions1 = ecoChips[0] && ecoChips[0].unique_id;
+  const speciesRegions1 =
+    ecoChips[0] &&
+    ecoChips[0].observed_ecoregions &&
+    ecoChips[0].native === false
+      ? ecoChips[0] && ecoChips[0].observed_ecoregions
+      : ecoChips[0] && ecoChips[0].native_ecoregions;
 
   const speciesFilter1 = ecoChips[0]
     ? ["in", "unique_id", ...speciesRegions1]
     : ["in", "unique_id"];
 
-  const speciesRegions2 = ecoChips[1] && ecoChips[1].unique_id;
+  const speciesRegions2 =
+    ecoChips[1] &&
+    ecoChips[1].observed_ecoregions &&
+    ecoChips[1].native === false
+      ? ecoChips[1] && ecoChips[1].observed_ecoregions
+      : ecoChips[1] && ecoChips[1].native_ecoregions;
 
   const speciesFilter2 = ecoChips[1]
     ? ["in", "unique_id", ...speciesRegions2]
     : ["in", "unique_id"];
 
-  const speciesRegions3 = ecoChips[2] && ecoChips[2].unique_id;
+  const speciesRegions3 =
+    ecoChips[2] &&
+    ecoChips[2].observed_ecoregions &&
+    ecoChips[2].native === false
+      ? ecoChips[2] && ecoChips[2].observed_ecoregions
+      : ecoChips[2] && ecoChips[2].native_ecoregions;
 
   const speciesFilter3 = ecoChips[2]
     ? ["in", "unique_id", ...speciesRegions3]
@@ -267,8 +293,119 @@ const MapMain = ({
     [speciesRegions1, speciesRegions2, speciesRegions3]
   );
 
+  const handleNativeToggleChange = (event) => {
+    const scientificName =
+      ecoChips && ecoChips[0] && ecoChips[0].scientific_name;
+    if (scientificName) {
+      if (event.target.value === "observed") {
+        setEcoChips((prevState) =>
+          prevState.map((item) =>
+            item.scientific_name === scientificName
+              ? { ...item, native: false }
+              : item
+          )
+        );
+
+        setNativeToggleValue("observed");
+      } else {
+        setEcoChips((prevState) =>
+          prevState.map((item) =>
+            item.scientific_name === scientificName
+              ? { ...item, native: true }
+              : item
+          )
+        );
+        setNativeToggleValue("native");
+      }
+    }
+  };
+
   return (
     <>
+      <FormControl
+        component="fieldset"
+        sx={{
+          position: "absolute",
+          bottom: { xs: "inherit", md: "10px" },
+          right: 0,
+          zIndex: 1,
+          display:
+            ecoChips &&
+            ecoChips.length === 1 &&
+            ecoChips[0].native_ecoregions &&
+            ecoChips[0].native_ecoregions.length > 0
+              ? "block"
+              : "none",
+        }}
+      >
+        <RadioGroup
+          aria-label="native-toggle"
+          name="native-toggle"
+          value={
+            (ecoChips &&
+              ecoChips[0] &&
+              ecoChips[0].native_ecoregions &&
+              ecoChips[0].native_ecoregions.length === 0) ||
+            (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+              ? "observed"
+              : nativeToggleValue
+          }
+          onChange={handleNativeToggleChange}
+          row
+        >
+          <FormControlLabel
+            value="observed"
+            control={
+              <Radio
+                color="secondary"
+                sx={{
+                  color: `${theme.palette.secondary.main}!important`,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
+                  },
+                }}
+              />
+            }
+            sx={{
+              "& .MuiFormControlLabel-label": {
+                fontWeight: "900",
+                fontSize: "1.4rem",
+                "-webkit-text-stroke": "1px black",
+              },
+            }}
+            label="observed"
+          />
+          <FormControlLabel
+            value="native"
+            disabled={
+              (ecoChips &&
+                ecoChips[0] &&
+                ecoChips[0].native_ecoregions &&
+                ecoChips[0].native_ecoregions.length === 0) ||
+              (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+            }
+            control={
+              <Radio
+                color="secondary"
+                sx={{
+                  color: `${theme.palette.secondary.main}!important`,
+                  "& .MuiSvgIcon-root": {
+                    fontSize: { xs: "1.5rem", sm: "2rem" },
+                  },
+                }}
+              />
+            }
+            sx={{
+              "& .MuiFormControlLabel-label": {
+                fontWeight: "900",
+                fontSize: "1.4rem",
+                "-webkit-text-stroke": "1px black",
+              },
+            }}
+            label="native"
+          />
+        </RadioGroup>
+      </FormControl>
       <Map
         id="mapMain"
         reuseMaps
@@ -319,13 +456,14 @@ const MapMain = ({
         </Source>
         <AttributionControl
           compact={true}
+          position="bottom-left"
           customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
             World. GIS layers developed by The Nature Conservancy with multiple partners,
             combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK):
             The Nature Conservancy. DOIs: 10.1641/B570707;
             10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-
             wcmc.org/datasets/38"
-          style={{ color: "black" }}
+          style={{ color: "black", marginLeft: "100px", marginBottom: "-20px" }}
         />
         {selectedRegion && showPopup && (
           <Popup

@@ -4,11 +4,16 @@ import {
   Button,
   CircularProgress,
   Container,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material";
 import fetcher from "@utils/fetcher";
+import theme from "@utils/theme";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import CategoryPostList from "./CategoryPostList";
 import CategorySpeciesList from "./CategorySpeciesList";
 import DrawerPost from "./DrawerPost";
@@ -23,11 +28,13 @@ const CategoryList = ({
   description,
   handleFilterClose,
 }) => {
+  const [nativeToggleValue, setNativeToggleValue] = useState("observed");
+
   const { data, isLoading, error } = useSWR(
     category
       ? category.title
         ? `/api/${ecoFilter.unique_id}/${category.title}?sub=${category.sub}`
-        : `/api/${ecoFilter.unique_id}/${category}`
+        : `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
       : null,
     fetcher,
     {
@@ -35,8 +42,24 @@ const CategoryList = ({
     }
   );
 
+  const { mutate } = useSWRConfig();
+
   const [itemSelected, setItemSelected] = useState(false);
   const [item, setItem] = useState(null);
+
+  const handleNativeToggleChange = (event) => {
+    if (event.target.value === "native") {
+      setNativeToggleValue("native");
+      mutate(
+        `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
+      );
+    } else {
+      setNativeToggleValue("observed");
+      mutate(
+        `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
+      );
+    }
+  };
 
   return (
     <>
@@ -185,13 +208,54 @@ const CategoryList = ({
                   {data && data.category.length === 0 ? (
                     <Container sx={{ minHeight: "auto" }}>
                       {data.tag === "species" ? (
-                        <Typography
-                          variant="h6"
-                          align="center"
-                          sx={{ marginTop: "20px" }}
-                        >
-                          We currently do not have data on this category
-                        </Typography>
+                        <>
+                          <FormControl
+                            component="fieldset"
+                            sx={{
+                              marginLeft: "56px",
+                            }}
+                          >
+                            <RadioGroup
+                              aria-label="native-toggle"
+                              name="native-toggle"
+                              value={nativeToggleValue}
+                              onChange={handleNativeToggleChange}
+                              row
+                            >
+                              <FormControlLabel
+                                value="observed"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="observed"
+                              />
+                              <FormControlLabel
+                                value="native"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="native"
+                              />
+                            </RadioGroup>
+                          </FormControl>
+                          <Typography
+                            variant="h6"
+                            align="center"
+                            sx={{ marginTop: "20px" }}
+                          >
+                            We currently do not have data on this category
+                          </Typography>
+                        </>
                       ) : (
                         <Typography
                           variant="h6"
@@ -207,21 +271,51 @@ const CategoryList = ({
                     <>
                       {data && data.category[0].scientific_name ? (
                         <>
-                          <Container sx={{ minHeight: "auto" }}>
-                            <Typography
-                              variant="body1"
-                              align="center"
-                              sx={{ marginTop: "20px" }}
+                          <FormControl
+                            component="fieldset"
+                            sx={{
+                              marginLeft: "80px",
+                            }}
+                          >
+                            <RadioGroup
+                              aria-label="native-toggle"
+                              name="native-toggle"
+                              value={nativeToggleValue}
+                              onChange={handleNativeToggleChange}
+                              row
                             >
-                              *Eco-{ecoFilter.unique_id} {title} current species
-                              count: {data.category.length}
-                            </Typography>
-                          </Container>
-
+                              <FormControlLabel
+                                value="observed"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="observed"
+                              />
+                              <FormControlLabel
+                                value="native"
+                                control={
+                                  <Radio
+                                    color="secondary"
+                                    sx={{
+                                      color: `${theme.palette.secondary.main}!important`,
+                                    }}
+                                  />
+                                }
+                                label="native"
+                              />
+                            </RadioGroup>
+                          </FormControl>
                           <CategorySpeciesList
                             category={data && data.category}
                             setItemSelected={setItemSelected}
                             setItem={setItem}
+                            ecoFilter={ecoFilter && ecoFilter}
+                            title={title}
                           />
                           <Container sx={{ minHeight: "auto" }}>
                             <Typography variant="subtitle2" align="left">
