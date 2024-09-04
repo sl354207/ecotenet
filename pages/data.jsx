@@ -119,6 +119,80 @@ const Data = () => {
               10/27/2021). National Plant Data Team, Greensboro, NC USA.
             </Typography>
           </ListItem>
+          <ListItem divider key={"iucn"}>
+            <Typography variant="h6">
+              <Link
+                href="https://www.iucnredlist.org/"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                IUCN Red List of Threatened Species:
+              </Link>{" "}
+              IUCN 2024. The IUCN Red List of Threatened Species. 2024-1.2.
+              https://www.iucnredlist.org. Downloaded on 30 May 2024. The
+              datasets can be found{" "}
+              <Link
+                href="https://www.iucnredlist.org/resources/spatial-data-download"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here.
+              </Link>
+            </Typography>
+          </ListItem>
+          <ListItem divider key={"little"}>
+            <Typography variant="h6">
+              <Link
+                href="https://www.fs.usda.gov/database/feis/pdfs/Little/aa_SupportingFiles/LittleMaps.html"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Atlas of United States trees:
+              </Link>{" "}
+              Fryer, Janet L., comp. 2018. Tree species distribution maps from
+              Little&apos;s &quot;Atlas of United States trees&quot; series. In:
+              Fire Effects Information System, [Online]. U.S. Department of
+              Agriculture, Forest Service, Rocky Mountain Research Station, Fire
+              Sciences Laboratory (Producer). Will Petry, & Shawn Taylor.
+              (2022). wpetry/USTreeAtlas: Initial release (v1.0). Zenodo. The
+              dataset can be found{" "}
+              <Link
+                href="https://doi.org/10.5281/zenodo.7445016"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here.
+              </Link>
+            </Typography>
+          </ListItem>
+          <ListItem divider key={"gap"}>
+            <Typography variant="h6">
+              <Link
+                href="https://www.sciencebase.gov/catalog/item/5951527de4b062508e3b1e79"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                USGS Gap Analysis Project
+              </Link>{" "}
+              U.S. Geological Survey (USGS) Gap Analysis Project (GAP), 2018,
+              U.S.Geological Survey - Gap Analysis Project Species Range Maps
+              CONUS_2001: U.S. Geological Survey data release. The dataset can
+              be found{" "}
+              <Link
+                href="https://doi.org/10.5066/F7Q81B3R"
+                underline="hover"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here.
+              </Link>
+            </Typography>
+          </ListItem>
         </List>
       </Container>
       <Footer />
