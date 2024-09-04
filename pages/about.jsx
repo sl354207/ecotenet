@@ -178,12 +178,12 @@ const About = () => {
           </Link>
           ,{" "}
           <Link
-            href="https://www.inaturalist.org/"
+            href="https://www.iucnredlist.org/"
             underline="hover"
             target="_blank"
             rel="noopener noreferrer"
           >
-            iNaturalist
+            IUCN Red List of Threatened Species
           </Link>
           ,{" "}
           <Link
@@ -194,7 +194,7 @@ const About = () => {
           >
             USDA
           </Link>
-          , and the{" "}
+          ,{" "}
           <Link
             href="https://obis.org/"
             underline="hover"
@@ -202,8 +202,8 @@ const About = () => {
             rel="noopener noreferrer"
           >
             Ocean Biodiversity Information System
-          </Link>
-          . To see a list of our datasets click{" "}
+          </Link>{" "}
+          and a few others. To see a full list of our datasets click{" "}
           <Link href="/data" underline="hover">
             here
           </Link>
