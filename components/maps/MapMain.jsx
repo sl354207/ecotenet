@@ -1,7 +1,11 @@
+import LayersIcon from "@mui/icons-material/Layers";
 import {
+  Box,
   Button,
   FormControl,
   FormControlLabel,
+  IconButton,
+  Popper,
   Radio,
   RadioGroup,
   Typography,
@@ -117,6 +121,34 @@ const MapMain = ({
         "rgb(62, 136, 185)",
       ],
       "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
+    },
+  };
+
+  const feowFill = {
+    id: "feow-fill",
+    type: "fill",
+    // source: "eco-data",
+    "source-layer": "dsmw-tiles",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,1)",
+      "fill-color": "#627BC1",
+      "fill-opacity": 0,
+    },
+  };
+
+  // outline layer
+  const feowLine = {
+    id: "feow-line",
+    type: "line",
+    // source: "eco-fill",
+    "source-layer": "dsmw-tiles",
+    layout: {},
+    paint: {
+      // "line-color": "rgb(0, 113, 228)",
+      // "line-color": "rgb(148, 201, 255)",
+      "line-color": "rgb(5, 11, 15)",
+      // "line-color": "rgb(62, 136, 185)",
+      "line-width": 2,
     },
   };
 
@@ -320,8 +352,94 @@ const MapMain = ({
     }
   };
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
+
+  const [layer, setLayer] = useState("Ecoregions");
+
+  const handleLayerChange = (event) => {
+    setLayer(event.target.value);
+  };
+
   return (
     <>
+      <IconButton
+        sx={{
+          position: "absolute",
+          top: "80px",
+          left: "10px",
+          zIndex: 1,
+          border: "2px solid #94c9ff",
+        }}
+        onClick={(event) => handleClick(event)}
+        color="inherit"
+        aria-label="layer"
+      >
+        <LayersIcon />
+      </IconButton>
+      <Popper id={id} open={open} anchorEl={anchorEl}>
+        <Box
+          sx={{
+            border: "2px solid #94c9ff",
+            borderRadius: "10px",
+            p: 1,
+            bgcolor: "background.paper",
+          }}
+        >
+          <FormControl component="fieldset">
+            <RadioGroup
+              aria-label="layer-toggle"
+              name="layer-toggle"
+              value={layer}
+              onChange={handleLayerChange}
+            >
+              <FormControlLabel
+                value="Ecoregions"
+                control={
+                  <Radio
+                    color="secondary"
+                    sx={{
+                      color: `${theme.palette.secondary.main}!important`,
+                    }}
+                  />
+                }
+                label="Ecoregions"
+              />
+              <FormControlLabel
+                value="Freshwater"
+                control={
+                  <Radio
+                    color="secondary"
+                    sx={{
+                      color: `${theme.palette.secondary.main}!important`,
+                    }}
+                  />
+                }
+                label="Freshwater"
+              />
+              <FormControlLabel
+                value="Soil"
+                control={
+                  <Radio
+                    color="secondary"
+                    sx={{
+                      color: `${theme.palette.secondary.main}!important`,
+                    }}
+                  />
+                }
+                label="Soil"
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
+      </Popper>
+
       <FormControl
         component="fieldset"
         sx={{
@@ -426,34 +544,90 @@ const MapMain = ({
         onMove={(evt) => setViewState(evt.viewState)}
         attributionControl={false}
       >
-        <Source id="ecomap" type="vector" url="mapbox://sl354207.ecomap-tiles">
-          <Layer id="base" beforeId="waterway-label" {...ecoFill} />
+        {layer === "Ecoregions" ? (
+          <>
+            <Source
+              id="ecomap"
+              key="ecomap"
+              type="vector"
+              url="mapbox://sl354207.ecomap-tiles"
+            >
+              <Layer
+                id="ecobase"
+                key="ecobase"
+                beforeId="waterway-label"
+                {...ecoFill}
+              />
 
-          <Layer
-            beforeId="waterway-label"
-            {...ecoFill5}
-            filter={speciesFilter3}
-          />
-          <Layer
-            beforeId="waterway-label"
-            {...ecoFill4}
-            filter={speciesFilter2}
-          />
-          <Layer
-            id="species1"
-            beforeId="waterway-label"
-            {...ecoFill3}
-            filter={speciesFilter1}
-          />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill5}
+                filter={speciesFilter3}
+              />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill4}
+                filter={speciesFilter2}
+              />
+              <Layer
+                id="species1"
+                beforeId="waterway-label"
+                {...ecoFill3}
+                filter={speciesFilter1}
+              />
 
-          <Layer
-            id="hover"
-            beforeId="waterway-label"
-            {...ecoFill1}
-            filter={filter}
-          />
-          <Layer beforeId="waterway-label" {...ecoLine} />
-        </Source>
+              <Layer
+                id="hover"
+                beforeId="waterway-label"
+                {...ecoFill1}
+                filter={filter}
+              />
+              <Layer beforeId="waterway-label" key="ecoline" {...ecoLine} />
+            </Source>
+          </>
+        ) : (
+          <>
+            <Source
+              id="feowmap"
+              key="feowmap"
+              type="vector"
+              url="mapbox://sl354207.dsmw-tiles"
+            >
+              <Layer
+                id="feowbase"
+                key="feowbase"
+                beforeId="waterway-label"
+                {...feowFill}
+              />
+
+              {/* <Layer
+                beforeId="waterway-label"
+                {...ecoFill5}
+                filter={speciesFilter3}
+              />
+              <Layer
+                beforeId="waterway-label"
+                {...ecoFill4}
+                filter={speciesFilter2}
+              />
+              <Layer
+                id="species1"
+                beforeId="waterway-label"
+                {...ecoFill3}
+                filter={speciesFilter1}
+              />
+
+              <Layer
+                id="hover"
+                beforeId="waterway-label"
+                {...ecoFill1}
+                filter={filter}
+              /> */}
+              <Layer beforeId="waterway-label" key="feoline" {...feowLine} />
+            </Source>
+          </>
+        )}
+
         <AttributionControl
           compact={true}
           position="bottom-left"
