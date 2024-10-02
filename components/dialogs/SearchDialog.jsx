@@ -50,7 +50,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
   } = useSWR(
     query
       ? `/api/search?q=${query.q}&filter=${query.filter}&eco=${
-          ecoFilter && ecoFilter.unique_id
+          ecoFilter && ecoFilter._id
         }`
       : null,
     fetcher,
@@ -90,7 +90,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             onClick={() =>
               mutate(
                 `/api/search?q=${query.q}&filter=${query.filter}&eco=${
-                  ecoFilter && ecoFilter.unique_id
+                  ecoFilter && ecoFilter._id
                 }`
               )
             }

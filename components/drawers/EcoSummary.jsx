@@ -9,8 +9,8 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   let wikiUrl;
   const { mutate } = useSWRConfig();
 
-  if (ecoFilter && !wiki) {
-    const res = fetch(`/api/ecoregions/${ecoFilter.unique_id}`, {
+  if (ecoFilter && ecoFilter.layer === "Ecoregions" && !wiki) {
+    const res = fetch(`/api/ecoregions/${ecoFilter._id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -204,19 +204,19 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   };
   return (
     <>
-      {ecoFilter ? (
+      {ecoFilter && ecoFilter.layer === "Ecoregions" ? (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Button
               variant="contained"
               color="secondary"
               sx={{ marginBottom: "15px", marginTop: isMobile ? 0 : 3 }}
-              href={`/ecoregions/${ecoFilter.unique_id}`}
+              href={`/ecoregions/${ecoFilter._id}`}
             >
               view full page
             </Button>
             <Typography variant="h5" align="center">
-              Eco-{ecoFilter.unique_id}
+              Eco-{ecoFilter._id}
             </Typography>
             <Typography
               variant="h5"

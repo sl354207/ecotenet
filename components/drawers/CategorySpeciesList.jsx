@@ -31,8 +31,7 @@ const CategorySpeciesList = ({
     <>
       <Container sx={{ minHeight: "auto" }}>
         <Typography variant="body1" align="center" sx={{ marginTop: "20px" }}>
-          *Eco-{ecoFilter.unique_id} {title} current species count:{" "}
-          {category.length}
+          *Eco-{ecoFilter._id} {title} current species count: {category.length}
         </Typography>
       </Container>
 

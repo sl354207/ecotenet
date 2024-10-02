@@ -35,6 +35,8 @@ const MapMain = ({
   setMapLoc,
   nativeToggleValue,
   setNativeToggleValue,
+  layer,
+  setLayer,
 }) => {
   const mapBox = process.env.NEXT_PUBLIC_MAPBOX;
   useEffect(() => {
@@ -52,7 +54,7 @@ const MapMain = ({
       "fill-opacity": 0,
     },
   };
-  // hover layer
+  // ecoclick layer
   const ecoFill1 = {
     id: "eco-fill1",
     type: "fill",
@@ -128,11 +130,24 @@ const MapMain = ({
     id: "feow-fill",
     type: "fill",
     // source: "eco-data",
-    "source-layer": "dsmw-tiles",
+    "source-layer": "feow-tiles",
     paint: {
       "fill-outline-color": "rgba(0,0,0,1)",
       "fill-color": "#627BC1",
       "fill-opacity": 0,
+    },
+  };
+
+  const feowFill1 = {
+    id: "feow-fill1",
+    type: "fill",
+    // source: "eco-fill",
+    "source-layer": "feow-tiles",
+    paint: {
+      "fill-outline-color": "rgba(0,0,0,1)",
+      // "fill-color": "#627BC1",
+      "fill-color": "#94c9ff",
+      "fill-opacity": 0.5,
     },
   };
 
@@ -141,7 +156,7 @@ const MapMain = ({
     id: "feow-line",
     type: "line",
     // source: "eco-fill",
-    "source-layer": "dsmw-tiles",
+    "source-layer": "feow-tiles",
     layout: {},
     paint: {
       // "line-color": "rgb(0, 113, 228)",
@@ -160,8 +175,9 @@ const MapMain = ({
 
   // set hover info when hovering over map. useCallback memoizes function so it isn't recalled every time user hovers over new point and state changes causing re-render. This reduces reloading of map data(which is a lot). Second argument is used to determine on what variable change you want function to re-render on(in this case none). useCallback returns function
   // console.log(visitedHome);
-  const onHover = useCallback(
+  const onEcoClick = useCallback(
     async (event) => {
+      // console.log(event.features);
       setShowPopup(true);
 
       if (!visitedHome && !click) {
@@ -170,7 +186,7 @@ const MapMain = ({
 
       const region = event.features && event.features[0];
 
-      if (region.properties.unique_id !== "<NA>") {
+      if (region && region.properties.unique_id !== "<NA>") {
         setHoverInfo({
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
@@ -179,6 +195,8 @@ const MapMain = ({
         });
 
         let eco = region.properties;
+        eco.layer = "Ecoregions";
+        eco._id = region.properties.unique_id;
 
         if (region.geometry.coordinates[0][0][0].length > 1) {
           eco.coordinates = region.geometry.coordinates[0][0][0];
@@ -207,6 +225,57 @@ const MapMain = ({
     },
     [hoverInfo]
   );
+  const onFeowClick = useCallback(
+    async (event) => {
+      // console.log(event.features);
+      setShowPopup(true);
+
+      if (!visitedHome && !click) {
+        setTab({ id: 1, label: "Summary" });
+      }
+
+      const region = event.features && event.features[0];
+      // console.log(region);
+
+      if (region) {
+        setHoverInfo({
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          regionName: region && region.properties.name,
+          regionNum: region && region.properties.id,
+        });
+
+        let eco = region.properties;
+        eco.layer = "Freshwater";
+        eco._id = region.properties.id;
+
+        if (region.geometry.coordinates[0][0][0].length > 1) {
+          eco.coordinates = region.geometry.coordinates[0][0][0];
+        } else {
+          eco.coordinates = region.geometry.coordinates[0][0];
+        }
+
+        sessionStorage.setItem("ecoregion", JSON.stringify(eco));
+        setEcoFilter(eco);
+
+        // const res = await fetch(
+        //   `/api/ecoregions/${region.properties.unique_id}`,
+        //   {
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   }
+        // );
+
+        // const data = await res.json();
+
+        // setWiki(data);
+        setClick(true);
+      }
+    },
+    [hoverInfo]
+  );
 
   useEffect(() => {
     if (ecoFilter && !click) {
@@ -222,7 +291,7 @@ const MapMain = ({
   const ecoName = (hoverInfo && hoverInfo.regionName) || "";
 
   // check layer and style expressions in mapbox docs for array setup. useMemo memoizes the return value of a function(useCallback memoizes the function not the return value) so the return value can be reused between re-renders. Function is re-ran when value of selectedRegion changes.
-  const filter = useMemo(
+  const ecoClickFilter = useMemo(
     () => ["in", "unique_id", selectedRegion],
     [selectedRegion]
   );
@@ -259,6 +328,11 @@ const MapMain = ({
   const speciesFilter3 = ecoChips[2]
     ? ["in", "unique_id", ...speciesRegions3]
     : ["in", "unique_id"];
+
+  const feowClickFilter = useMemo(
+    () => ["in", "id", selectedRegion],
+    [selectedRegion]
+  );
 
   const mapRef = useRef();
 
@@ -354,17 +428,16 @@ const MapMain = ({
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
+  const handleLayerClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
 
-  const [layer, setLayer] = useState("Ecoregions");
-
   const handleLayerChange = (event) => {
     setLayer(event.target.value);
+    setShowPopup(false);
   };
 
   return (
@@ -377,7 +450,7 @@ const MapMain = ({
           zIndex: 1,
           border: "2px solid #94c9ff",
         }}
-        onClick={(event) => handleClick(event)}
+        onClick={(event) => handleLayerClick(event)}
         color="inherit"
         aria-label="layer"
       >
@@ -537,8 +610,8 @@ const MapMain = ({
         touchPitch={false}
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs"
         mapboxAccessToken={mapBox}
-        interactiveLayerIds={["eco-fill"]}
-        onClick={onHover}
+        interactiveLayerIds={["eco-fill", "feow-fill"]}
+        onClick={layer === "Ecoregions" ? onEcoClick : onFeowClick}
         ref={mapRef}
         onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         onMove={(evt) => setViewState(evt.viewState)}
@@ -577,10 +650,11 @@ const MapMain = ({
               />
 
               <Layer
-                id="hover"
+                id="ecoclick"
+                key="ecoclick"
                 beforeId="waterway-label"
                 {...ecoFill1}
-                filter={filter}
+                filter={ecoClickFilter}
               />
               <Layer beforeId="waterway-label" key="ecoline" {...ecoLine} />
             </Source>
@@ -591,7 +665,7 @@ const MapMain = ({
               id="feowmap"
               key="feowmap"
               type="vector"
-              url="mapbox://sl354207.dsmw-tiles"
+              url="mapbox://sl354207.feow-tiles"
             >
               <Layer
                 id="feowbase"
@@ -604,25 +678,26 @@ const MapMain = ({
                 beforeId="waterway-label"
                 {...ecoFill5}
                 filter={speciesFilter3}
-              />
-              <Layer
+              /> */}
+              {/* <Layer
                 beforeId="waterway-label"
                 {...ecoFill4}
                 filter={speciesFilter2}
-              />
-              <Layer
+              /> */}
+              {/* <Layer
                 id="species1"
                 beforeId="waterway-label"
                 {...ecoFill3}
                 filter={speciesFilter1}
-              />
+              /> */}
 
               <Layer
-                id="hover"
+                id="feowclick"
+                key="feowclick"
                 beforeId="waterway-label"
-                {...ecoFill1}
-                filter={filter}
-              /> */}
+                {...feowFill1}
+                filter={feowClickFilter}
+              />
               <Layer beforeId="waterway-label" key="feoline" {...feowLine} />
             </Source>
           </>
@@ -654,7 +729,9 @@ const MapMain = ({
                 align="center"
                 sx={{ fontWeight: 500, minWidth: "150px" }}
               >
-                Eco-{selectedRegion}
+                {layer === "Ecoregions"
+                  ? `Eco - ${selectedRegion}`
+                  : `FEOW - ${selectedRegion}`}
               </Typography>
               <Typography
                 color="textSecondary"

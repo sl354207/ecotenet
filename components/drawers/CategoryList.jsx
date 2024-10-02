@@ -33,8 +33,8 @@ const CategoryList = ({
   const { data, isLoading, error } = useSWR(
     category
       ? category.title
-        ? `/api/${ecoFilter.unique_id}/${category.title}?sub=${category.sub}`
-        : `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
+        ? `/api/${ecoFilter._id}/${category.title}?sub=${category.sub}`
+        : `/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}`
       : null,
     fetcher,
     {
@@ -50,14 +50,10 @@ const CategoryList = ({
   const handleNativeToggleChange = (event) => {
     if (event.target.value === "native") {
       setNativeToggleValue("native");
-      mutate(
-        `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
-      );
+      mutate(`/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}`);
     } else {
       setNativeToggleValue("observed");
-      mutate(
-        `/api/${ecoFilter.unique_id}/${category}?native=${nativeToggleValue}`
-      );
+      mutate(`/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}`);
     }
   };
 
@@ -90,8 +86,8 @@ const CategoryList = ({
                 onClick={() =>
                   mutate(
                     category.title
-                      ? `/api/${ecoFilter.unique_id}/${category.title}?sub=${category.sub}`
-                      : `/api/${ecoFilter.unique_id}/${category}`
+                      ? `/api/${ecoFilter._id}/${category.title}?sub=${category.sub}`
+                      : `/api/${ecoFilter._id}/${category}`
                   )
                 }
               >

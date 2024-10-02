@@ -17,6 +17,7 @@ import Coords from "@data/eco_coord.json";
 import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 import { useHomepageContext } from "@components/context/HomepageContext";
+import FeowSummary from "@components/drawers/FeowSummary";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
@@ -117,6 +118,8 @@ const MapPage = ({ ecoregions }) => {
     setTab,
     ecoChips,
     setEcoChips,
+    layer,
+    setLayer,
   } = useHomepageContext();
 
   const drawerWidth = 350;
@@ -148,7 +151,7 @@ const MapPage = ({ ecoregions }) => {
         longitude: ecoFilter.coordinates[0],
         latitude: ecoFilter.coordinates[1],
         regionName: ecoFilter.name,
-        regionNum: ecoFilter.unique_id,
+        regionNum: ecoFilter._id,
       });
     }
   }, [ecoFilter]);
@@ -259,6 +262,8 @@ const MapPage = ({ ecoregions }) => {
           setMapLoc={setMapLoc}
           nativeToggleValue={nativeToggleValue}
           setNativeToggleValue={setNativeToggleValue}
+          layer={layer}
+          setLayer={setLayer}
         />
         {isMobile ? (
           <>
@@ -443,12 +448,16 @@ const MapPage = ({ ecoregions }) => {
                     />
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
-                    <EcoSummary
-                      wiki={wiki && wiki}
-                      setWiki={setWiki}
-                      ecoFilter={ecoFilter && ecoFilter}
-                      isMobile={isMobile}
-                    />
+                    {layer === "Ecoregions" ? (
+                      <EcoSummary
+                        wiki={wiki && wiki}
+                        setWiki={setWiki}
+                        ecoFilter={ecoFilter && ecoFilter}
+                        isMobile={isMobile}
+                      />
+                    ) : (
+                      <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                    )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
                     <EcoDist
@@ -597,11 +606,15 @@ const MapPage = ({ ecoregions }) => {
                     />
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
-                    <EcoSummary
-                      wiki={wiki && wiki}
-                      setWiki={setWiki}
-                      ecoFilter={ecoFilter && ecoFilter}
-                    />
+                    {layer === "Ecoregions" ? (
+                      <EcoSummary
+                        wiki={wiki && wiki}
+                        setWiki={setWiki}
+                        ecoFilter={ecoFilter && ecoFilter}
+                      />
+                    ) : (
+                      <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                    )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
                     <EcoDist

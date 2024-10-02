@@ -15,6 +15,7 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -64,6 +65,7 @@ const FilterDrawer = ({
 
   // useReducer hook can be used for complex state manipulation or when a component has multiple substates such as menu dropdowns
   const [drawerState, drawerDispatch] = useReducer(reducer, menuItems);
+
   return (
     <>
       <Drawer
@@ -156,25 +158,42 @@ const FilterDrawer = ({
               </ButtonGroup>
             </>
           )}
-          <Button
-            sx={{
-              flexGrow: { xs: 0, md: 1 },
-              marginInline: { xs: "auto", md: "10px" },
-              position: { xs: "absolute", md: "relative" },
-              left: "0px",
-              right: "0px",
+          {ecoFilter && ecoFilter.layer === "Ecoregions" ? (
+            <Button
+              sx={{
+                flexGrow: { xs: 0, md: 1 },
+                marginInline: { xs: "auto", md: "10px" },
+                position: { xs: "absolute", md: "relative" },
+                left: "0px",
+                right: "0px",
 
-              width: { xs: "55vw", md: "auto" },
-            }}
-            onClick={() => {
-              setFilterOpen(false);
-              router.push(`/ecoregions/${ecoFilter.unique_id}`);
-            }}
-            variant="text"
-            color="inherit"
-          >
-            ECO-{ecoFilter && ecoFilter.unique_id}
-          </Button>
+                width: { xs: "55vw", md: "auto" },
+              }}
+              onClick={() => {
+                setFilterOpen(false);
+                router.push(`/ecoregions/${ecoFilter._id}`);
+              }}
+              variant="text"
+              color="inherit"
+            >
+              ECO-{ecoFilter && ecoFilter._id}
+            </Button>
+          ) : (
+            <Typography
+              sx={{
+                flexGrow: { xs: 0, md: 1 },
+                marginInline: { xs: "auto", md: "10px" },
+                position: { xs: "absolute", md: "relative" },
+                left: "0px",
+                right: "0px",
+                alignContent: "center",
+              }}
+              align="center"
+            >
+              FEOW-{ecoFilter && ecoFilter._id}
+            </Typography>
+          )}
+
           <IconButton
             onClick={handleFilterClose}
             sx={{ marginLeft: "auto", marginRight: "10px" }}
@@ -202,57 +221,136 @@ const FilterDrawer = ({
             />
           ) : (
             <>
-              {drawerState.map((menuItem, index) => {
-                const { menuTitle, menuSubs, openList } = menuItem;
+              {ecoFilter && ecoFilter.layer === "Ecoregions" ? (
+                <>
+                  {drawerState.map((menuItem, index) => {
+                    const { menuTitle, menuSubs, openList } = menuItem;
 
-                return (
-                  <List
-                    component="nav"
-                    aria-labelledby="nested-list"
-                    key={index}
-                  >
-                    <ListItemButton
-                      key={menuTitle}
-                      onClick={() => handleListClick(menuTitle)}
-                    >
-                      <ListItemText primary={menuTitle} />
-                      {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </ListItemButton>
-                    <Collapse in={openList} timeout="auto" unmountOnExit>
-                      <List component="div" disablePadding key="sublist">
-                        {menuSubs.map((menuSub) => (
-                          <ListItemButton
-                            key={menuSub.subTitle}
-                            sx={{ paddingLeft: theme.spacing(4) }}
-                            onClick={() => {
-                              if (menuSub.query.title) {
-                                const title = encodeURIComponent(
-                                  menuSub.query.title
-                                );
-                                const sub = encodeURIComponent(
-                                  menuSub.query.sub
-                                );
-                                setCategorySelected(true);
-                                setCategory({ title: title, sub: sub });
-                                setTitle(menuSub.subTitle);
-                                setDescription(menuSub.description);
-                              } else {
-                                setCategorySelected(true);
-                                setCategory(menuSub.query);
-                                setTitle(menuSub.subTitle);
-                                setDescription(menuSub.description);
-                              }
-                            }}
-                          >
-                            <ListItemText primary={menuSub.subTitle} />
-                          </ListItemButton>
-                        ))}
+                    return (
+                      <List
+                        component="nav"
+                        aria-labelledby="nested-list"
+                        key={index}
+                      >
+                        <ListItemButton
+                          key={menuTitle}
+                          onClick={() => handleListClick(menuTitle)}
+                        >
+                          <ListItemText primary={menuTitle} />
+                          {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </ListItemButton>
+                        <Collapse in={openList} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding key="sublist">
+                            {menuSubs.map((menuSub) => (
+                              <ListItemButton
+                                key={menuSub.subTitle}
+                                sx={{ paddingLeft: theme.spacing(4) }}
+                                onClick={() => {
+                                  if (menuSub.query.title) {
+                                    const title = encodeURIComponent(
+                                      menuSub.query.title
+                                    );
+                                    const sub = encodeURIComponent(
+                                      menuSub.query.sub
+                                    );
+                                    setCategorySelected(true);
+                                    setCategory({ title: title, sub: sub });
+                                    setTitle(menuSub.subTitle);
+                                    setDescription(menuSub.description);
+                                  } else {
+                                    setCategorySelected(true);
+                                    setCategory(menuSub.query);
+                                    setTitle(menuSub.subTitle);
+                                    setDescription(menuSub.description);
+                                  }
+                                }}
+                              >
+                                <ListItemText primary={menuSub.subTitle} />
+                              </ListItemButton>
+                            ))}
+                          </List>
+                        </Collapse>
+                        <Divider />
                       </List>
-                    </Collapse>
-                    <Divider />
-                  </List>
-                );
-              })}
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  {drawerState.map((menuItem, index) => {
+                    const { menuTitle, menuSubs, openList } = menuItem;
+
+                    // remove menuItem from drawerState where menuTitle is "Gather"
+
+                    return (
+                      <List
+                        component="nav"
+                        aria-labelledby="nested-list"
+                        key={index}
+                      >
+                        <ListItemButton
+                          key={menuTitle}
+                          onClick={() => handleListClick(menuTitle)}
+                          sx={{
+                            display:
+                              menuTitle === "Hunt" ||
+                              menuTitle === "Gather" ||
+                              menuTitle === "Survival" ||
+                              menuTitle === "Building" ||
+                              menuTitle === "Travel" ||
+                              menuTitle === "Agriculture" ||
+                              menuTitle === "Culture"
+                                ? "none"
+                                : "flex",
+                          }}
+                        >
+                          <ListItemText primary={menuTitle} />
+                          {openList ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                        </ListItemButton>
+                        <Collapse in={openList} timeout="auto" unmountOnExit>
+                          <List component="div" disablePadding key="sublist">
+                            {menuSubs.map((menuSub) => (
+                              <ListItemButton
+                                key={menuSub.subTitle}
+                                sx={{
+                                  paddingLeft: theme.spacing(4),
+                                  display:
+                                    menuSub.subTitle === "Guides"
+                                      ? "none"
+                                      : "block",
+                                }}
+                                onClick={() => {
+                                  if (menuSub.query.title) {
+                                    const title = encodeURIComponent(
+                                      menuSub.query.title
+                                    );
+                                    const sub = encodeURIComponent(
+                                      menuSub.query.sub
+                                    );
+                                    setCategorySelected(true);
+                                    setCategory({ title: title, sub: sub });
+                                    setTitle(menuSub.subTitle);
+                                    setDescription(menuSub.description);
+                                  } else {
+                                    setCategorySelected(true);
+                                    setCategory(menuSub.query);
+                                    setTitle(menuSub.subTitle);
+                                    setDescription(menuSub.description);
+                                  }
+                                }}
+                              >
+                                <ListItemText primary={menuSub.subTitle} />
+                              </ListItemButton>
+                            ))}
+                          </List>
+                        </Collapse>
+                        <Divider />
+                      </List>
+                    );
+                  })}
+                </>
+              )}
             </>
           )}
         </Box>
