@@ -34,6 +34,9 @@ const EcoRegions = ({
           regionName: ecoregion.name,
           regionNum: ecoregion.unique_id,
         });
+
+        ecoregion._id = ecoregion.unique_id;
+        ecoregion.layer = "Ecoregions";
         sessionStorage.setItem("ecoregion", JSON.stringify(ecoregion));
         setEcoFilter(ecoregion);
         setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });

@@ -13,10 +13,10 @@ import EcoDist from "@components/drawers/EcoDist";
 import EcoRegions from "@components/drawers/EcoRegions";
 import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
-import Coords from "@data/eco_coord.json";
 import { getEcoregions } from "@utils/mongodb/mongoHelpers";
 
 import { useHomepageContext } from "@components/context/HomepageContext";
+import FeowRegions from "@components/drawers/FeowRegions";
 import FeowSummary from "@components/drawers/FeowSummary";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -45,7 +45,7 @@ const DynamicFeatureAndSearchDrawer = dynamic(
   }
 );
 
-const coords = Coords;
+// const coords = Coords;
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -251,7 +251,7 @@ const MapPage = ({ ecoregions }) => {
           setClick={setClick}
           ecoChips={ecoChips}
           setEcoChips={setEcoChips}
-          coords={coords}
+          coords={ecoregions}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
           showPopup={showPopup}
@@ -432,20 +432,36 @@ const MapPage = ({ ecoregions }) => {
               >
                 <>
                   <TabPanel value={tab.id} index={0}>
-                    <EcoRegions
-                      ecoregions={ecoregions}
-                      ecoMove={ecoMove}
-                      setEcoMove={setEcoMove}
-                      setEcoFilter={setEcoFilter}
-                      setHoverInfo={setHoverInfo}
-                      setWiki={setWiki}
-                      setShowPopup={setShowPopup}
-                      visitedHome={visitedHome}
-                      setTab={setTab}
-                      click={click}
-                      setClick={setClick}
-                      isMobile={isMobile}
-                    />
+                    {layer === "Ecoregions" ? (
+                      <EcoRegions
+                        ecoregions={ecoregions}
+                        ecoMove={ecoMove}
+                        setEcoMove={setEcoMove}
+                        setEcoFilter={setEcoFilter}
+                        setHoverInfo={setHoverInfo}
+                        setWiki={setWiki}
+                        setShowPopup={setShowPopup}
+                        visitedHome={visitedHome}
+                        setTab={setTab}
+                        click={click}
+                        setClick={setClick}
+                        isMobile={isMobile}
+                      />
+                    ) : (
+                      <FeowRegions
+                        ecoMove={ecoMove}
+                        setEcoMove={setEcoMove}
+                        setEcoFilter={setEcoFilter}
+                        setHoverInfo={setHoverInfo}
+                        setShowPopup={setShowPopup}
+                        visitedHome={visitedHome}
+                        setTab={setTab}
+                        click={click}
+                        setClick={setClick}
+                        isMobile={isMobile}
+                        layer={layer}
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
                     {layer === "Ecoregions" ? (
@@ -591,19 +607,34 @@ const MapPage = ({ ecoregions }) => {
               >
                 <>
                   <TabPanel value={tab.id} index={0}>
-                    <EcoRegions
-                      ecoregions={ecoregions}
-                      ecoMove={ecoMove}
-                      setEcoMove={setEcoMove}
-                      setEcoFilter={setEcoFilter}
-                      setHoverInfo={setHoverInfo}
-                      setWiki={setWiki}
-                      setShowPopup={setShowPopup}
-                      visitedHome={visitedHome}
-                      setTab={setTab}
-                      click={click}
-                      setClick={setClick}
-                    />
+                    {layer === "Ecoregions" ? (
+                      <EcoRegions
+                        ecoregions={ecoregions}
+                        ecoMove={ecoMove}
+                        setEcoMove={setEcoMove}
+                        setEcoFilter={setEcoFilter}
+                        setHoverInfo={setHoverInfo}
+                        setWiki={setWiki}
+                        setShowPopup={setShowPopup}
+                        visitedHome={visitedHome}
+                        setTab={setTab}
+                        click={click}
+                        setClick={setClick}
+                      />
+                    ) : (
+                      <FeowRegions
+                        ecoMove={ecoMove}
+                        setEcoMove={setEcoMove}
+                        setEcoFilter={setEcoFilter}
+                        setHoverInfo={setHoverInfo}
+                        setShowPopup={setShowPopup}
+                        visitedHome={visitedHome}
+                        setTab={setTab}
+                        click={click}
+                        setClick={setClick}
+                        layer={layer}
+                      />
+                    )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
                     {layer === "Ecoregions" ? (

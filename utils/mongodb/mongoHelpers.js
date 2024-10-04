@@ -1192,7 +1192,22 @@ const getEcoregions = async () => {
     const response = await db
       .collection("ecoregions")
       .find({})
-      .project({ unique_id: 1, name: 1, coordinates: 1, url: 1 })
+      .project({ unique_id: 1, name: 1, coordinates: 1, url: 1, _id: 0 })
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFeowEcoregions = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("feow")
+      .find({})
+      .project({ _id: 0 })
       .toArray();
 
     return response;
@@ -1540,6 +1555,7 @@ module.exports = {
   updateNotification,
   checkName,
   getEcoregions,
+  getFeowEcoregions,
   getEcoregionById,
   getDistinctCategory,
   getFilteredStats,
