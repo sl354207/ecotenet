@@ -9,13 +9,16 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   let wikiUrl;
   const { mutate } = useSWRConfig();
 
-  if (ecoFilter && ecoFilter.layer === "Ecoregions" && !wiki) {
-    const res = fetch(`/api/ecoregions/${ecoFilter._id}?layer=ecoregions`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  if (ecoFilter && ecoFilter.layer === "ecoregions" && !wiki) {
+    const res = fetch(
+      `/api/ecoregions/${ecoFilter._id}?layer=${ecoFilter.layer}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => setWiki(data))
       .catch((error) => console.log(error));
@@ -204,7 +207,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   };
   return (
     <>
-      {ecoFilter && ecoFilter.layer === "Ecoregions" ? (
+      {ecoFilter && ecoFilter.layer === "ecoregions" ? (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Button

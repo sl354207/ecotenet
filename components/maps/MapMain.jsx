@@ -71,7 +71,7 @@ const MapMain = ({
         });
 
         let eco = region.properties;
-        eco.layer = "Ecoregions";
+        eco.layer = "ecoregions";
         eco._id = region.properties.unique_id;
 
         if (region.geometry.coordinates[0][0][0].length > 1) {
@@ -120,7 +120,7 @@ const MapMain = ({
         });
 
         let eco = region.properties;
-        eco.layer = "Freshwater";
+        eco.layer = "feow";
         eco._id = region.properties.id;
 
         if (region.geometry.coordinates[0][0][0].length > 1) {
@@ -334,7 +334,7 @@ const MapMain = ({
               onChange={handleLayerChange}
             >
               <FormControlLabel
-                value="Ecoregions"
+                value="ecoregions"
                 control={
                   <Radio
                     color="secondary"
@@ -346,7 +346,7 @@ const MapMain = ({
                 label="Ecoregions"
               />
               <FormControlLabel
-                value="Freshwater"
+                value="feow"
                 control={
                   <Radio
                     color="secondary"
@@ -358,7 +358,7 @@ const MapMain = ({
                 label="Freshwater"
               />
               <FormControlLabel
-                value="Soil"
+                value="dsmw"
                 control={
                   <Radio
                     color="secondary"
@@ -472,13 +472,13 @@ const MapMain = ({
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs"
         mapboxAccessToken={mapBox}
         interactiveLayerIds={["eco-fill", "feow-fill"]}
-        onClick={layer === "Ecoregions" ? onEcoClick : onFeowClick}
+        onClick={layer === "ecoregions" ? onEcoClick : onFeowClick}
         ref={mapRef}
         onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         onMove={(evt) => setViewState(evt.viewState)}
         attributionControl={false}
       >
-        {layer === "Ecoregions" ? (
+        {layer === "ecoregions" ? (
           <>
             <Source
               id="ecomap"
@@ -590,7 +590,7 @@ const MapMain = ({
                 align="center"
                 sx={{ fontWeight: 500, minWidth: "150px" }}
               >
-                {layer === "Ecoregions"
+                {layer === "ecoregions"
                   ? `Eco - ${selectedRegion}`
                   : `FEOW - ${selectedRegion}`}
               </Typography>

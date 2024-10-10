@@ -10,8 +10,8 @@ const FeowSummary = ({ ecoFilter }) => {
     error,
     mutate,
   } = useSWR(
-    ecoFilter && ecoFilter.layer === "Freshwater"
-      ? `/api/ecoregions/${ecoFilter._id}?layer=feow`
+    ecoFilter && ecoFilter.layer === "feow"
+      ? `/api/ecoregions/${ecoFilter._id}?layer=${ecoFilter.layer}`
       : null,
     fetcher,
     {
@@ -22,7 +22,7 @@ const FeowSummary = ({ ecoFilter }) => {
   // console.log(results);
   return (
     <>
-      {ecoFilter && ecoFilter.layer === "Freshwater" ? (
+      {ecoFilter && ecoFilter.layer === "feow" ? (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Typography variant="h5" align="center" sx={{ marginTop: "20px" }}>

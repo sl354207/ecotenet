@@ -271,7 +271,7 @@ const Nav = () => {
                         color="secondary"
                         size={isTab ? "small" : "medium"}
                       >
-                        {ecoFilter.layer === "Ecoregions"
+                        {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id}`
                           : `FEOW-${ecoFilter._id}`}
                       </Button>
@@ -332,7 +332,7 @@ const Nav = () => {
                         variant="contained"
                         color="secondary"
                       >
-                        {ecoFilter.layer === "Ecoregions"
+                        {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id} Filter`
                           : `FEOW-${ecoFilter._id} Filter`}
                       </Button>

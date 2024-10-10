@@ -28,13 +28,9 @@ const FeowRegions = ({
     isLoading,
     error,
     mutate,
-  } = useSWR(
-    layer === "Freshwater" ? "/api/ecoregions?layer=feow" : null,
-    fetcher,
-    {
-      shouldRetryOnError: false,
-    }
-  );
+  } = useSWR(layer === "feow" ? "/api/ecoregions?layer=feow" : null, fetcher, {
+    shouldRetryOnError: false,
+  });
   //   const sorted = ecoregions.sort(function (a, b) {
   //     return a.unique_id - b.unique_id;
   //   });
@@ -55,7 +51,7 @@ const FeowRegions = ({
         });
 
         ecoregion._id = ecoregion.id;
-        ecoregion.layer = "Freshwater";
+        ecoregion.layer = "feow";
         sessionStorage.setItem("ecoregion", JSON.stringify(ecoregion));
         setEcoFilter(ecoregion);
         setEcoMove({ name: ecoregion.name, id: ecoregion.id });

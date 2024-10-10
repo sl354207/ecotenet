@@ -432,7 +432,7 @@ const MapPage = ({ ecoregions }) => {
               >
                 <>
                   <TabPanel value={tab.id} index={0}>
-                    {layer === "Ecoregions" ? (
+                    {layer === "ecoregions" ? (
                       <EcoRegions
                         ecoregions={ecoregions}
                         ecoMove={ecoMove}
@@ -464,7 +464,7 @@ const MapPage = ({ ecoregions }) => {
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
-                    {layer === "Ecoregions" ? (
+                    {layer === "ecoregions" ? (
                       <EcoSummary
                         wiki={wiki && wiki}
                         setWiki={setWiki}
@@ -607,7 +607,7 @@ const MapPage = ({ ecoregions }) => {
               >
                 <>
                   <TabPanel value={tab.id} index={0}>
-                    {layer === "Ecoregions" ? (
+                    {layer === "ecoregions" ? (
                       <EcoRegions
                         ecoregions={ecoregions}
                         ecoMove={ecoMove}
@@ -637,7 +637,7 @@ const MapPage = ({ ecoregions }) => {
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
-                    {layer === "Ecoregions" ? (
+                    {layer === "ecoregions" ? (
                       <EcoSummary
                         wiki={wiki && wiki}
                         setWiki={setWiki}

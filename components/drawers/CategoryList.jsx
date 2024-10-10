@@ -34,7 +34,7 @@ const CategoryList = ({
     category
       ? category.title
         ? `/api/${ecoFilter._id}/${category.title}?sub=${category.sub}`
-        : `/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}`
+        : `/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}&layer=${ecoFilter.layer}`
       : null,
     fetcher,
     {
@@ -50,10 +50,14 @@ const CategoryList = ({
   const handleNativeToggleChange = (event) => {
     if (event.target.value === "native") {
       setNativeToggleValue("native");
-      mutate(`/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}`);
+      mutate(
+        `/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}&layer=${ecoFilter.layer}`
+      );
     } else {
       setNativeToggleValue("observed");
-      mutate(`/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}`);
+      mutate(
+        `/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}&layer=${ecoFilter.layer}`
+      );
     }
   };
 
@@ -87,7 +91,7 @@ const CategoryList = ({
                   mutate(
                     category.title
                       ? `/api/${ecoFilter._id}/${category.title}?sub=${category.sub}`
-                      : `/api/${ecoFilter._id}/${category}`
+                      : `/api/${ecoFilter._id}/${category}?native=${nativeToggleValue}&layer=${ecoFilter.layer}`
                   )
                 }
               >
@@ -205,7 +209,7 @@ const CategoryList = ({
                     <Container sx={{ minHeight: "auto" }}>
                       {data.tag === "species" ? (
                         <>
-                          {ecoFilter && ecoFilter.layer === "Ecoregions" && (
+                          {ecoFilter && ecoFilter.layer === "ecoregions" && (
                             <FormControl
                               component="fieldset"
                               sx={{
@@ -270,7 +274,7 @@ const CategoryList = ({
                     <>
                       {data && data.category[0].scientific_name ? (
                         <>
-                          {ecoFilter && ecoFilter.layer === "Ecoregions" && (
+                          {ecoFilter && ecoFilter.layer === "ecoregions" && (
                             <FormControl
                               component="fieldset"
                               sx={{

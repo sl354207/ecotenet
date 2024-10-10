@@ -158,7 +158,7 @@ const FilterDrawer = ({
               </ButtonGroup>
             </>
           )}
-          {ecoFilter && ecoFilter.layer === "Ecoregions" ? (
+          {ecoFilter && ecoFilter.layer === "ecoregions" ? (
             <Button
               sx={{
                 flexGrow: { xs: 0, md: 1 },
@@ -221,7 +221,7 @@ const FilterDrawer = ({
             />
           ) : (
             <>
-              {ecoFilter && ecoFilter.layer === "Ecoregions" ? (
+              {ecoFilter && ecoFilter.layer === "ecoregions" ? (
                 <>
                   {drawerState.map((menuItem, index) => {
                     const { menuTitle, menuSubs, openList } = menuItem;

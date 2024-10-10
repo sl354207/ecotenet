@@ -439,6 +439,7 @@ const getSpecies = async (speciesType, observed_ecoregions) => {
         common_name: 1,
         observed_ecoregions: 1,
         native_ecoregions: 1,
+        freshwater_ecoregions: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -463,6 +464,32 @@ const getNativeSpecies = async (speciesType, native_ecoregions) => {
         common_name: 1,
         observed_ecoregions: 1,
         native_ecoregions: 1,
+        freshwater_ecoregions: 1,
+      })
+      .sort({ scientific_name: 1 })
+      .toArray();
+
+    return species;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFeowSpecies = async (speciesType, freshwater_ecoregions) => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db
+      .collection("species")
+      .find({
+        species_type: speciesType,
+        freshwater_ecoregions: freshwater_ecoregions,
+      })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        observed_ecoregions: 1,
+        native_ecoregions: 1,
+        freshwater_ecoregions: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -1544,6 +1571,7 @@ module.exports = {
   deleteComment,
   getSpecies,
   getNativeSpecies,
+  getFeowSpecies,
   getAllSpecies,
   getSpeciesByScientificName,
   searchAllPosts,
