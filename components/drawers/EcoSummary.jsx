@@ -10,7 +10,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   const { mutate } = useSWRConfig();
 
   if (ecoFilter && ecoFilter.layer === "Ecoregions" && !wiki) {
-    const res = fetch(`/api/ecoregions/${ecoFilter._id}`, {
+    const res = fetch(`/api/ecoregions/${ecoFilter._id}?layer=ecoregions`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -296,8 +296,6 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
               )}
             </>
           )}
-          {/* </>
-          )} */}
         </>
       ) : (
         <Typography variant="h5" align="center" sx={{ marginTop: "20px" }}>

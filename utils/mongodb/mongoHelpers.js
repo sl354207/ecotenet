@@ -1207,7 +1207,7 @@ const getFeowEcoregions = async () => {
     const response = await db
       .collection("feow")
       .find({})
-      .project({ _id: 0 })
+      .project({ id: 1, name: 1, coordinates: 1, _id: 0 })
       .toArray();
 
     return response;
@@ -1225,6 +1225,22 @@ const getEcoregionById = async (id) => {
         unique_id: id,
       },
       { projection: { unique_id: 1, name: 1, url: 1, coordinates: 1 } }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFeowById = async (id) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("feow").findOne(
+      {
+        id: id,
+      },
+      { projection: { _id: 0 } }
     );
 
     return response;
@@ -1557,6 +1573,7 @@ module.exports = {
   getEcoregions,
   getFeowEcoregions,
   getEcoregionById,
+  getFeowById,
   getDistinctCategory,
   getFilteredStats,
   getStatsAPIEcoregions,

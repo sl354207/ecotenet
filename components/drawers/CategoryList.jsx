@@ -205,45 +205,48 @@ const CategoryList = ({
                     <Container sx={{ minHeight: "auto" }}>
                       {data.tag === "species" ? (
                         <>
-                          <FormControl
-                            component="fieldset"
-                            sx={{
-                              marginLeft: "56px",
-                            }}
-                          >
-                            <RadioGroup
-                              aria-label="native-toggle"
-                              name="native-toggle"
-                              value={nativeToggleValue}
-                              onChange={handleNativeToggleChange}
-                              row
+                          {ecoFilter && ecoFilter.layer === "Ecoregions" && (
+                            <FormControl
+                              component="fieldset"
+                              sx={{
+                                marginLeft: "56px",
+                              }}
                             >
-                              <FormControlLabel
-                                value="observed"
-                                control={
-                                  <Radio
-                                    color="secondary"
-                                    sx={{
-                                      color: `${theme.palette.secondary.main}!important`,
-                                    }}
-                                  />
-                                }
-                                label="observed"
-                              />
-                              <FormControlLabel
-                                value="native"
-                                control={
-                                  <Radio
-                                    color="secondary"
-                                    sx={{
-                                      color: `${theme.palette.secondary.main}!important`,
-                                    }}
-                                  />
-                                }
-                                label="native"
-                              />
-                            </RadioGroup>
-                          </FormControl>
+                              <RadioGroup
+                                aria-label="native-toggle"
+                                name="native-toggle"
+                                value={nativeToggleValue}
+                                onChange={handleNativeToggleChange}
+                                row
+                              >
+                                <FormControlLabel
+                                  value="observed"
+                                  control={
+                                    <Radio
+                                      color="secondary"
+                                      sx={{
+                                        color: `${theme.palette.secondary.main}!important`,
+                                      }}
+                                    />
+                                  }
+                                  label="observed"
+                                />
+                                <FormControlLabel
+                                  value="native"
+                                  control={
+                                    <Radio
+                                      color="secondary"
+                                      sx={{
+                                        color: `${theme.palette.secondary.main}!important`,
+                                      }}
+                                    />
+                                  }
+                                  label="native"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                          )}
+
                           <Typography
                             variant="h6"
                             align="center"
@@ -267,46 +270,48 @@ const CategoryList = ({
                     <>
                       {data && data.category[0].scientific_name ? (
                         <>
-                          <FormControl
-                            component="fieldset"
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <RadioGroup
-                              aria-label="native-toggle"
-                              name="native-toggle"
-                              value={nativeToggleValue}
-                              onChange={handleNativeToggleChange}
-                              row
+                          {ecoFilter && ecoFilter.layer === "Ecoregions" && (
+                            <FormControl
+                              component="fieldset"
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                              }}
                             >
-                              <FormControlLabel
-                                value="observed"
-                                control={
-                                  <Radio
-                                    color="secondary"
-                                    sx={{
-                                      color: `${theme.palette.secondary.main}!important`,
-                                    }}
-                                  />
-                                }
-                                label="observed"
-                              />
-                              <FormControlLabel
-                                value="native"
-                                control={
-                                  <Radio
-                                    color="secondary"
-                                    sx={{
-                                      color: `${theme.palette.secondary.main}!important`,
-                                    }}
-                                  />
-                                }
-                                label="native"
-                              />
-                            </RadioGroup>
-                          </FormControl>
+                              <RadioGroup
+                                aria-label="native-toggle"
+                                name="native-toggle"
+                                value={nativeToggleValue}
+                                onChange={handleNativeToggleChange}
+                                row
+                              >
+                                <FormControlLabel
+                                  value="observed"
+                                  control={
+                                    <Radio
+                                      color="secondary"
+                                      sx={{
+                                        color: `${theme.palette.secondary.main}!important`,
+                                      }}
+                                    />
+                                  }
+                                  label="observed"
+                                />
+                                <FormControlLabel
+                                  value="native"
+                                  control={
+                                    <Radio
+                                      color="secondary"
+                                      sx={{
+                                        color: `${theme.palette.secondary.main}!important`,
+                                      }}
+                                    />
+                                  }
+                                  label="native"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                          )}
                           {nativeToggleValue === "native" && (
                             <Typography
                               variant="subtitle2"

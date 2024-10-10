@@ -43,130 +43,6 @@ const MapMain = ({
     setMapLoc(true);
   }, []);
 
-  const ecoFill = {
-    id: "eco-fill",
-    type: "fill",
-    // source: "eco-data",
-    "source-layer": "ecomap-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#627BC1",
-      "fill-opacity": 0,
-    },
-  };
-  // ecoclick layer
-  const ecoFill1 = {
-    id: "eco-fill1",
-    type: "fill",
-    // source: "eco-fill",
-    "source-layer": "ecomap-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      // "fill-color": "#627BC1",
-      "fill-color": "#94c9ff",
-      "fill-opacity": 0.5,
-    },
-  };
-
-  // selected layer
-  const ecoFill3 = {
-    id: "eco-fill3",
-    type: "fill",
-    // source: "eco-fill",
-    "source-layer": "ecomap-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#ff00ff",
-      // "fill-color": "#990399",
-      "fill-opacity": 0.4,
-    },
-  };
-  // selected layer
-  const ecoFill4 = {
-    id: "eco-fill4",
-    type: "fill",
-    // source: "eco-fill",
-    "source-layer": "ecomap-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#ffff00",
-      // "fill-color": "#fcfbcc",
-      "fill-opacity": 0.6,
-    },
-  };
-  // selected layer
-  const ecoFill5 = {
-    id: "eco-fill5",
-    type: "fill",
-    // source: "eco-fill",
-    "source-layer": "ecomap-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#00ffff",
-      // "fill-color": "#00ffff",
-      "fill-opacity": 0.8,
-    },
-  };
-
-  // outline layer
-  const ecoLine = {
-    id: "eco-line",
-    type: "line",
-    // source: "eco-fill",
-    "source-layer": "ecomap-tiles",
-    layout: {},
-    paint: {
-      "line-color": [
-        "case",
-        ["==", ["get", "TYPE"], "TEOW"],
-        "rgb(5, 11, 15)",
-        "rgb(62, 136, 185)",
-      ],
-      "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
-    },
-  };
-
-  const feowFill = {
-    id: "feow-fill",
-    type: "fill",
-    // source: "eco-data",
-    "source-layer": "feow-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      "fill-color": "#627BC1",
-      "fill-opacity": 0,
-    },
-  };
-
-  const feowFill1 = {
-    id: "feow-fill1",
-    type: "fill",
-    // source: "eco-fill",
-    "source-layer": "feow-tiles",
-    paint: {
-      "fill-outline-color": "rgba(0,0,0,1)",
-      // "fill-color": "#627BC1",
-      "fill-color": "#94c9ff",
-      "fill-opacity": 0.5,
-    },
-  };
-
-  // outline layer
-  const feowLine = {
-    id: "feow-line",
-    type: "line",
-    // source: "eco-fill",
-    "source-layer": "feow-tiles",
-    layout: {},
-    paint: {
-      // "line-color": "rgb(0, 113, 228)",
-      // "line-color": "rgb(148, 201, 255)",
-      "line-color": "rgb(5, 11, 15)",
-      // "line-color": "rgb(62, 136, 185)",
-      "line-width": 2,
-    },
-  };
-
   const [viewState, setViewState] = useState({
     latitude: 37.8,
     longitude: -98,
@@ -208,7 +84,7 @@ const MapMain = ({
         setEcoFilter(eco);
 
         const res = await fetch(
-          `/api/ecoregions/${region.properties.unique_id}`,
+          `/api/ecoregions/${region.properties.unique_id}?layer=ecoregions`,
           {
             method: "GET",
             headers: {
@@ -227,7 +103,6 @@ const MapMain = ({
   );
   const onFeowClick = useCallback(
     async (event) => {
-      // console.log(event.features);
       setShowPopup(true);
 
       if (!visitedHome && !click) {
@@ -235,7 +110,6 @@ const MapMain = ({
       }
 
       const region = event.features && event.features[0];
-      // console.log(region);
 
       if (region) {
         setHoverInfo({
@@ -258,19 +132,6 @@ const MapMain = ({
         sessionStorage.setItem("ecoregion", JSON.stringify(eco));
         setEcoFilter(eco);
 
-        // const res = await fetch(
-        //   `/api/ecoregions/${region.properties.unique_id}`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   }
-        // );
-
-        // const data = await res.json();
-
-        // setWiki(data);
         setClick(true);
       }
     },
@@ -760,6 +621,114 @@ const MapMain = ({
       </Map>
     </>
   );
+};
+
+const ecoFill = {
+  id: "eco-fill",
+  type: "fill",
+  "source-layer": "ecomap-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#627BC1",
+    "fill-opacity": 0,
+  },
+};
+// ecoclick layer
+const ecoFill1 = {
+  id: "eco-fill1",
+  type: "fill",
+  "source-layer": "ecomap-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#94c9ff",
+    "fill-opacity": 0.5,
+  },
+};
+
+// selected layer 1
+const ecoFill3 = {
+  id: "eco-fill3",
+  type: "fill",
+  "source-layer": "ecomap-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#ff00ff",
+    "fill-opacity": 0.4,
+  },
+};
+// selected layer 2
+const ecoFill4 = {
+  id: "eco-fill4",
+  type: "fill",
+  "source-layer": "ecomap-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#ffff00",
+    "fill-opacity": 0.6,
+  },
+};
+// selected layer 3
+const ecoFill5 = {
+  id: "eco-fill5",
+  type: "fill",
+  "source-layer": "ecomap-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#00ffff",
+    "fill-opacity": 0.8,
+  },
+};
+
+// outline layer
+const ecoLine = {
+  id: "eco-line",
+  type: "line",
+  "source-layer": "ecomap-tiles",
+  layout: {},
+  paint: {
+    "line-color": [
+      "case",
+      ["==", ["get", "TYPE"], "TEOW"],
+      "rgb(5, 11, 15)",
+      "rgb(62, 136, 185)",
+    ],
+    "line-width": ["case", ["==", ["get", "TYPE"], "TEOW"], 2, 1],
+  },
+};
+
+const feowFill = {
+  id: "feow-fill",
+  type: "fill",
+  "source-layer": "feow-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#627BC1",
+    "fill-opacity": 0,
+  },
+};
+
+// feowclick layer
+const feowFill1 = {
+  id: "feow-fill1",
+  type: "fill",
+  "source-layer": "feow-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#94c9ff",
+    "fill-opacity": 0.5,
+  },
+};
+
+// outline layer
+const feowLine = {
+  id: "feow-line",
+  type: "line",
+  "source-layer": "feow-tiles",
+  layout: {},
+  paint: {
+    "line-color": "rgb(5, 11, 15)",
+    "line-width": 2,
+  },
 };
 
 export default MapMain;
