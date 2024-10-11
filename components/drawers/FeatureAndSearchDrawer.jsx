@@ -26,6 +26,7 @@ const FeatureAndSearchDrawer = ({
   drawerHeight,
   setDrawerHeight,
   anchor,
+  ecoFilter,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -171,7 +172,10 @@ const FeatureAndSearchDrawer = ({
           {typeof FS.item === "string" ? (
             <DrawerPost id={FS.item} handleClose={handleFSClose} />
           ) : (
-            <DrawerSpecies species={FS.item} handleClose={handleFSClose} />
+            <DrawerSpecies
+              species={FS.item}
+              ecoFilter={ecoFilter && ecoFilter}
+            />
           )}
         </Box>
       </Drawer>

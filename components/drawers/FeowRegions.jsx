@@ -1,14 +1,6 @@
-import {
-  Button,
-  CircularProgress,
-  List,
-  ListItemButton,
-  Typography,
-} from "@mui/material";
-import fetcher from "@utils/fetcher";
+import { List, ListItemButton, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useMap } from "react-map-gl";
-import useSWR from "swr";
 
 const FeowRegions = ({
   ecoMove,
@@ -21,16 +13,17 @@ const FeowRegions = ({
   click,
   setClick,
   isMobile,
-  layer,
+  // layer,
+  feow,
 }) => {
-  const {
-    data: results,
-    isLoading,
-    error,
-    mutate,
-  } = useSWR(layer === "feow" ? "/api/ecoregions?layer=feow" : null, fetcher, {
-    shouldRetryOnError: false,
-  });
+  // const {
+  //   data: results,
+  //   isLoading,
+  //   error,
+  //   mutate,
+  // } = useSWR(layer === "feow" ? "/api/ecoregions?layer=feow" : null, fetcher, {
+  //   shouldRetryOnError: false,
+  // });
   //   const sorted = ecoregions.sort(function (a, b) {
   //     return a.unique_id - b.unique_id;
   //   });
@@ -90,7 +83,7 @@ const FeowRegions = ({
           view a summary and filter an ecoregion by category
         </Typography>
       </div>
-      {isLoading ? (
+      {/* {isLoading ? (
         <CircularProgress
           color="secondary"
           size={50}
@@ -117,25 +110,25 @@ const FeowRegions = ({
             </div>
           ) : (
             <>
-              {results && (
-                <List>
-                  {results.map((ecoregion) => {
-                    // console.log(ecoregion);
-                    return (
-                      <ListItemButton
-                        onClick={() => ecoClick(ecoregion)}
-                        key={ecoregion.id}
-                      >
-                        FEOW-{ecoregion.id}: {ecoregion.name}
-                      </ListItemButton>
-                    );
-                  })}
-                </List>
-              )}
+              {results && ( */}
+      <List>
+        {feow.map((ecoregion) => {
+          // console.log(ecoregion);
+          return (
+            <ListItemButton
+              onClick={() => ecoClick(ecoregion)}
+              key={ecoregion.id}
+            >
+              FEOW-{ecoregion.id}: {ecoregion.name}
+            </ListItemButton>
+          );
+        })}
+      </List>
+      {/* )}
             </>
           )}
         </>
-      )}
+      )} */}
     </>
   );
 };

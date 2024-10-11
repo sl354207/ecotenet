@@ -47,6 +47,7 @@ const EcoDist = ({
   isMobile,
   nativeToggleValue,
   setNativeToggleValue,
+  layer,
 }) => {
   const handleChange = async (e) => {
     if (e.target.value) {
@@ -235,7 +236,7 @@ const EcoDist = ({
           </FormHelperText>
         )}
       </FormControl>
-      {ecoChips && ecoChips.length > 0 && (
+      {layer === "ecoregions" && ecoChips && ecoChips.length > 0 && (
         <>
           <Tooltip
             enterTouchDelay={100}
@@ -307,31 +308,33 @@ const EcoDist = ({
                 maxWidth: isMobile ? "81%" : "80%",
               }}
             ></CustomChip>
-            <FormControlLabel
-              key={`select-${ecoChip.id}`}
-              sx={{
-                marginLeft: "auto",
-                marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
-              }}
-              control={
-                <Checkbox
-                  sx={{
-                    color: theme.palette.secondary.main,
-                    "&.Mui-checked": {
+            {layer === "ecoregions" && (
+              <FormControlLabel
+                key={`select-${ecoChip.id}`}
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
+                }}
+                control={
+                  <Checkbox
+                    sx={{
                       color: theme.palette.secondary.main,
-                    },
-                  }}
-                  checked={ecoChip.native}
-                  onChange={() => handleSelectCheckboxChange(ecoChip.id)}
-                  disabled={
-                    (ecoChip &&
-                      ecoChip.native_ecoregions &&
-                      ecoChip.native_ecoregions.length === 0) ||
-                    (ecoChip && !ecoChip.native_ecoregions)
-                  }
-                />
-              }
-            />
+                      "&.Mui-checked": {
+                        color: theme.palette.secondary.main,
+                      },
+                    }}
+                    checked={ecoChip.native}
+                    onChange={() => handleSelectCheckboxChange(ecoChip.id)}
+                    disabled={
+                      (ecoChip &&
+                        ecoChip.native_ecoregions &&
+                        ecoChip.native_ecoregions.length === 0) ||
+                      (ecoChip && !ecoChip.native_ecoregions)
+                    }
+                  />
+                }
+              />
+            )}
           </SortableItem>
         )}
       />

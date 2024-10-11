@@ -158,15 +158,20 @@ const MapMain = ({
   );
 
   const speciesRegions1 =
-    ecoChips[0] &&
-    ecoChips[0].observed_ecoregions &&
-    ecoChips[0].native === false
+    ecoChips[0] && layer === "feow" && ecoChips[0].freshwater_ecoregions
+      ? ecoChips[0] && ecoChips[0].freshwater_ecoregions
+      : ecoChips[0] &&
+        ecoChips[0].observed_ecoregions &&
+        ecoChips[0].native === false
       ? ecoChips[0] && ecoChips[0].observed_ecoregions
       : ecoChips[0] && ecoChips[0].native_ecoregions;
 
-  const speciesFilter1 = ecoChips[0]
-    ? ["in", "unique_id", ...speciesRegions1]
-    : ["in", "unique_id"];
+  const speciesFilter1 =
+    ecoChips[0] && layer === "feow"
+      ? ["in", "id", ...speciesRegions1]
+      : ecoChips[0]
+      ? ["in", "unique_id", ...speciesRegions1]
+      : ["in", "unique_id"];
 
   const speciesRegions2 =
     ecoChips[1] &&
@@ -216,9 +221,13 @@ const MapMain = ({
         speciesRegions1.length > 0 &&
         prevCount1 !== speciesRegions1
       ) {
-        const coord = coords.filter(
-          (region) => region.unique_id === speciesRegions1[0]
-        );
+        const coord = coords.filter((region) => {
+          if (layer === "feow") {
+            return region.id === speciesRegions1[0];
+          } else {
+            return region.unique_id === speciesRegions1[0];
+          }
+        });
 
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
@@ -373,91 +382,93 @@ const MapMain = ({
           </FormControl>
         </Box>
       </Popper>
-
-      <FormControl
-        component="fieldset"
-        sx={{
-          position: "absolute",
-          bottom: { xs: "inherit", md: "10px" },
-          right: 0,
-          zIndex: 1,
-          display:
-            ecoChips &&
-            ecoChips.length === 1 &&
-            ecoChips[0].native_ecoregions &&
-            ecoChips[0].native_ecoregions.length > 0
-              ? "block"
-              : "none",
-        }}
-      >
-        <RadioGroup
-          aria-label="native-toggle"
-          name="native-toggle"
-          value={
-            (ecoChips &&
-              ecoChips[0] &&
+      {layer === "ecoregions" && (
+        <FormControl
+          component="fieldset"
+          sx={{
+            position: "absolute",
+            bottom: { xs: "inherit", md: "10px" },
+            right: 0,
+            zIndex: 1,
+            display:
+              ecoChips &&
+              ecoChips.length === 1 &&
               ecoChips[0].native_ecoregions &&
-              ecoChips[0].native_ecoregions.length === 0) ||
-            (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
-              ? "observed"
-              : nativeToggleValue
-          }
-          onChange={handleNativeToggleChange}
-          row
+              ecoChips[0].native_ecoregions.length > 0
+                ? "block"
+                : "none",
+          }}
         >
-          <FormControlLabel
-            value="observed"
-            control={
-              <Radio
-                color="secondary"
-                sx={{
-                  color: `${theme.palette.secondary.main}!important`,
-                  "& .MuiSvgIcon-root": {
-                    fontSize: { xs: "1.5rem", sm: "2rem" },
-                  },
-                }}
-              />
-            }
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontWeight: "900",
-                fontSize: "1.4rem",
-                "-webkit-text-stroke": "1px black",
-              },
-            }}
-            label="observed"
-          />
-          <FormControlLabel
-            value="native"
-            disabled={
+          <RadioGroup
+            aria-label="native-toggle"
+            name="native-toggle"
+            value={
               (ecoChips &&
                 ecoChips[0] &&
                 ecoChips[0].native_ecoregions &&
                 ecoChips[0].native_ecoregions.length === 0) ||
               (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+                ? "observed"
+                : nativeToggleValue
             }
-            control={
-              <Radio
-                color="secondary"
-                sx={{
-                  color: `${theme.palette.secondary.main}!important`,
-                  "& .MuiSvgIcon-root": {
-                    fontSize: { xs: "1.5rem", sm: "2rem" },
-                  },
-                }}
-              />
-            }
-            sx={{
-              "& .MuiFormControlLabel-label": {
-                fontWeight: "900",
-                fontSize: "1.4rem",
-                "-webkit-text-stroke": "1px black",
-              },
-            }}
-            label="native"
-          />
-        </RadioGroup>
-      </FormControl>
+            onChange={handleNativeToggleChange}
+            row
+          >
+            <FormControlLabel
+              value="observed"
+              control={
+                <Radio
+                  color="secondary"
+                  sx={{
+                    color: `${theme.palette.secondary.main}!important`,
+                    "& .MuiSvgIcon-root": {
+                      fontSize: { xs: "1.5rem", sm: "2rem" },
+                    },
+                  }}
+                />
+              }
+              sx={{
+                "& .MuiFormControlLabel-label": {
+                  fontWeight: "900",
+                  fontSize: "1.4rem",
+                  "-webkit-text-stroke": "1px black",
+                },
+              }}
+              label="observed"
+            />
+            <FormControlLabel
+              value="native"
+              disabled={
+                (ecoChips &&
+                  ecoChips[0] &&
+                  ecoChips[0].native_ecoregions &&
+                  ecoChips[0].native_ecoregions.length === 0) ||
+                (ecoChips && ecoChips[0] && !ecoChips[0].native_ecoregions)
+              }
+              control={
+                <Radio
+                  color="secondary"
+                  sx={{
+                    color: `${theme.palette.secondary.main}!important`,
+                    "& .MuiSvgIcon-root": {
+                      fontSize: { xs: "1.5rem", sm: "2rem" },
+                    },
+                  }}
+                />
+              }
+              sx={{
+                "& .MuiFormControlLabel-label": {
+                  fontWeight: "900",
+                  fontSize: "1.4rem",
+                  "-webkit-text-stroke": "1px black",
+                },
+              }}
+              label="native"
+            />
+          </RadioGroup>
+        </FormControl>
+      )}
+
       <Map
         id="mapMain"
         reuseMaps
@@ -545,12 +556,13 @@ const MapMain = ({
                 {...ecoFill4}
                 filter={speciesFilter2}
               /> */}
-              {/* <Layer
-                id="species1"
+              <Layer
+                id="feowspecies1"
+                key="feowspecies1"
                 beforeId="waterway-label"
-                {...ecoFill3}
+                {...feowFill3}
                 filter={speciesFilter1}
-              /> */}
+              />
 
               <Layer
                 id="feowclick"
@@ -716,6 +728,17 @@ const feowFill1 = {
     "fill-outline-color": "rgba(0,0,0,1)",
     "fill-color": "#94c9ff",
     "fill-opacity": 0.5,
+  },
+};
+// selected layer 1
+const feowFill3 = {
+  id: "feow-fill3",
+  type: "fill",
+  "source-layer": "feow-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#ff00ff",
+    "fill-opacity": 0.4,
   },
 };
 

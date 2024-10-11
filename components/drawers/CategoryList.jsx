@@ -154,7 +154,7 @@ const CategoryList = ({
                   ) : (
                     <DrawerSpecies
                       species={item}
-                      handleClose={handleFilterClose}
+                      ecoFilter={ecoFilter && ecoFilter}
                     />
                   )}
                 </>

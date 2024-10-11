@@ -13,7 +13,7 @@ import EcoDist from "@components/drawers/EcoDist";
 import EcoRegions from "@components/drawers/EcoRegions";
 import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
-import { getEcoregions } from "@utils/mongodb/mongoHelpers";
+import { getEcoregions, getFeowEcoregions } from "@utils/mongodb/mongoHelpers";
 
 import { useHomepageContext } from "@components/context/HomepageContext";
 import FeowRegions from "@components/drawers/FeowRegions";
@@ -95,7 +95,7 @@ const CustomTab = styled((props) => <Tab {...props} />)(({ theme }) => ({
   },
 }));
 
-const MapPage = ({ ecoregions }) => {
+const MapPage = ({ ecoregions, feow }) => {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
@@ -251,7 +251,7 @@ const MapPage = ({ ecoregions }) => {
           setClick={setClick}
           ecoChips={ecoChips}
           setEcoChips={setEcoChips}
-          coords={ecoregions}
+          coords={layer === "feow" ? feow : ecoregions}
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
           showPopup={showPopup}
@@ -459,7 +459,8 @@ const MapPage = ({ ecoregions }) => {
                         click={click}
                         setClick={setClick}
                         isMobile={isMobile}
-                        layer={layer}
+                        // layer={layer}
+                        feow={feow}
                       />
                     )}
                   </TabPanel>
@@ -484,6 +485,7 @@ const MapPage = ({ ecoregions }) => {
                       isMobile={isMobile}
                       nativeToggleValue={nativeToggleValue}
                       setNativeToggleValue={setNativeToggleValue}
+                      layer={layer}
                     />
                   </TabPanel>
                 </>
@@ -499,6 +501,7 @@ const MapPage = ({ ecoregions }) => {
                 anchor="bottom"
                 FS={FS}
                 FSOpen={FSOpen}
+                ecoFilter={ecoFilter && ecoFilter}
               />
             )}
           </>
@@ -632,7 +635,8 @@ const MapPage = ({ ecoregions }) => {
                         setTab={setTab}
                         click={click}
                         setClick={setClick}
-                        layer={layer}
+                        // layer={layer}
+                        feow={feow}
                       />
                     )}
                   </TabPanel>
@@ -655,6 +659,7 @@ const MapPage = ({ ecoregions }) => {
                       setEcoDistResults={setEcoDistResults}
                       nativeToggleValue={nativeToggleValue}
                       setNativeToggleValue={setNativeToggleValue}
+                      layer={layer}
                     />
                   </TabPanel>
                 </>
@@ -670,6 +675,7 @@ const MapPage = ({ ecoregions }) => {
                 anchor="bottom"
                 FS={FS}
                 FSOpen={FSOpen}
+                ecoFilter={ecoFilter && ecoFilter}
               />
             )}
           </>
@@ -682,10 +688,12 @@ const MapPage = ({ ecoregions }) => {
 
 export const getStaticProps = async () => {
   const ecoregions = await getEcoregions();
+  const feow = await getFeowEcoregions();
 
   return {
     props: {
       ecoregions: JSON.parse(JSON.stringify(ecoregions)),
+      feow: JSON.parse(JSON.stringify(feow)),
     },
     revalidate: 60,
   };

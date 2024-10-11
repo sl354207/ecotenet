@@ -531,6 +531,7 @@ const getSpeciesByScientificName = async (name) => {
           common_name: 1,
           observed_ecoregions: 1,
           native_ecoregions: 1,
+          freshwater_ecoregions: 1,
           species_type: 1,
         },
       }
@@ -646,6 +647,7 @@ const searchAllSpecies = async (query) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
           },
         },
       ])
@@ -766,6 +768,7 @@ const searchEcoSpecies = async (query, eco) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
           },
         },
       ])
@@ -811,6 +814,7 @@ const autoSpecies = async (query) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
           },
         },
       ])
@@ -856,6 +860,7 @@ const adminAutoSpecies = async (query) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
             species_type: 1,
           },
         },
