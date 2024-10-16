@@ -22,10 +22,9 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   }
 
   if (wiki) {
+    const corrections = { " ": "_", "/": "%2F" };
     switch (wiki.url) {
-      case undefined:
-        const corrections = { " ": "_", "/": "%2F" };
-
+      case null:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.name.replace(
           / |\//g,
           (matched) => corrections[matched]
