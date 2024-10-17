@@ -358,7 +358,7 @@ export const getServerSideProps = async (context) => {
         let wiki;
 
         switch (eco.url) {
-          case undefined:
+          case null:
             wikiRes = await fetch(
               `https://en.wikipedia.org/api/rest_v1/page/segments/${unSlug}?redirect=true`,
               {
