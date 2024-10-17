@@ -158,8 +158,10 @@ const MapMain = ({
   );
 
   const speciesRegions1 =
-    ecoChips[0] && layer === "feow" && ecoChips[0].freshwater_ecoregions
+    ecoChips[0] && layer === "feow"
       ? ecoChips[0] && ecoChips[0].freshwater_ecoregions
+        ? ecoChips[0].freshwater_ecoregions
+        : []
       : ecoChips[0] &&
         ecoChips[0].observed_ecoregions &&
         ecoChips[0].native === false
@@ -174,26 +176,40 @@ const MapMain = ({
       : ["in", "unique_id"];
 
   const speciesRegions2 =
-    ecoChips[1] &&
-    ecoChips[1].observed_ecoregions &&
-    ecoChips[1].native === false
+    ecoChips[1] && layer === "feow"
+      ? ecoChips[1] && ecoChips[1].freshwater_ecoregions
+        ? ecoChips[1].freshwater_ecoregions
+        : []
+      : ecoChips[1] &&
+        ecoChips[1].observed_ecoregions &&
+        ecoChips[1].native === false
       ? ecoChips[1] && ecoChips[1].observed_ecoregions
       : ecoChips[1] && ecoChips[1].native_ecoregions;
 
-  const speciesFilter2 = ecoChips[1]
-    ? ["in", "unique_id", ...speciesRegions2]
-    : ["in", "unique_id"];
+  const speciesFilter2 =
+    ecoChips[1] && layer === "feow"
+      ? ["in", "id", ...speciesRegions2]
+      : ecoChips[1]
+      ? ["in", "unique_id", ...speciesRegions2]
+      : ["in", "unique_id"];
 
   const speciesRegions3 =
-    ecoChips[2] &&
-    ecoChips[2].observed_ecoregions &&
-    ecoChips[2].native === false
+    ecoChips[2] && layer === "feow"
+      ? ecoChips[2] && ecoChips[2].freshwater_ecoregions
+        ? ecoChips[2].freshwater_ecoregions
+        : []
+      : ecoChips[2] &&
+        ecoChips[2].observed_ecoregions &&
+        ecoChips[2].native === false
       ? ecoChips[2] && ecoChips[2].observed_ecoregions
       : ecoChips[2] && ecoChips[2].native_ecoregions;
 
-  const speciesFilter3 = ecoChips[2]
-    ? ["in", "unique_id", ...speciesRegions3]
-    : ["in", "unique_id"];
+  const speciesFilter3 =
+    ecoChips[2] && layer === "feow"
+      ? ["in", "id", ...speciesRegions3]
+      : ecoChips[2]
+      ? ["in", "unique_id", ...speciesRegions3]
+      : ["in", "unique_id"];
 
   const feowClickFilter = useMemo(
     () => ["in", "id", selectedRegion],
@@ -216,6 +232,7 @@ const MapMain = ({
 
   const onMove = useCallback(
     (prevCount1, prevCount2, prevCount3) => {
+      console.log(speciesRegions1);
       if (
         speciesRegions1 &&
         speciesRegions1.length > 0 &&
@@ -228,7 +245,7 @@ const MapMain = ({
             return region.unique_id === speciesRegions1[0];
           }
         });
-
+        console.log(coord);
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
           duration: 2000,
@@ -240,9 +257,13 @@ const MapMain = ({
         speciesRegions2.length > 0 &&
         prevCount2 !== speciesRegions2
       ) {
-        const coord = coords.filter(
-          (region) => region.unique_id === speciesRegions2[0]
-        );
+        const coord = coords.filter((region) => {
+          if (layer === "feow") {
+            return region.id === speciesRegions2[0];
+          } else {
+            return region.unique_id === speciesRegions2[0];
+          }
+        });
 
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
@@ -255,9 +276,13 @@ const MapMain = ({
         speciesRegions3.length > 0 &&
         prevCount3 !== speciesRegions3
       ) {
-        const coord = coords.filter(
-          (region) => region.unique_id === speciesRegions3[0]
-        );
+        const coord = coords.filter((region) => {
+          if (layer === "feow") {
+            return region.id === speciesRegions3[0];
+          } else {
+            return region.unique_id === speciesRegions3[0];
+          }
+        });
 
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
@@ -505,17 +530,22 @@ const MapMain = ({
               />
 
               <Layer
+                id="ecospecies3"
+                key="ecospecies3"
                 beforeId="waterway-label"
                 {...ecoFill5}
                 filter={speciesFilter3}
               />
               <Layer
+                id="ecospecies2"
+                key="ecospecies2"
                 beforeId="waterway-label"
                 {...ecoFill4}
                 filter={speciesFilter2}
               />
               <Layer
-                id="species1"
+                id="ecospecies1"
+                key="ecospecies1"
                 beforeId="waterway-label"
                 {...ecoFill3}
                 filter={speciesFilter1}
@@ -528,7 +558,12 @@ const MapMain = ({
                 {...ecoFill1}
                 filter={ecoClickFilter}
               />
-              <Layer beforeId="waterway-label" key="ecoline" {...ecoLine} />
+              <Layer
+                beforeId="waterway-label"
+                id="ecoline"
+                key="ecoline"
+                {...ecoLine}
+              />
             </Source>
           </>
         ) : (
@@ -546,16 +581,20 @@ const MapMain = ({
                 {...feowFill}
               />
 
-              {/* <Layer
+              <Layer
+                id="feowspecies3"
+                key="feowspecies3"
                 beforeId="waterway-label"
-                {...ecoFill5}
+                {...feowFill5}
                 filter={speciesFilter3}
-              /> */}
-              {/* <Layer
+              />
+              <Layer
+                id="feowspecies2"
+                key="feowspecies2"
                 beforeId="waterway-label"
-                {...ecoFill4}
+                {...feowFill4}
                 filter={speciesFilter2}
-              /> */}
+              />
               <Layer
                 id="feowspecies1"
                 key="feowspecies1"
@@ -571,7 +610,12 @@ const MapMain = ({
                 {...feowFill1}
                 filter={feowClickFilter}
               />
-              <Layer beforeId="waterway-label" key="feoline" {...feowLine} />
+              <Layer
+                beforeId="waterway-label"
+                id="feoline"
+                key="feoline"
+                {...feowLine}
+              />
             </Source>
           </>
         )}
@@ -739,6 +783,28 @@ const feowFill3 = {
     "fill-outline-color": "rgba(0,0,0,1)",
     "fill-color": "#ff00ff",
     "fill-opacity": 0.4,
+  },
+};
+// selected layer 2
+const feowFill4 = {
+  id: "feow-fill4",
+  type: "fill",
+  "source-layer": "feow-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#ffff00",
+    "fill-opacity": 0.6,
+  },
+};
+// selected layer 3
+const feowFill5 = {
+  id: "feow-fill5",
+  type: "fill",
+  "source-layer": "feow-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#00ffff",
+    "fill-opacity": 0.8,
   },
 };
 

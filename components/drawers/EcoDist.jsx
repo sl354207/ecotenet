@@ -356,16 +356,28 @@ const EcoDist = ({
           <InfoIcon fontSize="medium" sx={{ marginTop: "15px" }}></InfoIcon>
         </Tooltip>
       ) : (
-        <Typography
-          variant="subtitle2"
-          align="left"
-          sx={{ marginTop: "-10px", marginBottom: "0px" }}
-        >
-          *A species distribution often does not align perfectly with ecoregion
-          boundaries, therefore a species may not be present throughout the
-          entire ecoregion but only in specific areas. A species may also be
-          widespread but in small numbers so rarely seen.
-        </Typography>
+        <>
+          <Typography
+            variant="subtitle2"
+            align="left"
+            sx={{ marginTop: "-10px", marginBottom: "0px" }}
+          >
+            *A species distribution often does not align perfectly with
+            ecoregion boundaries, therefore a species may not be present
+            throughout the entire ecoregion but only in specific areas. A
+            species may also be widespread but in small numbers so rarely seen.
+          </Typography>
+          {/* UPDATE */}
+          <Typography
+            variant="subtitle2"
+            align="left"
+            sx={{ marginTop: "10px", marginBottom: "0px" }}
+          >
+            If no freshwater ecoregions are available for a species, no
+            ecoregions will be highlighted and the map won&apos;t pan to any
+            ecoregions.
+          </Typography>
+        </>
       )}
     </>
   );
