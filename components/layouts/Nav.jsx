@@ -66,6 +66,8 @@ const Nav = () => {
     setEcoOpen,
     setFSOpen,
     visited,
+    layer,
+    setLayer,
   } = useHomepageContext();
 
   let status;
@@ -711,6 +713,8 @@ const Nav = () => {
               search={search}
               setSearch={setSearch}
               ecoFilter={ecoFilter && ecoFilter}
+              layer={layer}
+              setLayer={setLayer}
             />
           )}
 

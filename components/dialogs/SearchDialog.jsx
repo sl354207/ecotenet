@@ -34,7 +34,7 @@ const CustomPopper = function (props) {
   );
 };
 
-const SearchDialog = ({ search, setSearch, ecoFilter }) => {
+const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
   const [query, setQuery] = useState();
   const [autoError, setAutoError] = useState(false);
   const { mutate } = useSWRConfig();
@@ -229,46 +229,55 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             }}
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
-
-              if (!ecoFilter) {
-                if (params.inputValue !== "") {
-                  filtered.push(
-                    {
-                      inputValue: params.inputValue,
-                      title: `"${params.inputValue}" in all posts`,
-                      path: "allPosts",
-                    },
-                    {
-                      inputValue: params.inputValue,
-                      title: `"${params.inputValue}" in all species`,
-                      path: "allSpecies",
-                    }
-                  );
+              if (layer === "ecoregions") {
+                if (!ecoFilter) {
+                  if (params.inputValue !== "") {
+                    filtered.push(
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all posts`,
+                        path: "allPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all species`,
+                        path: "allSpecies",
+                      }
+                    );
+                  }
+                } else {
+                  if (params.inputValue !== "") {
+                    filtered.push(
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in ecoregion posts`,
+                        path: "ecoPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in ecoregion species`,
+                        path: "ecoSpecies",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all posts`,
+                        path: "allPosts",
+                      },
+                      {
+                        inputValue: params.inputValue,
+                        title: `"${params.inputValue}" in all species`,
+                        path: "allSpecies",
+                      }
+                    );
+                  }
                 }
               } else {
                 if (params.inputValue !== "") {
-                  filtered.push(
-                    {
-                      inputValue: params.inputValue,
-                      title: `"${params.inputValue}" in ecoregion posts`,
-                      path: "ecoPosts",
-                    },
-                    {
-                      inputValue: params.inputValue,
-                      title: `"${params.inputValue}" in ecoregion species`,
-                      path: "ecoSpecies",
-                    },
-                    {
-                      inputValue: params.inputValue,
-                      title: `"${params.inputValue}" in all posts`,
-                      path: "allPosts",
-                    },
-                    {
-                      inputValue: params.inputValue,
-                      title: `"${params.inputValue}" in all species`,
-                      path: "allSpecies",
-                    }
-                  );
+                  filtered.push({
+                    inputValue: params.inputValue,
+                    title: `"${params.inputValue}" in all species`,
+                    path: "allSpecies",
+                  });
                 }
               }
 
@@ -324,6 +333,28 @@ const SearchDialog = ({ search, setSearch, ecoFilter }) => {
             {autoError ? "Invalid Search Input" : " "}
           </FormHelperText>
         </FormControl>
+        {layer && layer !== "ecoregions" && (
+          <>
+            <Typography align="center" variant="body2">
+              *Currently it is not possible to search for posts or authors in
+              the Freshwater Ecoregions layer, only species.
+            </Typography>
+            <Typography align="center" variant="body2">
+              If you would like to search for posts or authors please switch to
+              the Ecoregions layer.
+            </Typography>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                sx={{ marginTop: "20px" }}
+                onClick={() => setLayer("ecoregions")}
+              >
+                switch to Ecoregions layer
+              </Button>
+            </div>
+          </>
+        )}
 
         {query && <>{list}</>}
       </DialogContent>

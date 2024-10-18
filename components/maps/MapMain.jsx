@@ -361,6 +361,9 @@ const MapMain = ({
           }}
         >
           <FormControl component="fieldset">
+            <Typography component="legend" align="center">
+              Layer
+            </Typography>
             <RadioGroup
               aria-label="layer-toggle"
               name="layer-toggle"
