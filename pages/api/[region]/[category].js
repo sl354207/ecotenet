@@ -71,8 +71,7 @@ export default async function handler(req, res) {
           break;
         case "feow":
           try {
-            const idToInt = parseInt(id);
-            const category = await getFeowSpecies(categoryQuery, idToInt);
+            const category = await getFeowSpecies(categoryQuery, id);
 
             return res.status(200).json({
               tag: "species",

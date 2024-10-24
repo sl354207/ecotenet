@@ -19,7 +19,6 @@ const FeowSummary = ({ ecoFilter }) => {
     }
   );
 
-  // console.log(results);
   return (
     <>
       {ecoFilter && ecoFilter.layer === "feow" ? (

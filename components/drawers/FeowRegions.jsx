@@ -13,21 +13,8 @@ const FeowRegions = ({
   click,
   setClick,
   isMobile,
-  // layer,
   feow,
 }) => {
-  // const {
-  //   data: results,
-  //   isLoading,
-  //   error,
-  //   mutate,
-  // } = useSWR(layer === "feow" ? "/api/ecoregions?layer=feow" : null, fetcher, {
-  //   shouldRetryOnError: false,
-  // });
-  //   const sorted = ecoregions.sort(function (a, b) {
-  //     return a.unique_id - b.unique_id;
-  //   });
-
   // for map context provider
   const { mapMain } = useMap();
 
@@ -49,7 +36,6 @@ const FeowRegions = ({
         setEcoFilter(ecoregion);
         setEcoMove({ name: ecoregion.name, id: ecoregion.id });
 
-        // setWiki(ecoregion);
         if (!visitedHome && !click) {
           setTab({ id: 1, label: "Summary" });
         }
@@ -83,37 +69,9 @@ const FeowRegions = ({
           view a summary and filter an ecoregion by category
         </Typography>
       </div>
-      {/* {isLoading ? (
-        <CircularProgress
-          color="secondary"
-          size={50}
-          disableShrink={true}
-          sx={{
-            margin: "10px auto",
-            display: "flex",
-            justifySelf: "center",
-          }}
-        />
-      ) : (
-        <>
-          {error ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Button variant="outlined" color="error" onClick={() => mutate()}>
-                Error Loading. Retry
-              </Button>
-            </div>
-          ) : (
-            <>
-              {results && ( */}
+
       <List>
         {feow.map((ecoregion) => {
-          // console.log(ecoregion);
           return (
             <ListItemButton
               onClick={() => ecoClick(ecoregion)}
@@ -124,11 +82,6 @@ const FeowRegions = ({
           );
         })}
       </List>
-      {/* )}
-            </>
-          )}
-        </>
-      )} */}
     </>
   );
 };

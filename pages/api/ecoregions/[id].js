@@ -28,9 +28,7 @@ export default async function handler(req, res) {
         break;
       case "feow":
         try {
-          // convert id to int
-          const idToInt = parseInt(id);
-          const results = await getFeowById(idToInt);
+          const results = await getFeowById(id);
           res.setHeader(
             "Cache-Control",
             "public, s-maxage=604800, stale-while-revalidate=59"
