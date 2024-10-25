@@ -187,6 +187,7 @@ const FilterDrawer = ({
                 left: "0px",
                 right: "0px",
                 alignContent: "center",
+                marginTop: { xs: "9px", md: "0px" },
               }}
               align="center"
             >

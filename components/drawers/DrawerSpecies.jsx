@@ -324,32 +324,36 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
                 <Typography variant="body1">
                   {species &&
                   species.freshwater_ecoregions &&
-                  species.freshwater_ecoregions.length > 0
-                    ? "Freshwater Ecoregions:"
-                    : "Currently no freshwater ecoregions listed."}
-                  {toggleObservedEcoregions ? (
+                  species.freshwater_ecoregions.length > 0 ? (
                     <>
-                      <IconButton
-                        onClick={() => setToggleObservedEcoregions(false)}
-                        size="small"
-                      >
-                        <KeyboardDoubleArrowLeftIcon
-                          sx={{ color: theme.palette.secondary.main }}
-                        />
-                      </IconButton>
-                      {species.freshwater_ecoregions.map(
-                        (id) => `FEOW-${id}, `
+                      Freshwater Ecoregions:{" "}
+                      {toggleObservedEcoregions ? (
+                        <>
+                          <IconButton
+                            onClick={() => setToggleObservedEcoregions(false)}
+                            size="small"
+                          >
+                            <KeyboardDoubleArrowLeftIcon
+                              sx={{ color: theme.palette.secondary.main }}
+                            />
+                          </IconButton>
+                          {species.freshwater_ecoregions.map(
+                            (id) => `FEOW-${id}, `
+                          )}
+                        </>
+                      ) : (
+                        <IconButton
+                          onClick={() => setToggleObservedEcoregions(true)}
+                          size="small"
+                        >
+                          <KeyboardDoubleArrowRightIcon
+                            sx={{ color: theme.palette.secondary.main }}
+                          />
+                        </IconButton>
                       )}
                     </>
                   ) : (
-                    <IconButton
-                      onClick={() => setToggleObservedEcoregions(true)}
-                      size="small"
-                    >
-                      <KeyboardDoubleArrowRightIcon
-                        sx={{ color: theme.palette.secondary.main }}
-                      />
-                    </IconButton>
+                    "Currently no freshwater ecoregions listed."
                   )}
                 </Typography>
               ) : (

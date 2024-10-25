@@ -232,7 +232,7 @@ const MapMain = ({
 
   const onMove = useCallback(
     (prevCount1, prevCount2, prevCount3) => {
-      console.log(speciesRegions1);
+      // console.log(speciesRegions1);
       if (
         speciesRegions1 &&
         speciesRegions1.length > 0 &&
@@ -245,7 +245,7 @@ const MapMain = ({
             return region.unique_id === speciesRegions1[0];
           }
         });
-        console.log(coord);
+        // console.log(coord);
         mapRef.current?.flyTo({
           center: coord[0].coordinates,
           duration: 2000,
@@ -416,6 +416,7 @@ const MapMain = ({
           sx={{
             position: "absolute",
             bottom: { xs: "inherit", md: "10px" },
+            top: { xs: "80px", md: "inherit" },
             right: 0,
             zIndex: 1,
             display:

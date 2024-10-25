@@ -28,7 +28,10 @@ const CustomPopper = function (props) {
   return (
     <Popper
       {...props}
-      style={{ maxWidth: "900px", width: "calc(100% - 64px)" }}
+      style={{
+        maxWidth: "900px",
+        width: "calc(100% - 64px)",
+      }}
       placement="bottom"
     />
   );
@@ -230,7 +233,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
               if (layer === "ecoregions") {
-                if (!ecoFilter) {
+                if (!ecoFilter || (ecoFilter && ecoFilter.layer === "feow")) {
                   if (params.inputValue !== "") {
                     filtered.push(
                       {
@@ -275,7 +278,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
                 if (params.inputValue !== "") {
                   filtered.push({
                     inputValue: params.inputValue,
-                    title: `"${params.inputValue}" in all species`,
+                    title: `Search "${params.inputValue}" in all species`,
                     path: "allSpecies",
                   });
                 }
@@ -333,7 +336,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
             {autoError ? "Invalid Search Input" : " "}
           </FormHelperText>
         </FormControl>
-        {layer && layer !== "ecoregions" && (
+        {layer && layer !== "ecoregions" && !results && (
           <>
             <Typography align="center" variant="body2">
               *Currently it is not possible to search for posts or authors in
