@@ -630,7 +630,7 @@ const searchAllSpecies = async (query) => {
       .aggregate([
         {
           $search: {
-            index: "searchSpeciesTest",
+            index: "searchSpecies",
             text: {
               query: `${query}`,
               path: ["common_name", "scientific_name"],
@@ -737,7 +737,7 @@ const searchEcoSpecies = async (query, eco) => {
       .aggregate([
         {
           $search: {
-            index: "searchSpeciesTest",
+            index: "searchSpecies",
             compound: {
               must: [
                 {
@@ -789,7 +789,7 @@ const autoSpecies = async (query) => {
       .aggregate([
         {
           $search: {
-            index: "autoSpeciesTest",
+            index: "autoSpecies",
             compound: {
               should: [
                 {
