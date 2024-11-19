@@ -82,20 +82,20 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
           break;
-        case "dsmw":
-          try {
-            // UPDATE
-            const category = await getSpecies(categoryQuery, id);
+        // case "dsmw":
+        //   try {
+        //     // UPDATE
+        //     const category = await getSpecies(categoryQuery, id);
 
-            return res.status(200).json({
-              tag: "species",
-              category: category,
-            });
-          } catch (err) {
-            console.error(err);
-            res.status(500).json({ msg: "Something went wrong." });
-          }
-          break;
+        //     return res.status(200).json({
+        //       tag: "species",
+        //       category: category,
+        //     });
+        //   } catch (err) {
+        //     console.error(err);
+        //     res.status(500).json({ msg: "Something went wrong." });
+        //   }
+        //   break;
 
         default:
           res.status(400).json({ msg: "Bad request" });
