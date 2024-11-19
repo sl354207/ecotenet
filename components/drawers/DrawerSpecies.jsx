@@ -33,7 +33,7 @@ const DynamicTiedPostDialog = dynamic(
     ssr: false,
   }
 );
-const DrawerSpecies = ({ species, handleClose }) => {
+const DrawerSpecies = ({ species, ecoFilter }) => {
   const router = useRouter();
   const { user } = useUserContext();
   const { mutate } = useSWRConfig();
@@ -320,68 +320,61 @@ const DrawerSpecies = ({ species, handleClose }) => {
                   </div>
                 </div>
               </div>
-
-              <Typography variant="body1">
-                {species &&
-                species.native_ecoregions &&
-                species.native_ecoregions.length > 0
-                  ? "Observed Ecoregions:"
-                  : "Ecoregions:"}
-                {toggleObservedEcoregions ? (
-                  <>
-                    <IconButton
-                      onClick={() => setToggleObservedEcoregions(false)}
-                      size="small"
-                    >
-                      <KeyboardDoubleArrowLeftIcon
-                        sx={{ color: theme.palette.secondary.main }}
-                      />
-                    </IconButton>
-                    {species.observed_ecoregions.map((id) => (
-                      <Link
-                        href={`/ecoregions/${id}`}
-                        color="secondary"
-                        underline="hover"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        key={id}
-                        sx={{
-                          fontSize: "1rem",
-                          fontWeight: 500,
-                          lineHeight: 1.5,
-                        }}
-                      >
-                        Eco-{id},{" "}
-                      </Link>
-                    ))}
-                  </>
-                ) : (
-                  <IconButton
-                    onClick={() => setToggleObservedEcoregions(true)}
-                    size="small"
-                  >
-                    <KeyboardDoubleArrowRightIcon
-                      sx={{ color: theme.palette.secondary.main }}
-                    />
-                  </IconButton>
-                )}
-              </Typography>
-              {species &&
-                species.native_ecoregions &&
-                species.native_ecoregions.length > 0 && (
+              {ecoFilter && ecoFilter.layer === "feow" ? (
+                <Typography variant="body1">
+                  {species &&
+                  species.freshwater_ecoregions &&
+                  species.freshwater_ecoregions.length > 0 ? (
+                    <>
+                      Freshwater Ecoregions:{" "}
+                      {toggleObservedEcoregions ? (
+                        <>
+                          <IconButton
+                            onClick={() => setToggleObservedEcoregions(false)}
+                            size="small"
+                          >
+                            <KeyboardDoubleArrowLeftIcon
+                              sx={{ color: theme.palette.secondary.main }}
+                            />
+                          </IconButton>
+                          {species.freshwater_ecoregions.map(
+                            (id) => `FEOW-${id}, `
+                          )}
+                        </>
+                      ) : (
+                        <IconButton
+                          onClick={() => setToggleObservedEcoregions(true)}
+                          size="small"
+                        >
+                          <KeyboardDoubleArrowRightIcon
+                            sx={{ color: theme.palette.secondary.main }}
+                          />
+                        </IconButton>
+                      )}
+                    </>
+                  ) : (
+                    "Currently no freshwater ecoregions listed."
+                  )}
+                </Typography>
+              ) : (
+                <>
                   <Typography variant="body1">
-                    Native Ecoregions:
-                    {toggleNativeEcoregions ? (
+                    {species &&
+                    species.native_ecoregions &&
+                    species.native_ecoregions.length > 0
+                      ? "Observed Ecoregions:"
+                      : "Ecoregions:"}
+                    {toggleObservedEcoregions ? (
                       <>
                         <IconButton
-                          onClick={() => setToggleNativeEcoregions(false)}
+                          onClick={() => setToggleObservedEcoregions(false)}
                           size="small"
                         >
                           <KeyboardDoubleArrowLeftIcon
                             sx={{ color: theme.palette.secondary.main }}
                           />
                         </IconButton>
-                        {species.native_ecoregions.map((id) => (
+                        {species.observed_ecoregions.map((id) => (
                           <Link
                             href={`/ecoregions/${id}`}
                             color="secondary"
@@ -401,7 +394,7 @@ const DrawerSpecies = ({ species, handleClose }) => {
                       </>
                     ) : (
                       <IconButton
-                        onClick={() => setToggleNativeEcoregions(true)}
+                        onClick={() => setToggleObservedEcoregions(true)}
                         size="small"
                       >
                         <KeyboardDoubleArrowRightIcon
@@ -410,17 +403,63 @@ const DrawerSpecies = ({ species, handleClose }) => {
                       </IconButton>
                     )}
                   </Typography>
-                )}
-              <Button
-                variant="outlined"
-                color="secondary"
-                sx={{ marginTop: "5px" }}
-                onClick={() => {
-                  setTiedPostDialog(true);
-                }}
-              >
-                Tied Posts
-              </Button>
+                  {species &&
+                    species.native_ecoregions &&
+                    species.native_ecoregions.length > 0 && (
+                      <Typography variant="body1">
+                        Native Ecoregions:
+                        {toggleNativeEcoregions ? (
+                          <>
+                            <IconButton
+                              onClick={() => setToggleNativeEcoregions(false)}
+                              size="small"
+                            >
+                              <KeyboardDoubleArrowLeftIcon
+                                sx={{ color: theme.palette.secondary.main }}
+                              />
+                            </IconButton>
+                            {species.native_ecoregions.map((id) => (
+                              <Link
+                                href={`/ecoregions/${id}`}
+                                color="secondary"
+                                underline="hover"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                key={id}
+                                sx={{
+                                  fontSize: "1rem",
+                                  fontWeight: 500,
+                                  lineHeight: 1.5,
+                                }}
+                              >
+                                Eco-{id},{" "}
+                              </Link>
+                            ))}
+                          </>
+                        ) : (
+                          <IconButton
+                            onClick={() => setToggleNativeEcoregions(true)}
+                            size="small"
+                          >
+                            <KeyboardDoubleArrowRightIcon
+                              sx={{ color: theme.palette.secondary.main }}
+                            />
+                          </IconButton>
+                        )}
+                      </Typography>
+                    )}
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    sx={{ marginTop: "5px" }}
+                    onClick={() => {
+                      setTiedPostDialog(true);
+                    }}
+                  >
+                    Tied Posts
+                  </Button>
+                </>
+              )}
 
               <div
                 style={{

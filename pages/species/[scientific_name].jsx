@@ -113,6 +113,8 @@ const Species = ({ species, wiki }) => {
   const [toggleObservedEcoregions, setToggleObservedEcoregions] =
     useState(false);
   const [toggleNativeEcoregions, setToggleNativeEcoregions] = useState(false);
+  const [toggleFreshwaterEcoregions, setToggleFreshwaterEcoregions] =
+    useState(false);
 
   const options = {
     replace: (domNode) => {
@@ -425,7 +427,12 @@ const Species = ({ species, wiki }) => {
             {species &&
               species.native_ecoregions &&
               species.native_ecoregions.length > 0 && (
-                <Typography variant="h6">
+                <Typography
+                  variant="h6"
+                  sx={{
+                    marginBottom: "-5px",
+                  }}
+                >
                   Native Ecoregions:
                   {toggleNativeEcoregions ? (
                     <>
@@ -458,6 +465,47 @@ const Species = ({ species, wiki }) => {
                   ) : (
                     <IconButton
                       onClick={() => setToggleNativeEcoregions(true)}
+                      size="small"
+                    >
+                      <KeyboardDoubleArrowRightIcon
+                        sx={{ color: theme.palette.secondary.main }}
+                      />
+                    </IconButton>
+                  )}
+                </Typography>
+              )}
+            {species &&
+              species.freshwater_ecoregions &&
+              species.freshwater_ecoregions.length > 0 && (
+                <Typography variant="h6">
+                  Freshwater Ecoregions:
+                  {toggleFreshwaterEcoregions ? (
+                    <>
+                      <IconButton
+                        onClick={() => setToggleFreshwaterEcoregions(false)}
+                        size="small"
+                      >
+                        <KeyboardDoubleArrowLeftIcon
+                          sx={{ color: theme.palette.secondary.main }}
+                        />
+                      </IconButton>
+                      {species.freshwater_ecoregions.map((id) => (
+                        <Typography
+                          key={id}
+                          sx={{
+                            fontSize: "1rem",
+                            fontWeight: 500,
+                            lineHeight: 1.5,
+                            display: "contents",
+                          }}
+                        >
+                          FEOW-{id},{" "}
+                        </Typography>
+                      ))}
+                    </>
+                  ) : (
+                    <IconButton
+                      onClick={() => setToggleFreshwaterEcoregions(true)}
                       size="small"
                     >
                       <KeyboardDoubleArrowRightIcon

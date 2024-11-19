@@ -50,27 +50,18 @@ const Data = () => {
               </Link>{" "}
               GBIF is an international network and data infrastructure aimed at
               providing anyone, anywhere, open access to data about all types of
-              life on Earth. We use two different datasets that aggregate data
-              from many sources including the iNaturalist Research-grade
-              Observations dataset. These datasets can be found{" "}
+              life on Earth. We use one dataset that aggregates data from many
+              sources including the iNaturalist Research-grade Observations
+              dataset. This dataset can be found{" "}
               <Link
-                href="https://doi.org/10.15468/dl.hjpkwr"
-                underline="hover"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                here
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="https://doi.org/10.15468/dl.pxqgjf"
+                href="https://doi.org/10.15468/dl.3ew7zc"
                 underline="hover"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 here
               </Link>
-              . GBIF.org (11 July 2023) GBIF Occurrence Download.
+              . GBIF.org (19 September 2024) GBIF Occurrence Download.
             </Typography>
           </ListItem>
 
@@ -86,7 +77,7 @@ const Data = () => {
               </Link>{" "}
               OBIS is a global open-access data and information clearing-house
               on marine biodiversity for science, conservation and sustainable
-              development. OBIS (2023) Ocean Biodiversity Information System.
+              development. OBIS (2024) Ocean Biodiversity Information System.
               Intergovernmental Oceanographic Commission of UNESCO.
               www.obis.org.
             </Typography>
