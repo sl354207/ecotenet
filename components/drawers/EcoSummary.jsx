@@ -9,13 +9,16 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   let wikiUrl;
   const { mutate } = useSWRConfig();
 
-  if (ecoFilter && !wiki) {
-    const res = fetch(`/api/ecoregions/${ecoFilter.unique_id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  if (ecoFilter && ecoFilter.layer === "ecoregions" && !wiki) {
+    const res = fetch(
+      `/api/ecoregions/${ecoFilter._id}?layer=${ecoFilter.layer}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => setWiki(data))
       .catch((error) => console.log(error));
@@ -203,19 +206,19 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   };
   return (
     <>
-      {ecoFilter ? (
+      {ecoFilter && ecoFilter.layer === "ecoregions" ? (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Button
               variant="contained"
               color="secondary"
               sx={{ marginBottom: "15px", marginTop: isMobile ? 0 : 3 }}
-              href={`/ecoregions/${ecoFilter.unique_id}`}
+              href={`/ecoregions/${ecoFilter._id}`}
             >
               view full page
             </Button>
             <Typography variant="h5" align="center">
-              Eco-{ecoFilter.unique_id}
+              Eco-{ecoFilter._id}
             </Typography>
             <Typography
               variant="h5"
@@ -295,8 +298,6 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
               )}
             </>
           )}
-          {/* </>
-          )} */}
         </>
       ) : (
         <Typography variant="h5" align="center" sx={{ marginTop: "20px" }}>

@@ -2,12 +2,10 @@ import { List, ListItemButton, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useMap } from "react-map-gl";
 
-const EcoRegions = ({
-  ecoregions,
+const FeowRegions = ({
   ecoMove,
   setEcoMove,
   setEcoFilter,
-  setWiki,
   setHoverInfo,
   setShowPopup,
   visitedHome,
@@ -15,11 +13,8 @@ const EcoRegions = ({
   click,
   setClick,
   isMobile,
+  feow,
 }) => {
-  const sorted = ecoregions.sort(function (a, b) {
-    return a.unique_id - b.unique_id;
-  });
-
   // for map context provider
   const { mapMain } = useMap();
 
@@ -32,16 +27,15 @@ const EcoRegions = ({
           longitude: ecoregion.coordinates[0],
           latitude: ecoregion.coordinates[1],
           regionName: ecoregion.name,
-          regionNum: ecoregion.unique_id,
+          regionNum: ecoregion.id,
         });
 
-        ecoregion._id = ecoregion.unique_id;
-        ecoregion.layer = "ecoregions";
+        ecoregion._id = ecoregion.id;
+        ecoregion.layer = "feow";
         sessionStorage.setItem("ecoregion", JSON.stringify(ecoregion));
         setEcoFilter(ecoregion);
-        setEcoMove({ name: ecoregion.name, id: ecoregion.unique_id });
+        setEcoMove({ name: ecoregion.name, id: ecoregion.id });
 
-        setWiki(ecoregion);
         if (!visitedHome && !click) {
           setTab({ id: 1, label: "Summary" });
         }
@@ -66,24 +60,24 @@ const EcoRegions = ({
             align="center"
             sx={{ marginBottom: "4px", marginTop: "10px", fontWeight: 500 }}
           >
-            Ecoregions
+            Freshwater Ecoregions
           </Typography>
         )}
 
         <Typography variant="h6" align="center">
-          Select an ecoregion on the map, or from the list below, to view a
-          summary and filter an ecoregion by category
+          Select a freshwater ecoregion on the map, or from the list below, to
+          view a summary and filter an ecoregion by category
         </Typography>
       </div>
 
       <List>
-        {sorted.map((ecoregion) => {
+        {feow.map((ecoregion) => {
           return (
             <ListItemButton
               onClick={() => ecoClick(ecoregion)}
-              key={ecoregion.unique_id}
+              key={ecoregion.id}
             >
-              Eco-{ecoregion.unique_id}: {ecoregion.name}
+              FEOW-{ecoregion.id}: {ecoregion.name}
             </ListItemButton>
           );
         })}
@@ -92,4 +86,4 @@ const EcoRegions = ({
   );
 };
 
-export default EcoRegions;
+export default FeowRegions;

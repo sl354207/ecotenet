@@ -8,6 +8,7 @@ import {
   Autocomplete,
   Checkbox,
   Chip,
+  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -47,6 +48,7 @@ const EcoDist = ({
   isMobile,
   nativeToggleValue,
   setNativeToggleValue,
+  layer,
 }) => {
   const handleChange = async (e) => {
     if (e.target.value) {
@@ -235,7 +237,7 @@ const EcoDist = ({
           </FormHelperText>
         )}
       </FormControl>
-      {ecoChips && ecoChips.length > 0 && (
+      {layer === "ecoregions" && ecoChips && ecoChips.length > 0 && (
         <>
           <Tooltip
             enterTouchDelay={100}
@@ -307,40 +309,58 @@ const EcoDist = ({
                 maxWidth: isMobile ? "81%" : "80%",
               }}
             ></CustomChip>
-            <FormControlLabel
-              key={`select-${ecoChip.id}`}
-              sx={{
-                marginLeft: "auto",
-                marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
-              }}
-              control={
-                <Checkbox
-                  sx={{
-                    color: theme.palette.secondary.main,
-                    "&.Mui-checked": {
+            {layer === "ecoregions" && (
+              <FormControlLabel
+                key={`select-${ecoChip.id}`}
+                sx={{
+                  marginLeft: "auto",
+                  marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
+                }}
+                control={
+                  <Checkbox
+                    sx={{
                       color: theme.palette.secondary.main,
-                    },
-                  }}
-                  checked={ecoChip.native}
-                  onChange={() => handleSelectCheckboxChange(ecoChip.id)}
-                  disabled={
-                    (ecoChip &&
-                      ecoChip.native_ecoregions &&
-                      ecoChip.native_ecoregions.length === 0) ||
-                    (ecoChip && !ecoChip.native_ecoregions)
-                  }
-                />
-              }
-            />
+                      "&.Mui-checked": {
+                        color: theme.palette.secondary.main,
+                      },
+                    }}
+                    checked={ecoChip.native}
+                    onChange={() => handleSelectCheckboxChange(ecoChip.id)}
+                    disabled={
+                      (ecoChip &&
+                        ecoChip.native_ecoregions &&
+                        ecoChip.native_ecoregions.length === 0) ||
+                      (ecoChip && !ecoChip.native_ecoregions)
+                    }
+                  />
+                }
+              />
+            )}
           </SortableItem>
         )}
       />
-      {isMobile ? (
-        <Tooltip
-          enterTouchDelay={100}
-          leaveTouchDelay={5000}
-          arrow
-          title={
+
+      <Tooltip
+        enterTouchDelay={100}
+        leaveTouchDelay={5000}
+        arrow
+        title={
+          <>
+            {layer === "feow" && (
+              <>
+                <Typography
+                  color="inherit"
+                  variant="body1"
+                  sx={{ marginBottom: "5px" }}
+                >
+                  If no freshwater ecoregions are available for a species, no
+                  ecoregions will be highlighted and the map won&apos;t pan to
+                  any ecoregions.
+                </Typography>
+                <Divider sx={{ marginBottom: "5px" }} />
+              </>
+            )}
+
             <Typography color="inherit" variant="body1">
               A species distribution often does not align perfectly with
               ecoregion boundaries, therefore a species may not be present
@@ -348,22 +368,14 @@ const EcoDist = ({
               species may also be widespread but in small numbers so rarely
               seen.
             </Typography>
-          }
-        >
-          <InfoIcon fontSize="medium" sx={{ marginTop: "15px" }}></InfoIcon>
-        </Tooltip>
-      ) : (
-        <Typography
-          variant="subtitle2"
-          align="left"
-          sx={{ marginTop: "-10px", marginBottom: "0px" }}
-        >
-          *A species distribution often does not align perfectly with ecoregion
-          boundaries, therefore a species may not be present throughout the
-          entire ecoregion but only in specific areas. A species may also be
-          widespread but in small numbers so rarely seen.
-        </Typography>
-      )}
+          </>
+        }
+      >
+        <InfoIcon
+          fontSize="medium"
+          sx={{ marginBlock: "10px", marginLeft: { xs: "0px", md: "-24px" } }}
+        ></InfoIcon>
+      </Tooltip>
     </>
   );
 };

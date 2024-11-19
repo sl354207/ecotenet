@@ -404,7 +404,11 @@ const MapEditor = ({
             combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK):
             The Nature Conservancy. DOIs: 10.1641/B570707;
             10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-
-            wcmc.org/datasets/38"
+            wcmc.org/datasets/38. Freshwater Ecoregions Citation: Originator: The Nature Conservancy and World Wildlife Fund, Inc.
+      Publication_Date:  2008
+      Title: Freshwater Ecoregions of the World
+      Geospatial_Data_Presentation_Form: vector digital data
+      Online_Linkage: www.feow.org"
           style={{ color: "black" }}
         />
         {selectedRegion && showPopup && (

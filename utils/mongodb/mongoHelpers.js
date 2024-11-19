@@ -439,6 +439,7 @@ const getSpecies = async (speciesType, observed_ecoregions) => {
         common_name: 1,
         observed_ecoregions: 1,
         native_ecoregions: 1,
+        freshwater_ecoregions: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -463,6 +464,32 @@ const getNativeSpecies = async (speciesType, native_ecoregions) => {
         common_name: 1,
         observed_ecoregions: 1,
         native_ecoregions: 1,
+        freshwater_ecoregions: 1,
+      })
+      .sort({ scientific_name: 1 })
+      .toArray();
+
+    return species;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFeowSpecies = async (speciesType, freshwater_ecoregions) => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db
+      .collection("species")
+      .find({
+        species_type: speciesType,
+        freshwater_ecoregions: freshwater_ecoregions,
+      })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        observed_ecoregions: 1,
+        native_ecoregions: 1,
+        freshwater_ecoregions: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -504,6 +531,7 @@ const getSpeciesByScientificName = async (name) => {
           common_name: 1,
           observed_ecoregions: 1,
           native_ecoregions: 1,
+          freshwater_ecoregions: 1,
           species_type: 1,
         },
       }
@@ -619,6 +647,7 @@ const searchAllSpecies = async (query) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
           },
         },
       ])
@@ -739,6 +768,7 @@ const searchEcoSpecies = async (query, eco) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
           },
         },
       ])
@@ -784,6 +814,7 @@ const autoSpecies = async (query) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
           },
         },
       ])
@@ -829,6 +860,7 @@ const adminAutoSpecies = async (query) => {
             common_name: 1,
             observed_ecoregions: 1,
             native_ecoregions: 1,
+            freshwater_ecoregions: 1,
             species_type: 1,
           },
         },
@@ -1192,7 +1224,22 @@ const getEcoregions = async () => {
     const response = await db
       .collection("ecoregions")
       .find({})
-      .project({ unique_id: 1, name: 1, coordinates: 1, url: 1 })
+      .project({ unique_id: 1, name: 1, coordinates: 1, url: 1, _id: 0 })
+      .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFeowEcoregions = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("feow")
+      .find({})
+      .project({ id: 1, name: 1, coordinates: 1, _id: 0 })
       .toArray();
 
     return response;
@@ -1210,6 +1257,22 @@ const getEcoregionById = async (id) => {
         unique_id: id,
       },
       { projection: { unique_id: 1, name: 1, url: 1, coordinates: 1 } }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getFeowById = async (id) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("feow").findOne(
+      {
+        id: id,
+      },
+      { projection: { _id: 0 } }
     );
 
     return response;
@@ -1513,6 +1576,7 @@ module.exports = {
   deleteComment,
   getSpecies,
   getNativeSpecies,
+  getFeowSpecies,
   getAllSpecies,
   getSpeciesByScientificName,
   searchAllPosts,
@@ -1540,7 +1604,9 @@ module.exports = {
   updateNotification,
   checkName,
   getEcoregions,
+  getFeowEcoregions,
   getEcoregionById,
+  getFeowById,
   getDistinctCategory,
   getFilteredStats,
   getStatsAPIEcoregions,
