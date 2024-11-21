@@ -609,7 +609,7 @@ const Species = ({ species, wiki }) => {
                         Wikipedia
                       </Link>
                     </Typography>
-                    {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
+                    {parse(DOMPurify.sanitize(wiki), options)}
                   </>
                 )}
               </TabPanel>
@@ -703,7 +703,7 @@ export const getServerSideProps = async (context) => {
         };
       } else {
         const wikiRes = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/segments/${scientificName}?redirect=true`,
+          `https://en.wikipedia.org/w/rest.php/v1/page/${scientificName}/html?redirect=true`,
           {
             method: "GET",
             headers: {
@@ -711,21 +711,21 @@ export const getServerSideProps = async (context) => {
             },
           }
         );
+
         let wiki;
 
         if (wikiRes.ok) {
-          wiki = await wikiRes.json();
+          wiki = await wikiRes.text();
           res.setHeader(
             "Cache-Control",
             "public, s-maxage=604800, stale-while-revalidate=59"
           );
+
           return {
             props: {
               species: JSON.parse(JSON.stringify(species)),
               wiki:
-                wiki === undefined || wiki.title === "Not found."
-                  ? null
-                  : JSON.parse(JSON.stringify(wiki)),
+                wiki === undefined ? null : JSON.parse(JSON.stringify(wiki)),
             },
           };
         } else if (wikiRes.status === 404) {
@@ -737,9 +737,7 @@ export const getServerSideProps = async (context) => {
             props: {
               species: JSON.parse(JSON.stringify(species)),
               wiki:
-                wiki === undefined || wiki.title === "Not found."
-                  ? null
-                  : JSON.parse(JSON.stringify(wiki)),
+                wiki === undefined ? null : JSON.parse(JSON.stringify(wiki)),
             },
           };
         } else {

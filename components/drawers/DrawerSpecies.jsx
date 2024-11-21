@@ -14,7 +14,6 @@ import {
   Table,
   Typography,
 } from "@mui/material";
-import fetcher from "@utils/fetcher";
 import theme from "@utils/theme";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
@@ -59,18 +58,45 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
     setDialog(false);
   };
 
+  const wikipediaFetcher = async (url) => {
+    const options = {
+      method: "GET",
+      headers: {
+        "Api-User-Agent": "ecotenet (info@ecotenet.org)",
+      },
+    };
+
+    const res = await fetch(url, options);
+
+    // If the status code is not in the range 200-299,
+    // we still try to parse and throw it.
+    if (!res.ok) {
+      if (res.status === 404) {
+        return null;
+      } else {
+        const error = new Error("An error occurred while fetching the data.");
+        // Attach extra info to the error object.
+        // error.info = await res.json();
+        error.status = res.status;
+        throw error;
+      }
+    }
+
+    return res.text();
+  };
+
   const {
     data: wiki,
     isLoading,
     error,
   } = useSWR(
     species
-      ? `https://en.wikipedia.org/api/rest_v1/page/segments/${species.scientific_name.replace(
+      ? `https://en.wikipedia.org/w/rest.php/v1/page/${species.scientific_name.replace(
           / /g,
           "_"
-        )}?redirect=true`
+        )}/html?redirect=true`
       : null,
-    fetcher,
+    wikipediaFetcher,
     {
       shouldRetryOnError: false,
     }
@@ -129,9 +155,8 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
             {...props}
             sx={{
               border: "thin solid",
-              // margin: { xs: "auto", md: "0px 0px 0px 10px" },
+
               margin: { xs: "auto", md: "10px 0px 10px 0px" },
-              // float: { xs: "none", md: "right" },
             }}
           >
             {domToReact(domNode.children, options)}
@@ -256,10 +281,10 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
                 color="error"
                 onClick={() =>
                   mutate(
-                    `https://en.wikipedia.org/api/rest_v1/page/segments/${species.scientific_name.replace(
+                    `https://en.wikipedia.org/w/rest.php/v1/page/${species.scientific_name.replace(
                       / /g,
                       "_"
-                    )}?redirect=true`
+                    )}/html?redirect=true`
                   )
                 }
               >
@@ -277,6 +302,8 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
                     / /g,
                     "_"
                   )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   view full page
                 </Button>
@@ -468,7 +495,7 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
                   borderRadius: "10px",
                 }}
               >
-                {!wiki || wiki.title === "Not found." ? (
+                {!wiki ? (
                   <Typography
                     variant="h6"
                     align="justify"
@@ -494,7 +521,7 @@ const DrawerSpecies = ({ species, ecoFilter }) => {
                         Wikipedia
                       </Link>
                     </Typography>
-                    {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
+                    {parse(DOMPurify.sanitize(wiki), options)}
                   </>
                 )}
               </div>
