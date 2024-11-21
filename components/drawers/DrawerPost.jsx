@@ -230,6 +230,8 @@ const DrawerPost = ({ id, handleClose }) => {
                         color="secondary"
                         sx={{ marginBlock: "15px" }}
                         href={`/posts/${post._id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         view full page
                       </Button>

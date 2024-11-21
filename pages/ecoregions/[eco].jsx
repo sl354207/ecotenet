@@ -26,8 +26,11 @@ const eco = ({ wiki, eco, id }) => {
   const { setEcoFilter } = useHomepageContext();
 
   useEffect(() => {
-    sessionStorage.setItem("ecoregion", JSON.stringify(eco));
-    setEcoFilter(eco);
+    if (eco) {
+      sessionStorage.setItem("ecoregion", JSON.stringify(eco));
+
+      setEcoFilter(eco);
+    }
   }, []);
 
   const [dialog, setDialog] = useState(false);
@@ -313,7 +316,7 @@ const eco = ({ wiki, eco, id }) => {
                     Wikipedia
                   </Link>
                 </Typography>
-                {parse(DOMPurify.sanitize(wiki.segmentedContent), options)}
+                {parse(DOMPurify.sanitize(wiki), options)}
               </>
             )}
 
@@ -348,6 +351,8 @@ export const getServerSideProps = async (context) => {
           notFound: true,
         };
       } else {
+        eco._id = id;
+        eco.layer = "ecoregions";
         const corrections = { " ": "_", "/": "%2F" };
         const unSlug = eco.name.replace(
           / |\//g,
@@ -360,7 +365,7 @@ export const getServerSideProps = async (context) => {
         switch (eco.url) {
           case null:
             wikiRes = await fetch(
-              `https://en.wikipedia.org/api/rest_v1/page/segments/${unSlug}?redirect=true`,
+              `https://en.wikipedia.org/w/rest.php/v1/page/${unSlug}/html?redirect=true`,
               {
                 method: "GET",
                 headers: {
@@ -370,7 +375,7 @@ export const getServerSideProps = async (context) => {
             );
 
             if (wikiRes.ok) {
-              wiki = await wikiRes.json();
+              wiki = await wikiRes.text();
               res.setHeader(
                 "Cache-Control",
                 "public, s-maxage=604800, stale-while-revalidate=59"
@@ -389,10 +394,10 @@ export const getServerSideProps = async (context) => {
 
           default:
             wikiRes = await fetch(
-              `https://en.wikipedia.org/api/rest_v1/page/segments/${eco.url.replace(
+              `https://en.wikipedia.org/w/rest.php/v1/page/${eco.url.replace(
                 / |\//g,
                 (matched) => corrections[matched]
-              )}?redirect=true`,
+              )}/html?redirect=true`,
               {
                 method: "GET",
                 headers: {
@@ -402,7 +407,7 @@ export const getServerSideProps = async (context) => {
             );
 
             if (wikiRes.ok) {
-              wiki = await wikiRes.json();
+              wiki = await wikiRes.text();
               res.setHeader(
                 "Cache-Control",
                 "public, s-maxage=604800, stale-while-revalidate=59"
@@ -418,10 +423,7 @@ export const getServerSideProps = async (context) => {
 
         return {
           props: {
-            wiki:
-              wiki === undefined || wiki.title === "Not found."
-                ? null
-                : JSON.parse(JSON.stringify(wiki)),
+            wiki: wiki === undefined ? null : JSON.parse(JSON.stringify(wiki)),
 
             eco: JSON.parse(JSON.stringify(eco)),
             id: id,
