@@ -1,6 +1,5 @@
 import Link from "@components/layouts/Link";
 import { Button, CircularProgress, Table, Typography } from "@mui/material";
-import fetcher from "@utils/fetcher";
 import parse, { attributesToProps, domToReact } from "html-react-parser";
 import DOMPurify from "isomorphic-dompurify";
 import useSWR, { useSWRConfig } from "swr";
@@ -31,7 +30,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.name.replace(
           / |\//g,
           (matched) => corrections[matched]
-        )}?redirect=true`;
+        )}/html?redirect=true`;
 
         break;
 
@@ -41,19 +40,46 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
         break;
 
       default:
-        wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.url.replace(
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/${wiki.url.replace(
           / |\//g,
           (matched) => corrections[matched]
-        )}?redirect=true`;
+        )}/html?redirect=true`;
         break;
     }
   }
+
+  const wikipediaFetcher = async (url) => {
+    const options = {
+      method: "GET",
+      headers: {
+        "Api-User-Agent": "ecotenet (info@ecotenet.org)",
+      },
+    };
+
+    const res = await fetch(url, options);
+
+    // If the status code is not in the range 200-299,
+    // we still try to parse and throw it.
+    if (!res.ok) {
+      if (res.status === 404) {
+        return null;
+      } else {
+        const error = new Error("An error occurred while fetching the data.");
+        // Attach extra info to the error object.
+        // error.info = await res.json();
+        error.status = res.status;
+        throw error;
+      }
+    }
+
+    return res.text();
+  };
 
   const {
     data: results,
     isLoading,
     error,
-  } = useSWR(wiki ? wikiUrl : null, fetcher, {
+  } = useSWR(wiki ? wikiUrl : null, wikipediaFetcher, {
     shouldRetryOnError: false,
   });
 
@@ -214,6 +240,8 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
               color="secondary"
               sx={{ marginBottom: "15px", marginTop: isMobile ? 0 : 3 }}
               href={`/ecoregions/${ecoFilter._id}`}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               view full page
             </Button>
@@ -260,9 +288,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                 </div>
               ) : (
                 <>
-                  {!wikiUrl ||
-                  (results && results.title === "Not found.") ||
-                  results === null ? (
+                  {!wikiUrl || results === null ? (
                     <Typography
                       variant="h6"
                       align="justify"
@@ -288,10 +314,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                           Wikipedia
                         </Link>
                       </Typography>
-                      {parse(
-                        DOMPurify.sanitize(results && results.segmentedContent),
-                        options
-                      )}
+                      {parse(DOMPurify.sanitize(results && results), options)}
                     </>
                   )}
                 </>
