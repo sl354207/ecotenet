@@ -25,6 +25,7 @@ const EcoSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
 
   if (wiki) {
     const corrections = { " ": "_", "/": "%2F" };
+    // console.log(wiki);
     switch (wiki.url) {
       case null:
         wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/segments/${wiki.name.replace(
