@@ -5,6 +5,9 @@ import {
   FormControl,
   FormControlLabel,
   IconButton,
+  List,
+  ListItem,
+  ListItemText,
   Popper,
   Radio,
   RadioGroup,
@@ -61,6 +64,7 @@ const MapMain = ({
       }
 
       const region = event.features && event.features[0];
+      // console.log(region);
 
       if (region && region.properties.unique_id !== "<NA>") {
         setHoverInfo({
@@ -110,6 +114,7 @@ const MapMain = ({
       }
 
       const region = event.features && event.features[0];
+      // console.log(region);
 
       if (region) {
         setHoverInfo({
@@ -121,6 +126,49 @@ const MapMain = ({
 
         let eco = region.properties;
         eco.layer = "feow";
+        eco._id = region.properties.id;
+
+        if (region.geometry.coordinates[0][0][0].length > 1) {
+          eco.coordinates = region.geometry.coordinates[0][0][0];
+        } else {
+          eco.coordinates = region.geometry.coordinates[0][0];
+        }
+
+        sessionStorage.setItem("ecoregion", JSON.stringify(eco));
+        setEcoFilter(eco);
+
+        setClick(true);
+      }
+    },
+    [hoverInfo]
+  );
+  const onDsmwClick = useCallback(
+    async (event) => {
+      setShowPopup(true);
+
+      if (!visitedHome && !click) {
+        setTab({ id: 1, label: "Summary" });
+      }
+
+      const region = event.features && event.features[0];
+      console.log(region);
+
+      if (region) {
+        setHoverInfo({
+          longitude: event.lngLat.lng,
+          latitude: event.lngLat.lat,
+          regionName: region && {
+            dominant_soil_type: region.properties.dominant_soil_name,
+            dominant_soil_type_percentage:
+              region.properties.dominant_soil_type_percentage,
+            soil_texture: region.properties.soil_texture,
+            soil_slope: region.properties.soil_slope,
+          },
+          regionNum: region && region.properties.specific_soil_name,
+        });
+
+        let eco = region.properties;
+        eco.layer = "dsmw";
         eco._id = region.properties.id;
 
         if (region.geometry.coordinates[0][0][0].length > 1) {
@@ -213,6 +261,11 @@ const MapMain = ({
 
   const feowClickFilter = useMemo(
     () => ["in", "id", selectedRegion],
+    [selectedRegion]
+  );
+
+  const dsmwClickFilter = useMemo(
+    () => ["in", "specific_soil_name", selectedRegion],
     [selectedRegion]
   );
 
@@ -394,7 +447,7 @@ const MapMain = ({
                 }
                 label="Freshwater"
               />
-              {/* <FormControlLabel
+              <FormControlLabel
                 value="dsmw"
                 control={
                   <Radio
@@ -405,7 +458,7 @@ const MapMain = ({
                   />
                 }
                 label="Soil"
-              /> */}
+              />
             </RadioGroup>
           </FormControl>
         </Box>
@@ -511,8 +564,14 @@ const MapMain = ({
         touchPitch={false}
         mapStyle="mapbox://styles/sl354207/ckph5dyvu1xio17tfsiau4wjs"
         mapboxAccessToken={mapBox}
-        interactiveLayerIds={["eco-fill", "feow-fill"]}
-        onClick={layer === "ecoregions" ? onEcoClick : onFeowClick}
+        interactiveLayerIds={["eco-fill", "feow-fill", "dsmw-fill"]}
+        onClick={
+          layer === "ecoregions"
+            ? onEcoClick
+            : layer === "feow"
+            ? onFeowClick
+            : onDsmwClick
+        }
         ref={mapRef}
         onSourceData={onMove(prevCount1, prevCount2, prevCount3)}
         onMove={(evt) => setViewState(evt.viewState)}
@@ -572,55 +631,111 @@ const MapMain = ({
           </>
         ) : (
           <>
-            <Source
-              id="feowmap"
-              key="feowmap"
-              type="vector"
-              url="mapbox://sl354207.feow-tiles"
-            >
-              <Layer
-                id="feowbase"
-                key="feowbase"
-                beforeId="waterway-label"
-                {...feowFill}
-              />
+            {layer === "feow" ? (
+              <>
+                <Source
+                  id="feowmap"
+                  key="feowmap"
+                  type="vector"
+                  url="mapbox://sl354207.feow-tiles"
+                >
+                  <Layer
+                    id="feowbase"
+                    key="feowbase"
+                    beforeId="waterway-label"
+                    {...feowFill}
+                  />
 
-              <Layer
-                id="feowspecies3"
-                key="feowspecies3"
-                beforeId="waterway-label"
-                {...feowFill5}
-                filter={speciesFilter3}
-              />
-              <Layer
-                id="feowspecies2"
-                key="feowspecies2"
-                beforeId="waterway-label"
-                {...feowFill4}
-                filter={speciesFilter2}
-              />
-              <Layer
-                id="feowspecies1"
-                key="feowspecies1"
-                beforeId="waterway-label"
-                {...feowFill3}
-                filter={speciesFilter1}
-              />
+                  <Layer
+                    id="feowspecies3"
+                    key="feowspecies3"
+                    beforeId="waterway-label"
+                    {...feowFill5}
+                    filter={speciesFilter3}
+                  />
+                  <Layer
+                    id="feowspecies2"
+                    key="feowspecies2"
+                    beforeId="waterway-label"
+                    {...feowFill4}
+                    filter={speciesFilter2}
+                  />
+                  <Layer
+                    id="feowspecies1"
+                    key="feowspecies1"
+                    beforeId="waterway-label"
+                    {...feowFill3}
+                    filter={speciesFilter1}
+                  />
 
-              <Layer
-                id="feowclick"
-                key="feowclick"
-                beforeId="waterway-label"
-                {...feowFill1}
-                filter={feowClickFilter}
-              />
-              <Layer
-                beforeId="waterway-label"
-                id="feoline"
-                key="feoline"
-                {...feowLine}
-              />
-            </Source>
+                  <Layer
+                    id="feowclick"
+                    key="feowclick"
+                    beforeId="waterway-label"
+                    {...feowFill1}
+                    filter={feowClickFilter}
+                  />
+                  <Layer
+                    beforeId="waterway-label"
+                    id="feoline"
+                    key="feoline"
+                    {...feowLine}
+                  />
+                </Source>
+              </>
+            ) : (
+              <>
+                <Source
+                  id="dsmwmap"
+                  key="dsmwmap"
+                  type="vector"
+                  url="mapbox://sl354207.dsmw-tiles"
+                >
+                  <Layer
+                    id="dsmwbase"
+                    key="dsmwbase"
+                    beforeId="waterway-label"
+                    {...dsmwFill}
+                  />
+
+                  {/* <Layer
+                    id="feowspecies3"
+                    key="feowspecies3"
+                    beforeId="waterway-label"
+                    {...feowFill5}
+                    filter={speciesFilter3}
+                  /> */}
+                  {/* <Layer
+                    id="feowspecies2"
+                    key="feowspecies2"
+                    beforeId="waterway-label"
+                    {...feowFill4}
+                    filter={speciesFilter2}
+                  /> */}
+                  {/* <Layer
+                    id="feowspecies1"
+                    key="feowspecies1"
+                    beforeId="waterway-label"
+                    {...feowFill3}
+                    filter={speciesFilter1}
+                  /> */}
+
+                  <Layer
+                    id="dsmwclick"
+                    key="dsmwclick"
+                    beforeId="waterway-label"
+                    {...dsmwFill1}
+                    filter={dsmwClickFilter}
+                  />
+                  <Layer
+                    beforeId="waterway-label"
+                    id="dsmwline"
+                    key="dsmwline"
+                    {...dsmwLine}
+                  />
+                </Source>
+              </>
+            )}
           </>
         )}
 
@@ -657,15 +772,38 @@ const MapMain = ({
               >
                 {layer === "ecoregions"
                   ? `Eco - ${selectedRegion}`
-                  : `FEOW - ${selectedRegion}`}
+                  : layer === "feow"
+                  ? `FEOW - ${selectedRegion}`
+                  : selectedRegion}
               </Typography>
-              <Typography
-                color="textSecondary"
-                align="center"
-                sx={{ fontWeight: 500 }}
-              >
-                {ecoName}
-              </Typography>
+              {layer === "dsmw" ? (
+                <>
+                  <List dense disablePadding>
+                    {ecoName &&
+                      Object.keys(ecoName).map((key, index) => (
+                        <ListItem
+                          key={index}
+                          dense
+                          disablePadding
+                          disableGutters
+                        >
+                          <ListItemText
+                            primary={`${key}: ${ecoName[key]}`}
+                            sx={{ color: "black" }}
+                          />
+                        </ListItem>
+                      ))}
+                  </List>
+                </>
+              ) : (
+                <Typography
+                  color="textSecondary"
+                  align="center"
+                  sx={{ fontWeight: 500 }}
+                >
+                  {ecoName}
+                </Typography>
+              )}
             </div>
             <Button
               size="small"
@@ -817,7 +955,6 @@ const feowFill5 = {
   },
 };
 
-// outline layer
 const feowLine = {
   id: "feow-line",
   type: "line",
@@ -826,6 +963,41 @@ const feowLine = {
   paint: {
     "line-color": "rgb(5, 11, 15)",
     "line-width": 2,
+  },
+};
+
+const dsmwFill = {
+  id: "dsmw-fill",
+  type: "fill",
+  "source-layer": "dsmw-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#627BC1",
+    "fill-opacity": 0,
+  },
+};
+
+// dsmwclick layer
+const dsmwFill1 = {
+  id: "dsmw-fill1",
+  type: "fill",
+  "source-layer": "dsmw-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": "#94c9ff",
+    "fill-opacity": 0.5,
+  },
+};
+
+// outline layer
+const dsmwLine = {
+  id: "dsmw-line",
+  type: "line",
+  "source-layer": "dsmw-tiles",
+  layout: {},
+  paint: {
+    "line-color": "rgb(5, 11, 15)",
+    "line-width": ["step", ["zoom"], 0.5, 3, 1, 5, 2, 8, 3],
   },
 };
 
