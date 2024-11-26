@@ -1247,6 +1247,51 @@ const getFeowEcoregions = async () => {
     throw new Error(error);
   }
 };
+const getDsmwRegions = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("dsmw")
+      .aggregate([
+        {
+          $group: {
+            _id: "$specific_soil_name",
+            coordinates: { $first: "$coordinates" },
+            dominant_soil_type: { $first: "$dominant_soil_name" },
+            dominant_soil_type_percentage: {
+              $first: "$dominant_soil_type_percentage",
+            },
+            soil_texture: { $first: "$soil_texture" },
+            soil_slope: { $first: "$soil_slope" },
+            id: { $first: "$id" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            specific_soil_name: "$_id",
+            coordinates: 1,
+            dominant_soil_type: 1,
+            dominant_soil_type_percentage: 1,
+            soil_texture: 1,
+            soil_slope: 1,
+            id: 1,
+          },
+        },
+      ])
+      .toArray();
+    // const response = await db
+    //   .collection("dsmw")
+    //   .find({})
+    //   .project({ specific_soil_name: 1, coordinates: 1, _id: 0 })
+    //   .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const getEcoregionById = async (id) => {
   try {
@@ -1605,6 +1650,7 @@ module.exports = {
   checkName,
   getEcoregions,
   getFeowEcoregions,
+  getDsmwRegions,
   getEcoregionById,
   getFeowById,
   getDistinctCategory,

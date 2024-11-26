@@ -275,7 +275,9 @@ const Nav = () => {
                       >
                         {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id}`
-                          : `FEOW-${ecoFilter._id}`}
+                          : ecoFilter.layer === "feow"
+                          ? `FEOW-${ecoFilter._id}`
+                          : `${ecoFilter._id}`}
                       </Button>
                     </Tooltip>
                   </div>
@@ -336,7 +338,9 @@ const Nav = () => {
                       >
                         {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id} Filter`
-                          : `FEOW-${ecoFilter._id} Filter`}
+                          : ecoFilter.layer === "feow"
+                          ? `FEOW-${ecoFilter._id} Filter`
+                          : `${ecoFilter._id} Filter`}
                       </Button>
                     </Tooltip>
                   </div>

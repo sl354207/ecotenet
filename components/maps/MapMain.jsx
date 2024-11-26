@@ -151,25 +151,26 @@ const MapMain = ({
       }
 
       const region = event.features && event.features[0];
-      console.log(region);
+      // console.log(region);
 
       if (region) {
         setHoverInfo({
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
           regionName: region && {
-            dominant_soil_type: region.properties.dominant_soil_name,
-            dominant_soil_type_percentage:
+            "FAO soil id": region.properties.FAOSOIL,
+            "dominant soil type": region.properties.dominant_soil_name,
+            "dominant soil type percentage":
               region.properties.dominant_soil_type_percentage,
-            soil_texture: region.properties.soil_texture,
-            soil_slope: region.properties.soil_slope,
+            "soil texture": region.properties.soil_texture,
+            "soil slope": region.properties.soil_slope,
           },
           regionNum: region && region.properties.specific_soil_name,
         });
 
         let eco = region.properties;
         eco.layer = "dsmw";
-        eco._id = region.properties.id;
+        eco._id = region.properties.specific_soil_name;
 
         if (region.geometry.coordinates[0][0][0].length > 1) {
           eco.coordinates = region.geometry.coordinates[0][0][0];
@@ -768,7 +769,11 @@ const MapMain = ({
               <Typography
                 color="textSecondary"
                 align="center"
-                sx={{ fontWeight: 500, minWidth: "150px" }}
+                sx={{
+                  fontWeight: 500,
+                  minWidth: "150px",
+                  marginTop: layer === "dsmw" ? "10px" : "0px",
+                }}
               >
                 {layer === "ecoregions"
                   ? `Eco - ${selectedRegion}`
