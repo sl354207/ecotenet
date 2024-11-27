@@ -1,49 +1,58 @@
 import Link from "@components/layouts/Link";
 import { Button, CircularProgress, Table, Typography } from "@mui/material";
-import { attributesToProps, domToReact } from "html-react-parser";
+import parse, { attributesToProps, domToReact } from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 import useSWR, { useSWRConfig } from "swr";
 // Salt flats, Glacier, Inland water or ocean, Dunes or shifting sands, Rock debris or desert detritus
-const DsmwSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
+const DsmwSummary = ({ ecoFilter }) => {
   let wikiUrl;
   const { mutate } = useSWRConfig();
 
-  if (ecoFilter && ecoFilter.layer === "ecoregions" && !wiki) {
-    const res = fetch(
-      `/api/ecoregions/${ecoFilter._id}?layer=${ecoFilter.layer}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => setWiki(data))
-      .catch((error) => console.log(error));
-  }
-
-  if (wiki) {
-    const corrections = { " ": "_", "/": "%2F" };
-    // console.log(wiki);
-    switch (wiki.url) {
+  if (ecoFilter && ecoFilter.layer === "dsmw" && ecoFilter.dominant_soil_name) {
+    switch (ecoFilter.dominant_soil_name) {
       case null:
-        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/${wiki.name.replace(
-          / |\//g,
-          (matched) => corrections[matched]
-        )}/html?redirect=true`;
-
-        break;
-
-      case "undefined":
         wikiUrl = undefined;
 
         break;
 
+      case undefined:
+        wikiUrl = undefined;
+
+        break;
+
+      case "Salt flats":
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/Salt_pan_(geology)/html?redirect=true`;
+        break;
+
+      case "Dunes or shifting sands":
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/Dune/html?redirect=true`;
+        break;
+
+      case "Rock debris or desert detritus":
+        wikiUrl = undefined;
+        break;
+
+      case "NITOSOLS":
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/Nitisol/html?redirect=true`;
+        break;
+
+      case "PODZOLUVISOLS":
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/Podzoluvisols/html?redirect=true`;
+        break;
+
+      case "RANKERS":
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/Rankers/html?redirect=true`;
+        break;
+
       default:
-        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/${wiki.url.replace(
-          / |\//g,
-          (matched) => corrections[matched]
-        )}/html?redirect=true`;
+        // name equals ecoFilter.dominant_soil_name in all lowercase letters except the first letter is capitalized and if there is an s at the end then remove it
+        const str = ecoFilter.dominant_soil_name;
+        const name =
+          str.charAt(0).toUpperCase() +
+          (str.endsWith("S") ? str.slice(1, -1) : str.slice(1)).toLowerCase();
+
+        wikiUrl = `https://en.wikipedia.org/w/rest.php/v1/page/${name}/html?redirect=true`;
+
         break;
     }
   }
@@ -79,7 +88,7 @@ const DsmwSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
     data: results,
     isLoading,
     error,
-  } = useSWR(wiki ? wikiUrl : null, wikipediaFetcher, {
+  } = useSWR(wikiUrl ? wikiUrl : null, wikipediaFetcher, {
     shouldRetryOnError: false,
   });
 
@@ -232,28 +241,17 @@ const DsmwSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
   };
   return (
     <>
-      {ecoFilter && ecoFilter.layer === "ecoregions" ? (
+      {ecoFilter && ecoFilter.layer === "dsmw" ? (
         <>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ marginBottom: "15px", marginTop: isMobile ? 0 : 3 }}
-              href={`/ecoregions/${ecoFilter._id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              view full page
-            </Button>
-            <Typography variant="h5" align="center">
-              Eco-{ecoFilter._id}
-            </Typography>
             <Typography
               variant="h5"
               align="center"
-              sx={{ marginBottom: "15px" }}
+              sx={{ marginTop: "20px", marginBottom: "15px" }}
             >
-              {wiki && wiki.name}
+              {ecoFilter.dominant_soil_name &&
+                ecoFilter.dominant_soil_name.charAt(0).toUpperCase() +
+                  ecoFilter.dominant_soil_name.slice(1).toLowerCase()}
             </Typography>
           </div>
 
@@ -294,19 +292,16 @@ const DsmwSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
                       align="justify"
                       sx={{ marginTop: "20px" }}
                     >
-                      We currently don&apos;t have a summary of this ecoregion.
-                      If you want to help us out you can create a wikipedia page
-                      for the ecoregion.
+                      We currently don&apos;t have a summary of this region. If
+                      you want to help us out you can create a wikipedia page
+                      for the region.
                     </Typography>
                   ) : (
                     <>
                       <Typography variant="h6" sx={{ marginTop: "10px" }}>
                         Source:{" "}
                         <Link
-                          href={`https://en.wikipedia.org/wiki/${wiki.name.replace(
-                            / /g,
-                            "_"
-                          )}?redirect=true`}
+                          href={wikiUrl && wikiUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           underline="hover"
@@ -324,7 +319,7 @@ const DsmwSummary = ({ wiki, setWiki, ecoFilter, isMobile }) => {
         </>
       ) : (
         <Typography variant="h5" align="center" sx={{ marginTop: "20px" }}>
-          Please select an ecoregion from the map or ecoregions tab to view a
+          Please select a region from the map or ecoregions tab to view a
           summary
         </Typography>
       )}

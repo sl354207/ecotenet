@@ -1258,7 +1258,7 @@ const getDsmwRegions = async () => {
           $group: {
             _id: "$specific_soil_name",
             coordinates: { $first: "$coordinates" },
-            dominant_soil_type: { $first: "$dominant_soil_name" },
+            dominant_soil_name: { $first: "$dominant_soil_name" },
             dominant_soil_type_percentage: {
               $first: "$dominant_soil_type_percentage",
             },
@@ -1272,7 +1272,7 @@ const getDsmwRegions = async () => {
             _id: 0,
             specific_soil_name: "$_id",
             coordinates: 1,
-            dominant_soil_type: 1,
+            dominant_soil_name: 1,
             dominant_soil_type_percentage: 1,
             soil_texture: 1,
             soil_slope: 1,

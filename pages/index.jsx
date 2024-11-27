@@ -503,12 +503,7 @@ const MapPage = ({ ecoregions, feow, dsmw }) => {
                         {layer === "feow" ? (
                           <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
                         ) : (
-                          <DsmwSummary
-                            wiki={wiki && wiki}
-                            setWiki={setWiki}
-                            ecoFilter={ecoFilter && ecoFilter}
-                            isMobile={isMobile}
-                          />
+                          <DsmwSummary ecoFilter={ecoFilter && ecoFilter} />
                         )}
                       </>
                     )}
@@ -703,7 +698,13 @@ const MapPage = ({ ecoregions, feow, dsmw }) => {
                         ecoFilter={ecoFilter && ecoFilter}
                       />
                     ) : (
-                      <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                      <>
+                        {layer === "feow" ? (
+                          <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                        ) : (
+                          <DsmwSummary ecoFilter={ecoFilter && ecoFilter} />
+                        )}
+                      </>
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>

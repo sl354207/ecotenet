@@ -74,7 +74,10 @@ const DsmwRegions = ({
       <List>
         {dsmw
           .filter(
-            (ecoregion) => !["No data"].includes(ecoregion.specific_soil_name)
+            (ecoregion) =>
+              !["No data", "Inland water or ocean"].includes(
+                ecoregion.specific_soil_name
+              )
           )
           .sort((a, b) => {
             const lastItems = [
@@ -82,7 +85,7 @@ const DsmwRegions = ({
               "Salt flats",
               "Glacier",
               "Dunes or shifting sands",
-              "Inland water or ocean",
+              // "Inland water or ocean",
             ];
             if (
               lastItems.includes(a.specific_soil_name) &&

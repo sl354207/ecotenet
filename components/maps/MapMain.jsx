@@ -153,7 +153,12 @@ const MapMain = ({
       const region = event.features && event.features[0];
       // console.log(region);
 
-      if (region) {
+      if (
+        region &&
+        region.properties.specific_soil_name !== "Inland water or ocean" &&
+        region &&
+        region.properties.specific_soil_name !== "No data"
+      ) {
         setHoverInfo({
           longitude: event.lngLat.lng,
           latitude: event.lngLat.lat,
