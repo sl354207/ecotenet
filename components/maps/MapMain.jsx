@@ -151,7 +151,7 @@ const MapMain = ({
       }
 
       const region = event.features && event.features[0];
-      // console.log(region);
+      console.log(region);
 
       if (
         region &&
@@ -200,6 +200,49 @@ const MapMain = ({
       });
     }
   }, [mapLoc]);
+
+  const speciesSoil = [
+    { id: "15783", count: 1 },
+    { id: "15277", count: 2 },
+    { id: "14552", count: 3 },
+    { id: "16799", count: 4 },
+    { id: "15955", count: 5 },
+    { id: "17114", count: 6 },
+    { id: "16452", count: 7 },
+    { id: "15820", count: 8 },
+    { id: "15834", count: 9 },
+    { id: "16420", count: 10 },
+  ];
+
+  useEffect(() => {
+    if (layer) {
+      // console.log(layer);
+      if (layer === "dsmw" && speciesSoil) {
+        // console.log(speciesSoil);
+        // const features = mapRef.current?.queryRenderedFeatures({
+        //   layers: ["dsmw-fill"],
+        // });
+        // console.log(features);
+        speciesSoil.forEach((datum) => {
+          mapRef.current?.setFeatureState(
+            {
+              source: "dsmwmap",
+              sourceLayer: "dsmw-tiles",
+              id: datum.id,
+            },
+            {
+              count: datum.count,
+            }
+          );
+        });
+      }
+    }
+  }, [layer]);
+
+  // const soilFilter equals list if ids in speciesSoil
+
+  const soilFilter = ["in", "id", ...speciesSoil.map((s) => s.id)];
+  // console.log(soilFilter);
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
 
@@ -556,6 +599,121 @@ const MapMain = ({
           </RadioGroup>
         </FormControl>
       )}
+      {layer === "dsmw" && speciesSoil && (
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: { xs: "inherit", md: "10px" },
+            top: { xs: "80px", md: "inherit" },
+            right: 0,
+            zIndex: 1,
+            backgroundColor: "#001e3c",
+            borderRadius: "3px",
+            border: "3px solid #c8fcff",
+            padding: "10px",
+          }}
+        >
+          <Typography variant="body1" align="center">
+            test
+          </Typography>
+          <Box sx={{ display: "flex" }}>
+            <Box>
+              <Box
+                sx={{
+                  backgroundColor: "#FDE725",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#B8DE29",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#73D055",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#3CBB75",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#20A387",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#287D8E",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#33638D",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#404788",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#482677",
+                  padding: "10px",
+                }}
+              ></Box>
+              <Box
+                sx={{
+                  backgroundColor: "#440154",
+                  padding: "10px",
+                }}
+              ></Box>
+            </Box>
+            <Box>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                100
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                90
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                80
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                70
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                60
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                50
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                40
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                30
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                20
+              </Typography>
+              <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                10
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      )}
 
       <Map
         id="mapMain"
@@ -696,6 +854,7 @@ const MapMain = ({
                   key="dsmwmap"
                   type="vector"
                   url="mapbox://sl354207.dsmw-tiles"
+                  promoteId={"id"}
                 >
                   <Layer
                     id="dsmwbase"
@@ -703,28 +862,6 @@ const MapMain = ({
                     beforeId="waterway-label"
                     {...dsmwFill}
                   />
-
-                  {/* <Layer
-                    id="feowspecies3"
-                    key="feowspecies3"
-                    beforeId="waterway-label"
-                    {...feowFill5}
-                    filter={speciesFilter3}
-                  /> */}
-                  {/* <Layer
-                    id="feowspecies2"
-                    key="feowspecies2"
-                    beforeId="waterway-label"
-                    {...feowFill4}
-                    filter={speciesFilter2}
-                  /> */}
-                  {/* <Layer
-                    id="feowspecies1"
-                    key="feowspecies1"
-                    beforeId="waterway-label"
-                    {...feowFill3}
-                    filter={speciesFilter1}
-                  /> */}
 
                   <Layer
                     id="dsmwclick"
@@ -739,6 +876,15 @@ const MapMain = ({
                     key="dsmwline"
                     {...dsmwLine}
                   />
+                  {speciesSoil && (
+                    <Layer
+                      id="dsmwspecies1"
+                      key="dsmwspecies1"
+                      beforeId="waterway-label"
+                      {...dsmwFill3}
+                      filter={soilFilter}
+                    />
+                  )}
                 </Source>
               </>
             )}
@@ -748,17 +894,7 @@ const MapMain = ({
         <AttributionControl
           compact={true}
           position="bottom-left"
-          customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the
-            World. GIS layers developed by The Nature Conservancy with multiple partners,
-            combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK):
-            The Nature Conservancy. DOIs: 10.1641/B570707;
-            10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-
-            wcmc.org/datasets/38. Freshwater Ecoregions Citation: Originator: The Nature Conservancy and World Wildlife Fund, Inc.
-      Publication_Date:  2008
-      Title: Freshwater Ecoregions of the World
-      Geospatial_Data_Presentation_Form: vector digital data
-      Online_Linkage: www.feow.org
-"
+          customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the World. GIS layers developed by The Nature Conservancy with multiple partners, combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK): The Nature Conservancy. DOIs: 10.1641/B570707;10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-wcmc.org/datasets/38. Freshwater Ecoregions Citation: Originator: The Nature Conservancy and World Wildlife Fund, Inc. Publication_Date:  2008 Title: Freshwater Ecoregions of the World Geospatial_Data_Presentation_Form: vector digital data Online_Linkage: www.feow.org"
           style={{ color: "black", marginLeft: "100px", marginBottom: "-20px" }}
         />
         {selectedRegion && showPopup && (
@@ -1010,5 +1146,77 @@ const dsmwLine = {
     "line-width": ["step", ["zoom"], 0.5, 3, 1, 5, 2, 8, 3],
   },
 };
+
+const dsmwFill3 = {
+  id: "dsmw-fill3",
+  type: "fill",
+  source: "dsmwmap",
+  "source-layer": "dsmw-tiles",
+  paint: {
+    "fill-outline-color": "rgba(0,0,0,1)",
+    "fill-color": [
+      "case",
+      ["==", ["feature-state", "count"], 1],
+      "#440154",
+      ["==", ["feature-state", "count"], 2],
+      "#482677",
+      ["==", ["feature-state", "count"], 3],
+      "#404788",
+      ["==", ["feature-state", "count"], 4],
+      "#33638D",
+      ["==", ["feature-state", "count"], 5],
+      "#287D8E",
+      ["==", ["feature-state", "count"], 6],
+      "#20A387",
+      ["==", ["feature-state", "count"], 7],
+      "#3CBB75",
+      ["==", ["feature-state", "count"], 8],
+      "#73D055",
+      ["==", ["feature-state", "count"], 9],
+      "#B8DE29",
+      ["==", ["feature-state", "count"], 10],
+      "#FDE725",
+      "red",
+    ],
+
+    "fill-opacity": 0.8,
+  },
+};
+
+// #440154FF 1
+
+// #481567FF 2
+// #482677FF 3
+// #453781FF 4
+// #404788FF 5
+// #39568CFF 6
+// #33638DFF 7
+// #2D708EFF 8
+// #287D8EFF 9
+// #238A8DFF 10
+
+// #1F968BFF 11
+// #20A387FF 12
+// #29AF7FFF 13
+// #3CBB75FF 14
+// #55C667FF 15
+// #73D055FF 16
+// #95D840FF 17
+// #B8DE29FF 18
+// #DCE319FF 19
+
+// #FDE725FF 20
+
+// #440154FF 1 1
+// #482677FF 3 2
+// #404788FF 5 3
+// #33638DFF 7 4
+// #287D8EFF 9 5
+// #20A387FF 12 6
+// #3CBB75FF 14 7
+// #73D055FF 16 8
+// #B8DE29FF 18 9
+// #FDE725FF 20 10
+// Freedman-Diaconis rule, Sturges’ rule, and Scott’s rule
 
 export default MapMain;
