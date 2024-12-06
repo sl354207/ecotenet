@@ -815,6 +815,7 @@ const autoSpecies = async (query) => {
             observed_ecoregions: 1,
             native_ecoregions: 1,
             freshwater_ecoregions: 1,
+            soil_regions: 1,
           },
         },
       ])

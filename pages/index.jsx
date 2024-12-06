@@ -51,8 +51,6 @@ const DynamicFeatureAndSearchDrawer = dynamic(
   }
 );
 
-// const coords = Coords;
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -258,7 +256,9 @@ const MapPage = ({ ecoregions, feow, dsmw }) => {
           setClick={setClick}
           ecoChips={ecoChips}
           setEcoChips={setEcoChips}
-          coords={layer === "feow" ? feow : ecoregions}
+          coords={
+            layer === "ecoregions" ? ecoregions : layer === "feow" ? feow : dsmw
+          }
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
           showPopup={showPopup}

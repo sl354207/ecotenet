@@ -151,7 +151,7 @@ const MapMain = ({
       }
 
       const region = event.features && event.features[0];
-      console.log(region);
+      // console.log(region);
 
       if (
         region &&
@@ -201,47 +201,43 @@ const MapMain = ({
     }
   }, [mapLoc]);
 
-  const speciesSoil = [
-    { id: "15783", count: 1 },
-    { id: "15277", count: 2 },
-    { id: "14552", count: 3 },
-    { id: "16799", count: 4 },
-    { id: "15955", count: 5 },
-    { id: "17114", count: 6 },
-    { id: "16452", count: 7 },
-    { id: "15820", count: 8 },
-    { id: "15834", count: 9 },
-    { id: "16420", count: 10 },
-  ];
-
+  // const speciesSoil = {
+  //   15783: 1,
+  //   15277: 2,
+  //   14552: 3,
+  //   16799: 4,
+  //   15955: 5,
+  //   17114: 6,
+  //   16452: 7,
+  //   15820: 8,
+  //   15834: 9,
+  //   16420: 10,
+  // };
   useEffect(() => {
     if (layer) {
-      // console.log(layer);
-      if (layer === "dsmw" && speciesSoil) {
-        // console.log(speciesSoil);
-        // const features = mapRef.current?.queryRenderedFeatures({
-        //   layers: ["dsmw-fill"],
-        // });
-        // console.log(features);
-        speciesSoil.forEach((datum) => {
+      if (layer === "dsmw" && ecoChips[0] && ecoChips[0].soil_regions) {
+        Object.entries(ecoChips[0].soil_regions).forEach(([key, value]) => {
           mapRef.current?.setFeatureState(
             {
               source: "dsmwmap",
               sourceLayer: "dsmw-tiles",
-              id: datum.id,
+              id: key,
             },
             {
-              count: datum.count,
+              count: value,
             }
           );
         });
       }
     }
-  }, [layer]);
+  }, [layer, ecoChips]);
 
-  // const soilFilter equals list if ids in speciesSoil
-
-  const soilFilter = ["in", "id", ...speciesSoil.map((s) => s.id)];
+  const soilFilter =
+    ecoChips[0] && layer === "dsmw"
+      ? ecoChips[0] && ecoChips[0].soil_regions
+        ? ["in", "id", ...Object.keys(ecoChips[0].soil_regions)]
+        : []
+      : [];
   // console.log(soilFilter);
 
   const selectedRegion = (hoverInfo && hoverInfo.regionNum) || "";
@@ -335,62 +331,64 @@ const MapMain = ({
   const onMove = useCallback(
     (prevCount1, prevCount2, prevCount3) => {
       // console.log(speciesRegions1);
-      if (
-        speciesRegions1 &&
-        speciesRegions1.length > 0 &&
-        prevCount1 !== speciesRegions1
-      ) {
-        const coord = coords.filter((region) => {
-          if (layer === "feow") {
-            return region.id === speciesRegions1[0];
-          } else {
-            return region.unique_id === speciesRegions1[0];
-          }
-        });
-        // console.log(coord);
-        mapRef.current?.flyTo({
-          center: coord[0].coordinates,
-          duration: 2000,
-          zoom: 3.5,
-        });
-      }
-      if (
-        speciesRegions2 &&
-        speciesRegions2.length > 0 &&
-        prevCount2 !== speciesRegions2
-      ) {
-        const coord = coords.filter((region) => {
-          if (layer === "feow") {
-            return region.id === speciesRegions2[0];
-          } else {
-            return region.unique_id === speciesRegions2[0];
-          }
-        });
+      if (layer !== "dsmw") {
+        if (
+          speciesRegions1 &&
+          speciesRegions1.length > 0 &&
+          prevCount1 !== speciesRegions1
+        ) {
+          const coord = coords.filter((region) => {
+            if (layer === "feow") {
+              return region.id === speciesRegions1[0];
+            } else {
+              return region.unique_id === speciesRegions1[0];
+            }
+          });
+          // console.log(coord);
+          mapRef.current?.flyTo({
+            center: coord[0].coordinates,
+            duration: 2000,
+            zoom: 3.5,
+          });
+        }
+        if (
+          speciesRegions2 &&
+          speciesRegions2.length > 0 &&
+          prevCount2 !== speciesRegions2
+        ) {
+          const coord = coords.filter((region) => {
+            if (layer === "feow") {
+              return region.id === speciesRegions2[0];
+            } else {
+              return region.unique_id === speciesRegions2[0];
+            }
+          });
 
-        mapRef.current?.flyTo({
-          center: coord[0].coordinates,
-          duration: 2000,
-          zoom: 3.5,
-        });
-      }
-      if (
-        speciesRegions3 &&
-        speciesRegions3.length > 0 &&
-        prevCount3 !== speciesRegions3
-      ) {
-        const coord = coords.filter((region) => {
-          if (layer === "feow") {
-            return region.id === speciesRegions3[0];
-          } else {
-            return region.unique_id === speciesRegions3[0];
-          }
-        });
+          mapRef.current?.flyTo({
+            center: coord[0].coordinates,
+            duration: 2000,
+            zoom: 3.5,
+          });
+        }
+        if (
+          speciesRegions3 &&
+          speciesRegions3.length > 0 &&
+          prevCount3 !== speciesRegions3
+        ) {
+          const coord = coords.filter((region) => {
+            if (layer === "feow") {
+              return region.id === speciesRegions3[0];
+            } else {
+              return region.unique_id === speciesRegions3[0];
+            }
+          });
 
-        mapRef.current?.flyTo({
-          center: coord[0].coordinates,
-          duration: 2000,
-          zoom: 3.5,
-        });
+          mapRef.current?.flyTo({
+            center: coord[0].coordinates,
+            duration: 2000,
+            zoom: 3.5,
+          });
+        }
       }
     },
     [speciesRegions1, speciesRegions2, speciesRegions3]
@@ -599,7 +597,7 @@ const MapMain = ({
           </RadioGroup>
         </FormControl>
       )}
-      {layer === "dsmw" && speciesSoil && (
+      {layer === "dsmw" && ecoChips && ecoChips[0] && (
         <Box
           sx={{
             position: "absolute",
@@ -614,7 +612,7 @@ const MapMain = ({
           }}
         >
           <Typography variant="body1" align="center">
-            test
+            Occurrence %
           </Typography>
           <Box sx={{ display: "flex" }}>
             <Box>
@@ -876,7 +874,7 @@ const MapMain = ({
                     key="dsmwline"
                     {...dsmwLine}
                   />
-                  {speciesSoil && (
+                  {ecoChips && ecoChips[0] && (
                     <Layer
                       id="dsmwspecies1"
                       key="dsmwspecies1"
@@ -1218,5 +1216,33 @@ const dsmwFill3 = {
 // #B8DE29FF 18 9
 // #FDE725FF 20 10
 // Freedman-Diaconis rule, Sturges’ rule, and Scott’s rule
+
+// const arr = [1, 1, 1, 1, 2, 2, 2, 2, 3, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5];
+
+// const arr_length = arr.length;
+
+// const counts = {};
+// for (const value of arr) {
+//     if (counts[value]) {
+//         counts[value] += 1;
+//     } else {
+//         counts[value] = 1;
+//     }
+// }
+// console.log(counts);
+
+// const percentages = {};
+// for (const [key, value] of Object.entries(counts)) {
+//     percentages[key] = value / arr_length;
+// }
+// console.log(percentages);
+
+// const min_value = Math.min(...Object.values(percentages));
+// const max_value = Math.max(...Object.values(percentages));
+// const normalized_percentages = {};
+// for (const [key, value] of Object.entries(percentages)) {
+//     normalized_percentages[key] = ((value - min_value) / (max_value - min_value)) * 100;
+// }
+// console.log(normalized_percentages);
 
 export default MapMain;
