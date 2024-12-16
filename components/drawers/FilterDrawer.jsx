@@ -191,7 +191,9 @@ const FilterDrawer = ({
               }}
               align="center"
             >
-              FEOW-{ecoFilter && ecoFilter._id}
+              {ecoFilter && ecoFilter.layer === "feow"
+                ? `FEOW-${ecoFilter && ecoFilter._id}`
+                : `${ecoFilter && ecoFilter._id}`}
             </Typography>
           )}
 

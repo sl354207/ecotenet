@@ -201,18 +201,6 @@ const MapMain = ({
     }
   }, [mapLoc]);
 
-  // const speciesSoil = {
-  //   15783: 1,
-  //   15277: 2,
-  //   14552: 3,
-  //   16799: 4,
-  //   15955: 5,
-  //   17114: 6,
-  //   16452: 7,
-  //   15820: 8,
-  //   15834: 9,
-  //   16420: 10,
-  // };
   useEffect(() => {
     if (layer) {
       if (layer === "dsmw" && ecoChips[0] && ecoChips[0].soil_regions) {
@@ -679,34 +667,34 @@ const MapMain = ({
             </Box>
             <Box>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                100
+                &gt;90
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                90
+                80-90
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                80
+                70-80
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                70
+                60-70
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                60
+                50-60
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                50
+                40-50
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                40
+                30-40
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                30
+                20-30
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                20
+                10-20
               </Typography>
               <Typography variant="body2" sx={{ marginLeft: "4px" }}>
-                10
+                &lt;10
               </Typography>
             </Box>
           </Box>
@@ -892,7 +880,7 @@ const MapMain = ({
         <AttributionControl
           compact={true}
           position="bottom-left"
-          customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the World. GIS layers developed by The Nature Conservancy with multiple partners, combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK): The Nature Conservancy. DOIs: 10.1641/B570707;10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-wcmc.org/datasets/38. Freshwater Ecoregions Citation: Originator: The Nature Conservancy and World Wildlife Fund, Inc. Publication_Date:  2008 Title: Freshwater Ecoregions of the World Geospatial_Data_Presentation_Form: vector digital data Online_Linkage: www.feow.org"
+          customAttribution="Ecoregion Citations: Olson, D. M., Dinerstein, E., Wikramanayake, E. D., Burgess, N. D., Powell, G. V. N., Underwood, E. C., D'Amico, J. A., Itoua, I., Strand, H. E., Morrison, J. C., Loucks, C. J., Allnutt, T. F., Ricketts, T. H., Kura, Y., Lamoreux, J. F., Wettengel, W. W., Hedao, P., Kassem, K. R. 2001. Terrestrial ecoregions of the world: a new map of life on Earth. Bioscience 51(11):933-938. The Nature Conservancy (2012). Marine Ecoregions and Pelagic Provinces of the World. GIS layers developed by The Nature Conservancy with multiple partners, combined from Spalding et al. (2007) and Spalding et al. (2012). Cambridge (UK): The Nature Conservancy. DOIs: 10.1641/B570707;10.1016/j.ocecoaman.2011.12.016. Data URL: http://data.unep-wcmc.org/datasets/38. Freshwater Ecoregions Citation: Originator: The Nature Conservancy and World Wildlife Fund, Inc. Publication_Date:  2008 Title: Freshwater Ecoregions of the World Geospatial_Data_Presentation_Form: vector digital data Online_Linkage: www.feow.org. Soil Regions Citation: The Digital Soil Map of the World. Food and Agriculture Organization of the United Nations. Version 3.6, completed January 2003. FAO/UNESCO. Land and Water Development Division, FAO, Rome"
           style={{ color: "black", marginLeft: "100px", marginBottom: "-20px" }}
         />
         {selectedRegion && showPopup && (
@@ -1154,25 +1142,66 @@ const dsmwFill3 = {
     "fill-outline-color": "rgba(0,0,0,1)",
     "fill-color": [
       "case",
-      ["==", ["feature-state", "count"], 1],
+      ["<=", ["feature-state", "count"], 10],
       "#440154",
-      ["==", ["feature-state", "count"], 2],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 10],
+        ["<=", ["feature-state", "count"], 20],
+      ],
       "#482677",
-      ["==", ["feature-state", "count"], 3],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 20],
+        ["<=", ["feature-state", "count"], 30],
+      ],
       "#404788",
-      ["==", ["feature-state", "count"], 4],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 30],
+        ["<=", ["feature-state", "count"], 40],
+      ],
       "#33638D",
-      ["==", ["feature-state", "count"], 5],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 40],
+        ["<=", ["feature-state", "count"], 50],
+      ],
       "#287D8E",
-      ["==", ["feature-state", "count"], 6],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 50],
+        ["<=", ["feature-state", "count"], 60],
+      ],
       "#20A387",
-      ["==", ["feature-state", "count"], 7],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 60],
+        ["<=", ["feature-state", "count"], 70],
+      ],
       "#3CBB75",
-      ["==", ["feature-state", "count"], 8],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 70],
+        ["<=", ["feature-state", "count"], 80],
+      ],
       "#73D055",
-      ["==", ["feature-state", "count"], 9],
+
+      [
+        "all",
+        [">", ["feature-state", "count"], 80],
+        ["<=", ["feature-state", "count"], 90],
+      ],
       "#B8DE29",
-      ["==", ["feature-state", "count"], 10],
+
+      [">=", ["feature-state", "count"], 90],
       "#FDE725",
       "red",
     ],
@@ -1180,69 +1209,5 @@ const dsmwFill3 = {
     "fill-opacity": 0.8,
   },
 };
-
-// #440154FF 1
-
-// #481567FF 2
-// #482677FF 3
-// #453781FF 4
-// #404788FF 5
-// #39568CFF 6
-// #33638DFF 7
-// #2D708EFF 8
-// #287D8EFF 9
-// #238A8DFF 10
-
-// #1F968BFF 11
-// #20A387FF 12
-// #29AF7FFF 13
-// #3CBB75FF 14
-// #55C667FF 15
-// #73D055FF 16
-// #95D840FF 17
-// #B8DE29FF 18
-// #DCE319FF 19
-
-// #FDE725FF 20
-
-// #440154FF 1 1
-// #482677FF 3 2
-// #404788FF 5 3
-// #33638DFF 7 4
-// #287D8EFF 9 5
-// #20A387FF 12 6
-// #3CBB75FF 14 7
-// #73D055FF 16 8
-// #B8DE29FF 18 9
-// #FDE725FF 20 10
-// Freedman-Diaconis rule, Sturges’ rule, and Scott’s rule
-
-// const arr = [1, 1, 1, 1, 2, 2, 2, 2, 3, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5];
-
-// const arr_length = arr.length;
-
-// const counts = {};
-// for (const value of arr) {
-//     if (counts[value]) {
-//         counts[value] += 1;
-//     } else {
-//         counts[value] = 1;
-//     }
-// }
-// console.log(counts);
-
-// const percentages = {};
-// for (const [key, value] of Object.entries(counts)) {
-//     percentages[key] = value / arr_length;
-// }
-// console.log(percentages);
-
-// const min_value = Math.min(...Object.values(percentages));
-// const max_value = Math.max(...Object.values(percentages));
-// const normalized_percentages = {};
-// for (const [key, value] of Object.entries(percentages)) {
-//     normalized_percentages[key] = ((value - min_value) / (max_value - min_value)) * 100;
-// }
-// console.log(normalized_percentages);
 
 export default MapMain;

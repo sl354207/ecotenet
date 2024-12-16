@@ -277,6 +277,10 @@ const Nav = () => {
                           ? `Eco-${ecoFilter._id}`
                           : ecoFilter.layer === "feow"
                           ? `FEOW-${ecoFilter._id}`
+                          : ecoFilter._id === "Rock debris or desert detritus"
+                          ? "Rocks"
+                          : ecoFilter._id === "Dunes or shifting sands"
+                          ? "Dunes"
                           : `${ecoFilter._id}`}
                       </Button>
                     </Tooltip>
@@ -340,6 +344,10 @@ const Nav = () => {
                           ? `Eco-${ecoFilter._id} Filter`
                           : ecoFilter.layer === "feow"
                           ? `FEOW-${ecoFilter._id} Filter`
+                          : ecoFilter._id === "Rock debris or desert detritus"
+                          ? "Rocks Filter"
+                          : ecoFilter._id === "Dunes or shifting sands"
+                          ? "Dunes Filter"
                           : `${ecoFilter._id} Filter`}
                       </Button>
                     </Tooltip>

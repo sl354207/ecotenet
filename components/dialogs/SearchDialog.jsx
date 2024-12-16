@@ -52,7 +52,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
     error,
   } = useSWR(
     query
-      ? `/api/search?q=${query.q}&filter=${query.filter}&eco=${
+      ? `/api/search?q=${query.q}&filter=${query.filter}&layer=${layer}&eco=${
           ecoFilter && ecoFilter._id
         }`
       : null,
@@ -92,9 +92,9 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
             color="error"
             onClick={() =>
               mutate(
-                `/api/search?q=${query.q}&filter=${query.filter}&eco=${
-                  ecoFilter && ecoFilter._id
-                }`
+                `/api/search?q=${query.q}&filter=${
+                  query.filter
+                }&layer=${layer}&eco=${ecoFilter && ecoFilter._id}`
               )
             }
           >
@@ -233,7 +233,11 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
             filterOptions={(options, params) => {
               const filtered = filter(options, params);
               if (layer === "ecoregions") {
-                if (!ecoFilter || (ecoFilter && ecoFilter.layer === "feow")) {
+                if (
+                  !ecoFilter ||
+                  (ecoFilter && ecoFilter.layer === "feow") ||
+                  (ecoFilter && ecoFilter.layer === "dsmw")
+                ) {
                   if (params.inputValue !== "") {
                     filtered.push(
                       {
@@ -340,7 +344,7 @@ const SearchDialog = ({ search, setSearch, ecoFilter, layer, setLayer }) => {
           <>
             <Typography align="center" variant="body2">
               *Currently it is not possible to search for posts or authors in
-              the Freshwater Ecoregions layer, only species.
+              the Soil or Freshwater Ecoregions layer, only species.
             </Typography>
             <Typography align="center" variant="body2">
               If you would like to search for posts or authors please switch to
