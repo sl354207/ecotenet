@@ -1366,6 +1366,22 @@ const getFeowById = async (id) => {
     throw new Error(error);
   }
 };
+const getDsmwById = async (id) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("dsmw").findOne(
+      {
+        id: id,
+      },
+      { projection: { id: 1, coordinates: 1, _id: 0 } }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const getDistinctCategory = async (category) => {
   try {
     const db = await connectToDatabase();
@@ -1695,6 +1711,7 @@ module.exports = {
   getDsmwRegions,
   getEcoregionById,
   getFeowById,
+  getDsmwById,
   getDistinctCategory,
   getFilteredStats,
   getStatsAPIEcoregions,

@@ -28,7 +28,7 @@ export function validEco(string) {
   if (
     typeof string === "string" &&
     string.length > 0 &&
-    string.length < 5 &&
+    string.length < 6 &&
     regex.test(string)
   ) {
     return true;

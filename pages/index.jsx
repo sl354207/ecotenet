@@ -523,6 +523,124 @@ const MapPage = ({ ecoregions, feow, dsmw }) => {
                 </>
               </Box>
             </Drawer>
+            {layer === "dsmw" &&
+              ecoChips &&
+              ecoChips[0] &&
+              ecoChips[0].soil_regions && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: "inherit",
+                    top: "80px",
+                    right: 0,
+                    zIndex: 1,
+                    backgroundColor: "#001e3c",
+                    borderRadius: "3px",
+                    border: "3px solid #c8fcff",
+                    padding: "10px",
+                  }}
+                >
+                  <Typography variant="body1" align="center">
+                    Occur. %
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#FDE725",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#B8DE29",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#73D055",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#3CBB75",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#20A387",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#287D8E",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#33638D",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#404788",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#482677",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#440154",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                    </Box>
+                    <Box>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        &gt;90
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        80-90
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        70-80
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        60-70
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        50-60
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        40-50
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        30-40
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        20-30
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        10-20
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        &lt;10
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
             {FSOpen && (
               <DynamicFeatureAndSearchDrawer
                 handleFSClose={handleFSClose}
@@ -718,6 +836,154 @@ const MapPage = ({ ecoregions, feow, dsmw }) => {
                       layer={layer}
                     />
                   </TabPanel>
+                  {layer === "dsmw" &&
+                    ecoChips &&
+                    ecoChips[0] &&
+                    ecoChips[0].soil_regions && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          bottom: "70px",
+                          maxWidth: "fit-content",
+                          visibility: "visible!important",
+                          left: "-130px",
+                          backgroundColor: "#001e3c",
+                          borderRadius: "3px",
+                          border: "3px solid #c8fcff",
+                          padding: "10px",
+                        }}
+                      >
+                        <Typography variant="body1" align="center">
+                          Occurrence %
+                        </Typography>
+                        <Box sx={{ display: "flex" }}>
+                          <Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#FDE725",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#B8DE29",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#73D055",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#3CBB75",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#20A387",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#287D8E",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#33638D",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#404788",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#482677",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#440154",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                          </Box>
+                          <Box>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              &gt;90
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              80-90
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              70-80
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              60-70
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              50-60
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              40-50
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              30-40
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              20-30
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              10-20
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              &lt;10
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
                 </>
               </Box>
             </Drawer>

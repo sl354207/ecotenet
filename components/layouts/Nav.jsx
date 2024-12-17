@@ -272,6 +272,10 @@ const Nav = () => {
                         variant="contained"
                         color="secondary"
                         size={isTab ? "small" : "medium"}
+                        sx={{
+                          maxWidth: { xs: "130px", md: "170px", lg: "none" },
+                          whiteSpace: "wrap",
+                        }}
                       >
                         {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id}`
@@ -339,6 +343,10 @@ const Nav = () => {
                         onClick={handleFilterOpen}
                         variant="contained"
                         color="secondary"
+                        sx={{
+                          maxWidth: { xs: "130px", md: "170px", lg: "none" },
+                          whiteSpace: "nowrap",
+                        }}
                       >
                         {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id} Filter`
