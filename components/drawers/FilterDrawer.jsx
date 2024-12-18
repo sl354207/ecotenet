@@ -107,7 +107,7 @@ const FilterDrawer = ({
             <>
               <ButtonGroup
                 aria-label="vertical outlined button group"
-                sx={{ marginLeft: "10px" }}
+                sx={{ marginLeft: "10px", zIndex: 1 }}
               >
                 <IconButton
                   variant="text"
@@ -191,7 +191,9 @@ const FilterDrawer = ({
               }}
               align="center"
             >
-              FEOW-{ecoFilter && ecoFilter._id}
+              {ecoFilter && ecoFilter.layer === "feow"
+                ? `FEOW-${ecoFilter && ecoFilter._id}`
+                : `${ecoFilter && ecoFilter._id}`}
             </Typography>
           )}
 

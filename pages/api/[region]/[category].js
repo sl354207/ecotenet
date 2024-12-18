@@ -1,4 +1,5 @@
 import {
+  getDsmwSpecies,
   getFeowSpecies,
   getNativeSpecies,
   getPostsByCategoryAndRegion,
@@ -6,7 +7,7 @@ import {
 } from "@utils/mongodb/mongoHelpers";
 
 import { ajv } from "@schema/validation";
-import { validEco } from "@utils/validationHelpers";
+import { validEco, validSoilID } from "@utils/validationHelpers";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
   const validate = ajv.getSchema("category");
   const valid = validate(dataCheck);
 
-  if (valid && validEco(id)) {
+  if (valid && (validEco(id) || (layer === "dsmw" && validSoilID(id)))) {
     if (categorySub === "undefined") {
       switch (layer) {
         case "ecoregions":
@@ -82,20 +83,19 @@ export default async function handler(req, res) {
             res.status(500).json({ msg: "Something went wrong." });
           }
           break;
-        // case "dsmw":
-        //   try {
-        //     // UPDATE
-        //     const category = await getSpecies(categoryQuery, id);
+        case "dsmw":
+          try {
+            const category = await getDsmwSpecies(categoryQuery, id);
 
-        //     return res.status(200).json({
-        //       tag: "species",
-        //       category: category,
-        //     });
-        //   } catch (err) {
-        //     console.error(err);
-        //     res.status(500).json({ msg: "Something went wrong." });
-        //   }
-        //   break;
+            return res.status(200).json({
+              tag: "species",
+              category: category,
+            });
+          } catch (err) {
+            console.error(err);
+            res.status(500).json({ msg: "Something went wrong." });
+          }
+          break;
 
         default:
           res.status(400).json({ msg: "Bad request" });

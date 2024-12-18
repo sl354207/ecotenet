@@ -272,10 +272,20 @@ const Nav = () => {
                         variant="contained"
                         color="secondary"
                         size={isTab ? "small" : "medium"}
+                        sx={{
+                          maxWidth: { xs: "130px", md: "170px", lg: "none" },
+                          whiteSpace: "wrap",
+                        }}
                       >
                         {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id}`
-                          : `FEOW-${ecoFilter._id}`}
+                          : ecoFilter.layer === "feow"
+                          ? `FEOW-${ecoFilter._id}`
+                          : ecoFilter._id === "Rock debris or desert detritus"
+                          ? "Rocks"
+                          : ecoFilter._id === "Dunes or shifting sands"
+                          ? "Dunes"
+                          : `${ecoFilter._id}`}
                       </Button>
                     </Tooltip>
                   </div>
@@ -333,10 +343,20 @@ const Nav = () => {
                         onClick={handleFilterOpen}
                         variant="contained"
                         color="secondary"
+                        sx={{
+                          maxWidth: { xs: "130px", md: "170px", lg: "none" },
+                          whiteSpace: "nowrap",
+                        }}
                       >
                         {ecoFilter.layer === "ecoregions"
                           ? `Eco-${ecoFilter._id} Filter`
-                          : `FEOW-${ecoFilter._id} Filter`}
+                          : ecoFilter.layer === "feow"
+                          ? `FEOW-${ecoFilter._id} Filter`
+                          : ecoFilter._id === "Rock debris or desert detritus"
+                          ? "Rocks Filter"
+                          : ecoFilter._id === "Dunes or shifting sands"
+                          ? "Dunes Filter"
+                          : `${ecoFilter._id} Filter`}
                       </Button>
                     </Tooltip>
                   </div>
