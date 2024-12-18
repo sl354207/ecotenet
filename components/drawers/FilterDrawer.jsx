@@ -107,7 +107,7 @@ const FilterDrawer = ({
             <>
               <ButtonGroup
                 aria-label="vertical outlined button group"
-                sx={{ marginLeft: "10px" }}
+                sx={{ marginLeft: "10px", zIndex: 1 }}
               >
                 <IconButton
                   variant="text"
