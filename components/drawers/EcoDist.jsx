@@ -136,22 +136,24 @@ const EcoDist = ({
       <Typography variant="body1" align="left">
         Search for a species by common or scientific name to display their
         distribution on the map.
-        <Tooltip
-          enterTouchDelay={100}
-          leaveTouchDelay={5000}
-          arrow
-          title={
-            <Typography color="inherit" variant="body1">
-              A maximum of 3 species can be visualized on the map at the same
-              time, but up to 5 species can be added and manipulated.
-            </Typography>
-          }
-        >
-          <InfoIcon
-            fontSize="small"
-            sx={{ marginLeft: "10px", marginBottom: "-5px" }}
-          ></InfoIcon>
-        </Tooltip>
+        {layer !== "dsmw" && (
+          <Tooltip
+            enterTouchDelay={100}
+            leaveTouchDelay={5000}
+            arrow
+            title={
+              <Typography color="inherit" variant="body1">
+                A maximum of 3 species can be visualized on the map at the same
+                time, but up to 5 species can be added and manipulated.
+              </Typography>
+            }
+          >
+            <InfoIcon
+              fontSize="small"
+              sx={{ marginLeft: "10px", marginBottom: "-5px" }}
+            ></InfoIcon>
+          </Tooltip>
+        )}
       </Typography>
 
       <FormControl sx={{ display: "flex" }}>
@@ -182,7 +184,11 @@ const EcoDist = ({
             },
           }}
           autoHighlight
-          disabled={ecoChips && ecoChips.length === 5}
+          disabled={
+            layer === "dsmw"
+              ? ecoChips && ecoChips.length === 1
+              : ecoChips && ecoChips.length === 5
+          }
           onChange={(event, newValue) => handleSubmit(event, newValue)}
           selectOnFocus
           clearOnBlur
@@ -268,77 +274,114 @@ const EcoDist = ({
           </Typography>
         </>
       )}
-
-      <SortableList
-        items={ecoChips}
-        onChange={setEcoChips}
-        main={true}
-        isMobile={isMobile}
-        renderItem={(ecoChip) => (
-          <SortableItem id={ecoChip.id}>
-            <DragHandle />
+      {layer === "dsmw" ? (
+        <>
+          {ecoChips && ecoChips.length > 0 ? (
             <CustomChip
               label={
-                ecoChip.title
-                  ? ecoChip.title
-                  : ecoChip.common_name
-                  ? `${ecoChip.scientific_name} - ${ecoChip.common_name}`
-                  : ecoChip.scientific_name
+                ecoChips && ecoChips[0] && ecoChips[0].title
+                  ? ecoChips[0].title
+                  : ecoChips[0].common_name
+                  ? `${ecoChips[0].scientific_name} - ${ecoChips[0].common_name}`
+                  : ecoChips[0].scientific_name
               }
-              clickable={ecoChip.scientific_name ? true : false}
+              clickable={ecoChips[0].scientific_name ? true : false}
               onClick={() => {
-                if (ecoChip.scientific_name) {
+                if (ecoChips[0].scientific_name) {
                   window.open(
-                    `/species/${ecoChip.scientific_name.replace(/ /g, "_")}`,
+                    `/species/${ecoChips[0].scientific_name.replace(
+                      / /g,
+                      "_"
+                    )}`,
                     "_blank",
                     "noopener,noreferrer"
                   );
                 }
               }}
-              onDelete={() => handleRemoveChip(ecoChip)}
+              onDelete={() => handleRemoveChip(ecoChips[0])}
               variant="outlined"
               sx={{
-                borderColor:
-                  ecoChips && ecoChips.indexOf(ecoChip) === 0
-                    ? "#ff00ff"
-                    : ecoChips && ecoChips.indexOf(ecoChip) === 1
-                    ? "#ffff00"
-                    : ecoChips && ecoChips.indexOf(ecoChip) === 2
-                    ? "#00ffff"
-                    : theme.palette.secondary.main,
-                maxWidth: isMobile ? "81%" : "80%",
+                borderColor: theme.palette.secondary.main,
+                maxWidth: isMobile ? "86%" : "85%",
+                display: "flex",
               }}
             ></CustomChip>
-            {layer === "ecoregions" && (
-              <FormControlLabel
-                key={`select-${ecoChip.id}`}
-                sx={{
-                  marginLeft: "auto",
-                  marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
-                }}
-                control={
-                  <Checkbox
-                    sx={{
-                      color: theme.palette.secondary.main,
-                      "&.Mui-checked": {
-                        color: theme.palette.secondary.main,
-                      },
-                    }}
-                    checked={ecoChip.native}
-                    onChange={() => handleSelectCheckboxChange(ecoChip.id)}
-                    disabled={
-                      (ecoChip &&
-                        ecoChip.native_ecoregions &&
-                        ecoChip.native_ecoregions.length === 0) ||
-                      (ecoChip && !ecoChip.native_ecoregions)
-                    }
-                  />
+          ) : (
+            <></>
+          )}
+        </>
+      ) : (
+        <SortableList
+          items={ecoChips}
+          onChange={setEcoChips}
+          main={true}
+          isMobile={isMobile}
+          renderItem={(ecoChip) => (
+            <SortableItem id={ecoChip.id}>
+              <DragHandle />
+              <CustomChip
+                label={
+                  ecoChip.title
+                    ? ecoChip.title
+                    : ecoChip.common_name
+                    ? `${ecoChip.scientific_name} - ${ecoChip.common_name}`
+                    : ecoChip.scientific_name
                 }
-              />
-            )}
-          </SortableItem>
-        )}
-      />
+                clickable={ecoChip.scientific_name ? true : false}
+                onClick={() => {
+                  if (ecoChip.scientific_name) {
+                    window.open(
+                      `/species/${ecoChip.scientific_name.replace(/ /g, "_")}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    );
+                  }
+                }}
+                onDelete={() => handleRemoveChip(ecoChip)}
+                variant="outlined"
+                sx={{
+                  borderColor:
+                    ecoChips && ecoChips.indexOf(ecoChip) === 0
+                      ? "#ff00ff"
+                      : ecoChips && ecoChips.indexOf(ecoChip) === 1
+                      ? "#ffff00"
+                      : ecoChips && ecoChips.indexOf(ecoChip) === 2
+                      ? "#00ffff"
+                      : theme.palette.secondary.main,
+                  maxWidth: isMobile ? "81%" : "80%",
+                }}
+              ></CustomChip>
+              {layer === "ecoregions" && (
+                <FormControlLabel
+                  key={`select-${ecoChip.id}`}
+                  sx={{
+                    marginLeft: "auto",
+                    marginRight: { xs: "-20px", sm: "-15px", md: "-25px" },
+                  }}
+                  control={
+                    <Checkbox
+                      sx={{
+                        color: theme.palette.secondary.main,
+                        "&.Mui-checked": {
+                          color: theme.palette.secondary.main,
+                        },
+                      }}
+                      checked={ecoChip.native}
+                      onChange={() => handleSelectCheckboxChange(ecoChip.id)}
+                      disabled={
+                        (ecoChip &&
+                          ecoChip.native_ecoregions &&
+                          ecoChip.native_ecoregions.length === 0) ||
+                        (ecoChip && !ecoChip.native_ecoregions)
+                      }
+                    />
+                  }
+                />
+              )}
+            </SortableItem>
+          )}
+        />
+      )}
 
       <Tooltip
         enterTouchDelay={100}
@@ -346,20 +389,21 @@ const EcoDist = ({
         arrow
         title={
           <>
-            {layer === "feow" && (
-              <>
-                <Typography
-                  color="inherit"
-                  variant="body1"
-                  sx={{ marginBottom: "5px" }}
-                >
-                  If no freshwater ecoregions are available for a species, no
-                  ecoregions will be highlighted and the map won&apos;t pan to
-                  any ecoregions.
-                </Typography>
-                <Divider sx={{ marginBottom: "5px" }} />
-              </>
-            )}
+            {layer === "feow" ||
+              (layer === "dsmw" && (
+                <>
+                  <Typography
+                    color="inherit"
+                    variant="body1"
+                    sx={{ marginBottom: "5px" }}
+                  >
+                    If no freshwater or soil ecoregions are available for a
+                    species, no ecoregions will be highlighted and the map
+                    won&apos;t pan to any ecoregions.
+                  </Typography>
+                  <Divider sx={{ marginBottom: "5px" }} />
+                </>
+              ))}
 
             <Typography color="inherit" variant="body1">
               A species distribution often does not align perfectly with

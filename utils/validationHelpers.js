@@ -13,13 +13,22 @@ export function validID(string) {
     return false;
   }
 }
+export function validSoilID(string) {
+  // only contains letters(uppercase and lowercase) and spaces
+  const regex = /^[A-Za-z ]*$/;
+  if (typeof string === "string" && string.length <= 50 && regex.test(string)) {
+    return true;
+  } else {
+    return false;
+  }
+}
 export function validEco(string) {
   // only allow numbers in string
   const regex = /^\d+$/;
   if (
     typeof string === "string" &&
     string.length > 0 &&
-    string.length < 5 &&
+    string.length < 6 &&
     regex.test(string)
   ) {
     return true;

@@ -440,6 +440,9 @@ const getSpecies = async (speciesType, observed_ecoregions) => {
         observed_ecoregions: 1,
         native_ecoregions: 1,
         freshwater_ecoregions: 1,
+        soil_regions: 1,
+        specific_soil_names: 1,
+        soil_observations: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -465,6 +468,9 @@ const getNativeSpecies = async (speciesType, native_ecoregions) => {
         observed_ecoregions: 1,
         native_ecoregions: 1,
         freshwater_ecoregions: 1,
+        soil_regions: 1,
+        specific_soil_names: 1,
+        soil_observations: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -490,6 +496,37 @@ const getFeowSpecies = async (speciesType, freshwater_ecoregions) => {
         observed_ecoregions: 1,
         native_ecoregions: 1,
         freshwater_ecoregions: 1,
+        soil_regions: 1,
+        specific_soil_names: 1,
+        soil_observations: 1,
+      })
+      .sort({ scientific_name: 1 })
+      .toArray();
+
+    return species;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getDsmwSpecies = async (speciesType, specific_soil_names) => {
+  try {
+    const db = await connectToDatabase();
+
+    const species = await db
+      .collection("species")
+      .find({
+        species_type: speciesType,
+        specific_soil_names: specific_soil_names,
+      })
+      .project({
+        scientific_name: 1,
+        common_name: 1,
+        observed_ecoregions: 1,
+        native_ecoregions: 1,
+        freshwater_ecoregions: 1,
+        soil_regions: 1,
+        specific_soil_names: 1,
+        soil_observations: 1,
       })
       .sort({ scientific_name: 1 })
       .toArray();
@@ -630,7 +667,7 @@ const searchAllSpecies = async (query) => {
       .aggregate([
         {
           $search: {
-            index: "searchSpecies",
+            index: "searchSpeciesTest",
             text: {
               query: `${query}`,
               path: ["common_name", "scientific_name"],
@@ -648,6 +685,9 @@ const searchAllSpecies = async (query) => {
             observed_ecoregions: 1,
             native_ecoregions: 1,
             freshwater_ecoregions: 1,
+            soil_regions: 1,
+            specific_soil_names: 1,
+            soil_observations: 1,
           },
         },
       ])
@@ -789,7 +829,7 @@ const autoSpecies = async (query) => {
       .aggregate([
         {
           $search: {
-            index: "autoSpecies",
+            index: "autoSpeciesTest",
             compound: {
               should: [
                 {
@@ -815,6 +855,7 @@ const autoSpecies = async (query) => {
             observed_ecoregions: 1,
             native_ecoregions: 1,
             freshwater_ecoregions: 1,
+            soil_regions: 1,
           },
         },
       ])
@@ -1247,6 +1288,51 @@ const getFeowEcoregions = async () => {
     throw new Error(error);
   }
 };
+const getDsmwRegions = async () => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db
+      .collection("dsmw")
+      .aggregate([
+        {
+          $group: {
+            _id: "$specific_soil_name",
+            coordinates: { $first: "$coordinates" },
+            dominant_soil_name: { $first: "$dominant_soil_name" },
+            dominant_soil_type_percentage: {
+              $first: "$dominant_soil_type_percentage",
+            },
+            soil_texture: { $first: "$soil_texture" },
+            soil_slope: { $first: "$soil_slope" },
+            id: { $first: "$id" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            specific_soil_name: "$_id",
+            coordinates: 1,
+            dominant_soil_name: 1,
+            dominant_soil_type_percentage: 1,
+            soil_texture: 1,
+            soil_slope: 1,
+            id: 1,
+          },
+        },
+      ])
+      .toArray();
+    // const response = await db
+    //   .collection("dsmw")
+    //   .find({})
+    //   .project({ specific_soil_name: 1, coordinates: 1, _id: 0 })
+    //   .toArray();
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const getEcoregionById = async (id) => {
   try {
@@ -1273,6 +1359,22 @@ const getFeowById = async (id) => {
         id: id,
       },
       { projection: { _id: 0 } }
+    );
+
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const getDsmwById = async (id) => {
+  try {
+    const db = await connectToDatabase();
+
+    const response = await db.collection("dsmw").findOne(
+      {
+        id: id,
+      },
+      { projection: { id: 1, coordinates: 1, _id: 0 } }
     );
 
     return response;
@@ -1577,6 +1679,7 @@ module.exports = {
   getSpecies,
   getNativeSpecies,
   getFeowSpecies,
+  getDsmwSpecies,
   getAllSpecies,
   getSpeciesByScientificName,
   searchAllPosts,
@@ -1605,8 +1708,10 @@ module.exports = {
   checkName,
   getEcoregions,
   getFeowEcoregions,
+  getDsmwRegions,
   getEcoregionById,
   getFeowById,
+  getDsmwById,
   getDistinctCategory,
   getFilteredStats,
   getStatsAPIEcoregions,

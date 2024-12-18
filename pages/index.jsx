@@ -13,9 +13,15 @@ import EcoDist from "@components/drawers/EcoDist";
 import EcoRegions from "@components/drawers/EcoRegions";
 import EcoSummary from "@components/drawers/EcoSummary";
 import MapMain from "@components/maps/MapMain";
-import { getEcoregions, getFeowEcoregions } from "@utils/mongodb/mongoHelpers";
+import {
+  getDsmwRegions,
+  getEcoregions,
+  getFeowEcoregions,
+} from "@utils/mongodb/mongoHelpers";
 
 import { useHomepageContext } from "@components/context/HomepageContext";
+import DsmwRegions from "@components/drawers/DsmwRegions";
+import DsmwSummary from "@components/drawers/DsmwSummary";
 import FeowRegions from "@components/drawers/FeowRegions";
 import FeowSummary from "@components/drawers/FeowSummary";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
@@ -44,8 +50,6 @@ const DynamicFeatureAndSearchDrawer = dynamic(
     ssr: false,
   }
 );
-
-// const coords = Coords;
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -95,7 +99,7 @@ const CustomTab = styled((props) => <Tab {...props} />)(({ theme }) => ({
   },
 }));
 
-const MapPage = ({ ecoregions, feow }) => {
+const MapPage = ({ ecoregions, feow, dsmw }) => {
   // need to dynamically import to work with mapbox
   // const MapMain = dynamic(() => import("@components/maps/MapMain"), {
   //   ssr: false,
@@ -155,6 +159,7 @@ const MapPage = ({ ecoregions, feow }) => {
       });
     }
   }, [ecoFilter]);
+  // console.log(ecoFilter);
 
   const [showPopup, setShowPopup] = useState(true);
   const [mapLoc, setMapLoc] = useState(false);
@@ -251,7 +256,9 @@ const MapPage = ({ ecoregions, feow }) => {
           setClick={setClick}
           ecoChips={ecoChips}
           setEcoChips={setEcoChips}
-          coords={layer === "feow" ? feow : ecoregions}
+          coords={
+            layer === "ecoregions" ? ecoregions : layer === "feow" ? feow : dsmw
+          }
           hoverInfo={hoverInfo}
           setHoverInfo={setHoverInfo}
           showPopup={showPopup}
@@ -448,20 +455,39 @@ const MapPage = ({ ecoregions, feow }) => {
                         isMobile={isMobile}
                       />
                     ) : (
-                      <FeowRegions
-                        ecoMove={ecoMove}
-                        setEcoMove={setEcoMove}
-                        setEcoFilter={setEcoFilter}
-                        setHoverInfo={setHoverInfo}
-                        setShowPopup={setShowPopup}
-                        visitedHome={visitedHome}
-                        setTab={setTab}
-                        click={click}
-                        setClick={setClick}
-                        isMobile={isMobile}
-                        // layer={layer}
-                        feow={feow}
-                      />
+                      <>
+                        {layer === "feow" ? (
+                          <FeowRegions
+                            ecoMove={ecoMove}
+                            setEcoMove={setEcoMove}
+                            setEcoFilter={setEcoFilter}
+                            setHoverInfo={setHoverInfo}
+                            setShowPopup={setShowPopup}
+                            visitedHome={visitedHome}
+                            setTab={setTab}
+                            click={click}
+                            setClick={setClick}
+                            isMobile={isMobile}
+                            // layer={layer}
+                            feow={feow}
+                          />
+                        ) : (
+                          <DsmwRegions
+                            ecoMove={ecoMove}
+                            setEcoMove={setEcoMove}
+                            setEcoFilter={setEcoFilter}
+                            setHoverInfo={setHoverInfo}
+                            setShowPopup={setShowPopup}
+                            visitedHome={visitedHome}
+                            setTab={setTab}
+                            click={click}
+                            setClick={setClick}
+                            isMobile={isMobile}
+                            // layer={layer}
+                            dsmw={dsmw}
+                          />
+                        )}
+                      </>
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
@@ -473,7 +499,13 @@ const MapPage = ({ ecoregions, feow }) => {
                         isMobile={isMobile}
                       />
                     ) : (
-                      <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                      <>
+                        {layer === "feow" ? (
+                          <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                        ) : (
+                          <DsmwSummary ecoFilter={ecoFilter && ecoFilter} />
+                        )}
+                      </>
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
@@ -491,6 +523,124 @@ const MapPage = ({ ecoregions, feow }) => {
                 </>
               </Box>
             </Drawer>
+            {layer === "dsmw" &&
+              ecoChips &&
+              ecoChips[0] &&
+              ecoChips[0].soil_regions && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: "inherit",
+                    top: "80px",
+                    right: 0,
+                    zIndex: 1,
+                    backgroundColor: "#001e3c",
+                    borderRadius: "3px",
+                    border: "3px solid #c8fcff",
+                    padding: "10px",
+                  }}
+                >
+                  <Typography variant="body1" align="center">
+                    Occur. %
+                  </Typography>
+                  <Box sx={{ display: "flex" }}>
+                    <Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#FDE725",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#B8DE29",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#73D055",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#3CBB75",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#20A387",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#287D8E",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#33638D",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#404788",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#482677",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                      <Box
+                        sx={{
+                          backgroundColor: "#440154",
+                          padding: "10px",
+                        }}
+                      ></Box>
+                    </Box>
+                    <Box>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        &gt;90
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        80-90
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        70-80
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        60-70
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        50-60
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        40-50
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        30-40
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        20-30
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        10-20
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginLeft: "4px" }}>
+                        &lt;10
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
             {FSOpen && (
               <DynamicFeatureAndSearchDrawer
                 handleFSClose={handleFSClose}
@@ -625,19 +775,37 @@ const MapPage = ({ ecoregions, feow }) => {
                         setClick={setClick}
                       />
                     ) : (
-                      <FeowRegions
-                        ecoMove={ecoMove}
-                        setEcoMove={setEcoMove}
-                        setEcoFilter={setEcoFilter}
-                        setHoverInfo={setHoverInfo}
-                        setShowPopup={setShowPopup}
-                        visitedHome={visitedHome}
-                        setTab={setTab}
-                        click={click}
-                        setClick={setClick}
-                        // layer={layer}
-                        feow={feow}
-                      />
+                      <>
+                        {layer === "feow" ? (
+                          <FeowRegions
+                            ecoMove={ecoMove}
+                            setEcoMove={setEcoMove}
+                            setEcoFilter={setEcoFilter}
+                            setHoverInfo={setHoverInfo}
+                            setShowPopup={setShowPopup}
+                            visitedHome={visitedHome}
+                            setTab={setTab}
+                            click={click}
+                            setClick={setClick}
+                            // layer={layer}
+                            feow={feow}
+                          />
+                        ) : (
+                          <DsmwRegions
+                            ecoMove={ecoMove}
+                            setEcoMove={setEcoMove}
+                            setEcoFilter={setEcoFilter}
+                            setHoverInfo={setHoverInfo}
+                            setShowPopup={setShowPopup}
+                            visitedHome={visitedHome}
+                            setTab={setTab}
+                            click={click}
+                            setClick={setClick}
+                            // layer={layer}
+                            dsmw={dsmw}
+                          />
+                        )}
+                      </>
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={1}>
@@ -648,7 +816,13 @@ const MapPage = ({ ecoregions, feow }) => {
                         ecoFilter={ecoFilter && ecoFilter}
                       />
                     ) : (
-                      <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                      <>
+                        {layer === "feow" ? (
+                          <FeowSummary ecoFilter={ecoFilter && ecoFilter} />
+                        ) : (
+                          <DsmwSummary ecoFilter={ecoFilter && ecoFilter} />
+                        )}
+                      </>
                     )}
                   </TabPanel>
                   <TabPanel value={tab.id} index={2}>
@@ -662,6 +836,154 @@ const MapPage = ({ ecoregions, feow }) => {
                       layer={layer}
                     />
                   </TabPanel>
+                  {layer === "dsmw" &&
+                    ecoChips &&
+                    ecoChips[0] &&
+                    ecoChips[0].soil_regions && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          bottom: "70px",
+                          maxWidth: "fit-content",
+                          visibility: "visible!important",
+                          left: "-130px",
+                          backgroundColor: "#001e3c",
+                          borderRadius: "3px",
+                          border: "3px solid #c8fcff",
+                          padding: "10px",
+                        }}
+                      >
+                        <Typography variant="body1" align="center">
+                          Occurrence %
+                        </Typography>
+                        <Box sx={{ display: "flex" }}>
+                          <Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#FDE725",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#B8DE29",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#73D055",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#3CBB75",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#20A387",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#287D8E",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#33638D",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#404788",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#482677",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                            <Box
+                              sx={{
+                                backgroundColor: "#440154",
+                                padding: "10px",
+                              }}
+                            ></Box>
+                          </Box>
+                          <Box>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              &gt;90
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              80-90
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              70-80
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              60-70
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              50-60
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              40-50
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              30-40
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              20-30
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              10-20
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{ marginLeft: "4px" }}
+                            >
+                              &lt;10
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    )}
                 </>
               </Box>
             </Drawer>
@@ -689,11 +1011,13 @@ const MapPage = ({ ecoregions, feow }) => {
 export const getStaticProps = async () => {
   const ecoregions = await getEcoregions();
   const feow = await getFeowEcoregions();
+  const dsmw = await getDsmwRegions();
 
   return {
     props: {
       ecoregions: JSON.parse(JSON.stringify(ecoregions)),
       feow: JSON.parse(JSON.stringify(feow)),
+      dsmw: JSON.parse(JSON.stringify(dsmw)),
     },
     revalidate: 60,
   };
